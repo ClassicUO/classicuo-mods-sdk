@@ -5,19 +5,19 @@ const _: () = ::planus::check_version_compatibility("planus-1.3.0");
 /// The root namespace
 ///
 /// Generated from these locations:
-/// * File `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs`
+/// * File `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs`
 #[no_implicit_prelude]
 #[allow(clippy::needless_lifetimes)]
 mod root {
     /// The namespace `ModAbi`
     ///
     /// Generated from these locations:
-    /// * File `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs`
+    /// * File `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs`
     pub mod mod_abi {
         /// The enum `Encoding` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `Encoding` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:47`
+        /// * Enum `Encoding` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:47`
         #[derive(
             Copy,
             Clone,
@@ -186,7 +186,7 @@ mod root {
         /// The table `CompValue` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `CompValue` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:53`
+        /// * Table `CompValue` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:53`
         #[derive(
             Clone,
             Debug,
@@ -544,7 +544,7 @@ mod root {
         /// The table `TypePath` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `TypePath` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:62`
+        /// * Table `TypePath` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:62`
         #[derive(
             Clone,
             Debug,
@@ -853,7 +853,7 @@ mod root {
         /// The table `Handshake` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `Handshake` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:67`
+        /// * Table `Handshake` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:67`
         #[derive(
             Clone,
             Debug,
@@ -1188,7 +1188,7 @@ mod root {
         /// The enum `Schedule` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `Schedule` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:75`
+        /// * Enum `Schedule` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:75`
         #[derive(
             Copy,
             Clone,
@@ -1385,7 +1385,7 @@ mod root {
         /// The enum `QueryTermKind` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `QueryTermKind` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:85`
+        /// * Enum `QueryTermKind` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:85`
         #[derive(
             Copy,
             Clone,
@@ -1572,7 +1572,7 @@ mod root {
         /// The enum `ParamKind` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `ParamKind` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:97`
+        /// * Enum `ParamKind` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:97`
         #[derive(
             Copy,
             Clone,
@@ -1741,7 +1741,7 @@ mod root {
         /// The enum `ObserverKind` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `ObserverKind` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:102`
+        /// * Enum `ObserverKind` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:102`
         #[derive(
             Copy,
             Clone,
@@ -1928,7 +1928,7 @@ mod root {
         /// The table `QueryTerm` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `QueryTerm` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:110`
+        /// * Table `QueryTerm` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:110`
         #[derive(
             Clone,
             Debug,
@@ -2242,7 +2242,7 @@ mod root {
         /// The table `QueryDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `QueryDecl` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:115`
+        /// * Table `QueryDecl` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:115`
         #[derive(
             Clone,
             Debug,
@@ -2526,7 +2526,7 @@ mod root {
         /// The table `ParamDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ParamDecl` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:119`
+        /// * Table `ParamDecl` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:119`
         #[derive(
             Clone,
             Debug,
@@ -2850,7 +2850,7 @@ mod root {
         /// The table `SystemDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SystemDecl` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:124`
+        /// * Table `SystemDecl` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:124`
         #[derive(
             Clone,
             Debug,
@@ -3488,7 +3488,7 @@ mod root {
         /// The table `ObserverDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ObserverDecl` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:135`
+        /// * Table `ObserverDecl` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:135`
         #[derive(
             Clone,
             Debug,
@@ -3901,7 +3901,7 @@ mod root {
         /// The table `SetupReply` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SetupReply` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:142`
+        /// * Table `SetupReply` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:142`
         #[derive(
             Clone,
             Debug,
@@ -4356,7 +4356,7 @@ mod root {
         /// The table `Row` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `Row` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:152`
+        /// * Table `Row` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:152`
         #[derive(
             Clone,
             Debug,
@@ -4676,7 +4676,7 @@ mod root {
         /// The table `QueryRows` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `QueryRows` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:157`
+        /// * Table `QueryRows` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:157`
         #[derive(
             Clone,
             Debug,
@@ -5002,7 +5002,7 @@ mod root {
         /// The table `SystemInput` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SystemInput` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:162`
+        /// * Table `SystemInput` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:162`
         #[derive(
             Clone,
             Debug,
@@ -5372,7 +5372,7 @@ mod root {
         /// The table `SpawnCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SpawnCmd` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:177`
+        /// * Table `SpawnCmd` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:177`
         #[derive(
             Clone,
             Debug,
@@ -5694,7 +5694,7 @@ mod root {
         /// The table `InsertCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `InsertCmd` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:182`
+        /// * Table `InsertCmd` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:182`
         #[derive(
             Clone,
             Debug,
@@ -6021,7 +6021,7 @@ mod root {
         /// The table `RemoveCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `RemoveCmd` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:187`
+        /// * Table `RemoveCmd` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:187`
         #[derive(
             Clone,
             Debug,
@@ -6339,7 +6339,7 @@ mod root {
         /// The table `DespawnCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `DespawnCmd` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:192`
+        /// * Table `DespawnCmd` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:192`
         #[derive(
             Clone,
             Debug,
@@ -6601,7 +6601,7 @@ mod root {
         /// The table `AddChildCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `AddChildCmd` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:196`
+        /// * Table `AddChildCmd` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:196`
         #[derive(
             Clone,
             Debug,
@@ -6954,7 +6954,7 @@ mod root {
         /// The table `ResourceSetCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ResourceSetCmd` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:202`
+        /// * Table `ResourceSetCmd` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:202`
         #[derive(
             Clone,
             Debug,
@@ -7229,7 +7229,7 @@ mod root {
         /// The table `EmitEventCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `EmitEventCmd` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:206`
+        /// * Table `EmitEventCmd` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:206`
         #[derive(
             Clone,
             Debug,
@@ -7594,7 +7594,7 @@ mod root {
         /// The table `ConsumeMouseCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ConsumeMouseCmd` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:212`
+        /// * Table `ConsumeMouseCmd` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:212`
         #[derive(
             Clone,
             Debug,
@@ -7874,7 +7874,7 @@ mod root {
         /// The table `ConsumeKeyCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ConsumeKeyCmd` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:216`
+        /// * Table `ConsumeKeyCmd` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:216`
         #[derive(
             Clone,
             Debug,
@@ -8137,7 +8137,7 @@ mod root {
         /// The union `Cmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Union `Cmd` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:222`
+        /// * Union `Cmd` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:222`
         #[derive(
             Clone,
             Debug,
@@ -8705,7 +8705,7 @@ mod root {
         /// The table `CommandBuffer` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `CommandBuffer` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:234`
+        /// * Table `CommandBuffer` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:234`
         #[derive(
             Clone,
             Debug,
@@ -8985,7 +8985,7 @@ mod root {
         /// The table `ObserverInput` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ObserverInput` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:241`
+        /// * Table `ObserverInput` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:241`
         #[derive(
             Clone,
             Debug,
@@ -9352,7 +9352,7 @@ mod root {
         /// The table `SpawnResolved` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SpawnResolved` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:253`
+        /// * Table `SpawnResolved` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:253`
         #[derive(
             Clone,
             Debug,
@@ -9660,7 +9660,7 @@ mod root {
         /// The table `SpawnedInput` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SpawnedInput` in the file `C:\dev\cuo\cuo-agents\external\TinyEcs\src\TinyEcs.Bevy.Modding\abi\mod-abi.fbs:258`
+        /// * Table `SpawnedInput` in the file `C:\dev\cuo\cuo-agents\external\classicuo-mods-sdk\abi\mod-abi.fbs:258`
         #[derive(
             Clone,
             Debug,
