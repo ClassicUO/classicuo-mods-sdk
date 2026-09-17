@@ -1,0 +1,28 @@
+# Shared guest SDK for core-wasm ClassicUO mods. Standalone: NOT part of the repo-root
+# Rust workspace (own empty [workspace] table). Consumed as a path dependency by each
+# mod crate (cdylib, wasm32-wasip1); this crate itself is an rlib that links into them.
+[workspace]
+
+[package]
+name = "cuo-mod-sdk"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# planus 1.3.0 bundles the flatbuffer runtime; codegen is done by the separate
+# planus-cli 1.3.0 binary (see build.rs). planus 1.3.0 derives serde on every
+# generated type UNCONDITIONALLY, so serde-derive is a hard dependency of the abi.
+planus = "=1.3.0"
+serde = { version = "1", features = ["derive"] }
+# JSON codec for the cuo UI component builders (ui module) — the core-wasm registry
+# is JSON-encoded (System.Text.Json on the host side).
+serde_json = "1"
+
+[lib]
+crate-type = ["rlib"]
+
+# Applies only when this crate is built as a workspace root (e.g. `cargo test`).
+# As a path dependency the consuming cdylib's profile governs instead.
+[profile.release]
+opt-level = "s"
+strip = true
