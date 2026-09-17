@@ -1,0 +1,77 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- cuo-mod-sdk-dotnet — guest-side SDK for C# core-wasm ClassicUO mods; the .NET
+         twin of ../rust. Plain net10.0 classlib: a mod references
+         it through ModSdk.props / ModSdk.targets and publishes wasi-wasm — ILC compiles
+         the SDK IL into the mod's core module and exports the SDK's ABI entrypoints
+         (UnmanagedEntryPointsAssembly in ModSdk.targets). -->
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>preview</LangVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+        <AssemblyName>CuoModSdk</AssemblyName>
+        <RootNamespace>CuoModSdk</RootNamespace>
+    </PropertyGroup>
+
+    <!-- Core-wasm mod ABI (FlatSharp). Mirrors TinyEcs.Bevy.Modding.csproj. ../abi/mod-abi.fbs
+         is a SNAPSHOT of the canonical TinyEcs.Bevy.Modding/abi/mod-abi.fbs, refreshed by the
+         client's `make gen-mod-sdk` (ModSdkSyncTests there guards drift). The schema is ATTRIBUTE-FREE (planus rejects user attributes), so
+         DeriveFlatSharpSchema copies it into obj/, prepends the fs_serializer attribute
+         decl, and tags the 5 boundary root tables (annotating a root pulls its whole
+         graph). Generated C# lands in namespace ModAbi (from the .fbs). Same FlatSharp
+         version as the host so both directions share one library. -->
+    <ItemGroup>
+        <PackageReference Include="FlatSharp.Compiler" Version="7.9.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="FlatSharp.Runtime" Version="7.9.0" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <CanonicalModAbiFbs>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\abi\mod-abi.fbs'))</CanonicalModAbiFbs>
+        <DerivedModAbiFbs>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\obj\mod-abi.fs.fbs'))</DerivedModAbiFbs>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FlatSharpSchema Include="$(DerivedModAbiFbs)" />
+    </ItemGroup>
+
+    <UsingTask TaskName="WriteTextFile" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <Path ParameterType="System.String" Required="true" />
+            <Content ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Code Type="Fragment" Language="cs"><![CDATA[
+                System.IO.File.WriteAllText(Path, Content);
+            ]]></Code>
+        </Task>
+    </UsingTask>
+
+    <Target Name="DeriveFlatSharpSchema"
+            BeforeTargets="FlatSharpFbsCompile"
+            Inputs="$(CanonicalModAbiFbs)"
+            Outputs="$(DerivedModAbiFbs)">
+        <MakeDir Directories="$(MSBuildProjectDirectory)\obj" />
+        <PropertyGroup>
+            <_ModAbi>$([System.IO.File]::ReadAllText('$(CanonicalModAbiFbs)'))</_ModAbi>
+            <_ModAbi>$(_ModAbi.Replace('table Handshake {', 'table Handshake (fs_serializer) {'))</_ModAbi>
+            <_ModAbi>$(_ModAbi.Replace('table SetupReply {', 'table SetupReply (fs_serializer) {'))</_ModAbi>
+            <_ModAbi>$(_ModAbi.Replace('table SystemInput {', 'table SystemInput (fs_serializer) {'))</_ModAbi>
+            <_ModAbi>$(_ModAbi.Replace('table CommandBuffer {', 'table CommandBuffer (fs_serializer) {'))</_ModAbi>
+            <_ModAbi>$(_ModAbi.Replace('table ObserverInput {', 'table ObserverInput (fs_serializer) {'))</_ModAbi>
+      <_ModAbi>$(_ModAbi.Replace('table SpawnedInput {', 'table SpawnedInput (fs_serializer) {'))</_ModAbi>
+            <_DerivedModAbi>// AUTO-DERIVED from abi/mod-abi.fbs for FlatSharp — do not edit.
+attribute &quot;fs_serializer&quot;%3B
+$(_ModAbi)</_DerivedModAbi>
+        </PropertyGroup>
+        <WriteTextFile Path="$(DerivedModAbiFbs)" Content="$(_DerivedModAbi)" />
+        <Message Text="Derived FlatSharp schema: $(DerivedModAbiFbs)" Importance="high" />
+    </Target>
+
+</Project>
