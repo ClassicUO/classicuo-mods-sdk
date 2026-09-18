@@ -343,6 +343,8 @@ public static class Paths
         public const string OptionsWindow = "cuo:ui/options-window";
         /// <summary><c>cuo:ui/popup</c> — component.</summary>
         public const string Popup = "cuo:ui/popup";
+        /// <summary><c>cuo:ui/resizable</c> — component.</summary>
+        public const string Resizable = "cuo:ui/resizable";
         /// <summary><c>cuo:ui/right-clicked</c> — component.</summary>
         public const string RightClicked = "cuo:ui/right-clicked";
         /// <summary><c>cuo:ui/scroll</c> — component.</summary>
