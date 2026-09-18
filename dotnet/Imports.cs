@@ -27,6 +27,9 @@ internal static unsafe class Imports
         [DllImport("cuo", EntryPoint = "gump_size"), WasmImportLinkage]
         public static extern uint GumpSize(uint id);
 
+        [DllImport("cuo", EntryPoint = "hue_color"), WasmImportLinkage]
+        public static extern uint HueColor(uint hue);
+
         [DllImport("cuo", EntryPoint = "measure_text"), WasmImportLinkage]
         public static extern uint MeasureText(uint font, int ptr, int len);
 
@@ -69,6 +72,11 @@ internal static unsafe class Imports
         var packed = Ffi.GumpSize(id);
         return ((int)(packed >> 16), (int)(packed & 0xFFFF));
     }
+
+    /// <summary>A UO hue as packed 0xAARRGGBB — what the host would tint a white
+    /// glyph with (hue 0 = white). Mod text colour is plain RGB, so this is how a
+    /// mod paints server text in the colour the server asked for.</summary>
+    public static uint HueColor(uint hue) => Ffi.HueColor(hue);
 
     /// <summary>Rendered pixel width of <paramref name="text"/> in the given UO font.</summary>
     public static int MeasureText(uint font, string text)

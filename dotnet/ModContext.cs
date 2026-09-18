@@ -73,6 +73,14 @@ public readonly struct UiApi
     /// <summary>Rendered pixel width of <paramref name="text"/> in a UO font.</summary>
     public int MeasureText(uint font, string text) => Imports.MeasureText(font, text);
 
+    /// <summary>A UO hue as an RGB colour (hue 0 = white) — the tint the host would
+    /// apply to a white glyph. Use it to paint server text in its own hue.</summary>
+    public Types.Color HueColor(uint hue)
+    {
+        var argb = Imports.HueColor(hue);
+        return Types.Color.Rgba((byte)(argb >> 16), (byte)(argb >> 8), (byte)argb, (byte)(argb >> 24));
+    }
+
     /// <summary>Cliloc string ("" when unknown).</summary>
     public string ResolveCliloc(uint id) => Imports.ResolveCliloc(id);
 
