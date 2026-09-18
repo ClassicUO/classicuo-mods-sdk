@@ -2233,6 +2233,20 @@ pub struct UiRect {
     pub bottom: Val,
 }
 
+/// `cuo:ui/resizable`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct UiResizable {
+    pub min_w: f32,
+    pub min_h: f32,
+    pub max_w: f32,
+    pub max_h: f32,
+    pub grip: f32,
+}
+impl HasPath for UiResizable {
+    const PATH: &'static str = paths::ui::RESIZABLE;
+}
+
 /// `cuo:ui/scrollbar`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]

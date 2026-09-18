@@ -326,6 +326,8 @@ pub mod ui {
     pub const OPTIONS_WINDOW: &str = "cuo:ui/options-window";
     /// `cuo:ui/popup` — component.
     pub const POPUP: &str = "cuo:ui/popup";
+    /// `cuo:ui/resizable` — component.
+    pub const RESIZABLE: &str = "cuo:ui/resizable";
     /// `cuo:ui/right-clicked` — component.
     pub const RIGHT_CLICKED: &str = "cuo:ui/right-clicked";
     /// `cuo:ui/scroll` — component.

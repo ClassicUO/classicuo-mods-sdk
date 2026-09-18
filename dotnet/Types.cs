@@ -2083,6 +2083,19 @@ public partial struct UiRect
     [JsonPropertyName("Bottom")] public Val Bottom;
 }
 
+/// <summary><c>cuo:ui/resizable</c></summary>
+public partial struct UiResizable
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/resizable";
+
+    [JsonPropertyName("MinW")] public float MinW;
+    [JsonPropertyName("MinH")] public float MinH;
+    [JsonPropertyName("MaxW")] public float MaxW;
+    [JsonPropertyName("MaxH")] public float MaxH;
+    [JsonPropertyName("Grip")] public float Grip;
+}
+
 /// <summary><c>cuo:ui/scrollbar</c></summary>
 public partial struct UiScrollbar
 {
@@ -2392,6 +2405,7 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(UiNoWindowDrag))]
 [JsonSerializable(typeof(UiPopup))]
 [JsonSerializable(typeof(UiRect))]
+[JsonSerializable(typeof(UiResizable))]
 [JsonSerializable(typeof(UiScrollbar))]
 [JsonSerializable(typeof(UiSurfaceDto))]
 [JsonSerializable(typeof(UiTooltip))]
@@ -2563,6 +2577,7 @@ public static class TypePaths
         [typeof(UiNoRightClickClose)] = "cuo:ui/no-right-click-close",
         [typeof(UiNoWindowDrag)] = "cuo:ui/no-window-drag",
         [typeof(UiPopup)] = "cuo:ui/popup",
+        [typeof(UiResizable)] = "cuo:ui/resizable",
         [typeof(UiScrollbar)] = "cuo:ui/scrollbar",
         [typeof(UiSurfaceDto)] = "cuo:ui/surface",
         [typeof(UiTooltip)] = "cuo:ui/tooltip",
