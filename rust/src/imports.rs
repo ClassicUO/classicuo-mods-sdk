@@ -18,6 +18,7 @@ mod ffi {
     extern "C" {
         pub fn resolve_serial(serial: u32) -> u64;
         pub fn gump_size(id: u32) -> u32;
+        pub fn hue_color(hue: u32) -> u32;
         pub fn measure_text(font: u32, ptr: u32, len: u32) -> u32;
         pub fn resolve_cliloc(id: u32, out_ptr: u32, cap: u32) -> u32;
         pub fn net_send(ptr: u32, len: u32);
@@ -37,6 +38,9 @@ mod ffi {
         unimplemented!("cuo host import only available under wasm")
     }
     pub unsafe fn gump_size(_id: u32) -> u32 {
+        unimplemented!("cuo host import only available under wasm")
+    }
+    pub unsafe fn hue_color(_hue: u32) -> u32 {
         unimplemented!("cuo host import only available under wasm")
     }
     pub unsafe fn measure_text(_font: u32, _ptr: u32, _len: u32) -> u32 {
@@ -79,6 +83,13 @@ pub fn resolve_serial(serial: u32) -> u64 {
 /// Gump dimensions, packed `width << 16 | height`.
 pub fn gump_size(id: u32) -> u32 {
     unsafe { ffi::gump_size(id) }
+}
+
+/// A UO hue as packed `0xAARRGGBB` — the tint the host would apply to a white
+/// glyph (hue 0 = white). Mod text colour is plain RGB, so this is how a mod
+/// paints server text in the colour the server asked for.
+pub fn hue_color(hue: u32) -> u32 {
+    unsafe { ffi::hue_color(hue) }
 }
 
 /// Rendered pixel width of `text` in the given UO font.
