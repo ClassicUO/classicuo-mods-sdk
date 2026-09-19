@@ -307,6 +307,8 @@ public static class Paths
         public const string Button = "cuo:ui/button";
         /// <summary><c>cuo:ui/clicked</c> — component.</summary>
         public const string Clicked = "cuo:ui/clicked";
+        /// <summary><c>cuo:ui/clipboard-set</c> — resource.</summary>
+        public const string ClipboardSet = "cuo:ui/clipboard-set";
         /// <summary><c>cuo:ui/contains-by-bounds</c> — component.</summary>
         public const string ContainsByBounds = "cuo:ui/contains-by-bounds";
         /// <summary><c>cuo:ui/custom</c> — component.</summary>

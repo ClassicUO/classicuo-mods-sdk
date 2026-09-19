@@ -121,6 +121,16 @@ public partial struct CharacterSelectionScene
     public const string Path = "cuo:scene/character-selection";
 }
 
+/// <summary><c>cuo:ui/clipboard-set</c></summary>
+public sealed partial class ClipboardSetDto
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/clipboard-set";
+
+    [JsonPropertyName("Seq")] public int Seq;
+    [JsonPropertyName("Text")] public string Text;
+}
+
 /// <summary>Nested payload type (<c>Clay.Color</c>).</summary>
 public partial struct Color
 {
@@ -2240,6 +2250,7 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(CharInfoDto))]
 [JsonSerializable(typeof(CharacterSelectionDto))]
 [JsonSerializable(typeof(CharacterSelectionScene))]
+[JsonSerializable(typeof(ClipboardSetDto))]
 [JsonSerializable(typeof(Color))]
 [JsonSerializable(typeof(CombatBookWindow))]
 [JsonSerializable(typeof(ContainedInDto))]
@@ -2446,6 +2457,7 @@ public static class TypePaths
         [typeof(CharCreationScene)] = "cuo:scene/character-creation",
         [typeof(CharacterSelectionDto)] = "cuo:scene/character-list",
         [typeof(CharacterSelectionScene)] = "cuo:scene/character-selection",
+        [typeof(ClipboardSetDto)] = "cuo:ui/clipboard-set",
         [typeof(CombatBookWindow)] = "cuo:gump/combat-book",
         [typeof(ContainedInDto)] = "cuo:ent/container",
         [typeof(ContainedInto)] = "cuo:ent/contained-into",
