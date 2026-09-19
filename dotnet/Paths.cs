@@ -373,6 +373,8 @@ public static class Paths
         public const string TextCompletionState = "cuo:ui/text-completion-state";
         /// <summary><c>cuo:ui/text-font</c> — component.</summary>
         public const string TextFont = "cuo:ui/text-font";
+        /// <summary><c>cuo:ui/text-hue</c> — component.</summary>
+        public const string TextHue = "cuo:ui/text-hue";
         /// <summary><c>cuo:ui/text-input</c> — component.</summary>
         public const string TextInput = "cuo:ui/text-input";
         /// <summary><c>cuo:ui/text-spans</c> — component.</summary>

@@ -1835,6 +1835,15 @@ public partial struct TextFont
     [JsonPropertyName("Size")] public ushort Size;
 }
 
+/// <summary><c>cuo:ui/text-hue</c></summary>
+public partial struct TextHue
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/text-hue";
+
+    [JsonPropertyName("Value")] public ushort Value;
+}
+
 /// <summary><c>cuo:ui/text-input</c>
 /// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
 /// </summary>
@@ -2380,6 +2389,7 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(TextCompletionPickDto))]
 [JsonSerializable(typeof(TextCompletionStateDto))]
 [JsonSerializable(typeof(TextFont))]
+[JsonSerializable(typeof(TextHue))]
 [JsonSerializable(typeof(TextInput))]
 [JsonSerializable(typeof(TextSpan))]
 [JsonSerializable(typeof(TextSpans))]
@@ -2556,6 +2566,7 @@ public static class TypePaths
         [typeof(TextCompletionPickDto)] = "cuo:ui/text-completion-pick",
         [typeof(TextCompletionStateDto)] = "cuo:ui/text-completion-state",
         [typeof(TextFont)] = "cuo:ui/text-font",
+        [typeof(TextHue)] = "cuo:ui/text-hue",
         [typeof(TextInput)] = "cuo:ui/text-input",
         [typeof(TextSpans)] = "cuo:ui/text-spans",
         [typeof(TextWrap)] = "cuo:ui/text-wrap",

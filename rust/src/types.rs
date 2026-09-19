@@ -1973,6 +1973,16 @@ impl HasPath for TextFont {
     const PATH: &'static str = paths::ui::TEXT_FONT;
 }
 
+/// `cuo:ui/text-hue`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct TextHue {
+    pub value: u16,
+}
+impl HasPath for TextHue {
+    const PATH: &'static str = paths::ui::TEXT_HUE;
+}
+
 /// `cuo:ui/text-input`
 /// Zero-size tag: its payload is `{}` in both directions.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
