@@ -356,6 +356,8 @@ pub mod ui {
     pub const TEXT_COMPLETION_STATE: &str = "cuo:ui/text-completion-state";
     /// `cuo:ui/text-font` — component.
     pub const TEXT_FONT: &str = "cuo:ui/text-font";
+    /// `cuo:ui/text-hue` — component.
+    pub const TEXT_HUE: &str = "cuo:ui/text-hue";
     /// `cuo:ui/text-input` — component.
     pub const TEXT_INPUT: &str = "cuo:ui/text-input";
     /// `cuo:ui/text-spans` — component.
