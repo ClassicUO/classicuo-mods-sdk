@@ -290,6 +290,8 @@ pub mod ui {
     pub const BUTTON: &str = "cuo:ui/button";
     /// `cuo:ui/clicked` — component.
     pub const CLICKED: &str = "cuo:ui/clicked";
+    /// `cuo:ui/clipboard-set` — resource.
+    pub const CLIPBOARD_SET: &str = "cuo:ui/clipboard-set";
     /// `cuo:ui/contains-by-bounds` — component.
     pub const CONTAINS_BY_BOUNDS: &str = "cuo:ui/contains-by-bounds";
     /// `cuo:ui/custom` — component.

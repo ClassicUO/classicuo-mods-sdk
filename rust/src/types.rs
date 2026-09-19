@@ -141,6 +141,17 @@ impl HasPath for CharacterSelectionScene {
     const PATH: &'static str = paths::scene::CHARACTER_SELECTION;
 }
 
+/// `cuo:ui/clipboard-set`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ClipboardSetDto {
+    pub seq: i32,
+    pub text: String,
+}
+impl HasPath for ClipboardSetDto {
+    const PATH: &'static str = paths::ui::CLIPBOARD_SET;
+}
+
 /// Nested payload type (`Clay.Color`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
