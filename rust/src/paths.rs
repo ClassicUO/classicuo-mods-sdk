@@ -340,6 +340,8 @@ pub mod ui {
     pub const STAT_LOCK_BUTTON: &str = "cuo:ui/stat-lock-button";
     /// `cuo:ui/statusbar-window` — component.
     pub const STATUSBAR_WINDOW: &str = "cuo:ui/statusbar-window";
+    /// `cuo:ui/supersedes` — component.
+    pub const SUPERSEDES: &str = "cuo:ui/supersedes";
     /// `cuo:ui/surface` — resource.
     pub const SURFACE: &str = "cuo:ui/surface";
     /// `cuo:ui/text` — component.

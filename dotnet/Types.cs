@@ -988,6 +988,15 @@ public partial struct ModState
     [JsonPropertyName("Json")] public string Json;
 }
 
+/// <summary><c>cuo:ui/supersedes</c></summary>
+public partial struct ModSupersedes
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/supersedes";
+
+    [JsonPropertyName("Feature")] public string Feature;
+}
+
 /// <summary><c>cuo:input/mouse</c></summary>
 public partial struct MouseInputDto
 {
@@ -2328,6 +2337,7 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(ModMoveRequest))]
 [JsonSerializable(typeof(ModRightClicked))]
 [JsonSerializable(typeof(ModState))]
+[JsonSerializable(typeof(ModSupersedes))]
 [JsonSerializable(typeof(MouseInputDto))]
 [JsonSerializable(typeof(NetworkSerial))]
 [JsonSerializable(typeof(Node))]
@@ -2522,6 +2532,7 @@ public static class TypePaths
         [typeof(ModMoveRequest)] = "cuo:player/move-request",
         [typeof(ModRightClicked)] = "cuo:ui/right-clicked",
         [typeof(ModState)] = "cuo:mod/state",
+        [typeof(ModSupersedes)] = "cuo:ui/supersedes",
         [typeof(MouseInputDto)] = "cuo:input/mouse",
         [typeof(NetworkSerial)] = "cuo:ent/serial",
         [typeof(Node)] = "cuo:ui/node",
