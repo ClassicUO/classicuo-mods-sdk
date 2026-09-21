@@ -357,6 +357,8 @@ public static class Paths
         public const string StatLockButton = "cuo:ui/stat-lock-button";
         /// <summary><c>cuo:ui/statusbar-window</c> — component.</summary>
         public const string StatusbarWindow = "cuo:ui/statusbar-window";
+        /// <summary><c>cuo:ui/supersedes</c> — component.</summary>
+        public const string Supersedes = "cuo:ui/supersedes";
         /// <summary><c>cuo:ui/surface</c> — resource.</summary>
         public const string Surface = "cuo:ui/surface";
         /// <summary><c>cuo:ui/text</c> — component.</summary>

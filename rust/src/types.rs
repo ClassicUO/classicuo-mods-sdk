@@ -1066,6 +1066,16 @@ impl HasPath for ModState {
     const PATH: &'static str = paths::mod_::STATE;
 }
 
+/// `cuo:ui/supersedes`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ModSupersedes {
+    pub feature: String,
+}
+impl HasPath for ModSupersedes {
+    const PATH: &'static str = paths::ui::SUPERSEDES;
+}
+
 /// `cuo:input/mouse`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
