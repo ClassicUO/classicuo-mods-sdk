@@ -36,7 +36,7 @@ public interface ISystemParam<TSelf> where TSelf : ISystemParam<TSelf>
 public sealed class ParamDescriber
 {
     readonly ModHost _host;
-    internal readonly List<ParamDecl> Params = new();
+    internal readonly List<ParamDeclT> Params = new();
     int _queries;
     int _last = -1;
 
@@ -45,14 +45,14 @@ public sealed class ParamDescriber
         _host = host;
         // Every system gets a Commands param: the SDK always hands the body a command
         // buffer, and an unused one costs the host nothing.
-        Params.Add(new ParamDecl { Kind = ParamKind.Commands });
+        Params.Add(new ParamDeclT { Kind = ParamKind.Commands });
     }
 
     internal QueryTermSink BeginQuery() => new(_host);
 
     internal void EndQuery(QueryTermSink sink)
     {
-        Params.Add(new ParamDecl { Kind = ParamKind.Query, Query = new QueryDecl { Terms = sink.Terms } });
+        Params.Add(new ParamDeclT { Kind = ParamKind.Query, Query = new QueryDeclT { Terms = sink.Terms } });
         _last = _queries++;
     }
 

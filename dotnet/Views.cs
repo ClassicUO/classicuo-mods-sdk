@@ -11,14 +11,17 @@ internal readonly struct SystemInputView
 
     internal SystemInputView(SystemInput input) => _input = input;
 
+    // `default` for an observer context (no buffer behind it).
+    bool Empty => _input.ByteBuffer == null;
+
     /// <summary>Host frame tick (for guest-side timers).</summary>
-    public ulong Tick => _input?.Tick ?? 0;
+    public ulong Tick => Empty ? 0 : _input.Tick;
 
     /// <summary>The rows of the <paramref name="n"/>th declared query (0-based, in declaration
     /// order). Null for an observer context, which carries no rows.</summary>
     public QueryRowsView? Query(int n) =>
-        _input is { Queries: { } queries } && (uint)n < (uint)queries.Count
-            ? new QueryRowsView(queries[n])
+        !Empty && (uint)n < (uint)_input.QueriesLength
+            ? new QueryRowsView(_input.Queries(n)!.Value)
             : null;
 }
 
@@ -29,18 +32,17 @@ internal readonly struct QueryRowsView
 
     internal QueryRowsView(QueryRows q) => _q = q;
 
-    public int Count => _q.Rows?.Count ?? 0;
+    public int Count => _q.RowsLength;
 
     public RowView? Row(int i) =>
-        _q.Rows is { } rows && (uint)i < (uint)rows.Count ? new RowView(rows[i]) : null;
+        (uint)i < (uint)_q.RowsLength ? new RowView(_q.Rows(i)!.Value) : null;
 
     public IEnumerable<RowView> Rows
     {
         get
         {
-            if (_q.Rows is { } rows)
-                foreach (var r in rows)
-                    yield return new RowView(r);
+            for (var i = 0; i < _q.RowsLength; i++)
+                yield return new RowView(_q.Rows(i)!.Value);
         }
     }
 }
@@ -56,7 +58,7 @@ internal readonly struct RowView
 
     /// <summary>Component at declared Ref/Mut index <paramref name="i"/>.</summary>
     public CompView? Comp(int i) =>
-        _row.Comps is { } comps && (uint)i < (uint)comps.Count ? new CompView(comps[i]) : null;
+        (uint)i < (uint)_row.CompsLength ? new CompView(_row.Comps(i)!.Value) : null;
 }
 
 /// <summary>A single component slot on a <see cref="RowView"/>.</summary>
@@ -66,8 +68,8 @@ internal readonly struct CompView
 
     internal CompView(CompValue c) => _c = c;
 
-    /// <summary>Raw payload bytes (typed sub-buffer or JSON utf8).</summary>
-    public ReadOnlyMemory<byte> Bytes => _c.Data is { } d ? d : ReadOnlyMemory<byte>.Empty;
+    /// <summary>Raw payload bytes (typed sub-buffer or JSON utf8), a view into the input buffer.</summary>
+    public ReadOnlyMemory<byte> Bytes => _c.GetDataBytes() is { } d ? d : ReadOnlyMemory<byte>.Empty;
 
     /// <summary>
     /// Deserialize the JSON payload into <typeparamref name="T"/>; <c>default</c> on empty
@@ -96,7 +98,7 @@ internal readonly struct ObserverInputView
     public ulong Entity => _entity;
 
     /// <summary>The event/component payload (Insert/Remove component, or Custom event JSON).</summary>
-    // Null-conditional on _input: a system's params are built from a `default` observer
-    // view, so this is reachable outside an observer call.
-    public CompView? Value => _input?.Value is { } v ? new CompView(v) : null;
+    // ByteBuffer check: a system's params are built from a `default` observer view, so
+    // this is reachable outside an observer call.
+    public CompView? Value => _input.ByteBuffer != null && _input.Value is { } v ? new CompView(v) : null;
 }

@@ -19,24 +19,24 @@ public sealed class ObserverDescriber
     const ushort NoneType = 0xFFFF;
 
     readonly ModHost _host;
-    internal ObserverDecl? Decl;
+    internal ObserverDeclT? Decl;
 
     internal ObserverDescriber(ModHost host) => _host = host;
 
-    internal void Event<T>() => Decl = new ObserverDecl
+    internal void Event<T>() => Decl = new ObserverDeclT
     {
         Kind = ObserverKind.Custom,
         TypeId = NoneType,
         EventName = ModHost.PathOf<T>(),
     };
 
-    internal void Insert<T>() => Decl = new ObserverDecl { Kind = ObserverKind.Insert, TypeId = _host.Id<T>() };
+    internal void Insert<T>() => Decl = new ObserverDeclT { Kind = ObserverKind.Insert, TypeId = _host.Id<T>() };
 
-    internal void Remove<T>() => Decl = new ObserverDecl { Kind = ObserverKind.Remove, TypeId = _host.Id<T>() };
+    internal void Remove<T>() => Decl = new ObserverDeclT { Kind = ObserverKind.Remove, TypeId = _host.Id<T>() };
 
-    internal void Spawn() => Decl = new ObserverDecl { Kind = ObserverKind.Spawn, TypeId = NoneType };
+    internal void Spawn() => Decl = new ObserverDeclT { Kind = ObserverKind.Spawn, TypeId = NoneType };
 
-    internal void Despawn() => Decl = new ObserverDecl { Kind = ObserverKind.Despawn, TypeId = NoneType };
+    internal void Despawn() => Decl = new ObserverDeclT { Kind = ObserverKind.Despawn, TypeId = NoneType };
 }
 
 /// <summary>
