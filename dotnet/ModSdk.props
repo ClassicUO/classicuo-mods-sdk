@@ -22,6 +22,14 @@
     <OptimizationPreference Condition="'$(OptimizationPreference)' == ''">Size</OptimizationPreference>
     <WasmEnableSIMD>true</WasmEnableSIMD>
 
+    <!-- Size: DebugType=none turns off NativeDebugSymbols, so ILC links with the
+         wasm-ld strip-all flag (no DWARF, no name section: ~70% of the module). Trap
+         backtraces lose function names; pass -p:DebugType=portable to debug a mod. -->
+    <DebugType>none</DebugType>
+    <!-- No stack-trace data (names are stripped anyway); also lets ILC fold identical
+         method bodies across all types, not just generics. -->
+    <StackTraceSupport Condition="'$(StackTraceSupport)' == ''">false</StackTraceSupport>
+
     <!-- cdylib-style output name: ecs-foo -> ecs_foo (the Makefile copies $(TargetName).wasm). -->
     <TargetName Condition="'$(TargetName)' == ''">$(MSBuildProjectName.Replace('-','_'))</TargetName>
 

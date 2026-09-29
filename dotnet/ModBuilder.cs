@@ -21,8 +21,8 @@ namespace CuoModSdk;
 public sealed class ModBuilder
 {
     readonly ModHost _host;
-    readonly List<SystemDecl> _sysDecls = new();
-    readonly List<ObserverDecl> _obsDecls = new();
+    readonly List<SystemDeclT> _sysDecls = new();
+    readonly List<ObserverDeclT> _obsDecls = new();
     readonly List<Types.ModHotkeyBinding> _hotkeys = new();
 
     internal readonly List<Action<SystemInputView, Commands>> SystemFns = new();
@@ -251,7 +251,7 @@ public sealed class ModBuilder
     SystemHandle AddSystem(ParamDescriber d, Action<SystemInputView, Commands> run)
     {
         var id = (uint)_sysDecls.Count;
-        var decl = new SystemDecl
+        var decl = new SystemDeclT
         {
             Id = id,
             // Diagnostics only host-side, but After/Before resolve by name — so it must
@@ -287,7 +287,7 @@ public sealed class ModBuilder
         AddSystem((Commands cmds) => cmds.SetResource(bindings)).InStage(Stage.Startup).Label("hotkeys");
     }
 
-    internal SetupReply BuildReply() => new()
+    internal SetupReplyT BuildReply() => new()
     {
         Systems = _sysDecls.Count == 0 ? null : _sysDecls,
         Observers = _obsDecls.Count == 0 ? null : _obsDecls,
@@ -302,9 +302,9 @@ public sealed class ModBuilder
 /// </summary>
 public readonly struct SystemHandle
 {
-    readonly SystemDecl _decl;
+    readonly SystemDeclT _decl;
 
-    internal SystemHandle(SystemDecl decl) => _decl = decl;
+    internal SystemHandle(SystemDeclT decl) => _decl = decl;
 
     internal uint Id => _decl.Id;
 

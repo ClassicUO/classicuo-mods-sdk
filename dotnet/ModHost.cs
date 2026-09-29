@@ -26,7 +26,7 @@ internal sealed class ModHost
     /// <summary>Host frame tick from the last <c>mod_run</c> input (observers get no tick of their own).</summary>
     internal ulong Tick;
 
-    internal ModHost(Handshake hs)
+    internal ModHost(HandshakeT hs)
     {
         if (hs.TypePaths != null)
             foreach (var tp in hs.TypePaths)

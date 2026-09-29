@@ -29,22 +29,22 @@ public interface IQueryFilter<TSelf> where TSelf : struct, IQueryFilter<TSelf>
 public sealed class QueryTermSink
 {
     readonly ModHost _host;
-    internal readonly List<QueryTerm> Terms = new();
+    internal readonly List<QueryTermT> Terms = new();
 
     internal QueryTermSink(ModHost host) => _host = host;
 
     /// <summary>A read term: the row carries <typeparamref name="T"/>.</summary>
-    internal void Read<T>() => Terms.Add(new QueryTerm { Kind = QueryTermKind.Ref, TypeId = _host.Id<T>() });
+    internal void Read<T>() => Terms.Add(new QueryTermT { Kind = QueryTermKind.Ref, TypeId = _host.Id<T>() });
 
     /// <summary>Presence filter. Dropped when the type is already a term — a read term already implies presence.</summary>
     internal void With<T>()
     {
         var id = _host.Id<T>();
         if (Find(id) < 0)
-            Terms.Add(new QueryTerm { Kind = QueryTermKind.With, TypeId = id });
+            Terms.Add(new QueryTermT { Kind = QueryTermKind.With, TypeId = id });
     }
 
-    internal void Without<T>() => Terms.Add(new QueryTerm { Kind = QueryTermKind.Without, TypeId = _host.Id<T>() });
+    internal void Without<T>() => Terms.Add(new QueryTermT { Kind = QueryTermKind.Without, TypeId = _host.Id<T>() });
 
     /// <summary>
     /// Read + change filter. When the type is already a term (a <c>Data&lt;T&gt;</c> read,
@@ -58,7 +58,7 @@ public sealed class QueryTermSink
         if (at >= 0)
             Terms[at].Kind = QueryTermKind.Changed;
         else
-            Terms.Add(new QueryTerm { Kind = QueryTermKind.Changed, TypeId = id });
+            Terms.Add(new QueryTermT { Kind = QueryTermKind.Changed, TypeId = id });
     }
 
     int Find(ushort typeId)

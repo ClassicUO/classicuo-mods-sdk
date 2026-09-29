@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using FlatSharp;
+using Google.FlatBuffers;
 using ModAbi;
 
 namespace CuoModSdk;
@@ -19,9 +19,8 @@ public delegate bool PacketFilter(byte id, ReadOnlySpan<byte> data);
 /// 3. <c>mod_filter(id, bytes)</c> / <c>mod_filter_out(id, bytes)</c> — run the
 ///    incoming / outgoing packet filter; nonzero blocks.
 ///
-/// Boundary plumbing: inputs are read with FlatSharp, returns are written with
-/// FlatSharp (it reads its own deduplicated vtables fine — the Rust SDK hand-rolls a
-/// wire reader only because planus can't follow FlatSharp's backward vtables).
+/// Boundary plumbing (Google.FlatBuffers): per-call inputs are read in place through
+/// the struct accessors; returns are written with one reused FlatBufferBuilder.
 /// Packed guest returns are <c>len&lt;&lt;32 | ptr</c> (0 = none).
 /// </summary>
 public static unsafe class ModRuntime
@@ -52,13 +51,14 @@ public static unsafe class ModRuntime
         if (pending == null || _host == null)
             return;
 
-        var input = Parse(SpawnedInput.Serializer, ptr, len);
-        if (input.Spawned == null)
-            return;
-        foreach (var sr in input.Spawned)
+        var input = SpawnedInput.GetRootAsSpawnedInput(Wrap(ptr, len));
+        for (var i = 0; i < input.SpawnedLength; i++)
+        {
+            var sr = input.Spawned(i)!.Value;
             foreach (var (tempId, name) in pending)
                 if (tempId == sr.TempId)
                     _host.Named[name] = sr.Entity;
+        }
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public static unsafe class ModRuntime
     /// </summary>
     public static long Setup(int ptr, int len, Mod mod)
     {
-        var hs = Parse(Handshake.Serializer, ptr, len);
+        var hs = Handshake.GetRootAsHandshake(Wrap(ptr, len)).UnPack();
         if (hs.AbiVersion != AbiVersion)
             throw new InvalidOperationException(
                 $"mod ABI mismatch: host speaks v{hs.AbiVersion}, this mod was built against " +
@@ -82,14 +82,15 @@ public static unsafe class ModRuntime
         _observers = m.ObserverFns;
         _filter = m.Filter;
         _filterOut = m.FilterOut;
-        return Pack(SetupReply.Serializer, m.BuildReply());
+        var reply = m.BuildReply();
+        return Pack(SetupReply.Pack(Begin(), reply).Value);
     }
 
     internal static long Run(int sysId, int ptr, int len)
     {
         if ((uint)sysId >= (uint)_systems.Count)
             return 0;
-        var input = new SystemInputView(Parse(SystemInput.Serializer, ptr, len));
+        var input = new SystemInputView(SystemInput.GetRootAsSystemInput(Wrap(ptr, len)));
         _host!.Tick = input.Tick;
         var buffer = new CommandBufferBuilder();
         var cmds = new Commands(buffer, _host);
@@ -102,7 +103,7 @@ public static unsafe class ModRuntime
     {
         if ((uint)obsId >= (uint)_observers.Count)
             return 0;
-        var input = new ObserverInputView(Parse(ObserverInput.Serializer, ptr, len), (ulong)entity);
+        var input = new ObserverInputView(ObserverInput.GetRootAsObserverInput(Wrap(ptr, len)), (ulong)entity);
         var buffer = new CommandBufferBuilder();
         var cmds = new Commands(buffer, _host!);
         _observers[obsId](input, cmds);
@@ -121,33 +122,40 @@ public static unsafe class ModRuntime
     static long PackAndStash(CommandBufferBuilder cmds)
     {
         var names = cmds.TakePendingNames();
-        var packed = Pack(CommandBuffer.Serializer, cmds.Finish());
+        var packed = Pack(cmds.Finish(Begin()));
         if (names != null)
             _pendingNames = names;
         return packed;
     }
 
-    // ── FlatSharp <-> arena plumbing ─────────────────────────────────────────────
-    static byte[] _scratch = new byte[1024];
+    // ── FlatBuffers <-> arena plumbing ───────────────────────────────────────────
+    static readonly FlatBufferBuilder _fbb = new(1024);
 
-    static T Parse<T>(ISerializer<T> serializer, int ptr, int len) where T : class
+    // The input is copied out of the arena: ByteBuffer wants a managed array, and the
+    // views over it are only used for the duration of this call.
+    static ByteBuffer Wrap(int ptr, int len)
     {
         var arr = new byte[len];
         new ReadOnlySpan<byte>((void*)(nint)ptr, len).CopyTo(arr);
-        return serializer.Parse(arr.AsMemory(0, len));
+        return new ByteBuffer(arr);
     }
 
-    // Serialize into the scratch buffer, copy into a fresh arena reservation, return the
-    // packed len<<32 | ptr. The arena still holds the (already-parsed) input at lower
-    // offsets; the bump pointer places this after it.
-    static long Pack<T>(ISerializer<T> serializer, T value) where T : class
+    static FlatBufferBuilder Begin()
     {
-        var max = serializer.GetMaxSize(value);
-        if (_scratch.Length < max)
-            _scratch = new byte[max];
-        var n = serializer.Write(_scratch, value);
+        _fbb.Clear();
+        return _fbb;
+    }
+
+    // Finish the root, copy the finished bytes into a fresh arena reservation, return the
+    // packed len<<32 | ptr. The arena still holds the (already-read) input at lower
+    // offsets; the bump pointer places this after it.
+    static long Pack(int root)
+    {
+        _fbb.Finish(root);
+        var bytes = _fbb.DataBuffer.ToArraySegment(_fbb.DataBuffer.Position, _fbb.Offset);
+        var n = bytes.Count;
         var ptr = Arena.Alloc(n);
-        new ReadOnlySpan<byte>(_scratch, 0, n).CopyTo(new Span<byte>((void*)(nint)ptr, n));
+        bytes.AsSpan().CopyTo(new Span<byte>((void*)(nint)ptr, n));
         return ((long)n << 32) | (uint)ptr;
     }
 }
