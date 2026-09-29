@@ -491,6 +491,13 @@ pub struct GrabbedItem {
     pub pending_drop: bool,
     pub drop_target_serial: u32,
     pub failed_drop: bool,
+    pub drop_seq: i32,
+    pub last_drop_serial: u32,
+    pub last_drop_x: u16,
+    pub last_drop_y: u16,
+    pub last_drop_z: i8,
+    pub last_drop_container: u32,
+    pub mouse_offset: Vector2,
 }
 impl HasPath for GrabbedItem {
     const PATH: &'static str = paths::player::GRABBED_ITEM;
@@ -1217,6 +1224,7 @@ pub struct PaperdollWindow {
     pub serial: u32,
     pub is_player: bool,
     pub can_lift: bool,
+    pub minimized: bool,
 }
 impl HasPath for PaperdollWindow {
     const PATH: &'static str = paths::gump::PAPERDOLL;
@@ -1417,6 +1425,8 @@ pub struct ProfileWindow {
     pub expander_entity: u64,
     pub footer_entity: u64,
     pub footer_offset_from_bottom: i32,
+    pub minimized: bool,
+    pub knob_entity: u64,
 }
 impl HasPath for ProfileWindow {
     const PATH: &'static str = paths::gump::PROFILE;
@@ -1750,6 +1760,7 @@ pub struct SpellbookWindow {
     pub content_entity: u64,
     pub left_corner: u64,
     pub right_corner: u64,
+    pub minimized: bool,
 }
 impl HasPath for SpellbookWindow {
     const PATH: &'static str = paths::gump::SPELLBOOK;
@@ -2340,6 +2351,14 @@ pub mod val_type {
     pub const PX: super::ValType = 1;
     pub const PERCENT: super::ValType = 2;
     pub const GROW: super::ValType = 3;
+}
+
+/// Nested payload type (`System.Numerics.Vector2`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct Vector2 {
+    pub x: f32,
+    pub y: f32,
 }
 
 /// `cuo:gump/vendor`

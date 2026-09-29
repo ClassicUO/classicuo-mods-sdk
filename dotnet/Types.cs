@@ -450,6 +450,13 @@ public sealed partial class GrabbedItem
     [JsonPropertyName("PendingDrop")] public bool PendingDrop;
     [JsonPropertyName("DropTargetSerial")] public uint DropTargetSerial;
     [JsonPropertyName("FailedDrop")] public bool FailedDrop;
+    [JsonPropertyName("DropSeq")] public int DropSeq;
+    [JsonPropertyName("LastDropSerial")] public uint LastDropSerial;
+    [JsonPropertyName("LastDropX")] public ushort LastDropX;
+    [JsonPropertyName("LastDropY")] public ushort LastDropY;
+    [JsonPropertyName("LastDropZ")] public sbyte LastDropZ;
+    [JsonPropertyName("LastDropContainer")] public uint LastDropContainer;
+    [JsonPropertyName("MouseOffset")] public Vector2 MouseOffset;
 }
 
 /// <summary><c>cuo:ent/graphic</c></summary>
@@ -1134,6 +1141,7 @@ public partial struct PaperdollWindow
     [JsonPropertyName("Serial")] public uint Serial;
     [JsonPropertyName("IsPlayer")] public bool IsPlayer;
     [JsonPropertyName("CanLift")] public bool CanLift;
+    [JsonPropertyName("Minimized")] public bool Minimized;
 }
 
 /// <summary><c>cuo:player/party</c></summary>
@@ -1321,6 +1329,8 @@ public partial struct ProfileWindow
     [JsonPropertyName("ExpanderEntity")] public ulong ExpanderEntity;
     [JsonPropertyName("FooterEntity")] public ulong FooterEntity;
     [JsonPropertyName("FooterOffsetFromBottom")] public int FooterOffsetFromBottom;
+    [JsonPropertyName("Minimized")] public bool Minimized;
+    [JsonPropertyName("KnobEntity")] public ulong KnobEntity;
 }
 
 /// <summary><c>cuo:chat/prompt</c></summary>
@@ -1630,6 +1640,7 @@ public partial struct SpellbookWindow
     [JsonPropertyName("ContentEntity")] public ulong ContentEntity;
     [JsonPropertyName("LeftCorner")] public ulong LeftCorner;
     [JsonPropertyName("RightCorner")] public ulong RightCorner;
+    [JsonPropertyName("Minimized")] public bool Minimized;
 }
 
 /// <summary><c>cuo:player/spellbook</c></summary>
@@ -2183,6 +2194,13 @@ public enum ValType : byte
     Grow = 3,
 }
 
+/// <summary>Nested payload type (<c>System.Numerics.Vector2</c>).</summary>
+public partial struct Vector2
+{
+    [JsonPropertyName("X")] public float X;
+    [JsonPropertyName("Y")] public float Y;
+}
+
 /// <summary><c>cuo:gump/vendor</c>
 /// <para>Presence-only marker: the host always answers <c>{}</c> and ignores writes.</para>
 /// </summary>
@@ -2443,6 +2461,7 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(UseSkillAction))]
 [JsonSerializable(typeof(Val))]
 [JsonSerializable(typeof(ValType))]
+[JsonSerializable(typeof(Vector2))]
 [JsonSerializable(typeof(VendorWindow))]
 [JsonSerializable(typeof(WalkAction))]
 [JsonSerializable(typeof(WalkToAction))]
