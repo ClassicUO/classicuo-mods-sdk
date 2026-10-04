@@ -18,11 +18,15 @@ fn main() {
     println!("cargo:rerun-if-changed={}", schema.display());
     println!("cargo:rerun-if-changed=build.rs");
 
+    // Run from abi/ with the bare file name: planus writes the schema path into
+    // generated.rs doc comments, and an absolute (or OS-separated) one would leak
+    // the builder's machine path and churn the file between hosts.
     match Command::new("planus")
+        .current_dir(schema.parent().unwrap())
         .arg("rust")
         .arg("-o")
         .arg(&out)
-        .arg(&schema)
+        .arg("mod-abi.fbs")
         .status()
     {
         Ok(s) if s.success() => {
