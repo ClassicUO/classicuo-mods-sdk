@@ -6,25 +6,15 @@ using ModAbi;
 namespace CuoModSdk;
 
 /// <summary>
-/// The per-guest instance state the SDK threads through every callback: the interned
-/// type-path table from the handshake, the JSON contexts that can resolve a payload
-/// type, the name→entity bindings the host resolves for <c>Spawn(name)</c>, and the
-/// last tick pushed by the host.
-///
-/// Instance, not statics: it is created by <see cref="ModRuntime.Setup"/> and reachable
-/// only through <see cref="ModBuilder"/> / <see cref="ModContext"/>, so nothing a mod
-/// writes can see (or need) global SDK state.
+/// The per-guest state the SDK threads through every run: the interned type-path table
+/// from the handshake and the JSON contexts that can resolve a payload type.
 /// </summary>
 internal sealed class ModHost
 {
+    internal const ushort NoneType = 0xFFFF;
+
     readonly Dictionary<string, ushort> _typeIds = new();
     readonly List<JsonSerializerContext> _json = new();
-
-    /// <summary>Real ecs ids of entities spawned by name, resolved through <c>mod_spawned</c>.</summary>
-    internal readonly Dictionary<string, ulong> Named = new();
-
-    /// <summary>Host frame tick from the last <c>mod_run</c> input (observers get no tick of their own).</summary>
-    internal ulong Tick;
 
     internal ModHost(HandshakeT hs)
     {
@@ -45,8 +35,7 @@ internal sealed class ModHost
         _typeIds.TryGetValue(path, out var id)
             ? id
             : throw new InvalidOperationException(
-                $"the host does not register the type path '{path}' " +
-                "(see src/ClassicUO.Ecs/Modding/CuoModdingRegistry.cs)");
+                $"the client has no type path '{path}'");
 
     internal ushort Id<T>() => Id(PathOf<T>());
 

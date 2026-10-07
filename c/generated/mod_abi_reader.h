@@ -63,6 +63,14 @@ typedef const struct ModAbi_QueryRows_table *ModAbi_QueryRows_table_t;
 typedef struct ModAbi_QueryRows_table *ModAbi_QueryRows_mutable_table_t;
 typedef const flatbuffers_uoffset_t *ModAbi_QueryRows_vec_t;
 typedef flatbuffers_uoffset_t *ModAbi_QueryRows_mutable_vec_t;
+typedef const struct ModAbi_ResValue_table *ModAbi_ResValue_table_t;
+typedef struct ModAbi_ResValue_table *ModAbi_ResValue_mutable_table_t;
+typedef const flatbuffers_uoffset_t *ModAbi_ResValue_vec_t;
+typedef flatbuffers_uoffset_t *ModAbi_ResValue_mutable_vec_t;
+typedef const struct ModAbi_EventValues_table *ModAbi_EventValues_table_t;
+typedef struct ModAbi_EventValues_table *ModAbi_EventValues_mutable_table_t;
+typedef const flatbuffers_uoffset_t *ModAbi_EventValues_vec_t;
+typedef flatbuffers_uoffset_t *ModAbi_EventValues_mutable_vec_t;
 typedef const struct ModAbi_SystemInput_table *ModAbi_SystemInput_table_t;
 typedef struct ModAbi_SystemInput_table *ModAbi_SystemInput_mutable_table_t;
 typedef const flatbuffers_uoffset_t *ModAbi_SystemInput_vec_t;
@@ -250,6 +258,30 @@ typedef flatbuffers_uoffset_t *ModAbi_SpawnedInput_mutable_vec_t;
 #define ModAbi_QueryRows_type_identifier "\x54\x13\x9a\x08"
 #ifndef ModAbi_QueryRows_file_extension
 #define ModAbi_QueryRows_file_extension "bin"
+#endif
+#ifndef ModAbi_ResValue_file_identifier
+#define ModAbi_ResValue_file_identifier 0
+#endif
+/* deprecated, use ModAbi_ResValue_file_identifier */
+#ifndef ModAbi_ResValue_identifier
+#define ModAbi_ResValue_identifier 0
+#endif
+#define ModAbi_ResValue_type_hash ((flatbuffers_thash_t)0xdbb8b610)
+#define ModAbi_ResValue_type_identifier "\x10\xb6\xb8\xdb"
+#ifndef ModAbi_ResValue_file_extension
+#define ModAbi_ResValue_file_extension "bin"
+#endif
+#ifndef ModAbi_EventValues_file_identifier
+#define ModAbi_EventValues_file_identifier 0
+#endif
+/* deprecated, use ModAbi_EventValues_file_identifier */
+#ifndef ModAbi_EventValues_identifier
+#define ModAbi_EventValues_identifier 0
+#endif
+#define ModAbi_EventValues_type_hash ((flatbuffers_thash_t)0xf0fb4957)
+#define ModAbi_EventValues_type_identifier "\x57\x49\xfb\xf0"
+#ifndef ModAbi_EventValues_file_extension
+#define ModAbi_EventValues_file_extension "bin"
 #endif
 #ifndef ModAbi_SystemInput_file_identifier
 #define ModAbi_SystemInput_file_identifier 0
@@ -488,6 +520,7 @@ __flatbuffers_define_integer_type(ModAbi_QueryTermKind, ModAbi_QueryTermKind_enu
 #define ModAbi_QueryTermKind_With ((ModAbi_QueryTermKind_enum_t)UINT8_C(2))
 #define ModAbi_QueryTermKind_Without ((ModAbi_QueryTermKind_enum_t)UINT8_C(3))
 #define ModAbi_QueryTermKind_Changed ((ModAbi_QueryTermKind_enum_t)UINT8_C(4))
+#define ModAbi_QueryTermKind_Added ((ModAbi_QueryTermKind_enum_t)UINT8_C(5))
 
 static inline const char *ModAbi_QueryTermKind_name(ModAbi_QueryTermKind_enum_t value)
 {
@@ -497,6 +530,7 @@ static inline const char *ModAbi_QueryTermKind_name(ModAbi_QueryTermKind_enum_t 
     case ModAbi_QueryTermKind_With: return "With";
     case ModAbi_QueryTermKind_Without: return "Without";
     case ModAbi_QueryTermKind_Changed: return "Changed";
+    case ModAbi_QueryTermKind_Added: return "Added";
     default: return "";
     }
 }
@@ -509,6 +543,7 @@ static inline int ModAbi_QueryTermKind_is_known_value(ModAbi_QueryTermKind_enum_
     case ModAbi_QueryTermKind_With: return 1;
     case ModAbi_QueryTermKind_Without: return 1;
     case ModAbi_QueryTermKind_Changed: return 1;
+    case ModAbi_QueryTermKind_Added: return 1;
     default: return 0;
     }
 }
@@ -517,12 +552,18 @@ typedef uint8_t ModAbi_ParamKind_enum_t;
 __flatbuffers_define_integer_type(ModAbi_ParamKind, ModAbi_ParamKind_enum_t, 8)
 #define ModAbi_ParamKind_Commands ((ModAbi_ParamKind_enum_t)UINT8_C(0))
 #define ModAbi_ParamKind_Query ((ModAbi_ParamKind_enum_t)UINT8_C(1))
+#define ModAbi_ParamKind_Res ((ModAbi_ParamKind_enum_t)UINT8_C(2))
+#define ModAbi_ParamKind_ResMut ((ModAbi_ParamKind_enum_t)UINT8_C(3))
+#define ModAbi_ParamKind_Events ((ModAbi_ParamKind_enum_t)UINT8_C(4))
 
 static inline const char *ModAbi_ParamKind_name(ModAbi_ParamKind_enum_t value)
 {
     switch (value) {
     case ModAbi_ParamKind_Commands: return "Commands";
     case ModAbi_ParamKind_Query: return "Query";
+    case ModAbi_ParamKind_Res: return "Res";
+    case ModAbi_ParamKind_ResMut: return "ResMut";
+    case ModAbi_ParamKind_Events: return "Events";
     default: return "";
     }
 }
@@ -532,6 +573,9 @@ static inline int ModAbi_ParamKind_is_known_value(ModAbi_ParamKind_enum_t value)
     switch (value) {
     case ModAbi_ParamKind_Commands: return 1;
     case ModAbi_ParamKind_Query: return 1;
+    case ModAbi_ParamKind_Res: return 1;
+    case ModAbi_ParamKind_ResMut: return 1;
+    case ModAbi_ParamKind_Events: return 1;
     default: return 0;
     }
 }
@@ -635,6 +679,7 @@ __flatbuffers_table_as_root(ModAbi_ParamDecl)
 
 __flatbuffers_define_scalar_field(0, ModAbi_ParamDecl, kind, ModAbi_ParamKind, ModAbi_ParamKind_enum_t, UINT8_C(0))
 __flatbuffers_define_table_field(1, ModAbi_ParamDecl, query, ModAbi_QueryDecl_table_t, 0)
+__flatbuffers_define_scalar_field(2, ModAbi_ParamDecl, type_id, flatbuffers_uint16, uint16_t, UINT16_C(0))
 
 struct ModAbi_SystemDecl_table { uint8_t unused__; };
 
@@ -665,6 +710,7 @@ __flatbuffers_define_scalar_field(0, ModAbi_ObserverDecl, id, flatbuffers_uint32
 __flatbuffers_define_scalar_field(1, ModAbi_ObserverDecl, kind, ModAbi_ObserverKind, ModAbi_ObserverKind_enum_t, UINT8_C(0))
 __flatbuffers_define_scalar_field(2, ModAbi_ObserverDecl, type_id, flatbuffers_uint16, uint16_t, UINT16_C(0))
 __flatbuffers_define_string_field(3, ModAbi_ObserverDecl, event_name, 0)
+__flatbuffers_define_vector_field(4, ModAbi_ObserverDecl, params, ModAbi_ParamDecl_vec_t, 0)
 
 struct ModAbi_SetupReply_table { uint8_t unused__; };
 
@@ -678,6 +724,7 @@ __flatbuffers_define_vector_field(0, ModAbi_SetupReply, systems, ModAbi_SystemDe
 __flatbuffers_define_vector_field(1, ModAbi_SetupReply, observers, ModAbi_ObserverDecl_vec_t, 0)
 __flatbuffers_define_scalar_field(2, ModAbi_SetupReply, wants_filter, flatbuffers_bool, flatbuffers_bool_t, UINT8_C(0))
 __flatbuffers_define_scalar_field(3, ModAbi_SetupReply, wants_filter_out, flatbuffers_bool, flatbuffers_bool_t, UINT8_C(0))
+__flatbuffers_define_scalar_field(4, ModAbi_SetupReply, res_unchanged, flatbuffers_bool, flatbuffers_bool_t, UINT8_C(0))
 
 struct ModAbi_Row_table { uint8_t unused__; };
 
@@ -701,6 +748,29 @@ __flatbuffers_table_as_root(ModAbi_QueryRows)
 __flatbuffers_define_scalar_field(0, ModAbi_QueryRows, param_index, flatbuffers_uint32, uint32_t, UINT32_C(0))
 __flatbuffers_define_vector_field(1, ModAbi_QueryRows, rows, ModAbi_Row_vec_t, 0)
 
+struct ModAbi_ResValue_table { uint8_t unused__; };
+
+static inline size_t ModAbi_ResValue_vec_len(ModAbi_ResValue_vec_t vec)
+__flatbuffers_vec_len(vec)
+static inline ModAbi_ResValue_table_t ModAbi_ResValue_vec_at(ModAbi_ResValue_vec_t vec, size_t i)
+__flatbuffers_offset_vec_at(ModAbi_ResValue_table_t, vec, i, 0)
+__flatbuffers_table_as_root(ModAbi_ResValue)
+
+__flatbuffers_define_scalar_field(0, ModAbi_ResValue, param_index, flatbuffers_uint32, uint32_t, UINT32_C(0))
+__flatbuffers_define_table_field(1, ModAbi_ResValue, value, ModAbi_CompValue_table_t, 0)
+__flatbuffers_define_scalar_field(2, ModAbi_ResValue, unchanged, flatbuffers_bool, flatbuffers_bool_t, UINT8_C(0))
+
+struct ModAbi_EventValues_table { uint8_t unused__; };
+
+static inline size_t ModAbi_EventValues_vec_len(ModAbi_EventValues_vec_t vec)
+__flatbuffers_vec_len(vec)
+static inline ModAbi_EventValues_table_t ModAbi_EventValues_vec_at(ModAbi_EventValues_vec_t vec, size_t i)
+__flatbuffers_offset_vec_at(ModAbi_EventValues_table_t, vec, i, 0)
+__flatbuffers_table_as_root(ModAbi_EventValues)
+
+__flatbuffers_define_scalar_field(0, ModAbi_EventValues, param_index, flatbuffers_uint32, uint32_t, UINT32_C(0))
+__flatbuffers_define_vector_field(1, ModAbi_EventValues, values, ModAbi_CompValue_vec_t, 0)
+
 struct ModAbi_SystemInput_table { uint8_t unused__; };
 
 static inline size_t ModAbi_SystemInput_vec_len(ModAbi_SystemInput_vec_t vec)
@@ -712,6 +782,8 @@ __flatbuffers_table_as_root(ModAbi_SystemInput)
 __flatbuffers_define_scalar_field(0, ModAbi_SystemInput, sys_id, flatbuffers_uint32, uint32_t, UINT32_C(0))
 __flatbuffers_define_vector_field(1, ModAbi_SystemInput, queries, ModAbi_QueryRows_vec_t, 0)
 __flatbuffers_define_scalar_field(2, ModAbi_SystemInput, tick, flatbuffers_uint64, uint64_t, UINT64_C(0))
+__flatbuffers_define_vector_field(3, ModAbi_SystemInput, resources, ModAbi_ResValue_vec_t, 0)
+__flatbuffers_define_vector_field(4, ModAbi_SystemInput, events, ModAbi_EventValues_vec_t, 0)
 
 struct ModAbi_SpawnCmd_table { uint8_t unused__; };
 
@@ -879,6 +951,9 @@ __flatbuffers_table_as_root(ModAbi_ObserverInput)
 __flatbuffers_define_scalar_field(0, ModAbi_ObserverInput, obs_id, flatbuffers_uint32, uint32_t, UINT32_C(0))
 __flatbuffers_define_scalar_field(1, ModAbi_ObserverInput, entity, flatbuffers_uint64, uint64_t, UINT64_C(0))
 __flatbuffers_define_table_field(2, ModAbi_ObserverInput, value, ModAbi_CompValue_table_t, 0)
+__flatbuffers_define_vector_field(3, ModAbi_ObserverInput, queries, ModAbi_QueryRows_vec_t, 0)
+__flatbuffers_define_vector_field(4, ModAbi_ObserverInput, resources, ModAbi_ResValue_vec_t, 0)
+__flatbuffers_define_vector_field(5, ModAbi_ObserverInput, events, ModAbi_EventValues_vec_t, 0)
 
 struct ModAbi_SpawnResolved_table { uint8_t unused__; };
 

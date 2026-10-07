@@ -1,5 +1,5 @@
 /* UI payload constructors, chat and hotkeys — the hand-written layer over the generated
- * types (twin of rust/src/ui.rs + dotnet/Types.Ui.cs, ModContext.ChatApi, ModBuilder.Hotkey). */
+ * types (twin of rust/src/ui.rs + dotnet/Types.Ui.cs, Commands.Chat, ModBuilder.Hotkey). */
 #include <stdlib.h>
 #include <string.h>
 

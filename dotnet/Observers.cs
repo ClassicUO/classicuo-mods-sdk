@@ -4,119 +4,96 @@ namespace CuoModSdk;
 
 /// <summary>
 /// What an observer reacts to. The FIRST parameter of a <c>ModBuilder.AddObserver</c>
-/// lambda must be one of these — the same shape as a host <c>TinyEcs.Bevy</c> observer.
+/// lambda must be one of these: <see cref="On{T}"/> (an event), <see cref="OnAdd{T}"/>,
+/// <see cref="OnRemove{T}"/>.
 /// </summary>
 public interface IObserverTrigger<TSelf> where TSelf : struct, IObserverTrigger<TSelf>
 {
-    static abstract void Describe(ObserverDescriber d);
+    static abstract ObserverDeclT Describe(ParamDescriber d);
 
-    static abstract TSelf Create(ParamContext c);
-}
-
-/// <summary>Collects the wire declaration of one observer as its trigger type describes itself.</summary>
-public sealed class ObserverDescriber
-{
-    const ushort NoneType = 0xFFFF;
-
-    readonly ModHost _host;
-    internal ObserverDeclT? Decl;
-
-    internal ObserverDescriber(ModHost host) => _host = host;
-
-    internal void Event<T>() => Decl = new ObserverDeclT
-    {
-        Kind = ObserverKind.Custom,
-        TypeId = NoneType,
-        EventName = ModHost.PathOf<T>(),
-    };
-
-    internal void Insert<T>() => Decl = new ObserverDeclT { Kind = ObserverKind.Insert, TypeId = _host.Id<T>() };
-
-    internal void Remove<T>() => Decl = new ObserverDeclT { Kind = ObserverKind.Remove, TypeId = _host.Id<T>() };
-
-    internal void Spawn() => Decl = new ObserverDeclT { Kind = ObserverKind.Spawn, TypeId = NoneType };
-
-    internal void Despawn() => Decl = new ObserverDeclT { Kind = ObserverKind.Despawn, TypeId = NoneType };
+    static abstract bool TryCreate(ParamContext c, out TSelf value);
 }
 
 /// <summary>
-/// A host event fired (<typeparamref name="T"/> = the generated event payload type).
-/// Runs synchronously when the host emits it — no per-frame polling, no one-frame lag.
+/// The event <typeparamref name="T"/> was sent (<c>On&lt;UiClick&gt;</c>,
+/// <c>On&lt;ModHotkeyFired&gt;</c>, …). Runs synchronously when the host emits it.
 /// </summary>
 public readonly struct On<T> : IObserverTrigger<On<T>>
 {
-    On(ulong entity, T @event)
+    On(Entity entity, T @event)
     {
         Entity = entity;
         Event = @event;
     }
 
-    /// <summary>The entity the event was emitted on (0 = global).</summary>
-    public ulong Entity { get; }
+    /// <summary>The entity the event is aimed at (a clicked UI node); default for a global event.</summary>
+    public Entity Entity { get; }
 
     public T Event { get; }
 
-    public static void Describe(ObserverDescriber d) => d.Event<T>();
+    public static ObserverDeclT Describe(ParamDescriber d) => new()
+    {
+        Kind = ObserverKind.Custom,
+        TypeId = ModHost.NoneType,
+        EventName = ModHost.PathOf<T>(),
+    };
 
-    public static On<T> Create(ParamContext c) => new(c.Observer.Entity, c.Payload<T>());
+    public static bool TryCreate(ParamContext c, out On<T> value) => Trigger.Create<T, On<T>>(c, static (e, v) => new On<T>(e, v), out value);
 }
 
-/// <summary><typeparamref name="T"/> was inserted on an entity; <see cref="Value"/> is the new component.</summary>
-public readonly struct OnInsert<T> : IObserverTrigger<OnInsert<T>>
+/// <summary><typeparamref name="T"/> was added to an entity; <see cref="Value"/> is the new component.</summary>
+public readonly struct OnAdd<T> : IObserverTrigger<OnAdd<T>>
 {
-    OnInsert(ulong entity, T value)
+    OnAdd(Entity entity, T value)
     {
         Entity = entity;
         Value = value;
     }
 
-    public ulong Entity { get; }
+    public Entity Entity { get; }
 
     public T Value { get; }
 
-    public static void Describe(ObserverDescriber d) => d.Insert<T>();
+    public static ObserverDeclT Describe(ParamDescriber d) => new() { Kind = ObserverKind.Insert, TypeId = d.Host.Id<T>() };
 
-    public static OnInsert<T> Create(ParamContext c) => new(c.Observer.Entity, c.Payload<T>());
+    public static bool TryCreate(ParamContext c, out OnAdd<T> value) => Trigger.Create<T, OnAdd<T>>(c, static (e, v) => new OnAdd<T>(e, v), out value);
 }
 
-/// <summary><typeparamref name="T"/> was removed from an entity; <see cref="Value"/> is its last value.</summary>
+/// <summary><typeparamref name="T"/> was removed from an entity (or it despawned); <see cref="Value"/> is its last value.</summary>
 public readonly struct OnRemove<T> : IObserverTrigger<OnRemove<T>>
 {
-    OnRemove(ulong entity, T value)
+    OnRemove(Entity entity, T value)
     {
         Entity = entity;
         Value = value;
     }
 
-    public ulong Entity { get; }
+    public Entity Entity { get; }
 
     public T Value { get; }
 
-    public static void Describe(ObserverDescriber d) => d.Remove<T>();
+    public static ObserverDeclT Describe(ParamDescriber d) => new() { Kind = ObserverKind.Remove, TypeId = d.Host.Id<T>() };
 
-    public static OnRemove<T> Create(ParamContext c) => new(c.Observer.Entity, c.Payload<T>());
+    public static bool TryCreate(ParamContext c, out OnRemove<T> value) => Trigger.Create<T, OnRemove<T>>(c, static (e, v) => new OnRemove<T>(e, v), out value);
 }
 
-/// <summary>An entity was spawned.</summary>
-public readonly struct OnSpawn : IObserverTrigger<OnSpawn>
+static class Trigger
 {
-    OnSpawn(ulong entity) => Entity = entity;
-
-    public ulong Entity { get; }
-
-    public static void Describe(ObserverDescriber d) => d.Spawn();
-
-    public static OnSpawn Create(ParamContext c) => new(c.Observer.Entity);
-}
-
-/// <summary>An entity was despawned.</summary>
-public readonly struct OnDespawn : IObserverTrigger<OnDespawn>
-{
-    OnDespawn(ulong entity) => Entity = entity;
-
-    public ulong Entity { get; }
-
-    public static void Describe(ObserverDescriber d) => d.Despawn();
-
-    public static OnDespawn Create(ParamContext c) => new(c.Observer.Entity);
+    // A payload that doesn't parse as T skips the run (a host/SDK shape drift, not mod logic).
+    internal static bool Create<T, TTrigger>(ParamContext c, Func<Entity, T, TTrigger> make, out TTrigger value)
+    {
+        value = default!;
+        var payload = c.Scope.TriggerValue;
+        T parsed;
+        try
+        {
+            parsed = payload is { } p ? p.Parse(c.Host.Json<T>())! : System.Text.Json.JsonSerializer.Deserialize("{}"u8, c.Host.Json<T>())!;
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            return false;
+        }
+        value = make(new Entity(c.Scope.TriggerEntity), parsed);
+        return true;
+    }
 }

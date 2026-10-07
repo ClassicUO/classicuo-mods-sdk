@@ -29,6 +29,15 @@ public partial struct Amount
     [JsonPropertyName("Value")] public int Value;
 }
 
+/// <summary><c>cuo:ent/auto-opened-corpse</c>
+/// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
+/// </summary>
+public partial struct AutoOpenedCorpse
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ent/auto-opened-corpse";
+}
+
 /// <summary><c>cuo:ui/bg-color</c></summary>
 public partial struct BackgroundColor
 {
@@ -45,6 +54,18 @@ public partial struct BookWindow
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:gump/book";
+}
+
+/// <summary><c>cuo:ui/border-color</c></summary>
+public partial struct BorderColorDto
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/border-color";
+
+    [JsonPropertyName("R")] public float R;
+    [JsonPropertyName("G")] public float G;
+    [JsonPropertyName("B")] public float B;
+    [JsonPropertyName("A")] public float A;
 }
 
 /// <summary><c>cuo:ui/border-radius</c></summary>
@@ -75,15 +96,6 @@ public partial struct BulletinBoardWindow
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:gump/bulletin-board";
-}
-
-/// <summary><c>cuo:action/cast-spell</c></summary>
-public partial struct CastSpellAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/cast-spell";
-
-    [JsonPropertyName("Id")] public int Id;
 }
 
 /// <summary><c>cuo:scene/character-creation</c>
@@ -119,6 +131,15 @@ public partial struct CharacterSelectionScene
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:scene/character-selection";
+}
+
+/// <summary><c>cuo:ecs/child-of</c></summary>
+public partial struct ChildOfDto
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ecs/child-of";
+
+    [JsonPropertyName("Parent")] public ulong Parent;
 }
 
 /// <summary><c>cuo:ui/clipboard-set</c></summary>
@@ -159,13 +180,16 @@ public partial struct CombatBookWindow
     [JsonPropertyName("Right")] public ulong Right;
 }
 
-/// <summary><c>cuo:ent/container</c></summary>
-public partial struct ContainedInDto
+/// <summary><c>cuo:ui/computed</c></summary>
+public partial struct ComputedNode
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:ent/container";
+    public const string Path = "cuo:ui/computed";
 
-    [JsonPropertyName("Container")] public uint Container;
+    [JsonPropertyName("Size")] public Vector2 Size;
+    [JsonPropertyName("Position")] public Vector2 Position;
+    [JsonPropertyName("ClayId")] public uint ClayId;
+    [JsonPropertyName("PaintOrder")] public int PaintOrder;
 }
 
 /// <summary><c>cuo:ent/contained-into</c>
@@ -187,6 +211,33 @@ public partial struct ContainerClosedEvent
     [JsonPropertyName("UserInitiated")] public bool UserInitiated;
 }
 
+/// <summary><c>cuo:gump/container-tag</c></summary>
+public partial struct ContainerGumpTagDto
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:gump/container-tag";
+
+    [JsonPropertyName("Graphic")] public ushort Graphic;
+    [JsonPropertyName("OriginalGraphic")] public ushort OriginalGraphic;
+    [JsonPropertyName("Scale")] public float Scale;
+    [JsonPropertyName("BoundsX")] public int BoundsX;
+    [JsonPropertyName("BoundsY")] public int BoundsY;
+    [JsonPropertyName("BoundsW")] public int BoundsW;
+    [JsonPropertyName("BoundsH")] public int BoundsH;
+}
+
+/// <summary><c>cuo:ui/container-item</c></summary>
+public partial struct ContainerItemUI
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/container-item";
+
+    [JsonPropertyName("Container")] public ulong Container;
+    [JsonPropertyName("Serial")] public uint Serial;
+    [JsonPropertyName("OriginalHue")] public Vector3 OriginalHue;
+    [JsonPropertyName("HoverHue")] public Vector3 HoverHue;
+}
+
 /// <summary><c>cuo:gump/container-opened</c></summary>
 public partial struct ContainerOpenedEvent
 {
@@ -195,6 +246,47 @@ public partial struct ContainerOpenedEvent
 
     [JsonPropertyName("Serial")] public uint Serial;
     [JsonPropertyName("Graphic")] public ushort Graphic;
+}
+
+/// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.ContainerPositionDto</c>).</summary>
+public partial struct ContainerPositionDto
+{
+    [JsonPropertyName("Serial")] public uint Serial;
+    [JsonPropertyName("X")] public int X;
+    [JsonPropertyName("Y")] public int Y;
+}
+
+/// <summary><c>cuo:gump/container-positions</c></summary>
+public partial struct ContainerPositionsDto
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:gump/container-positions";
+
+    [JsonPropertyName("Saved")] public ContainerPositionDto[] Saved;
+}
+
+/// <remarks><c>ClassicUO.Ecs.ContainerSlotAction</c> — crosses the boundary as a number.</remarks>
+public enum ContainerSlotAction : byte
+{
+    Add = 0,
+    Remove = 1,
+}
+
+/// <summary><c>cuo:gump/container-slot</c></summary>
+public partial struct ContainerSlotEvent
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:gump/container-slot";
+
+    /// <summary>enum ContainerSlotAction (0=Add, 1=Remove)</summary>
+    [JsonPropertyName("Action")] public ContainerSlotAction Action;
+    [JsonPropertyName("ContainerSerial")] public uint ContainerSerial;
+    [JsonPropertyName("ItemSerial")] public uint ItemSerial;
+    [JsonPropertyName("Graphic")] public ushort Graphic;
+    [JsonPropertyName("Hue")] public ushort Hue;
+    [JsonPropertyName("X")] public ushort X;
+    [JsonPropertyName("Y")] public ushort Y;
+    [JsonPropertyName("Amount")] public ushort Amount;
 }
 
 /// <summary><c>cuo:ent/slot-position</c></summary>
@@ -237,16 +329,6 @@ public partial struct ContextMenuEvent
     [JsonPropertyName("Entries")] public ContextMenuEntry[] Entries;
 }
 
-/// <summary><c>cuo:action/context-menu-reply</c></summary>
-public partial struct ContextMenuReplyAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/context-menu-reply";
-
-    [JsonPropertyName("Serial")] public uint Serial;
-    [JsonPropertyName("Index")] public ushort Index;
-}
-
 /// <remarks><c>ClassicUO.Game.Data.Direction</c> — crosses the boundary as a number.</remarks>
 public enum Direction : byte
 {
@@ -268,28 +350,6 @@ public enum Display : byte
 {
     Flex = 0,
     None = 1,
-}
-
-/// <summary><c>cuo:action/double-click</c></summary>
-public partial struct DoubleClickAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/double-click";
-
-    [JsonPropertyName("Serial")] public uint Serial;
-}
-
-/// <summary><c>cuo:action/drop</c></summary>
-public partial struct DropAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/drop";
-
-    [JsonPropertyName("Serial")] public uint Serial;
-    [JsonPropertyName("X")] public ushort X;
-    [JsonPropertyName("Y")] public ushort Y;
-    [JsonPropertyName("Z")] public sbyte Z;
-    [JsonPropertyName("Container")] public uint Container;
 }
 
 /// <summary><c>cuo:ui/editable-text</c></summary>
@@ -320,17 +380,6 @@ public partial struct EntityPropertiesDto
     [JsonPropertyName("Revision")] public uint Revision;
     [JsonPropertyName("Name")] public string Name;
     [JsonPropertyName("Lines")] public OplLineDto[] Lines;
-}
-
-/// <summary><c>cuo:action/equip</c></summary>
-public partial struct EquipAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/equip";
-
-    [JsonPropertyName("Serial")] public uint Serial;
-    [JsonPropertyName("Layer")] public byte Layer;
-    [JsonPropertyName("Container")] public uint Container;
 }
 
 /// <summary><c>cuo:ent/equipment</c></summary>
@@ -406,6 +455,25 @@ public partial struct GameScene
     public const string Path = "cuo:scene/game";
 }
 
+/// <summary><c>cuo:game/settings</c></summary>
+public partial struct GameSettingsDto
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:game/settings";
+
+    [JsonPropertyName("GridLootType")] public int GridLootType;
+    [JsonPropertyName("SkipEmptyCorpse")] public bool SkipEmptyCorpse;
+    [JsonPropertyName("AutoOpenCorpses")] public bool AutoOpenCorpses;
+    [JsonPropertyName("AutoOpenCorpseRange")] public int AutoOpenCorpseRange;
+    [JsonPropertyName("CorpseOpenOptions")] public int CorpseOpenOptions;
+    [JsonPropertyName("DoubleClickToLootInsideContainers")] public bool DoubleClickToLootInsideContainers;
+    [JsonPropertyName("HoldShiftToSplitStack")] public bool HoldShiftToSplitStack;
+    [JsonPropertyName("RelativeDragAndDropItems")] public bool RelativeDragAndDropItems;
+    [JsonPropertyName("SpeechHue")] public ushort SpeechHue;
+    [JsonPropertyName("AlwaysRun")] public bool AlwaysRun;
+    [JsonPropertyName("HighlightGameObjects")] public bool HighlightGameObjects;
+}
+
 /// <summary><c>cuo:game/state</c></summary>
 public partial struct GameStateDto
 {
@@ -450,12 +518,6 @@ public sealed partial class GrabbedItem
     [JsonPropertyName("PendingDrop")] public bool PendingDrop;
     [JsonPropertyName("DropTargetSerial")] public uint DropTargetSerial;
     [JsonPropertyName("FailedDrop")] public bool FailedDrop;
-    [JsonPropertyName("DropSeq")] public int DropSeq;
-    [JsonPropertyName("LastDropSerial")] public uint LastDropSerial;
-    [JsonPropertyName("LastDropX")] public ushort LastDropX;
-    [JsonPropertyName("LastDropY")] public ushort LastDropY;
-    [JsonPropertyName("LastDropZ")] public sbyte LastDropZ;
-    [JsonPropertyName("LastDropContainer")] public uint LastDropContainer;
     [JsonPropertyName("MouseOffset")] public Vector2 MouseOffset;
 }
 
@@ -488,32 +550,13 @@ public partial struct GridLootWindow
     [JsonPropertyName("ContentSig")] public int ContentSig;
 }
 
-/// <summary><c>cuo:action/gump-close</c></summary>
-public partial struct GumpCloseAction
+/// <summary><c>cuo:ui/no-pickup</c>
+/// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
+/// </summary>
+public partial struct GridPinnedCell
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/gump-close";
-
-    [JsonPropertyName("GumpId")] public uint GumpId;
-}
-
-/// <summary><c>cuo:action/gump-reply</c></summary>
-public partial struct GumpReplyAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/gump-reply";
-
-    [JsonPropertyName("GumpId")] public uint GumpId;
-    [JsonPropertyName("ButtonId")] public int ButtonId;
-    [JsonPropertyName("Switches")] public uint[] Switches;
-    [JsonPropertyName("TextEntries")] public GumpTextEntry[] TextEntries;
-}
-
-/// <summary>Nested payload type (<c>ClassicUO.Ecs.GumpTextEntry</c>).</summary>
-public partial struct GumpTextEntry
-{
-    [JsonPropertyName("Id")] public ushort Id;
-    [JsonPropertyName("Text")] public string Text;
+    public const string Path = "cuo:ui/no-pickup";
 }
 
 /// <summary><c>cuo:gump/health-bar</c></summary>
@@ -579,13 +622,13 @@ public partial struct Hue
     [JsonPropertyName("Value")] public ushort Value;
 }
 
-/// <summary><c>cuo:ui/interaction</c> — the payload IS this enum's number.</summary>
-/// <remarks><c>TinyEcs.Bevy.UI.Interaction</c> — crosses the boundary as a number.</remarks>
-public enum Interaction : byte
+/// <summary><c>cuo:ui/interaction</c></summary>
+public partial struct InteractionDto
 {
-    None = 0,
-    Hovered = 1,
-    Pressed = 2,
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/interaction";
+
+    [JsonPropertyName("State")] public byte State;
 }
 
 /// <summary><c>cuo:ent/is-container</c>
@@ -613,6 +656,29 @@ public partial struct IsTopBar
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/topbar-root";
+}
+
+/// <summary><c>cuo:item/drop-sent</c></summary>
+public partial struct ItemDropSent
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:item/drop-sent";
+
+    [JsonPropertyName("Serial")] public uint Serial;
+    [JsonPropertyName("X")] public ushort X;
+    [JsonPropertyName("Y")] public ushort Y;
+    [JsonPropertyName("Z")] public sbyte Z;
+    [JsonPropertyName("Container")] public uint Container;
+}
+
+/// <summary><c>cuo:item/move-result</c></summary>
+public partial struct ItemMoveResult
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:item/move-result";
+
+    [JsonPropertyName("Result")] public byte Result;
+    [JsonPropertyName("Code")] public byte Code;
 }
 
 /// <summary><c>cuo:ent/is-item</c>
@@ -669,6 +735,7 @@ public partial struct KeyboardInputDto
     public const string Path = "cuo:input/keyboard";
 
     [JsonPropertyName("Pressed")] public int[] Pressed;
+    [JsonPropertyName("PressedOnce")] public int[] PressedOnce;
 }
 
 /// <remarks><c>ClassicUO.Game.Data.Layer</c> — crosses the boundary as a number.</remarks>
@@ -771,6 +838,15 @@ public partial struct Mana
 
     [JsonPropertyName("Value")] public ushort Value;
     [JsonPropertyName("MaxValue")] public ushort MaxValue;
+}
+
+/// <summary><c>cuo:ent/manual-opened-corpse</c>
+/// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
+/// </summary>
+public partial struct ManualOpenedCorpse
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ent/manual-opened-corpse";
 }
 
 /// <summary><c>cuo:gump/map</c>
@@ -891,31 +967,13 @@ public partial struct ModChatMessage
     [JsonPropertyName("Kind")] public byte Kind;
 }
 
-/// <summary><c>cuo:ui/clicked</c></summary>
-public partial struct ModClicked
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:ui/clicked";
-
-    [JsonPropertyName("Tick")] public byte Tick;
-}
-
-/// <summary><c>cuo:test/counter</c></summary>
-public partial struct ModCounter
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:test/counter";
-
-    [JsonPropertyName("Value")] public int Value;
-}
-
-/// <summary><c>cuo:mod/owned</c>
-/// <para>Presence-only marker: the host always answers <c>{}</c> and ignores writes.</para>
+/// <summary><c>cuo:ui/click</c>
+/// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
 /// </summary>
-public partial struct ModEntity
+public partial struct ModClick
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:mod/owned";
+    public const string Path = "cuo:ui/click";
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.ModHotkeyBinding</c>).</summary>
@@ -955,13 +1013,23 @@ public partial struct ModHotkeyFired
     [JsonPropertyName("FromMod")] public bool FromMod;
 }
 
-/// <summary><c>cuo:ui/hovered</c></summary>
-public partial struct ModHovered
+/// <summary><c>cuo:ui/hover</c></summary>
+public partial struct ModHover
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:ui/hovered";
+    public const string Path = "cuo:ui/hover";
 
-    [JsonPropertyName("Tick")] public byte Tick;
+    [JsonPropertyName("Over")] public bool Over;
+}
+
+/// <summary><c>cuo:input/consume</c></summary>
+public partial struct ModInputConsume
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:input/consume";
+
+    [JsonPropertyName("Mouse")] public byte Mouse;
+    [JsonPropertyName("Key")] public uint Key;
 }
 
 /// <summary><c>cuo:player/move-request</c></summary>
@@ -975,24 +1043,48 @@ public partial struct ModMoveRequest
     [JsonPropertyName("Sequence")] public byte Sequence;
 }
 
-/// <summary><c>cuo:ui/right-clicked</c></summary>
-public partial struct ModRightClicked
+/// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.ModOptionDto</c>).</summary>
+public partial struct ModOptionDto
 {
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:ui/right-clicked";
-
-    [JsonPropertyName("Tick")] public byte Tick;
-    [JsonPropertyName("X")] public float X;
-    [JsonPropertyName("Y")] public float Y;
+    [JsonPropertyName("Key")] public string Key;
+    [JsonPropertyName("Label")] public string Label;
+    [JsonPropertyName("Group")] public string Group;
+    [JsonPropertyName("Keywords")] public string Keywords;
+    [JsonPropertyName("Kind")] public byte Kind;
+    [JsonPropertyName("Min")] public int Min;
+    [JsonPropertyName("Max")] public int Max;
+    [JsonPropertyName("Step")] public int Step;
+    [JsonPropertyName("Default")] public int Default;
+    [JsonPropertyName("Choices")] public string[] Choices;
 }
 
-/// <summary><c>cuo:mod/state</c></summary>
-public partial struct ModState
+/// <summary><c>cuo:options/schema</c></summary>
+public partial struct ModOptionsSchemaDto
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:mod/state";
+    public const string Path = "cuo:options/schema";
 
-    [JsonPropertyName("Json")] public string Json;
+    [JsonPropertyName("Options")] public ModOptionDto[] Options;
+}
+
+/// <summary><c>cuo:options/values</c>
+/// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
+/// <para>Dropped member <c>Values: unsupported CLR type Dictionary<String,Int32></c>.</para>
+/// </summary>
+public partial struct ModOptionsValuesDto
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:options/values";
+}
+
+/// <summary><c>cuo:ui/right-click</c></summary>
+public partial struct ModRightClick
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/right-click";
+
+    [JsonPropertyName("X")] public float X;
+    [JsonPropertyName("Y")] public float Y;
 }
 
 /// <summary><c>cuo:ui/supersedes</c></summary>
@@ -1018,6 +1110,15 @@ public partial struct MouseInputDto
     [JsonPropertyName("X1")] public bool X1;
     [JsonPropertyName("X2")] public bool X2;
     [JsonPropertyName("Wheel")] public float Wheel;
+    [JsonPropertyName("LeftPressed")] public bool LeftPressed;
+    [JsonPropertyName("LeftReleased")] public bool LeftReleased;
+    [JsonPropertyName("LeftDouble")] public bool LeftDouble;
+    [JsonPropertyName("RightPressed")] public bool RightPressed;
+    [JsonPropertyName("RightReleased")] public bool RightReleased;
+    [JsonPropertyName("MiddlePressed")] public bool MiddlePressed;
+    [JsonPropertyName("MiddleReleased")] public bool MiddleReleased;
+    [JsonPropertyName("X1Pressed")] public bool X1Pressed;
+    [JsonPropertyName("X2Pressed")] public bool X2Pressed;
 }
 
 /// <summary><c>cuo:ent/serial</c></summary>
@@ -1098,15 +1199,6 @@ public partial struct OnLoginRequest
     [JsonPropertyName("Port")] public ushort Port;
 }
 
-/// <summary><c>cuo:action/open-door</c>
-/// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
-/// </summary>
-public partial struct OpenDoorAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/open-door";
-}
-
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.OplLineDto</c>).</summary>
 public partial struct OplLineDto
 {
@@ -1179,16 +1271,6 @@ public partial struct PartyMemberDto
 {
     [JsonPropertyName("Serial")] public uint Serial;
     [JsonPropertyName("Name")] public string Name;
-}
-
-/// <summary><c>cuo:action/pickup</c></summary>
-public partial struct PickupAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/pickup";
-
-    [JsonPropertyName("Serial")] public uint Serial;
-    [JsonPropertyName("Amount")] public ushort Amount;
 }
 
 /// <summary><c>cuo:player/player</c>
@@ -1345,16 +1427,6 @@ public partial struct PromptOpenedEvent
     [JsonPropertyName("Text")] public string Text;
 }
 
-/// <summary><c>cuo:action/prompt-reply</c></summary>
-public partial struct PromptReplyAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/prompt-reply";
-
-    [JsonPropertyName("Text")] public string Text;
-    [JsonPropertyName("Cancel")] public bool Cancel;
-}
-
 /// <remarks><c>ClassicUO.Game.Data.RaceType</c> — crosses the boundary as a number.</remarks>
 public enum RaceType : byte
 {
@@ -1380,71 +1452,6 @@ public partial struct RacialBookWindow
     [JsonPropertyName("Content")] public ulong Content;
     [JsonPropertyName("Left")] public ulong Left;
     [JsonPropertyName("Right")] public ulong Right;
-}
-
-/// <summary><c>cuo:action/rename</c></summary>
-public partial struct RenameAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/rename";
-
-    [JsonPropertyName("Serial")] public uint Serial;
-    [JsonPropertyName("Name")] public string Name;
-}
-
-/// <summary><c>cuo:action/request-context-menu</c></summary>
-public partial struct RequestContextMenuAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/request-context-menu";
-
-    [JsonPropertyName("Serial")] public uint Serial;
-}
-
-/// <summary><c>cuo:action/request-properties</c></summary>
-public partial struct RequestPropertiesAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/request-properties";
-
-    [JsonPropertyName("Serial")] public uint Serial;
-}
-
-/// <summary><c>cuo:action/request-skills</c></summary>
-public partial struct RequestSkillsAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/request-skills";
-
-    [JsonPropertyName("Serial")] public uint Serial;
-}
-
-/// <summary><c>cuo:action/request-status</c></summary>
-public partial struct RequestStatusAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/request-status";
-
-    [JsonPropertyName("Serial")] public uint Serial;
-}
-
-/// <summary><c>cuo:action/request-target</c></summary>
-public partial struct RequestTargetAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/request-target";
-
-    [JsonPropertyName("PromptText")] public string PromptText;
-}
-
-/// <summary><c>cuo:action/say</c></summary>
-public partial struct SayAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/say";
-
-    [JsonPropertyName("Text")] public string Text;
-    [JsonPropertyName("Hue")] public ushort Hue;
 }
 
 /// <summary><c>cuo:ui/scroll</c></summary>
@@ -1564,15 +1571,6 @@ public partial struct ServerSelectionScene
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:scene/server-selection";
-}
-
-/// <summary><c>cuo:action/single-click</c></summary>
-public partial struct SingleClickAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/single-click";
-
-    [JsonPropertyName("Serial")] public uint Serial;
 }
 
 /// <summary><c>cuo:gump/skills</c></summary>
@@ -1719,36 +1717,6 @@ public partial struct StatusBarWindow
 
     [JsonPropertyName("MinimizeX")] public float MinimizeX;
     [JsonPropertyName("MinimizeY")] public float MinimizeY;
-}
-
-/// <summary><c>cuo:action/target-cancel</c>
-/// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
-/// </summary>
-public partial struct TargetCancelAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/target-cancel";
-}
-
-/// <summary><c>cuo:action/target-location</c></summary>
-public partial struct TargetLocationAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/target-location";
-
-    [JsonPropertyName("X")] public ushort X;
-    [JsonPropertyName("Y")] public ushort Y;
-    [JsonPropertyName("Z")] public sbyte Z;
-    [JsonPropertyName("Graphic")] public ushort Graphic;
-}
-
-/// <summary><c>cuo:action/target-object</c></summary>
-public partial struct TargetObjectAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/target-object";
-
-    [JsonPropertyName("Serial")] public uint Serial;
 }
 
 /// <summary><c>cuo:target/state</c></summary>
@@ -1944,15 +1912,6 @@ public partial struct TipNoticeWindow
     [JsonPropertyName("NextEntity")] public ulong NextEntity;
 }
 
-/// <summary><c>cuo:action/toggle-war-mode</c>
-/// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
-/// </summary>
-public partial struct ToggleWarModeAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/toggle-war-mode";
-}
-
 /// <summary><c>cuo:ui/topbar-button</c>
 /// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
 /// </summary>
@@ -2038,6 +1997,7 @@ public partial struct UiCustomDto
     [JsonPropertyName("HueX")] public float HueX;
     [JsonPropertyName("HueY")] public float HueY;
     [JsonPropertyName("HueZ")] public float HueZ;
+    [JsonPropertyName("Stacked")] public bool Stacked;
 }
 
 /// <summary><c>cuo:ui/hover-tint</c></summary>
@@ -2104,6 +2064,19 @@ public partial struct UiNoWindowDrag
     public const string Path = "cuo:ui/no-window-drag";
 }
 
+/// <summary><c>cuo:ui/pick</c></summary>
+public partial struct UiPickDto
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/pick";
+
+    [JsonPropertyName("Entity")] public ulong Entity;
+    [JsonPropertyName("Root")] public ulong Root;
+    [JsonPropertyName("PaintOrder")] public int PaintOrder;
+    [JsonPropertyName("X")] public float X;
+    [JsonPropertyName("Y")] public float Y;
+}
+
 /// <summary><c>cuo:ui/popup</c>
 /// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
 /// </summary>
@@ -2133,6 +2106,8 @@ public partial struct UiResizable
     [JsonPropertyName("MaxW")] public float MaxW;
     [JsonPropertyName("MaxH")] public float MaxH;
     [JsonPropertyName("Grip")] public float Grip;
+    [JsonPropertyName("GripInset")] public float GripInset;
+    [JsonPropertyName("WholePixels")] public bool WholePixels;
 }
 
 /// <summary><c>cuo:ui/scrollbar</c></summary>
@@ -2166,13 +2141,13 @@ public partial struct UiTooltip
     [JsonPropertyName("MaxWidth")] public int MaxWidth;
 }
 
-/// <summary><c>cuo:action/use-skill</c></summary>
-public partial struct UseSkillAction
+/// <summary><c>cuo:ui/tooltip-serial</c></summary>
+public partial struct UiTooltipSerial
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/use-skill";
+    public const string Path = "cuo:ui/tooltip-serial";
 
-    [JsonPropertyName("Id")] public int Id;
+    [JsonPropertyName("Serial")] public uint Serial;
 }
 
 /// <summary>Nested payload type (<c>TinyEcs.Bevy.UI.Val</c>).</summary>
@@ -2201,6 +2176,14 @@ public partial struct Vector2
     [JsonPropertyName("Y")] public float Y;
 }
 
+/// <summary>Nested payload type (<c>System.Numerics.Vector3</c>).</summary>
+public partial struct Vector3
+{
+    [JsonPropertyName("X")] public float X;
+    [JsonPropertyName("Y")] public float Y;
+    [JsonPropertyName("Z")] public float Z;
+}
+
 /// <summary><c>cuo:gump/vendor</c>
 /// <para>Presence-only marker: the host always answers <c>{}</c> and ignores writes.</para>
 /// </summary>
@@ -2208,27 +2191,6 @@ public partial struct VendorWindow
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:gump/vendor";
-}
-
-/// <summary><c>cuo:action/walk</c></summary>
-public partial struct WalkAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/walk";
-
-    [JsonPropertyName("Direction")] public byte Direction;
-    [JsonPropertyName("Run")] public bool Run;
-}
-
-/// <summary><c>cuo:action/walk-to</c></summary>
-public partial struct WalkToAction
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:action/walk-to";
-
-    [JsonPropertyName("X")] public ushort X;
-    [JsonPropertyName("Y")] public ushort Y;
-    [JsonPropertyName("Z")] public sbyte Z;
 }
 
 /// <summary><c>cuo:gump/worldmap</c>
@@ -2267,36 +2229,40 @@ public partial struct WorldSingleClickDto
 [JsonSourceGenerationOptions(IncludeFields = true)]
 [JsonSerializable(typeof(AlignItems))]
 [JsonSerializable(typeof(Amount))]
+[JsonSerializable(typeof(AutoOpenedCorpse))]
 [JsonSerializable(typeof(BackgroundColor))]
 [JsonSerializable(typeof(BookWindow))]
+[JsonSerializable(typeof(BorderColorDto))]
 [JsonSerializable(typeof(BorderRadius))]
 [JsonSerializable(typeof(BuffGumpUI))]
 [JsonSerializable(typeof(BulletinBoardWindow))]
-[JsonSerializable(typeof(CastSpellAction))]
 [JsonSerializable(typeof(CharCreationScene))]
 [JsonSerializable(typeof(CharInfoDto))]
 [JsonSerializable(typeof(CharacterSelectionDto))]
 [JsonSerializable(typeof(CharacterSelectionScene))]
+[JsonSerializable(typeof(ChildOfDto))]
 [JsonSerializable(typeof(ClipboardSetDto))]
 [JsonSerializable(typeof(Color))]
 [JsonSerializable(typeof(CombatBookWindow))]
-[JsonSerializable(typeof(ContainedInDto))]
+[JsonSerializable(typeof(ComputedNode))]
 [JsonSerializable(typeof(ContainedInto))]
 [JsonSerializable(typeof(ContainerClosedEvent))]
+[JsonSerializable(typeof(ContainerGumpTagDto))]
+[JsonSerializable(typeof(ContainerItemUI))]
 [JsonSerializable(typeof(ContainerOpenedEvent))]
+[JsonSerializable(typeof(ContainerPositionDto))]
+[JsonSerializable(typeof(ContainerPositionsDto))]
+[JsonSerializable(typeof(ContainerSlotAction))]
+[JsonSerializable(typeof(ContainerSlotEvent))]
 [JsonSerializable(typeof(ContainerSlotPosition))]
 [JsonSerializable(typeof(ContainerWindow))]
 [JsonSerializable(typeof(ContextMenuEntry))]
 [JsonSerializable(typeof(ContextMenuEvent))]
-[JsonSerializable(typeof(ContextMenuReplyAction))]
 [JsonSerializable(typeof(Direction))]
 [JsonSerializable(typeof(Display))]
-[JsonSerializable(typeof(DoubleClickAction))]
-[JsonSerializable(typeof(DropAction))]
 [JsonSerializable(typeof(EditableText))]
 [JsonSerializable(typeof(EntityName))]
 [JsonSerializable(typeof(EntityPropertiesDto))]
-[JsonSerializable(typeof(EquipAction))]
 [JsonSerializable(typeof(EquipmentSlotsDto))]
 [JsonSerializable(typeof(Facing))]
 [JsonSerializable(typeof(Flags))]
@@ -2304,25 +2270,26 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(FocusedInput))]
 [JsonSerializable(typeof(GameContextDto))]
 [JsonSerializable(typeof(GameScene))]
+[JsonSerializable(typeof(GameSettingsDto))]
 [JsonSerializable(typeof(GameStateDto))]
 [JsonSerializable(typeof(GlobalZIndex))]
 [JsonSerializable(typeof(GrabbedItem))]
 [JsonSerializable(typeof(Graphic))]
 [JsonSerializable(typeof(GridContainerWindow))]
 [JsonSerializable(typeof(GridLootWindow))]
-[JsonSerializable(typeof(GumpCloseAction))]
-[JsonSerializable(typeof(GumpReplyAction))]
-[JsonSerializable(typeof(GumpTextEntry))]
+[JsonSerializable(typeof(GridPinnedCell))]
 [JsonSerializable(typeof(HealthBarWindow))]
 [JsonSerializable(typeof(Hits))]
 [JsonSerializable(typeof(HostHotkeyDto))]
 [JsonSerializable(typeof(HostHotkeysDto))]
 [JsonSerializable(typeof(HouseDesignWindow))]
 [JsonSerializable(typeof(Hue))]
-[JsonSerializable(typeof(Interaction))]
+[JsonSerializable(typeof(InteractionDto))]
 [JsonSerializable(typeof(IsContainer))]
 [JsonSerializable(typeof(IsMulti))]
 [JsonSerializable(typeof(IsTopBar))]
+[JsonSerializable(typeof(ItemDropSent))]
+[JsonSerializable(typeof(ItemMoveResult))]
 [JsonSerializable(typeof(Items))]
 [JsonSerializable(typeof(JournalWindow))]
 [JsonSerializable(typeof(JustifyContent))]
@@ -2335,6 +2302,7 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(LoginScene))]
 [JsonSerializable(typeof(LogoutGumpWindow))]
 [JsonSerializable(typeof(Mana))]
+[JsonSerializable(typeof(ManualOpenedCorpse))]
 [JsonSerializable(typeof(MapWindow))]
 [JsonSerializable(typeof(MaskedText))]
 [JsonSerializable(typeof(MenuGumpWindow))]
@@ -2345,16 +2313,17 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(MobileStepsDto))]
 [JsonSerializable(typeof(Mobiles))]
 [JsonSerializable(typeof(ModChatMessage))]
-[JsonSerializable(typeof(ModClicked))]
-[JsonSerializable(typeof(ModCounter))]
-[JsonSerializable(typeof(ModEntity))]
+[JsonSerializable(typeof(ModClick))]
 [JsonSerializable(typeof(ModHotkeyBinding))]
 [JsonSerializable(typeof(ModHotkeyBindingsDto))]
 [JsonSerializable(typeof(ModHotkeyFired))]
-[JsonSerializable(typeof(ModHovered))]
+[JsonSerializable(typeof(ModHover))]
+[JsonSerializable(typeof(ModInputConsume))]
 [JsonSerializable(typeof(ModMoveRequest))]
-[JsonSerializable(typeof(ModRightClicked))]
-[JsonSerializable(typeof(ModState))]
+[JsonSerializable(typeof(ModOptionDto))]
+[JsonSerializable(typeof(ModOptionsSchemaDto))]
+[JsonSerializable(typeof(ModOptionsValuesDto))]
+[JsonSerializable(typeof(ModRightClick))]
 [JsonSerializable(typeof(ModSupersedes))]
 [JsonSerializable(typeof(MouseInputDto))]
 [JsonSerializable(typeof(NetworkSerial))]
@@ -2362,7 +2331,6 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(Notoriety))]
 [JsonSerializable(typeof(NotorietyFlag))]
 [JsonSerializable(typeof(OnLoginRequest))]
-[JsonSerializable(typeof(OpenDoorAction))]
 [JsonSerializable(typeof(OplLineDto))]
 [JsonSerializable(typeof(OptionsWindow))]
 [JsonSerializable(typeof(Overflow))]
@@ -2371,7 +2339,6 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(PartyInviteWindow))]
 [JsonSerializable(typeof(PartyManifestWindow))]
 [JsonSerializable(typeof(PartyMemberDto))]
-[JsonSerializable(typeof(PickupAction))]
 [JsonSerializable(typeof(Player))]
 [JsonSerializable(typeof(PlayerBuffDto))]
 [JsonSerializable(typeof(PlayerBuffsDto))]
@@ -2383,16 +2350,8 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(PositionType))]
 [JsonSerializable(typeof(ProfileWindow))]
 [JsonSerializable(typeof(PromptOpenedEvent))]
-[JsonSerializable(typeof(PromptReplyAction))]
 [JsonSerializable(typeof(RaceType))]
 [JsonSerializable(typeof(RacialBookWindow))]
-[JsonSerializable(typeof(RenameAction))]
-[JsonSerializable(typeof(RequestContextMenuAction))]
-[JsonSerializable(typeof(RequestPropertiesAction))]
-[JsonSerializable(typeof(RequestSkillsAction))]
-[JsonSerializable(typeof(RequestStatusAction))]
-[JsonSerializable(typeof(RequestTargetAction))]
-[JsonSerializable(typeof(SayAction))]
 [JsonSerializable(typeof(ScrollPosition))]
 [JsonSerializable(typeof(ScrollbarStyle))]
 [JsonSerializable(typeof(ServerFlags))]
@@ -2405,7 +2364,6 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(ServerInfo))]
 [JsonSerializable(typeof(ServerSelectionInfoEvent))]
 [JsonSerializable(typeof(ServerSelectionScene))]
-[JsonSerializable(typeof(SingleClickAction))]
 [JsonSerializable(typeof(SkillsWindow))]
 [JsonSerializable(typeof(SpellBookType))]
 [JsonSerializable(typeof(SpellbookDto))]
@@ -2416,9 +2374,6 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(StatLockButton))]
 [JsonSerializable(typeof(StatLocks))]
 [JsonSerializable(typeof(StatusBarWindow))]
-[JsonSerializable(typeof(TargetCancelAction))]
-[JsonSerializable(typeof(TargetLocationAction))]
-[JsonSerializable(typeof(TargetObjectAction))]
 [JsonSerializable(typeof(TargetingState))]
 [JsonSerializable(typeof(Text))]
 [JsonSerializable(typeof(TextCaretDto))]
@@ -2436,7 +2391,6 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(TextWrapKind))]
 [JsonSerializable(typeof(Time))]
 [JsonSerializable(typeof(TipNoticeWindow))]
-[JsonSerializable(typeof(ToggleWarModeAction))]
 [JsonSerializable(typeof(TopBarButton))]
 [JsonSerializable(typeof(TopBarDragHandle))]
 [JsonSerializable(typeof(TopBarFull))]
@@ -2452,19 +2406,19 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(UiNoBlur))]
 [JsonSerializable(typeof(UiNoRightClickClose))]
 [JsonSerializable(typeof(UiNoWindowDrag))]
+[JsonSerializable(typeof(UiPickDto))]
 [JsonSerializable(typeof(UiPopup))]
 [JsonSerializable(typeof(UiRect))]
 [JsonSerializable(typeof(UiResizable))]
 [JsonSerializable(typeof(UiScrollbar))]
 [JsonSerializable(typeof(UiSurfaceDto))]
 [JsonSerializable(typeof(UiTooltip))]
-[JsonSerializable(typeof(UseSkillAction))]
+[JsonSerializable(typeof(UiTooltipSerial))]
 [JsonSerializable(typeof(Val))]
 [JsonSerializable(typeof(ValType))]
 [JsonSerializable(typeof(Vector2))]
+[JsonSerializable(typeof(Vector3))]
 [JsonSerializable(typeof(VendorWindow))]
-[JsonSerializable(typeof(WalkAction))]
-[JsonSerializable(typeof(WalkToAction))]
 [JsonSerializable(typeof(WorldMapWindow))]
 [JsonSerializable(typeof(WorldPosition))]
 [JsonSerializable(typeof(WorldSingleClickDto))]
@@ -2477,53 +2431,57 @@ public static class TypePaths
     private static readonly System.Collections.Generic.Dictionary<System.Type, string> Map = new()
     {
         [typeof(Amount)] = "cuo:ent/amount",
+        [typeof(AutoOpenedCorpse)] = "cuo:ent/auto-opened-corpse",
         [typeof(BackgroundColor)] = "cuo:ui/bg-color",
         [typeof(BookWindow)] = "cuo:gump/book",
+        [typeof(BorderColorDto)] = "cuo:ui/border-color",
         [typeof(BorderRadius)] = "cuo:ui/border-radius",
         [typeof(BuffGumpUI)] = "cuo:gump/buff",
         [typeof(BulletinBoardWindow)] = "cuo:gump/bulletin-board",
-        [typeof(CastSpellAction)] = "cuo:action/cast-spell",
         [typeof(CharCreationScene)] = "cuo:scene/character-creation",
         [typeof(CharacterSelectionDto)] = "cuo:scene/character-list",
         [typeof(CharacterSelectionScene)] = "cuo:scene/character-selection",
+        [typeof(ChildOfDto)] = "cuo:ecs/child-of",
         [typeof(ClipboardSetDto)] = "cuo:ui/clipboard-set",
         [typeof(CombatBookWindow)] = "cuo:gump/combat-book",
-        [typeof(ContainedInDto)] = "cuo:ent/container",
+        [typeof(ComputedNode)] = "cuo:ui/computed",
         [typeof(ContainedInto)] = "cuo:ent/contained-into",
         [typeof(ContainerClosedEvent)] = "cuo:gump/container-closed",
+        [typeof(ContainerGumpTagDto)] = "cuo:gump/container-tag",
+        [typeof(ContainerItemUI)] = "cuo:ui/container-item",
         [typeof(ContainerOpenedEvent)] = "cuo:gump/container-opened",
+        [typeof(ContainerPositionsDto)] = "cuo:gump/container-positions",
+        [typeof(ContainerSlotEvent)] = "cuo:gump/container-slot",
         [typeof(ContainerSlotPosition)] = "cuo:ent/slot-position",
         [typeof(ContainerWindow)] = "cuo:gump/container",
         [typeof(ContextMenuEvent)] = "cuo:gump/context-menu",
-        [typeof(ContextMenuReplyAction)] = "cuo:action/context-menu-reply",
-        [typeof(DoubleClickAction)] = "cuo:action/double-click",
-        [typeof(DropAction)] = "cuo:action/drop",
         [typeof(EditableText)] = "cuo:ui/editable-text",
         [typeof(EntityName)] = "cuo:ent/name",
         [typeof(EntityPropertiesDto)] = "cuo:ent/properties",
-        [typeof(EquipAction)] = "cuo:action/equip",
         [typeof(EquipmentSlotsDto)] = "cuo:ent/equipment",
         [typeof(Facing)] = "cuo:ent/facing",
         [typeof(FocusedInput)] = "cuo:ui/focused-input",
         [typeof(GameContextDto)] = "cuo:game/context",
         [typeof(GameScene)] = "cuo:scene/game",
+        [typeof(GameSettingsDto)] = "cuo:game/settings",
         [typeof(GameStateDto)] = "cuo:game/state",
         [typeof(GlobalZIndex)] = "cuo:ui/global-z",
         [typeof(GrabbedItem)] = "cuo:player/grabbed-item",
         [typeof(Graphic)] = "cuo:ent/graphic",
         [typeof(GridContainerWindow)] = "cuo:gump/grid-container",
         [typeof(GridLootWindow)] = "cuo:gump/grid-loot",
-        [typeof(GumpCloseAction)] = "cuo:action/gump-close",
-        [typeof(GumpReplyAction)] = "cuo:action/gump-reply",
+        [typeof(GridPinnedCell)] = "cuo:ui/no-pickup",
         [typeof(HealthBarWindow)] = "cuo:gump/health-bar",
         [typeof(Hits)] = "cuo:player/hits",
         [typeof(HostHotkeysDto)] = "cuo:input/host-hotkeys",
         [typeof(HouseDesignWindow)] = "cuo:gump/house-design",
         [typeof(Hue)] = "cuo:ent/hue",
-        [typeof(Interaction)] = "cuo:ui/interaction",
+        [typeof(InteractionDto)] = "cuo:ui/interaction",
         [typeof(IsContainer)] = "cuo:ent/is-container",
         [typeof(IsMulti)] = "cuo:ent/is-multi",
         [typeof(IsTopBar)] = "cuo:ui/topbar-root",
+        [typeof(ItemDropSent)] = "cuo:item/drop-sent",
+        [typeof(ItemMoveResult)] = "cuo:item/move-result",
         [typeof(Items)] = "cuo:ent/is-item",
         [typeof(JournalWindow)] = "cuo:gump/journal",
         [typeof(KeyboardInputDto)] = "cuo:input/keyboard",
@@ -2533,6 +2491,7 @@ public static class TypePaths
         [typeof(LoginScene)] = "cuo:scene/login",
         [typeof(LogoutGumpWindow)] = "cuo:gump/logout",
         [typeof(Mana)] = "cuo:player/mana",
+        [typeof(ManualOpenedCorpse)] = "cuo:ent/manual-opened-corpse",
         [typeof(MapWindow)] = "cuo:gump/map",
         [typeof(MaskedText)] = "cuo:ui/masked-text",
         [typeof(MenuGumpWindow)] = "cuo:gump/menu",
@@ -2542,28 +2501,26 @@ public static class TypePaths
         [typeof(MobileStepsDto)] = "cuo:ent/mob-steps",
         [typeof(Mobiles)] = "cuo:ent/is-mobile",
         [typeof(ModChatMessage)] = "cuo:chat/message",
-        [typeof(ModClicked)] = "cuo:ui/clicked",
-        [typeof(ModCounter)] = "cuo:test/counter",
-        [typeof(ModEntity)] = "cuo:mod/owned",
+        [typeof(ModClick)] = "cuo:ui/click",
         [typeof(ModHotkeyBindingsDto)] = "cuo:input/mod-hotkeys",
         [typeof(ModHotkeyFired)] = "cuo:input/hotkey",
-        [typeof(ModHovered)] = "cuo:ui/hovered",
+        [typeof(ModHover)] = "cuo:ui/hover",
+        [typeof(ModInputConsume)] = "cuo:input/consume",
         [typeof(ModMoveRequest)] = "cuo:player/move-request",
-        [typeof(ModRightClicked)] = "cuo:ui/right-clicked",
-        [typeof(ModState)] = "cuo:mod/state",
+        [typeof(ModOptionsSchemaDto)] = "cuo:options/schema",
+        [typeof(ModOptionsValuesDto)] = "cuo:options/values",
+        [typeof(ModRightClick)] = "cuo:ui/right-click",
         [typeof(ModSupersedes)] = "cuo:ui/supersedes",
         [typeof(MouseInputDto)] = "cuo:input/mouse",
         [typeof(NetworkSerial)] = "cuo:ent/serial",
         [typeof(Node)] = "cuo:ui/node",
         [typeof(Notoriety)] = "cuo:ent/notoriety",
         [typeof(OnLoginRequest)] = "cuo:scene/login-request",
-        [typeof(OpenDoorAction)] = "cuo:action/open-door",
         [typeof(OptionsWindow)] = "cuo:ui/options-window",
         [typeof(PaperdollWindow)] = "cuo:gump/paperdoll",
         [typeof(PartyDto)] = "cuo:player/party",
         [typeof(PartyInviteWindow)] = "cuo:gump/party-invite",
         [typeof(PartyManifestWindow)] = "cuo:gump/party-manifest",
-        [typeof(PickupAction)] = "cuo:action/pickup",
         [typeof(Player)] = "cuo:player/player",
         [typeof(PlayerBuffsDto)] = "cuo:player/buffs",
         [typeof(PlayerData)] = "cuo:player/data",
@@ -2571,15 +2528,7 @@ public static class TypePaths
         [typeof(PlayerStepsDto)] = "cuo:player/steps",
         [typeof(ProfileWindow)] = "cuo:gump/profile",
         [typeof(PromptOpenedEvent)] = "cuo:chat/prompt",
-        [typeof(PromptReplyAction)] = "cuo:action/prompt-reply",
         [typeof(RacialBookWindow)] = "cuo:gump/racial-book",
-        [typeof(RenameAction)] = "cuo:action/rename",
-        [typeof(RequestContextMenuAction)] = "cuo:action/request-context-menu",
-        [typeof(RequestPropertiesAction)] = "cuo:action/request-properties",
-        [typeof(RequestSkillsAction)] = "cuo:action/request-skills",
-        [typeof(RequestStatusAction)] = "cuo:action/request-status",
-        [typeof(RequestTargetAction)] = "cuo:action/request-target",
-        [typeof(SayAction)] = "cuo:action/say",
         [typeof(ScrollPosition)] = "cuo:ui/scroll",
         [typeof(ServerFlags)] = "cuo:ent/server-flags",
         [typeof(ServerGumpClosedEvent)] = "cuo:gump/server-closed",
@@ -2587,7 +2536,6 @@ public static class TypePaths
         [typeof(ServerGumpOpenedEvent)] = "cuo:gump/server-opened",
         [typeof(ServerSelectionInfoEvent)] = "cuo:scene/server-list",
         [typeof(ServerSelectionScene)] = "cuo:scene/server-selection",
-        [typeof(SingleClickAction)] = "cuo:action/single-click",
         [typeof(SkillsWindow)] = "cuo:gump/skills",
         [typeof(SpellbookWindow)] = "cuo:gump/spellbook",
         [typeof(SpellbooksDto)] = "cuo:player/spellbook",
@@ -2596,9 +2544,6 @@ public static class TypePaths
         [typeof(StatLockButton)] = "cuo:ui/stat-lock-button",
         [typeof(StatLocks)] = "cuo:player/stat-locks",
         [typeof(StatusBarWindow)] = "cuo:ui/statusbar-window",
-        [typeof(TargetCancelAction)] = "cuo:action/target-cancel",
-        [typeof(TargetLocationAction)] = "cuo:action/target-location",
-        [typeof(TargetObjectAction)] = "cuo:action/target-object",
         [typeof(TargetingState)] = "cuo:target/state",
         [typeof(Text)] = "cuo:ui/text",
         [typeof(TextCaretDto)] = "cuo:ui/text-caret",
@@ -2614,7 +2559,6 @@ public static class TypePaths
         [typeof(TextWrap)] = "cuo:ui/text-wrap",
         [typeof(Time)] = "cuo:engine/time",
         [typeof(TipNoticeWindow)] = "cuo:gump/tip-notice",
-        [typeof(ToggleWarModeAction)] = "cuo:action/toggle-war-mode",
         [typeof(TopBarButton)] = "cuo:ui/topbar-button",
         [typeof(TopBarDragHandle)] = "cuo:ui/topbar-bg",
         [typeof(TopBarFull)] = "cuo:ui/topbar-full",
@@ -2629,15 +2573,14 @@ public static class TypePaths
         [typeof(UiNoBlur)] = "cuo:ui/no-blur",
         [typeof(UiNoRightClickClose)] = "cuo:ui/no-right-click-close",
         [typeof(UiNoWindowDrag)] = "cuo:ui/no-window-drag",
+        [typeof(UiPickDto)] = "cuo:ui/pick",
         [typeof(UiPopup)] = "cuo:ui/popup",
         [typeof(UiResizable)] = "cuo:ui/resizable",
         [typeof(UiScrollbar)] = "cuo:ui/scrollbar",
         [typeof(UiSurfaceDto)] = "cuo:ui/surface",
         [typeof(UiTooltip)] = "cuo:ui/tooltip",
-        [typeof(UseSkillAction)] = "cuo:action/use-skill",
+        [typeof(UiTooltipSerial)] = "cuo:ui/tooltip-serial",
         [typeof(VendorWindow)] = "cuo:gump/vendor",
-        [typeof(WalkAction)] = "cuo:action/walk",
-        [typeof(WalkToAction)] = "cuo:action/walk-to",
         [typeof(WorldMapWindow)] = "cuo:gump/worldmap",
         [typeof(WorldPosition)] = "cuo:ent/world-position",
         [typeof(WorldSingleClickDto)] = "cuo:input/world-single-click",

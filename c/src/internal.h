@@ -7,8 +7,6 @@
 #include "mod_abi_reader.h"
 #include "mod_abi_builder.h"
 
-#define CUO_IMPORT(name) __attribute__((import_module("cuo"), import_name(#name)))
-
 _Noreturn void cuo__trap(const char *msg);
 
 /* call-scoped scratch */
@@ -25,8 +23,6 @@ typedef struct cuo__map {
 bool cuo__map_get(const cuo__map *m, const char *key, uint64_t *out);
 void cuo__map_put(cuo__map *m, const char *key, uint64_t val);
 bool cuo__map_remove(cuo__map *m, const char *key, uint64_t *out);
-
-extern cuo__map cuo__named;
 
 /* The one builder shared by the setup reply and every command buffer. */
 flatcc_builder_t *cuo__builder(void);

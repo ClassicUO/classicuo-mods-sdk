@@ -17,7 +17,7 @@ mod root {
         /// The enum `Encoding` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `Encoding` in the file `mod-abi.fbs:47`
+        /// * Enum `Encoding` in the file `mod-abi.fbs:44`
         #[derive(
             Copy,
             Clone,
@@ -186,7 +186,7 @@ mod root {
         /// The table `CompValue` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `CompValue` in the file `mod-abi.fbs:53`
+        /// * Table `CompValue` in the file `mod-abi.fbs:50`
         #[derive(
             Clone,
             Debug,
@@ -544,7 +544,7 @@ mod root {
         /// The table `TypePath` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `TypePath` in the file `mod-abi.fbs:62`
+        /// * Table `TypePath` in the file `mod-abi.fbs:59`
         #[derive(
             Clone,
             Debug,
@@ -853,7 +853,7 @@ mod root {
         /// The table `Handshake` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `Handshake` in the file `mod-abi.fbs:67`
+        /// * Table `Handshake` in the file `mod-abi.fbs:64`
         #[derive(
             Clone,
             Debug,
@@ -1188,7 +1188,7 @@ mod root {
         /// The enum `Schedule` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `Schedule` in the file `mod-abi.fbs:75`
+        /// * Enum `Schedule` in the file `mod-abi.fbs:72`
         #[derive(
             Copy,
             Clone,
@@ -1385,7 +1385,7 @@ mod root {
         /// The enum `QueryTermKind` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `QueryTermKind` in the file `mod-abi.fbs:85`
+        /// * Enum `QueryTermKind` in the file `mod-abi.fbs:82`
         #[derive(
             Copy,
             Clone,
@@ -1414,16 +1414,20 @@ mod root {
 
             /// The variant `Changed` in the enum `QueryTermKind`
             Changed = 4,
+
+            /// The variant `Added` in the enum `QueryTermKind`
+            Added = 5,
         }
 
         impl QueryTermKind {
             /// Array containing all valid variants of QueryTermKind
-            pub const ENUM_VALUES: [Self; 5] = [
+            pub const ENUM_VALUES: [Self; 6] = [
                 Self::Ref,
                 Self::Mut,
                 Self::With,
                 Self::Without,
                 Self::Changed,
+                Self::Added,
             ];
         }
 
@@ -1440,6 +1444,7 @@ mod root {
                     2 => ::core::result::Result::Ok(QueryTermKind::With),
                     3 => ::core::result::Result::Ok(QueryTermKind::Without),
                     4 => ::core::result::Result::Ok(QueryTermKind::Changed),
+                    5 => ::core::result::Result::Ok(QueryTermKind::Added),
 
                     _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
                         tag: value as i128,
@@ -1572,7 +1577,7 @@ mod root {
         /// The enum `ParamKind` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `ParamKind` in the file `mod-abi.fbs:97`
+        /// * Enum `ParamKind` in the file `mod-abi.fbs:95`
         #[derive(
             Copy,
             Clone,
@@ -1592,11 +1597,26 @@ mod root {
 
             /// The variant `Query` in the enum `ParamKind`
             Query = 1,
+
+            /// The variant `Res` in the enum `ParamKind`
+            Res = 2,
+
+            /// The variant `ResMut` in the enum `ParamKind`
+            ResMut = 3,
+
+            /// The variant `Events` in the enum `ParamKind`
+            Events = 4,
         }
 
         impl ParamKind {
             /// Array containing all valid variants of ParamKind
-            pub const ENUM_VALUES: [Self; 2] = [Self::Commands, Self::Query];
+            pub const ENUM_VALUES: [Self; 5] = [
+                Self::Commands,
+                Self::Query,
+                Self::Res,
+                Self::ResMut,
+                Self::Events,
+            ];
         }
 
         impl ::core::convert::TryFrom<u8> for ParamKind {
@@ -1609,6 +1629,9 @@ mod root {
                 match value {
                     0 => ::core::result::Result::Ok(ParamKind::Commands),
                     1 => ::core::result::Result::Ok(ParamKind::Query),
+                    2 => ::core::result::Result::Ok(ParamKind::Res),
+                    3 => ::core::result::Result::Ok(ParamKind::ResMut),
+                    4 => ::core::result::Result::Ok(ParamKind::Events),
 
                     _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
                         tag: value as i128,
@@ -1741,7 +1764,7 @@ mod root {
         /// The enum `ObserverKind` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `ObserverKind` in the file `mod-abi.fbs:102`
+        /// * Enum `ObserverKind` in the file `mod-abi.fbs:103`
         #[derive(
             Copy,
             Clone,
@@ -1928,7 +1951,7 @@ mod root {
         /// The table `QueryTerm` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `QueryTerm` in the file `mod-abi.fbs:110`
+        /// * Table `QueryTerm` in the file `mod-abi.fbs:111`
         #[derive(
             Clone,
             Debug,
@@ -2242,7 +2265,7 @@ mod root {
         /// The table `QueryDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `QueryDecl` in the file `mod-abi.fbs:115`
+        /// * Table `QueryDecl` in the file `mod-abi.fbs:116`
         #[derive(
             Clone,
             Debug,
@@ -2526,7 +2549,7 @@ mod root {
         /// The table `ParamDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ParamDecl` in the file `mod-abi.fbs:119`
+        /// * Table `ParamDecl` in the file `mod-abi.fbs:120`
         #[derive(
             Clone,
             Debug,
@@ -2543,6 +2566,8 @@ mod root {
             pub kind: self::ParamKind,
             /// The field `query` in the table `ParamDecl`
             pub query: ::core::option::Option<::planus::alloc::boxed::Box<self::QueryDecl>>,
+            /// The field `type_id` in the table `ParamDecl`
+            pub type_id: u16,
         }
 
         #[allow(clippy::derivable_impls)]
@@ -2551,6 +2576,7 @@ mod root {
                 Self {
                     kind: self::ParamKind::Commands,
                     query: ::core::default::Default::default(),
+                    type_id: 0,
                 }
             }
         }
@@ -2567,14 +2593,19 @@ mod root {
                 builder: &mut ::planus::Builder,
                 field_kind: impl ::planus::WriteAsDefault<self::ParamKind, self::ParamKind>,
                 field_query: impl ::planus::WriteAsOptional<::planus::Offset<self::QueryDecl>>,
+                field_type_id: impl ::planus::WriteAsDefault<u16, u16>,
             ) -> ::planus::Offset<Self> {
                 let prepared_kind = field_kind.prepare(builder, &self::ParamKind::Commands);
                 let prepared_query = field_query.prepare(builder);
+                let prepared_type_id = field_type_id.prepare(builder, &0);
 
-                let mut table_writer: ::planus::table_writer::TableWriter<8> =
+                let mut table_writer: ::planus::table_writer::TableWriter<10> =
                     ::core::default::Default::default();
                 if prepared_query.is_some() {
                     table_writer.write_entry::<::planus::Offset<self::QueryDecl>>(1);
+                }
+                if prepared_type_id.is_some() {
+                    table_writer.write_entry::<u16>(2);
                 }
                 if prepared_kind.is_some() {
                     table_writer.write_entry::<self::ParamKind>(0);
@@ -2584,6 +2615,9 @@ mod root {
                     table_writer.finish(builder, |object_writer| {
                         if let ::core::option::Option::Some(prepared_query) = prepared_query {
                             object_writer.write::<_, _, 4>(&prepared_query);
+                        }
+                        if let ::core::option::Option::Some(prepared_type_id) = prepared_type_id {
+                            object_writer.write::<_, _, 2>(&prepared_type_id);
                         }
                         if let ::core::option::Option::Some(prepared_kind) = prepared_kind {
                             object_writer.write::<_, _, 1>(&prepared_kind);
@@ -2618,7 +2652,7 @@ mod root {
         impl ::planus::WriteAsOffset<ParamDecl> for ParamDecl {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ParamDecl> {
-                ParamDecl::create(builder, self.kind, &self.query)
+                ParamDecl::create(builder, self.kind, &self.query, self.type_id)
             }
         }
 
@@ -2669,6 +2703,26 @@ mod root {
         }
 
         impl<T0, T1> ParamDeclBuilder<(T0, T1)> {
+            /// Setter for the [`type_id` field](ParamDecl#structfield.type_id).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn type_id<T2>(self, value: T2) -> ParamDeclBuilder<(T0, T1, T2)>
+            where
+                T2: ::planus::WriteAsDefault<u16, u16>,
+            {
+                let (v0, v1) = self.0;
+                ParamDeclBuilder((v0, v1, value))
+            }
+
+            /// Sets the [`type_id` field](ParamDecl#structfield.type_id) to the default value.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn type_id_as_default(self) -> ParamDeclBuilder<(T0, T1, ::planus::DefaultValue)> {
+                self.type_id(::planus::DefaultValue)
+            }
+        }
+
+        impl<T0, T1, T2> ParamDeclBuilder<(T0, T1, T2)> {
             /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ParamDecl].
             #[inline]
             pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<ParamDecl>
@@ -2682,7 +2736,8 @@ mod root {
         impl<
                 T0: ::planus::WriteAsDefault<self::ParamKind, self::ParamKind>,
                 T1: ::planus::WriteAsOptional<::planus::Offset<self::QueryDecl>>,
-            > ::planus::WriteAs<::planus::Offset<ParamDecl>> for ParamDeclBuilder<(T0, T1)>
+                T2: ::planus::WriteAsDefault<u16, u16>,
+            > ::planus::WriteAs<::planus::Offset<ParamDecl>> for ParamDeclBuilder<(T0, T1, T2)>
         {
             type Prepared = ::planus::Offset<ParamDecl>;
 
@@ -2695,8 +2750,9 @@ mod root {
         impl<
                 T0: ::planus::WriteAsDefault<self::ParamKind, self::ParamKind>,
                 T1: ::planus::WriteAsOptional<::planus::Offset<self::QueryDecl>>,
+                T2: ::planus::WriteAsDefault<u16, u16>,
             > ::planus::WriteAsOptional<::planus::Offset<ParamDecl>>
-            for ParamDeclBuilder<(T0, T1)>
+            for ParamDeclBuilder<(T0, T1, T2)>
         {
             type Prepared = ::planus::Offset<ParamDecl>;
 
@@ -2712,12 +2768,13 @@ mod root {
         impl<
                 T0: ::planus::WriteAsDefault<self::ParamKind, self::ParamKind>,
                 T1: ::planus::WriteAsOptional<::planus::Offset<self::QueryDecl>>,
-            > ::planus::WriteAsOffset<ParamDecl> for ParamDeclBuilder<(T0, T1)>
+                T2: ::planus::WriteAsDefault<u16, u16>,
+            > ::planus::WriteAsOffset<ParamDecl> for ParamDeclBuilder<(T0, T1, T2)>
         {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ParamDecl> {
-                let (v0, v1) = &self.0;
-                ParamDecl::create(builder, v0, v1)
+                let (v0, v1, v2) = &self.0;
+                ParamDecl::create(builder, v0, v1, v2)
             }
         }
 
@@ -2743,6 +2800,12 @@ mod root {
             ) -> ::planus::Result<::core::option::Option<self::QueryDeclRef<'a>>> {
                 self.0.access(1, "ParamDecl", "query")
             }
+
+            /// Getter for the [`type_id` field](ParamDecl#structfield.type_id).
+            #[inline]
+            pub fn type_id(&self) -> ::planus::Result<u16> {
+                ::core::result::Result::Ok(self.0.access(2, "ParamDecl", "type_id")?.unwrap_or(0))
+            }
         }
 
         impl<'a> ::core::fmt::Debug for ParamDeclRef<'a> {
@@ -2752,6 +2815,7 @@ mod root {
                 if let ::core::option::Option::Some(field_query) = self.query().transpose() {
                     f.field("query", &field_query);
                 }
+                f.field("type_id", &self.type_id());
                 f.finish()
             }
         }
@@ -2770,6 +2834,7 @@ mod root {
                     } else {
                         ::core::option::Option::None
                     },
+                    type_id: ::core::convert::TryInto::try_into(value.type_id()?)?,
                 })
             }
         }
@@ -2850,7 +2915,7 @@ mod root {
         /// The table `SystemDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SystemDecl` in the file `mod-abi.fbs:124`
+        /// * Table `SystemDecl` in the file `mod-abi.fbs:126`
         #[derive(
             Clone,
             Debug,
@@ -3488,7 +3553,7 @@ mod root {
         /// The table `ObserverDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ObserverDecl` in the file `mod-abi.fbs:135`
+        /// * Table `ObserverDecl` in the file `mod-abi.fbs:137`
         #[derive(
             Clone,
             Debug,
@@ -3509,6 +3574,8 @@ mod root {
             pub type_id: u16,
             /// The field `event_name` in the table `ObserverDecl`
             pub event_name: ::core::option::Option<::planus::alloc::string::String>,
+            /// The field `params` in the table `ObserverDecl`
+            pub params: ::core::option::Option<::planus::alloc::vec::Vec<self::ParamDecl>>,
         }
 
         #[allow(clippy::derivable_impls)]
@@ -3519,6 +3586,7 @@ mod root {
                     kind: self::ObserverKind::Spawn,
                     type_id: 0,
                     event_name: ::core::default::Default::default(),
+                    params: ::core::default::Default::default(),
                 }
             }
         }
@@ -3539,19 +3607,27 @@ mod root {
                 field_event_name: impl ::planus::WriteAsOptional<
                     ::planus::Offset<::core::primitive::str>,
                 >,
+                field_params: impl ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::ParamDecl>]>,
+                >,
             ) -> ::planus::Offset<Self> {
                 let prepared_id = field_id.prepare(builder, &0);
                 let prepared_kind = field_kind.prepare(builder, &self::ObserverKind::Spawn);
                 let prepared_type_id = field_type_id.prepare(builder, &0);
                 let prepared_event_name = field_event_name.prepare(builder);
+                let prepared_params = field_params.prepare(builder);
 
-                let mut table_writer: ::planus::table_writer::TableWriter<12> =
+                let mut table_writer: ::planus::table_writer::TableWriter<14> =
                     ::core::default::Default::default();
                 if prepared_id.is_some() {
                     table_writer.write_entry::<u32>(0);
                 }
                 if prepared_event_name.is_some() {
                     table_writer.write_entry::<::planus::Offset<str>>(3);
+                }
+                if prepared_params.is_some() {
+                    table_writer
+                        .write_entry::<::planus::Offset<[::planus::Offset<self::ParamDecl>]>>(4);
                 }
                 if prepared_type_id.is_some() {
                     table_writer.write_entry::<u16>(2);
@@ -3569,6 +3645,9 @@ mod root {
                             prepared_event_name
                         {
                             object_writer.write::<_, _, 4>(&prepared_event_name);
+                        }
+                        if let ::core::option::Option::Some(prepared_params) = prepared_params {
+                            object_writer.write::<_, _, 4>(&prepared_params);
                         }
                         if let ::core::option::Option::Some(prepared_type_id) = prepared_type_id {
                             object_writer.write::<_, _, 2>(&prepared_type_id);
@@ -3606,7 +3685,14 @@ mod root {
         impl ::planus::WriteAsOffset<ObserverDecl> for ObserverDecl {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ObserverDecl> {
-                ObserverDecl::create(builder, self.id, self.kind, self.type_id, &self.event_name)
+                ObserverDecl::create(
+                    builder,
+                    self.id,
+                    self.kind,
+                    self.type_id,
+                    &self.event_name,
+                    &self.params,
+                )
             }
         }
 
@@ -3699,6 +3785,28 @@ mod root {
         }
 
         impl<T0, T1, T2, T3> ObserverDeclBuilder<(T0, T1, T2, T3)> {
+            /// Setter for the [`params` field](ObserverDecl#structfield.params).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn params<T4>(self, value: T4) -> ObserverDeclBuilder<(T0, T1, T2, T3, T4)>
+            where
+                T4: ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::ParamDecl>]>,
+                >,
+            {
+                let (v0, v1, v2, v3) = self.0;
+                ObserverDeclBuilder((v0, v1, v2, v3, value))
+            }
+
+            /// Sets the [`params` field](ObserverDecl#structfield.params) to null.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn params_as_null(self) -> ObserverDeclBuilder<(T0, T1, T2, T3, ())> {
+                self.params(())
+            }
+        }
+
+        impl<T0, T1, T2, T3, T4> ObserverDeclBuilder<(T0, T1, T2, T3, T4)> {
             /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ObserverDecl].
             #[inline]
             pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<ObserverDecl>
@@ -3714,8 +3822,9 @@ mod root {
                 T1: ::planus::WriteAsDefault<self::ObserverKind, self::ObserverKind>,
                 T2: ::planus::WriteAsDefault<u16, u16>,
                 T3: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ParamDecl>]>>,
             > ::planus::WriteAs<::planus::Offset<ObserverDecl>>
-            for ObserverDeclBuilder<(T0, T1, T2, T3)>
+            for ObserverDeclBuilder<(T0, T1, T2, T3, T4)>
         {
             type Prepared = ::planus::Offset<ObserverDecl>;
 
@@ -3730,8 +3839,9 @@ mod root {
                 T1: ::planus::WriteAsDefault<self::ObserverKind, self::ObserverKind>,
                 T2: ::planus::WriteAsDefault<u16, u16>,
                 T3: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
+                T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ParamDecl>]>>,
             > ::planus::WriteAsOptional<::planus::Offset<ObserverDecl>>
-            for ObserverDeclBuilder<(T0, T1, T2, T3)>
+            for ObserverDeclBuilder<(T0, T1, T2, T3, T4)>
         {
             type Prepared = ::planus::Offset<ObserverDecl>;
 
@@ -3749,12 +3859,13 @@ mod root {
                 T1: ::planus::WriteAsDefault<self::ObserverKind, self::ObserverKind>,
                 T2: ::planus::WriteAsDefault<u16, u16>,
                 T3: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
-            > ::planus::WriteAsOffset<ObserverDecl> for ObserverDeclBuilder<(T0, T1, T2, T3)>
+                T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ParamDecl>]>>,
+            > ::planus::WriteAsOffset<ObserverDecl> for ObserverDeclBuilder<(T0, T1, T2, T3, T4)>
         {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ObserverDecl> {
-                let (v0, v1, v2, v3) = &self.0;
-                ObserverDecl::create(builder, v0, v1, v2, v3)
+                let (v0, v1, v2, v3, v4) = &self.0;
+                ObserverDecl::create(builder, v0, v1, v2, v3, v4)
             }
         }
 
@@ -3794,6 +3905,18 @@ mod root {
             ) -> ::planus::Result<::core::option::Option<&'a ::core::primitive::str>> {
                 self.0.access(3, "ObserverDecl", "event_name")
             }
+
+            /// Getter for the [`params` field](ObserverDecl#structfield.params).
+            #[inline]
+            pub fn params(
+                &self,
+            ) -> ::planus::Result<
+                ::core::option::Option<
+                    ::planus::Vector<'a, ::planus::Result<self::ParamDeclRef<'a>>>,
+                >,
+            > {
+                self.0.access(4, "ObserverDecl", "params")
+            }
         }
 
         impl<'a> ::core::fmt::Debug for ObserverDeclRef<'a> {
@@ -3806,6 +3929,9 @@ mod root {
                     self.event_name().transpose()
                 {
                     f.field("event_name", &field_event_name);
+                }
+                if let ::core::option::Option::Some(field_params) = self.params().transpose() {
+                    f.field("params", &field_params);
                 }
                 f.finish()
             }
@@ -3821,6 +3947,11 @@ mod root {
                     kind: ::core::convert::TryInto::try_into(value.kind()?)?,
                     type_id: ::core::convert::TryInto::try_into(value.type_id()?)?,
                     event_name: value.event_name()?.map(::core::convert::Into::into),
+                    params: if let ::core::option::Option::Some(params) = value.params()? {
+                        ::core::option::Option::Some(params.to_vec_result()?)
+                    } else {
+                        ::core::option::Option::None
+                    },
                 })
             }
         }
@@ -3901,7 +4032,7 @@ mod root {
         /// The table `SetupReply` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SetupReply` in the file `mod-abi.fbs:142`
+        /// * Table `SetupReply` in the file `mod-abi.fbs:145`
         #[derive(
             Clone,
             Debug,
@@ -3922,6 +4053,8 @@ mod root {
             pub wants_filter: bool,
             /// The field `wants_filter_out` in the table `SetupReply`
             pub wants_filter_out: bool,
+            /// The field `res_unchanged` in the table `SetupReply`
+            pub res_unchanged: bool,
         }
 
         #[allow(clippy::derivable_impls)]
@@ -3932,6 +4065,7 @@ mod root {
                     observers: ::core::default::Default::default(),
                     wants_filter: false,
                     wants_filter_out: false,
+                    res_unchanged: false,
                 }
             }
         }
@@ -3954,13 +4088,15 @@ mod root {
                 >,
                 field_wants_filter: impl ::planus::WriteAsDefault<bool, bool>,
                 field_wants_filter_out: impl ::planus::WriteAsDefault<bool, bool>,
+                field_res_unchanged: impl ::planus::WriteAsDefault<bool, bool>,
             ) -> ::planus::Offset<Self> {
                 let prepared_systems = field_systems.prepare(builder);
                 let prepared_observers = field_observers.prepare(builder);
                 let prepared_wants_filter = field_wants_filter.prepare(builder, &false);
                 let prepared_wants_filter_out = field_wants_filter_out.prepare(builder, &false);
+                let prepared_res_unchanged = field_res_unchanged.prepare(builder, &false);
 
-                let mut table_writer: ::planus::table_writer::TableWriter<12> =
+                let mut table_writer: ::planus::table_writer::TableWriter<14> =
                     ::core::default::Default::default();
                 if prepared_systems.is_some() {
                     table_writer
@@ -3975,6 +4111,9 @@ mod root {
                 }
                 if prepared_wants_filter_out.is_some() {
                     table_writer.write_entry::<bool>(3);
+                }
+                if prepared_res_unchanged.is_some() {
+                    table_writer.write_entry::<bool>(4);
                 }
 
                 unsafe {
@@ -3995,6 +4134,11 @@ mod root {
                             prepared_wants_filter_out
                         {
                             object_writer.write::<_, _, 1>(&prepared_wants_filter_out);
+                        }
+                        if let ::core::option::Option::Some(prepared_res_unchanged) =
+                            prepared_res_unchanged
+                        {
+                            object_writer.write::<_, _, 1>(&prepared_res_unchanged);
                         }
                     });
                 }
@@ -4032,6 +4176,7 @@ mod root {
                     &self.observers,
                     self.wants_filter,
                     self.wants_filter_out,
+                    self.res_unchanged,
                 )
             }
         }
@@ -4131,6 +4276,28 @@ mod root {
         }
 
         impl<T0, T1, T2, T3> SetupReplyBuilder<(T0, T1, T2, T3)> {
+            /// Setter for the [`res_unchanged` field](SetupReply#structfield.res_unchanged).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn res_unchanged<T4>(self, value: T4) -> SetupReplyBuilder<(T0, T1, T2, T3, T4)>
+            where
+                T4: ::planus::WriteAsDefault<bool, bool>,
+            {
+                let (v0, v1, v2, v3) = self.0;
+                SetupReplyBuilder((v0, v1, v2, v3, value))
+            }
+
+            /// Sets the [`res_unchanged` field](SetupReply#structfield.res_unchanged) to the default value.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn res_unchanged_as_default(
+                self,
+            ) -> SetupReplyBuilder<(T0, T1, T2, T3, ::planus::DefaultValue)> {
+                self.res_unchanged(::planus::DefaultValue)
+            }
+        }
+
+        impl<T0, T1, T2, T3, T4> SetupReplyBuilder<(T0, T1, T2, T3, T4)> {
             /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [SetupReply].
             #[inline]
             pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<SetupReply>
@@ -4146,8 +4313,9 @@ mod root {
                 T1: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ObserverDecl>]>>,
                 T2: ::planus::WriteAsDefault<bool, bool>,
                 T3: ::planus::WriteAsDefault<bool, bool>,
+                T4: ::planus::WriteAsDefault<bool, bool>,
             > ::planus::WriteAs<::planus::Offset<SetupReply>>
-            for SetupReplyBuilder<(T0, T1, T2, T3)>
+            for SetupReplyBuilder<(T0, T1, T2, T3, T4)>
         {
             type Prepared = ::planus::Offset<SetupReply>;
 
@@ -4162,8 +4330,9 @@ mod root {
                 T1: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ObserverDecl>]>>,
                 T2: ::planus::WriteAsDefault<bool, bool>,
                 T3: ::planus::WriteAsDefault<bool, bool>,
+                T4: ::planus::WriteAsDefault<bool, bool>,
             > ::planus::WriteAsOptional<::planus::Offset<SetupReply>>
-            for SetupReplyBuilder<(T0, T1, T2, T3)>
+            for SetupReplyBuilder<(T0, T1, T2, T3, T4)>
         {
             type Prepared = ::planus::Offset<SetupReply>;
 
@@ -4181,12 +4350,13 @@ mod root {
                 T1: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ObserverDecl>]>>,
                 T2: ::planus::WriteAsDefault<bool, bool>,
                 T3: ::planus::WriteAsDefault<bool, bool>,
-            > ::planus::WriteAsOffset<SetupReply> for SetupReplyBuilder<(T0, T1, T2, T3)>
+                T4: ::planus::WriteAsDefault<bool, bool>,
+            > ::planus::WriteAsOffset<SetupReply> for SetupReplyBuilder<(T0, T1, T2, T3, T4)>
         {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<SetupReply> {
-                let (v0, v1, v2, v3) = &self.0;
-                SetupReply::create(builder, v0, v1, v2, v3)
+                let (v0, v1, v2, v3, v4) = &self.0;
+                SetupReply::create(builder, v0, v1, v2, v3, v4)
             }
         }
 
@@ -4238,6 +4408,16 @@ mod root {
                         .unwrap_or(false),
                 )
             }
+
+            /// Getter for the [`res_unchanged` field](SetupReply#structfield.res_unchanged).
+            #[inline]
+            pub fn res_unchanged(&self) -> ::planus::Result<bool> {
+                ::core::result::Result::Ok(
+                    self.0
+                        .access(4, "SetupReply", "res_unchanged")?
+                        .unwrap_or(false),
+                )
+            }
         }
 
         impl<'a> ::core::fmt::Debug for SetupReplyRef<'a> {
@@ -4252,6 +4432,7 @@ mod root {
                 }
                 f.field("wants_filter", &self.wants_filter());
                 f.field("wants_filter_out", &self.wants_filter_out());
+                f.field("res_unchanged", &self.res_unchanged());
                 f.finish()
             }
         }
@@ -4276,6 +4457,7 @@ mod root {
                     wants_filter_out: ::core::convert::TryInto::try_into(
                         value.wants_filter_out()?,
                     )?,
+                    res_unchanged: ::core::convert::TryInto::try_into(value.res_unchanged()?)?,
                 })
             }
         }
@@ -4356,7 +4538,7 @@ mod root {
         /// The table `Row` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `Row` in the file `mod-abi.fbs:152`
+        /// * Table `Row` in the file `mod-abi.fbs:156`
         #[derive(
             Clone,
             Debug,
@@ -4676,7 +4858,7 @@ mod root {
         /// The table `QueryRows` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `QueryRows` in the file `mod-abi.fbs:157`
+        /// * Table `QueryRows` in the file `mod-abi.fbs:161`
         #[derive(
             Clone,
             Debug,
@@ -4999,10 +5181,706 @@ mod root {
             }
         }
 
+        /// The table `ResValue` in the namespace `ModAbi`
+        ///
+        /// Generated from these locations:
+        /// * Table `ResValue` in the file `mod-abi.fbs:170`
+        #[derive(
+            Clone,
+            Debug,
+            PartialEq,
+            PartialOrd,
+            Eq,
+            Ord,
+            Hash,
+            ::serde::Serialize,
+            ::serde::Deserialize,
+        )]
+        pub struct ResValue {
+            /// The field `param_index` in the table `ResValue`
+            pub param_index: u32,
+            /// The field `value` in the table `ResValue`
+            pub value: ::core::option::Option<::planus::alloc::boxed::Box<self::CompValue>>,
+            /// The field `unchanged` in the table `ResValue`
+            pub unchanged: bool,
+        }
+
+        #[allow(clippy::derivable_impls)]
+        impl ::core::default::Default for ResValue {
+            fn default() -> Self {
+                Self {
+                    param_index: 0,
+                    value: ::core::default::Default::default(),
+                    unchanged: false,
+                }
+            }
+        }
+
+        impl ResValue {
+            /// Creates a [ResValueBuilder] for serializing an instance of this table.
+            #[inline]
+            pub fn builder() -> ResValueBuilder<()> {
+                ResValueBuilder(())
+            }
+
+            #[allow(clippy::too_many_arguments)]
+            pub fn create(
+                builder: &mut ::planus::Builder,
+                field_param_index: impl ::planus::WriteAsDefault<u32, u32>,
+                field_value: impl ::planus::WriteAsOptional<::planus::Offset<self::CompValue>>,
+                field_unchanged: impl ::planus::WriteAsDefault<bool, bool>,
+            ) -> ::planus::Offset<Self> {
+                let prepared_param_index = field_param_index.prepare(builder, &0);
+                let prepared_value = field_value.prepare(builder);
+                let prepared_unchanged = field_unchanged.prepare(builder, &false);
+
+                let mut table_writer: ::planus::table_writer::TableWriter<10> =
+                    ::core::default::Default::default();
+                if prepared_param_index.is_some() {
+                    table_writer.write_entry::<u32>(0);
+                }
+                if prepared_value.is_some() {
+                    table_writer.write_entry::<::planus::Offset<self::CompValue>>(1);
+                }
+                if prepared_unchanged.is_some() {
+                    table_writer.write_entry::<bool>(2);
+                }
+
+                unsafe {
+                    table_writer.finish(builder, |object_writer| {
+                        if let ::core::option::Option::Some(prepared_param_index) =
+                            prepared_param_index
+                        {
+                            object_writer.write::<_, _, 4>(&prepared_param_index);
+                        }
+                        if let ::core::option::Option::Some(prepared_value) = prepared_value {
+                            object_writer.write::<_, _, 4>(&prepared_value);
+                        }
+                        if let ::core::option::Option::Some(prepared_unchanged) = prepared_unchanged
+                        {
+                            object_writer.write::<_, _, 1>(&prepared_unchanged);
+                        }
+                    });
+                }
+                builder.current_offset()
+            }
+        }
+
+        impl ::planus::WriteAs<::planus::Offset<ResValue>> for ResValue {
+            type Prepared = ::planus::Offset<Self>;
+
+            #[inline]
+            fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ResValue> {
+                ::planus::WriteAsOffset::prepare(self, builder)
+            }
+        }
+
+        impl ::planus::WriteAsOptional<::planus::Offset<ResValue>> for ResValue {
+            type Prepared = ::planus::Offset<Self>;
+
+            #[inline]
+            fn prepare(
+                &self,
+                builder: &mut ::planus::Builder,
+            ) -> ::core::option::Option<::planus::Offset<ResValue>> {
+                ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+            }
+        }
+
+        impl ::planus::WriteAsOffset<ResValue> for ResValue {
+            #[inline]
+            fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ResValue> {
+                ResValue::create(builder, self.param_index, &self.value, self.unchanged)
+            }
+        }
+
+        /// Builder for serializing an instance of the [ResValue] type.
+        ///
+        /// Can be created using the [ResValue::builder] method.
+        #[derive(Debug)]
+        #[must_use]
+        pub struct ResValueBuilder<State>(State);
+
+        impl ResValueBuilder<()> {
+            /// Setter for the [`param_index` field](ResValue#structfield.param_index).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn param_index<T0>(self, value: T0) -> ResValueBuilder<(T0,)>
+            where
+                T0: ::planus::WriteAsDefault<u32, u32>,
+            {
+                ResValueBuilder((value,))
+            }
+
+            /// Sets the [`param_index` field](ResValue#structfield.param_index) to the default value.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn param_index_as_default(self) -> ResValueBuilder<(::planus::DefaultValue,)> {
+                self.param_index(::planus::DefaultValue)
+            }
+        }
+
+        impl<T0> ResValueBuilder<(T0,)> {
+            /// Setter for the [`value` field](ResValue#structfield.value).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn value<T1>(self, value: T1) -> ResValueBuilder<(T0, T1)>
+            where
+                T1: ::planus::WriteAsOptional<::planus::Offset<self::CompValue>>,
+            {
+                let (v0,) = self.0;
+                ResValueBuilder((v0, value))
+            }
+
+            /// Sets the [`value` field](ResValue#structfield.value) to null.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn value_as_null(self) -> ResValueBuilder<(T0, ())> {
+                self.value(())
+            }
+        }
+
+        impl<T0, T1> ResValueBuilder<(T0, T1)> {
+            /// Setter for the [`unchanged` field](ResValue#structfield.unchanged).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn unchanged<T2>(self, value: T2) -> ResValueBuilder<(T0, T1, T2)>
+            where
+                T2: ::planus::WriteAsDefault<bool, bool>,
+            {
+                let (v0, v1) = self.0;
+                ResValueBuilder((v0, v1, value))
+            }
+
+            /// Sets the [`unchanged` field](ResValue#structfield.unchanged) to the default value.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn unchanged_as_default(self) -> ResValueBuilder<(T0, T1, ::planus::DefaultValue)> {
+                self.unchanged(::planus::DefaultValue)
+            }
+        }
+
+        impl<T0, T1, T2> ResValueBuilder<(T0, T1, T2)> {
+            /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ResValue].
+            #[inline]
+            pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<ResValue>
+            where
+                Self: ::planus::WriteAsOffset<ResValue>,
+            {
+                ::planus::WriteAsOffset::prepare(&self, builder)
+            }
+        }
+
+        impl<
+                T0: ::planus::WriteAsDefault<u32, u32>,
+                T1: ::planus::WriteAsOptional<::planus::Offset<self::CompValue>>,
+                T2: ::planus::WriteAsDefault<bool, bool>,
+            > ::planus::WriteAs<::planus::Offset<ResValue>> for ResValueBuilder<(T0, T1, T2)>
+        {
+            type Prepared = ::planus::Offset<ResValue>;
+
+            #[inline]
+            fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ResValue> {
+                ::planus::WriteAsOffset::prepare(self, builder)
+            }
+        }
+
+        impl<
+                T0: ::planus::WriteAsDefault<u32, u32>,
+                T1: ::planus::WriteAsOptional<::planus::Offset<self::CompValue>>,
+                T2: ::planus::WriteAsDefault<bool, bool>,
+            > ::planus::WriteAsOptional<::planus::Offset<ResValue>>
+            for ResValueBuilder<(T0, T1, T2)>
+        {
+            type Prepared = ::planus::Offset<ResValue>;
+
+            #[inline]
+            fn prepare(
+                &self,
+                builder: &mut ::planus::Builder,
+            ) -> ::core::option::Option<::planus::Offset<ResValue>> {
+                ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+            }
+        }
+
+        impl<
+                T0: ::planus::WriteAsDefault<u32, u32>,
+                T1: ::planus::WriteAsOptional<::planus::Offset<self::CompValue>>,
+                T2: ::planus::WriteAsDefault<bool, bool>,
+            > ::planus::WriteAsOffset<ResValue> for ResValueBuilder<(T0, T1, T2)>
+        {
+            #[inline]
+            fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ResValue> {
+                let (v0, v1, v2) = &self.0;
+                ResValue::create(builder, v0, v1, v2)
+            }
+        }
+
+        /// Reference to a deserialized [ResValue].
+        #[derive(Copy, Clone)]
+        pub struct ResValueRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+        impl<'a> ResValueRef<'a> {
+            /// Getter for the [`param_index` field](ResValue#structfield.param_index).
+            #[inline]
+            pub fn param_index(&self) -> ::planus::Result<u32> {
+                ::core::result::Result::Ok(
+                    self.0.access(0, "ResValue", "param_index")?.unwrap_or(0),
+                )
+            }
+
+            /// Getter for the [`value` field](ResValue#structfield.value).
+            #[inline]
+            pub fn value(
+                &self,
+            ) -> ::planus::Result<::core::option::Option<self::CompValueRef<'a>>> {
+                self.0.access(1, "ResValue", "value")
+            }
+
+            /// Getter for the [`unchanged` field](ResValue#structfield.unchanged).
+            #[inline]
+            pub fn unchanged(&self) -> ::planus::Result<bool> {
+                ::core::result::Result::Ok(
+                    self.0.access(2, "ResValue", "unchanged")?.unwrap_or(false),
+                )
+            }
+        }
+
+        impl<'a> ::core::fmt::Debug for ResValueRef<'a> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut f = f.debug_struct("ResValueRef");
+                f.field("param_index", &self.param_index());
+                if let ::core::option::Option::Some(field_value) = self.value().transpose() {
+                    f.field("value", &field_value);
+                }
+                f.field("unchanged", &self.unchanged());
+                f.finish()
+            }
+        }
+
+        impl<'a> ::core::convert::TryFrom<ResValueRef<'a>> for ResValue {
+            type Error = ::planus::Error;
+
+            #[allow(unreachable_code)]
+            fn try_from(value: ResValueRef<'a>) -> ::planus::Result<Self> {
+                ::core::result::Result::Ok(Self {
+                    param_index: ::core::convert::TryInto::try_into(value.param_index()?)?,
+                    value: if let ::core::option::Option::Some(value) = value.value()? {
+                        ::core::option::Option::Some(::planus::alloc::boxed::Box::new(
+                            ::core::convert::TryInto::try_into(value)?,
+                        ))
+                    } else {
+                        ::core::option::Option::None
+                    },
+                    unchanged: ::core::convert::TryInto::try_into(value.unchanged()?)?,
+                })
+            }
+        }
+
+        impl<'a> ::planus::TableRead<'a> for ResValueRef<'a> {
+            #[inline]
+            fn from_buffer(
+                buffer: ::planus::SliceWithStartOffset<'a>,
+                offset: usize,
+            ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                    buffer, offset,
+                )?))
+            }
+        }
+
+        impl<'a> ::planus::VectorReadInner<'a> for ResValueRef<'a> {
+            type Error = ::planus::Error;
+            const STRIDE: usize = 4;
+
+            unsafe fn from_buffer(
+                buffer: ::planus::SliceWithStartOffset<'a>,
+                offset: usize,
+            ) -> ::planus::Result<Self> {
+                ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                    error_kind.with_error_location("[ResValueRef]", "get", buffer.offset_from_start)
+                })
+            }
+        }
+
+        /// # Safety
+        /// The planus compiler generates implementations that initialize
+        /// the bytes in `write_values`.
+        unsafe impl ::planus::VectorWrite<::planus::Offset<ResValue>> for ResValue {
+            type Value = ::planus::Offset<ResValue>;
+            const STRIDE: usize = 4;
+            #[inline]
+            fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                ::planus::WriteAs::prepare(self, builder)
+            }
+
+            #[inline]
+            unsafe fn write_values(
+                values: &[::planus::Offset<ResValue>],
+                bytes: *mut ::core::mem::MaybeUninit<u8>,
+                buffer_position: u32,
+            ) {
+                let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                    ::planus::WriteAsPrimitive::write(
+                        v,
+                        ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                        buffer_position - (Self::STRIDE * i) as u32,
+                    );
+                }
+            }
+        }
+
+        impl<'a> ::planus::ReadAsRoot<'a> for ResValueRef<'a> {
+            fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                ::planus::TableRead::from_buffer(
+                    ::planus::SliceWithStartOffset {
+                        buffer: slice,
+                        offset_from_start: 0,
+                    },
+                    0,
+                )
+                .map_err(|error_kind| {
+                    error_kind.with_error_location("[ResValueRef]", "read_as_root", 0)
+                })
+            }
+        }
+
+        /// The table `EventValues` in the namespace `ModAbi`
+        ///
+        /// Generated from these locations:
+        /// * Table `EventValues` in the file `mod-abi.fbs:177`
+        #[derive(
+            Clone,
+            Debug,
+            PartialEq,
+            PartialOrd,
+            Eq,
+            Ord,
+            Hash,
+            ::serde::Serialize,
+            ::serde::Deserialize,
+        )]
+        pub struct EventValues {
+            /// The field `param_index` in the table `EventValues`
+            pub param_index: u32,
+            /// The field `values` in the table `EventValues`
+            pub values: ::core::option::Option<::planus::alloc::vec::Vec<self::CompValue>>,
+        }
+
+        #[allow(clippy::derivable_impls)]
+        impl ::core::default::Default for EventValues {
+            fn default() -> Self {
+                Self {
+                    param_index: 0,
+                    values: ::core::default::Default::default(),
+                }
+            }
+        }
+
+        impl EventValues {
+            /// Creates a [EventValuesBuilder] for serializing an instance of this table.
+            #[inline]
+            pub fn builder() -> EventValuesBuilder<()> {
+                EventValuesBuilder(())
+            }
+
+            #[allow(clippy::too_many_arguments)]
+            pub fn create(
+                builder: &mut ::planus::Builder,
+                field_param_index: impl ::planus::WriteAsDefault<u32, u32>,
+                field_values: impl ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::CompValue>]>,
+                >,
+            ) -> ::planus::Offset<Self> {
+                let prepared_param_index = field_param_index.prepare(builder, &0);
+                let prepared_values = field_values.prepare(builder);
+
+                let mut table_writer: ::planus::table_writer::TableWriter<8> =
+                    ::core::default::Default::default();
+                if prepared_param_index.is_some() {
+                    table_writer.write_entry::<u32>(0);
+                }
+                if prepared_values.is_some() {
+                    table_writer
+                        .write_entry::<::planus::Offset<[::planus::Offset<self::CompValue>]>>(1);
+                }
+
+                unsafe {
+                    table_writer.finish(builder, |object_writer| {
+                        if let ::core::option::Option::Some(prepared_param_index) =
+                            prepared_param_index
+                        {
+                            object_writer.write::<_, _, 4>(&prepared_param_index);
+                        }
+                        if let ::core::option::Option::Some(prepared_values) = prepared_values {
+                            object_writer.write::<_, _, 4>(&prepared_values);
+                        }
+                    });
+                }
+                builder.current_offset()
+            }
+        }
+
+        impl ::planus::WriteAs<::planus::Offset<EventValues>> for EventValues {
+            type Prepared = ::planus::Offset<Self>;
+
+            #[inline]
+            fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<EventValues> {
+                ::planus::WriteAsOffset::prepare(self, builder)
+            }
+        }
+
+        impl ::planus::WriteAsOptional<::planus::Offset<EventValues>> for EventValues {
+            type Prepared = ::planus::Offset<Self>;
+
+            #[inline]
+            fn prepare(
+                &self,
+                builder: &mut ::planus::Builder,
+            ) -> ::core::option::Option<::planus::Offset<EventValues>> {
+                ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+            }
+        }
+
+        impl ::planus::WriteAsOffset<EventValues> for EventValues {
+            #[inline]
+            fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<EventValues> {
+                EventValues::create(builder, self.param_index, &self.values)
+            }
+        }
+
+        /// Builder for serializing an instance of the [EventValues] type.
+        ///
+        /// Can be created using the [EventValues::builder] method.
+        #[derive(Debug)]
+        #[must_use]
+        pub struct EventValuesBuilder<State>(State);
+
+        impl EventValuesBuilder<()> {
+            /// Setter for the [`param_index` field](EventValues#structfield.param_index).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn param_index<T0>(self, value: T0) -> EventValuesBuilder<(T0,)>
+            where
+                T0: ::planus::WriteAsDefault<u32, u32>,
+            {
+                EventValuesBuilder((value,))
+            }
+
+            /// Sets the [`param_index` field](EventValues#structfield.param_index) to the default value.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn param_index_as_default(self) -> EventValuesBuilder<(::planus::DefaultValue,)> {
+                self.param_index(::planus::DefaultValue)
+            }
+        }
+
+        impl<T0> EventValuesBuilder<(T0,)> {
+            /// Setter for the [`values` field](EventValues#structfield.values).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn values<T1>(self, value: T1) -> EventValuesBuilder<(T0, T1)>
+            where
+                T1: ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::CompValue>]>,
+                >,
+            {
+                let (v0,) = self.0;
+                EventValuesBuilder((v0, value))
+            }
+
+            /// Sets the [`values` field](EventValues#structfield.values) to null.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn values_as_null(self) -> EventValuesBuilder<(T0, ())> {
+                self.values(())
+            }
+        }
+
+        impl<T0, T1> EventValuesBuilder<(T0, T1)> {
+            /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [EventValues].
+            #[inline]
+            pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<EventValues>
+            where
+                Self: ::planus::WriteAsOffset<EventValues>,
+            {
+                ::planus::WriteAsOffset::prepare(&self, builder)
+            }
+        }
+
+        impl<
+                T0: ::planus::WriteAsDefault<u32, u32>,
+                T1: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::CompValue>]>>,
+            > ::planus::WriteAs<::planus::Offset<EventValues>> for EventValuesBuilder<(T0, T1)>
+        {
+            type Prepared = ::planus::Offset<EventValues>;
+
+            #[inline]
+            fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<EventValues> {
+                ::planus::WriteAsOffset::prepare(self, builder)
+            }
+        }
+
+        impl<
+                T0: ::planus::WriteAsDefault<u32, u32>,
+                T1: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::CompValue>]>>,
+            > ::planus::WriteAsOptional<::planus::Offset<EventValues>>
+            for EventValuesBuilder<(T0, T1)>
+        {
+            type Prepared = ::planus::Offset<EventValues>;
+
+            #[inline]
+            fn prepare(
+                &self,
+                builder: &mut ::planus::Builder,
+            ) -> ::core::option::Option<::planus::Offset<EventValues>> {
+                ::core::option::Option::Some(::planus::WriteAsOffset::prepare(self, builder))
+            }
+        }
+
+        impl<
+                T0: ::planus::WriteAsDefault<u32, u32>,
+                T1: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::CompValue>]>>,
+            > ::planus::WriteAsOffset<EventValues> for EventValuesBuilder<(T0, T1)>
+        {
+            #[inline]
+            fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<EventValues> {
+                let (v0, v1) = &self.0;
+                EventValues::create(builder, v0, v1)
+            }
+        }
+
+        /// Reference to a deserialized [EventValues].
+        #[derive(Copy, Clone)]
+        pub struct EventValuesRef<'a>(#[allow(dead_code)] ::planus::table_reader::Table<'a>);
+
+        impl<'a> EventValuesRef<'a> {
+            /// Getter for the [`param_index` field](EventValues#structfield.param_index).
+            #[inline]
+            pub fn param_index(&self) -> ::planus::Result<u32> {
+                ::core::result::Result::Ok(
+                    self.0.access(0, "EventValues", "param_index")?.unwrap_or(0),
+                )
+            }
+
+            /// Getter for the [`values` field](EventValues#structfield.values).
+            #[inline]
+            pub fn values(
+                &self,
+            ) -> ::planus::Result<
+                ::core::option::Option<
+                    ::planus::Vector<'a, ::planus::Result<self::CompValueRef<'a>>>,
+                >,
+            > {
+                self.0.access(1, "EventValues", "values")
+            }
+        }
+
+        impl<'a> ::core::fmt::Debug for EventValuesRef<'a> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut f = f.debug_struct("EventValuesRef");
+                f.field("param_index", &self.param_index());
+                if let ::core::option::Option::Some(field_values) = self.values().transpose() {
+                    f.field("values", &field_values);
+                }
+                f.finish()
+            }
+        }
+
+        impl<'a> ::core::convert::TryFrom<EventValuesRef<'a>> for EventValues {
+            type Error = ::planus::Error;
+
+            #[allow(unreachable_code)]
+            fn try_from(value: EventValuesRef<'a>) -> ::planus::Result<Self> {
+                ::core::result::Result::Ok(Self {
+                    param_index: ::core::convert::TryInto::try_into(value.param_index()?)?,
+                    values: if let ::core::option::Option::Some(values) = value.values()? {
+                        ::core::option::Option::Some(values.to_vec_result()?)
+                    } else {
+                        ::core::option::Option::None
+                    },
+                })
+            }
+        }
+
+        impl<'a> ::planus::TableRead<'a> for EventValuesRef<'a> {
+            #[inline]
+            fn from_buffer(
+                buffer: ::planus::SliceWithStartOffset<'a>,
+                offset: usize,
+            ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                ::core::result::Result::Ok(Self(::planus::table_reader::Table::from_buffer(
+                    buffer, offset,
+                )?))
+            }
+        }
+
+        impl<'a> ::planus::VectorReadInner<'a> for EventValuesRef<'a> {
+            type Error = ::planus::Error;
+            const STRIDE: usize = 4;
+
+            unsafe fn from_buffer(
+                buffer: ::planus::SliceWithStartOffset<'a>,
+                offset: usize,
+            ) -> ::planus::Result<Self> {
+                ::planus::TableRead::from_buffer(buffer, offset).map_err(|error_kind| {
+                    error_kind.with_error_location(
+                        "[EventValuesRef]",
+                        "get",
+                        buffer.offset_from_start,
+                    )
+                })
+            }
+        }
+
+        /// # Safety
+        /// The planus compiler generates implementations that initialize
+        /// the bytes in `write_values`.
+        unsafe impl ::planus::VectorWrite<::planus::Offset<EventValues>> for EventValues {
+            type Value = ::planus::Offset<EventValues>;
+            const STRIDE: usize = 4;
+            #[inline]
+            fn prepare(&self, builder: &mut ::planus::Builder) -> Self::Value {
+                ::planus::WriteAs::prepare(self, builder)
+            }
+
+            #[inline]
+            unsafe fn write_values(
+                values: &[::planus::Offset<EventValues>],
+                bytes: *mut ::core::mem::MaybeUninit<u8>,
+                buffer_position: u32,
+            ) {
+                let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 4];
+                for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                    ::planus::WriteAsPrimitive::write(
+                        v,
+                        ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                        buffer_position - (Self::STRIDE * i) as u32,
+                    );
+                }
+            }
+        }
+
+        impl<'a> ::planus::ReadAsRoot<'a> for EventValuesRef<'a> {
+            fn read_as_root(slice: &'a [u8]) -> ::planus::Result<Self> {
+                ::planus::TableRead::from_buffer(
+                    ::planus::SliceWithStartOffset {
+                        buffer: slice,
+                        offset_from_start: 0,
+                    },
+                    0,
+                )
+                .map_err(|error_kind| {
+                    error_kind.with_error_location("[EventValuesRef]", "read_as_root", 0)
+                })
+            }
+        }
+
         /// The table `SystemInput` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SystemInput` in the file `mod-abi.fbs:162`
+        /// * Table `SystemInput` in the file `mod-abi.fbs:182`
         #[derive(
             Clone,
             Debug,
@@ -5021,6 +5899,10 @@ mod root {
             pub queries: ::core::option::Option<::planus::alloc::vec::Vec<self::QueryRows>>,
             /// The field `tick` in the table `SystemInput`
             pub tick: u64,
+            /// The field `resources` in the table `SystemInput`
+            pub resources: ::core::option::Option<::planus::alloc::vec::Vec<self::ResValue>>,
+            /// The field `events` in the table `SystemInput`
+            pub events: ::core::option::Option<::planus::alloc::vec::Vec<self::EventValues>>,
         }
 
         #[allow(clippy::derivable_impls)]
@@ -5030,6 +5912,8 @@ mod root {
                     sys_id: 0,
                     queries: ::core::default::Default::default(),
                     tick: 0,
+                    resources: ::core::default::Default::default(),
+                    events: ::core::default::Default::default(),
                 }
             }
         }
@@ -5049,12 +5933,20 @@ mod root {
                     ::planus::Offset<[::planus::Offset<self::QueryRows>]>,
                 >,
                 field_tick: impl ::planus::WriteAsDefault<u64, u64>,
+                field_resources: impl ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::ResValue>]>,
+                >,
+                field_events: impl ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::EventValues>]>,
+                >,
             ) -> ::planus::Offset<Self> {
                 let prepared_sys_id = field_sys_id.prepare(builder, &0);
                 let prepared_queries = field_queries.prepare(builder);
                 let prepared_tick = field_tick.prepare(builder, &0);
+                let prepared_resources = field_resources.prepare(builder);
+                let prepared_events = field_events.prepare(builder);
 
-                let mut table_writer: ::planus::table_writer::TableWriter<10> =
+                let mut table_writer: ::planus::table_writer::TableWriter<14> =
                     ::core::default::Default::default();
                 if prepared_tick.is_some() {
                     table_writer.write_entry::<u64>(2);
@@ -5065,6 +5957,14 @@ mod root {
                 if prepared_queries.is_some() {
                     table_writer
                         .write_entry::<::planus::Offset<[::planus::Offset<self::QueryRows>]>>(1);
+                }
+                if prepared_resources.is_some() {
+                    table_writer
+                        .write_entry::<::planus::Offset<[::planus::Offset<self::ResValue>]>>(3);
+                }
+                if prepared_events.is_some() {
+                    table_writer
+                        .write_entry::<::planus::Offset<[::planus::Offset<self::EventValues>]>>(4);
                 }
 
                 unsafe {
@@ -5077,6 +5977,13 @@ mod root {
                         }
                         if let ::core::option::Option::Some(prepared_queries) = prepared_queries {
                             object_writer.write::<_, _, 4>(&prepared_queries);
+                        }
+                        if let ::core::option::Option::Some(prepared_resources) = prepared_resources
+                        {
+                            object_writer.write::<_, _, 4>(&prepared_resources);
+                        }
+                        if let ::core::option::Option::Some(prepared_events) = prepared_events {
+                            object_writer.write::<_, _, 4>(&prepared_events);
                         }
                     });
                 }
@@ -5108,7 +6015,14 @@ mod root {
         impl ::planus::WriteAsOffset<SystemInput> for SystemInput {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<SystemInput> {
-                SystemInput::create(builder, self.sys_id, &self.queries, self.tick)
+                SystemInput::create(
+                    builder,
+                    self.sys_id,
+                    &self.queries,
+                    self.tick,
+                    &self.resources,
+                    &self.events,
+                )
             }
         }
 
@@ -5181,6 +6095,48 @@ mod root {
         }
 
         impl<T0, T1, T2> SystemInputBuilder<(T0, T1, T2)> {
+            /// Setter for the [`resources` field](SystemInput#structfield.resources).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn resources<T3>(self, value: T3) -> SystemInputBuilder<(T0, T1, T2, T3)>
+            where
+                T3: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ResValue>]>>,
+            {
+                let (v0, v1, v2) = self.0;
+                SystemInputBuilder((v0, v1, v2, value))
+            }
+
+            /// Sets the [`resources` field](SystemInput#structfield.resources) to null.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn resources_as_null(self) -> SystemInputBuilder<(T0, T1, T2, ())> {
+                self.resources(())
+            }
+        }
+
+        impl<T0, T1, T2, T3> SystemInputBuilder<(T0, T1, T2, T3)> {
+            /// Setter for the [`events` field](SystemInput#structfield.events).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn events<T4>(self, value: T4) -> SystemInputBuilder<(T0, T1, T2, T3, T4)>
+            where
+                T4: ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::EventValues>]>,
+                >,
+            {
+                let (v0, v1, v2, v3) = self.0;
+                SystemInputBuilder((v0, v1, v2, v3, value))
+            }
+
+            /// Sets the [`events` field](SystemInput#structfield.events) to null.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn events_as_null(self) -> SystemInputBuilder<(T0, T1, T2, T3, ())> {
+                self.events(())
+            }
+        }
+
+        impl<T0, T1, T2, T3, T4> SystemInputBuilder<(T0, T1, T2, T3, T4)> {
             /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [SystemInput].
             #[inline]
             pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<SystemInput>
@@ -5195,8 +6151,10 @@ mod root {
                 T0: ::planus::WriteAsDefault<u32, u32>,
                 T1: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::QueryRows>]>>,
                 T2: ::planus::WriteAsDefault<u64, u64>,
+                T3: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ResValue>]>>,
+                T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::EventValues>]>>,
             > ::planus::WriteAs<::planus::Offset<SystemInput>>
-            for SystemInputBuilder<(T0, T1, T2)>
+            for SystemInputBuilder<(T0, T1, T2, T3, T4)>
         {
             type Prepared = ::planus::Offset<SystemInput>;
 
@@ -5210,8 +6168,10 @@ mod root {
                 T0: ::planus::WriteAsDefault<u32, u32>,
                 T1: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::QueryRows>]>>,
                 T2: ::planus::WriteAsDefault<u64, u64>,
+                T3: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ResValue>]>>,
+                T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::EventValues>]>>,
             > ::planus::WriteAsOptional<::planus::Offset<SystemInput>>
-            for SystemInputBuilder<(T0, T1, T2)>
+            for SystemInputBuilder<(T0, T1, T2, T3, T4)>
         {
             type Prepared = ::planus::Offset<SystemInput>;
 
@@ -5228,12 +6188,14 @@ mod root {
                 T0: ::planus::WriteAsDefault<u32, u32>,
                 T1: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::QueryRows>]>>,
                 T2: ::planus::WriteAsDefault<u64, u64>,
-            > ::planus::WriteAsOffset<SystemInput> for SystemInputBuilder<(T0, T1, T2)>
+                T3: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ResValue>]>>,
+                T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::EventValues>]>>,
+            > ::planus::WriteAsOffset<SystemInput> for SystemInputBuilder<(T0, T1, T2, T3, T4)>
         {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<SystemInput> {
-                let (v0, v1, v2) = &self.0;
-                SystemInput::create(builder, v0, v1, v2)
+                let (v0, v1, v2, v3, v4) = &self.0;
+                SystemInput::create(builder, v0, v1, v2, v3, v4)
             }
         }
 
@@ -5265,6 +6227,30 @@ mod root {
             pub fn tick(&self) -> ::planus::Result<u64> {
                 ::core::result::Result::Ok(self.0.access(2, "SystemInput", "tick")?.unwrap_or(0))
             }
+
+            /// Getter for the [`resources` field](SystemInput#structfield.resources).
+            #[inline]
+            pub fn resources(
+                &self,
+            ) -> ::planus::Result<
+                ::core::option::Option<
+                    ::planus::Vector<'a, ::planus::Result<self::ResValueRef<'a>>>,
+                >,
+            > {
+                self.0.access(3, "SystemInput", "resources")
+            }
+
+            /// Getter for the [`events` field](SystemInput#structfield.events).
+            #[inline]
+            pub fn events(
+                &self,
+            ) -> ::planus::Result<
+                ::core::option::Option<
+                    ::planus::Vector<'a, ::planus::Result<self::EventValuesRef<'a>>>,
+                >,
+            > {
+                self.0.access(4, "SystemInput", "events")
+            }
         }
 
         impl<'a> ::core::fmt::Debug for SystemInputRef<'a> {
@@ -5275,6 +6261,13 @@ mod root {
                     f.field("queries", &field_queries);
                 }
                 f.field("tick", &self.tick());
+                if let ::core::option::Option::Some(field_resources) = self.resources().transpose()
+                {
+                    f.field("resources", &field_resources);
+                }
+                if let ::core::option::Option::Some(field_events) = self.events().transpose() {
+                    f.field("events", &field_events);
+                }
                 f.finish()
             }
         }
@@ -5292,6 +6285,16 @@ mod root {
                         ::core::option::Option::None
                     },
                     tick: ::core::convert::TryInto::try_into(value.tick()?)?,
+                    resources: if let ::core::option::Option::Some(resources) = value.resources()? {
+                        ::core::option::Option::Some(resources.to_vec_result()?)
+                    } else {
+                        ::core::option::Option::None
+                    },
+                    events: if let ::core::option::Option::Some(events) = value.events()? {
+                        ::core::option::Option::Some(events.to_vec_result()?)
+                    } else {
+                        ::core::option::Option::None
+                    },
                 })
             }
         }
@@ -5372,7 +6375,7 @@ mod root {
         /// The table `SpawnCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SpawnCmd` in the file `mod-abi.fbs:177`
+        /// * Table `SpawnCmd` in the file `mod-abi.fbs:197`
         #[derive(
             Clone,
             Debug,
@@ -5694,7 +6697,7 @@ mod root {
         /// The table `InsertCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `InsertCmd` in the file `mod-abi.fbs:182`
+        /// * Table `InsertCmd` in the file `mod-abi.fbs:202`
         #[derive(
             Clone,
             Debug,
@@ -6021,7 +7024,7 @@ mod root {
         /// The table `RemoveCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `RemoveCmd` in the file `mod-abi.fbs:187`
+        /// * Table `RemoveCmd` in the file `mod-abi.fbs:207`
         #[derive(
             Clone,
             Debug,
@@ -6339,7 +7342,7 @@ mod root {
         /// The table `DespawnCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `DespawnCmd` in the file `mod-abi.fbs:192`
+        /// * Table `DespawnCmd` in the file `mod-abi.fbs:212`
         #[derive(
             Clone,
             Debug,
@@ -6601,7 +7604,7 @@ mod root {
         /// The table `AddChildCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `AddChildCmd` in the file `mod-abi.fbs:196`
+        /// * Table `AddChildCmd` in the file `mod-abi.fbs:217`
         #[derive(
             Clone,
             Debug,
@@ -6954,7 +7957,7 @@ mod root {
         /// The table `ResourceSetCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ResourceSetCmd` in the file `mod-abi.fbs:202`
+        /// * Table `ResourceSetCmd` in the file `mod-abi.fbs:223`
         #[derive(
             Clone,
             Debug,
@@ -7229,7 +8232,7 @@ mod root {
         /// The table `EmitEventCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `EmitEventCmd` in the file `mod-abi.fbs:206`
+        /// * Table `EmitEventCmd` in the file `mod-abi.fbs:227`
         #[derive(
             Clone,
             Debug,
@@ -7594,7 +8597,7 @@ mod root {
         /// The table `ConsumeMouseCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ConsumeMouseCmd` in the file `mod-abi.fbs:212`
+        /// * Table `ConsumeMouseCmd` in the file `mod-abi.fbs:234`
         #[derive(
             Clone,
             Debug,
@@ -7874,7 +8877,7 @@ mod root {
         /// The table `ConsumeKeyCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ConsumeKeyCmd` in the file `mod-abi.fbs:216`
+        /// * Table `ConsumeKeyCmd` in the file `mod-abi.fbs:238`
         #[derive(
             Clone,
             Debug,
@@ -8137,7 +9140,7 @@ mod root {
         /// The union `Cmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Union `Cmd` in the file `mod-abi.fbs:222`
+        /// * Union `Cmd` in the file `mod-abi.fbs:244`
         #[derive(
             Clone,
             Debug,
@@ -8705,7 +9708,7 @@ mod root {
         /// The table `CommandBuffer` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `CommandBuffer` in the file `mod-abi.fbs:234`
+        /// * Table `CommandBuffer` in the file `mod-abi.fbs:256`
         #[derive(
             Clone,
             Debug,
@@ -8985,7 +9988,7 @@ mod root {
         /// The table `ObserverInput` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ObserverInput` in the file `mod-abi.fbs:241`
+        /// * Table `ObserverInput` in the file `mod-abi.fbs:263`
         #[derive(
             Clone,
             Debug,
@@ -9004,6 +10007,12 @@ mod root {
             pub entity: u64,
             /// The field `value` in the table `ObserverInput`
             pub value: ::core::option::Option<::planus::alloc::boxed::Box<self::CompValue>>,
+            /// The field `queries` in the table `ObserverInput`
+            pub queries: ::core::option::Option<::planus::alloc::vec::Vec<self::QueryRows>>,
+            /// The field `resources` in the table `ObserverInput`
+            pub resources: ::core::option::Option<::planus::alloc::vec::Vec<self::ResValue>>,
+            /// The field `events` in the table `ObserverInput`
+            pub events: ::core::option::Option<::planus::alloc::vec::Vec<self::EventValues>>,
         }
 
         #[allow(clippy::derivable_impls)]
@@ -9013,6 +10022,9 @@ mod root {
                     obs_id: 0,
                     entity: 0,
                     value: ::core::default::Default::default(),
+                    queries: ::core::default::Default::default(),
+                    resources: ::core::default::Default::default(),
+                    events: ::core::default::Default::default(),
                 }
             }
         }
@@ -9030,12 +10042,24 @@ mod root {
                 field_obs_id: impl ::planus::WriteAsDefault<u32, u32>,
                 field_entity: impl ::planus::WriteAsDefault<u64, u64>,
                 field_value: impl ::planus::WriteAsOptional<::planus::Offset<self::CompValue>>,
+                field_queries: impl ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::QueryRows>]>,
+                >,
+                field_resources: impl ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::ResValue>]>,
+                >,
+                field_events: impl ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::EventValues>]>,
+                >,
             ) -> ::planus::Offset<Self> {
                 let prepared_obs_id = field_obs_id.prepare(builder, &0);
                 let prepared_entity = field_entity.prepare(builder, &0);
                 let prepared_value = field_value.prepare(builder);
+                let prepared_queries = field_queries.prepare(builder);
+                let prepared_resources = field_resources.prepare(builder);
+                let prepared_events = field_events.prepare(builder);
 
-                let mut table_writer: ::planus::table_writer::TableWriter<10> =
+                let mut table_writer: ::planus::table_writer::TableWriter<16> =
                     ::core::default::Default::default();
                 if prepared_entity.is_some() {
                     table_writer.write_entry::<u64>(1);
@@ -9045,6 +10069,18 @@ mod root {
                 }
                 if prepared_value.is_some() {
                     table_writer.write_entry::<::planus::Offset<self::CompValue>>(2);
+                }
+                if prepared_queries.is_some() {
+                    table_writer
+                        .write_entry::<::planus::Offset<[::planus::Offset<self::QueryRows>]>>(3);
+                }
+                if prepared_resources.is_some() {
+                    table_writer
+                        .write_entry::<::planus::Offset<[::planus::Offset<self::ResValue>]>>(4);
+                }
+                if prepared_events.is_some() {
+                    table_writer
+                        .write_entry::<::planus::Offset<[::planus::Offset<self::EventValues>]>>(5);
                 }
 
                 unsafe {
@@ -9057,6 +10093,16 @@ mod root {
                         }
                         if let ::core::option::Option::Some(prepared_value) = prepared_value {
                             object_writer.write::<_, _, 4>(&prepared_value);
+                        }
+                        if let ::core::option::Option::Some(prepared_queries) = prepared_queries {
+                            object_writer.write::<_, _, 4>(&prepared_queries);
+                        }
+                        if let ::core::option::Option::Some(prepared_resources) = prepared_resources
+                        {
+                            object_writer.write::<_, _, 4>(&prepared_resources);
+                        }
+                        if let ::core::option::Option::Some(prepared_events) = prepared_events {
+                            object_writer.write::<_, _, 4>(&prepared_events);
                         }
                     });
                 }
@@ -9088,7 +10134,15 @@ mod root {
         impl ::planus::WriteAsOffset<ObserverInput> for ObserverInput {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ObserverInput> {
-                ObserverInput::create(builder, self.obs_id, self.entity, &self.value)
+                ObserverInput::create(
+                    builder,
+                    self.obs_id,
+                    self.entity,
+                    &self.value,
+                    &self.queries,
+                    &self.resources,
+                    &self.events,
+                )
             }
         }
 
@@ -9159,6 +10213,70 @@ mod root {
         }
 
         impl<T0, T1, T2> ObserverInputBuilder<(T0, T1, T2)> {
+            /// Setter for the [`queries` field](ObserverInput#structfield.queries).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn queries<T3>(self, value: T3) -> ObserverInputBuilder<(T0, T1, T2, T3)>
+            where
+                T3: ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::QueryRows>]>,
+                >,
+            {
+                let (v0, v1, v2) = self.0;
+                ObserverInputBuilder((v0, v1, v2, value))
+            }
+
+            /// Sets the [`queries` field](ObserverInput#structfield.queries) to null.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn queries_as_null(self) -> ObserverInputBuilder<(T0, T1, T2, ())> {
+                self.queries(())
+            }
+        }
+
+        impl<T0, T1, T2, T3> ObserverInputBuilder<(T0, T1, T2, T3)> {
+            /// Setter for the [`resources` field](ObserverInput#structfield.resources).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn resources<T4>(self, value: T4) -> ObserverInputBuilder<(T0, T1, T2, T3, T4)>
+            where
+                T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ResValue>]>>,
+            {
+                let (v0, v1, v2, v3) = self.0;
+                ObserverInputBuilder((v0, v1, v2, v3, value))
+            }
+
+            /// Sets the [`resources` field](ObserverInput#structfield.resources) to null.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn resources_as_null(self) -> ObserverInputBuilder<(T0, T1, T2, T3, ())> {
+                self.resources(())
+            }
+        }
+
+        impl<T0, T1, T2, T3, T4> ObserverInputBuilder<(T0, T1, T2, T3, T4)> {
+            /// Setter for the [`events` field](ObserverInput#structfield.events).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn events<T5>(self, value: T5) -> ObserverInputBuilder<(T0, T1, T2, T3, T4, T5)>
+            where
+                T5: ::planus::WriteAsOptional<
+                    ::planus::Offset<[::planus::Offset<self::EventValues>]>,
+                >,
+            {
+                let (v0, v1, v2, v3, v4) = self.0;
+                ObserverInputBuilder((v0, v1, v2, v3, v4, value))
+            }
+
+            /// Sets the [`events` field](ObserverInput#structfield.events) to null.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn events_as_null(self) -> ObserverInputBuilder<(T0, T1, T2, T3, T4, ())> {
+                self.events(())
+            }
+        }
+
+        impl<T0, T1, T2, T3, T4, T5> ObserverInputBuilder<(T0, T1, T2, T3, T4, T5)> {
             /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ObserverInput].
             #[inline]
             pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<ObserverInput>
@@ -9173,8 +10291,11 @@ mod root {
                 T0: ::planus::WriteAsDefault<u32, u32>,
                 T1: ::planus::WriteAsDefault<u64, u64>,
                 T2: ::planus::WriteAsOptional<::planus::Offset<self::CompValue>>,
+                T3: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::QueryRows>]>>,
+                T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ResValue>]>>,
+                T5: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::EventValues>]>>,
             > ::planus::WriteAs<::planus::Offset<ObserverInput>>
-            for ObserverInputBuilder<(T0, T1, T2)>
+            for ObserverInputBuilder<(T0, T1, T2, T3, T4, T5)>
         {
             type Prepared = ::planus::Offset<ObserverInput>;
 
@@ -9188,8 +10309,11 @@ mod root {
                 T0: ::planus::WriteAsDefault<u32, u32>,
                 T1: ::planus::WriteAsDefault<u64, u64>,
                 T2: ::planus::WriteAsOptional<::planus::Offset<self::CompValue>>,
+                T3: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::QueryRows>]>>,
+                T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ResValue>]>>,
+                T5: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::EventValues>]>>,
             > ::planus::WriteAsOptional<::planus::Offset<ObserverInput>>
-            for ObserverInputBuilder<(T0, T1, T2)>
+            for ObserverInputBuilder<(T0, T1, T2, T3, T4, T5)>
         {
             type Prepared = ::planus::Offset<ObserverInput>;
 
@@ -9206,12 +10330,16 @@ mod root {
                 T0: ::planus::WriteAsDefault<u32, u32>,
                 T1: ::planus::WriteAsDefault<u64, u64>,
                 T2: ::planus::WriteAsOptional<::planus::Offset<self::CompValue>>,
-            > ::planus::WriteAsOffset<ObserverInput> for ObserverInputBuilder<(T0, T1, T2)>
+                T3: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::QueryRows>]>>,
+                T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ResValue>]>>,
+                T5: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::EventValues>]>>,
+            > ::planus::WriteAsOffset<ObserverInput>
+            for ObserverInputBuilder<(T0, T1, T2, T3, T4, T5)>
         {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ObserverInput> {
-                let (v0, v1, v2) = &self.0;
-                ObserverInput::create(builder, v0, v1, v2)
+                let (v0, v1, v2, v3, v4, v5) = &self.0;
+                ObserverInput::create(builder, v0, v1, v2, v3, v4, v5)
             }
         }
 
@@ -9243,6 +10371,42 @@ mod root {
             ) -> ::planus::Result<::core::option::Option<self::CompValueRef<'a>>> {
                 self.0.access(2, "ObserverInput", "value")
             }
+
+            /// Getter for the [`queries` field](ObserverInput#structfield.queries).
+            #[inline]
+            pub fn queries(
+                &self,
+            ) -> ::planus::Result<
+                ::core::option::Option<
+                    ::planus::Vector<'a, ::planus::Result<self::QueryRowsRef<'a>>>,
+                >,
+            > {
+                self.0.access(3, "ObserverInput", "queries")
+            }
+
+            /// Getter for the [`resources` field](ObserverInput#structfield.resources).
+            #[inline]
+            pub fn resources(
+                &self,
+            ) -> ::planus::Result<
+                ::core::option::Option<
+                    ::planus::Vector<'a, ::planus::Result<self::ResValueRef<'a>>>,
+                >,
+            > {
+                self.0.access(4, "ObserverInput", "resources")
+            }
+
+            /// Getter for the [`events` field](ObserverInput#structfield.events).
+            #[inline]
+            pub fn events(
+                &self,
+            ) -> ::planus::Result<
+                ::core::option::Option<
+                    ::planus::Vector<'a, ::planus::Result<self::EventValuesRef<'a>>>,
+                >,
+            > {
+                self.0.access(5, "ObserverInput", "events")
+            }
         }
 
         impl<'a> ::core::fmt::Debug for ObserverInputRef<'a> {
@@ -9252,6 +10416,16 @@ mod root {
                 f.field("entity", &self.entity());
                 if let ::core::option::Option::Some(field_value) = self.value().transpose() {
                     f.field("value", &field_value);
+                }
+                if let ::core::option::Option::Some(field_queries) = self.queries().transpose() {
+                    f.field("queries", &field_queries);
+                }
+                if let ::core::option::Option::Some(field_resources) = self.resources().transpose()
+                {
+                    f.field("resources", &field_resources);
+                }
+                if let ::core::option::Option::Some(field_events) = self.events().transpose() {
+                    f.field("events", &field_events);
                 }
                 f.finish()
             }
@@ -9269,6 +10443,21 @@ mod root {
                         ::core::option::Option::Some(::planus::alloc::boxed::Box::new(
                             ::core::convert::TryInto::try_into(value)?,
                         ))
+                    } else {
+                        ::core::option::Option::None
+                    },
+                    queries: if let ::core::option::Option::Some(queries) = value.queries()? {
+                        ::core::option::Option::Some(queries.to_vec_result()?)
+                    } else {
+                        ::core::option::Option::None
+                    },
+                    resources: if let ::core::option::Option::Some(resources) = value.resources()? {
+                        ::core::option::Option::Some(resources.to_vec_result()?)
+                    } else {
+                        ::core::option::Option::None
+                    },
+                    events: if let ::core::option::Option::Some(events) = value.events()? {
+                        ::core::option::Option::Some(events.to_vec_result()?)
                     } else {
                         ::core::option::Option::None
                     },
@@ -9352,7 +10541,7 @@ mod root {
         /// The table `SpawnResolved` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SpawnResolved` in the file `mod-abi.fbs:253`
+        /// * Table `SpawnResolved` in the file `mod-abi.fbs:275`
         #[derive(
             Clone,
             Debug,
@@ -9660,7 +10849,7 @@ mod root {
         /// The table `SpawnedInput` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SpawnedInput` in the file `mod-abi.fbs:258`
+        /// * Table `SpawnedInput` in the file `mod-abi.fbs:280`
         #[derive(
             Clone,
             Debug,

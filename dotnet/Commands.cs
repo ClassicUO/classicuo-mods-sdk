@@ -1,12 +1,12 @@
 using System.Text.Json;
+using ModAbi;
 
 namespace CuoModSdk;
 
 /// <summary>
-/// Structural changes the host applies AFTER the callback returns — a component written
-/// here is not visible to a <c>ctx.Component&lt;T&gt;()</c> read in the same call.
-/// Payload types are the generated <c>CuoModSdk.Types</c> shapes; their type ids and JSON
-/// metadata are resolved for you.
+/// Changes to the world — spawn, insert, remove, despawn, send events — applied by the
+/// host in order AFTER the system returns. Payload types are the generated
+/// <c>CuoModSdk.Types</c> shapes; their type ids and JSON metadata are resolved for you.
 /// </summary>
 public sealed class Commands : ISystemParam<Commands>
 {
@@ -20,103 +20,86 @@ public sealed class Commands : ISystemParam<Commands>
         _host = host;
     }
 
-    /// <summary>Nothing on the wire: the SDK hands every system a command buffer anyway.</summary>
-    public static void Describe(ParamDescriber d) { }
+    public static void Describe(ParamDescriber d) => d.Add(new ParamDeclT { Kind = ParamKind.Commands, TypeId = ModHost.NoneType });
 
-    public static Commands Create(ParamContext c) => c.Commands;
+    public static bool TryCreate(ParamContext c, out Commands value)
+    {
+        value = c.Scope.Commands;
+        return true;
+    }
 
-    /// <summary>Typed game actions the HOST performs (cast, target, pickup, say, …).</summary>
-    public ActionsApi Actions => new(this);
-
-    /// <summary>Print sysmessages / overhead text.</summary>
+    /// <summary>Journal / overhead text, through the <c>cuo:chat/message</c> event.</summary>
     public ChatApi Chat => new(this);
 
     /// <summary>
-    /// Spawn an entity; chain <c>.With(..)</c> for its components. A
-    /// <paramref name="name"/> makes the host hand back the real ecs id, readable from
-    /// the NEXT call on as <c>ctx.Entity(name)</c>.
+    /// Spawn an entity; chain <c>.With(..)</c> for its components and
+    /// <c>.ChildOf(parent)</c> to parent it. The builder converts to the
+    /// <see cref="CuoModSdk.Entity"/> (a placeholder until the host assigned the real id).
     /// </summary>
-    public EntityBuilder Spawn(string? name = null)
+    public EntityBuilder Spawn()
     {
         Flush();
-        return _pending = new EntityBuilder(this, name);
+        return _pending = new EntityBuilder(this, ModRuntime.NextTemp());
     }
 
     /// <summary>Insert / overwrite a component.</summary>
-    public void Insert<T>(EntityRef entity, T value)
+    public void Insert<T>(Entity entity, T value)
     {
         Flush();
-        _buffer.Insert(entity, Payload(value));
+        _buffer.Insert(entity.Wire, Payload(value));
     }
 
     /// <summary>Insert a zero-size marker component.</summary>
-    public void Insert<T>(EntityRef entity)
+    public void Insert<T>(Entity entity)
     {
         Flush();
-        _buffer.Insert(entity, Comp.Marker(_host.Id<T>()));
+        _buffer.Insert(entity.Wire, Comp.Marker(_host.Id<T>()));
     }
 
-    public void Remove<T>(EntityRef entity)
+    public void Remove<T>(Entity entity)
     {
         Flush();
-        _buffer.Remove(entity, _host.Id<T>());
+        _buffer.Remove(entity.Wire, _host.Id<T>());
     }
 
-    /// <summary>Despawn an entity and, host-side, its subtree.</summary>
-    public void Despawn(EntityRef entity)
+    /// <summary>Despawn an entity and its children.</summary>
+    public void Despawn(Entity entity)
     {
         Flush();
-        _buffer.Despawn(entity);
+        _buffer.Despawn(entity.Wire);
     }
 
-    /// <summary>Despawn the entity spawned under <paramref name="name"/> and forget the name (no-op when unknown).</summary>
-    public void Despawn(string name)
+    /// <summary>Send an event: observers of it fire, <see cref="EventReader{T}"/>s see it. <paramref name="target"/> aims it at an entity.</summary>
+    public void Send<T>(T @event, Entity target = default)
     {
         Flush();
-        if (_host.Named.Remove(name, out var entity))
-            _buffer.Despawn(entity);
+        _buffer.EmitEvent(ModHost.PathOf<T>(), target.Id, JsonSerializer.Serialize(@event, _host.Json<T>()));
     }
 
-    /// <summary>Reparent (<see cref="EntityBuilder.ChildOf"/> is the usual way).</summary>
-    public void AddChild(EntityRef parent, EntityRef child, uint index = uint.MaxValue)
-    {
-        Flush();
-        _buffer.AddChild(parent, child, index);
-    }
-
-    /// <summary>Overwrite a singleton host resource.</summary>
+    /// <summary>Overwrite a resource (<see cref="ResMut{T}"/> is the parameter form).</summary>
     public void SetResource<T>(T value)
     {
         Flush();
         _buffer.ResourceSet(Payload(value));
     }
 
-    /// <summary>Emit a host event; <paramref name="entity"/> 0 = global.</summary>
-    public void Emit<T>(T @event, ulong entity = 0)
-    {
-        Flush();
-        _buffer.EmitEvent(ModHost.PathOf<T>(), entity, JsonSerializer.Serialize(@event, _host.Json<T>()));
-    }
-
-    /// <summary>Swallow a mouse button for this frame (blocks downstream world / pickup handling).</summary>
-    public void ConsumeMouse(byte button)
-    {
-        Flush();
-        _buffer.ConsumeMouse(button);
-    }
-
-    /// <summary>Swallow a key for this frame.</summary>
-    public void ConsumeKey(KeyCode key)
-    {
-        Flush();
-        _buffer.ConsumeKey((uint)key);
-    }
-
     internal ModHost Host => _host;
 
     internal Comp Payload<T>(T value) => Comp.Value(_host.Id<T>(), value, _host.Json<T>());
 
-    /// <summary>Emit the open <c>Spawn(..)</c> chain, if any. Every other command — and the end of the call — does this first.</summary>
+    internal void ResourceSetRaw(ushort typeId, byte[] json)
+    {
+        Flush();
+        _buffer.ResourceSet(Comp.FromBytes(typeId, json));
+    }
+
+    internal void InsertRaw(Entity entity, Comp comp)
+    {
+        Flush();
+        _buffer.Insert(entity.Wire, comp);
+    }
+
+    /// <summary>Emit the open <c>Spawn()</c> chain, if any. Every other command — and the end of the run — does this first.</summary>
     internal void Flush()
     {
         var pending = _pending;
@@ -134,68 +117,83 @@ public sealed class Commands : ISystemParam<Commands>
 }
 
 /// <summary>
-/// An entity being spawned. The commands are emitted when the chain ends (the next
-/// command, a use of this entity as a parent/ref, or the end of the callback), so the
-/// spawn always precedes anything referring to it.
+/// An entity being spawned. Its SpawnCmd is emitted when the chain ends (the next
+/// command, or the end of the run), so it always precedes anything referring to it.
+/// A <c>.With</c> after that becomes an insert.
 /// </summary>
 public sealed class EntityBuilder
 {
     readonly Commands _commands;
-    readonly string? _name;
+    readonly uint _temp;
     readonly List<Comp> _comps = new();
-    EntityRef? _parent;
-    EntityRef? _self;
+    bool _emitted;
 
-    internal EntityBuilder(Commands commands, string? name)
+    internal EntityBuilder(Commands commands, uint temp)
     {
         _commands = commands;
-        _name = name;
+        _temp = temp;
     }
 
-    /// <summary>Set a component (generated payload struct, or a bare enum like <c>Interaction</c>).</summary>
+    /// <summary>The spawned entity (a placeholder until the host assigned the real id).</summary>
+    public Entity Id => new(Entity.Pending | _temp);
+
+    /// <summary>Set a component (generated payload type, or a bare enum like <c>Interaction</c>).</summary>
     public EntityBuilder With<T>(T value)
     {
-        Open();
-        _comps.Add(_commands.Payload(value));
+        var comp = _commands.Payload(value);
+        if (_emitted)
+            _commands.InsertRaw(Id, comp);
+        else
+            _comps.Add(comp);
         return this;
     }
 
     /// <summary>Set a zero-size marker component (<c>UiMovable</c>, <c>UiContainsByBounds</c>, …).</summary>
     public EntityBuilder With<T>()
     {
-        Open();
-        _comps.Add(Comp.Marker(_commands.Host.Id<T>()));
+        var comp = Comp.Marker(_commands.Host.Id<T>());
+        if (_emitted)
+            _commands.InsertRaw(Id, comp);
+        else
+            _comps.Add(comp);
         return this;
     }
 
-    /// <summary>Parent this entity under <paramref name="parent"/>.</summary>
-    public EntityBuilder ChildOf(EntityRef parent)
-    {
-        Open();
-        _parent = parent;
-        return this;
-    }
+    /// <summary>Put this entity under <paramref name="parent"/> (<c>cuo:ecs/child-of</c>).</summary>
+    public EntityBuilder ChildOf(Entity parent) => With(new Types.ChildOfDto { Parent = parent.Id });
 
-    /// <summary>Use the entity as a ref in another command (commits the chain).</summary>
-    public static implicit operator EntityRef(EntityBuilder builder)
-    {
-        builder._commands.FlushIf(builder);
-        return builder._self!.Value;
-    }
+    public static implicit operator Entity(EntityBuilder builder) => builder.Id;
 
     internal void Emit(CommandBufferBuilder buffer)
     {
-        var comps = _comps.ToArray();
-        var self = EntityRef.Temp(_name == null ? buffer.Spawn(comps) : buffer.SpawnNamed(_name, comps));
-        _self = self;
-        if (_parent is { } parent)
-            buffer.AddChild(parent, self);
+        _emitted = true;
+        buffer.Spawn(_temp, _comps.ToArray());
     }
+}
 
-    void Open()
-    {
-        if (_self != null)
-            throw new InvalidOperationException(
-                "this Spawn(..) chain was already committed — finish the .With(..) chain before issuing another command");
-    }
+/// <summary>Chat output, through the <c>cuo:chat/message</c> event. Reached as <c>Commands.Chat</c>.</summary>
+public readonly struct ChatApi
+{
+    readonly Commands _commands;
+
+    internal ChatApi(Commands commands) => _commands = commands;
+
+    // Font 3 unicode: the shape server speech arrives in. The DTO's zero value (ascii
+    // font 0) is the big gothic face, unlike any other text on screen.
+    const byte SpeechFont = 3;
+
+    /// <summary>A sysmessage in the journal, like the server would send.</summary>
+    public void System(string text, ushort hue = 0x5B, byte font = SpeechFont, bool unicode = true) =>
+        _commands.Send(new Types.ModChatMessage
+        {
+            Text = text, Name = "", Hue = hue, Font = font, IsUnicode = unicode, Kind = 1,
+        });
+
+    /// <summary>Text over a live entity the client knows (0 shows nothing; pass the player's own serial for a self line).</summary>
+    public void Overhead(string text, ushort hue = 0x3B2, uint serial = 0, string name = "",
+        byte font = SpeechFont, bool unicode = true) =>
+        _commands.Send(new Types.ModChatMessage
+        {
+            Text = text, Name = name, Hue = hue, Serial = serial, Font = font, IsUnicode = unicode, Kind = 0,
+        });
 }

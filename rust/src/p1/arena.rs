@@ -40,11 +40,10 @@ impl Arena {
         let start = (self.top + ALIGN - 1) & !(ALIGN - 1);
         let end = start + size.max(1);
         if end > self.buf.len() {
-            // Grow with headroom. Any pointer previously handed out is dead by the time
-            // we grow: the host reads/writes a region only between the mod_alloc that
-            // handed it out and the export that consumes it, and the guest builds its
-            // return in a separate heap Vec, copying in (pack_ret) only after the input
-            // borrow has ended.
+            // Grow with headroom. Growing moves the buffer, so every region handed out
+            // before is dead: the guest copies an export's input out before running
+            // mod code (a `mod_call` result lands here too, and may grow it), and
+            // copies a `mod_call` result out before the next call.
             let new_len = end.next_power_of_two().max(64 * 1024);
             self.buf.resize(new_len, 0);
         }

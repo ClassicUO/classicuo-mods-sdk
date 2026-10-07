@@ -4,50 +4,86 @@ using ModAbi;
 
 namespace CuoModSdk;
 
-/// <summary>Reader over a <c>mod_run</c> input buffer (PUSH model).</summary>
-internal readonly struct SystemInputView
+/// <summary>
+/// The parameter data the host pushed for one run — a <c>SystemInput</c> or an
+/// <c>ObserverInput</c> (same three vectors), looked up by declared param index.
+/// </summary>
+internal readonly struct ParamsView
 {
-    readonly SystemInput _input;
+    readonly SystemInput _sys;
+    readonly ObserverInput _obs;
+    readonly bool _isObserver;
 
-    internal SystemInputView(SystemInput input) => _input = input;
+    internal ParamsView(SystemInput sys)
+    {
+        _sys = sys;
+        _obs = default;
+        _isObserver = false;
+    }
 
-    // `default` for an observer context (no buffer behind it).
-    bool Empty => _input.ByteBuffer == null;
+    internal ParamsView(ObserverInput obs)
+    {
+        _sys = default;
+        _obs = obs;
+        _isObserver = true;
+    }
 
-    /// <summary>Host frame tick (for guest-side timers).</summary>
-    public ulong Tick => Empty ? 0 : _input.Tick;
+    int QueriesLength => _isObserver ? _obs.QueriesLength : _sys.QueriesLength;
+    QueryRows? Queries(int i) => _isObserver ? _obs.Queries(i) : _sys.Queries(i);
+    int ResourcesLength => _isObserver ? _obs.ResourcesLength : _sys.ResourcesLength;
+    ResValue? Resources(int i) => _isObserver ? _obs.Resources(i) : _sys.Resources(i);
+    int EventsLength => _isObserver ? _obs.EventsLength : _sys.EventsLength;
+    EventValues? Events(int i) => _isObserver ? _obs.Events(i) : _sys.Events(i);
 
-    /// <summary>The rows of the <paramref name="n"/>th declared query (0-based, in declaration
-    /// order). Null for an observer context, which carries no rows.</summary>
-    public QueryRowsView? Query(int n) =>
-        !Empty && (uint)n < (uint)_input.QueriesLength
-            ? new QueryRowsView(_input.Queries(n)!.Value)
-            : null;
+    /// <summary>The rows of the Query param at <paramref name="param"/> (empty when the host sent none).</summary>
+    public QueryRowsView Rows(int param)
+    {
+        for (var i = 0; i < QueriesLength; i++)
+            if (Queries(i) is { } q && q.ParamIndex == (uint)param)
+                return new QueryRowsView(q);
+        return default;
+    }
+
+    /// <summary>The Res / ResMut param's value; null when the host has no such resource now.</summary>
+    public CompView? Resource(int param)
+    {
+        for (var i = 0; i < ResourcesLength; i++)
+            if (Resources(i) is { } r && r.ParamIndex == (uint)param)
+                return r.Value is { } v ? new CompView(v) : null;
+        return null;
+    }
+
+    /// <summary>The Events param's values since the last run.</summary>
+    public IEnumerable<CompView> EventValues(int param)
+    {
+        for (var i = 0; i < EventsLength; i++)
+            if (Events(i) is { } e && e.ParamIndex == (uint)param)
+            {
+                for (var j = 0; j < e.ValuesLength; j++)
+                    yield return new CompView(e.Values(j)!.Value);
+                yield break;
+            }
+    }
 }
 
 /// <summary>The rows of one query param.</summary>
 internal readonly struct QueryRowsView
 {
     readonly QueryRows _q;
+    readonly bool _has;
 
-    internal QueryRowsView(QueryRows q) => _q = q;
-
-    public int Count => _q.RowsLength;
-
-    public RowView? Row(int i) =>
-        (uint)i < (uint)_q.RowsLength ? new RowView(_q.Rows(i)!.Value) : null;
-
-    public IEnumerable<RowView> Rows
+    internal QueryRowsView(QueryRows q)
     {
-        get
-        {
-            for (var i = 0; i < _q.RowsLength; i++)
-                yield return new RowView(_q.Rows(i)!.Value);
-        }
+        _q = q;
+        _has = true;
     }
+
+    public int Count => _has ? _q.RowsLength : 0;
+
+    public RowView Row(int i) => new(_q.Rows(i)!.Value);
 }
 
-/// <summary>One query result row: an entity plus its Ref/Mut components in declaration order.</summary>
+/// <summary>One query row: an entity plus its reading terms' components, in declaration order.</summary>
 internal readonly struct RowView
 {
     readonly Row _row;
@@ -56,49 +92,23 @@ internal readonly struct RowView
 
     public ulong Entity => _row.Entity;
 
-    /// <summary>Component at declared Ref/Mut index <paramref name="i"/>.</summary>
     public CompView? Comp(int i) =>
         (uint)i < (uint)_row.CompsLength ? new CompView(_row.Comps(i)!.Value) : null;
 }
 
-/// <summary>A single component slot on a <see cref="RowView"/>.</summary>
+/// <summary>A component / resource / event payload.</summary>
 internal readonly struct CompView
 {
     readonly CompValue _c;
 
     internal CompView(CompValue c) => _c = c;
 
-    /// <summary>Raw payload bytes (typed sub-buffer or JSON utf8), a view into the input buffer.</summary>
-    public ReadOnlyMemory<byte> Bytes => _c.GetDataBytes() is { } d ? d : ReadOnlyMemory<byte>.Empty;
+    public ReadOnlySpan<byte> Bytes => _c.GetDataBytes() is { } d ? d.AsSpan() : default;
 
-    /// <summary>
-    /// Deserialize the JSON payload into <typeparamref name="T"/>; <c>default</c> on empty
-    /// data. JsonTypeInfo overload only: source-gen metadata keeps this AOT-safe under ILC.
-    /// </summary>
+    /// <summary>The JSON payload as <typeparamref name="T"/>; an empty payload (a marker) reads as <c>{}</c>.</summary>
     public T? Parse<T>(JsonTypeInfo<T> typeInfo)
     {
         var b = Bytes;
-        return b.Length == 0 ? default : JsonSerializer.Deserialize(b.Span, typeInfo);
+        return JsonSerializer.Deserialize(b.Length == 0 ? "{}"u8 : b, typeInfo);
     }
-}
-
-/// <summary>Reader over a <c>mod_observer</c> input buffer.</summary>
-internal readonly struct ObserverInputView
-{
-    readonly ObserverInput _input;
-    readonly ulong _entity;
-
-    internal ObserverInputView(ObserverInput input, ulong entity)
-    {
-        _input = input;
-        _entity = entity;
-    }
-
-    /// <summary>The triggering entity (authoritative — from the export arg).</summary>
-    public ulong Entity => _entity;
-
-    /// <summary>The event/component payload (Insert/Remove component, or Custom event JSON).</summary>
-    // ByteBuffer check: a system's params are built from a `default` observer view, so
-    // this is reachable outside an observer call.
-    public CompView? Value => _input.ByteBuffer != null && _input.Value is { } v ? new CompView(v) : null;
 }

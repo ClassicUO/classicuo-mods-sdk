@@ -1,12 +1,12 @@
-/* Arena, scratch, registration and the ABI exports — twin of rust/src/{arena,runtime}.rs.
+/* Arena, scratch, registration and the ABI exports — twin of rust/src/p1/{arena,mod}.rs.
  *
  * Lifecycle (host drives, serially; the guest is single-threaded, so plain statics):
  * 1. mod_setup(Handshake) — intern the type-path table, call the mod's cuo_setup,
  *    return the SetupReply.
- * 2. mod_run / mod_observer — dispatch to the registered callback, return its
- *    CommandBuffer (0 = none).
- * 3. mod_filter / mod_filter_out — packet filters, nonzero blocks.
- * 4. mod_spawned — the host resolved the temp ids of the buffer it just applied.
+ * 2. mod_run / mod_observer — dispatch to the registered callback with the pushed
+ *    parameter data, return its CommandBuffer (0 = none).
+ * 3. mod_spawned — the host assigned real ids to the buffer it just applied (cmds.c).
+ * 4. mod_on_packet — the packet handler: 0 pass, 1 block, else the replacement.
  */
 #include <stdarg.h>
 #include <stdio.h>
@@ -18,11 +18,9 @@
 #define EXPORT(name) __attribute__((export_name(#name)))
 #define ALIGN8(n) (((n) + 7u) & ~(size_t)7u)
 
-CUO_IMPORT(log) void cuo__imp_log(const char *ptr, uint32_t len);
-
 _Noreturn void cuo__trap(const char *msg)
 {
-    cuo__imp_log(msg, (uint32_t)strlen(msg));
+    cuo_log(msg);
     __builtin_trap();
 }
 
@@ -197,29 +195,6 @@ const char *cuo_fmt(const char *fmt, ...)
     return d;
 }
 
-void cuo_log(const char *msg)
-{
-    cuo__imp_log(msg, (uint32_t)strlen(msg));
-}
-
-void cuo_logf(const char *fmt, ...)
-{
-    char stack[256];
-    va_list ap;
-    va_start(ap, fmt);
-    int n = vsnprintf(stack, sizeof stack, fmt, ap);
-    va_end(ap);
-    if (n < (int)sizeof stack) {
-        cuo__imp_log(stack, (uint32_t)n);
-        return;
-    }
-    char *d = scratch_raw((size_t)n + 1);
-    va_start(ap, fmt);
-    vsnprintf(d, (size_t)n + 1, fmt, ap);
-    va_end(ap);
-    cuo__imp_log(d, (uint32_t)n);
-}
-
 /* ── string -> u64 map (open addressing, linear probe, tombstones) ───────────── */
 
 static char tomb;
@@ -326,10 +301,9 @@ bool cuo__map_remove(cuo__map *m, const char *key, uint64_t *out)
     }
 }
 
-/* ── type table + named entities ───────────────────────────────────────────── */
+/* ── type table ───────────────────────────────────────────────────────────── */
 
 static cuo__map types;
-cuo__map cuo__named;
 
 bool cuo_try_type_id(const char *path, uint16_t *out)
 {
@@ -345,8 +319,7 @@ uint16_t cuo_type_id(const char *path)
 {
     uint16_t id;
     if (!cuo_try_type_id(path, &id))
-        cuo__trap(cuo_fmt("cuo: the host does not register the type path '%s' "
-                          "(see paths.h / the host registry)", path));
+        cuo__trap(cuo_fmt("cuo: the client has no type path '%s'", path));
     return id;
 }
 
@@ -358,34 +331,28 @@ const char *cuo_type_path(uint16_t id)
     return NULL;
 }
 
-bool cuo_entity(const char *name, uint64_t *out)
-{
-    return cuo__map_get(&cuo__named, name, out);
-}
-
-void cuo_forget(const char *name)
-{
-    cuo__map_remove(&cuo__named, name, NULL);
-}
-
 /* ── registration ────────────────────────────────────────────────────────── */
 
-typedef struct query_decl {
+typedef struct param_decl {
+    uint8_t kind; /* ModAbi_ParamKind */
+    uint16_t type_id;
     cuo_term *terms;
     size_t n;
-} query_decl;
+} param_decl;
+
+typedef struct param_list {
+    param_decl *v;
+    size_t n, cap;
+} param_list;
 
 typedef struct sys_rec {
     cuo_system_fn fn;
     void *user;
     char *name;
     uint8_t schedule;
-    char *custom_stage;
-    query_decl *queries;
-    size_t nq, capq;
+    param_list params;
     uint32_t *after, *before;
     size_t nafter, capafter, nbefore, capbefore;
-    uint32_t interval_ms;
 } sys_rec;
 
 typedef struct obs_rec {
@@ -394,6 +361,7 @@ typedef struct obs_rec {
     uint8_t kind;
     uint16_t type_id;
     char *event_name;
+    param_list params;
 } obs_rec;
 
 struct cuo_builder {
@@ -405,9 +373,8 @@ static sys_rec *systems;
 static size_t nsys, capsys;
 static obs_rec *observers;
 static size_t nobs, capobs;
-static cuo_packet_fn filter_in, filter_out;
-static void *filter_in_user, *filter_out_user;
-static uint64_t last_tick;
+static cuo_packet_fn packet_fn;
+static void *packet_user;
 
 static void require_setup(cuo_builder *m)
 {
@@ -423,62 +390,75 @@ static sys_rec *sys_at(cuo_builder *m, cuo_sys s)
     return &systems[s];
 }
 
-static cuo_sys add_system(cuo_builder *m, const char *label, uint8_t schedule, const char *custom,
-                          cuo_system_fn fn, void *user)
+static obs_rec *obs_at(cuo_builder *m, cuo_observer o)
+{
+    require_setup(m);
+    if (o >= nobs)
+        cuo__trap("cuo: unknown observer id");
+    return &observers[o];
+}
+
+static cuo_param add_param(param_list *l, uint8_t kind, uint16_t type_id, cuo_term *terms, size_t n)
+{
+    param_decl p = { kind, type_id, terms, n };
+    PUSH(l->v, l->n, l->cap, p);
+    return (cuo_param)(l->n - 1);
+}
+
+/* Two terms on one type would put two payloads in the row and shift every later
+ * slot: fold instead (a WITH on a read type is dropped, a CHANGED / ADDED upgrades). */
+static cuo_param add_query(param_list *l, const cuo_term *terms, size_t n)
+{
+    cuo_term *q = xrealloc(NULL, (n ? n : 1) * sizeof(cuo_term));
+    size_t qn = 0;
+    for (size_t i = 0; i < n; i++) {
+        cuo_term t = terms[i];
+        size_t at = qn;
+        if (t.kind != CUO_TERM_WITHOUT)
+            for (size_t j = 0; j < qn; j++)
+                if (q[j].type_id == t.type_id && q[j].kind != CUO_TERM_WITHOUT) {
+                    at = j;
+                    break;
+                }
+        if (at < qn) {
+            if (t.kind == CUO_TERM_CHANGED || t.kind == CUO_TERM_ADDED)
+                q[at].kind = t.kind;
+            else if (q[at].kind == CUO_TERM_WITH && t.kind != CUO_TERM_WITH)
+                q[at].kind = t.kind;
+            continue;
+        }
+        q[qn++] = t;
+    }
+    return add_param(l, ModAbi_ParamKind_Query, CUO_NONE_TYPE, q, qn);
+}
+
+cuo_sys cuo_add_system(cuo_builder *m, const char *label, cuo_stage stage, cuo_system_fn fn, void *user)
 {
     require_setup(m);
     sys_rec r = { 0 };
     r.fn = fn;
     r.user = user;
-    r.schedule = schedule;
+    r.schedule = (uint8_t)stage;
     r.name = label ? xstrdup(label) : xstrdup(cuo_fmt("sys-%zu", nsys));
-    r.custom_stage = custom ? xstrdup(custom) : NULL;
+    /* Param 0 is always Commands: the SDK hands every callback a command buffer. */
+    add_param(&r.params, ModAbi_ParamKind_Commands, CUO_NONE_TYPE, NULL, 0);
     PUSH(systems, nsys, capsys, r);
     return (cuo_sys)(nsys - 1);
 }
 
-cuo_sys cuo_add_system(cuo_builder *m, const char *label, cuo_stage stage, cuo_system_fn fn, void *user)
+cuo_param cuo_system_query(cuo_builder *m, cuo_sys s, const cuo_term *terms, size_t n)
 {
-    return add_system(m, label, (uint8_t)stage, NULL, fn, user);
+    return add_query(&sys_at(m, s)->params, terms, n);
 }
 
-cuo_sys cuo_add_system_in(cuo_builder *m, const char *label, const char *custom_stage, cuo_system_fn fn,
-                          void *user)
+cuo_param cuo_system_res(cuo_builder *m, cuo_sys s, uint16_t type_id, bool mut)
 {
-    return add_system(m, label, 6 /* ModAbi Schedule.Custom */, custom_stage, fn, user);
+    return add_param(&sys_at(m, s)->params, mut ? ModAbi_ParamKind_ResMut : ModAbi_ParamKind_Res, type_id, NULL, 0);
 }
 
-uint32_t cuo_system_query(cuo_builder *m, cuo_sys s, const cuo_term *terms, size_t n)
+cuo_param cuo_system_events(cuo_builder *m, cuo_sys s, uint16_t type_id)
 {
-    sys_rec *r = sys_at(m, s);
-    query_decl q = { xrealloc(NULL, (n ? n : 1) * sizeof(cuo_term)), 0 };
-    for (size_t i = 0; i < n; i++) {
-        cuo_term t = terms[i];
-        size_t at = q.n;
-        if (t.kind != CUO_TERM_WITHOUT)
-            for (size_t j = 0; j < q.n; j++)
-                if (q.terms[j].type_id == t.type_id && q.terms[j].kind != CUO_TERM_WITHOUT) {
-                    at = j;
-                    break;
-                }
-        if (at < q.n) {
-            /* Two terms on one type would put two payloads in the row and shift
-             * every later slot: fold instead. */
-            if (t.kind == CUO_TERM_CHANGED)
-                q.terms[at].kind = CUO_TERM_CHANGED;
-            else if (q.terms[at].kind == CUO_TERM_WITH && t.kind != CUO_TERM_WITH)
-                q.terms[at].kind = t.kind;
-            continue;
-        }
-        q.terms[q.n++] = t;
-    }
-    PUSH(r->queries, r->nq, r->capq, q);
-    return (uint32_t)(r->nq - 1);
-}
-
-void cuo_system_every(cuo_builder *m, cuo_sys s, uint32_t ms)
-{
-    sys_at(m, s)->interval_ms = ms;
+    return add_param(&sys_at(m, s)->params, ModAbi_ParamKind_Events, type_id, NULL, 0);
 }
 
 void cuo_system_after(cuo_builder *m, cuo_sys s, cuo_sys other)
@@ -493,61 +473,53 @@ void cuo_system_before(cuo_builder *m, cuo_sys s, cuo_sys other)
     PUSH(r->before, r->nbefore, r->capbefore, other);
 }
 
-static uint32_t add_observer(cuo_builder *m, uint8_t kind, uint16_t type_id, const char *event,
-                             cuo_observer_fn fn, void *user)
+static cuo_observer add_observer(cuo_builder *m, uint8_t kind, uint16_t type_id, const char *event,
+                                 cuo_observer_fn fn, void *user)
 {
     require_setup(m);
-    obs_rec r = { fn, user, kind, type_id, event ? xstrdup(event) : NULL };
+    obs_rec r = { fn, user, kind, type_id, event ? xstrdup(event) : NULL, { 0 } };
+    add_param(&r.params, ModAbi_ParamKind_Commands, CUO_NONE_TYPE, NULL, 0);
     PUSH(observers, nobs, capobs, r);
-    return (uint32_t)(nobs - 1);
+    return (cuo_observer)(nobs - 1);
 }
 
-uint32_t cuo_on_event(cuo_builder *m, const char *event_path, cuo_observer_fn fn, void *user)
+cuo_observer cuo_on_event(cuo_builder *m, const char *event_path, cuo_observer_fn fn, void *user)
 {
     return add_observer(m, ModAbi_ObserverKind_Custom, CUO_NONE_TYPE, event_path, fn, user);
 }
 
-uint32_t cuo_on_insert(cuo_builder *m, uint16_t type_id, cuo_observer_fn fn, void *user)
+cuo_observer cuo_on_add(cuo_builder *m, uint16_t type_id, cuo_observer_fn fn, void *user)
 {
     return add_observer(m, ModAbi_ObserverKind_Insert, type_id, NULL, fn, user);
 }
 
-uint32_t cuo_on_remove(cuo_builder *m, uint16_t type_id, cuo_observer_fn fn, void *user)
+cuo_observer cuo_on_remove(cuo_builder *m, uint16_t type_id, cuo_observer_fn fn, void *user)
 {
     return add_observer(m, ModAbi_ObserverKind_Remove, type_id, NULL, fn, user);
 }
 
-uint32_t cuo_on_spawn(cuo_builder *m, cuo_observer_fn fn, void *user)
+cuo_param cuo_observer_query(cuo_builder *m, cuo_observer o, const cuo_term *terms, size_t n)
 {
-    return add_observer(m, ModAbi_ObserverKind_Spawn, CUO_NONE_TYPE, NULL, fn, user);
+    return add_query(&obs_at(m, o)->params, terms, n);
 }
 
-uint32_t cuo_on_despawn(cuo_builder *m, cuo_observer_fn fn, void *user)
+cuo_param cuo_observer_res(cuo_builder *m, cuo_observer o, uint16_t type_id, bool mut)
 {
-    return add_observer(m, ModAbi_ObserverKind_Despawn, CUO_NONE_TYPE, NULL, fn, user);
+    return add_param(&obs_at(m, o)->params, mut ? ModAbi_ParamKind_ResMut : ModAbi_ParamKind_Res, type_id, NULL, 0);
 }
 
-void cuo_on_packet_in(cuo_builder *m, cuo_packet_fn fn, void *user)
+cuo_param cuo_observer_events(cuo_builder *m, cuo_observer o, uint16_t type_id)
+{
+    return add_param(&obs_at(m, o)->params, ModAbi_ParamKind_Events, type_id, NULL, 0);
+}
+
+void cuo_on_packet(cuo_builder *m, cuo_packet_fn fn, void *user)
 {
     require_setup(m);
-    if (filter_in)
-        cuo__trap("cuo: cuo_on_packet_in registered twice (one mod_filter export per mod)");
-    filter_in = fn;
-    filter_in_user = user;
-}
-
-void cuo_on_packet_out(cuo_builder *m, cuo_packet_fn fn, void *user)
-{
-    require_setup(m);
-    if (filter_out)
-        cuo__trap("cuo: cuo_on_packet_out registered twice (one mod_filter_out export per mod)");
-    filter_out = fn;
-    filter_out_user = user;
-}
-
-uint64_t cuo_tick(void)
-{
-    return last_tick;
+    if (packet_fn)
+        cuo__trap("cuo: cuo_on_packet registered twice (one mod_on_packet export per mod)");
+    packet_fn = fn;
+    packet_user = user;
 }
 
 /* ── setup reply ─────────────────────────────────────────────────────────── */
@@ -564,6 +536,24 @@ flatcc_builder_t *cuo__builder(void)
     return &fb;
 }
 
+static void build_param(flatcc_builder_t *B, const param_decl *p)
+{
+    ModAbi_ParamDecl_kind_add(B, p->kind);
+    ModAbi_ParamDecl_type_id_add(B, p->type_id);
+    if (p->kind != ModAbi_ParamKind_Query)
+        return;
+    ModAbi_ParamDecl_query_start(B);
+    ModAbi_QueryDecl_terms_start(B);
+    for (size_t t = 0; t < p->n; t++) {
+        ModAbi_QueryDecl_terms_push_start(B);
+        ModAbi_QueryTerm_kind_add(B, p->terms[t].kind);
+        ModAbi_QueryTerm_type_id_add(B, p->terms[t].type_id);
+        ModAbi_QueryDecl_terms_push_end(B);
+    }
+    ModAbi_QueryDecl_terms_end(B);
+    ModAbi_ParamDecl_query_end(B);
+}
+
 static uint64_t build_reply(void)
 {
     flatcc_builder_t *B = cuo__builder();
@@ -576,37 +566,17 @@ static uint64_t build_reply(void)
         ModAbi_SystemDecl_id_add(B, (uint32_t)i);
         ModAbi_SystemDecl_name_create_str(B, r->name);
         ModAbi_SystemDecl_schedule_add(B, r->schedule);
-        if (r->custom_stage)
-            ModAbi_SystemDecl_custom_stage_create_str(B, r->custom_stage);
-
         ModAbi_SystemDecl_params_start(B);
-        /* Every system gets a Commands param (like the C# SDK): the SDK always hands
-         * the callback a command buffer, and an unused one costs the host nothing. */
-        ModAbi_SystemDecl_params_push_start(B);
-        ModAbi_ParamDecl_kind_add(B, ModAbi_ParamKind_Commands);
-        ModAbi_SystemDecl_params_push_end(B);
-        for (size_t q = 0; q < r->nq; q++) {
+        for (size_t p = 0; p < r->params.n; p++) {
             ModAbi_SystemDecl_params_push_start(B);
-            ModAbi_ParamDecl_kind_add(B, ModAbi_ParamKind_Query);
-            ModAbi_ParamDecl_query_start(B);
-            ModAbi_QueryDecl_terms_start(B);
-            for (size_t t = 0; t < r->queries[q].n; t++) {
-                ModAbi_QueryDecl_terms_push_start(B);
-                ModAbi_QueryTerm_kind_add(B, r->queries[q].terms[t].kind);
-                ModAbi_QueryTerm_type_id_add(B, r->queries[q].terms[t].type_id);
-                ModAbi_QueryDecl_terms_push_end(B);
-            }
-            ModAbi_QueryDecl_terms_end(B);
-            ModAbi_ParamDecl_query_end(B);
+            build_param(B, &r->params.v[p]);
             ModAbi_SystemDecl_params_push_end(B);
         }
         ModAbi_SystemDecl_params_end(B);
-
         if (r->nafter)
             ModAbi_SystemDecl_after_create(B, r->after, r->nafter);
         if (r->nbefore)
             ModAbi_SystemDecl_before_create(B, r->before, r->nbefore);
-        ModAbi_SystemDecl_interval_ms_add(B, r->interval_ms);
         ModAbi_SetupReply_systems_push_end(B);
     }
     ModAbi_SetupReply_systems_end(B);
@@ -620,12 +590,17 @@ static uint64_t build_reply(void)
         ModAbi_ObserverDecl_type_id_add(B, r->type_id);
         if (r->event_name)
             ModAbi_ObserverDecl_event_name_create_str(B, r->event_name);
+        ModAbi_ObserverDecl_params_start(B);
+        for (size_t p = 0; p < r->params.n; p++) {
+            ModAbi_ObserverDecl_params_push_start(B);
+            build_param(B, &r->params.v[p]);
+            ModAbi_ObserverDecl_params_push_end(B);
+        }
+        ModAbi_ObserverDecl_params_end(B);
         ModAbi_SetupReply_observers_push_end(B);
     }
     ModAbi_SetupReply_observers_end(B);
 
-    ModAbi_SetupReply_wants_filter_add(B, filter_in != NULL);
-    ModAbi_SetupReply_wants_filter_out_add(B, filter_out != NULL);
     ModAbi_SetupReply_end_as_root(B);
     return cuo__pack_builder(B);
 }
@@ -639,8 +614,8 @@ EXPORT(mod_setup) uint64_t mod_setup(uint32_t ptr, uint32_t len)
     ModAbi_Handshake_table_t hs = ModAbi_Handshake_as_root((const void *)(uintptr_t)ptr);
     uint32_t host_abi = hs ? ModAbi_Handshake_abi_version(hs) : 0;
     if (host_abi != CUO_ABI_VERSION)
-        cuo__trap(cuo_fmt("cuo: mod ABI mismatch: host speaks v%u, this mod was built against v%u "
-                          "- rebuild the mod against the current SDK",
+        cuo__trap(cuo_fmt("cuo: mod ABI mismatch: the client speaks v%u, this mod was built for v%u: "
+                          "rebuild it against the current SDK",
                           host_abi, CUO_ABI_VERSION));
 
     ModAbi_TypePath_vec_t paths = ModAbi_Handshake_type_paths(hs);
@@ -665,7 +640,6 @@ EXPORT(mod_run) uint64_t mod_run(uint32_t sys_id, uint32_t ptr, uint32_t len)
         return 0;
     cuo__scratch_reset();
     cuo_input in = { ModAbi_SystemInput_as_root((const void *)(uintptr_t)ptr) };
-    last_tick = in.t ? ModAbi_SystemInput_tick(in.t) : 0;
     cuo_cmds *c = cuo__cmds_instance();
     cuo__cmds_begin(c);
     systems[sys_id].fn(&in, c, systems[sys_id].user);
@@ -685,23 +659,88 @@ EXPORT(mod_observer) uint64_t mod_observer(uint32_t obs_id, uint64_t entity, uin
     return cuo__cmds_finish(c);
 }
 
-EXPORT(mod_filter) uint32_t mod_filter(uint32_t id, uint32_t ptr, uint32_t len)
+EXPORT(mod_on_packet) uint64_t mod_on_packet(uint32_t dir, uint32_t ptr, uint32_t len)
 {
-    if (!filter_in)
+    if (!packet_fn)
         return 0;
     cuo__scratch_reset();
-    return filter_in((uint8_t)id, (const uint8_t *)(uintptr_t)ptr, len, filter_in_user) ? 1u : 0u;
-}
-
-EXPORT(mod_filter_out) uint32_t mod_filter_out(uint32_t id, uint32_t ptr, uint32_t len)
-{
-    if (!filter_out)
+    /* The packet sits in the ABI arena, which a cuo_call result may move: copy it. */
+    uint8_t *packet = cuo_alloc(len);
+    memcpy(packet, (const void *)(uintptr_t)ptr, len);
+    cuo_bytes replacement = { NULL, 0 };
+    switch (packet_fn(dir == 0 ? CUO_INCOMING : CUO_OUTGOING, packet, len, &replacement, packet_user)) {
+    case CUO_BLOCK:
+        return 1;
+    case CUO_REPLACE: {
+        void *dst = abi_alloc(replacement.len);
+        memcpy(dst, replacement.ptr, replacement.len);
+        return ((uint64_t)replacement.len << 32) | (uint32_t)(uintptr_t)dst;
+    }
+    default:
         return 0;
-    cuo__scratch_reset();
-    return filter_out((uint8_t)id, (const uint8_t *)(uintptr_t)ptr, len, filter_out_user) ? 1u : 0u;
+    }
 }
 
 /* ── input views ─────────────────────────────────────────────────────────── */
+
+/* The host emits one entry per param of each kind, keyed by its param index. */
+static cuo_query query_of(ModAbi_QueryRows_vec_t qs, cuo_param p)
+{
+    cuo_query q = { NULL, 0 };
+    for (size_t i = 0, n = ModAbi_QueryRows_vec_len(qs); i < n; i++) {
+        ModAbi_QueryRows_table_t t = ModAbi_QueryRows_vec_at(qs, i);
+        if (ModAbi_QueryRows_param_index(t) == p) {
+            ModAbi_Row_vec_t rows = ModAbi_QueryRows_rows(t);
+            q.vec = rows;
+            q.len = ModAbi_Row_vec_len(rows);
+            break;
+        }
+    }
+    return q;
+}
+
+static cuo_bytes comp_bytes(ModAbi_CompValue_table_t cv)
+{
+    cuo_bytes b = { NULL, 0 };
+    if (!cv)
+        return b;
+    flatbuffers_uint8_vec_t d = ModAbi_CompValue_data(cv);
+    b.len = flatbuffers_uint8_vec_len(d);
+    b.ptr = b.len ? d : NULL;
+    return b;
+}
+
+static cuo_bytes res_of(ModAbi_ResValue_vec_t rs, cuo_param p)
+{
+    cuo_bytes none = { NULL, 0 };
+    for (size_t i = 0, n = ModAbi_ResValue_vec_len(rs); i < n; i++) {
+        ModAbi_ResValue_table_t t = ModAbi_ResValue_vec_at(rs, i);
+        if (ModAbi_ResValue_param_index(t) == p) {
+            ModAbi_CompValue_table_t v = ModAbi_ResValue_value(t);
+            if (!v)
+                return none;
+            cuo_bytes b = comp_bytes(v);
+            /* A present marker resource: report "{}", not absence. */
+            return b.ptr ? b : cuo_str_bytes("{}");
+        }
+    }
+    return none;
+}
+
+static cuo_events events_of(ModAbi_EventValues_vec_t es, cuo_param p)
+{
+    cuo_events e = { NULL, 0 };
+    for (size_t i = 0, n = ModAbi_EventValues_vec_len(es); i < n; i++) {
+        ModAbi_EventValues_table_t t = ModAbi_EventValues_vec_at(es, i);
+        if (ModAbi_EventValues_param_index(t) == p) {
+            ModAbi_CompValue_vec_t v = ModAbi_EventValues_values(t);
+            e.vec = v;
+            e.len = ModAbi_CompValue_vec_len(v);
+            break;
+        }
+    }
+    return e;
+}
 
 uint32_t cuo_input_sys_id(const cuo_input *in)
 {
@@ -713,19 +752,22 @@ uint64_t cuo_input_tick(const cuo_input *in)
     return in->t ? ModAbi_SystemInput_tick(in->t) : 0;
 }
 
-cuo_query cuo_input_query(const cuo_input *in, uint32_t n)
+cuo_query cuo_input_query(const cuo_input *in, cuo_param p)
 {
-    cuo_query q = { NULL, 0 };
-    if (!in->t)
-        return q;
-    /* The host emits one entry per declared query, in order: n is the ordinal. */
-    ModAbi_QueryRows_vec_t qs = ModAbi_SystemInput_queries(in->t);
-    if (n >= ModAbi_QueryRows_vec_len(qs))
-        return q;
-    ModAbi_Row_vec_t rows = ModAbi_QueryRows_rows(ModAbi_QueryRows_vec_at(qs, n));
-    q.vec = rows;
-    q.len = ModAbi_Row_vec_len(rows);
-    return q;
+    cuo_query none = { NULL, 0 };
+    return in->t ? query_of(ModAbi_SystemInput_queries(in->t), p) : none;
+}
+
+cuo_bytes cuo_input_res(const cuo_input *in, cuo_param p)
+{
+    cuo_bytes none = { NULL, 0 };
+    return in->t ? res_of(ModAbi_SystemInput_resources(in->t), p) : none;
+}
+
+cuo_events cuo_input_events(const cuo_input *in, cuo_param p)
+{
+    cuo_events none = { NULL, 0 };
+    return in->t ? events_of(ModAbi_SystemInput_events(in->t), p) : none;
 }
 
 cuo_row cuo_query_row(cuo_query q, size_t i)
@@ -734,11 +776,12 @@ cuo_row cuo_query_row(cuo_query q, size_t i)
     return r;
 }
 
-bool cuo_query_find(cuo_query q, uint64_t entity, cuo_row *out)
+bool cuo_query_find(cuo_query q, cuo_entity entity, cuo_row *out)
 {
+    uint64_t id = cuo_resolve(entity);
     for (size_t i = 0; i < q.len; i++) {
         ModAbi_Row_table_t t = ModAbi_Row_vec_at((ModAbi_Row_vec_t)q.vec, i);
-        if (ModAbi_Row_entity(t) == entity) {
+        if (ModAbi_Row_entity(t) == id) {
             if (out)
                 out->table = t;
             return true;
@@ -757,17 +800,6 @@ size_t cuo_row_comp_count(cuo_row r)
     return r.table ? ModAbi_CompValue_vec_len(ModAbi_Row_comps((ModAbi_Row_table_t)r.table)) : 0;
 }
 
-static cuo_bytes comp_bytes(ModAbi_CompValue_table_t cv)
-{
-    cuo_bytes b = { NULL, 0 };
-    if (!cv)
-        return b;
-    flatbuffers_uint8_vec_t d = ModAbi_CompValue_data(cv);
-    b.len = flatbuffers_uint8_vec_len(d);
-    b.ptr = b.len ? d : NULL;
-    return b;
-}
-
 cuo_bytes cuo_row_comp(cuo_row r, size_t i)
 {
     cuo_bytes none = { NULL, 0 };
@@ -777,6 +809,14 @@ cuo_bytes cuo_row_comp(cuo_row r, size_t i)
     if (i >= ModAbi_CompValue_vec_len(comps))
         return none;
     return comp_bytes(ModAbi_CompValue_vec_at(comps, i));
+}
+
+cuo_bytes cuo_events_at(cuo_events ev, size_t i)
+{
+    cuo_bytes none = { NULL, 0 };
+    if (i >= ev.len)
+        return none;
+    return comp_bytes(ModAbi_CompValue_vec_at((ModAbi_CompValue_vec_t)ev.vec, i));
 }
 
 uint32_t cuo_obs_id(const cuo_obs *ev)
@@ -793,4 +833,22 @@ cuo_bytes cuo_obs_value(const cuo_obs *ev)
 {
     cuo_bytes none = { NULL, 0 };
     return ev->t ? comp_bytes(ModAbi_ObserverInput_value(ev->t)) : none;
+}
+
+cuo_query cuo_obs_query(const cuo_obs *ev, cuo_param p)
+{
+    cuo_query none = { NULL, 0 };
+    return ev->t ? query_of(ModAbi_ObserverInput_queries(ev->t), p) : none;
+}
+
+cuo_bytes cuo_obs_res(const cuo_obs *ev, cuo_param p)
+{
+    cuo_bytes none = { NULL, 0 };
+    return ev->t ? res_of(ModAbi_ObserverInput_resources(ev->t), p) : none;
+}
+
+cuo_events cuo_obs_events(const cuo_obs *ev, cuo_param p)
+{
+    cuo_events none = { NULL, 0 };
+    return ev->t ? events_of(ModAbi_ObserverInput_events(ev->t), p) : none;
 }

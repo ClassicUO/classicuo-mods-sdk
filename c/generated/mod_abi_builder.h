@@ -65,7 +65,7 @@ __flatbuffers_build_table(flatbuffers_, ModAbi_QueryDecl, 1)
 static const flatbuffers_voffset_t __ModAbi_ParamDecl_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_ParamDecl_ref_t;
 static ModAbi_ParamDecl_ref_t ModAbi_ParamDecl_clone(flatbuffers_builder_t *B, ModAbi_ParamDecl_table_t t);
-__flatbuffers_build_table(flatbuffers_, ModAbi_ParamDecl, 2)
+__flatbuffers_build_table(flatbuffers_, ModAbi_ParamDecl, 3)
 
 static const flatbuffers_voffset_t __ModAbi_SystemDecl_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_SystemDecl_ref_t;
@@ -75,12 +75,12 @@ __flatbuffers_build_table(flatbuffers_, ModAbi_SystemDecl, 8)
 static const flatbuffers_voffset_t __ModAbi_ObserverDecl_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_ObserverDecl_ref_t;
 static ModAbi_ObserverDecl_ref_t ModAbi_ObserverDecl_clone(flatbuffers_builder_t *B, ModAbi_ObserverDecl_table_t t);
-__flatbuffers_build_table(flatbuffers_, ModAbi_ObserverDecl, 4)
+__flatbuffers_build_table(flatbuffers_, ModAbi_ObserverDecl, 5)
 
 static const flatbuffers_voffset_t __ModAbi_SetupReply_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_SetupReply_ref_t;
 static ModAbi_SetupReply_ref_t ModAbi_SetupReply_clone(flatbuffers_builder_t *B, ModAbi_SetupReply_table_t t);
-__flatbuffers_build_table(flatbuffers_, ModAbi_SetupReply, 4)
+__flatbuffers_build_table(flatbuffers_, ModAbi_SetupReply, 5)
 
 static const flatbuffers_voffset_t __ModAbi_Row_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_Row_ref_t;
@@ -92,10 +92,20 @@ typedef flatbuffers_ref_t ModAbi_QueryRows_ref_t;
 static ModAbi_QueryRows_ref_t ModAbi_QueryRows_clone(flatbuffers_builder_t *B, ModAbi_QueryRows_table_t t);
 __flatbuffers_build_table(flatbuffers_, ModAbi_QueryRows, 2)
 
+static const flatbuffers_voffset_t __ModAbi_ResValue_required[] = { 0 };
+typedef flatbuffers_ref_t ModAbi_ResValue_ref_t;
+static ModAbi_ResValue_ref_t ModAbi_ResValue_clone(flatbuffers_builder_t *B, ModAbi_ResValue_table_t t);
+__flatbuffers_build_table(flatbuffers_, ModAbi_ResValue, 3)
+
+static const flatbuffers_voffset_t __ModAbi_EventValues_required[] = { 0 };
+typedef flatbuffers_ref_t ModAbi_EventValues_ref_t;
+static ModAbi_EventValues_ref_t ModAbi_EventValues_clone(flatbuffers_builder_t *B, ModAbi_EventValues_table_t t);
+__flatbuffers_build_table(flatbuffers_, ModAbi_EventValues, 2)
+
 static const flatbuffers_voffset_t __ModAbi_SystemInput_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_SystemInput_ref_t;
 static ModAbi_SystemInput_ref_t ModAbi_SystemInput_clone(flatbuffers_builder_t *B, ModAbi_SystemInput_table_t t);
-__flatbuffers_build_table(flatbuffers_, ModAbi_SystemInput, 3)
+__flatbuffers_build_table(flatbuffers_, ModAbi_SystemInput, 5)
 
 static const flatbuffers_voffset_t __ModAbi_SpawnCmd_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_SpawnCmd_ref_t;
@@ -150,7 +160,7 @@ __flatbuffers_build_table(flatbuffers_, ModAbi_CommandBuffer, 2)
 static const flatbuffers_voffset_t __ModAbi_ObserverInput_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_ObserverInput_ref_t;
 static ModAbi_ObserverInput_ref_t ModAbi_ObserverInput_clone(flatbuffers_builder_t *B, ModAbi_ObserverInput_table_t t);
-__flatbuffers_build_table(flatbuffers_, ModAbi_ObserverInput, 3)
+__flatbuffers_build_table(flatbuffers_, ModAbi_ObserverInput, 6)
 
 static const flatbuffers_voffset_t __ModAbi_SpawnResolved_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_SpawnResolved_ref_t;
@@ -187,8 +197,8 @@ __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_QueryTerm, ModAbi_QueryTer
 static inline ModAbi_QueryDecl_ref_t ModAbi_QueryDecl_create(flatbuffers_builder_t *B __ModAbi_QueryDecl_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_QueryDecl, ModAbi_QueryDecl_file_identifier, ModAbi_QueryDecl_type_identifier)
 
-#define __ModAbi_ParamDecl_formal_args , ModAbi_ParamKind_enum_t v0, ModAbi_QueryDecl_ref_t v1
-#define __ModAbi_ParamDecl_call_args , v0, v1
+#define __ModAbi_ParamDecl_formal_args , ModAbi_ParamKind_enum_t v0, ModAbi_QueryDecl_ref_t v1, uint16_t v2
+#define __ModAbi_ParamDecl_call_args , v0, v1, v2
 static inline ModAbi_ParamDecl_ref_t ModAbi_ParamDecl_create(flatbuffers_builder_t *B __ModAbi_ParamDecl_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_ParamDecl, ModAbi_ParamDecl_file_identifier, ModAbi_ParamDecl_type_identifier)
 
@@ -201,13 +211,17 @@ __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_ParamDecl, ModAbi_ParamDec
 static inline ModAbi_SystemDecl_ref_t ModAbi_SystemDecl_create(flatbuffers_builder_t *B __ModAbi_SystemDecl_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_SystemDecl, ModAbi_SystemDecl_file_identifier, ModAbi_SystemDecl_type_identifier)
 
-#define __ModAbi_ObserverDecl_formal_args , uint32_t v0, ModAbi_ObserverKind_enum_t v1, uint16_t v2, flatbuffers_string_ref_t v3
-#define __ModAbi_ObserverDecl_call_args , v0, v1, v2, v3
+#define __ModAbi_ObserverDecl_formal_args ,\
+  uint32_t v0, ModAbi_ObserverKind_enum_t v1, uint16_t v2, flatbuffers_string_ref_t v3, ModAbi_ParamDecl_vec_ref_t v4
+#define __ModAbi_ObserverDecl_call_args ,\
+  v0, v1, v2, v3, v4
 static inline ModAbi_ObserverDecl_ref_t ModAbi_ObserverDecl_create(flatbuffers_builder_t *B __ModAbi_ObserverDecl_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_ObserverDecl, ModAbi_ObserverDecl_file_identifier, ModAbi_ObserverDecl_type_identifier)
 
-#define __ModAbi_SetupReply_formal_args , ModAbi_SystemDecl_vec_ref_t v0, ModAbi_ObserverDecl_vec_ref_t v1, flatbuffers_bool_t v2, flatbuffers_bool_t v3
-#define __ModAbi_SetupReply_call_args , v0, v1, v2, v3
+#define __ModAbi_SetupReply_formal_args ,\
+  ModAbi_SystemDecl_vec_ref_t v0, ModAbi_ObserverDecl_vec_ref_t v1, flatbuffers_bool_t v2, flatbuffers_bool_t v3, flatbuffers_bool_t v4
+#define __ModAbi_SetupReply_call_args ,\
+  v0, v1, v2, v3, v4
 static inline ModAbi_SetupReply_ref_t ModAbi_SetupReply_create(flatbuffers_builder_t *B __ModAbi_SetupReply_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_SetupReply, ModAbi_SetupReply_file_identifier, ModAbi_SetupReply_type_identifier)
 
@@ -221,8 +235,20 @@ __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_Row, ModAbi_Row_file_ident
 static inline ModAbi_QueryRows_ref_t ModAbi_QueryRows_create(flatbuffers_builder_t *B __ModAbi_QueryRows_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_QueryRows, ModAbi_QueryRows_file_identifier, ModAbi_QueryRows_type_identifier)
 
-#define __ModAbi_SystemInput_formal_args , uint32_t v0, ModAbi_QueryRows_vec_ref_t v1, uint64_t v2
-#define __ModAbi_SystemInput_call_args , v0, v1, v2
+#define __ModAbi_ResValue_formal_args , uint32_t v0, ModAbi_CompValue_ref_t v1, flatbuffers_bool_t v2
+#define __ModAbi_ResValue_call_args , v0, v1, v2
+static inline ModAbi_ResValue_ref_t ModAbi_ResValue_create(flatbuffers_builder_t *B __ModAbi_ResValue_formal_args);
+__flatbuffers_build_table_prolog(flatbuffers_, ModAbi_ResValue, ModAbi_ResValue_file_identifier, ModAbi_ResValue_type_identifier)
+
+#define __ModAbi_EventValues_formal_args , uint32_t v0, ModAbi_CompValue_vec_ref_t v1
+#define __ModAbi_EventValues_call_args , v0, v1
+static inline ModAbi_EventValues_ref_t ModAbi_EventValues_create(flatbuffers_builder_t *B __ModAbi_EventValues_formal_args);
+__flatbuffers_build_table_prolog(flatbuffers_, ModAbi_EventValues, ModAbi_EventValues_file_identifier, ModAbi_EventValues_type_identifier)
+
+#define __ModAbi_SystemInput_formal_args ,\
+  uint32_t v0, ModAbi_QueryRows_vec_ref_t v1, uint64_t v2, ModAbi_ResValue_vec_ref_t v3, ModAbi_EventValues_vec_ref_t v4
+#define __ModAbi_SystemInput_call_args ,\
+  v0, v1, v2, v3, v4
 static inline ModAbi_SystemInput_ref_t ModAbi_SystemInput_create(flatbuffers_builder_t *B __ModAbi_SystemInput_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_SystemInput, ModAbi_SystemInput_file_identifier, ModAbi_SystemInput_type_identifier)
 
@@ -276,8 +302,10 @@ __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_ConsumeKeyCmd, ModAbi_Cons
 static inline ModAbi_CommandBuffer_ref_t ModAbi_CommandBuffer_create(flatbuffers_builder_t *B __ModAbi_CommandBuffer_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_CommandBuffer, ModAbi_CommandBuffer_file_identifier, ModAbi_CommandBuffer_type_identifier)
 
-#define __ModAbi_ObserverInput_formal_args , uint32_t v0, uint64_t v1, ModAbi_CompValue_ref_t v2
-#define __ModAbi_ObserverInput_call_args , v0, v1, v2
+#define __ModAbi_ObserverInput_formal_args ,\
+  uint32_t v0, uint64_t v1, ModAbi_CompValue_ref_t v2, ModAbi_QueryRows_vec_ref_t v3, ModAbi_ResValue_vec_ref_t v4, ModAbi_EventValues_vec_ref_t v5
+#define __ModAbi_ObserverInput_call_args ,\
+  v0, v1, v2, v3, v4, v5
 static inline ModAbi_ObserverInput_ref_t ModAbi_ObserverInput_create(flatbuffers_builder_t *B __ModAbi_ObserverInput_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_ObserverInput, ModAbi_ObserverInput_file_identifier, ModAbi_ObserverInput_type_identifier)
 
@@ -451,11 +479,13 @@ static ModAbi_QueryDecl_ref_t ModAbi_QueryDecl_clone(flatbuffers_builder_t *B, M
 
 __flatbuffers_build_scalar_field(0, flatbuffers_, ModAbi_ParamDecl_kind, ModAbi_ParamKind, ModAbi_ParamKind_enum_t, 1, 1, UINT8_C(0), ModAbi_ParamDecl)
 __flatbuffers_build_table_field(1, flatbuffers_, ModAbi_ParamDecl_query, ModAbi_QueryDecl, ModAbi_ParamDecl)
+__flatbuffers_build_scalar_field(2, flatbuffers_, ModAbi_ParamDecl_type_id, flatbuffers_uint16, uint16_t, 2, 2, UINT16_C(0), ModAbi_ParamDecl)
 
 static inline ModAbi_ParamDecl_ref_t ModAbi_ParamDecl_create(flatbuffers_builder_t *B __ModAbi_ParamDecl_formal_args)
 {
     if (ModAbi_ParamDecl_start(B)
         || ModAbi_ParamDecl_query_add(B, v1)
+        || ModAbi_ParamDecl_type_id_add(B, v2)
         || ModAbi_ParamDecl_kind_add(B, v0)) {
         return 0;
     }
@@ -467,6 +497,7 @@ static ModAbi_ParamDecl_ref_t ModAbi_ParamDecl_clone(flatbuffers_builder_t *B, M
     __flatbuffers_memoize_begin(B, t);
     if (ModAbi_ParamDecl_start(B)
         || ModAbi_ParamDecl_query_pick(B, t)
+        || ModAbi_ParamDecl_type_id_pick(B, t)
         || ModAbi_ParamDecl_kind_pick(B, t)) {
         return 0;
     }
@@ -519,12 +550,14 @@ __flatbuffers_build_scalar_field(0, flatbuffers_, ModAbi_ObserverDecl_id, flatbu
 __flatbuffers_build_scalar_field(1, flatbuffers_, ModAbi_ObserverDecl_kind, ModAbi_ObserverKind, ModAbi_ObserverKind_enum_t, 1, 1, UINT8_C(0), ModAbi_ObserverDecl)
 __flatbuffers_build_scalar_field(2, flatbuffers_, ModAbi_ObserverDecl_type_id, flatbuffers_uint16, uint16_t, 2, 2, UINT16_C(0), ModAbi_ObserverDecl)
 __flatbuffers_build_string_field(3, flatbuffers_, ModAbi_ObserverDecl_event_name, ModAbi_ObserverDecl)
+__flatbuffers_build_table_vector_field(4, flatbuffers_, ModAbi_ObserverDecl_params, ModAbi_ParamDecl, ModAbi_ObserverDecl)
 
 static inline ModAbi_ObserverDecl_ref_t ModAbi_ObserverDecl_create(flatbuffers_builder_t *B __ModAbi_ObserverDecl_formal_args)
 {
     if (ModAbi_ObserverDecl_start(B)
         || ModAbi_ObserverDecl_id_add(B, v0)
         || ModAbi_ObserverDecl_event_name_add(B, v3)
+        || ModAbi_ObserverDecl_params_add(B, v4)
         || ModAbi_ObserverDecl_type_id_add(B, v2)
         || ModAbi_ObserverDecl_kind_add(B, v1)) {
         return 0;
@@ -538,6 +571,7 @@ static ModAbi_ObserverDecl_ref_t ModAbi_ObserverDecl_clone(flatbuffers_builder_t
     if (ModAbi_ObserverDecl_start(B)
         || ModAbi_ObserverDecl_id_pick(B, t)
         || ModAbi_ObserverDecl_event_name_pick(B, t)
+        || ModAbi_ObserverDecl_params_pick(B, t)
         || ModAbi_ObserverDecl_type_id_pick(B, t)
         || ModAbi_ObserverDecl_kind_pick(B, t)) {
         return 0;
@@ -549,6 +583,7 @@ __flatbuffers_build_table_vector_field(0, flatbuffers_, ModAbi_SetupReply_system
 __flatbuffers_build_table_vector_field(1, flatbuffers_, ModAbi_SetupReply_observers, ModAbi_ObserverDecl, ModAbi_SetupReply)
 __flatbuffers_build_scalar_field(2, flatbuffers_, ModAbi_SetupReply_wants_filter, flatbuffers_bool, flatbuffers_bool_t, 1, 1, UINT8_C(0), ModAbi_SetupReply)
 __flatbuffers_build_scalar_field(3, flatbuffers_, ModAbi_SetupReply_wants_filter_out, flatbuffers_bool, flatbuffers_bool_t, 1, 1, UINT8_C(0), ModAbi_SetupReply)
+__flatbuffers_build_scalar_field(4, flatbuffers_, ModAbi_SetupReply_res_unchanged, flatbuffers_bool, flatbuffers_bool_t, 1, 1, UINT8_C(0), ModAbi_SetupReply)
 
 static inline ModAbi_SetupReply_ref_t ModAbi_SetupReply_create(flatbuffers_builder_t *B __ModAbi_SetupReply_formal_args)
 {
@@ -556,7 +591,8 @@ static inline ModAbi_SetupReply_ref_t ModAbi_SetupReply_create(flatbuffers_build
         || ModAbi_SetupReply_systems_add(B, v0)
         || ModAbi_SetupReply_observers_add(B, v1)
         || ModAbi_SetupReply_wants_filter_add(B, v2)
-        || ModAbi_SetupReply_wants_filter_out_add(B, v3)) {
+        || ModAbi_SetupReply_wants_filter_out_add(B, v3)
+        || ModAbi_SetupReply_res_unchanged_add(B, v4)) {
         return 0;
     }
     return ModAbi_SetupReply_end(B);
@@ -569,7 +605,8 @@ static ModAbi_SetupReply_ref_t ModAbi_SetupReply_clone(flatbuffers_builder_t *B,
         || ModAbi_SetupReply_systems_pick(B, t)
         || ModAbi_SetupReply_observers_pick(B, t)
         || ModAbi_SetupReply_wants_filter_pick(B, t)
-        || ModAbi_SetupReply_wants_filter_out_pick(B, t)) {
+        || ModAbi_SetupReply_wants_filter_out_pick(B, t)
+        || ModAbi_SetupReply_res_unchanged_pick(B, t)) {
         return 0;
     }
     __flatbuffers_memoize_end(B, t, ModAbi_SetupReply_end(B));
@@ -623,16 +660,71 @@ static ModAbi_QueryRows_ref_t ModAbi_QueryRows_clone(flatbuffers_builder_t *B, M
     __flatbuffers_memoize_end(B, t, ModAbi_QueryRows_end(B));
 }
 
+__flatbuffers_build_scalar_field(0, flatbuffers_, ModAbi_ResValue_param_index, flatbuffers_uint32, uint32_t, 4, 4, UINT32_C(0), ModAbi_ResValue)
+__flatbuffers_build_table_field(1, flatbuffers_, ModAbi_ResValue_value, ModAbi_CompValue, ModAbi_ResValue)
+__flatbuffers_build_scalar_field(2, flatbuffers_, ModAbi_ResValue_unchanged, flatbuffers_bool, flatbuffers_bool_t, 1, 1, UINT8_C(0), ModAbi_ResValue)
+
+static inline ModAbi_ResValue_ref_t ModAbi_ResValue_create(flatbuffers_builder_t *B __ModAbi_ResValue_formal_args)
+{
+    if (ModAbi_ResValue_start(B)
+        || ModAbi_ResValue_param_index_add(B, v0)
+        || ModAbi_ResValue_value_add(B, v1)
+        || ModAbi_ResValue_unchanged_add(B, v2)) {
+        return 0;
+    }
+    return ModAbi_ResValue_end(B);
+}
+
+static ModAbi_ResValue_ref_t ModAbi_ResValue_clone(flatbuffers_builder_t *B, ModAbi_ResValue_table_t t)
+{
+    __flatbuffers_memoize_begin(B, t);
+    if (ModAbi_ResValue_start(B)
+        || ModAbi_ResValue_param_index_pick(B, t)
+        || ModAbi_ResValue_value_pick(B, t)
+        || ModAbi_ResValue_unchanged_pick(B, t)) {
+        return 0;
+    }
+    __flatbuffers_memoize_end(B, t, ModAbi_ResValue_end(B));
+}
+
+__flatbuffers_build_scalar_field(0, flatbuffers_, ModAbi_EventValues_param_index, flatbuffers_uint32, uint32_t, 4, 4, UINT32_C(0), ModAbi_EventValues)
+__flatbuffers_build_table_vector_field(1, flatbuffers_, ModAbi_EventValues_values, ModAbi_CompValue, ModAbi_EventValues)
+
+static inline ModAbi_EventValues_ref_t ModAbi_EventValues_create(flatbuffers_builder_t *B __ModAbi_EventValues_formal_args)
+{
+    if (ModAbi_EventValues_start(B)
+        || ModAbi_EventValues_param_index_add(B, v0)
+        || ModAbi_EventValues_values_add(B, v1)) {
+        return 0;
+    }
+    return ModAbi_EventValues_end(B);
+}
+
+static ModAbi_EventValues_ref_t ModAbi_EventValues_clone(flatbuffers_builder_t *B, ModAbi_EventValues_table_t t)
+{
+    __flatbuffers_memoize_begin(B, t);
+    if (ModAbi_EventValues_start(B)
+        || ModAbi_EventValues_param_index_pick(B, t)
+        || ModAbi_EventValues_values_pick(B, t)) {
+        return 0;
+    }
+    __flatbuffers_memoize_end(B, t, ModAbi_EventValues_end(B));
+}
+
 __flatbuffers_build_scalar_field(0, flatbuffers_, ModAbi_SystemInput_sys_id, flatbuffers_uint32, uint32_t, 4, 4, UINT32_C(0), ModAbi_SystemInput)
 __flatbuffers_build_table_vector_field(1, flatbuffers_, ModAbi_SystemInput_queries, ModAbi_QueryRows, ModAbi_SystemInput)
 __flatbuffers_build_scalar_field(2, flatbuffers_, ModAbi_SystemInput_tick, flatbuffers_uint64, uint64_t, 8, 8, UINT64_C(0), ModAbi_SystemInput)
+__flatbuffers_build_table_vector_field(3, flatbuffers_, ModAbi_SystemInput_resources, ModAbi_ResValue, ModAbi_SystemInput)
+__flatbuffers_build_table_vector_field(4, flatbuffers_, ModAbi_SystemInput_events, ModAbi_EventValues, ModAbi_SystemInput)
 
 static inline ModAbi_SystemInput_ref_t ModAbi_SystemInput_create(flatbuffers_builder_t *B __ModAbi_SystemInput_formal_args)
 {
     if (ModAbi_SystemInput_start(B)
         || ModAbi_SystemInput_tick_add(B, v2)
         || ModAbi_SystemInput_sys_id_add(B, v0)
-        || ModAbi_SystemInput_queries_add(B, v1)) {
+        || ModAbi_SystemInput_queries_add(B, v1)
+        || ModAbi_SystemInput_resources_add(B, v3)
+        || ModAbi_SystemInput_events_add(B, v4)) {
         return 0;
     }
     return ModAbi_SystemInput_end(B);
@@ -644,7 +736,9 @@ static ModAbi_SystemInput_ref_t ModAbi_SystemInput_clone(flatbuffers_builder_t *
     if (ModAbi_SystemInput_start(B)
         || ModAbi_SystemInput_tick_pick(B, t)
         || ModAbi_SystemInput_sys_id_pick(B, t)
-        || ModAbi_SystemInput_queries_pick(B, t)) {
+        || ModAbi_SystemInput_queries_pick(B, t)
+        || ModAbi_SystemInput_resources_pick(B, t)
+        || ModAbi_SystemInput_events_pick(B, t)) {
         return 0;
     }
     __flatbuffers_memoize_end(B, t, ModAbi_SystemInput_end(B));
@@ -893,13 +987,19 @@ static ModAbi_CommandBuffer_ref_t ModAbi_CommandBuffer_clone(flatbuffers_builder
 __flatbuffers_build_scalar_field(0, flatbuffers_, ModAbi_ObserverInput_obs_id, flatbuffers_uint32, uint32_t, 4, 4, UINT32_C(0), ModAbi_ObserverInput)
 __flatbuffers_build_scalar_field(1, flatbuffers_, ModAbi_ObserverInput_entity, flatbuffers_uint64, uint64_t, 8, 8, UINT64_C(0), ModAbi_ObserverInput)
 __flatbuffers_build_table_field(2, flatbuffers_, ModAbi_ObserverInput_value, ModAbi_CompValue, ModAbi_ObserverInput)
+__flatbuffers_build_table_vector_field(3, flatbuffers_, ModAbi_ObserverInput_queries, ModAbi_QueryRows, ModAbi_ObserverInput)
+__flatbuffers_build_table_vector_field(4, flatbuffers_, ModAbi_ObserverInput_resources, ModAbi_ResValue, ModAbi_ObserverInput)
+__flatbuffers_build_table_vector_field(5, flatbuffers_, ModAbi_ObserverInput_events, ModAbi_EventValues, ModAbi_ObserverInput)
 
 static inline ModAbi_ObserverInput_ref_t ModAbi_ObserverInput_create(flatbuffers_builder_t *B __ModAbi_ObserverInput_formal_args)
 {
     if (ModAbi_ObserverInput_start(B)
         || ModAbi_ObserverInput_entity_add(B, v1)
         || ModAbi_ObserverInput_obs_id_add(B, v0)
-        || ModAbi_ObserverInput_value_add(B, v2)) {
+        || ModAbi_ObserverInput_value_add(B, v2)
+        || ModAbi_ObserverInput_queries_add(B, v3)
+        || ModAbi_ObserverInput_resources_add(B, v4)
+        || ModAbi_ObserverInput_events_add(B, v5)) {
         return 0;
     }
     return ModAbi_ObserverInput_end(B);
@@ -911,7 +1011,10 @@ static ModAbi_ObserverInput_ref_t ModAbi_ObserverInput_clone(flatbuffers_builder
     if (ModAbi_ObserverInput_start(B)
         || ModAbi_ObserverInput_entity_pick(B, t)
         || ModAbi_ObserverInput_obs_id_pick(B, t)
-        || ModAbi_ObserverInput_value_pick(B, t)) {
+        || ModAbi_ObserverInput_value_pick(B, t)
+        || ModAbi_ObserverInput_queries_pick(B, t)
+        || ModAbi_ObserverInput_resources_pick(B, t)
+        || ModAbi_ObserverInput_events_pick(B, t)) {
         return 0;
     }
     __flatbuffers_memoize_end(B, t, ModAbi_ObserverInput_end(B));

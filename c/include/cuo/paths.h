@@ -5,38 +5,14 @@
 #ifndef CUO_PATHS_H
 #define CUO_PATHS_H
 
-#define CUO_PATH_ACTION_CAST_SPELL "cuo:action/cast-spell" /* event */
-#define CUO_PATH_ACTION_CONTEXT_MENU_REPLY "cuo:action/context-menu-reply" /* event */
-#define CUO_PATH_ACTION_DOUBLE_CLICK "cuo:action/double-click" /* event */
-#define CUO_PATH_ACTION_DROP "cuo:action/drop" /* event */
-#define CUO_PATH_ACTION_EQUIP "cuo:action/equip" /* event */
-#define CUO_PATH_ACTION_GUMP_CLOSE "cuo:action/gump-close" /* event */
-#define CUO_PATH_ACTION_GUMP_REPLY "cuo:action/gump-reply" /* event */
-#define CUO_PATH_ACTION_OPEN_DOOR "cuo:action/open-door" /* event */
-#define CUO_PATH_ACTION_PICKUP "cuo:action/pickup" /* event */
-#define CUO_PATH_ACTION_PROMPT_REPLY "cuo:action/prompt-reply" /* event */
-#define CUO_PATH_ACTION_RENAME "cuo:action/rename" /* event */
-#define CUO_PATH_ACTION_REQUEST_CONTEXT_MENU "cuo:action/request-context-menu" /* event */
-#define CUO_PATH_ACTION_REQUEST_PROPERTIES "cuo:action/request-properties" /* event */
-#define CUO_PATH_ACTION_REQUEST_SKILLS "cuo:action/request-skills" /* event */
-#define CUO_PATH_ACTION_REQUEST_STATUS "cuo:action/request-status" /* event */
-#define CUO_PATH_ACTION_REQUEST_TARGET "cuo:action/request-target" /* event */
-#define CUO_PATH_ACTION_SAY "cuo:action/say" /* event */
-#define CUO_PATH_ACTION_SINGLE_CLICK "cuo:action/single-click" /* event */
-#define CUO_PATH_ACTION_TARGET_CANCEL "cuo:action/target-cancel" /* event */
-#define CUO_PATH_ACTION_TARGET_LOCATION "cuo:action/target-location" /* event */
-#define CUO_PATH_ACTION_TARGET_OBJECT "cuo:action/target-object" /* event */
-#define CUO_PATH_ACTION_TOGGLE_WAR_MODE "cuo:action/toggle-war-mode" /* event */
-#define CUO_PATH_ACTION_USE_SKILL "cuo:action/use-skill" /* event */
-#define CUO_PATH_ACTION_WALK "cuo:action/walk" /* event */
-#define CUO_PATH_ACTION_WALK_TO "cuo:action/walk-to" /* event */
 #define CUO_PATH_CHAT_MESSAGE "cuo:chat/message" /* event */
 #define CUO_PATH_CHAT_PROMPT "cuo:chat/prompt" /* event */
+#define CUO_PATH_ECS_CHILD_OF "cuo:ecs/child-of" /* component */
 #define CUO_PATH_ENGINE_TIME "cuo:engine/time" /* resource */
 #define CUO_PATH_ENT_AMOUNT "cuo:ent/amount" /* component */
 #define CUO_PATH_ENT_ANIMATION "cuo:ent/animation" /* component */
+#define CUO_PATH_ENT_AUTO_OPENED_CORPSE "cuo:ent/auto-opened-corpse" /* component */
 #define CUO_PATH_ENT_CONTAINED_INTO "cuo:ent/contained-into" /* component */
-#define CUO_PATH_ENT_CONTAINER "cuo:ent/container" /* component */
 #define CUO_PATH_ENT_EQUIPMENT "cuo:ent/equipment" /* component */
 #define CUO_PATH_ENT_FACING "cuo:ent/facing" /* component */
 #define CUO_PATH_ENT_GRAPHIC "cuo:ent/graphic" /* component */
@@ -45,6 +21,7 @@
 #define CUO_PATH_ENT_IS_ITEM "cuo:ent/is-item" /* component */
 #define CUO_PATH_ENT_IS_MOBILE "cuo:ent/is-mobile" /* component */
 #define CUO_PATH_ENT_IS_MULTI "cuo:ent/is-multi" /* component */
+#define CUO_PATH_ENT_MANUAL_OPENED_CORPSE "cuo:ent/manual-opened-corpse" /* component */
 #define CUO_PATH_ENT_MOB_STEPS "cuo:ent/mob-steps" /* component */
 #define CUO_PATH_ENT_NAME "cuo:ent/name" /* component */
 #define CUO_PATH_ENT_NOTORIETY "cuo:ent/notoriety" /* component */
@@ -54,6 +31,7 @@
 #define CUO_PATH_ENT_SLOT_POSITION "cuo:ent/slot-position" /* component */
 #define CUO_PATH_ENT_WORLD_POSITION "cuo:ent/world-position" /* component */
 #define CUO_PATH_GAME_CONTEXT "cuo:game/context" /* resource */
+#define CUO_PATH_GAME_SETTINGS "cuo:game/settings" /* resource */
 #define CUO_PATH_GAME_STATE "cuo:game/state" /* resource */
 #define CUO_PATH_GUMP_BOOK "cuo:gump/book" /* component (presence-only) */
 #define CUO_PATH_GUMP_BUFF "cuo:gump/buff" /* component */
@@ -62,6 +40,9 @@
 #define CUO_PATH_GUMP_CONTAINER "cuo:gump/container" /* component */
 #define CUO_PATH_GUMP_CONTAINER_CLOSED "cuo:gump/container-closed" /* event */
 #define CUO_PATH_GUMP_CONTAINER_OPENED "cuo:gump/container-opened" /* event */
+#define CUO_PATH_GUMP_CONTAINER_POSITIONS "cuo:gump/container-positions" /* resource */
+#define CUO_PATH_GUMP_CONTAINER_SLOT "cuo:gump/container-slot" /* event */
+#define CUO_PATH_GUMP_CONTAINER_TAG "cuo:gump/container-tag" /* component */
 #define CUO_PATH_GUMP_CONTEXT_MENU "cuo:gump/context-menu" /* event */
 #define CUO_PATH_GUMP_GRID_CONTAINER "cuo:gump/grid-container" /* component */
 #define CUO_PATH_GUMP_GRID_LOOT "cuo:gump/grid-loot" /* component */
@@ -88,14 +69,17 @@
 #define CUO_PATH_GUMP_TRADE "cuo:gump/trade" /* component */
 #define CUO_PATH_GUMP_VENDOR "cuo:gump/vendor" /* component (presence-only) */
 #define CUO_PATH_GUMP_WORLDMAP "cuo:gump/worldmap" /* component */
+#define CUO_PATH_INPUT_CONSUME "cuo:input/consume" /* event */
 #define CUO_PATH_INPUT_HOST_HOTKEYS "cuo:input/host-hotkeys" /* resource */
 #define CUO_PATH_INPUT_HOTKEY "cuo:input/hotkey" /* event */
 #define CUO_PATH_INPUT_KEYBOARD "cuo:input/keyboard" /* resource */
 #define CUO_PATH_INPUT_MOD_HOTKEYS "cuo:input/mod-hotkeys" /* resource */
 #define CUO_PATH_INPUT_MOUSE "cuo:input/mouse" /* resource */
 #define CUO_PATH_INPUT_WORLD_SINGLE_CLICK "cuo:input/world-single-click" /* resource */
-#define CUO_PATH_MOD_OWNED "cuo:mod/owned" /* component (presence-only) */
-#define CUO_PATH_MOD_STATE "cuo:mod/state" /* component */
+#define CUO_PATH_ITEM_DROP_SENT "cuo:item/drop-sent" /* event */
+#define CUO_PATH_ITEM_MOVE_RESULT "cuo:item/move-result" /* event */
+#define CUO_PATH_OPTIONS_SCHEMA "cuo:options/schema" /* resource */
+#define CUO_PATH_OPTIONS_VALUES "cuo:options/values" /* resource */
 #define CUO_PATH_PLAYER_BUFFS "cuo:player/buffs" /* resource */
 #define CUO_PATH_PLAYER_DATA "cuo:player/data" /* component */
 #define CUO_PATH_PLAYER_GRABBED_ITEM "cuo:player/grabbed-item" /* resource */
@@ -121,32 +105,36 @@
 #define CUO_PATH_SCENE_SERVER_SELECTION "cuo:scene/server-selection" /* component */
 #define CUO_PATH_TARGET_LOCAL_RESULT "cuo:target/local-result" /* event */
 #define CUO_PATH_TARGET_STATE "cuo:target/state" /* resource */
-#define CUO_PATH_TEST_COUNTER "cuo:test/counter" /* component */
 #define CUO_PATH_UI_BG_COLOR "cuo:ui/bg-color" /* component */
+#define CUO_PATH_UI_BORDER_COLOR "cuo:ui/border-color" /* component */
 #define CUO_PATH_UI_BORDER_RADIUS "cuo:ui/border-radius" /* component */
 #define CUO_PATH_UI_BUTTON "cuo:ui/button" /* component */
-#define CUO_PATH_UI_CLICKED "cuo:ui/clicked" /* component */
+#define CUO_PATH_UI_CLICK "cuo:ui/click" /* event */
 #define CUO_PATH_UI_CLIPBOARD_SET "cuo:ui/clipboard-set" /* resource */
+#define CUO_PATH_UI_COMPUTED "cuo:ui/computed" /* component */
+#define CUO_PATH_UI_CONTAINER_ITEM "cuo:ui/container-item" /* component */
 #define CUO_PATH_UI_CONTAINS_BY_BOUNDS "cuo:ui/contains-by-bounds" /* component */
 #define CUO_PATH_UI_CUSTOM "cuo:ui/custom" /* component */
 #define CUO_PATH_UI_EDITABLE_TEXT "cuo:ui/editable-text" /* component */
 #define CUO_PATH_UI_FOCUSED_INPUT "cuo:ui/focused-input" /* resource */
 #define CUO_PATH_UI_GLOBAL_Z "cuo:ui/global-z" /* component */
+#define CUO_PATH_UI_HOVER "cuo:ui/hover" /* event */
 #define CUO_PATH_UI_HOVER_TINT "cuo:ui/hover-tint" /* component */
-#define CUO_PATH_UI_HOVERED "cuo:ui/hovered" /* component */
 #define CUO_PATH_UI_INTERACTION "cuo:ui/interaction" /* component */
 #define CUO_PATH_UI_MASKED_TEXT "cuo:ui/masked-text" /* component */
 #define CUO_PATH_UI_MOVABLE "cuo:ui/movable" /* component */
 #define CUO_PATH_UI_MOVABLE_NO_DRAG "cuo:ui/movable-no-drag" /* component */
 #define CUO_PATH_UI_NAME "cuo:ui/name" /* component */
 #define CUO_PATH_UI_NO_BLUR "cuo:ui/no-blur" /* component */
+#define CUO_PATH_UI_NO_PICKUP "cuo:ui/no-pickup" /* component */
 #define CUO_PATH_UI_NO_RIGHT_CLICK_CLOSE "cuo:ui/no-right-click-close" /* component */
 #define CUO_PATH_UI_NO_WINDOW_DRAG "cuo:ui/no-window-drag" /* component */
 #define CUO_PATH_UI_NODE "cuo:ui/node" /* component */
 #define CUO_PATH_UI_OPTIONS_WINDOW "cuo:ui/options-window" /* component */
+#define CUO_PATH_UI_PICK "cuo:ui/pick" /* resource */
 #define CUO_PATH_UI_POPUP "cuo:ui/popup" /* component */
 #define CUO_PATH_UI_RESIZABLE "cuo:ui/resizable" /* component */
-#define CUO_PATH_UI_RIGHT_CLICKED "cuo:ui/right-clicked" /* component */
+#define CUO_PATH_UI_RIGHT_CLICK "cuo:ui/right-click" /* event */
 #define CUO_PATH_UI_SCROLL "cuo:ui/scroll" /* component */
 #define CUO_PATH_UI_SCROLLBAR "cuo:ui/scrollbar" /* component */
 #define CUO_PATH_UI_STAT_LOCK_BUTTON "cuo:ui/stat-lock-button" /* component */
@@ -166,6 +154,7 @@
 #define CUO_PATH_UI_TEXT_SPANS "cuo:ui/text-spans" /* component */
 #define CUO_PATH_UI_TEXT_WRAP "cuo:ui/text-wrap" /* component */
 #define CUO_PATH_UI_TOOLTIP "cuo:ui/tooltip" /* component */
+#define CUO_PATH_UI_TOOLTIP_SERIAL "cuo:ui/tooltip-serial" /* component */
 #define CUO_PATH_UI_TOPBAR_BG "cuo:ui/topbar-bg" /* component */
 #define CUO_PATH_UI_TOPBAR_BUTTON "cuo:ui/topbar-button" /* component */
 #define CUO_PATH_UI_TOPBAR_FULL "cuo:ui/topbar-full" /* component */

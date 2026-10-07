@@ -19,57 +19,62 @@ extern "C" {
 #endif
 
 typedef struct cuo_Amount cuo_Amount;
+typedef struct cuo_AutoOpenedCorpse cuo_AutoOpenedCorpse;
 typedef struct cuo_BackgroundColor cuo_BackgroundColor;
 typedef struct cuo_BookWindow cuo_BookWindow;
+typedef struct cuo_BorderColorDto cuo_BorderColorDto;
 typedef struct cuo_BorderRadius cuo_BorderRadius;
 typedef struct cuo_BuffGumpUI cuo_BuffGumpUI;
 typedef struct cuo_BulletinBoardWindow cuo_BulletinBoardWindow;
-typedef struct cuo_CastSpellAction cuo_CastSpellAction;
 typedef struct cuo_CharCreationScene cuo_CharCreationScene;
 typedef struct cuo_CharInfoDto cuo_CharInfoDto;
 typedef struct cuo_CharacterSelectionDto cuo_CharacterSelectionDto;
 typedef struct cuo_CharacterSelectionScene cuo_CharacterSelectionScene;
+typedef struct cuo_ChildOfDto cuo_ChildOfDto;
 typedef struct cuo_ClipboardSetDto cuo_ClipboardSetDto;
 typedef struct cuo_Color cuo_Color;
 typedef struct cuo_CombatBookWindow cuo_CombatBookWindow;
-typedef struct cuo_ContainedInDto cuo_ContainedInDto;
+typedef struct cuo_ComputedNode cuo_ComputedNode;
 typedef struct cuo_ContainedInto cuo_ContainedInto;
 typedef struct cuo_ContainerClosedEvent cuo_ContainerClosedEvent;
+typedef struct cuo_ContainerGumpTagDto cuo_ContainerGumpTagDto;
+typedef struct cuo_ContainerItemUI cuo_ContainerItemUI;
 typedef struct cuo_ContainerOpenedEvent cuo_ContainerOpenedEvent;
+typedef struct cuo_ContainerPositionDto cuo_ContainerPositionDto;
+typedef struct cuo_ContainerPositionsDto cuo_ContainerPositionsDto;
+typedef struct cuo_ContainerSlotEvent cuo_ContainerSlotEvent;
 typedef struct cuo_ContainerSlotPosition cuo_ContainerSlotPosition;
 typedef struct cuo_ContainerWindow cuo_ContainerWindow;
 typedef struct cuo_ContextMenuEntry cuo_ContextMenuEntry;
 typedef struct cuo_ContextMenuEvent cuo_ContextMenuEvent;
-typedef struct cuo_ContextMenuReplyAction cuo_ContextMenuReplyAction;
-typedef struct cuo_DoubleClickAction cuo_DoubleClickAction;
-typedef struct cuo_DropAction cuo_DropAction;
 typedef struct cuo_EditableText cuo_EditableText;
 typedef struct cuo_EntityName cuo_EntityName;
 typedef struct cuo_EntityPropertiesDto cuo_EntityPropertiesDto;
-typedef struct cuo_EquipAction cuo_EquipAction;
 typedef struct cuo_EquipmentSlotsDto cuo_EquipmentSlotsDto;
 typedef struct cuo_Facing cuo_Facing;
 typedef struct cuo_FocusedInput cuo_FocusedInput;
 typedef struct cuo_GameContextDto cuo_GameContextDto;
 typedef struct cuo_GameScene cuo_GameScene;
+typedef struct cuo_GameSettingsDto cuo_GameSettingsDto;
 typedef struct cuo_GameStateDto cuo_GameStateDto;
 typedef struct cuo_GlobalZIndex cuo_GlobalZIndex;
 typedef struct cuo_GrabbedItem cuo_GrabbedItem;
 typedef struct cuo_Graphic cuo_Graphic;
 typedef struct cuo_GridContainerWindow cuo_GridContainerWindow;
 typedef struct cuo_GridLootWindow cuo_GridLootWindow;
-typedef struct cuo_GumpCloseAction cuo_GumpCloseAction;
-typedef struct cuo_GumpReplyAction cuo_GumpReplyAction;
-typedef struct cuo_GumpTextEntry cuo_GumpTextEntry;
+typedef struct cuo_GridPinnedCell cuo_GridPinnedCell;
 typedef struct cuo_HealthBarWindow cuo_HealthBarWindow;
 typedef struct cuo_Hits cuo_Hits;
 typedef struct cuo_HostHotkeyDto cuo_HostHotkeyDto;
 typedef struct cuo_HostHotkeysDto cuo_HostHotkeysDto;
 typedef struct cuo_HouseDesignWindow cuo_HouseDesignWindow;
 typedef struct cuo_Hue cuo_Hue;
+typedef struct cuo_InteractionDto cuo_InteractionDto;
 typedef struct cuo_IsContainer cuo_IsContainer;
 typedef struct cuo_IsMulti cuo_IsMulti;
 typedef struct cuo_IsTopBar cuo_IsTopBar;
+typedef struct cuo_ItemDropSent cuo_ItemDropSent;
+typedef struct cuo_ItemMoveResult cuo_ItemMoveResult;
 typedef struct cuo_Items cuo_Items;
 typedef struct cuo_JournalWindow cuo_JournalWindow;
 typedef struct cuo_KeyboardInputDto cuo_KeyboardInputDto;
@@ -80,6 +85,7 @@ typedef struct cuo_LoginErrorsInfoEvent cuo_LoginErrorsInfoEvent;
 typedef struct cuo_LoginScene cuo_LoginScene;
 typedef struct cuo_LogoutGumpWindow cuo_LogoutGumpWindow;
 typedef struct cuo_Mana cuo_Mana;
+typedef struct cuo_ManualOpenedCorpse cuo_ManualOpenedCorpse;
 typedef struct cuo_MapWindow cuo_MapWindow;
 typedef struct cuo_MaskedText cuo_MaskedText;
 typedef struct cuo_MenuGumpWindow cuo_MenuGumpWindow;
@@ -90,23 +96,23 @@ typedef struct cuo_MobStepDto cuo_MobStepDto;
 typedef struct cuo_MobileStepsDto cuo_MobileStepsDto;
 typedef struct cuo_Mobiles cuo_Mobiles;
 typedef struct cuo_ModChatMessage cuo_ModChatMessage;
-typedef struct cuo_ModClicked cuo_ModClicked;
-typedef struct cuo_ModCounter cuo_ModCounter;
-typedef struct cuo_ModEntity cuo_ModEntity;
+typedef struct cuo_ModClick cuo_ModClick;
 typedef struct cuo_ModHotkeyBinding cuo_ModHotkeyBinding;
 typedef struct cuo_ModHotkeyBindingsDto cuo_ModHotkeyBindingsDto;
 typedef struct cuo_ModHotkeyFired cuo_ModHotkeyFired;
-typedef struct cuo_ModHovered cuo_ModHovered;
+typedef struct cuo_ModHover cuo_ModHover;
+typedef struct cuo_ModInputConsume cuo_ModInputConsume;
 typedef struct cuo_ModMoveRequest cuo_ModMoveRequest;
-typedef struct cuo_ModRightClicked cuo_ModRightClicked;
-typedef struct cuo_ModState cuo_ModState;
+typedef struct cuo_ModOptionDto cuo_ModOptionDto;
+typedef struct cuo_ModOptionsSchemaDto cuo_ModOptionsSchemaDto;
+typedef struct cuo_ModOptionsValuesDto cuo_ModOptionsValuesDto;
+typedef struct cuo_ModRightClick cuo_ModRightClick;
 typedef struct cuo_ModSupersedes cuo_ModSupersedes;
 typedef struct cuo_MouseInputDto cuo_MouseInputDto;
 typedef struct cuo_NetworkSerial cuo_NetworkSerial;
 typedef struct cuo_Node cuo_Node;
 typedef struct cuo_Notoriety cuo_Notoriety;
 typedef struct cuo_OnLoginRequest cuo_OnLoginRequest;
-typedef struct cuo_OpenDoorAction cuo_OpenDoorAction;
 typedef struct cuo_OplLineDto cuo_OplLineDto;
 typedef struct cuo_OptionsWindow cuo_OptionsWindow;
 typedef struct cuo_PaperdollWindow cuo_PaperdollWindow;
@@ -114,7 +120,6 @@ typedef struct cuo_PartyDto cuo_PartyDto;
 typedef struct cuo_PartyInviteWindow cuo_PartyInviteWindow;
 typedef struct cuo_PartyManifestWindow cuo_PartyManifestWindow;
 typedef struct cuo_PartyMemberDto cuo_PartyMemberDto;
-typedef struct cuo_PickupAction cuo_PickupAction;
 typedef struct cuo_Player cuo_Player;
 typedef struct cuo_PlayerBuffDto cuo_PlayerBuffDto;
 typedef struct cuo_PlayerBuffsDto cuo_PlayerBuffsDto;
@@ -125,15 +130,7 @@ typedef struct cuo_PlayerStepDto cuo_PlayerStepDto;
 typedef struct cuo_PlayerStepsDto cuo_PlayerStepsDto;
 typedef struct cuo_ProfileWindow cuo_ProfileWindow;
 typedef struct cuo_PromptOpenedEvent cuo_PromptOpenedEvent;
-typedef struct cuo_PromptReplyAction cuo_PromptReplyAction;
 typedef struct cuo_RacialBookWindow cuo_RacialBookWindow;
-typedef struct cuo_RenameAction cuo_RenameAction;
-typedef struct cuo_RequestContextMenuAction cuo_RequestContextMenuAction;
-typedef struct cuo_RequestPropertiesAction cuo_RequestPropertiesAction;
-typedef struct cuo_RequestSkillsAction cuo_RequestSkillsAction;
-typedef struct cuo_RequestStatusAction cuo_RequestStatusAction;
-typedef struct cuo_RequestTargetAction cuo_RequestTargetAction;
-typedef struct cuo_SayAction cuo_SayAction;
 typedef struct cuo_ScrollPosition cuo_ScrollPosition;
 typedef struct cuo_ServerFlags cuo_ServerFlags;
 typedef struct cuo_ServerGumpButtonDto cuo_ServerGumpButtonDto;
@@ -145,7 +142,6 @@ typedef struct cuo_ServerGumpTextEntryDto cuo_ServerGumpTextEntryDto;
 typedef struct cuo_ServerInfo cuo_ServerInfo;
 typedef struct cuo_ServerSelectionInfoEvent cuo_ServerSelectionInfoEvent;
 typedef struct cuo_ServerSelectionScene cuo_ServerSelectionScene;
-typedef struct cuo_SingleClickAction cuo_SingleClickAction;
 typedef struct cuo_SkillsWindow cuo_SkillsWindow;
 typedef struct cuo_SpellbookDto cuo_SpellbookDto;
 typedef struct cuo_SpellbookWindow cuo_SpellbookWindow;
@@ -155,9 +151,6 @@ typedef struct cuo_Stamina cuo_Stamina;
 typedef struct cuo_StatLockButton cuo_StatLockButton;
 typedef struct cuo_StatLocks cuo_StatLocks;
 typedef struct cuo_StatusBarWindow cuo_StatusBarWindow;
-typedef struct cuo_TargetCancelAction cuo_TargetCancelAction;
-typedef struct cuo_TargetLocationAction cuo_TargetLocationAction;
-typedef struct cuo_TargetObjectAction cuo_TargetObjectAction;
 typedef struct cuo_TargetingState cuo_TargetingState;
 typedef struct cuo_Text cuo_Text;
 typedef struct cuo_TextCaretDto cuo_TextCaretDto;
@@ -174,7 +167,6 @@ typedef struct cuo_TextSpans cuo_TextSpans;
 typedef struct cuo_TextWrap cuo_TextWrap;
 typedef struct cuo_Time cuo_Time;
 typedef struct cuo_TipNoticeWindow cuo_TipNoticeWindow;
-typedef struct cuo_ToggleWarModeAction cuo_ToggleWarModeAction;
 typedef struct cuo_TopBarButton cuo_TopBarButton;
 typedef struct cuo_TopBarDragHandle cuo_TopBarDragHandle;
 typedef struct cuo_TopBarFull cuo_TopBarFull;
@@ -190,18 +182,18 @@ typedef struct cuo_UiName cuo_UiName;
 typedef struct cuo_UiNoBlur cuo_UiNoBlur;
 typedef struct cuo_UiNoRightClickClose cuo_UiNoRightClickClose;
 typedef struct cuo_UiNoWindowDrag cuo_UiNoWindowDrag;
+typedef struct cuo_UiPickDto cuo_UiPickDto;
 typedef struct cuo_UiPopup cuo_UiPopup;
 typedef struct cuo_UiRect cuo_UiRect;
 typedef struct cuo_UiResizable cuo_UiResizable;
 typedef struct cuo_UiScrollbar cuo_UiScrollbar;
 typedef struct cuo_UiSurfaceDto cuo_UiSurfaceDto;
 typedef struct cuo_UiTooltip cuo_UiTooltip;
-typedef struct cuo_UseSkillAction cuo_UseSkillAction;
+typedef struct cuo_UiTooltipSerial cuo_UiTooltipSerial;
 typedef struct cuo_Val cuo_Val;
 typedef struct cuo_Vector2 cuo_Vector2;
+typedef struct cuo_Vector3 cuo_Vector3;
 typedef struct cuo_VendorWindow cuo_VendorWindow;
-typedef struct cuo_WalkAction cuo_WalkAction;
-typedef struct cuo_WalkToAction cuo_WalkToAction;
 typedef struct cuo_WorldMapWindow cuo_WorldMapWindow;
 typedef struct cuo_WorldPosition cuo_WorldPosition;
 typedef struct cuo_WorldSingleClickDto cuo_WorldSingleClickDto;
@@ -211,6 +203,11 @@ typedef uint8_t cuo_AlignItems;
 #define CUO_ALIGN_ITEMS_START ((cuo_AlignItems)0)
 #define CUO_ALIGN_ITEMS_CENTER ((cuo_AlignItems)1)
 #define CUO_ALIGN_ITEMS_END ((cuo_AlignItems)2)
+
+/* `ClassicUO.Ecs.ContainerSlotAction` */
+typedef uint8_t cuo_ContainerSlotAction;
+#define CUO_CONTAINER_SLOT_ACTION_ADD ((cuo_ContainerSlotAction)0)
+#define CUO_CONTAINER_SLOT_ACTION_REMOVE ((cuo_ContainerSlotAction)1)
 
 /* `ClassicUO.Game.Data.Direction` */
 typedef uint8_t cuo_Direction;
@@ -248,12 +245,6 @@ typedef uint8_t cuo_Flags;
 typedef uint8_t cuo_FlexDirection;
 #define CUO_FLEX_DIRECTION_ROW ((cuo_FlexDirection)0)
 #define CUO_FLEX_DIRECTION_COLUMN ((cuo_FlexDirection)1)
-
-/* `TinyEcs.Bevy.UI.Interaction` */
-typedef uint8_t cuo_Interaction;
-#define CUO_INTERACTION_NONE ((cuo_Interaction)0)
-#define CUO_INTERACTION_HOVERED ((cuo_Interaction)1)
-#define CUO_INTERACTION_PRESSED ((cuo_Interaction)2)
 
 /* `TinyEcs.Bevy.UI.JustifyContent` */
 typedef uint8_t cuo_JustifyContent;
@@ -353,11 +344,12 @@ typedef uint8_t cuo_ValType;
 #define CUO_VAL_TYPE_GROW ((cuo_ValType)3)
 
 typedef struct cuo_vec_CharInfoDto { cuo_CharInfoDto *items; size_t len; } cuo_vec_CharInfoDto;
+typedef struct cuo_vec_ContainerPositionDto { cuo_ContainerPositionDto *items; size_t len; } cuo_vec_ContainerPositionDto;
 typedef struct cuo_vec_ContextMenuEntry { cuo_ContextMenuEntry *items; size_t len; } cuo_vec_ContextMenuEntry;
-typedef struct cuo_vec_GumpTextEntry { cuo_GumpTextEntry *items; size_t len; } cuo_vec_GumpTextEntry;
 typedef struct cuo_vec_HostHotkeyDto { cuo_HostHotkeyDto *items; size_t len; } cuo_vec_HostHotkeyDto;
 typedef struct cuo_vec_MobStepDto { cuo_MobStepDto *items; size_t len; } cuo_vec_MobStepDto;
 typedef struct cuo_vec_ModHotkeyBinding { cuo_ModHotkeyBinding *items; size_t len; } cuo_vec_ModHotkeyBinding;
+typedef struct cuo_vec_ModOptionDto { cuo_ModOptionDto *items; size_t len; } cuo_vec_ModOptionDto;
 typedef struct cuo_vec_OplLineDto { cuo_OplLineDto *items; size_t len; } cuo_vec_OplLineDto;
 typedef struct cuo_vec_PartyMemberDto { cuo_PartyMemberDto *items; size_t len; } cuo_vec_PartyMemberDto;
 typedef struct cuo_vec_PlayerBuffDto { cuo_PlayerBuffDto *items; size_t len; } cuo_vec_PlayerBuffDto;
@@ -386,6 +378,20 @@ bool cuo_Amount_parse(cuo_bytes json, cuo_Amount *out);
 uint16_t cuo_Amount_id(void);
 cuo_comp cuo_Amount_comp(const cuo_Amount *v);
 bool cuo_Amount_get(uint64_t entity, cuo_Amount *out);
+
+/* `cuo:ent/auto-opened-corpse` */
+/* Zero-size tag: its payload is {} in both directions. */
+struct cuo_AutoOpenedCorpse {
+    uint8_t unused_; /* C needs one member */
+};
+void cuo_AutoOpenedCorpse_write(cuo_jw *w, const cuo_AutoOpenedCorpse *v);
+void cuo_AutoOpenedCorpse_read(const cJSON *json, cuo_AutoOpenedCorpse *out);
+cuo_bytes cuo_AutoOpenedCorpse_json(const cuo_AutoOpenedCorpse *v);
+bool cuo_AutoOpenedCorpse_parse(cuo_bytes json, cuo_AutoOpenedCorpse *out);
+#define cuo_AutoOpenedCorpse_PATH CUO_PATH_ENT_AUTO_OPENED_CORPSE
+uint16_t cuo_AutoOpenedCorpse_id(void);
+cuo_comp cuo_AutoOpenedCorpse_comp(void);
+bool cuo_AutoOpenedCorpse_has(uint64_t entity);
 
 /* Nested payload type (`Clay.Color`). */
 struct cuo_Color {
@@ -426,6 +432,22 @@ bool cuo_BookWindow_parse(cuo_bytes json, cuo_BookWindow *out);
 uint16_t cuo_BookWindow_id(void);
 cuo_comp cuo_BookWindow_comp(void);
 bool cuo_BookWindow_has(uint64_t entity);
+
+/* `cuo:ui/border-color` */
+struct cuo_BorderColorDto {
+    float r;
+    float g;
+    float b;
+    float a;
+};
+void cuo_BorderColorDto_write(cuo_jw *w, const cuo_BorderColorDto *v);
+void cuo_BorderColorDto_read(const cJSON *json, cuo_BorderColorDto *out);
+cuo_bytes cuo_BorderColorDto_json(const cuo_BorderColorDto *v);
+bool cuo_BorderColorDto_parse(cuo_bytes json, cuo_BorderColorDto *out);
+#define cuo_BorderColorDto_PATH CUO_PATH_UI_BORDER_COLOR
+uint16_t cuo_BorderColorDto_id(void);
+cuo_comp cuo_BorderColorDto_comp(const cuo_BorderColorDto *v);
+bool cuo_BorderColorDto_get(uint64_t entity, cuo_BorderColorDto *out);
 
 /* `cuo:ui/border-radius` */
 struct cuo_BorderRadius {
@@ -470,19 +492,6 @@ bool cuo_BulletinBoardWindow_parse(cuo_bytes json, cuo_BulletinBoardWindow *out)
 uint16_t cuo_BulletinBoardWindow_id(void);
 cuo_comp cuo_BulletinBoardWindow_comp(void);
 bool cuo_BulletinBoardWindow_has(uint64_t entity);
-
-/* `cuo:action/cast-spell` */
-struct cuo_CastSpellAction {
-    int32_t id;
-};
-void cuo_CastSpellAction_write(cuo_jw *w, const cuo_CastSpellAction *v);
-void cuo_CastSpellAction_read(const cJSON *json, cuo_CastSpellAction *out);
-cuo_bytes cuo_CastSpellAction_json(const cuo_CastSpellAction *v);
-bool cuo_CastSpellAction_parse(cuo_bytes json, cuo_CastSpellAction *out);
-#define cuo_CastSpellAction_PATH CUO_PATH_ACTION_CAST_SPELL
-uint16_t cuo_CastSpellAction_id(void);
-cuo_comp cuo_CastSpellAction_comp(const cuo_CastSpellAction *v);
-void cuo_CastSpellAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_CastSpellAction *v);
 
 /* `cuo:scene/character-creation` */
 /* Zero-size tag: its payload is {} in both directions. */
@@ -536,6 +545,19 @@ uint16_t cuo_CharacterSelectionScene_id(void);
 cuo_comp cuo_CharacterSelectionScene_comp(void);
 bool cuo_CharacterSelectionScene_has(uint64_t entity);
 
+/* `cuo:ecs/child-of` */
+struct cuo_ChildOfDto {
+    uint64_t parent;
+};
+void cuo_ChildOfDto_write(cuo_jw *w, const cuo_ChildOfDto *v);
+void cuo_ChildOfDto_read(const cJSON *json, cuo_ChildOfDto *out);
+cuo_bytes cuo_ChildOfDto_json(const cuo_ChildOfDto *v);
+bool cuo_ChildOfDto_parse(cuo_bytes json, cuo_ChildOfDto *out);
+#define cuo_ChildOfDto_PATH CUO_PATH_ECS_CHILD_OF
+uint16_t cuo_ChildOfDto_id(void);
+cuo_comp cuo_ChildOfDto_comp(const cuo_ChildOfDto *v);
+bool cuo_ChildOfDto_get(uint64_t entity, cuo_ChildOfDto *out);
+
 /* `cuo:ui/clipboard-set` */
 struct cuo_ClipboardSetDto {
     int32_t seq;
@@ -571,18 +593,31 @@ uint16_t cuo_CombatBookWindow_id(void);
 cuo_comp cuo_CombatBookWindow_comp(const cuo_CombatBookWindow *v);
 bool cuo_CombatBookWindow_get(uint64_t entity, cuo_CombatBookWindow *out);
 
-/* `cuo:ent/container` */
-struct cuo_ContainedInDto {
-    uint32_t container;
+/* Nested payload type (`System.Numerics.Vector2`). */
+struct cuo_Vector2 {
+    float x;
+    float y;
 };
-void cuo_ContainedInDto_write(cuo_jw *w, const cuo_ContainedInDto *v);
-void cuo_ContainedInDto_read(const cJSON *json, cuo_ContainedInDto *out);
-cuo_bytes cuo_ContainedInDto_json(const cuo_ContainedInDto *v);
-bool cuo_ContainedInDto_parse(cuo_bytes json, cuo_ContainedInDto *out);
-#define cuo_ContainedInDto_PATH CUO_PATH_ENT_CONTAINER
-uint16_t cuo_ContainedInDto_id(void);
-cuo_comp cuo_ContainedInDto_comp(const cuo_ContainedInDto *v);
-bool cuo_ContainedInDto_get(uint64_t entity, cuo_ContainedInDto *out);
+void cuo_Vector2_write(cuo_jw *w, const cuo_Vector2 *v);
+void cuo_Vector2_read(const cJSON *json, cuo_Vector2 *out);
+cuo_bytes cuo_Vector2_json(const cuo_Vector2 *v);
+bool cuo_Vector2_parse(cuo_bytes json, cuo_Vector2 *out);
+
+/* `cuo:ui/computed` */
+struct cuo_ComputedNode {
+    cuo_Vector2 size;
+    cuo_Vector2 position;
+    uint32_t clay_id;
+    int32_t paint_order;
+};
+void cuo_ComputedNode_write(cuo_jw *w, const cuo_ComputedNode *v);
+void cuo_ComputedNode_read(const cJSON *json, cuo_ComputedNode *out);
+cuo_bytes cuo_ComputedNode_json(const cuo_ComputedNode *v);
+bool cuo_ComputedNode_parse(cuo_bytes json, cuo_ComputedNode *out);
+#define cuo_ComputedNode_PATH CUO_PATH_UI_COMPUTED
+uint16_t cuo_ComputedNode_id(void);
+cuo_comp cuo_ComputedNode_comp(const cuo_ComputedNode *v);
+bool cuo_ComputedNode_get(uint64_t entity, cuo_ComputedNode *out);
 
 /* `cuo:ent/contained-into` */
 /* Zero-size tag: its payload is {} in both directions. */
@@ -612,6 +647,52 @@ uint16_t cuo_ContainerClosedEvent_id(void);
 cuo_comp cuo_ContainerClosedEvent_comp(const cuo_ContainerClosedEvent *v);
 void cuo_ContainerClosedEvent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ContainerClosedEvent *v);
 
+/* `cuo:gump/container-tag` */
+struct cuo_ContainerGumpTagDto {
+    uint16_t graphic;
+    uint16_t original_graphic;
+    float scale;
+    int32_t bounds_x;
+    int32_t bounds_y;
+    int32_t bounds_w;
+    int32_t bounds_h;
+};
+void cuo_ContainerGumpTagDto_write(cuo_jw *w, const cuo_ContainerGumpTagDto *v);
+void cuo_ContainerGumpTagDto_read(const cJSON *json, cuo_ContainerGumpTagDto *out);
+cuo_bytes cuo_ContainerGumpTagDto_json(const cuo_ContainerGumpTagDto *v);
+bool cuo_ContainerGumpTagDto_parse(cuo_bytes json, cuo_ContainerGumpTagDto *out);
+#define cuo_ContainerGumpTagDto_PATH CUO_PATH_GUMP_CONTAINER_TAG
+uint16_t cuo_ContainerGumpTagDto_id(void);
+cuo_comp cuo_ContainerGumpTagDto_comp(const cuo_ContainerGumpTagDto *v);
+bool cuo_ContainerGumpTagDto_get(uint64_t entity, cuo_ContainerGumpTagDto *out);
+
+/* Nested payload type (`System.Numerics.Vector3`). */
+struct cuo_Vector3 {
+    float x;
+    float y;
+    float z;
+};
+void cuo_Vector3_write(cuo_jw *w, const cuo_Vector3 *v);
+void cuo_Vector3_read(const cJSON *json, cuo_Vector3 *out);
+cuo_bytes cuo_Vector3_json(const cuo_Vector3 *v);
+bool cuo_Vector3_parse(cuo_bytes json, cuo_Vector3 *out);
+
+/* `cuo:ui/container-item` */
+struct cuo_ContainerItemUI {
+    uint64_t container;
+    uint32_t serial;
+    cuo_Vector3 original_hue;
+    cuo_Vector3 hover_hue;
+};
+void cuo_ContainerItemUI_write(cuo_jw *w, const cuo_ContainerItemUI *v);
+void cuo_ContainerItemUI_read(const cJSON *json, cuo_ContainerItemUI *out);
+cuo_bytes cuo_ContainerItemUI_json(const cuo_ContainerItemUI *v);
+bool cuo_ContainerItemUI_parse(cuo_bytes json, cuo_ContainerItemUI *out);
+#define cuo_ContainerItemUI_PATH CUO_PATH_UI_CONTAINER_ITEM
+uint16_t cuo_ContainerItemUI_id(void);
+cuo_comp cuo_ContainerItemUI_comp(const cuo_ContainerItemUI *v);
+bool cuo_ContainerItemUI_get(uint64_t entity, cuo_ContainerItemUI *out);
+
 /* `cuo:gump/container-opened` */
 struct cuo_ContainerOpenedEvent {
     uint32_t serial;
@@ -625,6 +706,50 @@ bool cuo_ContainerOpenedEvent_parse(cuo_bytes json, cuo_ContainerOpenedEvent *ou
 uint16_t cuo_ContainerOpenedEvent_id(void);
 cuo_comp cuo_ContainerOpenedEvent_comp(const cuo_ContainerOpenedEvent *v);
 void cuo_ContainerOpenedEvent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ContainerOpenedEvent *v);
+
+/* Nested payload type (`ClassicUO.Ecs.Modding.ContainerPositionDto`). */
+struct cuo_ContainerPositionDto {
+    uint32_t serial;
+    int32_t x;
+    int32_t y;
+};
+void cuo_ContainerPositionDto_write(cuo_jw *w, const cuo_ContainerPositionDto *v);
+void cuo_ContainerPositionDto_read(const cJSON *json, cuo_ContainerPositionDto *out);
+cuo_bytes cuo_ContainerPositionDto_json(const cuo_ContainerPositionDto *v);
+bool cuo_ContainerPositionDto_parse(cuo_bytes json, cuo_ContainerPositionDto *out);
+
+/* `cuo:gump/container-positions` */
+struct cuo_ContainerPositionsDto {
+    cuo_vec_ContainerPositionDto saved;
+};
+void cuo_ContainerPositionsDto_write(cuo_jw *w, const cuo_ContainerPositionsDto *v);
+void cuo_ContainerPositionsDto_read(const cJSON *json, cuo_ContainerPositionsDto *out);
+cuo_bytes cuo_ContainerPositionsDto_json(const cuo_ContainerPositionsDto *v);
+bool cuo_ContainerPositionsDto_parse(cuo_bytes json, cuo_ContainerPositionsDto *out);
+#define cuo_ContainerPositionsDto_PATH CUO_PATH_GUMP_CONTAINER_POSITIONS
+uint16_t cuo_ContainerPositionsDto_id(void);
+cuo_comp cuo_ContainerPositionsDto_comp(const cuo_ContainerPositionsDto *v);
+bool cuo_ContainerPositionsDto_resource(cuo_ContainerPositionsDto *out);
+
+/* `cuo:gump/container-slot` */
+struct cuo_ContainerSlotEvent {
+    uint8_t action; /* enum ContainerSlotAction (0=Add, 1=Remove) */
+    uint32_t container_serial;
+    uint32_t item_serial;
+    uint16_t graphic;
+    uint16_t hue;
+    uint16_t x;
+    uint16_t y;
+    uint16_t amount;
+};
+void cuo_ContainerSlotEvent_write(cuo_jw *w, const cuo_ContainerSlotEvent *v);
+void cuo_ContainerSlotEvent_read(const cJSON *json, cuo_ContainerSlotEvent *out);
+cuo_bytes cuo_ContainerSlotEvent_json(const cuo_ContainerSlotEvent *v);
+bool cuo_ContainerSlotEvent_parse(cuo_bytes json, cuo_ContainerSlotEvent *out);
+#define cuo_ContainerSlotEvent_PATH CUO_PATH_GUMP_CONTAINER_SLOT
+uint16_t cuo_ContainerSlotEvent_id(void);
+cuo_comp cuo_ContainerSlotEvent_comp(const cuo_ContainerSlotEvent *v);
+void cuo_ContainerSlotEvent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ContainerSlotEvent *v);
 
 /* `cuo:ent/slot-position` */
 struct cuo_ContainerSlotPosition {
@@ -681,50 +806,6 @@ uint16_t cuo_ContextMenuEvent_id(void);
 cuo_comp cuo_ContextMenuEvent_comp(const cuo_ContextMenuEvent *v);
 void cuo_ContextMenuEvent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ContextMenuEvent *v);
 
-/* `cuo:action/context-menu-reply` */
-struct cuo_ContextMenuReplyAction {
-    uint32_t serial;
-    uint16_t index;
-};
-void cuo_ContextMenuReplyAction_write(cuo_jw *w, const cuo_ContextMenuReplyAction *v);
-void cuo_ContextMenuReplyAction_read(const cJSON *json, cuo_ContextMenuReplyAction *out);
-cuo_bytes cuo_ContextMenuReplyAction_json(const cuo_ContextMenuReplyAction *v);
-bool cuo_ContextMenuReplyAction_parse(cuo_bytes json, cuo_ContextMenuReplyAction *out);
-#define cuo_ContextMenuReplyAction_PATH CUO_PATH_ACTION_CONTEXT_MENU_REPLY
-uint16_t cuo_ContextMenuReplyAction_id(void);
-cuo_comp cuo_ContextMenuReplyAction_comp(const cuo_ContextMenuReplyAction *v);
-void cuo_ContextMenuReplyAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ContextMenuReplyAction *v);
-
-/* `cuo:action/double-click` */
-struct cuo_DoubleClickAction {
-    uint32_t serial;
-};
-void cuo_DoubleClickAction_write(cuo_jw *w, const cuo_DoubleClickAction *v);
-void cuo_DoubleClickAction_read(const cJSON *json, cuo_DoubleClickAction *out);
-cuo_bytes cuo_DoubleClickAction_json(const cuo_DoubleClickAction *v);
-bool cuo_DoubleClickAction_parse(cuo_bytes json, cuo_DoubleClickAction *out);
-#define cuo_DoubleClickAction_PATH CUO_PATH_ACTION_DOUBLE_CLICK
-uint16_t cuo_DoubleClickAction_id(void);
-cuo_comp cuo_DoubleClickAction_comp(const cuo_DoubleClickAction *v);
-void cuo_DoubleClickAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_DoubleClickAction *v);
-
-/* `cuo:action/drop` */
-struct cuo_DropAction {
-    uint32_t serial;
-    uint16_t x;
-    uint16_t y;
-    int8_t z;
-    uint32_t container;
-};
-void cuo_DropAction_write(cuo_jw *w, const cuo_DropAction *v);
-void cuo_DropAction_read(const cJSON *json, cuo_DropAction *out);
-cuo_bytes cuo_DropAction_json(const cuo_DropAction *v);
-bool cuo_DropAction_parse(cuo_bytes json, cuo_DropAction *out);
-#define cuo_DropAction_PATH CUO_PATH_ACTION_DROP
-uint16_t cuo_DropAction_id(void);
-cuo_comp cuo_DropAction_comp(const cuo_DropAction *v);
-void cuo_DropAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_DropAction *v);
-
 /* `cuo:ui/editable-text` */
 struct cuo_EditableText {
     bool multiline;
@@ -766,21 +847,6 @@ bool cuo_EntityPropertiesDto_parse(cuo_bytes json, cuo_EntityPropertiesDto *out)
 uint16_t cuo_EntityPropertiesDto_id(void);
 cuo_comp cuo_EntityPropertiesDto_comp(const cuo_EntityPropertiesDto *v);
 bool cuo_EntityPropertiesDto_get(uint64_t entity, cuo_EntityPropertiesDto *out);
-
-/* `cuo:action/equip` */
-struct cuo_EquipAction {
-    uint32_t serial;
-    uint8_t layer;
-    uint32_t container;
-};
-void cuo_EquipAction_write(cuo_jw *w, const cuo_EquipAction *v);
-void cuo_EquipAction_read(const cJSON *json, cuo_EquipAction *out);
-cuo_bytes cuo_EquipAction_json(const cuo_EquipAction *v);
-bool cuo_EquipAction_parse(cuo_bytes json, cuo_EquipAction *out);
-#define cuo_EquipAction_PATH CUO_PATH_ACTION_EQUIP
-uint16_t cuo_EquipAction_id(void);
-cuo_comp cuo_EquipAction_comp(const cuo_EquipAction *v);
-void cuo_EquipAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_EquipAction *v);
 
 /* `cuo:ent/equipment` */
 struct cuo_EquipmentSlotsDto {
@@ -853,6 +919,29 @@ uint16_t cuo_GameScene_id(void);
 cuo_comp cuo_GameScene_comp(void);
 bool cuo_GameScene_has(uint64_t entity);
 
+/* `cuo:game/settings` */
+struct cuo_GameSettingsDto {
+    int32_t grid_loot_type;
+    bool skip_empty_corpse;
+    bool auto_open_corpses;
+    int32_t auto_open_corpse_range;
+    int32_t corpse_open_options;
+    bool double_click_to_loot_inside_containers;
+    bool hold_shift_to_split_stack;
+    bool relative_drag_and_drop_items;
+    uint16_t speech_hue;
+    bool always_run;
+    bool highlight_game_objects;
+};
+void cuo_GameSettingsDto_write(cuo_jw *w, const cuo_GameSettingsDto *v);
+void cuo_GameSettingsDto_read(const cJSON *json, cuo_GameSettingsDto *out);
+cuo_bytes cuo_GameSettingsDto_json(const cuo_GameSettingsDto *v);
+bool cuo_GameSettingsDto_parse(cuo_bytes json, cuo_GameSettingsDto *out);
+#define cuo_GameSettingsDto_PATH CUO_PATH_GAME_SETTINGS
+uint16_t cuo_GameSettingsDto_id(void);
+cuo_comp cuo_GameSettingsDto_comp(const cuo_GameSettingsDto *v);
+bool cuo_GameSettingsDto_resource(cuo_GameSettingsDto *out);
+
 /* `cuo:game/state` */
 struct cuo_GameStateDto {
     uint8_t current;
@@ -879,16 +968,6 @@ uint16_t cuo_GlobalZIndex_id(void);
 cuo_comp cuo_GlobalZIndex_comp(const cuo_GlobalZIndex *v);
 bool cuo_GlobalZIndex_get(uint64_t entity, cuo_GlobalZIndex *out);
 
-/* Nested payload type (`System.Numerics.Vector2`). */
-struct cuo_Vector2 {
-    float x;
-    float y;
-};
-void cuo_Vector2_write(cuo_jw *w, const cuo_Vector2 *v);
-void cuo_Vector2_read(const cJSON *json, cuo_Vector2 *out);
-cuo_bytes cuo_Vector2_json(const cuo_Vector2 *v);
-bool cuo_Vector2_parse(cuo_bytes json, cuo_Vector2 *out);
-
 /* `cuo:player/grabbed-item` */
 struct cuo_GrabbedItem {
     bool is_active;
@@ -910,12 +989,6 @@ struct cuo_GrabbedItem {
     bool pending_drop;
     uint32_t drop_target_serial;
     bool failed_drop;
-    int32_t drop_seq;
-    uint32_t last_drop_serial;
-    uint16_t last_drop_x;
-    uint16_t last_drop_y;
-    int8_t last_drop_z;
-    uint32_t last_drop_container;
     cuo_Vector2 mouse_offset;
 };
 void cuo_GrabbedItem_write(cuo_jw *w, const cuo_GrabbedItem *v);
@@ -968,44 +1041,19 @@ uint16_t cuo_GridLootWindow_id(void);
 cuo_comp cuo_GridLootWindow_comp(const cuo_GridLootWindow *v);
 bool cuo_GridLootWindow_get(uint64_t entity, cuo_GridLootWindow *out);
 
-/* `cuo:action/gump-close` */
-struct cuo_GumpCloseAction {
-    uint32_t gump_id;
+/* `cuo:ui/no-pickup` */
+/* Zero-size tag: its payload is {} in both directions. */
+struct cuo_GridPinnedCell {
+    uint8_t unused_; /* C needs one member */
 };
-void cuo_GumpCloseAction_write(cuo_jw *w, const cuo_GumpCloseAction *v);
-void cuo_GumpCloseAction_read(const cJSON *json, cuo_GumpCloseAction *out);
-cuo_bytes cuo_GumpCloseAction_json(const cuo_GumpCloseAction *v);
-bool cuo_GumpCloseAction_parse(cuo_bytes json, cuo_GumpCloseAction *out);
-#define cuo_GumpCloseAction_PATH CUO_PATH_ACTION_GUMP_CLOSE
-uint16_t cuo_GumpCloseAction_id(void);
-cuo_comp cuo_GumpCloseAction_comp(const cuo_GumpCloseAction *v);
-void cuo_GumpCloseAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_GumpCloseAction *v);
-
-/* `cuo:action/gump-reply` */
-struct cuo_GumpReplyAction {
-    uint32_t gump_id;
-    int32_t button_id;
-    cuo_vec_u32 switches;
-    cuo_vec_GumpTextEntry text_entries;
-};
-void cuo_GumpReplyAction_write(cuo_jw *w, const cuo_GumpReplyAction *v);
-void cuo_GumpReplyAction_read(const cJSON *json, cuo_GumpReplyAction *out);
-cuo_bytes cuo_GumpReplyAction_json(const cuo_GumpReplyAction *v);
-bool cuo_GumpReplyAction_parse(cuo_bytes json, cuo_GumpReplyAction *out);
-#define cuo_GumpReplyAction_PATH CUO_PATH_ACTION_GUMP_REPLY
-uint16_t cuo_GumpReplyAction_id(void);
-cuo_comp cuo_GumpReplyAction_comp(const cuo_GumpReplyAction *v);
-void cuo_GumpReplyAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_GumpReplyAction *v);
-
-/* Nested payload type (`ClassicUO.Ecs.GumpTextEntry`). */
-struct cuo_GumpTextEntry {
-    uint16_t id;
-    const char *text;
-};
-void cuo_GumpTextEntry_write(cuo_jw *w, const cuo_GumpTextEntry *v);
-void cuo_GumpTextEntry_read(const cJSON *json, cuo_GumpTextEntry *out);
-cuo_bytes cuo_GumpTextEntry_json(const cuo_GumpTextEntry *v);
-bool cuo_GumpTextEntry_parse(cuo_bytes json, cuo_GumpTextEntry *out);
+void cuo_GridPinnedCell_write(cuo_jw *w, const cuo_GridPinnedCell *v);
+void cuo_GridPinnedCell_read(const cJSON *json, cuo_GridPinnedCell *out);
+cuo_bytes cuo_GridPinnedCell_json(const cuo_GridPinnedCell *v);
+bool cuo_GridPinnedCell_parse(cuo_bytes json, cuo_GridPinnedCell *out);
+#define cuo_GridPinnedCell_PATH CUO_PATH_UI_NO_PICKUP
+uint16_t cuo_GridPinnedCell_id(void);
+cuo_comp cuo_GridPinnedCell_comp(void);
+bool cuo_GridPinnedCell_has(uint64_t entity);
 
 /* `cuo:gump/health-bar` */
 struct cuo_HealthBarWindow {
@@ -1093,6 +1141,19 @@ uint16_t cuo_Hue_id(void);
 cuo_comp cuo_Hue_comp(const cuo_Hue *v);
 bool cuo_Hue_get(uint64_t entity, cuo_Hue *out);
 
+/* `cuo:ui/interaction` */
+struct cuo_InteractionDto {
+    uint8_t state;
+};
+void cuo_InteractionDto_write(cuo_jw *w, const cuo_InteractionDto *v);
+void cuo_InteractionDto_read(const cJSON *json, cuo_InteractionDto *out);
+cuo_bytes cuo_InteractionDto_json(const cuo_InteractionDto *v);
+bool cuo_InteractionDto_parse(cuo_bytes json, cuo_InteractionDto *out);
+#define cuo_InteractionDto_PATH CUO_PATH_UI_INTERACTION
+uint16_t cuo_InteractionDto_id(void);
+cuo_comp cuo_InteractionDto_comp(const cuo_InteractionDto *v);
+bool cuo_InteractionDto_get(uint64_t entity, cuo_InteractionDto *out);
+
 /* `cuo:ent/is-container` */
 /* Zero-size tag: its payload is {} in both directions. */
 struct cuo_IsContainer {
@@ -1134,6 +1195,37 @@ bool cuo_IsTopBar_parse(cuo_bytes json, cuo_IsTopBar *out);
 uint16_t cuo_IsTopBar_id(void);
 cuo_comp cuo_IsTopBar_comp(void);
 bool cuo_IsTopBar_has(uint64_t entity);
+
+/* `cuo:item/drop-sent` */
+struct cuo_ItemDropSent {
+    uint32_t serial;
+    uint16_t x;
+    uint16_t y;
+    int8_t z;
+    uint32_t container;
+};
+void cuo_ItemDropSent_write(cuo_jw *w, const cuo_ItemDropSent *v);
+void cuo_ItemDropSent_read(const cJSON *json, cuo_ItemDropSent *out);
+cuo_bytes cuo_ItemDropSent_json(const cuo_ItemDropSent *v);
+bool cuo_ItemDropSent_parse(cuo_bytes json, cuo_ItemDropSent *out);
+#define cuo_ItemDropSent_PATH CUO_PATH_ITEM_DROP_SENT
+uint16_t cuo_ItemDropSent_id(void);
+cuo_comp cuo_ItemDropSent_comp(const cuo_ItemDropSent *v);
+void cuo_ItemDropSent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ItemDropSent *v);
+
+/* `cuo:item/move-result` */
+struct cuo_ItemMoveResult {
+    uint8_t result;
+    uint8_t code;
+};
+void cuo_ItemMoveResult_write(cuo_jw *w, const cuo_ItemMoveResult *v);
+void cuo_ItemMoveResult_read(const cJSON *json, cuo_ItemMoveResult *out);
+cuo_bytes cuo_ItemMoveResult_json(const cuo_ItemMoveResult *v);
+bool cuo_ItemMoveResult_parse(cuo_bytes json, cuo_ItemMoveResult *out);
+#define cuo_ItemMoveResult_PATH CUO_PATH_ITEM_MOVE_RESULT
+uint16_t cuo_ItemMoveResult_id(void);
+cuo_comp cuo_ItemMoveResult_comp(const cuo_ItemMoveResult *v);
+void cuo_ItemMoveResult_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ItemMoveResult *v);
 
 /* `cuo:ent/is-item` */
 /* Zero-size tag: its payload is {} in both directions. */
@@ -1186,6 +1278,7 @@ bool cuo_JournalWindow_get(uint64_t entity, cuo_JournalWindow *out);
 /* `cuo:input/keyboard` */
 struct cuo_KeyboardInputDto {
     cuo_vec_i32 pressed;
+    cuo_vec_i32 pressed_once;
 };
 void cuo_KeyboardInputDto_write(cuo_jw *w, const cuo_KeyboardInputDto *v);
 void cuo_KeyboardInputDto_read(const cJSON *json, cuo_KeyboardInputDto *out);
@@ -1292,6 +1385,20 @@ bool cuo_Mana_parse(cuo_bytes json, cuo_Mana *out);
 uint16_t cuo_Mana_id(void);
 cuo_comp cuo_Mana_comp(const cuo_Mana *v);
 bool cuo_Mana_get(uint64_t entity, cuo_Mana *out);
+
+/* `cuo:ent/manual-opened-corpse` */
+/* Zero-size tag: its payload is {} in both directions. */
+struct cuo_ManualOpenedCorpse {
+    uint8_t unused_; /* C needs one member */
+};
+void cuo_ManualOpenedCorpse_write(cuo_jw *w, const cuo_ManualOpenedCorpse *v);
+void cuo_ManualOpenedCorpse_read(const cJSON *json, cuo_ManualOpenedCorpse *out);
+cuo_bytes cuo_ManualOpenedCorpse_json(const cuo_ManualOpenedCorpse *v);
+bool cuo_ManualOpenedCorpse_parse(cuo_bytes json, cuo_ManualOpenedCorpse *out);
+#define cuo_ManualOpenedCorpse_PATH CUO_PATH_ENT_MANUAL_OPENED_CORPSE
+uint16_t cuo_ManualOpenedCorpse_id(void);
+cuo_comp cuo_ManualOpenedCorpse_comp(void);
+bool cuo_ManualOpenedCorpse_has(uint64_t entity);
 
 /* `cuo:gump/map` */
 /* Presence-only marker: the host always answers {} and ignores writes. */
@@ -1452,45 +1559,19 @@ uint16_t cuo_ModChatMessage_id(void);
 cuo_comp cuo_ModChatMessage_comp(const cuo_ModChatMessage *v);
 void cuo_ModChatMessage_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModChatMessage *v);
 
-/* `cuo:ui/clicked` */
-struct cuo_ModClicked {
-    uint8_t tick;
-};
-void cuo_ModClicked_write(cuo_jw *w, const cuo_ModClicked *v);
-void cuo_ModClicked_read(const cJSON *json, cuo_ModClicked *out);
-cuo_bytes cuo_ModClicked_json(const cuo_ModClicked *v);
-bool cuo_ModClicked_parse(cuo_bytes json, cuo_ModClicked *out);
-#define cuo_ModClicked_PATH CUO_PATH_UI_CLICKED
-uint16_t cuo_ModClicked_id(void);
-cuo_comp cuo_ModClicked_comp(const cuo_ModClicked *v);
-bool cuo_ModClicked_get(uint64_t entity, cuo_ModClicked *out);
-
-/* `cuo:test/counter` */
-struct cuo_ModCounter {
-    int32_t value;
-};
-void cuo_ModCounter_write(cuo_jw *w, const cuo_ModCounter *v);
-void cuo_ModCounter_read(const cJSON *json, cuo_ModCounter *out);
-cuo_bytes cuo_ModCounter_json(const cuo_ModCounter *v);
-bool cuo_ModCounter_parse(cuo_bytes json, cuo_ModCounter *out);
-#define cuo_ModCounter_PATH CUO_PATH_TEST_COUNTER
-uint16_t cuo_ModCounter_id(void);
-cuo_comp cuo_ModCounter_comp(const cuo_ModCounter *v);
-bool cuo_ModCounter_get(uint64_t entity, cuo_ModCounter *out);
-
-/* `cuo:mod/owned` */
-/* Presence-only marker: the host always answers {} and ignores writes. */
-struct cuo_ModEntity {
+/* `cuo:ui/click` */
+/* Zero-size tag: its payload is {} in both directions. */
+struct cuo_ModClick {
     uint8_t unused_; /* C needs one member */
 };
-void cuo_ModEntity_write(cuo_jw *w, const cuo_ModEntity *v);
-void cuo_ModEntity_read(const cJSON *json, cuo_ModEntity *out);
-cuo_bytes cuo_ModEntity_json(const cuo_ModEntity *v);
-bool cuo_ModEntity_parse(cuo_bytes json, cuo_ModEntity *out);
-#define cuo_ModEntity_PATH CUO_PATH_MOD_OWNED
-uint16_t cuo_ModEntity_id(void);
-cuo_comp cuo_ModEntity_comp(void);
-bool cuo_ModEntity_has(uint64_t entity);
+void cuo_ModClick_write(cuo_jw *w, const cuo_ModClick *v);
+void cuo_ModClick_read(const cJSON *json, cuo_ModClick *out);
+cuo_bytes cuo_ModClick_json(const cuo_ModClick *v);
+bool cuo_ModClick_parse(cuo_bytes json, cuo_ModClick *out);
+#define cuo_ModClick_PATH CUO_PATH_UI_CLICK
+uint16_t cuo_ModClick_id(void);
+cuo_comp cuo_ModClick_comp(void);
+void cuo_ModClick_emit(cuo_cmds *cmds, uint64_t entity);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.ModHotkeyBinding`). */
 struct cuo_ModHotkeyBinding {
@@ -1540,18 +1621,32 @@ uint16_t cuo_ModHotkeyFired_id(void);
 cuo_comp cuo_ModHotkeyFired_comp(const cuo_ModHotkeyFired *v);
 void cuo_ModHotkeyFired_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModHotkeyFired *v);
 
-/* `cuo:ui/hovered` */
-struct cuo_ModHovered {
-    uint8_t tick;
+/* `cuo:ui/hover` */
+struct cuo_ModHover {
+    bool over;
 };
-void cuo_ModHovered_write(cuo_jw *w, const cuo_ModHovered *v);
-void cuo_ModHovered_read(const cJSON *json, cuo_ModHovered *out);
-cuo_bytes cuo_ModHovered_json(const cuo_ModHovered *v);
-bool cuo_ModHovered_parse(cuo_bytes json, cuo_ModHovered *out);
-#define cuo_ModHovered_PATH CUO_PATH_UI_HOVERED
-uint16_t cuo_ModHovered_id(void);
-cuo_comp cuo_ModHovered_comp(const cuo_ModHovered *v);
-bool cuo_ModHovered_get(uint64_t entity, cuo_ModHovered *out);
+void cuo_ModHover_write(cuo_jw *w, const cuo_ModHover *v);
+void cuo_ModHover_read(const cJSON *json, cuo_ModHover *out);
+cuo_bytes cuo_ModHover_json(const cuo_ModHover *v);
+bool cuo_ModHover_parse(cuo_bytes json, cuo_ModHover *out);
+#define cuo_ModHover_PATH CUO_PATH_UI_HOVER
+uint16_t cuo_ModHover_id(void);
+cuo_comp cuo_ModHover_comp(const cuo_ModHover *v);
+void cuo_ModHover_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModHover *v);
+
+/* `cuo:input/consume` */
+struct cuo_ModInputConsume {
+    uint8_t mouse;
+    uint32_t key;
+};
+void cuo_ModInputConsume_write(cuo_jw *w, const cuo_ModInputConsume *v);
+void cuo_ModInputConsume_read(const cJSON *json, cuo_ModInputConsume *out);
+cuo_bytes cuo_ModInputConsume_json(const cuo_ModInputConsume *v);
+bool cuo_ModInputConsume_parse(cuo_bytes json, cuo_ModInputConsume *out);
+#define cuo_ModInputConsume_PATH CUO_PATH_INPUT_CONSUME
+uint16_t cuo_ModInputConsume_id(void);
+cuo_comp cuo_ModInputConsume_comp(const cuo_ModInputConsume *v);
+void cuo_ModInputConsume_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModInputConsume *v);
 
 /* `cuo:player/move-request` */
 struct cuo_ModMoveRequest {
@@ -1568,33 +1663,65 @@ uint16_t cuo_ModMoveRequest_id(void);
 cuo_comp cuo_ModMoveRequest_comp(const cuo_ModMoveRequest *v);
 void cuo_ModMoveRequest_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModMoveRequest *v);
 
-/* `cuo:ui/right-clicked` */
-struct cuo_ModRightClicked {
-    uint8_t tick;
+/* Nested payload type (`ClassicUO.Ecs.Modding.ModOptionDto`). */
+struct cuo_ModOptionDto {
+    const char *key;
+    const char *label;
+    const char *group;
+    const char *keywords;
+    uint8_t kind;
+    int32_t min;
+    int32_t max;
+    int32_t step;
+    int32_t default_;
+    cuo_vec_str choices;
+};
+void cuo_ModOptionDto_write(cuo_jw *w, const cuo_ModOptionDto *v);
+void cuo_ModOptionDto_read(const cJSON *json, cuo_ModOptionDto *out);
+cuo_bytes cuo_ModOptionDto_json(const cuo_ModOptionDto *v);
+bool cuo_ModOptionDto_parse(cuo_bytes json, cuo_ModOptionDto *out);
+
+/* `cuo:options/schema` */
+struct cuo_ModOptionsSchemaDto {
+    cuo_vec_ModOptionDto options;
+};
+void cuo_ModOptionsSchemaDto_write(cuo_jw *w, const cuo_ModOptionsSchemaDto *v);
+void cuo_ModOptionsSchemaDto_read(const cJSON *json, cuo_ModOptionsSchemaDto *out);
+cuo_bytes cuo_ModOptionsSchemaDto_json(const cuo_ModOptionsSchemaDto *v);
+bool cuo_ModOptionsSchemaDto_parse(cuo_bytes json, cuo_ModOptionsSchemaDto *out);
+#define cuo_ModOptionsSchemaDto_PATH CUO_PATH_OPTIONS_SCHEMA
+uint16_t cuo_ModOptionsSchemaDto_id(void);
+cuo_comp cuo_ModOptionsSchemaDto_comp(const cuo_ModOptionsSchemaDto *v);
+bool cuo_ModOptionsSchemaDto_resource(cuo_ModOptionsSchemaDto *out);
+
+/* `cuo:options/values` */
+/* Zero-size tag: its payload is {} in both directions. */
+/* NOTE: dropped member `Values: unsupported CLR type Dictionary<String,Int32>` */
+struct cuo_ModOptionsValuesDto {
+    uint8_t unused_; /* C needs one member */
+};
+void cuo_ModOptionsValuesDto_write(cuo_jw *w, const cuo_ModOptionsValuesDto *v);
+void cuo_ModOptionsValuesDto_read(const cJSON *json, cuo_ModOptionsValuesDto *out);
+cuo_bytes cuo_ModOptionsValuesDto_json(const cuo_ModOptionsValuesDto *v);
+bool cuo_ModOptionsValuesDto_parse(cuo_bytes json, cuo_ModOptionsValuesDto *out);
+#define cuo_ModOptionsValuesDto_PATH CUO_PATH_OPTIONS_VALUES
+uint16_t cuo_ModOptionsValuesDto_id(void);
+cuo_comp cuo_ModOptionsValuesDto_comp(void);
+bool cuo_ModOptionsValuesDto_resource(cuo_ModOptionsValuesDto *out);
+
+/* `cuo:ui/right-click` */
+struct cuo_ModRightClick {
     float x;
     float y;
 };
-void cuo_ModRightClicked_write(cuo_jw *w, const cuo_ModRightClicked *v);
-void cuo_ModRightClicked_read(const cJSON *json, cuo_ModRightClicked *out);
-cuo_bytes cuo_ModRightClicked_json(const cuo_ModRightClicked *v);
-bool cuo_ModRightClicked_parse(cuo_bytes json, cuo_ModRightClicked *out);
-#define cuo_ModRightClicked_PATH CUO_PATH_UI_RIGHT_CLICKED
-uint16_t cuo_ModRightClicked_id(void);
-cuo_comp cuo_ModRightClicked_comp(const cuo_ModRightClicked *v);
-bool cuo_ModRightClicked_get(uint64_t entity, cuo_ModRightClicked *out);
-
-/* `cuo:mod/state` */
-struct cuo_ModState {
-    const char *json;
-};
-void cuo_ModState_write(cuo_jw *w, const cuo_ModState *v);
-void cuo_ModState_read(const cJSON *json, cuo_ModState *out);
-cuo_bytes cuo_ModState_json(const cuo_ModState *v);
-bool cuo_ModState_parse(cuo_bytes json, cuo_ModState *out);
-#define cuo_ModState_PATH CUO_PATH_MOD_STATE
-uint16_t cuo_ModState_id(void);
-cuo_comp cuo_ModState_comp(const cuo_ModState *v);
-bool cuo_ModState_get(uint64_t entity, cuo_ModState *out);
+void cuo_ModRightClick_write(cuo_jw *w, const cuo_ModRightClick *v);
+void cuo_ModRightClick_read(const cJSON *json, cuo_ModRightClick *out);
+cuo_bytes cuo_ModRightClick_json(const cuo_ModRightClick *v);
+bool cuo_ModRightClick_parse(cuo_bytes json, cuo_ModRightClick *out);
+#define cuo_ModRightClick_PATH CUO_PATH_UI_RIGHT_CLICK
+uint16_t cuo_ModRightClick_id(void);
+cuo_comp cuo_ModRightClick_comp(const cuo_ModRightClick *v);
+void cuo_ModRightClick_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModRightClick *v);
 
 /* `cuo:ui/supersedes` */
 struct cuo_ModSupersedes {
@@ -1619,6 +1746,15 @@ struct cuo_MouseInputDto {
     bool x1;
     bool x2;
     float wheel;
+    bool left_pressed;
+    bool left_released;
+    bool left_double;
+    bool right_pressed;
+    bool right_released;
+    bool middle_pressed;
+    bool middle_released;
+    bool x1_pressed;
+    bool x2_pressed;
 };
 void cuo_MouseInputDto_write(cuo_jw *w, const cuo_MouseInputDto *v);
 void cuo_MouseInputDto_read(const cJSON *json, cuo_MouseInputDto *out);
@@ -1726,20 +1862,6 @@ uint16_t cuo_OnLoginRequest_id(void);
 cuo_comp cuo_OnLoginRequest_comp(const cuo_OnLoginRequest *v);
 void cuo_OnLoginRequest_emit(cuo_cmds *cmds, uint64_t entity, const cuo_OnLoginRequest *v);
 
-/* `cuo:action/open-door` */
-/* Zero-size tag: its payload is {} in both directions. */
-struct cuo_OpenDoorAction {
-    uint8_t unused_; /* C needs one member */
-};
-void cuo_OpenDoorAction_write(cuo_jw *w, const cuo_OpenDoorAction *v);
-void cuo_OpenDoorAction_read(const cJSON *json, cuo_OpenDoorAction *out);
-cuo_bytes cuo_OpenDoorAction_json(const cuo_OpenDoorAction *v);
-bool cuo_OpenDoorAction_parse(cuo_bytes json, cuo_OpenDoorAction *out);
-#define cuo_OpenDoorAction_PATH CUO_PATH_ACTION_OPEN_DOOR
-uint16_t cuo_OpenDoorAction_id(void);
-cuo_comp cuo_OpenDoorAction_comp(void);
-void cuo_OpenDoorAction_emit(cuo_cmds *cmds, uint64_t entity);
-
 /* Nested payload type (`ClassicUO.Ecs.Modding.OplLineDto`). */
 struct cuo_OplLineDto {
     int32_t cliloc;
@@ -1832,20 +1954,6 @@ void cuo_PartyMemberDto_write(cuo_jw *w, const cuo_PartyMemberDto *v);
 void cuo_PartyMemberDto_read(const cJSON *json, cuo_PartyMemberDto *out);
 cuo_bytes cuo_PartyMemberDto_json(const cuo_PartyMemberDto *v);
 bool cuo_PartyMemberDto_parse(cuo_bytes json, cuo_PartyMemberDto *out);
-
-/* `cuo:action/pickup` */
-struct cuo_PickupAction {
-    uint32_t serial;
-    uint16_t amount;
-};
-void cuo_PickupAction_write(cuo_jw *w, const cuo_PickupAction *v);
-void cuo_PickupAction_read(const cJSON *json, cuo_PickupAction *out);
-cuo_bytes cuo_PickupAction_json(const cuo_PickupAction *v);
-bool cuo_PickupAction_parse(cuo_bytes json, cuo_PickupAction *out);
-#define cuo_PickupAction_PATH CUO_PATH_ACTION_PICKUP
-uint16_t cuo_PickupAction_id(void);
-cuo_comp cuo_PickupAction_comp(const cuo_PickupAction *v);
-void cuo_PickupAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_PickupAction *v);
 
 /* `cuo:player/player` */
 /* Zero-size tag: its payload is {} in both directions. */
@@ -2031,20 +2139,6 @@ uint16_t cuo_PromptOpenedEvent_id(void);
 cuo_comp cuo_PromptOpenedEvent_comp(const cuo_PromptOpenedEvent *v);
 void cuo_PromptOpenedEvent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_PromptOpenedEvent *v);
 
-/* `cuo:action/prompt-reply` */
-struct cuo_PromptReplyAction {
-    const char *text;
-    bool cancel;
-};
-void cuo_PromptReplyAction_write(cuo_jw *w, const cuo_PromptReplyAction *v);
-void cuo_PromptReplyAction_read(const cJSON *json, cuo_PromptReplyAction *out);
-cuo_bytes cuo_PromptReplyAction_json(const cuo_PromptReplyAction *v);
-bool cuo_PromptReplyAction_parse(cuo_bytes json, cuo_PromptReplyAction *out);
-#define cuo_PromptReplyAction_PATH CUO_PATH_ACTION_PROMPT_REPLY
-uint16_t cuo_PromptReplyAction_id(void);
-cuo_comp cuo_PromptReplyAction_comp(const cuo_PromptReplyAction *v);
-void cuo_PromptReplyAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_PromptReplyAction *v);
-
 /* `cuo:gump/racial-book` */
 struct cuo_RacialBookWindow {
     int32_t page;
@@ -2066,99 +2160,6 @@ bool cuo_RacialBookWindow_parse(cuo_bytes json, cuo_RacialBookWindow *out);
 uint16_t cuo_RacialBookWindow_id(void);
 cuo_comp cuo_RacialBookWindow_comp(const cuo_RacialBookWindow *v);
 bool cuo_RacialBookWindow_get(uint64_t entity, cuo_RacialBookWindow *out);
-
-/* `cuo:action/rename` */
-struct cuo_RenameAction {
-    uint32_t serial;
-    const char *name;
-};
-void cuo_RenameAction_write(cuo_jw *w, const cuo_RenameAction *v);
-void cuo_RenameAction_read(const cJSON *json, cuo_RenameAction *out);
-cuo_bytes cuo_RenameAction_json(const cuo_RenameAction *v);
-bool cuo_RenameAction_parse(cuo_bytes json, cuo_RenameAction *out);
-#define cuo_RenameAction_PATH CUO_PATH_ACTION_RENAME
-uint16_t cuo_RenameAction_id(void);
-cuo_comp cuo_RenameAction_comp(const cuo_RenameAction *v);
-void cuo_RenameAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RenameAction *v);
-
-/* `cuo:action/request-context-menu` */
-struct cuo_RequestContextMenuAction {
-    uint32_t serial;
-};
-void cuo_RequestContextMenuAction_write(cuo_jw *w, const cuo_RequestContextMenuAction *v);
-void cuo_RequestContextMenuAction_read(const cJSON *json, cuo_RequestContextMenuAction *out);
-cuo_bytes cuo_RequestContextMenuAction_json(const cuo_RequestContextMenuAction *v);
-bool cuo_RequestContextMenuAction_parse(cuo_bytes json, cuo_RequestContextMenuAction *out);
-#define cuo_RequestContextMenuAction_PATH CUO_PATH_ACTION_REQUEST_CONTEXT_MENU
-uint16_t cuo_RequestContextMenuAction_id(void);
-cuo_comp cuo_RequestContextMenuAction_comp(const cuo_RequestContextMenuAction *v);
-void cuo_RequestContextMenuAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RequestContextMenuAction *v);
-
-/* `cuo:action/request-properties` */
-struct cuo_RequestPropertiesAction {
-    uint32_t serial;
-};
-void cuo_RequestPropertiesAction_write(cuo_jw *w, const cuo_RequestPropertiesAction *v);
-void cuo_RequestPropertiesAction_read(const cJSON *json, cuo_RequestPropertiesAction *out);
-cuo_bytes cuo_RequestPropertiesAction_json(const cuo_RequestPropertiesAction *v);
-bool cuo_RequestPropertiesAction_parse(cuo_bytes json, cuo_RequestPropertiesAction *out);
-#define cuo_RequestPropertiesAction_PATH CUO_PATH_ACTION_REQUEST_PROPERTIES
-uint16_t cuo_RequestPropertiesAction_id(void);
-cuo_comp cuo_RequestPropertiesAction_comp(const cuo_RequestPropertiesAction *v);
-void cuo_RequestPropertiesAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RequestPropertiesAction *v);
-
-/* `cuo:action/request-skills` */
-struct cuo_RequestSkillsAction {
-    uint32_t serial;
-};
-void cuo_RequestSkillsAction_write(cuo_jw *w, const cuo_RequestSkillsAction *v);
-void cuo_RequestSkillsAction_read(const cJSON *json, cuo_RequestSkillsAction *out);
-cuo_bytes cuo_RequestSkillsAction_json(const cuo_RequestSkillsAction *v);
-bool cuo_RequestSkillsAction_parse(cuo_bytes json, cuo_RequestSkillsAction *out);
-#define cuo_RequestSkillsAction_PATH CUO_PATH_ACTION_REQUEST_SKILLS
-uint16_t cuo_RequestSkillsAction_id(void);
-cuo_comp cuo_RequestSkillsAction_comp(const cuo_RequestSkillsAction *v);
-void cuo_RequestSkillsAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RequestSkillsAction *v);
-
-/* `cuo:action/request-status` */
-struct cuo_RequestStatusAction {
-    uint32_t serial;
-};
-void cuo_RequestStatusAction_write(cuo_jw *w, const cuo_RequestStatusAction *v);
-void cuo_RequestStatusAction_read(const cJSON *json, cuo_RequestStatusAction *out);
-cuo_bytes cuo_RequestStatusAction_json(const cuo_RequestStatusAction *v);
-bool cuo_RequestStatusAction_parse(cuo_bytes json, cuo_RequestStatusAction *out);
-#define cuo_RequestStatusAction_PATH CUO_PATH_ACTION_REQUEST_STATUS
-uint16_t cuo_RequestStatusAction_id(void);
-cuo_comp cuo_RequestStatusAction_comp(const cuo_RequestStatusAction *v);
-void cuo_RequestStatusAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RequestStatusAction *v);
-
-/* `cuo:action/request-target` */
-struct cuo_RequestTargetAction {
-    const char *prompt_text;
-};
-void cuo_RequestTargetAction_write(cuo_jw *w, const cuo_RequestTargetAction *v);
-void cuo_RequestTargetAction_read(const cJSON *json, cuo_RequestTargetAction *out);
-cuo_bytes cuo_RequestTargetAction_json(const cuo_RequestTargetAction *v);
-bool cuo_RequestTargetAction_parse(cuo_bytes json, cuo_RequestTargetAction *out);
-#define cuo_RequestTargetAction_PATH CUO_PATH_ACTION_REQUEST_TARGET
-uint16_t cuo_RequestTargetAction_id(void);
-cuo_comp cuo_RequestTargetAction_comp(const cuo_RequestTargetAction *v);
-void cuo_RequestTargetAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RequestTargetAction *v);
-
-/* `cuo:action/say` */
-struct cuo_SayAction {
-    const char *text;
-    uint16_t hue;
-};
-void cuo_SayAction_write(cuo_jw *w, const cuo_SayAction *v);
-void cuo_SayAction_read(const cJSON *json, cuo_SayAction *out);
-cuo_bytes cuo_SayAction_json(const cuo_SayAction *v);
-bool cuo_SayAction_parse(cuo_bytes json, cuo_SayAction *out);
-#define cuo_SayAction_PATH CUO_PATH_ACTION_SAY
-uint16_t cuo_SayAction_id(void);
-cuo_comp cuo_SayAction_comp(const cuo_SayAction *v);
-void cuo_SayAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_SayAction *v);
 
 /* `cuo:ui/scroll` */
 struct cuo_ScrollPosition {
@@ -2311,19 +2312,6 @@ bool cuo_ServerSelectionScene_parse(cuo_bytes json, cuo_ServerSelectionScene *ou
 uint16_t cuo_ServerSelectionScene_id(void);
 cuo_comp cuo_ServerSelectionScene_comp(void);
 bool cuo_ServerSelectionScene_has(uint64_t entity);
-
-/* `cuo:action/single-click` */
-struct cuo_SingleClickAction {
-    uint32_t serial;
-};
-void cuo_SingleClickAction_write(cuo_jw *w, const cuo_SingleClickAction *v);
-void cuo_SingleClickAction_read(const cJSON *json, cuo_SingleClickAction *out);
-cuo_bytes cuo_SingleClickAction_json(const cuo_SingleClickAction *v);
-bool cuo_SingleClickAction_parse(cuo_bytes json, cuo_SingleClickAction *out);
-#define cuo_SingleClickAction_PATH CUO_PATH_ACTION_SINGLE_CLICK
-uint16_t cuo_SingleClickAction_id(void);
-cuo_comp cuo_SingleClickAction_comp(const cuo_SingleClickAction *v);
-void cuo_SingleClickAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_SingleClickAction *v);
 
 /* `cuo:gump/skills` */
 struct cuo_SkillsWindow {
@@ -2490,49 +2478,6 @@ bool cuo_StatusBarWindow_parse(cuo_bytes json, cuo_StatusBarWindow *out);
 uint16_t cuo_StatusBarWindow_id(void);
 cuo_comp cuo_StatusBarWindow_comp(const cuo_StatusBarWindow *v);
 bool cuo_StatusBarWindow_get(uint64_t entity, cuo_StatusBarWindow *out);
-
-/* `cuo:action/target-cancel` */
-/* Zero-size tag: its payload is {} in both directions. */
-struct cuo_TargetCancelAction {
-    uint8_t unused_; /* C needs one member */
-};
-void cuo_TargetCancelAction_write(cuo_jw *w, const cuo_TargetCancelAction *v);
-void cuo_TargetCancelAction_read(const cJSON *json, cuo_TargetCancelAction *out);
-cuo_bytes cuo_TargetCancelAction_json(const cuo_TargetCancelAction *v);
-bool cuo_TargetCancelAction_parse(cuo_bytes json, cuo_TargetCancelAction *out);
-#define cuo_TargetCancelAction_PATH CUO_PATH_ACTION_TARGET_CANCEL
-uint16_t cuo_TargetCancelAction_id(void);
-cuo_comp cuo_TargetCancelAction_comp(void);
-void cuo_TargetCancelAction_emit(cuo_cmds *cmds, uint64_t entity);
-
-/* `cuo:action/target-location` */
-struct cuo_TargetLocationAction {
-    uint16_t x;
-    uint16_t y;
-    int8_t z;
-    uint16_t graphic;
-};
-void cuo_TargetLocationAction_write(cuo_jw *w, const cuo_TargetLocationAction *v);
-void cuo_TargetLocationAction_read(const cJSON *json, cuo_TargetLocationAction *out);
-cuo_bytes cuo_TargetLocationAction_json(const cuo_TargetLocationAction *v);
-bool cuo_TargetLocationAction_parse(cuo_bytes json, cuo_TargetLocationAction *out);
-#define cuo_TargetLocationAction_PATH CUO_PATH_ACTION_TARGET_LOCATION
-uint16_t cuo_TargetLocationAction_id(void);
-cuo_comp cuo_TargetLocationAction_comp(const cuo_TargetLocationAction *v);
-void cuo_TargetLocationAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_TargetLocationAction *v);
-
-/* `cuo:action/target-object` */
-struct cuo_TargetObjectAction {
-    uint32_t serial;
-};
-void cuo_TargetObjectAction_write(cuo_jw *w, const cuo_TargetObjectAction *v);
-void cuo_TargetObjectAction_read(const cJSON *json, cuo_TargetObjectAction *out);
-cuo_bytes cuo_TargetObjectAction_json(const cuo_TargetObjectAction *v);
-bool cuo_TargetObjectAction_parse(cuo_bytes json, cuo_TargetObjectAction *out);
-#define cuo_TargetObjectAction_PATH CUO_PATH_ACTION_TARGET_OBJECT
-uint16_t cuo_TargetObjectAction_id(void);
-cuo_comp cuo_TargetObjectAction_comp(const cuo_TargetObjectAction *v);
-void cuo_TargetObjectAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_TargetObjectAction *v);
 
 /* `cuo:target/state` */
 struct cuo_TargetingState {
@@ -2782,20 +2727,6 @@ uint16_t cuo_TipNoticeWindow_id(void);
 cuo_comp cuo_TipNoticeWindow_comp(const cuo_TipNoticeWindow *v);
 bool cuo_TipNoticeWindow_get(uint64_t entity, cuo_TipNoticeWindow *out);
 
-/* `cuo:action/toggle-war-mode` */
-/* Zero-size tag: its payload is {} in both directions. */
-struct cuo_ToggleWarModeAction {
-    uint8_t unused_; /* C needs one member */
-};
-void cuo_ToggleWarModeAction_write(cuo_jw *w, const cuo_ToggleWarModeAction *v);
-void cuo_ToggleWarModeAction_read(const cJSON *json, cuo_ToggleWarModeAction *out);
-cuo_bytes cuo_ToggleWarModeAction_json(const cuo_ToggleWarModeAction *v);
-bool cuo_ToggleWarModeAction_parse(cuo_bytes json, cuo_ToggleWarModeAction *out);
-#define cuo_ToggleWarModeAction_PATH CUO_PATH_ACTION_TOGGLE_WAR_MODE
-uint16_t cuo_ToggleWarModeAction_id(void);
-cuo_comp cuo_ToggleWarModeAction_comp(void);
-void cuo_ToggleWarModeAction_emit(cuo_cmds *cmds, uint64_t entity);
-
 /* `cuo:ui/topbar-button` */
 /* Zero-size tag: its payload is {} in both directions. */
 struct cuo_TopBarButton {
@@ -2908,6 +2839,7 @@ struct cuo_UiCustomDto {
     float hue_x;
     float hue_y;
     float hue_z;
+    bool stacked;
 };
 void cuo_UiCustomDto_write(cuo_jw *w, const cuo_UiCustomDto *v);
 void cuo_UiCustomDto_read(const cJSON *json, cuo_UiCustomDto *out);
@@ -3015,6 +2947,23 @@ uint16_t cuo_UiNoWindowDrag_id(void);
 cuo_comp cuo_UiNoWindowDrag_comp(void);
 bool cuo_UiNoWindowDrag_has(uint64_t entity);
 
+/* `cuo:ui/pick` */
+struct cuo_UiPickDto {
+    uint64_t entity;
+    uint64_t root;
+    int32_t paint_order;
+    float x;
+    float y;
+};
+void cuo_UiPickDto_write(cuo_jw *w, const cuo_UiPickDto *v);
+void cuo_UiPickDto_read(const cJSON *json, cuo_UiPickDto *out);
+cuo_bytes cuo_UiPickDto_json(const cuo_UiPickDto *v);
+bool cuo_UiPickDto_parse(cuo_bytes json, cuo_UiPickDto *out);
+#define cuo_UiPickDto_PATH CUO_PATH_UI_PICK
+uint16_t cuo_UiPickDto_id(void);
+cuo_comp cuo_UiPickDto_comp(const cuo_UiPickDto *v);
+bool cuo_UiPickDto_resource(cuo_UiPickDto *out);
+
 /* `cuo:ui/popup` */
 /* Zero-size tag: its payload is {} in both directions. */
 struct cuo_UiPopup {
@@ -3036,6 +2985,8 @@ struct cuo_UiResizable {
     float max_w;
     float max_h;
     float grip;
+    float grip_inset;
+    bool whole_pixels;
 };
 void cuo_UiResizable_write(cuo_jw *w, const cuo_UiResizable *v);
 void cuo_UiResizable_read(const cJSON *json, cuo_UiResizable *out);
@@ -3088,18 +3039,18 @@ uint16_t cuo_UiTooltip_id(void);
 cuo_comp cuo_UiTooltip_comp(const cuo_UiTooltip *v);
 bool cuo_UiTooltip_get(uint64_t entity, cuo_UiTooltip *out);
 
-/* `cuo:action/use-skill` */
-struct cuo_UseSkillAction {
-    int32_t id;
+/* `cuo:ui/tooltip-serial` */
+struct cuo_UiTooltipSerial {
+    uint32_t serial;
 };
-void cuo_UseSkillAction_write(cuo_jw *w, const cuo_UseSkillAction *v);
-void cuo_UseSkillAction_read(const cJSON *json, cuo_UseSkillAction *out);
-cuo_bytes cuo_UseSkillAction_json(const cuo_UseSkillAction *v);
-bool cuo_UseSkillAction_parse(cuo_bytes json, cuo_UseSkillAction *out);
-#define cuo_UseSkillAction_PATH CUO_PATH_ACTION_USE_SKILL
-uint16_t cuo_UseSkillAction_id(void);
-cuo_comp cuo_UseSkillAction_comp(const cuo_UseSkillAction *v);
-void cuo_UseSkillAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_UseSkillAction *v);
+void cuo_UiTooltipSerial_write(cuo_jw *w, const cuo_UiTooltipSerial *v);
+void cuo_UiTooltipSerial_read(const cJSON *json, cuo_UiTooltipSerial *out);
+cuo_bytes cuo_UiTooltipSerial_json(const cuo_UiTooltipSerial *v);
+bool cuo_UiTooltipSerial_parse(cuo_bytes json, cuo_UiTooltipSerial *out);
+#define cuo_UiTooltipSerial_PATH CUO_PATH_UI_TOOLTIP_SERIAL
+uint16_t cuo_UiTooltipSerial_id(void);
+cuo_comp cuo_UiTooltipSerial_comp(const cuo_UiTooltipSerial *v);
+bool cuo_UiTooltipSerial_get(uint64_t entity, cuo_UiTooltipSerial *out);
 
 /* `cuo:gump/vendor` */
 /* Presence-only marker: the host always answers {} and ignores writes. */
@@ -3114,35 +3065,6 @@ bool cuo_VendorWindow_parse(cuo_bytes json, cuo_VendorWindow *out);
 uint16_t cuo_VendorWindow_id(void);
 cuo_comp cuo_VendorWindow_comp(void);
 bool cuo_VendorWindow_has(uint64_t entity);
-
-/* `cuo:action/walk` */
-struct cuo_WalkAction {
-    uint8_t direction;
-    bool run;
-};
-void cuo_WalkAction_write(cuo_jw *w, const cuo_WalkAction *v);
-void cuo_WalkAction_read(const cJSON *json, cuo_WalkAction *out);
-cuo_bytes cuo_WalkAction_json(const cuo_WalkAction *v);
-bool cuo_WalkAction_parse(cuo_bytes json, cuo_WalkAction *out);
-#define cuo_WalkAction_PATH CUO_PATH_ACTION_WALK
-uint16_t cuo_WalkAction_id(void);
-cuo_comp cuo_WalkAction_comp(const cuo_WalkAction *v);
-void cuo_WalkAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_WalkAction *v);
-
-/* `cuo:action/walk-to` */
-struct cuo_WalkToAction {
-    uint16_t x;
-    uint16_t y;
-    int8_t z;
-};
-void cuo_WalkToAction_write(cuo_jw *w, const cuo_WalkToAction *v);
-void cuo_WalkToAction_read(const cJSON *json, cuo_WalkToAction *out);
-cuo_bytes cuo_WalkToAction_json(const cuo_WalkToAction *v);
-bool cuo_WalkToAction_parse(cuo_bytes json, cuo_WalkToAction *out);
-#define cuo_WalkToAction_PATH CUO_PATH_ACTION_WALK_TO
-uint16_t cuo_WalkToAction_id(void);
-cuo_comp cuo_WalkToAction_comp(const cuo_WalkToAction *v);
-void cuo_WalkToAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_WalkToAction *v);
 
 /* `cuo:gump/worldmap` */
 /* Zero-size tag: its payload is {} in both directions. */
@@ -3186,67 +3108,6 @@ bool cuo_WorldSingleClickDto_parse(cuo_bytes json, cuo_WorldSingleClickDto *out)
 uint16_t cuo_WorldSingleClickDto_id(void);
 cuo_comp cuo_WorldSingleClickDto_comp(const cuo_WorldSingleClickDto *v);
 bool cuo_WorldSingleClickDto_resource(cuo_WorldSingleClickDto *out);
-
-/* `cuo:ui/interaction` — the payload IS the enum's number. */
-#define cuo_Interaction_PATH CUO_PATH_UI_INTERACTION
-uint16_t cuo_Interaction_id(void);
-cuo_comp cuo_Interaction_comp(cuo_Interaction v);
-bool cuo_Interaction_parse(cuo_bytes json, cuo_Interaction *out);
-bool cuo_Interaction_get(uint64_t entity, cuo_Interaction *out);
-
-/* Typed game actions: ask the HOST to perform a player action (it updates client state AND
- * sends the packet). Fire-and-forget, applied after the callback returns. For anything not
- * listed, build the packet yourself and cuo_net_send it. */
-/* `cuo:action/cast-spell` — emits cuo_CastSpellAction. */
-void cuo_action_cast_spell(cuo_cmds *cmds, int32_t id);
-/* `cuo:action/context-menu-reply` — emits cuo_ContextMenuReplyAction. */
-void cuo_action_context_menu_reply(cuo_cmds *cmds, uint32_t serial, uint16_t index);
-/* `cuo:action/double-click` — emits cuo_DoubleClickAction. */
-void cuo_action_double_click(cuo_cmds *cmds, uint32_t serial);
-/* `cuo:action/drop` — emits cuo_DropAction. */
-void cuo_action_drop(cuo_cmds *cmds, uint32_t serial, uint16_t x, uint16_t y, int8_t z, uint32_t container);
-/* `cuo:action/equip` — emits cuo_EquipAction. */
-void cuo_action_equip(cuo_cmds *cmds, uint32_t serial, uint8_t layer, uint32_t container);
-/* `cuo:action/gump-close` — emits cuo_GumpCloseAction. */
-void cuo_action_gump_close(cuo_cmds *cmds, uint32_t gump_id);
-/* `cuo:action/gump-reply` — emits cuo_GumpReplyAction. */
-void cuo_action_gump_reply(cuo_cmds *cmds, uint32_t gump_id, int32_t button_id, cuo_vec_u32 switches, cuo_vec_GumpTextEntry text_entries);
-/* `cuo:action/open-door` — emits cuo_OpenDoorAction. */
-void cuo_action_open_door(cuo_cmds *cmds);
-/* `cuo:action/pickup` — emits cuo_PickupAction. */
-void cuo_action_pickup(cuo_cmds *cmds, uint32_t serial, uint16_t amount);
-/* `cuo:action/prompt-reply` — emits cuo_PromptReplyAction. */
-void cuo_action_prompt_reply(cuo_cmds *cmds, const char *text, bool cancel);
-/* `cuo:action/rename` — emits cuo_RenameAction. */
-void cuo_action_rename(cuo_cmds *cmds, uint32_t serial, const char *name);
-/* `cuo:action/request-context-menu` — emits cuo_RequestContextMenuAction. */
-void cuo_action_request_context_menu(cuo_cmds *cmds, uint32_t serial);
-/* `cuo:action/request-properties` — emits cuo_RequestPropertiesAction. */
-void cuo_action_request_properties(cuo_cmds *cmds, uint32_t serial);
-/* `cuo:action/request-skills` — emits cuo_RequestSkillsAction. */
-void cuo_action_request_skills(cuo_cmds *cmds, uint32_t serial);
-/* `cuo:action/request-status` — emits cuo_RequestStatusAction. */
-void cuo_action_request_status(cuo_cmds *cmds, uint32_t serial);
-/* `cuo:action/request-target` — emits cuo_RequestTargetAction. */
-void cuo_action_request_target(cuo_cmds *cmds, const char *prompt_text);
-/* `cuo:action/say` — emits cuo_SayAction. */
-void cuo_action_say(cuo_cmds *cmds, const char *text, uint16_t hue);
-/* `cuo:action/single-click` — emits cuo_SingleClickAction. */
-void cuo_action_single_click(cuo_cmds *cmds, uint32_t serial);
-/* `cuo:action/target-cancel` — emits cuo_TargetCancelAction. */
-void cuo_action_target_cancel(cuo_cmds *cmds);
-/* `cuo:action/target-location` — emits cuo_TargetLocationAction. */
-void cuo_action_target_location(cuo_cmds *cmds, uint16_t x, uint16_t y, int8_t z, uint16_t graphic);
-/* `cuo:action/target-object` — emits cuo_TargetObjectAction. */
-void cuo_action_target_object(cuo_cmds *cmds, uint32_t serial);
-/* `cuo:action/toggle-war-mode` — emits cuo_ToggleWarModeAction. */
-void cuo_action_toggle_war_mode(cuo_cmds *cmds);
-/* `cuo:action/use-skill` — emits cuo_UseSkillAction. */
-void cuo_action_use_skill(cuo_cmds *cmds, int32_t id);
-/* `cuo:action/walk` — emits cuo_WalkAction. */
-void cuo_action_walk(cuo_cmds *cmds, uint8_t direction, bool run);
-/* `cuo:action/walk-to` — emits cuo_WalkToAction. */
-void cuo_action_walk_to(cuo_cmds *cmds, uint16_t x, uint16_t y, int8_t z);
 
 /* Keyboard keys, mirrored from TinyEcs.Bevy.Input.KeyCode (Win32 virtual-key codes). */
 #define CUO_KEY_NONE 0u

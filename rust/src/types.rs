@@ -17,6 +17,8 @@
 
 use serde::{Deserialize, Serialize};
 
+#[allow(unused_imports)]
+use crate::ecs::Entity;
 use crate::paths;
 
 /// Associates a payload type with the registry type-path it is registered under.
@@ -44,6 +46,15 @@ impl HasPath for Amount {
     const PATH: &'static str = paths::ent::AMOUNT;
 }
 
+/// `cuo:ent/auto-opened-corpse`
+/// Zero-size tag: its payload is `{}` in both directions.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct AutoOpenedCorpse {}
+impl HasPath for AutoOpenedCorpse {
+    const PATH: &'static str = paths::ent::AUTO_OPENED_CORPSE;
+}
+
 /// `cuo:ui/bg-color`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -61,6 +72,19 @@ impl HasPath for BackgroundColor {
 pub struct BookWindow {}
 impl HasPath for BookWindow {
     const PATH: &'static str = paths::gump::BOOK;
+}
+
+/// `cuo:ui/border-color`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct BorderColorDto {
+    pub r: f32,
+    pub g: f32,
+    pub b: f32,
+    pub a: f32,
+}
+impl HasPath for BorderColorDto {
+    const PATH: &'static str = paths::ui::BORDER_COLOR;
 }
 
 /// `cuo:ui/border-radius`
@@ -92,16 +116,6 @@ impl HasPath for BuffGumpUI {
 pub struct BulletinBoardWindow {}
 impl HasPath for BulletinBoardWindow {
     const PATH: &'static str = paths::gump::BULLETIN_BOARD;
-}
-
-/// `cuo:action/cast-spell`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct CastSpellAction {
-    pub id: i32,
-}
-impl HasPath for CastSpellAction {
-    const PATH: &'static str = paths::action::CAST_SPELL;
 }
 
 /// `cuo:scene/character-creation`
@@ -139,6 +153,16 @@ impl HasPath for CharacterSelectionDto {
 pub struct CharacterSelectionScene {}
 impl HasPath for CharacterSelectionScene {
     const PATH: &'static str = paths::scene::CHARACTER_SELECTION;
+}
+
+/// `cuo:ecs/child-of`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ChildOf {
+    pub parent: Entity,
+}
+impl HasPath for ChildOf {
+    const PATH: &'static str = paths::ecs::CHILD_OF;
 }
 
 /// `cuo:ui/clipboard-set`
@@ -182,14 +206,17 @@ impl HasPath for CombatBookWindow {
     const PATH: &'static str = paths::gump::COMBAT_BOOK;
 }
 
-/// `cuo:ent/container`
+/// `cuo:ui/computed`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ContainedInDto {
-    pub container: u32,
+pub struct ComputedNode {
+    pub size: Vector2,
+    pub position: Vector2,
+    pub clay_id: u32,
+    pub paint_order: i32,
 }
-impl HasPath for ContainedInDto {
-    const PATH: &'static str = paths::ent::CONTAINER;
+impl HasPath for ComputedNode {
+    const PATH: &'static str = paths::ui::COMPUTED;
 }
 
 /// `cuo:ent/contained-into`
@@ -212,6 +239,35 @@ impl HasPath for ContainerClosedEvent {
     const PATH: &'static str = paths::gump::CONTAINER_CLOSED;
 }
 
+/// `cuo:gump/container-tag`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ContainerGumpTagDto {
+    pub graphic: u16,
+    pub original_graphic: u16,
+    pub scale: f32,
+    pub bounds_x: i32,
+    pub bounds_y: i32,
+    pub bounds_w: i32,
+    pub bounds_h: i32,
+}
+impl HasPath for ContainerGumpTagDto {
+    const PATH: &'static str = paths::gump::CONTAINER_TAG;
+}
+
+/// `cuo:ui/container-item`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ContainerItemUI {
+    pub container: Entity,
+    pub serial: u32,
+    pub original_hue: Vector3,
+    pub hover_hue: Vector3,
+}
+impl HasPath for ContainerItemUI {
+    const PATH: &'static str = paths::ui::CONTAINER_ITEM;
+}
+
 /// `cuo:gump/container-opened`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -221,6 +277,50 @@ pub struct ContainerOpenedEvent {
 }
 impl HasPath for ContainerOpenedEvent {
     const PATH: &'static str = paths::gump::CONTAINER_OPENED;
+}
+
+/// Nested payload type (`ClassicUO.Ecs.Modding.ContainerPositionDto`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ContainerPositionDto {
+    pub serial: u32,
+    pub x: i32,
+    pub y: i32,
+}
+
+/// `cuo:gump/container-positions`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ContainerPositionsDto {
+    pub saved: Vec<ContainerPositionDto>,
+}
+impl HasPath for ContainerPositionsDto {
+    const PATH: &'static str = paths::gump::CONTAINER_POSITIONS;
+}
+
+/// `ClassicUO.Ecs.ContainerSlotAction` — crosses as `u8`.
+pub type ContainerSlotAction = u8;
+pub mod container_slot_action {
+    pub const ADD: super::ContainerSlotAction = 0;
+    pub const REMOVE: super::ContainerSlotAction = 1;
+}
+
+/// `cuo:gump/container-slot`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ContainerSlotEvent {
+    /// enum ContainerSlotAction (0=Add, 1=Remove)
+    pub action: u8,
+    pub container_serial: u32,
+    pub item_serial: u32,
+    pub graphic: u16,
+    pub hue: u16,
+    pub x: u16,
+    pub y: u16,
+    pub amount: u16,
+}
+impl HasPath for ContainerSlotEvent {
+    const PATH: &'static str = paths::gump::CONTAINER_SLOT;
 }
 
 /// `cuo:ent/slot-position`
@@ -267,17 +367,6 @@ impl HasPath for ContextMenuEvent {
     const PATH: &'static str = paths::gump::CONTEXT_MENU;
 }
 
-/// `cuo:action/context-menu-reply`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct ContextMenuReplyAction {
-    pub serial: u32,
-    pub index: u16,
-}
-impl HasPath for ContextMenuReplyAction {
-    const PATH: &'static str = paths::action::CONTEXT_MENU_REPLY;
-}
-
 /// `ClassicUO.Game.Data.Direction` — crosses as `u8`.
 pub type Direction = u8;
 pub mod direction {
@@ -299,30 +388,6 @@ pub type Display = u8;
 pub mod display {
     pub const FLEX: super::Display = 0;
     pub const NONE: super::Display = 1;
-}
-
-/// `cuo:action/double-click`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct DoubleClickAction {
-    pub serial: u32,
-}
-impl HasPath for DoubleClickAction {
-    const PATH: &'static str = paths::action::DOUBLE_CLICK;
-}
-
-/// `cuo:action/drop`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct DropAction {
-    pub serial: u32,
-    pub x: u16,
-    pub y: u16,
-    pub z: i8,
-    pub container: u32,
-}
-impl HasPath for DropAction {
-    const PATH: &'static str = paths::action::DROP;
 }
 
 /// `cuo:ui/editable-text`
@@ -356,18 +421,6 @@ pub struct EntityPropertiesDto {
 }
 impl HasPath for EntityPropertiesDto {
     const PATH: &'static str = paths::ent::PROPERTIES;
-}
-
-/// `cuo:action/equip`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct EquipAction {
-    pub serial: u32,
-    pub layer: u8,
-    pub container: u32,
-}
-impl HasPath for EquipAction {
-    const PATH: &'static str = paths::action::EQUIP;
 }
 
 /// `cuo:ent/equipment`
@@ -447,6 +500,26 @@ impl HasPath for GameScene {
     const PATH: &'static str = paths::scene::GAME;
 }
 
+/// `cuo:game/settings`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct GameSettingsDto {
+    pub grid_loot_type: i32,
+    pub skip_empty_corpse: bool,
+    pub auto_open_corpses: bool,
+    pub auto_open_corpse_range: i32,
+    pub corpse_open_options: i32,
+    pub double_click_to_loot_inside_containers: bool,
+    pub hold_shift_to_split_stack: bool,
+    pub relative_drag_and_drop_items: bool,
+    pub speech_hue: u16,
+    pub always_run: bool,
+    pub highlight_game_objects: bool,
+}
+impl HasPath for GameSettingsDto {
+    const PATH: &'static str = paths::game::SETTINGS;
+}
+
 /// `cuo:game/state`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -491,12 +564,6 @@ pub struct GrabbedItem {
     pub pending_drop: bool,
     pub drop_target_serial: u32,
     pub failed_drop: bool,
-    pub drop_seq: i32,
-    pub last_drop_serial: u32,
-    pub last_drop_x: u16,
-    pub last_drop_y: u16,
-    pub last_drop_z: i8,
-    pub last_drop_container: u32,
     pub mouse_offset: Vector2,
 }
 impl HasPath for GrabbedItem {
@@ -535,35 +602,13 @@ impl HasPath for GridLootWindow {
     const PATH: &'static str = paths::gump::GRID_LOOT;
 }
 
-/// `cuo:action/gump-close`
+/// `cuo:ui/no-pickup`
+/// Zero-size tag: its payload is `{}` in both directions.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct GumpCloseAction {
-    pub gump_id: u32,
-}
-impl HasPath for GumpCloseAction {
-    const PATH: &'static str = paths::action::GUMP_CLOSE;
-}
-
-/// `cuo:action/gump-reply`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct GumpReplyAction {
-    pub gump_id: u32,
-    pub button_id: i32,
-    pub switches: Vec<u32>,
-    pub text_entries: Vec<GumpTextEntry>,
-}
-impl HasPath for GumpReplyAction {
-    const PATH: &'static str = paths::action::GUMP_REPLY;
-}
-
-/// Nested payload type (`ClassicUO.Ecs.GumpTextEntry`).
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct GumpTextEntry {
-    pub id: u16,
-    pub text: String,
+#[serde(default)]
+pub struct NoPickup {}
+impl HasPath for NoPickup {
+    const PATH: &'static str = paths::ui::NO_PICKUP;
 }
 
 /// `cuo:gump/health-bar`
@@ -635,13 +680,14 @@ impl HasPath for Hue {
     const PATH: &'static str = paths::ent::HUE;
 }
 
-/// `cuo:ui/interaction` — the payload IS this enum's number.
-/// `TinyEcs.Bevy.UI.Interaction` — crosses as `u8`.
-pub type Interaction = u8;
-pub mod interaction {
-    pub const NONE: super::Interaction = 0;
-    pub const HOVERED: super::Interaction = 1;
-    pub const PRESSED: super::Interaction = 2;
+/// `cuo:ui/interaction`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct Interaction {
+    pub state: u8,
+}
+impl HasPath for Interaction {
+    const PATH: &'static str = paths::ui::INTERACTION;
 }
 
 /// `cuo:ent/is-container`
@@ -671,12 +717,37 @@ impl HasPath for IsTopBar {
     const PATH: &'static str = paths::ui::TOPBAR_ROOT;
 }
 
+/// `cuo:item/drop-sent`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ItemDropSent {
+    pub serial: u32,
+    pub x: u16,
+    pub y: u16,
+    pub z: i8,
+    pub container: u32,
+}
+impl HasPath for ItemDropSent {
+    const PATH: &'static str = paths::item::DROP_SENT;
+}
+
+/// `cuo:item/move-result`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ItemMoveResult {
+    pub result: u8,
+    pub code: u8,
+}
+impl HasPath for ItemMoveResult {
+    const PATH: &'static str = paths::item::MOVE_RESULT;
+}
+
 /// `cuo:ent/is-item`
 /// Zero-size tag: its payload is `{}` in both directions.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default)]
-pub struct Items {}
-impl HasPath for Items {
+pub struct Item {}
+impl HasPath for Item {
     const PATH: &'static str = paths::ent::IS_ITEM;
 }
 
@@ -724,6 +795,7 @@ pub mod justify_content {
 #[serde(default, rename_all = "PascalCase")]
 pub struct KeyboardInputDto {
     pub pressed: Vec<i32>,
+    pub pressed_once: Vec<i32>,
 }
 impl HasPath for KeyboardInputDto {
     const PATH: &'static str = paths::input::KEYBOARD;
@@ -835,6 +907,15 @@ impl HasPath for Mana {
     const PATH: &'static str = paths::player::MANA;
 }
 
+/// `cuo:ent/manual-opened-corpse`
+/// Zero-size tag: its payload is `{}` in both directions.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct ManualOpenedCorpse {}
+impl HasPath for ManualOpenedCorpse {
+    const PATH: &'static str = paths::ent::MANUAL_OPENED_CORPSE;
+}
+
 /// `cuo:gump/map`
 /// Presence-only marker: the host always answers `{}` and ignores writes.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -937,15 +1018,15 @@ impl HasPath for MobileStepsDto {
 /// Zero-size tag: its payload is `{}` in both directions.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default)]
-pub struct Mobiles {}
-impl HasPath for Mobiles {
+pub struct Mobile {}
+impl HasPath for Mobile {
     const PATH: &'static str = paths::ent::IS_MOBILE;
 }
 
 /// `cuo:chat/message`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ModChatMessage {
+pub struct ChatMessage {
     pub serial: u32,
     pub text: String,
     pub name: String,
@@ -956,37 +1037,17 @@ pub struct ModChatMessage {
     pub time: f32,
     pub kind: u8,
 }
-impl HasPath for ModChatMessage {
+impl HasPath for ChatMessage {
     const PATH: &'static str = paths::chat::MESSAGE;
 }
 
-/// `cuo:ui/clicked`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct ModClicked {
-    pub tick: u8,
-}
-impl HasPath for ModClicked {
-    const PATH: &'static str = paths::ui::CLICKED;
-}
-
-/// `cuo:test/counter`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct ModCounter {
-    pub value: i32,
-}
-impl HasPath for ModCounter {
-    const PATH: &'static str = paths::test::COUNTER;
-}
-
-/// `cuo:mod/owned`
-/// Presence-only marker: the host always answers `{}` and ignores writes.
+/// `cuo:ui/click`
+/// Zero-size tag: its payload is `{}` in both directions.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default)]
-pub struct ModEntity {}
-impl HasPath for ModEntity {
-    const PATH: &'static str = paths::mod_::OWNED;
+pub struct UiClick {}
+impl HasPath for UiClick {
+    const PATH: &'static str = paths::ui::CLICK;
 }
 
 /// Nested payload type (`ClassicUO.Ecs.Modding.ModHotkeyBinding`).
@@ -1029,14 +1090,25 @@ impl HasPath for ModHotkeyFired {
     const PATH: &'static str = paths::input::HOTKEY;
 }
 
-/// `cuo:ui/hovered`
+/// `cuo:ui/hover`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ModHovered {
-    pub tick: u8,
+pub struct UiHover {
+    pub over: bool,
 }
-impl HasPath for ModHovered {
-    const PATH: &'static str = paths::ui::HOVERED;
+impl HasPath for UiHover {
+    const PATH: &'static str = paths::ui::HOVER;
+}
+
+/// `cuo:input/consume`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct InputConsume {
+    pub mouse: u8,
+    pub key: u32,
+}
+impl HasPath for InputConsume {
+    const PATH: &'static str = paths::input::CONSUME;
 }
 
 /// `cuo:player/move-request`
@@ -1051,26 +1123,51 @@ impl HasPath for ModMoveRequest {
     const PATH: &'static str = paths::player::MOVE_REQUEST;
 }
 
-/// `cuo:ui/right-clicked`
+/// Nested payload type (`ClassicUO.Ecs.Modding.ModOptionDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ModRightClicked {
-    pub tick: u8,
+pub struct ModOptionDto {
+    pub key: String,
+    pub label: String,
+    pub group: String,
+    pub keywords: String,
+    pub kind: u8,
+    pub min: i32,
+    pub max: i32,
+    pub step: i32,
+    pub default: i32,
+    pub choices: Vec<String>,
+}
+
+/// `cuo:options/schema`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ModOptionsSchemaDto {
+    pub options: Vec<ModOptionDto>,
+}
+impl HasPath for ModOptionsSchemaDto {
+    const PATH: &'static str = paths::options::SCHEMA;
+}
+
+/// `cuo:options/values`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ModOptionsValuesDto {
+    pub values: std::collections::HashMap<String, i32>,
+}
+impl HasPath for ModOptionsValuesDto {
+    const PATH: &'static str = paths::options::VALUES;
+}
+
+/// `cuo:ui/right-click`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct UiRightClick {
     pub x: f32,
     pub y: f32,
 }
-impl HasPath for ModRightClicked {
-    const PATH: &'static str = paths::ui::RIGHT_CLICKED;
-}
-
-/// `cuo:mod/state`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct ModState {
-    pub json: String,
-}
-impl HasPath for ModState {
-    const PATH: &'static str = paths::mod_::STATE;
+impl HasPath for UiRightClick {
+    const PATH: &'static str = paths::ui::RIGHT_CLICK;
 }
 
 /// `cuo:ui/supersedes`
@@ -1095,6 +1192,15 @@ pub struct MouseInputDto {
     pub x1: bool,
     pub x2: bool,
     pub wheel: f32,
+    pub left_pressed: bool,
+    pub left_released: bool,
+    pub left_double: bool,
+    pub right_pressed: bool,
+    pub right_released: bool,
+    pub middle_pressed: bool,
+    pub middle_released: bool,
+    pub x1_pressed: bool,
+    pub x2_pressed: bool,
 }
 impl HasPath for MouseInputDto {
     const PATH: &'static str = paths::input::MOUSE;
@@ -1103,10 +1209,10 @@ impl HasPath for MouseInputDto {
 /// `cuo:ent/serial`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct NetworkSerial {
+pub struct Serial {
     pub value: u32,
 }
-impl HasPath for NetworkSerial {
+impl HasPath for Serial {
     const PATH: &'static str = paths::ent::SERIAL;
 }
 
@@ -1180,15 +1286,6 @@ pub struct OnLoginRequest {
 }
 impl HasPath for OnLoginRequest {
     const PATH: &'static str = paths::scene::LOGIN_REQUEST;
-}
-
-/// `cuo:action/open-door`
-/// Zero-size tag: its payload is `{}` in both directions.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default)]
-pub struct OpenDoorAction {}
-impl HasPath for OpenDoorAction {
-    const PATH: &'static str = paths::action::OPEN_DOOR;
 }
 
 /// Nested payload type (`ClassicUO.Ecs.Modding.OplLineDto`).
@@ -1269,17 +1366,6 @@ impl HasPath for PartyManifestWindow {
 pub struct PartyMemberDto {
     pub serial: u32,
     pub name: String,
-}
-
-/// `cuo:action/pickup`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct PickupAction {
-    pub serial: u32,
-    pub amount: u16,
-}
-impl HasPath for PickupAction {
-    const PATH: &'static str = paths::action::PICKUP;
 }
 
 /// `cuo:player/player`
@@ -1445,17 +1531,6 @@ impl HasPath for PromptOpenedEvent {
     const PATH: &'static str = paths::chat::PROMPT;
 }
 
-/// `cuo:action/prompt-reply`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct PromptReplyAction {
-    pub text: String,
-    pub cancel: bool,
-}
-impl HasPath for PromptReplyAction {
-    const PATH: &'static str = paths::action::PROMPT_REPLY;
-}
-
 /// `ClassicUO.Game.Data.RaceType` — crosses as `u8`.
 pub type RaceType = u8;
 pub mod race_type {
@@ -1482,78 +1557,6 @@ pub struct RacialBookWindow {
 }
 impl HasPath for RacialBookWindow {
     const PATH: &'static str = paths::gump::RACIAL_BOOK;
-}
-
-/// `cuo:action/rename`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct RenameAction {
-    pub serial: u32,
-    pub name: String,
-}
-impl HasPath for RenameAction {
-    const PATH: &'static str = paths::action::RENAME;
-}
-
-/// `cuo:action/request-context-menu`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct RequestContextMenuAction {
-    pub serial: u32,
-}
-impl HasPath for RequestContextMenuAction {
-    const PATH: &'static str = paths::action::REQUEST_CONTEXT_MENU;
-}
-
-/// `cuo:action/request-properties`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct RequestPropertiesAction {
-    pub serial: u32,
-}
-impl HasPath for RequestPropertiesAction {
-    const PATH: &'static str = paths::action::REQUEST_PROPERTIES;
-}
-
-/// `cuo:action/request-skills`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct RequestSkillsAction {
-    pub serial: u32,
-}
-impl HasPath for RequestSkillsAction {
-    const PATH: &'static str = paths::action::REQUEST_SKILLS;
-}
-
-/// `cuo:action/request-status`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct RequestStatusAction {
-    pub serial: u32,
-}
-impl HasPath for RequestStatusAction {
-    const PATH: &'static str = paths::action::REQUEST_STATUS;
-}
-
-/// `cuo:action/request-target`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct RequestTargetAction {
-    pub prompt_text: String,
-}
-impl HasPath for RequestTargetAction {
-    const PATH: &'static str = paths::action::REQUEST_TARGET;
-}
-
-/// `cuo:action/say`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct SayAction {
-    pub text: String,
-    pub hue: u16,
-}
-impl HasPath for SayAction {
-    const PATH: &'static str = paths::action::SAY;
 }
 
 /// `cuo:ui/scroll`
@@ -1683,16 +1686,6 @@ impl HasPath for ServerSelectionInfoEvent {
 pub struct ServerSelectionScene {}
 impl HasPath for ServerSelectionScene {
     const PATH: &'static str = paths::scene::SERVER_SELECTION;
-}
-
-/// `cuo:action/single-click`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct SingleClickAction {
-    pub serial: u32,
-}
-impl HasPath for SingleClickAction {
-    const PATH: &'static str = paths::action::SINGLE_CLICK;
 }
 
 /// `cuo:gump/skills`
@@ -1848,38 +1841,6 @@ pub struct StatusBarWindow {
 }
 impl HasPath for StatusBarWindow {
     const PATH: &'static str = paths::ui::STATUSBAR_WINDOW;
-}
-
-/// `cuo:action/target-cancel`
-/// Zero-size tag: its payload is `{}` in both directions.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default)]
-pub struct TargetCancelAction {}
-impl HasPath for TargetCancelAction {
-    const PATH: &'static str = paths::action::TARGET_CANCEL;
-}
-
-/// `cuo:action/target-location`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct TargetLocationAction {
-    pub x: u16,
-    pub y: u16,
-    pub z: i8,
-    pub graphic: u16,
-}
-impl HasPath for TargetLocationAction {
-    const PATH: &'static str = paths::action::TARGET_LOCATION;
-}
-
-/// `cuo:action/target-object`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct TargetObjectAction {
-    pub serial: u32,
-}
-impl HasPath for TargetObjectAction {
-    const PATH: &'static str = paths::action::TARGET_OBJECT;
 }
 
 /// `cuo:target/state`
@@ -2090,15 +2051,6 @@ impl HasPath for TipNoticeWindow {
     const PATH: &'static str = paths::gump::TIP_NOTICE;
 }
 
-/// `cuo:action/toggle-war-mode`
-/// Zero-size tag: its payload is `{}` in both directions.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default)]
-pub struct ToggleWarModeAction {}
-impl HasPath for ToggleWarModeAction {
-    const PATH: &'static str = paths::action::TOGGLE_WAR_MODE;
-}
-
 /// `cuo:ui/topbar-button`
 /// Zero-size tag: its payload is `{}` in both directions.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -2185,6 +2137,7 @@ pub struct UiCustomDto {
     pub hue_x: f32,
     pub hue_y: f32,
     pub hue_z: f32,
+    pub stacked: bool,
 }
 impl HasPath for UiCustomDto {
     const PATH: &'static str = paths::ui::CUSTOM;
@@ -2256,6 +2209,20 @@ impl HasPath for UiNoWindowDrag {
     const PATH: &'static str = paths::ui::NO_WINDOW_DRAG;
 }
 
+/// `cuo:ui/pick`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct UiPickDto {
+    pub entity: u64,
+    pub root: u64,
+    pub paint_order: i32,
+    pub x: f32,
+    pub y: f32,
+}
+impl HasPath for UiPickDto {
+    const PATH: &'static str = paths::ui::PICK;
+}
+
 /// `cuo:ui/popup`
 /// Zero-size tag: its payload is `{}` in both directions.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -2284,6 +2251,8 @@ pub struct UiResizable {
     pub max_w: f32,
     pub max_h: f32,
     pub grip: f32,
+    pub grip_inset: f32,
+    pub whole_pixels: bool,
 }
 impl HasPath for UiResizable {
     const PATH: &'static str = paths::ui::RESIZABLE;
@@ -2323,14 +2292,14 @@ impl HasPath for UiTooltip {
     const PATH: &'static str = paths::ui::TOOLTIP;
 }
 
-/// `cuo:action/use-skill`
+/// `cuo:ui/tooltip-serial`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct UseSkillAction {
-    pub id: i32,
+pub struct UiTooltipSerial {
+    pub serial: u32,
 }
-impl HasPath for UseSkillAction {
-    const PATH: &'static str = paths::action::USE_SKILL;
+impl HasPath for UiTooltipSerial {
+    const PATH: &'static str = paths::ui::TOOLTIP_SERIAL;
 }
 
 /// Nested payload type (`TinyEcs.Bevy.UI.Val`).
@@ -2361,6 +2330,15 @@ pub struct Vector2 {
     pub y: f32,
 }
 
+/// Nested payload type (`System.Numerics.Vector3`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct Vector3 {
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
+}
+
 /// `cuo:gump/vendor`
 /// Presence-only marker: the host always answers `{}` and ignores writes.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -2368,29 +2346,6 @@ pub struct Vector2 {
 pub struct VendorWindow {}
 impl HasPath for VendorWindow {
     const PATH: &'static str = paths::gump::VENDOR;
-}
-
-/// `cuo:action/walk`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct WalkAction {
-    pub direction: u8,
-    pub run: bool,
-}
-impl HasPath for WalkAction {
-    const PATH: &'static str = paths::action::WALK;
-}
-
-/// `cuo:action/walk-to`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct WalkToAction {
-    pub x: u16,
-    pub y: u16,
-    pub z: i8,
-}
-impl HasPath for WalkToAction {
-    const PATH: &'static str = paths::action::WALK_TO;
 }
 
 /// `cuo:gump/worldmap`
@@ -2423,191 +2378,5 @@ pub struct WorldSingleClickDto {
 }
 impl HasPath for WorldSingleClickDto {
     const PATH: &'static str = paths::input::WORLD_SINGLE_CLICK;
-}
-
-/// Typed game actions: ask the HOST to perform a player action (it does the client-side
-/// state change AND sends the packet, so nothing desyncs). Fire-and-forget — the command
-/// buffer applies it after the callback returns. For anything not listed here, build the
-/// bytes yourself and call [`crate::imports::net_send`].
-pub mod actions {
-    use crate::paths;
-    use crate::runtime::CommandBufferBuilder;
-    #[allow(unused_imports)]
-    use super::*;
-
-    /// `cuo:action/cast-spell` — emits [`super::CastSpellAction`].
-    pub fn cast_spell(cmds: &mut CommandBufferBuilder, id: i32) {
-        let action = super::CastSpellAction { id };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::CAST_SPELL, 0, &data);
-    }
-
-    /// `cuo:action/context-menu-reply` — emits [`super::ContextMenuReplyAction`].
-    pub fn context_menu_reply(cmds: &mut CommandBufferBuilder, serial: u32, index: u16) {
-        let action = super::ContextMenuReplyAction { serial, index };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::CONTEXT_MENU_REPLY, 0, &data);
-    }
-
-    /// `cuo:action/double-click` — emits [`super::DoubleClickAction`].
-    pub fn double_click(cmds: &mut CommandBufferBuilder, serial: u32) {
-        let action = super::DoubleClickAction { serial };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::DOUBLE_CLICK, 0, &data);
-    }
-
-    /// `cuo:action/drop` — emits [`super::DropAction`].
-    pub fn drop(cmds: &mut CommandBufferBuilder, serial: u32, x: u16, y: u16, z: i8, container: u32) {
-        let action = super::DropAction { serial, x, y, z, container };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::DROP, 0, &data);
-    }
-
-    /// `cuo:action/equip` — emits [`super::EquipAction`].
-    pub fn equip(cmds: &mut CommandBufferBuilder, serial: u32, layer: u8, container: u32) {
-        let action = super::EquipAction { serial, layer, container };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::EQUIP, 0, &data);
-    }
-
-    /// `cuo:action/gump-close` — emits [`super::GumpCloseAction`].
-    pub fn gump_close(cmds: &mut CommandBufferBuilder, gump_id: u32) {
-        let action = super::GumpCloseAction { gump_id };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::GUMP_CLOSE, 0, &data);
-    }
-
-    /// `cuo:action/gump-reply` — emits [`super::GumpReplyAction`].
-    pub fn gump_reply(cmds: &mut CommandBufferBuilder, gump_id: u32, button_id: i32, switches: Vec<u32>, text_entries: Vec<GumpTextEntry>) {
-        let action = super::GumpReplyAction { gump_id, button_id, switches, text_entries };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::GUMP_REPLY, 0, &data);
-    }
-
-    /// `cuo:action/open-door` — emits [`super::OpenDoorAction`].
-    pub fn open_door(cmds: &mut CommandBufferBuilder) {
-        let action = super::OpenDoorAction {  };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::OPEN_DOOR, 0, &data);
-    }
-
-    /// `cuo:action/pickup` — emits [`super::PickupAction`].
-    pub fn pickup(cmds: &mut CommandBufferBuilder, serial: u32, amount: u16) {
-        let action = super::PickupAction { serial, amount };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::PICKUP, 0, &data);
-    }
-
-    /// `cuo:action/prompt-reply` — emits [`super::PromptReplyAction`].
-    pub fn prompt_reply(cmds: &mut CommandBufferBuilder, text: &str, cancel: bool) {
-        let action = super::PromptReplyAction { text: text.to_string(), cancel };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::PROMPT_REPLY, 0, &data);
-    }
-
-    /// `cuo:action/rename` — emits [`super::RenameAction`].
-    pub fn rename(cmds: &mut CommandBufferBuilder, serial: u32, name: &str) {
-        let action = super::RenameAction { serial, name: name.to_string() };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::RENAME, 0, &data);
-    }
-
-    /// `cuo:action/request-context-menu` — emits [`super::RequestContextMenuAction`].
-    pub fn request_context_menu(cmds: &mut CommandBufferBuilder, serial: u32) {
-        let action = super::RequestContextMenuAction { serial };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::REQUEST_CONTEXT_MENU, 0, &data);
-    }
-
-    /// `cuo:action/request-properties` — emits [`super::RequestPropertiesAction`].
-    pub fn request_properties(cmds: &mut CommandBufferBuilder, serial: u32) {
-        let action = super::RequestPropertiesAction { serial };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::REQUEST_PROPERTIES, 0, &data);
-    }
-
-    /// `cuo:action/request-skills` — emits [`super::RequestSkillsAction`].
-    pub fn request_skills(cmds: &mut CommandBufferBuilder, serial: u32) {
-        let action = super::RequestSkillsAction { serial };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::REQUEST_SKILLS, 0, &data);
-    }
-
-    /// `cuo:action/request-status` — emits [`super::RequestStatusAction`].
-    pub fn request_status(cmds: &mut CommandBufferBuilder, serial: u32) {
-        let action = super::RequestStatusAction { serial };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::REQUEST_STATUS, 0, &data);
-    }
-
-    /// `cuo:action/request-target` — emits [`super::RequestTargetAction`].
-    pub fn request_target(cmds: &mut CommandBufferBuilder, prompt_text: &str) {
-        let action = super::RequestTargetAction { prompt_text: prompt_text.to_string() };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::REQUEST_TARGET, 0, &data);
-    }
-
-    /// `cuo:action/say` — emits [`super::SayAction`].
-    pub fn say(cmds: &mut CommandBufferBuilder, text: &str, hue: u16) {
-        let action = super::SayAction { text: text.to_string(), hue };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::SAY, 0, &data);
-    }
-
-    /// `cuo:action/single-click` — emits [`super::SingleClickAction`].
-    pub fn single_click(cmds: &mut CommandBufferBuilder, serial: u32) {
-        let action = super::SingleClickAction { serial };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::SINGLE_CLICK, 0, &data);
-    }
-
-    /// `cuo:action/target-cancel` — emits [`super::TargetCancelAction`].
-    pub fn target_cancel(cmds: &mut CommandBufferBuilder) {
-        let action = super::TargetCancelAction {  };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::TARGET_CANCEL, 0, &data);
-    }
-
-    /// `cuo:action/target-location` — emits [`super::TargetLocationAction`].
-    pub fn target_location(cmds: &mut CommandBufferBuilder, x: u16, y: u16, z: i8, graphic: u16) {
-        let action = super::TargetLocationAction { x, y, z, graphic };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::TARGET_LOCATION, 0, &data);
-    }
-
-    /// `cuo:action/target-object` — emits [`super::TargetObjectAction`].
-    pub fn target_object(cmds: &mut CommandBufferBuilder, serial: u32) {
-        let action = super::TargetObjectAction { serial };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::TARGET_OBJECT, 0, &data);
-    }
-
-    /// `cuo:action/toggle-war-mode` — emits [`super::ToggleWarModeAction`].
-    pub fn toggle_war_mode(cmds: &mut CommandBufferBuilder) {
-        let action = super::ToggleWarModeAction {  };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::TOGGLE_WAR_MODE, 0, &data);
-    }
-
-    /// `cuo:action/use-skill` — emits [`super::UseSkillAction`].
-    pub fn use_skill(cmds: &mut CommandBufferBuilder, id: i32) {
-        let action = super::UseSkillAction { id };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::USE_SKILL, 0, &data);
-    }
-
-    /// `cuo:action/walk` — emits [`super::WalkAction`].
-    pub fn walk(cmds: &mut CommandBufferBuilder, direction: u8, run: bool) {
-        let action = super::WalkAction { direction, run };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::WALK, 0, &data);
-    }
-
-    /// `cuo:action/walk-to` — emits [`super::WalkToAction`].
-    pub fn walk_to(cmds: &mut CommandBufferBuilder, x: u16, y: u16, z: i8) {
-        let action = super::WalkToAction { x, y, z };
-        let data = serde_json::to_vec(&action).unwrap_or_default();
-        cmds.emit_event(paths::action::WALK_TO, 0, &data);
-    }
 }
 

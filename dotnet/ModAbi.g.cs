@@ -33,12 +33,16 @@ public enum QueryTermKind : byte
   With = 2,
   Without = 3,
   Changed = 4,
+  Added = 5,
 };
 
 public enum ParamKind : byte
 {
   Commands = 0,
   Query = 1,
+  Res = 2,
+  ResMut = 3,
+  Events = 4,
 };
 
 public enum ObserverKind : byte
@@ -560,19 +564,23 @@ public struct ParamDecl : IFlatbufferObject
 
   public ModAbi.ParamKind Kind { get { int o = __p.__offset(4); return o != 0 ? (ModAbi.ParamKind)__p.bb.Get(o + __p.bb_pos) : ModAbi.ParamKind.Commands; } }
   public ModAbi.QueryDecl? Query { get { int o = __p.__offset(6); return o != 0 ? (ModAbi.QueryDecl?)(new ModAbi.QueryDecl()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public ushort TypeId { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUshort(o + __p.bb_pos) : (ushort)0; } }
 
   public static Offset<ModAbi.ParamDecl> CreateParamDecl(FlatBufferBuilder builder,
       ModAbi.ParamKind kind = ModAbi.ParamKind.Commands,
-      Offset<ModAbi.QueryDecl> queryOffset = default(Offset<ModAbi.QueryDecl>)) {
-    builder.StartTable(2);
+      Offset<ModAbi.QueryDecl> queryOffset = default(Offset<ModAbi.QueryDecl>),
+      ushort type_id = 0) {
+    builder.StartTable(3);
     ParamDecl.AddQuery(builder, queryOffset);
+    ParamDecl.AddTypeId(builder, type_id);
     ParamDecl.AddKind(builder, kind);
     return ParamDecl.EndParamDecl(builder);
   }
 
-  public static void StartParamDecl(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void StartParamDecl(FlatBufferBuilder builder) { builder.StartTable(3); }
   public static void AddKind(FlatBufferBuilder builder, ModAbi.ParamKind kind) { builder.AddByte(0, (byte)kind, 0); }
   public static void AddQuery(FlatBufferBuilder builder, Offset<ModAbi.QueryDecl> queryOffset) { builder.AddOffset(1, queryOffset.Value, 0); }
+  public static void AddTypeId(FlatBufferBuilder builder, ushort typeId) { builder.AddUshort(2, typeId, 0); }
   public static Offset<ModAbi.ParamDecl> EndParamDecl(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<ModAbi.ParamDecl>(o);
@@ -585,6 +593,7 @@ public struct ParamDecl : IFlatbufferObject
   public void UnPackTo(ParamDeclT _o) {
     _o.Kind = this.Kind;
     _o.Query = this.Query.HasValue ? this.Query.Value.UnPack() : null;
+    _o.TypeId = this.TypeId;
   }
   public static Offset<ModAbi.ParamDecl> Pack(FlatBufferBuilder builder, ParamDeclT _o) {
     if (_o == null) return default(Offset<ModAbi.ParamDecl>);
@@ -592,7 +601,8 @@ public struct ParamDecl : IFlatbufferObject
     return CreateParamDecl(
       builder,
       _o.Kind,
-      _query);
+      _query,
+      _o.TypeId);
   }
 }
 
@@ -600,10 +610,12 @@ public class ParamDeclT
 {
   public ModAbi.ParamKind Kind { get; set; }
   public ModAbi.QueryDeclT Query { get; set; }
+  public ushort TypeId { get; set; }
 
   public ParamDeclT() {
     this.Kind = ModAbi.ParamKind.Commands;
     this.Query = null;
+    this.TypeId = 0;
   }
 }
 
@@ -615,6 +627,7 @@ static public class ParamDeclVerify
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*Kind*/, 1 /*ModAbi.ParamKind*/, 1, false)
       && verifier.VerifyTable(tablePos, 6 /*Query*/, ModAbi.QueryDeclVerify.Verify, false)
+      && verifier.VerifyField(tablePos, 8 /*TypeId*/, 2 /*ushort*/, 2, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
@@ -824,13 +837,17 @@ public struct ObserverDecl : IFlatbufferObject
   public ArraySegment<byte>? GetEventNameBytes() { return __p.__vector_as_arraysegment(10); }
 #endif
   public byte[] GetEventNameArray() { return __p.__vector_as_array<byte>(10); }
+  public ModAbi.ParamDecl? Params(int j) { int o = __p.__offset(12); return o != 0 ? (ModAbi.ParamDecl?)(new ModAbi.ParamDecl()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int ParamsLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<ModAbi.ObserverDecl> CreateObserverDecl(FlatBufferBuilder builder,
       uint id = 0,
       ModAbi.ObserverKind kind = ModAbi.ObserverKind.Spawn,
       ushort type_id = 0,
-      StringOffset event_nameOffset = default(StringOffset)) {
-    builder.StartTable(4);
+      StringOffset event_nameOffset = default(StringOffset),
+      VectorOffset @paramsOffset = default(VectorOffset)) {
+    builder.StartTable(5);
+    ObserverDecl.AddParams(builder, @paramsOffset);
     ObserverDecl.AddEventName(builder, event_nameOffset);
     ObserverDecl.AddId(builder, id);
     ObserverDecl.AddTypeId(builder, type_id);
@@ -838,11 +855,17 @@ public struct ObserverDecl : IFlatbufferObject
     return ObserverDecl.EndObserverDecl(builder);
   }
 
-  public static void StartObserverDecl(FlatBufferBuilder builder) { builder.StartTable(4); }
+  public static void StartObserverDecl(FlatBufferBuilder builder) { builder.StartTable(5); }
   public static void AddId(FlatBufferBuilder builder, uint id) { builder.AddUint(0, id, 0); }
   public static void AddKind(FlatBufferBuilder builder, ModAbi.ObserverKind kind) { builder.AddByte(1, (byte)kind, 0); }
   public static void AddTypeId(FlatBufferBuilder builder, ushort typeId) { builder.AddUshort(2, typeId, 0); }
   public static void AddEventName(FlatBufferBuilder builder, StringOffset eventNameOffset) { builder.AddOffset(3, eventNameOffset.Value, 0); }
+  public static void AddParams(FlatBufferBuilder builder, VectorOffset paramsOffset) { builder.AddOffset(4, paramsOffset.Value, 0); }
+  public static VectorOffset CreateParamsVector(FlatBufferBuilder builder, Offset<ModAbi.ParamDecl>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateParamsVectorBlock(FlatBufferBuilder builder, Offset<ModAbi.ParamDecl>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateParamsVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<ModAbi.ParamDecl>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateParamsVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<ModAbi.ParamDecl>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartParamsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static Offset<ModAbi.ObserverDecl> EndObserverDecl(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<ModAbi.ObserverDecl>(o);
@@ -857,16 +880,25 @@ public struct ObserverDecl : IFlatbufferObject
     _o.Kind = this.Kind;
     _o.TypeId = this.TypeId;
     _o.EventName = this.EventName;
+    _o.Params = new List<ModAbi.ParamDeclT>();
+    for (var _j = 0; _j < this.ParamsLength; ++_j) {_o.Params.Add(this.Params(_j).HasValue ? this.Params(_j).Value.UnPack() : null);}
   }
   public static Offset<ModAbi.ObserverDecl> Pack(FlatBufferBuilder builder, ObserverDeclT _o) {
     if (_o == null) return default(Offset<ModAbi.ObserverDecl>);
     var _event_name = _o.EventName == null ? default(StringOffset) : builder.CreateString(_o.EventName);
+    var _params = default(VectorOffset);
+    if (_o.Params != null) {
+      var __params = new Offset<ModAbi.ParamDecl>[_o.Params.Count];
+      for (var _j = 0; _j < __params.Length; ++_j) { __params[_j] = ModAbi.ParamDecl.Pack(builder, _o.Params[_j]); }
+      _params = CreateParamsVector(builder, __params);
+    }
     return CreateObserverDecl(
       builder,
       _o.Id,
       _o.Kind,
       _o.TypeId,
-      _event_name);
+      _event_name,
+      _params);
   }
 }
 
@@ -876,12 +908,14 @@ public class ObserverDeclT
   public ModAbi.ObserverKind Kind { get; set; }
   public ushort TypeId { get; set; }
   public string EventName { get; set; }
+  public List<ModAbi.ParamDeclT> Params { get; set; }
 
   public ObserverDeclT() {
     this.Id = 0;
     this.Kind = ModAbi.ObserverKind.Spawn;
     this.TypeId = 0;
     this.EventName = null;
+    this.Params = null;
   }
 }
 
@@ -895,6 +929,7 @@ static public class ObserverDeclVerify
       && verifier.VerifyField(tablePos, 6 /*Kind*/, 1 /*ModAbi.ObserverKind*/, 1, false)
       && verifier.VerifyField(tablePos, 8 /*TypeId*/, 2 /*ushort*/, 2, false)
       && verifier.VerifyString(tablePos, 10 /*EventName*/, false)
+      && verifier.VerifyVectorOfTables(tablePos, 12 /*Params*/, ModAbi.ParamDeclVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
@@ -914,21 +949,24 @@ public struct SetupReply : IFlatbufferObject
   public int ObserversLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
   public bool WantsFilter { get { int o = __p.__offset(8); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
   public bool WantsFilterOut { get { int o = __p.__offset(10); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
+  public bool ResUnchanged { get { int o = __p.__offset(12); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
 
   public static Offset<ModAbi.SetupReply> CreateSetupReply(FlatBufferBuilder builder,
       VectorOffset systemsOffset = default(VectorOffset),
       VectorOffset observersOffset = default(VectorOffset),
       bool wants_filter = false,
-      bool wants_filter_out = false) {
-    builder.StartTable(4);
+      bool wants_filter_out = false,
+      bool res_unchanged = false) {
+    builder.StartTable(5);
     SetupReply.AddObservers(builder, observersOffset);
     SetupReply.AddSystems(builder, systemsOffset);
+    SetupReply.AddResUnchanged(builder, res_unchanged);
     SetupReply.AddWantsFilterOut(builder, wants_filter_out);
     SetupReply.AddWantsFilter(builder, wants_filter);
     return SetupReply.EndSetupReply(builder);
   }
 
-  public static void StartSetupReply(FlatBufferBuilder builder) { builder.StartTable(4); }
+  public static void StartSetupReply(FlatBufferBuilder builder) { builder.StartTable(5); }
   public static void AddSystems(FlatBufferBuilder builder, VectorOffset systemsOffset) { builder.AddOffset(0, systemsOffset.Value, 0); }
   public static VectorOffset CreateSystemsVector(FlatBufferBuilder builder, Offset<ModAbi.SystemDecl>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static VectorOffset CreateSystemsVectorBlock(FlatBufferBuilder builder, Offset<ModAbi.SystemDecl>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
@@ -943,6 +981,7 @@ public struct SetupReply : IFlatbufferObject
   public static void StartObserversVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static void AddWantsFilter(FlatBufferBuilder builder, bool wantsFilter) { builder.AddBool(2, wantsFilter, false); }
   public static void AddWantsFilterOut(FlatBufferBuilder builder, bool wantsFilterOut) { builder.AddBool(3, wantsFilterOut, false); }
+  public static void AddResUnchanged(FlatBufferBuilder builder, bool resUnchanged) { builder.AddBool(4, resUnchanged, false); }
   public static Offset<ModAbi.SetupReply> EndSetupReply(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<ModAbi.SetupReply>(o);
@@ -959,6 +998,7 @@ public struct SetupReply : IFlatbufferObject
     for (var _j = 0; _j < this.ObserversLength; ++_j) {_o.Observers.Add(this.Observers(_j).HasValue ? this.Observers(_j).Value.UnPack() : null);}
     _o.WantsFilter = this.WantsFilter;
     _o.WantsFilterOut = this.WantsFilterOut;
+    _o.ResUnchanged = this.ResUnchanged;
   }
   public static Offset<ModAbi.SetupReply> Pack(FlatBufferBuilder builder, SetupReplyT _o) {
     if (_o == null) return default(Offset<ModAbi.SetupReply>);
@@ -979,7 +1019,8 @@ public struct SetupReply : IFlatbufferObject
       _systems,
       _observers,
       _o.WantsFilter,
-      _o.WantsFilterOut);
+      _o.WantsFilterOut,
+      _o.ResUnchanged);
   }
 }
 
@@ -989,12 +1030,14 @@ public class SetupReplyT
   public List<ModAbi.ObserverDeclT> Observers { get; set; }
   public bool WantsFilter { get; set; }
   public bool WantsFilterOut { get; set; }
+  public bool ResUnchanged { get; set; }
 
   public SetupReplyT() {
     this.Systems = null;
     this.Observers = null;
     this.WantsFilter = false;
     this.WantsFilterOut = false;
+    this.ResUnchanged = false;
   }
 }
 
@@ -1008,6 +1051,7 @@ static public class SetupReplyVerify
       && verifier.VerifyVectorOfTables(tablePos, 6 /*Observers*/, ModAbi.ObserverDeclVerify.Verify, false)
       && verifier.VerifyField(tablePos, 8 /*WantsFilter*/, 1 /*bool*/, 1, false)
       && verifier.VerifyField(tablePos, 10 /*WantsFilterOut*/, 1 /*bool*/, 1, false)
+      && verifier.VerifyField(tablePos, 12 /*ResUnchanged*/, 1 /*bool*/, 1, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
@@ -1175,6 +1219,167 @@ static public class QueryRowsVerify
       && verifier.VerifyTableEnd(tablePos);
   }
 }
+public struct ResValue : IFlatbufferObject
+{
+  private Table __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
+  public static ResValue GetRootAsResValue(ByteBuffer _bb) { return GetRootAsResValue(_bb, new ResValue()); }
+  public static ResValue GetRootAsResValue(ByteBuffer _bb, ResValue obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public ResValue __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public uint ParamIndex { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public ModAbi.CompValue? Value { get { int o = __p.__offset(6); return o != 0 ? (ModAbi.CompValue?)(new ModAbi.CompValue()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public bool Unchanged { get { int o = __p.__offset(8); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
+
+  public static Offset<ModAbi.ResValue> CreateResValue(FlatBufferBuilder builder,
+      uint param_index = 0,
+      Offset<ModAbi.CompValue> valueOffset = default(Offset<ModAbi.CompValue>),
+      bool unchanged = false) {
+    builder.StartTable(3);
+    ResValue.AddValue(builder, valueOffset);
+    ResValue.AddParamIndex(builder, param_index);
+    ResValue.AddUnchanged(builder, unchanged);
+    return ResValue.EndResValue(builder);
+  }
+
+  public static void StartResValue(FlatBufferBuilder builder) { builder.StartTable(3); }
+  public static void AddParamIndex(FlatBufferBuilder builder, uint paramIndex) { builder.AddUint(0, paramIndex, 0); }
+  public static void AddValue(FlatBufferBuilder builder, Offset<ModAbi.CompValue> valueOffset) { builder.AddOffset(1, valueOffset.Value, 0); }
+  public static void AddUnchanged(FlatBufferBuilder builder, bool unchanged) { builder.AddBool(2, unchanged, false); }
+  public static Offset<ModAbi.ResValue> EndResValue(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<ModAbi.ResValue>(o);
+  }
+  public ResValueT UnPack() {
+    var _o = new ResValueT();
+    this.UnPackTo(_o);
+    return _o;
+  }
+  public void UnPackTo(ResValueT _o) {
+    _o.ParamIndex = this.ParamIndex;
+    _o.Value = this.Value.HasValue ? this.Value.Value.UnPack() : null;
+    _o.Unchanged = this.Unchanged;
+  }
+  public static Offset<ModAbi.ResValue> Pack(FlatBufferBuilder builder, ResValueT _o) {
+    if (_o == null) return default(Offset<ModAbi.ResValue>);
+    var _value = _o.Value == null ? default(Offset<ModAbi.CompValue>) : ModAbi.CompValue.Pack(builder, _o.Value);
+    return CreateResValue(
+      builder,
+      _o.ParamIndex,
+      _value,
+      _o.Unchanged);
+  }
+}
+
+public class ResValueT
+{
+  public uint ParamIndex { get; set; }
+  public ModAbi.CompValueT Value { get; set; }
+  public bool Unchanged { get; set; }
+
+  public ResValueT() {
+    this.ParamIndex = 0;
+    this.Value = null;
+    this.Unchanged = false;
+  }
+}
+
+
+static public class ResValueVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
+  {
+    return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyField(tablePos, 4 /*ParamIndex*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyTable(tablePos, 6 /*Value*/, ModAbi.CompValueVerify.Verify, false)
+      && verifier.VerifyField(tablePos, 8 /*Unchanged*/, 1 /*bool*/, 1, false)
+      && verifier.VerifyTableEnd(tablePos);
+  }
+}
+public struct EventValues : IFlatbufferObject
+{
+  private Table __p;
+  public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_25_2_10(); }
+  public static EventValues GetRootAsEventValues(ByteBuffer _bb) { return GetRootAsEventValues(_bb, new EventValues()); }
+  public static EventValues GetRootAsEventValues(ByteBuffer _bb, EventValues obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public EventValues __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+
+  public uint ParamIndex { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public ModAbi.CompValue? Values(int j) { int o = __p.__offset(6); return o != 0 ? (ModAbi.CompValue?)(new ModAbi.CompValue()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int ValuesLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
+
+  public static Offset<ModAbi.EventValues> CreateEventValues(FlatBufferBuilder builder,
+      uint param_index = 0,
+      VectorOffset valuesOffset = default(VectorOffset)) {
+    builder.StartTable(2);
+    EventValues.AddValues(builder, valuesOffset);
+    EventValues.AddParamIndex(builder, param_index);
+    return EventValues.EndEventValues(builder);
+  }
+
+  public static void StartEventValues(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void AddParamIndex(FlatBufferBuilder builder, uint paramIndex) { builder.AddUint(0, paramIndex, 0); }
+  public static void AddValues(FlatBufferBuilder builder, VectorOffset valuesOffset) { builder.AddOffset(1, valuesOffset.Value, 0); }
+  public static VectorOffset CreateValuesVector(FlatBufferBuilder builder, Offset<ModAbi.CompValue>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateValuesVectorBlock(FlatBufferBuilder builder, Offset<ModAbi.CompValue>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateValuesVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<ModAbi.CompValue>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateValuesVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<ModAbi.CompValue>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartValuesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static Offset<ModAbi.EventValues> EndEventValues(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<ModAbi.EventValues>(o);
+  }
+  public EventValuesT UnPack() {
+    var _o = new EventValuesT();
+    this.UnPackTo(_o);
+    return _o;
+  }
+  public void UnPackTo(EventValuesT _o) {
+    _o.ParamIndex = this.ParamIndex;
+    _o.Values = new List<ModAbi.CompValueT>();
+    for (var _j = 0; _j < this.ValuesLength; ++_j) {_o.Values.Add(this.Values(_j).HasValue ? this.Values(_j).Value.UnPack() : null);}
+  }
+  public static Offset<ModAbi.EventValues> Pack(FlatBufferBuilder builder, EventValuesT _o) {
+    if (_o == null) return default(Offset<ModAbi.EventValues>);
+    var _values = default(VectorOffset);
+    if (_o.Values != null) {
+      var __values = new Offset<ModAbi.CompValue>[_o.Values.Count];
+      for (var _j = 0; _j < __values.Length; ++_j) { __values[_j] = ModAbi.CompValue.Pack(builder, _o.Values[_j]); }
+      _values = CreateValuesVector(builder, __values);
+    }
+    return CreateEventValues(
+      builder,
+      _o.ParamIndex,
+      _values);
+  }
+}
+
+public class EventValuesT
+{
+  public uint ParamIndex { get; set; }
+  public List<ModAbi.CompValueT> Values { get; set; }
+
+  public EventValuesT() {
+    this.ParamIndex = 0;
+    this.Values = null;
+  }
+}
+
+
+static public class EventValuesVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
+  {
+    return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyField(tablePos, 4 /*ParamIndex*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyVectorOfTables(tablePos, 6 /*Values*/, ModAbi.CompValueVerify.Verify, false)
+      && verifier.VerifyTableEnd(tablePos);
+  }
+}
 public struct SystemInput : IFlatbufferObject
 {
   private Table __p;
@@ -1189,19 +1394,27 @@ public struct SystemInput : IFlatbufferObject
   public ModAbi.QueryRows? Queries(int j) { int o = __p.__offset(6); return o != 0 ? (ModAbi.QueryRows?)(new ModAbi.QueryRows()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
   public int QueriesLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
   public ulong Tick { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public ModAbi.ResValue? Resources(int j) { int o = __p.__offset(10); return o != 0 ? (ModAbi.ResValue?)(new ModAbi.ResValue()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int ResourcesLength { get { int o = __p.__offset(10); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public ModAbi.EventValues? Events(int j) { int o = __p.__offset(12); return o != 0 ? (ModAbi.EventValues?)(new ModAbi.EventValues()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int EventsLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<ModAbi.SystemInput> CreateSystemInput(FlatBufferBuilder builder,
       uint sys_id = 0,
       VectorOffset queriesOffset = default(VectorOffset),
-      ulong tick = 0) {
-    builder.StartTable(3);
+      ulong tick = 0,
+      VectorOffset resourcesOffset = default(VectorOffset),
+      VectorOffset eventsOffset = default(VectorOffset)) {
+    builder.StartTable(5);
     SystemInput.AddTick(builder, tick);
+    SystemInput.AddEvents(builder, eventsOffset);
+    SystemInput.AddResources(builder, resourcesOffset);
     SystemInput.AddQueries(builder, queriesOffset);
     SystemInput.AddSysId(builder, sys_id);
     return SystemInput.EndSystemInput(builder);
   }
 
-  public static void StartSystemInput(FlatBufferBuilder builder) { builder.StartTable(3); }
+  public static void StartSystemInput(FlatBufferBuilder builder) { builder.StartTable(5); }
   public static void AddSysId(FlatBufferBuilder builder, uint sysId) { builder.AddUint(0, sysId, 0); }
   public static void AddQueries(FlatBufferBuilder builder, VectorOffset queriesOffset) { builder.AddOffset(1, queriesOffset.Value, 0); }
   public static VectorOffset CreateQueriesVector(FlatBufferBuilder builder, Offset<ModAbi.QueryRows>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
@@ -1210,6 +1423,18 @@ public struct SystemInput : IFlatbufferObject
   public static VectorOffset CreateQueriesVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<ModAbi.QueryRows>>(dataPtr, sizeInBytes); return builder.EndVector(); }
   public static void StartQueriesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static void AddTick(FlatBufferBuilder builder, ulong tick) { builder.AddUlong(2, tick, 0); }
+  public static void AddResources(FlatBufferBuilder builder, VectorOffset resourcesOffset) { builder.AddOffset(3, resourcesOffset.Value, 0); }
+  public static VectorOffset CreateResourcesVector(FlatBufferBuilder builder, Offset<ModAbi.ResValue>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateResourcesVectorBlock(FlatBufferBuilder builder, Offset<ModAbi.ResValue>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateResourcesVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<ModAbi.ResValue>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateResourcesVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<ModAbi.ResValue>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartResourcesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddEvents(FlatBufferBuilder builder, VectorOffset eventsOffset) { builder.AddOffset(4, eventsOffset.Value, 0); }
+  public static VectorOffset CreateEventsVector(FlatBufferBuilder builder, Offset<ModAbi.EventValues>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateEventsVectorBlock(FlatBufferBuilder builder, Offset<ModAbi.EventValues>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateEventsVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<ModAbi.EventValues>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateEventsVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<ModAbi.EventValues>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartEventsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static Offset<ModAbi.SystemInput> EndSystemInput(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<ModAbi.SystemInput>(o);
@@ -1224,6 +1449,10 @@ public struct SystemInput : IFlatbufferObject
     _o.Queries = new List<ModAbi.QueryRowsT>();
     for (var _j = 0; _j < this.QueriesLength; ++_j) {_o.Queries.Add(this.Queries(_j).HasValue ? this.Queries(_j).Value.UnPack() : null);}
     _o.Tick = this.Tick;
+    _o.Resources = new List<ModAbi.ResValueT>();
+    for (var _j = 0; _j < this.ResourcesLength; ++_j) {_o.Resources.Add(this.Resources(_j).HasValue ? this.Resources(_j).Value.UnPack() : null);}
+    _o.Events = new List<ModAbi.EventValuesT>();
+    for (var _j = 0; _j < this.EventsLength; ++_j) {_o.Events.Add(this.Events(_j).HasValue ? this.Events(_j).Value.UnPack() : null);}
   }
   public static Offset<ModAbi.SystemInput> Pack(FlatBufferBuilder builder, SystemInputT _o) {
     if (_o == null) return default(Offset<ModAbi.SystemInput>);
@@ -1233,11 +1462,25 @@ public struct SystemInput : IFlatbufferObject
       for (var _j = 0; _j < __queries.Length; ++_j) { __queries[_j] = ModAbi.QueryRows.Pack(builder, _o.Queries[_j]); }
       _queries = CreateQueriesVector(builder, __queries);
     }
+    var _resources = default(VectorOffset);
+    if (_o.Resources != null) {
+      var __resources = new Offset<ModAbi.ResValue>[_o.Resources.Count];
+      for (var _j = 0; _j < __resources.Length; ++_j) { __resources[_j] = ModAbi.ResValue.Pack(builder, _o.Resources[_j]); }
+      _resources = CreateResourcesVector(builder, __resources);
+    }
+    var _events = default(VectorOffset);
+    if (_o.Events != null) {
+      var __events = new Offset<ModAbi.EventValues>[_o.Events.Count];
+      for (var _j = 0; _j < __events.Length; ++_j) { __events[_j] = ModAbi.EventValues.Pack(builder, _o.Events[_j]); }
+      _events = CreateEventsVector(builder, __events);
+    }
     return CreateSystemInput(
       builder,
       _o.SysId,
       _queries,
-      _o.Tick);
+      _o.Tick,
+      _resources,
+      _events);
   }
 }
 
@@ -1246,11 +1489,15 @@ public class SystemInputT
   public uint SysId { get; set; }
   public List<ModAbi.QueryRowsT> Queries { get; set; }
   public ulong Tick { get; set; }
+  public List<ModAbi.ResValueT> Resources { get; set; }
+  public List<ModAbi.EventValuesT> Events { get; set; }
 
   public SystemInputT() {
     this.SysId = 0;
     this.Queries = null;
     this.Tick = 0;
+    this.Resources = null;
+    this.Events = null;
   }
 }
 
@@ -1263,6 +1510,8 @@ static public class SystemInputVerify
       && verifier.VerifyField(tablePos, 4 /*SysId*/, 4 /*uint*/, 4, false)
       && verifier.VerifyVectorOfTables(tablePos, 6 /*Queries*/, ModAbi.QueryRowsVerify.Verify, false)
       && verifier.VerifyField(tablePos, 8 /*Tick*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyVectorOfTables(tablePos, 10 /*Resources*/, ModAbi.ResValueVerify.Verify, false)
+      && verifier.VerifyVectorOfTables(tablePos, 12 /*Events*/, ModAbi.EventValuesVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
@@ -2093,22 +2342,52 @@ public struct ObserverInput : IFlatbufferObject
   public uint ObsId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
   public ulong Entity { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
   public ModAbi.CompValue? Value { get { int o = __p.__offset(8); return o != 0 ? (ModAbi.CompValue?)(new ModAbi.CompValue()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public ModAbi.QueryRows? Queries(int j) { int o = __p.__offset(10); return o != 0 ? (ModAbi.QueryRows?)(new ModAbi.QueryRows()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int QueriesLength { get { int o = __p.__offset(10); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public ModAbi.ResValue? Resources(int j) { int o = __p.__offset(12); return o != 0 ? (ModAbi.ResValue?)(new ModAbi.ResValue()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int ResourcesLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public ModAbi.EventValues? Events(int j) { int o = __p.__offset(14); return o != 0 ? (ModAbi.EventValues?)(new ModAbi.EventValues()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int EventsLength { get { int o = __p.__offset(14); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<ModAbi.ObserverInput> CreateObserverInput(FlatBufferBuilder builder,
       uint obs_id = 0,
       ulong entity = 0,
-      Offset<ModAbi.CompValue> valueOffset = default(Offset<ModAbi.CompValue>)) {
-    builder.StartTable(3);
+      Offset<ModAbi.CompValue> valueOffset = default(Offset<ModAbi.CompValue>),
+      VectorOffset queriesOffset = default(VectorOffset),
+      VectorOffset resourcesOffset = default(VectorOffset),
+      VectorOffset eventsOffset = default(VectorOffset)) {
+    builder.StartTable(6);
     ObserverInput.AddEntity(builder, entity);
+    ObserverInput.AddEvents(builder, eventsOffset);
+    ObserverInput.AddResources(builder, resourcesOffset);
+    ObserverInput.AddQueries(builder, queriesOffset);
     ObserverInput.AddValue(builder, valueOffset);
     ObserverInput.AddObsId(builder, obs_id);
     return ObserverInput.EndObserverInput(builder);
   }
 
-  public static void StartObserverInput(FlatBufferBuilder builder) { builder.StartTable(3); }
+  public static void StartObserverInput(FlatBufferBuilder builder) { builder.StartTable(6); }
   public static void AddObsId(FlatBufferBuilder builder, uint obsId) { builder.AddUint(0, obsId, 0); }
   public static void AddEntity(FlatBufferBuilder builder, ulong entity) { builder.AddUlong(1, entity, 0); }
   public static void AddValue(FlatBufferBuilder builder, Offset<ModAbi.CompValue> valueOffset) { builder.AddOffset(2, valueOffset.Value, 0); }
+  public static void AddQueries(FlatBufferBuilder builder, VectorOffset queriesOffset) { builder.AddOffset(3, queriesOffset.Value, 0); }
+  public static VectorOffset CreateQueriesVector(FlatBufferBuilder builder, Offset<ModAbi.QueryRows>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateQueriesVectorBlock(FlatBufferBuilder builder, Offset<ModAbi.QueryRows>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateQueriesVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<ModAbi.QueryRows>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateQueriesVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<ModAbi.QueryRows>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartQueriesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddResources(FlatBufferBuilder builder, VectorOffset resourcesOffset) { builder.AddOffset(4, resourcesOffset.Value, 0); }
+  public static VectorOffset CreateResourcesVector(FlatBufferBuilder builder, Offset<ModAbi.ResValue>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateResourcesVectorBlock(FlatBufferBuilder builder, Offset<ModAbi.ResValue>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateResourcesVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<ModAbi.ResValue>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateResourcesVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<ModAbi.ResValue>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartResourcesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddEvents(FlatBufferBuilder builder, VectorOffset eventsOffset) { builder.AddOffset(5, eventsOffset.Value, 0); }
+  public static VectorOffset CreateEventsVector(FlatBufferBuilder builder, Offset<ModAbi.EventValues>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateEventsVectorBlock(FlatBufferBuilder builder, Offset<ModAbi.EventValues>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateEventsVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<ModAbi.EventValues>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateEventsVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<ModAbi.EventValues>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartEventsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static Offset<ModAbi.ObserverInput> EndObserverInput(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<ModAbi.ObserverInput>(o);
@@ -2122,15 +2401,42 @@ public struct ObserverInput : IFlatbufferObject
     _o.ObsId = this.ObsId;
     _o.Entity = this.Entity;
     _o.Value = this.Value.HasValue ? this.Value.Value.UnPack() : null;
+    _o.Queries = new List<ModAbi.QueryRowsT>();
+    for (var _j = 0; _j < this.QueriesLength; ++_j) {_o.Queries.Add(this.Queries(_j).HasValue ? this.Queries(_j).Value.UnPack() : null);}
+    _o.Resources = new List<ModAbi.ResValueT>();
+    for (var _j = 0; _j < this.ResourcesLength; ++_j) {_o.Resources.Add(this.Resources(_j).HasValue ? this.Resources(_j).Value.UnPack() : null);}
+    _o.Events = new List<ModAbi.EventValuesT>();
+    for (var _j = 0; _j < this.EventsLength; ++_j) {_o.Events.Add(this.Events(_j).HasValue ? this.Events(_j).Value.UnPack() : null);}
   }
   public static Offset<ModAbi.ObserverInput> Pack(FlatBufferBuilder builder, ObserverInputT _o) {
     if (_o == null) return default(Offset<ModAbi.ObserverInput>);
     var _value = _o.Value == null ? default(Offset<ModAbi.CompValue>) : ModAbi.CompValue.Pack(builder, _o.Value);
+    var _queries = default(VectorOffset);
+    if (_o.Queries != null) {
+      var __queries = new Offset<ModAbi.QueryRows>[_o.Queries.Count];
+      for (var _j = 0; _j < __queries.Length; ++_j) { __queries[_j] = ModAbi.QueryRows.Pack(builder, _o.Queries[_j]); }
+      _queries = CreateQueriesVector(builder, __queries);
+    }
+    var _resources = default(VectorOffset);
+    if (_o.Resources != null) {
+      var __resources = new Offset<ModAbi.ResValue>[_o.Resources.Count];
+      for (var _j = 0; _j < __resources.Length; ++_j) { __resources[_j] = ModAbi.ResValue.Pack(builder, _o.Resources[_j]); }
+      _resources = CreateResourcesVector(builder, __resources);
+    }
+    var _events = default(VectorOffset);
+    if (_o.Events != null) {
+      var __events = new Offset<ModAbi.EventValues>[_o.Events.Count];
+      for (var _j = 0; _j < __events.Length; ++_j) { __events[_j] = ModAbi.EventValues.Pack(builder, _o.Events[_j]); }
+      _events = CreateEventsVector(builder, __events);
+    }
     return CreateObserverInput(
       builder,
       _o.ObsId,
       _o.Entity,
-      _value);
+      _value,
+      _queries,
+      _resources,
+      _events);
   }
 }
 
@@ -2139,11 +2445,17 @@ public class ObserverInputT
   public uint ObsId { get; set; }
   public ulong Entity { get; set; }
   public ModAbi.CompValueT Value { get; set; }
+  public List<ModAbi.QueryRowsT> Queries { get; set; }
+  public List<ModAbi.ResValueT> Resources { get; set; }
+  public List<ModAbi.EventValuesT> Events { get; set; }
 
   public ObserverInputT() {
     this.ObsId = 0;
     this.Entity = 0;
     this.Value = null;
+    this.Queries = null;
+    this.Resources = null;
+    this.Events = null;
   }
 }
 
@@ -2156,6 +2468,9 @@ static public class ObserverInputVerify
       && verifier.VerifyField(tablePos, 4 /*ObsId*/, 4 /*uint*/, 4, false)
       && verifier.VerifyField(tablePos, 6 /*Entity*/, 8 /*ulong*/, 8, false)
       && verifier.VerifyTable(tablePos, 8 /*Value*/, ModAbi.CompValueVerify.Verify, false)
+      && verifier.VerifyVectorOfTables(tablePos, 10 /*Queries*/, ModAbi.QueryRowsVerify.Verify, false)
+      && verifier.VerifyVectorOfTables(tablePos, 12 /*Resources*/, ModAbi.ResValueVerify.Verify, false)
+      && verifier.VerifyVectorOfTables(tablePos, 14 /*Events*/, ModAbi.EventValuesVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

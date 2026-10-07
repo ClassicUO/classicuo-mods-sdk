@@ -1,3 +1,4 @@
+using System.Text.Json;
 using ModAbi;
 
 namespace CuoModSdk;
@@ -8,57 +9,46 @@ namespace CuoModSdk;
 /// — the same shape as a host <c>TinyEcs.Bevy</c> system.
 ///
 /// <para><see cref="Describe"/> runs once, at <c>AddSystem</c> time, and appends this
-/// parameter's wire declaration (a <c>Query</c> param with its terms; nothing for
-/// <see cref="Commands"/> / <see cref="ModContext"/> / <see cref="Res{T}"/>).
-/// <see cref="Create"/> runs per call and builds the instance from the current
-/// <c>mod_run</c> / <c>mod_observer</c> input.</para>
+/// parameter's wire declaration. <see cref="TryCreate"/> runs per call and builds the
+/// value from the data the host pushed; <c>false</c> skips the run (a <see cref="Res{T}"/>
+/// the host has no value for — take <see cref="Opt{P}"/> to run anyway).</para>
 ///
-/// <para>Static abstract members, not <c>new()</c> + instance <c>Fetch</c> like the host:
-/// the guest's params are value copies of a pushed snapshot, so there is nothing to
-/// keep alive between calls, and closed generics keep the whole resolution
-/// reflection-free under the NativeAOT-LLVM publish.</para>
+/// <para>Static abstract members keep the whole resolution reflection-free under the
+/// NativeAOT-LLVM publish.</para>
 /// </summary>
 public interface ISystemParam<TSelf> where TSelf : ISystemParam<TSelf>
 {
-    /// <summary>Append this parameter's wire declaration. A param that needs no host data declares nothing.</summary>
     static abstract void Describe(ParamDescriber d);
 
-    /// <summary>Build the parameter for one call.</summary>
-    static abstract TSelf Create(ParamContext c);
+    static abstract bool TryCreate(ParamContext c, out TSelf value);
 }
 
 /// <summary>
-/// Collects the wire parameter declarations of one system as its parameter types
-/// describe themselves. Only the SDK's own params write to it — a hand-written
-/// <see cref="ISystemParam{TSelf}"/> describes nothing, which is correct for a param
-/// that reads no host data.
+/// Collects the wire parameter declarations of one system / observer as its parameter
+/// types describe themselves. The param index of each declaration is what the host's
+/// pushed data is keyed by.
 /// </summary>
 public sealed class ParamDescriber
 {
-    readonly ModHost _host;
+    internal readonly ModHost Host;
     internal readonly List<ParamDeclT> Params = new();
-    int _queries;
+    int _locals;
     int _last = -1;
 
-    internal ParamDescriber(ModHost host)
+    internal ParamDescriber(ModHost host) => Host = host;
+
+    /// <summary>Append a wire parameter; the describing parameter gets its index.</summary>
+    internal void Add(ParamDeclT decl)
     {
-        _host = host;
-        // Every system gets a Commands param: the SDK always hands the body a command
-        // buffer, and an unused one costs the host nothing.
-        Params.Add(new ParamDeclT { Kind = ParamKind.Commands });
+        _last = Params.Count;
+        Params.Add(decl);
     }
 
-    internal QueryTermSink BeginQuery() => new(_host);
+    /// <summary>A guest-only slot (a <see cref="Local{T}"/>), not on the wire.</summary>
+    internal void AddLocal() => _last = _locals++;
 
-    internal void EndQuery(QueryTermSink sink)
-    {
-        Params.Add(new ParamDeclT { Kind = ParamKind.Query, Query = new QueryDeclT { Terms = sink.Terms } });
-        _last = _queries++;
-    }
-
-    // The query ordinal the parameter just described (-1 = it declared no query).
-    // ModBuilder captures it per parameter position so Create() can index
-    // SystemInput.queries without re-running Describe.
+    // The slot the parameter just described (-1 = none). Captured per parameter position
+    // so TryCreate() can index the pushed data without re-running Describe.
     internal int Take()
     {
         var last = _last;
@@ -67,48 +57,169 @@ public sealed class ParamDescriber
     }
 }
 
-/// <summary>
-/// The one call's worth of state a parameter is built from. Opaque to a mod: it exists
-/// so <see cref="ISystemParam{TSelf}.Create"/> has a single argument.
-/// </summary>
-public readonly struct ParamContext
+/// <summary>Per-run state shared by a run's parameters.</summary>
+internal sealed class RunScope
 {
-    internal readonly ModHost Host;
-    internal readonly Commands Commands;
-    internal readonly SystemInputView Input;
-    internal readonly ObserverInputView Observer;
-    internal readonly int QueryIndex;
+    internal required ModHost Host;
+    internal required Commands Commands;
+    internal required ParamsView Input;
+    internal required List<object> Locals;
+    internal List<Action>? WriteBacks;
+    internal ulong TriggerEntity;
+    internal CompView? TriggerValue;
 
-    internal ParamContext(ModHost host, Commands commands, SystemInputView input, ObserverInputView observer, int queryIndex)
-    {
-        Host = host;
-        Commands = commands;
-        Input = input;
-        Observer = observer;
-        QueryIndex = queryIndex;
-    }
-
-    // Rows of the query this parameter declared. Null in an observer, which carries none.
-    internal QueryRowsView? Rows => QueryIndex < 0 ? null : Input.Query(QueryIndex);
-
-    internal T Payload<T>() => Observer.Value is { } v ? v.Parse(Host.Json<T>())! : default!;
+    internal void AfterRun(Action writeBack) => (WriteBacks ??= new List<Action>()).Add(writeBack);
 }
 
 /// <summary>
-/// A read-only host singleton, pulled through <c>resource_get</c> when the parameter is
-/// built. <c>default</c> when the host has no such resource. Writes go the other way —
-/// <c>Commands.SetResource</c>.
+/// The one call's worth of state a parameter is built from. Opaque to a mod: it exists
+/// so <see cref="ISystemParam{TSelf}.TryCreate"/> has a single argument.
+/// </summary>
+public readonly struct ParamContext
+{
+    internal readonly RunScope Scope;
+    internal readonly int Slot;
+
+    internal ParamContext(RunScope scope, int slot)
+    {
+        Scope = scope;
+        Slot = slot;
+    }
+
+    internal ModHost Host => Scope.Host;
+}
+
+/// <summary>
+/// Read-only access to a resource. The system is skipped while the client has none
+/// (take <c>Opt&lt;Res&lt;T&gt;&gt;</c> to run anyway).
 /// </summary>
 public readonly struct Res<T> : ISystemParam<Res<T>>
 {
-    readonly T? _value;
+    public readonly T Value;
 
-    Res(T? value) => _value = value;
+    Res(T value) => Value = value;
 
-    /// <summary>Nothing on the wire: a resource is pulled, not pushed.</summary>
-    public static void Describe(ParamDescriber d) { }
+    public static void Describe(ParamDescriber d) =>
+        d.Add(new ParamDeclT { Kind = ParamKind.Res, TypeId = d.Host.Id<T>() });
 
-    public static Res<T> Create(ParamContext c) => new(Imports.ResourceGet(c.Host.Id<T>(), c.Host.Json<T>()));
+    public static bool TryCreate(ParamContext c, out Res<T> value)
+    {
+        value = default;
+        if (c.Scope.Input.Resource(c.Slot) is not { } v || v.Parse(c.Host.Json<T>()) is not { } parsed)
+            return false;
+        value = new Res<T>(parsed);
+        return true;
+    }
+}
 
-    public T? Value => _value;
+/// <summary>
+/// Writable access to a resource: change <see cref="Value"/> and it is written back when
+/// the system returns (only when it actually changed). Skipped like <see cref="Res{T}"/>.
+/// </summary>
+public sealed class ResMut<T> : ISystemParam<ResMut<T>>
+{
+    public T Value;
+
+    ResMut(T value) => Value = value;
+
+    public static void Describe(ParamDescriber d) =>
+        d.Add(new ParamDeclT { Kind = ParamKind.ResMut, TypeId = d.Host.Id<T>() });
+
+    public static bool TryCreate(ParamContext c, out ResMut<T> value)
+    {
+        value = null!;
+        var info = c.Host.Json<T>();
+        if (c.Scope.Input.Resource(c.Slot) is not { } v || v.Parse(info) is not { } parsed)
+            return false;
+        var res = new ResMut<T>(parsed);
+        // Compare against our own serialization, not the host's text: the two format
+        // differently, and a spurious write marks the resource changed.
+        var original = JsonSerializer.SerializeToUtf8Bytes(parsed, info);
+        var scope = c.Scope;
+        scope.AfterRun(() =>
+        {
+            var now = JsonSerializer.SerializeToUtf8Bytes(res.Value, info);
+            if (!now.AsSpan().SequenceEqual(original))
+                scope.Commands.ResourceSetRaw(scope.Host.Id<T>(), now);
+        });
+        value = res;
+        return true;
+    }
+}
+
+/// <summary>
+/// A parameter that may be missing (<c>Opt&lt;Res&lt;Time&gt;&gt;</c>): the system runs
+/// anyway, with <see cref="HasValue"/> false.
+/// </summary>
+public readonly struct Opt<P> : ISystemParam<Opt<P>> where P : ISystemParam<P>
+{
+    public readonly bool HasValue;
+    public readonly P Value;
+
+    Opt(bool has, P value)
+    {
+        HasValue = has;
+        Value = value;
+    }
+
+    public static void Describe(ParamDescriber d) => P.Describe(d);
+
+    public static bool TryCreate(ParamContext c, out Opt<P> value)
+    {
+        var has = P.TryCreate(c, out var inner);
+        value = new Opt<P>(has, inner);
+        return true;
+    }
+}
+
+/// <summary>The events of type <typeparamref name="T"/> sent since this system last ran.</summary>
+public readonly struct EventReader<T> : ISystemParam<EventReader<T>>
+{
+    readonly T[] _events;
+
+    EventReader(T[] events) => _events = events;
+
+    public static void Describe(ParamDescriber d) =>
+        d.Add(new ParamDeclT { Kind = ParamKind.Events, TypeId = d.Host.Id<T>() });
+
+    public static bool TryCreate(ParamContext c, out EventReader<T> value)
+    {
+        var info = c.Host.Json<T>();
+        var list = new List<T>();
+        foreach (var v in c.Scope.Input.EventValues(c.Slot))
+            if (v.Parse(info) is { } e)
+                list.Add(e);
+        value = new EventReader<T>(list.ToArray());
+        return true;
+    }
+
+    public ReadOnlySpan<T> Read() => _events ?? [];
+
+    public int Count => _events?.Length ?? 0;
+
+    public bool IsEmpty => Count == 0;
+
+    public ReadOnlySpan<T>.Enumerator GetEnumerator() => Read().GetEnumerator();
+}
+
+/// <summary>
+/// State that belongs to one system and survives between its runs (a counter, a timer,
+/// the window it spawned). Guest-only: nothing on the wire.
+/// </summary>
+public sealed class Local<T> : ISystemParam<Local<T>> where T : new()
+{
+    public T Value = new();
+
+    public static void Describe(ParamDescriber d) => d.AddLocal();
+
+    public static bool TryCreate(ParamContext c, out Local<T> value)
+    {
+        var locals = c.Scope.Locals;
+        while (locals.Count <= c.Slot)
+            locals.Add(null!);
+        if (locals[c.Slot] is not Local<T> local)
+            locals[c.Slot] = local = new Local<T>();
+        value = local;
+        return true;
+    }
 }

@@ -1,0 +1,311 @@
+/// A ClassicUO mod: the generic ECS contract (tinyecs:modding) plus host functions —
+/// data files (`assets`), player actions (`actions`), raw `packets`, storage.
+///
+/// Game data (entities, components, resources, events) is NOT here: it is reached
+/// through the ECS with type paths ("cuo:ent/graphic", "cuo:player/hits", ...),
+/// listed in docs/modding-reference.md.
+package cuo:modding@0.1.0;
+
+interface host {
+    use tinyecs:modding/ecs@0.1.0.{entity, json};
+
+    /// Where `storage-get` / `storage-set` keep the mod's blob.
+    enum scope {
+        /// One blob for the mod, shared by every character.
+        global,
+        /// One blob per character (empty until a character is logged in).
+        character,
+    }
+
+    /// Writes a line to the client log, prefixed with the mod name.
+    log: func(message: string);
+
+    /// Pixel width of `text` in a UO font.
+    measure-text: func(font: u16, text: string) -> u32;
+
+    /// The entity of a UO serial (an item or mobile the client knows); none when
+    /// unknown.
+    resolve-serial: func(serial: u32) -> option<entity>;
+
+    /// The mod's stored blob ("" when nothing was stored).
+    storage-get: func(scope: scope) -> string;
+
+    /// Replaces the mod's stored blob. Written to disk immediately.
+    storage-set: func(scope: scope, value: string);
+}
+
+/// Raw UO packets, both ways. A packet is the full wire bytes, id first. Prefer
+/// world data and `actions` when they cover what you need: they keep the client's
+/// own state in step.
+interface packets {
+    enum direction {
+        /// Server to client.
+        incoming,
+        /// Client to server.
+        outgoing,
+    }
+
+    /// What `on-packet` decides.
+    variant verdict {
+        /// Let it through unchanged.
+        pass,
+        /// Drop it: the client never handles / sends it.
+        block,
+        /// Let these bytes through instead.
+        replace(list<u8>),
+    }
+
+    /// Asks for `on-packet` calls for these packet ids in one direction. Call it in
+    /// `setup`; a mod that never calls it gets no packets. Calling again adds ids.
+    intercept: func(dir: direction, ids: list<u8>);
+
+    /// Sends a packet to the server, as if the client had sent it.
+    send-to-server: func(packet: list<u8>);
+
+    /// Feeds a packet to the client, as if the server had sent it.
+    send-to-client: func(packet: list<u8>);
+}
+
+/// The client's UO data files, read-only. Images come back decoded from the files
+/// (not from the GPU), so they work before anything was drawn.
+///
+/// Conventions: pixels are RGBA8, straight alpha, row-major, `width * height * 4`
+/// bytes. Colours are u32 0xAARRGGBB. A `hue` argument is the wire value: 0 = none,
+/// 0x8000 bit = partial hue (only grey pixels recoloured).
+interface assets {
+    enum image-kind {
+        /// Land tile art, id 0..0x3FFF (44x44 diamond).
+        land,
+        /// Item / static art, by graphic.
+        art,
+        /// Gump image.
+        gump,
+        /// Land texture (64x64 or 128x128), by tiledata texmap id.
+        texmap,
+        /// Light shape, 0..99.
+        light,
+    }
+
+    record size { width: u32, height: u32 }
+
+    record image { width: u32, height: u32, rgba: list<u8> }
+
+    /// Width and height; none when the id is missing.
+    image-size: func(kind: image-kind, id: u32) -> option<size>;
+
+    /// Decoded pixels with `hue` applied; none when the id is missing.
+    image-pixels: func(kind: image-kind, id: u32, hue: u16) -> option<image>;
+
+    /// Which mobile animation to read. `direction` is 0..7 (the host mirrors the
+    /// ones UO stores flipped); `action` is the UO action group.
+    record anim-key { body: u16, action: u8, direction: u8 }
+
+    record frame-info {
+        width: u32,
+        height: u32,
+        /// Draw offset: the frame's anchor point relative to its top-left.
+        center-x: s32,
+        center-y: s32,
+    }
+
+    /// Number of frames; none when the body has no such animation.
+    anim-frames: func(key: anim-key) -> option<u32>;
+
+    /// Size and anchor of one frame.
+    anim-frame: func(key: anim-key, frame: u32) -> option<frame-info>;
+
+    /// Decoded pixels of one frame (already mirrored), with `hue` applied.
+    anim-pixels: func(key: anim-key, frame: u32, hue: u16) -> option<image>;
+
+    record static-info {
+        name: string,
+        %flags: u64,
+        weight: u8,
+        layer: u8,
+        count: s32,
+        anim-id: u16,
+        hue: u16,
+        light-index: u16,
+        height: u8,
+    }
+
+    record land-info { name: string, %flags: u64, texmap: u16 }
+
+    /// The tiledata row of an item / static graphic.
+    static-tile: func(graphic: u16) -> option<static-info>;
+
+    /// The tiledata row of a land tile.
+    land-tile: func(id: u16) -> option<land-info>;
+
+    /// The 32-colour ramp of a hue (1-based, as on the wire), dark to light.
+    hue-ramp: func(hue: u16) -> option<list<u32>>;
+
+    /// A cliloc by id with its `~n_ARG~` slots filled from `args`; empty when
+    /// unknown.
+    cliloc: func(id: u32, args: list<string>) -> string;
+
+    /// Map file data only (no items, no house customisation). `map` is the facet
+    /// index.
+    record land-cell { graphic: u16, z: s8 }
+    record static-cell { graphic: u16, z: s8, hue: u16 }
+
+    map-size: func(%map: u8) -> option<size>;
+    map-land: func(%map: u8, x: u16, y: u16) -> option<land-cell>;
+    map-statics: func(%map: u8, x: u16, y: u16) -> list<static-cell>;
+
+    /// The pieces of a multi (house, boat), offsets relative to its centre.
+    record multi-part { graphic: u16, x: s16, y: s16, z: s16 }
+    multi: func(id: u16) -> list<multi-part>;
+
+    record skill { index: u16, name: string, has-action: bool }
+    skills: func() -> list<skill>;
+}
+
+/// What the player can do. Each call goes through the client's own code path (the
+/// same one a click or hotkey uses), so the client's state — held item, last target,
+/// last object, war mode, the target queue — stays in step with the server. Calls
+/// are fire-and-forget; the outcome shows up as world data and events.
+///
+/// Only primitives are here. Combinations (move every item of a type, target self,
+/// bandage self, ...) are SDK helpers built on these.
+interface actions {
+    /// A UO serial (items have the 0x40000000 bit).
+    type serial = u32;
+
+    enum direction { north, north-east, east, south-east, south, south-west, west, north-west }
+    enum speech-kind { regular, emote, whisper, yell, guild, alliance }
+    enum lock-state { up, down, locked }
+    enum stat { str, dex, int }
+    enum virtue { honor, sacrifice, valor }
+    enum ability { primary, secondary }
+    enum window {
+        paperdoll, status, journal, skills, backpack, world-map, minimap, options,
+        buffs, combat-book, party, guild, quest, logout,
+    }
+
+    record point { x: u16, y: u16, z: s8 }
+
+    variant destination {
+        /// Into a container; the server picks the slot.
+        container(serial),
+        /// Into a container at a slot (x, y).
+        container-at(tuple<serial, u16, u16>),
+        /// On the ground.
+        ground(point),
+    }
+
+    // ── items ──
+    double-click: func(target: serial);
+    single-click: func(target: serial);
+    /// Picks the item up onto the cursor (amount 0 = whole stack).
+    pick-up: func(item: serial, amount: u16);
+    /// Drops the item held on the cursor.
+    drop: func(to: destination);
+    /// Equips the item held on the cursor.
+    equip: func(layer: u8, mobile: serial);
+    /// Pick up + drop in one step, without touching the cursor.
+    move-item: func(item: serial, amount: u16, to: destination);
+    /// Pick up + equip in one step.
+    wear: func(item: serial, layer: u8, mobile: serial);
+    /// Uses `item` on `target` (bandages, keys, ...).
+    use-item-on: func(item: serial, target: serial);
+    equip-last-weapon: func();
+    rename: func(mobile: serial, name: string);
+    request-properties: func(target: serial);
+    close-container: func(container: serial);
+
+    // ── movement ──
+    walk: func(dir: direction, run: bool);
+    /// Pathfinds to a tile.
+    walk-to: func(at: point);
+    cancel-walk-to: func();
+    open-door: func();
+    resync: func();
+
+    // ── combat ──
+    set-war-mode: func(on: bool);
+    attack: func(mobile: serial);
+    /// Toggles the weapon's special ability.
+    use-ability: func(which: ability);
+    clear-ability: func();
+    toggle-flying: func();
+
+    // ── targeting ──
+    /// Answers the open target cursor, or queues the answer for the next one.
+    target-object: func(target: serial);
+    target-location: func(at: point, graphic: u16);
+    target-cancel: func();
+    clear-target-queue: func();
+    /// Shows a client-side target cursor; the pick arrives as `cuo:target/local-result`.
+    request-target: func(prompt: string);
+
+    // ── spells, skills, virtues ──
+    cast-spell: func(id: u16);
+    open-spellbook: func(kind: u8);
+    use-skill: func(index: u16);
+    set-skill-lock: func(index: u16, state: lock-state);
+    set-stat-lock: func(which: stat, state: lock-state);
+    invoke-virtue: func(which: virtue);
+    /// "bow" or "salute".
+    emote-action: func(name: string);
+
+    // ── speech ──
+    say: func(text: string, kind: speech-kind, hue: option<u16>);
+    /// To the whole party, or one member.
+    party-say: func(text: string, to: option<serial>);
+
+    // ── gumps, menus, prompts ──
+    gump-reply: func(gump: u32, button: s32, switches: list<u32>, texts: list<tuple<u16, string>>);
+    gump-close: func(gump: u32);
+    request-context-menu: func(target: serial);
+    context-menu-reply: func(target: serial, index: u16);
+    prompt-reply: func(text: string);
+    prompt-cancel: func();
+    menu-reply: func(menu: serial, menu-id: u16, index: u16, graphic: u16, hue: u16);
+    text-entry-reply: func(dialog: serial, parent-id: u8, button: u8, text: string, ok: bool);
+    dye-reply: func(tub: serial, graphic: u16, hue: u16);
+    help-request: func();
+
+    // ── party ──
+    /// The server answers with a target cursor.
+    party-invite: func();
+    /// None = pick by target.
+    party-remove: func(member: option<serial>);
+    party-accept: func(leader: serial);
+    party-decline: func(leader: serial);
+    party-set-loot: func(shareable: bool);
+
+    // ── trade, vendors ──
+    trade-accept: func(container: serial, accepted: bool);
+    trade-cancel: func(container: serial);
+    trade-set-gold: func(container: serial, gold: u32, platinum: u32);
+    vendor-buy: func(vendor: serial, items: list<tuple<serial, u16>>);
+    vendor-sell: func(vendor: serial, items: list<tuple<serial, u16>>);
+
+    // ── requests, client ──
+    /// None = yourself.
+    request-status: func(mobile: option<serial>);
+    request-skills: func(mobile: option<serial>);
+    /// `target` picks whose paperdoll / status; none = yours.
+    open-window: func(w: window, target: option<serial>);
+    close-window: func(w: window);
+    set-view-range: func(range: u8);
+    logout: func();
+}
+
+/// What a ClassicUO mod implements.
+world mod {
+    include tinyecs:modding/guest@0.1.0;
+    import host;
+    import assets;
+    import actions;
+    import packets;
+    use packets.{direction, verdict};
+
+    /// An intercepted packet, before the client handles (incoming) or sends
+    /// (outgoing) it. Mods run in load order; each sees the previous one's
+    /// replacement, and a block stops the chain. Packets a mod injects with
+    /// `send-to-*` skip that mod's own `on-packet`. Only called for the ids passed
+    /// to `packets.intercept`; the SDK provides a default that passes everything.
+    export on-packet: func(dir: direction, packet: list<u8>) -> verdict;
+}

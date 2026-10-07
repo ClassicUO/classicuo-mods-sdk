@@ -45,6 +45,38 @@ uint16_t cuo_Amount_id(void) { TYPE_ID(cuo_Amount_PATH); }
 cuo_comp cuo_Amount_comp(const cuo_Amount *v) { return cuo_comp_bytes(cuo_Amount_id(), cuo_Amount_json(v)); }
 bool cuo_Amount_get(uint64_t entity, cuo_Amount *out) { return cuo_Amount_parse(cuo_component_json(entity, cuo_Amount_id()), out); }
 
+void cuo_AutoOpenedCorpse_write(cuo_jw *w, const cuo_AutoOpenedCorpse *v)
+{
+    (void)v;
+    cuo_jw_obj(w);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_AutoOpenedCorpse_read(const cJSON *json, cuo_AutoOpenedCorpse *out)
+{
+    memset(out, 0, sizeof *out);
+    (void)json;
+}
+
+cuo_bytes cuo_AutoOpenedCorpse_json(const cuo_AutoOpenedCorpse *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_AutoOpenedCorpse_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_AutoOpenedCorpse_parse(cuo_bytes json, cuo_AutoOpenedCorpse *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_AutoOpenedCorpse_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_AutoOpenedCorpse_id(void) { TYPE_ID(cuo_AutoOpenedCorpse_PATH); }
+cuo_comp cuo_AutoOpenedCorpse_comp(void) { return cuo_comp_marker(cuo_AutoOpenedCorpse_id()); }
+bool cuo_AutoOpenedCorpse_has(uint64_t entity) { return cuo_component_json(entity, cuo_AutoOpenedCorpse_id()).ptr != NULL; }
+
 void cuo_Color_write(cuo_jw *w, const cuo_Color *v)
 {
     cuo_jw_obj(w);
@@ -151,6 +183,48 @@ uint16_t cuo_BookWindow_id(void) { TYPE_ID(cuo_BookWindow_PATH); }
 cuo_comp cuo_BookWindow_comp(void) { return cuo_comp_marker(cuo_BookWindow_id()); }
 bool cuo_BookWindow_has(uint64_t entity) { return cuo_component_json(entity, cuo_BookWindow_id()).ptr != NULL; }
 
+void cuo_BorderColorDto_write(cuo_jw *w, const cuo_BorderColorDto *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "R");
+    cuo_jw_num(w, v->r);
+    cuo_jw_key(w, "G");
+    cuo_jw_num(w, v->g);
+    cuo_jw_key(w, "B");
+    cuo_jw_num(w, v->b);
+    cuo_jw_key(w, "A");
+    cuo_jw_num(w, v->a);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_BorderColorDto_read(const cJSON *json, cuo_BorderColorDto *out)
+{
+    memset(out, 0, sizeof *out);
+    out->r = (float)rd_num(FIELD(json, "R"));
+    out->g = (float)rd_num(FIELD(json, "G"));
+    out->b = (float)rd_num(FIELD(json, "B"));
+    out->a = (float)rd_num(FIELD(json, "A"));
+}
+
+cuo_bytes cuo_BorderColorDto_json(const cuo_BorderColorDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_BorderColorDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_BorderColorDto_parse(cuo_bytes json, cuo_BorderColorDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_BorderColorDto_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_BorderColorDto_id(void) { TYPE_ID(cuo_BorderColorDto_PATH); }
+cuo_comp cuo_BorderColorDto_comp(const cuo_BorderColorDto *v) { return cuo_comp_bytes(cuo_BorderColorDto_id(), cuo_BorderColorDto_json(v)); }
+bool cuo_BorderColorDto_get(uint64_t entity, cuo_BorderColorDto *out) { return cuo_BorderColorDto_parse(cuo_component_json(entity, cuo_BorderColorDto_id()), out); }
+
 void cuo_BorderRadius_write(cuo_jw *w, const cuo_BorderRadius *v)
 {
     cuo_jw_obj(w);
@@ -256,39 +330,6 @@ bool cuo_BulletinBoardWindow_parse(cuo_bytes json, cuo_BulletinBoardWindow *out)
 uint16_t cuo_BulletinBoardWindow_id(void) { TYPE_ID(cuo_BulletinBoardWindow_PATH); }
 cuo_comp cuo_BulletinBoardWindow_comp(void) { return cuo_comp_marker(cuo_BulletinBoardWindow_id()); }
 bool cuo_BulletinBoardWindow_has(uint64_t entity) { return cuo_component_json(entity, cuo_BulletinBoardWindow_id()).ptr != NULL; }
-
-void cuo_CastSpellAction_write(cuo_jw *w, const cuo_CastSpellAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Id");
-    cuo_jw_int(w, v->id);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_CastSpellAction_read(const cJSON *json, cuo_CastSpellAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->id = (int32_t)rd_i64(FIELD(json, "Id"));
-}
-
-cuo_bytes cuo_CastSpellAction_json(const cuo_CastSpellAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_CastSpellAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_CastSpellAction_parse(cuo_bytes json, cuo_CastSpellAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_CastSpellAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_CastSpellAction_id(void) { TYPE_ID(cuo_CastSpellAction_PATH); }
-cuo_comp cuo_CastSpellAction_comp(const cuo_CastSpellAction *v) { return cuo_comp_bytes(cuo_CastSpellAction_id(), cuo_CastSpellAction_json(v)); }
-void cuo_CastSpellAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_CastSpellAction *v) { cuo_emit(cmds, cuo_CastSpellAction_PATH, entity, cuo_CastSpellAction_json(v)); }
 
 void cuo_CharCreationScene_write(cuo_jw *w, const cuo_CharCreationScene *v)
 {
@@ -444,6 +485,39 @@ uint16_t cuo_CharacterSelectionScene_id(void) { TYPE_ID(cuo_CharacterSelectionSc
 cuo_comp cuo_CharacterSelectionScene_comp(void) { return cuo_comp_marker(cuo_CharacterSelectionScene_id()); }
 bool cuo_CharacterSelectionScene_has(uint64_t entity) { return cuo_component_json(entity, cuo_CharacterSelectionScene_id()).ptr != NULL; }
 
+void cuo_ChildOfDto_write(cuo_jw *w, const cuo_ChildOfDto *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Parent");
+    cuo_jw_uint(w, v->parent);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ChildOfDto_read(const cJSON *json, cuo_ChildOfDto *out)
+{
+    memset(out, 0, sizeof *out);
+    out->parent = (uint64_t)rd_u64(FIELD(json, "Parent"));
+}
+
+cuo_bytes cuo_ChildOfDto_json(const cuo_ChildOfDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ChildOfDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ChildOfDto_parse(cuo_bytes json, cuo_ChildOfDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ChildOfDto_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ChildOfDto_id(void) { TYPE_ID(cuo_ChildOfDto_PATH); }
+cuo_comp cuo_ChildOfDto_comp(const cuo_ChildOfDto *v) { return cuo_comp_bytes(cuo_ChildOfDto_id(), cuo_ChildOfDto_json(v)); }
+bool cuo_ChildOfDto_get(uint64_t entity, cuo_ChildOfDto *out) { return cuo_ChildOfDto_parse(cuo_component_json(entity, cuo_ChildOfDto_id()), out); }
+
 void cuo_ClipboardSetDto_write(cuo_jw *w, const cuo_ClipboardSetDto *v)
 {
     cuo_jw_obj(w);
@@ -537,38 +611,79 @@ uint16_t cuo_CombatBookWindow_id(void) { TYPE_ID(cuo_CombatBookWindow_PATH); }
 cuo_comp cuo_CombatBookWindow_comp(const cuo_CombatBookWindow *v) { return cuo_comp_bytes(cuo_CombatBookWindow_id(), cuo_CombatBookWindow_json(v)); }
 bool cuo_CombatBookWindow_get(uint64_t entity, cuo_CombatBookWindow *out) { return cuo_CombatBookWindow_parse(cuo_component_json(entity, cuo_CombatBookWindow_id()), out); }
 
-void cuo_ContainedInDto_write(cuo_jw *w, const cuo_ContainedInDto *v)
+void cuo_Vector2_write(cuo_jw *w, const cuo_Vector2 *v)
 {
     cuo_jw_obj(w);
-    cuo_jw_key(w, "Container");
-    cuo_jw_uint(w, v->container);
+    cuo_jw_key(w, "X");
+    cuo_jw_num(w, v->x);
+    cuo_jw_key(w, "Y");
+    cuo_jw_num(w, v->y);
     cuo_jw_obj_end(w);
 }
 
-void cuo_ContainedInDto_read(const cJSON *json, cuo_ContainedInDto *out)
+void cuo_Vector2_read(const cJSON *json, cuo_Vector2 *out)
 {
     memset(out, 0, sizeof *out);
-    out->container = (uint32_t)rd_u64(FIELD(json, "Container"));
+    out->x = (float)rd_num(FIELD(json, "X"));
+    out->y = (float)rd_num(FIELD(json, "Y"));
 }
 
-cuo_bytes cuo_ContainedInDto_json(const cuo_ContainedInDto *v)
+cuo_bytes cuo_Vector2_json(const cuo_Vector2 *v)
 {
     cuo_jw w;
     cuo_jw_init(&w);
-    cuo_ContainedInDto_write(&w, v);
+    cuo_Vector2_write(&w, v);
     return cuo_jw_bytes(&w);
 }
 
-bool cuo_ContainedInDto_parse(cuo_bytes json, cuo_ContainedInDto *out)
+bool cuo_Vector2_parse(cuo_bytes json, cuo_Vector2 *out)
 {
     cJSON *j = cuo_json_parse(json);
-    cuo_ContainedInDto_read(j, out);
+    cuo_Vector2_read(j, out);
     return j != NULL;
 }
 
-uint16_t cuo_ContainedInDto_id(void) { TYPE_ID(cuo_ContainedInDto_PATH); }
-cuo_comp cuo_ContainedInDto_comp(const cuo_ContainedInDto *v) { return cuo_comp_bytes(cuo_ContainedInDto_id(), cuo_ContainedInDto_json(v)); }
-bool cuo_ContainedInDto_get(uint64_t entity, cuo_ContainedInDto *out) { return cuo_ContainedInDto_parse(cuo_component_json(entity, cuo_ContainedInDto_id()), out); }
+void cuo_ComputedNode_write(cuo_jw *w, const cuo_ComputedNode *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Size");
+    cuo_Vector2_write(w, &v->size);
+    cuo_jw_key(w, "Position");
+    cuo_Vector2_write(w, &v->position);
+    cuo_jw_key(w, "ClayId");
+    cuo_jw_uint(w, v->clay_id);
+    cuo_jw_key(w, "PaintOrder");
+    cuo_jw_int(w, v->paint_order);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ComputedNode_read(const cJSON *json, cuo_ComputedNode *out)
+{
+    memset(out, 0, sizeof *out);
+    cuo_Vector2_read(FIELD(json, "Size"), &out->size);
+    cuo_Vector2_read(FIELD(json, "Position"), &out->position);
+    out->clay_id = (uint32_t)rd_u64(FIELD(json, "ClayId"));
+    out->paint_order = (int32_t)rd_i64(FIELD(json, "PaintOrder"));
+}
+
+cuo_bytes cuo_ComputedNode_json(const cuo_ComputedNode *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ComputedNode_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ComputedNode_parse(cuo_bytes json, cuo_ComputedNode *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ComputedNode_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ComputedNode_id(void) { TYPE_ID(cuo_ComputedNode_PATH); }
+cuo_comp cuo_ComputedNode_comp(const cuo_ComputedNode *v) { return cuo_comp_bytes(cuo_ComputedNode_id(), cuo_ComputedNode_json(v)); }
+bool cuo_ComputedNode_get(uint64_t entity, cuo_ComputedNode *out) { return cuo_ComputedNode_parse(cuo_component_json(entity, cuo_ComputedNode_id()), out); }
 
 void cuo_ContainedInto_write(cuo_jw *w, const cuo_ContainedInto *v)
 {
@@ -638,6 +753,134 @@ uint16_t cuo_ContainerClosedEvent_id(void) { TYPE_ID(cuo_ContainerClosedEvent_PA
 cuo_comp cuo_ContainerClosedEvent_comp(const cuo_ContainerClosedEvent *v) { return cuo_comp_bytes(cuo_ContainerClosedEvent_id(), cuo_ContainerClosedEvent_json(v)); }
 void cuo_ContainerClosedEvent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ContainerClosedEvent *v) { cuo_emit(cmds, cuo_ContainerClosedEvent_PATH, entity, cuo_ContainerClosedEvent_json(v)); }
 
+void cuo_ContainerGumpTagDto_write(cuo_jw *w, const cuo_ContainerGumpTagDto *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Graphic");
+    cuo_jw_uint(w, v->graphic);
+    cuo_jw_key(w, "OriginalGraphic");
+    cuo_jw_uint(w, v->original_graphic);
+    cuo_jw_key(w, "Scale");
+    cuo_jw_num(w, v->scale);
+    cuo_jw_key(w, "BoundsX");
+    cuo_jw_int(w, v->bounds_x);
+    cuo_jw_key(w, "BoundsY");
+    cuo_jw_int(w, v->bounds_y);
+    cuo_jw_key(w, "BoundsW");
+    cuo_jw_int(w, v->bounds_w);
+    cuo_jw_key(w, "BoundsH");
+    cuo_jw_int(w, v->bounds_h);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ContainerGumpTagDto_read(const cJSON *json, cuo_ContainerGumpTagDto *out)
+{
+    memset(out, 0, sizeof *out);
+    out->graphic = (uint16_t)rd_u64(FIELD(json, "Graphic"));
+    out->original_graphic = (uint16_t)rd_u64(FIELD(json, "OriginalGraphic"));
+    out->scale = (float)rd_num(FIELD(json, "Scale"));
+    out->bounds_x = (int32_t)rd_i64(FIELD(json, "BoundsX"));
+    out->bounds_y = (int32_t)rd_i64(FIELD(json, "BoundsY"));
+    out->bounds_w = (int32_t)rd_i64(FIELD(json, "BoundsW"));
+    out->bounds_h = (int32_t)rd_i64(FIELD(json, "BoundsH"));
+}
+
+cuo_bytes cuo_ContainerGumpTagDto_json(const cuo_ContainerGumpTagDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ContainerGumpTagDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ContainerGumpTagDto_parse(cuo_bytes json, cuo_ContainerGumpTagDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ContainerGumpTagDto_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ContainerGumpTagDto_id(void) { TYPE_ID(cuo_ContainerGumpTagDto_PATH); }
+cuo_comp cuo_ContainerGumpTagDto_comp(const cuo_ContainerGumpTagDto *v) { return cuo_comp_bytes(cuo_ContainerGumpTagDto_id(), cuo_ContainerGumpTagDto_json(v)); }
+bool cuo_ContainerGumpTagDto_get(uint64_t entity, cuo_ContainerGumpTagDto *out) { return cuo_ContainerGumpTagDto_parse(cuo_component_json(entity, cuo_ContainerGumpTagDto_id()), out); }
+
+void cuo_Vector3_write(cuo_jw *w, const cuo_Vector3 *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "X");
+    cuo_jw_num(w, v->x);
+    cuo_jw_key(w, "Y");
+    cuo_jw_num(w, v->y);
+    cuo_jw_key(w, "Z");
+    cuo_jw_num(w, v->z);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_Vector3_read(const cJSON *json, cuo_Vector3 *out)
+{
+    memset(out, 0, sizeof *out);
+    out->x = (float)rd_num(FIELD(json, "X"));
+    out->y = (float)rd_num(FIELD(json, "Y"));
+    out->z = (float)rd_num(FIELD(json, "Z"));
+}
+
+cuo_bytes cuo_Vector3_json(const cuo_Vector3 *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_Vector3_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_Vector3_parse(cuo_bytes json, cuo_Vector3 *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_Vector3_read(j, out);
+    return j != NULL;
+}
+
+void cuo_ContainerItemUI_write(cuo_jw *w, const cuo_ContainerItemUI *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Container");
+    cuo_jw_uint(w, v->container);
+    cuo_jw_key(w, "Serial");
+    cuo_jw_uint(w, v->serial);
+    cuo_jw_key(w, "OriginalHue");
+    cuo_Vector3_write(w, &v->original_hue);
+    cuo_jw_key(w, "HoverHue");
+    cuo_Vector3_write(w, &v->hover_hue);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ContainerItemUI_read(const cJSON *json, cuo_ContainerItemUI *out)
+{
+    memset(out, 0, sizeof *out);
+    out->container = (uint64_t)rd_u64(FIELD(json, "Container"));
+    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
+    cuo_Vector3_read(FIELD(json, "OriginalHue"), &out->original_hue);
+    cuo_Vector3_read(FIELD(json, "HoverHue"), &out->hover_hue);
+}
+
+cuo_bytes cuo_ContainerItemUI_json(const cuo_ContainerItemUI *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ContainerItemUI_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ContainerItemUI_parse(cuo_bytes json, cuo_ContainerItemUI *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ContainerItemUI_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ContainerItemUI_id(void) { TYPE_ID(cuo_ContainerItemUI_PATH); }
+cuo_comp cuo_ContainerItemUI_comp(const cuo_ContainerItemUI *v) { return cuo_comp_bytes(cuo_ContainerItemUI_id(), cuo_ContainerItemUI_json(v)); }
+bool cuo_ContainerItemUI_get(uint64_t entity, cuo_ContainerItemUI *out) { return cuo_ContainerItemUI_parse(cuo_component_json(entity, cuo_ContainerItemUI_id()), out); }
+
 void cuo_ContainerOpenedEvent_write(cuo_jw *w, const cuo_ContainerOpenedEvent *v)
 {
     cuo_jw_obj(w);
@@ -673,6 +916,139 @@ bool cuo_ContainerOpenedEvent_parse(cuo_bytes json, cuo_ContainerOpenedEvent *ou
 uint16_t cuo_ContainerOpenedEvent_id(void) { TYPE_ID(cuo_ContainerOpenedEvent_PATH); }
 cuo_comp cuo_ContainerOpenedEvent_comp(const cuo_ContainerOpenedEvent *v) { return cuo_comp_bytes(cuo_ContainerOpenedEvent_id(), cuo_ContainerOpenedEvent_json(v)); }
 void cuo_ContainerOpenedEvent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ContainerOpenedEvent *v) { cuo_emit(cmds, cuo_ContainerOpenedEvent_PATH, entity, cuo_ContainerOpenedEvent_json(v)); }
+
+void cuo_ContainerPositionDto_write(cuo_jw *w, const cuo_ContainerPositionDto *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Serial");
+    cuo_jw_uint(w, v->serial);
+    cuo_jw_key(w, "X");
+    cuo_jw_int(w, v->x);
+    cuo_jw_key(w, "Y");
+    cuo_jw_int(w, v->y);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ContainerPositionDto_read(const cJSON *json, cuo_ContainerPositionDto *out)
+{
+    memset(out, 0, sizeof *out);
+    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
+    out->x = (int32_t)rd_i64(FIELD(json, "X"));
+    out->y = (int32_t)rd_i64(FIELD(json, "Y"));
+}
+
+cuo_bytes cuo_ContainerPositionDto_json(const cuo_ContainerPositionDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ContainerPositionDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ContainerPositionDto_parse(cuo_bytes json, cuo_ContainerPositionDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ContainerPositionDto_read(j, out);
+    return j != NULL;
+}
+
+void cuo_ContainerPositionsDto_write(cuo_jw *w, const cuo_ContainerPositionsDto *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Saved");
+    cuo_jw_arr(w);
+    for (size_t i = 0; i < v->saved.len; i++)
+        cuo_ContainerPositionDto_write(w, &v->saved.items[i]);
+    cuo_jw_arr_end(w);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ContainerPositionsDto_read(const cJSON *json, cuo_ContainerPositionsDto *out)
+{
+    memset(out, 0, sizeof *out);
+    {
+        const cJSON *a = FIELD(json, "Saved");
+        size_t len = cJSON_IsArray(a) ? (size_t)cJSON_GetArraySize(a) : 0;
+        out->saved.len = len;
+        out->saved.items = len ? cuo_alloc(len * sizeof(*out->saved.items)) : NULL;
+        size_t i = 0;
+        for (const cJSON *e = len ? a->child : NULL; e && i < len; e = e->next, i++)
+            cuo_ContainerPositionDto_read(e, &out->saved.items[i]);
+    }
+}
+
+cuo_bytes cuo_ContainerPositionsDto_json(const cuo_ContainerPositionsDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ContainerPositionsDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ContainerPositionsDto_parse(cuo_bytes json, cuo_ContainerPositionsDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ContainerPositionsDto_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ContainerPositionsDto_id(void) { TYPE_ID(cuo_ContainerPositionsDto_PATH); }
+cuo_comp cuo_ContainerPositionsDto_comp(const cuo_ContainerPositionsDto *v) { return cuo_comp_bytes(cuo_ContainerPositionsDto_id(), cuo_ContainerPositionsDto_json(v)); }
+bool cuo_ContainerPositionsDto_resource(cuo_ContainerPositionsDto *out) { return cuo_ContainerPositionsDto_parse(cuo_resource_json(cuo_ContainerPositionsDto_id()), out); }
+
+void cuo_ContainerSlotEvent_write(cuo_jw *w, const cuo_ContainerSlotEvent *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Action");
+    cuo_jw_uint(w, v->action);
+    cuo_jw_key(w, "ContainerSerial");
+    cuo_jw_uint(w, v->container_serial);
+    cuo_jw_key(w, "ItemSerial");
+    cuo_jw_uint(w, v->item_serial);
+    cuo_jw_key(w, "Graphic");
+    cuo_jw_uint(w, v->graphic);
+    cuo_jw_key(w, "Hue");
+    cuo_jw_uint(w, v->hue);
+    cuo_jw_key(w, "X");
+    cuo_jw_uint(w, v->x);
+    cuo_jw_key(w, "Y");
+    cuo_jw_uint(w, v->y);
+    cuo_jw_key(w, "Amount");
+    cuo_jw_uint(w, v->amount);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ContainerSlotEvent_read(const cJSON *json, cuo_ContainerSlotEvent *out)
+{
+    memset(out, 0, sizeof *out);
+    out->action = (uint8_t)rd_u64(FIELD(json, "Action"));
+    out->container_serial = (uint32_t)rd_u64(FIELD(json, "ContainerSerial"));
+    out->item_serial = (uint32_t)rd_u64(FIELD(json, "ItemSerial"));
+    out->graphic = (uint16_t)rd_u64(FIELD(json, "Graphic"));
+    out->hue = (uint16_t)rd_u64(FIELD(json, "Hue"));
+    out->x = (uint16_t)rd_u64(FIELD(json, "X"));
+    out->y = (uint16_t)rd_u64(FIELD(json, "Y"));
+    out->amount = (uint16_t)rd_u64(FIELD(json, "Amount"));
+}
+
+cuo_bytes cuo_ContainerSlotEvent_json(const cuo_ContainerSlotEvent *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ContainerSlotEvent_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ContainerSlotEvent_parse(cuo_bytes json, cuo_ContainerSlotEvent *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ContainerSlotEvent_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ContainerSlotEvent_id(void) { TYPE_ID(cuo_ContainerSlotEvent_PATH); }
+cuo_comp cuo_ContainerSlotEvent_comp(const cuo_ContainerSlotEvent *v) { return cuo_comp_bytes(cuo_ContainerSlotEvent_id(), cuo_ContainerSlotEvent_json(v)); }
+void cuo_ContainerSlotEvent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ContainerSlotEvent *v) { cuo_emit(cmds, cuo_ContainerSlotEvent_PATH, entity, cuo_ContainerSlotEvent_json(v)); }
 
 void cuo_ContainerSlotPosition_write(cuo_jw *w, const cuo_ContainerSlotPosition *v)
 {
@@ -834,120 +1210,6 @@ uint16_t cuo_ContextMenuEvent_id(void) { TYPE_ID(cuo_ContextMenuEvent_PATH); }
 cuo_comp cuo_ContextMenuEvent_comp(const cuo_ContextMenuEvent *v) { return cuo_comp_bytes(cuo_ContextMenuEvent_id(), cuo_ContextMenuEvent_json(v)); }
 void cuo_ContextMenuEvent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ContextMenuEvent *v) { cuo_emit(cmds, cuo_ContextMenuEvent_PATH, entity, cuo_ContextMenuEvent_json(v)); }
 
-void cuo_ContextMenuReplyAction_write(cuo_jw *w, const cuo_ContextMenuReplyAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_key(w, "Index");
-    cuo_jw_uint(w, v->index);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_ContextMenuReplyAction_read(const cJSON *json, cuo_ContextMenuReplyAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-    out->index = (uint16_t)rd_u64(FIELD(json, "Index"));
-}
-
-cuo_bytes cuo_ContextMenuReplyAction_json(const cuo_ContextMenuReplyAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_ContextMenuReplyAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_ContextMenuReplyAction_parse(cuo_bytes json, cuo_ContextMenuReplyAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_ContextMenuReplyAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_ContextMenuReplyAction_id(void) { TYPE_ID(cuo_ContextMenuReplyAction_PATH); }
-cuo_comp cuo_ContextMenuReplyAction_comp(const cuo_ContextMenuReplyAction *v) { return cuo_comp_bytes(cuo_ContextMenuReplyAction_id(), cuo_ContextMenuReplyAction_json(v)); }
-void cuo_ContextMenuReplyAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ContextMenuReplyAction *v) { cuo_emit(cmds, cuo_ContextMenuReplyAction_PATH, entity, cuo_ContextMenuReplyAction_json(v)); }
-
-void cuo_DoubleClickAction_write(cuo_jw *w, const cuo_DoubleClickAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_DoubleClickAction_read(const cJSON *json, cuo_DoubleClickAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-}
-
-cuo_bytes cuo_DoubleClickAction_json(const cuo_DoubleClickAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_DoubleClickAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_DoubleClickAction_parse(cuo_bytes json, cuo_DoubleClickAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_DoubleClickAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_DoubleClickAction_id(void) { TYPE_ID(cuo_DoubleClickAction_PATH); }
-cuo_comp cuo_DoubleClickAction_comp(const cuo_DoubleClickAction *v) { return cuo_comp_bytes(cuo_DoubleClickAction_id(), cuo_DoubleClickAction_json(v)); }
-void cuo_DoubleClickAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_DoubleClickAction *v) { cuo_emit(cmds, cuo_DoubleClickAction_PATH, entity, cuo_DoubleClickAction_json(v)); }
-
-void cuo_DropAction_write(cuo_jw *w, const cuo_DropAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_key(w, "X");
-    cuo_jw_uint(w, v->x);
-    cuo_jw_key(w, "Y");
-    cuo_jw_uint(w, v->y);
-    cuo_jw_key(w, "Z");
-    cuo_jw_int(w, v->z);
-    cuo_jw_key(w, "Container");
-    cuo_jw_uint(w, v->container);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_DropAction_read(const cJSON *json, cuo_DropAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-    out->x = (uint16_t)rd_u64(FIELD(json, "X"));
-    out->y = (uint16_t)rd_u64(FIELD(json, "Y"));
-    out->z = (int8_t)rd_i64(FIELD(json, "Z"));
-    out->container = (uint32_t)rd_u64(FIELD(json, "Container"));
-}
-
-cuo_bytes cuo_DropAction_json(const cuo_DropAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_DropAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_DropAction_parse(cuo_bytes json, cuo_DropAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_DropAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_DropAction_id(void) { TYPE_ID(cuo_DropAction_PATH); }
-cuo_comp cuo_DropAction_comp(const cuo_DropAction *v) { return cuo_comp_bytes(cuo_DropAction_id(), cuo_DropAction_json(v)); }
-void cuo_DropAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_DropAction *v) { cuo_emit(cmds, cuo_DropAction_PATH, entity, cuo_DropAction_json(v)); }
-
 void cuo_EditableText_write(cuo_jw *w, const cuo_EditableText *v)
 {
     cuo_jw_obj(w);
@@ -1066,45 +1328,6 @@ bool cuo_EntityPropertiesDto_parse(cuo_bytes json, cuo_EntityPropertiesDto *out)
 uint16_t cuo_EntityPropertiesDto_id(void) { TYPE_ID(cuo_EntityPropertiesDto_PATH); }
 cuo_comp cuo_EntityPropertiesDto_comp(const cuo_EntityPropertiesDto *v) { return cuo_comp_bytes(cuo_EntityPropertiesDto_id(), cuo_EntityPropertiesDto_json(v)); }
 bool cuo_EntityPropertiesDto_get(uint64_t entity, cuo_EntityPropertiesDto *out) { return cuo_EntityPropertiesDto_parse(cuo_component_json(entity, cuo_EntityPropertiesDto_id()), out); }
-
-void cuo_EquipAction_write(cuo_jw *w, const cuo_EquipAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_key(w, "Layer");
-    cuo_jw_uint(w, v->layer);
-    cuo_jw_key(w, "Container");
-    cuo_jw_uint(w, v->container);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_EquipAction_read(const cJSON *json, cuo_EquipAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-    out->layer = (uint8_t)rd_u64(FIELD(json, "Layer"));
-    out->container = (uint32_t)rd_u64(FIELD(json, "Container"));
-}
-
-cuo_bytes cuo_EquipAction_json(const cuo_EquipAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_EquipAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_EquipAction_parse(cuo_bytes json, cuo_EquipAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_EquipAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_EquipAction_id(void) { TYPE_ID(cuo_EquipAction_PATH); }
-cuo_comp cuo_EquipAction_comp(const cuo_EquipAction *v) { return cuo_comp_bytes(cuo_EquipAction_id(), cuo_EquipAction_json(v)); }
-void cuo_EquipAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_EquipAction *v) { cuo_emit(cmds, cuo_EquipAction_PATH, entity, cuo_EquipAction_json(v)); }
 
 void cuo_EquipmentSlotsDto_write(cuo_jw *w, const cuo_EquipmentSlotsDto *v)
 {
@@ -1296,6 +1519,69 @@ uint16_t cuo_GameScene_id(void) { TYPE_ID(cuo_GameScene_PATH); }
 cuo_comp cuo_GameScene_comp(void) { return cuo_comp_marker(cuo_GameScene_id()); }
 bool cuo_GameScene_has(uint64_t entity) { return cuo_component_json(entity, cuo_GameScene_id()).ptr != NULL; }
 
+void cuo_GameSettingsDto_write(cuo_jw *w, const cuo_GameSettingsDto *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "GridLootType");
+    cuo_jw_int(w, v->grid_loot_type);
+    cuo_jw_key(w, "SkipEmptyCorpse");
+    cuo_jw_bool(w, v->skip_empty_corpse);
+    cuo_jw_key(w, "AutoOpenCorpses");
+    cuo_jw_bool(w, v->auto_open_corpses);
+    cuo_jw_key(w, "AutoOpenCorpseRange");
+    cuo_jw_int(w, v->auto_open_corpse_range);
+    cuo_jw_key(w, "CorpseOpenOptions");
+    cuo_jw_int(w, v->corpse_open_options);
+    cuo_jw_key(w, "DoubleClickToLootInsideContainers");
+    cuo_jw_bool(w, v->double_click_to_loot_inside_containers);
+    cuo_jw_key(w, "HoldShiftToSplitStack");
+    cuo_jw_bool(w, v->hold_shift_to_split_stack);
+    cuo_jw_key(w, "RelativeDragAndDropItems");
+    cuo_jw_bool(w, v->relative_drag_and_drop_items);
+    cuo_jw_key(w, "SpeechHue");
+    cuo_jw_uint(w, v->speech_hue);
+    cuo_jw_key(w, "AlwaysRun");
+    cuo_jw_bool(w, v->always_run);
+    cuo_jw_key(w, "HighlightGameObjects");
+    cuo_jw_bool(w, v->highlight_game_objects);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_GameSettingsDto_read(const cJSON *json, cuo_GameSettingsDto *out)
+{
+    memset(out, 0, sizeof *out);
+    out->grid_loot_type = (int32_t)rd_i64(FIELD(json, "GridLootType"));
+    out->skip_empty_corpse = cJSON_IsTrue(FIELD(json, "SkipEmptyCorpse"));
+    out->auto_open_corpses = cJSON_IsTrue(FIELD(json, "AutoOpenCorpses"));
+    out->auto_open_corpse_range = (int32_t)rd_i64(FIELD(json, "AutoOpenCorpseRange"));
+    out->corpse_open_options = (int32_t)rd_i64(FIELD(json, "CorpseOpenOptions"));
+    out->double_click_to_loot_inside_containers = cJSON_IsTrue(FIELD(json, "DoubleClickToLootInsideContainers"));
+    out->hold_shift_to_split_stack = cJSON_IsTrue(FIELD(json, "HoldShiftToSplitStack"));
+    out->relative_drag_and_drop_items = cJSON_IsTrue(FIELD(json, "RelativeDragAndDropItems"));
+    out->speech_hue = (uint16_t)rd_u64(FIELD(json, "SpeechHue"));
+    out->always_run = cJSON_IsTrue(FIELD(json, "AlwaysRun"));
+    out->highlight_game_objects = cJSON_IsTrue(FIELD(json, "HighlightGameObjects"));
+}
+
+cuo_bytes cuo_GameSettingsDto_json(const cuo_GameSettingsDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_GameSettingsDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_GameSettingsDto_parse(cuo_bytes json, cuo_GameSettingsDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_GameSettingsDto_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_GameSettingsDto_id(void) { TYPE_ID(cuo_GameSettingsDto_PATH); }
+cuo_comp cuo_GameSettingsDto_comp(const cuo_GameSettingsDto *v) { return cuo_comp_bytes(cuo_GameSettingsDto_id(), cuo_GameSettingsDto_json(v)); }
+bool cuo_GameSettingsDto_resource(cuo_GameSettingsDto *out) { return cuo_GameSettingsDto_parse(cuo_resource_json(cuo_GameSettingsDto_id()), out); }
+
 void cuo_GameStateDto_write(cuo_jw *w, const cuo_GameStateDto *v)
 {
     cuo_jw_obj(w);
@@ -1362,38 +1648,6 @@ uint16_t cuo_GlobalZIndex_id(void) { TYPE_ID(cuo_GlobalZIndex_PATH); }
 cuo_comp cuo_GlobalZIndex_comp(const cuo_GlobalZIndex *v) { return cuo_comp_bytes(cuo_GlobalZIndex_id(), cuo_GlobalZIndex_json(v)); }
 bool cuo_GlobalZIndex_get(uint64_t entity, cuo_GlobalZIndex *out) { return cuo_GlobalZIndex_parse(cuo_component_json(entity, cuo_GlobalZIndex_id()), out); }
 
-void cuo_Vector2_write(cuo_jw *w, const cuo_Vector2 *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "X");
-    cuo_jw_num(w, v->x);
-    cuo_jw_key(w, "Y");
-    cuo_jw_num(w, v->y);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_Vector2_read(const cJSON *json, cuo_Vector2 *out)
-{
-    memset(out, 0, sizeof *out);
-    out->x = (float)rd_num(FIELD(json, "X"));
-    out->y = (float)rd_num(FIELD(json, "Y"));
-}
-
-cuo_bytes cuo_Vector2_json(const cuo_Vector2 *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_Vector2_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_Vector2_parse(cuo_bytes json, cuo_Vector2 *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_Vector2_read(j, out);
-    return j != NULL;
-}
-
 void cuo_GrabbedItem_write(cuo_jw *w, const cuo_GrabbedItem *v)
 {
     cuo_jw_obj(w);
@@ -1435,18 +1689,6 @@ void cuo_GrabbedItem_write(cuo_jw *w, const cuo_GrabbedItem *v)
     cuo_jw_uint(w, v->drop_target_serial);
     cuo_jw_key(w, "FailedDrop");
     cuo_jw_bool(w, v->failed_drop);
-    cuo_jw_key(w, "DropSeq");
-    cuo_jw_int(w, v->drop_seq);
-    cuo_jw_key(w, "LastDropSerial");
-    cuo_jw_uint(w, v->last_drop_serial);
-    cuo_jw_key(w, "LastDropX");
-    cuo_jw_uint(w, v->last_drop_x);
-    cuo_jw_key(w, "LastDropY");
-    cuo_jw_uint(w, v->last_drop_y);
-    cuo_jw_key(w, "LastDropZ");
-    cuo_jw_int(w, v->last_drop_z);
-    cuo_jw_key(w, "LastDropContainer");
-    cuo_jw_uint(w, v->last_drop_container);
     cuo_jw_key(w, "MouseOffset");
     cuo_Vector2_write(w, &v->mouse_offset);
     cuo_jw_obj_end(w);
@@ -1474,12 +1716,6 @@ void cuo_GrabbedItem_read(const cJSON *json, cuo_GrabbedItem *out)
     out->pending_drop = cJSON_IsTrue(FIELD(json, "PendingDrop"));
     out->drop_target_serial = (uint32_t)rd_u64(FIELD(json, "DropTargetSerial"));
     out->failed_drop = cJSON_IsTrue(FIELD(json, "FailedDrop"));
-    out->drop_seq = (int32_t)rd_i64(FIELD(json, "DropSeq"));
-    out->last_drop_serial = (uint32_t)rd_u64(FIELD(json, "LastDropSerial"));
-    out->last_drop_x = (uint16_t)rd_u64(FIELD(json, "LastDropX"));
-    out->last_drop_y = (uint16_t)rd_u64(FIELD(json, "LastDropY"));
-    out->last_drop_z = (int8_t)rd_i64(FIELD(json, "LastDropZ"));
-    out->last_drop_container = (uint32_t)rd_u64(FIELD(json, "LastDropContainer"));
     cuo_Vector2_read(FIELD(json, "MouseOffset"), &out->mouse_offset);
 }
 
@@ -1607,134 +1843,37 @@ uint16_t cuo_GridLootWindow_id(void) { TYPE_ID(cuo_GridLootWindow_PATH); }
 cuo_comp cuo_GridLootWindow_comp(const cuo_GridLootWindow *v) { return cuo_comp_bytes(cuo_GridLootWindow_id(), cuo_GridLootWindow_json(v)); }
 bool cuo_GridLootWindow_get(uint64_t entity, cuo_GridLootWindow *out) { return cuo_GridLootWindow_parse(cuo_component_json(entity, cuo_GridLootWindow_id()), out); }
 
-void cuo_GumpCloseAction_write(cuo_jw *w, const cuo_GumpCloseAction *v)
+void cuo_GridPinnedCell_write(cuo_jw *w, const cuo_GridPinnedCell *v)
 {
+    (void)v;
     cuo_jw_obj(w);
-    cuo_jw_key(w, "GumpId");
-    cuo_jw_uint(w, v->gump_id);
     cuo_jw_obj_end(w);
 }
 
-void cuo_GumpCloseAction_read(const cJSON *json, cuo_GumpCloseAction *out)
+void cuo_GridPinnedCell_read(const cJSON *json, cuo_GridPinnedCell *out)
 {
     memset(out, 0, sizeof *out);
-    out->gump_id = (uint32_t)rd_u64(FIELD(json, "GumpId"));
+    (void)json;
 }
 
-cuo_bytes cuo_GumpCloseAction_json(const cuo_GumpCloseAction *v)
+cuo_bytes cuo_GridPinnedCell_json(const cuo_GridPinnedCell *v)
 {
     cuo_jw w;
     cuo_jw_init(&w);
-    cuo_GumpCloseAction_write(&w, v);
+    cuo_GridPinnedCell_write(&w, v);
     return cuo_jw_bytes(&w);
 }
 
-bool cuo_GumpCloseAction_parse(cuo_bytes json, cuo_GumpCloseAction *out)
+bool cuo_GridPinnedCell_parse(cuo_bytes json, cuo_GridPinnedCell *out)
 {
     cJSON *j = cuo_json_parse(json);
-    cuo_GumpCloseAction_read(j, out);
+    cuo_GridPinnedCell_read(j, out);
     return j != NULL;
 }
 
-uint16_t cuo_GumpCloseAction_id(void) { TYPE_ID(cuo_GumpCloseAction_PATH); }
-cuo_comp cuo_GumpCloseAction_comp(const cuo_GumpCloseAction *v) { return cuo_comp_bytes(cuo_GumpCloseAction_id(), cuo_GumpCloseAction_json(v)); }
-void cuo_GumpCloseAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_GumpCloseAction *v) { cuo_emit(cmds, cuo_GumpCloseAction_PATH, entity, cuo_GumpCloseAction_json(v)); }
-
-void cuo_GumpReplyAction_write(cuo_jw *w, const cuo_GumpReplyAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "GumpId");
-    cuo_jw_uint(w, v->gump_id);
-    cuo_jw_key(w, "ButtonId");
-    cuo_jw_int(w, v->button_id);
-    cuo_jw_key(w, "Switches");
-    cuo_jw_arr(w);
-    for (size_t i = 0; i < v->switches.len; i++)
-        cuo_jw_uint(w, v->switches.items[i]);
-    cuo_jw_arr_end(w);
-    cuo_jw_key(w, "TextEntries");
-    cuo_jw_arr(w);
-    for (size_t i = 0; i < v->text_entries.len; i++)
-        cuo_GumpTextEntry_write(w, &v->text_entries.items[i]);
-    cuo_jw_arr_end(w);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_GumpReplyAction_read(const cJSON *json, cuo_GumpReplyAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->gump_id = (uint32_t)rd_u64(FIELD(json, "GumpId"));
-    out->button_id = (int32_t)rd_i64(FIELD(json, "ButtonId"));
-    {
-        const cJSON *a = FIELD(json, "Switches");
-        size_t len = cJSON_IsArray(a) ? (size_t)cJSON_GetArraySize(a) : 0;
-        out->switches.len = len;
-        out->switches.items = len ? cuo_alloc(len * sizeof(*out->switches.items)) : NULL;
-        size_t i = 0;
-        for (const cJSON *e = len ? a->child : NULL; e && i < len; e = e->next, i++)
-            out->switches.items[i] = (uint32_t)rd_u64(e);
-    }
-    {
-        const cJSON *a = FIELD(json, "TextEntries");
-        size_t len = cJSON_IsArray(a) ? (size_t)cJSON_GetArraySize(a) : 0;
-        out->text_entries.len = len;
-        out->text_entries.items = len ? cuo_alloc(len * sizeof(*out->text_entries.items)) : NULL;
-        size_t i = 0;
-        for (const cJSON *e = len ? a->child : NULL; e && i < len; e = e->next, i++)
-            cuo_GumpTextEntry_read(e, &out->text_entries.items[i]);
-    }
-}
-
-cuo_bytes cuo_GumpReplyAction_json(const cuo_GumpReplyAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_GumpReplyAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_GumpReplyAction_parse(cuo_bytes json, cuo_GumpReplyAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_GumpReplyAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_GumpReplyAction_id(void) { TYPE_ID(cuo_GumpReplyAction_PATH); }
-cuo_comp cuo_GumpReplyAction_comp(const cuo_GumpReplyAction *v) { return cuo_comp_bytes(cuo_GumpReplyAction_id(), cuo_GumpReplyAction_json(v)); }
-void cuo_GumpReplyAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_GumpReplyAction *v) { cuo_emit(cmds, cuo_GumpReplyAction_PATH, entity, cuo_GumpReplyAction_json(v)); }
-
-void cuo_GumpTextEntry_write(cuo_jw *w, const cuo_GumpTextEntry *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Id");
-    cuo_jw_uint(w, v->id);
-    cuo_jw_key(w, "Text");
-    cuo_jw_str(w, v->text);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_GumpTextEntry_read(const cJSON *json, cuo_GumpTextEntry *out)
-{
-    memset(out, 0, sizeof *out);
-    out->id = (uint16_t)rd_u64(FIELD(json, "Id"));
-    out->text = rd_str(FIELD(json, "Text"));
-}
-
-cuo_bytes cuo_GumpTextEntry_json(const cuo_GumpTextEntry *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_GumpTextEntry_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_GumpTextEntry_parse(cuo_bytes json, cuo_GumpTextEntry *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_GumpTextEntry_read(j, out);
-    return j != NULL;
-}
+uint16_t cuo_GridPinnedCell_id(void) { TYPE_ID(cuo_GridPinnedCell_PATH); }
+cuo_comp cuo_GridPinnedCell_comp(void) { return cuo_comp_marker(cuo_GridPinnedCell_id()); }
+bool cuo_GridPinnedCell_has(uint64_t entity) { return cuo_component_json(entity, cuo_GridPinnedCell_id()).ptr != NULL; }
 
 void cuo_HealthBarWindow_write(cuo_jw *w, const cuo_HealthBarWindow *v)
 {
@@ -1977,6 +2116,39 @@ uint16_t cuo_Hue_id(void) { TYPE_ID(cuo_Hue_PATH); }
 cuo_comp cuo_Hue_comp(const cuo_Hue *v) { return cuo_comp_bytes(cuo_Hue_id(), cuo_Hue_json(v)); }
 bool cuo_Hue_get(uint64_t entity, cuo_Hue *out) { return cuo_Hue_parse(cuo_component_json(entity, cuo_Hue_id()), out); }
 
+void cuo_InteractionDto_write(cuo_jw *w, const cuo_InteractionDto *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "State");
+    cuo_jw_uint(w, v->state);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_InteractionDto_read(const cJSON *json, cuo_InteractionDto *out)
+{
+    memset(out, 0, sizeof *out);
+    out->state = (uint8_t)rd_u64(FIELD(json, "State"));
+}
+
+cuo_bytes cuo_InteractionDto_json(const cuo_InteractionDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_InteractionDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_InteractionDto_parse(cuo_bytes json, cuo_InteractionDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_InteractionDto_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_InteractionDto_id(void) { TYPE_ID(cuo_InteractionDto_PATH); }
+cuo_comp cuo_InteractionDto_comp(const cuo_InteractionDto *v) { return cuo_comp_bytes(cuo_InteractionDto_id(), cuo_InteractionDto_json(v)); }
+bool cuo_InteractionDto_get(uint64_t entity, cuo_InteractionDto *out) { return cuo_InteractionDto_parse(cuo_component_json(entity, cuo_InteractionDto_id()), out); }
+
 void cuo_IsContainer_write(cuo_jw *w, const cuo_IsContainer *v)
 {
     (void)v;
@@ -2072,6 +2244,87 @@ bool cuo_IsTopBar_parse(cuo_bytes json, cuo_IsTopBar *out)
 uint16_t cuo_IsTopBar_id(void) { TYPE_ID(cuo_IsTopBar_PATH); }
 cuo_comp cuo_IsTopBar_comp(void) { return cuo_comp_marker(cuo_IsTopBar_id()); }
 bool cuo_IsTopBar_has(uint64_t entity) { return cuo_component_json(entity, cuo_IsTopBar_id()).ptr != NULL; }
+
+void cuo_ItemDropSent_write(cuo_jw *w, const cuo_ItemDropSent *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Serial");
+    cuo_jw_uint(w, v->serial);
+    cuo_jw_key(w, "X");
+    cuo_jw_uint(w, v->x);
+    cuo_jw_key(w, "Y");
+    cuo_jw_uint(w, v->y);
+    cuo_jw_key(w, "Z");
+    cuo_jw_int(w, v->z);
+    cuo_jw_key(w, "Container");
+    cuo_jw_uint(w, v->container);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ItemDropSent_read(const cJSON *json, cuo_ItemDropSent *out)
+{
+    memset(out, 0, sizeof *out);
+    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
+    out->x = (uint16_t)rd_u64(FIELD(json, "X"));
+    out->y = (uint16_t)rd_u64(FIELD(json, "Y"));
+    out->z = (int8_t)rd_i64(FIELD(json, "Z"));
+    out->container = (uint32_t)rd_u64(FIELD(json, "Container"));
+}
+
+cuo_bytes cuo_ItemDropSent_json(const cuo_ItemDropSent *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ItemDropSent_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ItemDropSent_parse(cuo_bytes json, cuo_ItemDropSent *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ItemDropSent_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ItemDropSent_id(void) { TYPE_ID(cuo_ItemDropSent_PATH); }
+cuo_comp cuo_ItemDropSent_comp(const cuo_ItemDropSent *v) { return cuo_comp_bytes(cuo_ItemDropSent_id(), cuo_ItemDropSent_json(v)); }
+void cuo_ItemDropSent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ItemDropSent *v) { cuo_emit(cmds, cuo_ItemDropSent_PATH, entity, cuo_ItemDropSent_json(v)); }
+
+void cuo_ItemMoveResult_write(cuo_jw *w, const cuo_ItemMoveResult *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Result");
+    cuo_jw_uint(w, v->result);
+    cuo_jw_key(w, "Code");
+    cuo_jw_uint(w, v->code);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ItemMoveResult_read(const cJSON *json, cuo_ItemMoveResult *out)
+{
+    memset(out, 0, sizeof *out);
+    out->result = (uint8_t)rd_u64(FIELD(json, "Result"));
+    out->code = (uint8_t)rd_u64(FIELD(json, "Code"));
+}
+
+cuo_bytes cuo_ItemMoveResult_json(const cuo_ItemMoveResult *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ItemMoveResult_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ItemMoveResult_parse(cuo_bytes json, cuo_ItemMoveResult *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ItemMoveResult_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ItemMoveResult_id(void) { TYPE_ID(cuo_ItemMoveResult_PATH); }
+cuo_comp cuo_ItemMoveResult_comp(const cuo_ItemMoveResult *v) { return cuo_comp_bytes(cuo_ItemMoveResult_id(), cuo_ItemMoveResult_json(v)); }
+void cuo_ItemMoveResult_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ItemMoveResult *v) { cuo_emit(cmds, cuo_ItemMoveResult_PATH, entity, cuo_ItemMoveResult_json(v)); }
 
 void cuo_Items_write(cuo_jw *w, const cuo_Items *v)
 {
@@ -2209,6 +2462,11 @@ void cuo_KeyboardInputDto_write(cuo_jw *w, const cuo_KeyboardInputDto *v)
     for (size_t i = 0; i < v->pressed.len; i++)
         cuo_jw_int(w, v->pressed.items[i]);
     cuo_jw_arr_end(w);
+    cuo_jw_key(w, "PressedOnce");
+    cuo_jw_arr(w);
+    for (size_t i = 0; i < v->pressed_once.len; i++)
+        cuo_jw_int(w, v->pressed_once.items[i]);
+    cuo_jw_arr_end(w);
     cuo_jw_obj_end(w);
 }
 
@@ -2223,6 +2481,15 @@ void cuo_KeyboardInputDto_read(const cJSON *json, cuo_KeyboardInputDto *out)
         size_t i = 0;
         for (const cJSON *e = len ? a->child : NULL; e && i < len; e = e->next, i++)
             out->pressed.items[i] = (int32_t)rd_i64(e);
+    }
+    {
+        const cJSON *a = FIELD(json, "PressedOnce");
+        size_t len = cJSON_IsArray(a) ? (size_t)cJSON_GetArraySize(a) : 0;
+        out->pressed_once.len = len;
+        out->pressed_once.items = len ? cuo_alloc(len * sizeof(*out->pressed_once.items)) : NULL;
+        size_t i = 0;
+        for (const cJSON *e = len ? a->child : NULL; e && i < len; e = e->next, i++)
+            out->pressed_once.items[i] = (int32_t)rd_i64(e);
     }
 }
 
@@ -2489,6 +2756,38 @@ bool cuo_Mana_parse(cuo_bytes json, cuo_Mana *out)
 uint16_t cuo_Mana_id(void) { TYPE_ID(cuo_Mana_PATH); }
 cuo_comp cuo_Mana_comp(const cuo_Mana *v) { return cuo_comp_bytes(cuo_Mana_id(), cuo_Mana_json(v)); }
 bool cuo_Mana_get(uint64_t entity, cuo_Mana *out) { return cuo_Mana_parse(cuo_component_json(entity, cuo_Mana_id()), out); }
+
+void cuo_ManualOpenedCorpse_write(cuo_jw *w, const cuo_ManualOpenedCorpse *v)
+{
+    (void)v;
+    cuo_jw_obj(w);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ManualOpenedCorpse_read(const cJSON *json, cuo_ManualOpenedCorpse *out)
+{
+    memset(out, 0, sizeof *out);
+    (void)json;
+}
+
+cuo_bytes cuo_ManualOpenedCorpse_json(const cuo_ManualOpenedCorpse *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ManualOpenedCorpse_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ManualOpenedCorpse_parse(cuo_bytes json, cuo_ManualOpenedCorpse *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ManualOpenedCorpse_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ManualOpenedCorpse_id(void) { TYPE_ID(cuo_ManualOpenedCorpse_PATH); }
+cuo_comp cuo_ManualOpenedCorpse_comp(void) { return cuo_comp_marker(cuo_ManualOpenedCorpse_id()); }
+bool cuo_ManualOpenedCorpse_has(uint64_t entity) { return cuo_component_json(entity, cuo_ManualOpenedCorpse_id()).ptr != NULL; }
 
 void cuo_MapWindow_write(cuo_jw *w, const cuo_MapWindow *v)
 {
@@ -2914,103 +3213,37 @@ uint16_t cuo_ModChatMessage_id(void) { TYPE_ID(cuo_ModChatMessage_PATH); }
 cuo_comp cuo_ModChatMessage_comp(const cuo_ModChatMessage *v) { return cuo_comp_bytes(cuo_ModChatMessage_id(), cuo_ModChatMessage_json(v)); }
 void cuo_ModChatMessage_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModChatMessage *v) { cuo_emit(cmds, cuo_ModChatMessage_PATH, entity, cuo_ModChatMessage_json(v)); }
 
-void cuo_ModClicked_write(cuo_jw *w, const cuo_ModClicked *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Tick");
-    cuo_jw_uint(w, v->tick);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_ModClicked_read(const cJSON *json, cuo_ModClicked *out)
-{
-    memset(out, 0, sizeof *out);
-    out->tick = (uint8_t)rd_u64(FIELD(json, "Tick"));
-}
-
-cuo_bytes cuo_ModClicked_json(const cuo_ModClicked *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_ModClicked_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_ModClicked_parse(cuo_bytes json, cuo_ModClicked *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_ModClicked_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_ModClicked_id(void) { TYPE_ID(cuo_ModClicked_PATH); }
-cuo_comp cuo_ModClicked_comp(const cuo_ModClicked *v) { return cuo_comp_bytes(cuo_ModClicked_id(), cuo_ModClicked_json(v)); }
-bool cuo_ModClicked_get(uint64_t entity, cuo_ModClicked *out) { return cuo_ModClicked_parse(cuo_component_json(entity, cuo_ModClicked_id()), out); }
-
-void cuo_ModCounter_write(cuo_jw *w, const cuo_ModCounter *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Value");
-    cuo_jw_int(w, v->value);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_ModCounter_read(const cJSON *json, cuo_ModCounter *out)
-{
-    memset(out, 0, sizeof *out);
-    out->value = (int32_t)rd_i64(FIELD(json, "Value"));
-}
-
-cuo_bytes cuo_ModCounter_json(const cuo_ModCounter *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_ModCounter_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_ModCounter_parse(cuo_bytes json, cuo_ModCounter *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_ModCounter_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_ModCounter_id(void) { TYPE_ID(cuo_ModCounter_PATH); }
-cuo_comp cuo_ModCounter_comp(const cuo_ModCounter *v) { return cuo_comp_bytes(cuo_ModCounter_id(), cuo_ModCounter_json(v)); }
-bool cuo_ModCounter_get(uint64_t entity, cuo_ModCounter *out) { return cuo_ModCounter_parse(cuo_component_json(entity, cuo_ModCounter_id()), out); }
-
-void cuo_ModEntity_write(cuo_jw *w, const cuo_ModEntity *v)
+void cuo_ModClick_write(cuo_jw *w, const cuo_ModClick *v)
 {
     (void)v;
     cuo_jw_obj(w);
     cuo_jw_obj_end(w);
 }
 
-void cuo_ModEntity_read(const cJSON *json, cuo_ModEntity *out)
+void cuo_ModClick_read(const cJSON *json, cuo_ModClick *out)
 {
     memset(out, 0, sizeof *out);
     (void)json;
 }
 
-cuo_bytes cuo_ModEntity_json(const cuo_ModEntity *v)
+cuo_bytes cuo_ModClick_json(const cuo_ModClick *v)
 {
     cuo_jw w;
     cuo_jw_init(&w);
-    cuo_ModEntity_write(&w, v);
+    cuo_ModClick_write(&w, v);
     return cuo_jw_bytes(&w);
 }
 
-bool cuo_ModEntity_parse(cuo_bytes json, cuo_ModEntity *out)
+bool cuo_ModClick_parse(cuo_bytes json, cuo_ModClick *out)
 {
     cJSON *j = cuo_json_parse(json);
-    cuo_ModEntity_read(j, out);
+    cuo_ModClick_read(j, out);
     return j != NULL;
 }
 
-uint16_t cuo_ModEntity_id(void) { TYPE_ID(cuo_ModEntity_PATH); }
-cuo_comp cuo_ModEntity_comp(void) { return cuo_comp_marker(cuo_ModEntity_id()); }
-bool cuo_ModEntity_has(uint64_t entity) { return cuo_component_json(entity, cuo_ModEntity_id()).ptr != NULL; }
+uint16_t cuo_ModClick_id(void) { TYPE_ID(cuo_ModClick_PATH); }
+cuo_comp cuo_ModClick_comp(void) { return cuo_comp_marker(cuo_ModClick_id()); }
+void cuo_ModClick_emit(cuo_cmds *cmds, uint64_t entity) { cuo_emit(cmds, cuo_ModClick_PATH, entity, cuo_str_bytes("{}")); }
 
 void cuo_ModHotkeyBinding_write(cuo_jw *w, const cuo_ModHotkeyBinding *v)
 {
@@ -3157,38 +3390,74 @@ uint16_t cuo_ModHotkeyFired_id(void) { TYPE_ID(cuo_ModHotkeyFired_PATH); }
 cuo_comp cuo_ModHotkeyFired_comp(const cuo_ModHotkeyFired *v) { return cuo_comp_bytes(cuo_ModHotkeyFired_id(), cuo_ModHotkeyFired_json(v)); }
 void cuo_ModHotkeyFired_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModHotkeyFired *v) { cuo_emit(cmds, cuo_ModHotkeyFired_PATH, entity, cuo_ModHotkeyFired_json(v)); }
 
-void cuo_ModHovered_write(cuo_jw *w, const cuo_ModHovered *v)
+void cuo_ModHover_write(cuo_jw *w, const cuo_ModHover *v)
 {
     cuo_jw_obj(w);
-    cuo_jw_key(w, "Tick");
-    cuo_jw_uint(w, v->tick);
+    cuo_jw_key(w, "Over");
+    cuo_jw_bool(w, v->over);
     cuo_jw_obj_end(w);
 }
 
-void cuo_ModHovered_read(const cJSON *json, cuo_ModHovered *out)
+void cuo_ModHover_read(const cJSON *json, cuo_ModHover *out)
 {
     memset(out, 0, sizeof *out);
-    out->tick = (uint8_t)rd_u64(FIELD(json, "Tick"));
+    out->over = cJSON_IsTrue(FIELD(json, "Over"));
 }
 
-cuo_bytes cuo_ModHovered_json(const cuo_ModHovered *v)
+cuo_bytes cuo_ModHover_json(const cuo_ModHover *v)
 {
     cuo_jw w;
     cuo_jw_init(&w);
-    cuo_ModHovered_write(&w, v);
+    cuo_ModHover_write(&w, v);
     return cuo_jw_bytes(&w);
 }
 
-bool cuo_ModHovered_parse(cuo_bytes json, cuo_ModHovered *out)
+bool cuo_ModHover_parse(cuo_bytes json, cuo_ModHover *out)
 {
     cJSON *j = cuo_json_parse(json);
-    cuo_ModHovered_read(j, out);
+    cuo_ModHover_read(j, out);
     return j != NULL;
 }
 
-uint16_t cuo_ModHovered_id(void) { TYPE_ID(cuo_ModHovered_PATH); }
-cuo_comp cuo_ModHovered_comp(const cuo_ModHovered *v) { return cuo_comp_bytes(cuo_ModHovered_id(), cuo_ModHovered_json(v)); }
-bool cuo_ModHovered_get(uint64_t entity, cuo_ModHovered *out) { return cuo_ModHovered_parse(cuo_component_json(entity, cuo_ModHovered_id()), out); }
+uint16_t cuo_ModHover_id(void) { TYPE_ID(cuo_ModHover_PATH); }
+cuo_comp cuo_ModHover_comp(const cuo_ModHover *v) { return cuo_comp_bytes(cuo_ModHover_id(), cuo_ModHover_json(v)); }
+void cuo_ModHover_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModHover *v) { cuo_emit(cmds, cuo_ModHover_PATH, entity, cuo_ModHover_json(v)); }
+
+void cuo_ModInputConsume_write(cuo_jw *w, const cuo_ModInputConsume *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Mouse");
+    cuo_jw_uint(w, v->mouse);
+    cuo_jw_key(w, "Key");
+    cuo_jw_uint(w, v->key);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ModInputConsume_read(const cJSON *json, cuo_ModInputConsume *out)
+{
+    memset(out, 0, sizeof *out);
+    out->mouse = (uint8_t)rd_u64(FIELD(json, "Mouse"));
+    out->key = (uint32_t)rd_u64(FIELD(json, "Key"));
+}
+
+cuo_bytes cuo_ModInputConsume_json(const cuo_ModInputConsume *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ModInputConsume_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ModInputConsume_parse(cuo_bytes json, cuo_ModInputConsume *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ModInputConsume_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ModInputConsume_id(void) { TYPE_ID(cuo_ModInputConsume_PATH); }
+cuo_comp cuo_ModInputConsume_comp(const cuo_ModInputConsume *v) { return cuo_comp_bytes(cuo_ModInputConsume_id(), cuo_ModInputConsume_json(v)); }
+void cuo_ModInputConsume_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModInputConsume *v) { cuo_emit(cmds, cuo_ModInputConsume_PATH, entity, cuo_ModInputConsume_json(v)); }
 
 void cuo_ModMoveRequest_write(cuo_jw *w, const cuo_ModMoveRequest *v)
 {
@@ -3229,11 +3498,152 @@ uint16_t cuo_ModMoveRequest_id(void) { TYPE_ID(cuo_ModMoveRequest_PATH); }
 cuo_comp cuo_ModMoveRequest_comp(const cuo_ModMoveRequest *v) { return cuo_comp_bytes(cuo_ModMoveRequest_id(), cuo_ModMoveRequest_json(v)); }
 void cuo_ModMoveRequest_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModMoveRequest *v) { cuo_emit(cmds, cuo_ModMoveRequest_PATH, entity, cuo_ModMoveRequest_json(v)); }
 
-void cuo_ModRightClicked_write(cuo_jw *w, const cuo_ModRightClicked *v)
+void cuo_ModOptionDto_write(cuo_jw *w, const cuo_ModOptionDto *v)
 {
     cuo_jw_obj(w);
-    cuo_jw_key(w, "Tick");
-    cuo_jw_uint(w, v->tick);
+    cuo_jw_key(w, "Key");
+    cuo_jw_str(w, v->key);
+    cuo_jw_key(w, "Label");
+    cuo_jw_str(w, v->label);
+    cuo_jw_key(w, "Group");
+    cuo_jw_str(w, v->group);
+    cuo_jw_key(w, "Keywords");
+    cuo_jw_str(w, v->keywords);
+    cuo_jw_key(w, "Kind");
+    cuo_jw_uint(w, v->kind);
+    cuo_jw_key(w, "Min");
+    cuo_jw_int(w, v->min);
+    cuo_jw_key(w, "Max");
+    cuo_jw_int(w, v->max);
+    cuo_jw_key(w, "Step");
+    cuo_jw_int(w, v->step);
+    cuo_jw_key(w, "Default");
+    cuo_jw_int(w, v->default_);
+    cuo_jw_key(w, "Choices");
+    cuo_jw_arr(w);
+    for (size_t i = 0; i < v->choices.len; i++)
+        cuo_jw_str(w, v->choices.items[i]);
+    cuo_jw_arr_end(w);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ModOptionDto_read(const cJSON *json, cuo_ModOptionDto *out)
+{
+    memset(out, 0, sizeof *out);
+    out->key = rd_str(FIELD(json, "Key"));
+    out->label = rd_str(FIELD(json, "Label"));
+    out->group = rd_str(FIELD(json, "Group"));
+    out->keywords = rd_str(FIELD(json, "Keywords"));
+    out->kind = (uint8_t)rd_u64(FIELD(json, "Kind"));
+    out->min = (int32_t)rd_i64(FIELD(json, "Min"));
+    out->max = (int32_t)rd_i64(FIELD(json, "Max"));
+    out->step = (int32_t)rd_i64(FIELD(json, "Step"));
+    out->default_ = (int32_t)rd_i64(FIELD(json, "Default"));
+    {
+        const cJSON *a = FIELD(json, "Choices");
+        size_t len = cJSON_IsArray(a) ? (size_t)cJSON_GetArraySize(a) : 0;
+        out->choices.len = len;
+        out->choices.items = len ? cuo_alloc(len * sizeof(*out->choices.items)) : NULL;
+        size_t i = 0;
+        for (const cJSON *e = len ? a->child : NULL; e && i < len; e = e->next, i++)
+            out->choices.items[i] = rd_str(e);
+    }
+}
+
+cuo_bytes cuo_ModOptionDto_json(const cuo_ModOptionDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ModOptionDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ModOptionDto_parse(cuo_bytes json, cuo_ModOptionDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ModOptionDto_read(j, out);
+    return j != NULL;
+}
+
+void cuo_ModOptionsSchemaDto_write(cuo_jw *w, const cuo_ModOptionsSchemaDto *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Options");
+    cuo_jw_arr(w);
+    for (size_t i = 0; i < v->options.len; i++)
+        cuo_ModOptionDto_write(w, &v->options.items[i]);
+    cuo_jw_arr_end(w);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ModOptionsSchemaDto_read(const cJSON *json, cuo_ModOptionsSchemaDto *out)
+{
+    memset(out, 0, sizeof *out);
+    {
+        const cJSON *a = FIELD(json, "Options");
+        size_t len = cJSON_IsArray(a) ? (size_t)cJSON_GetArraySize(a) : 0;
+        out->options.len = len;
+        out->options.items = len ? cuo_alloc(len * sizeof(*out->options.items)) : NULL;
+        size_t i = 0;
+        for (const cJSON *e = len ? a->child : NULL; e && i < len; e = e->next, i++)
+            cuo_ModOptionDto_read(e, &out->options.items[i]);
+    }
+}
+
+cuo_bytes cuo_ModOptionsSchemaDto_json(const cuo_ModOptionsSchemaDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ModOptionsSchemaDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ModOptionsSchemaDto_parse(cuo_bytes json, cuo_ModOptionsSchemaDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ModOptionsSchemaDto_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ModOptionsSchemaDto_id(void) { TYPE_ID(cuo_ModOptionsSchemaDto_PATH); }
+cuo_comp cuo_ModOptionsSchemaDto_comp(const cuo_ModOptionsSchemaDto *v) { return cuo_comp_bytes(cuo_ModOptionsSchemaDto_id(), cuo_ModOptionsSchemaDto_json(v)); }
+bool cuo_ModOptionsSchemaDto_resource(cuo_ModOptionsSchemaDto *out) { return cuo_ModOptionsSchemaDto_parse(cuo_resource_json(cuo_ModOptionsSchemaDto_id()), out); }
+
+void cuo_ModOptionsValuesDto_write(cuo_jw *w, const cuo_ModOptionsValuesDto *v)
+{
+    (void)v;
+    cuo_jw_obj(w);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ModOptionsValuesDto_read(const cJSON *json, cuo_ModOptionsValuesDto *out)
+{
+    memset(out, 0, sizeof *out);
+    (void)json;
+}
+
+cuo_bytes cuo_ModOptionsValuesDto_json(const cuo_ModOptionsValuesDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ModOptionsValuesDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ModOptionsValuesDto_parse(cuo_bytes json, cuo_ModOptionsValuesDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ModOptionsValuesDto_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_ModOptionsValuesDto_id(void) { TYPE_ID(cuo_ModOptionsValuesDto_PATH); }
+cuo_comp cuo_ModOptionsValuesDto_comp(void) { return cuo_comp_marker(cuo_ModOptionsValuesDto_id()); }
+bool cuo_ModOptionsValuesDto_resource(cuo_ModOptionsValuesDto *out) { return cuo_ModOptionsValuesDto_parse(cuo_resource_json(cuo_ModOptionsValuesDto_id()), out); }
+
+void cuo_ModRightClick_write(cuo_jw *w, const cuo_ModRightClick *v)
+{
+    cuo_jw_obj(w);
     cuo_jw_key(w, "X");
     cuo_jw_num(w, v->x);
     cuo_jw_key(w, "Y");
@@ -3241,65 +3651,31 @@ void cuo_ModRightClicked_write(cuo_jw *w, const cuo_ModRightClicked *v)
     cuo_jw_obj_end(w);
 }
 
-void cuo_ModRightClicked_read(const cJSON *json, cuo_ModRightClicked *out)
+void cuo_ModRightClick_read(const cJSON *json, cuo_ModRightClick *out)
 {
     memset(out, 0, sizeof *out);
-    out->tick = (uint8_t)rd_u64(FIELD(json, "Tick"));
     out->x = (float)rd_num(FIELD(json, "X"));
     out->y = (float)rd_num(FIELD(json, "Y"));
 }
 
-cuo_bytes cuo_ModRightClicked_json(const cuo_ModRightClicked *v)
+cuo_bytes cuo_ModRightClick_json(const cuo_ModRightClick *v)
 {
     cuo_jw w;
     cuo_jw_init(&w);
-    cuo_ModRightClicked_write(&w, v);
+    cuo_ModRightClick_write(&w, v);
     return cuo_jw_bytes(&w);
 }
 
-bool cuo_ModRightClicked_parse(cuo_bytes json, cuo_ModRightClicked *out)
+bool cuo_ModRightClick_parse(cuo_bytes json, cuo_ModRightClick *out)
 {
     cJSON *j = cuo_json_parse(json);
-    cuo_ModRightClicked_read(j, out);
+    cuo_ModRightClick_read(j, out);
     return j != NULL;
 }
 
-uint16_t cuo_ModRightClicked_id(void) { TYPE_ID(cuo_ModRightClicked_PATH); }
-cuo_comp cuo_ModRightClicked_comp(const cuo_ModRightClicked *v) { return cuo_comp_bytes(cuo_ModRightClicked_id(), cuo_ModRightClicked_json(v)); }
-bool cuo_ModRightClicked_get(uint64_t entity, cuo_ModRightClicked *out) { return cuo_ModRightClicked_parse(cuo_component_json(entity, cuo_ModRightClicked_id()), out); }
-
-void cuo_ModState_write(cuo_jw *w, const cuo_ModState *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Json");
-    cuo_jw_str(w, v->json);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_ModState_read(const cJSON *json, cuo_ModState *out)
-{
-    memset(out, 0, sizeof *out);
-    out->json = rd_str(FIELD(json, "Json"));
-}
-
-cuo_bytes cuo_ModState_json(const cuo_ModState *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_ModState_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_ModState_parse(cuo_bytes json, cuo_ModState *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_ModState_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_ModState_id(void) { TYPE_ID(cuo_ModState_PATH); }
-cuo_comp cuo_ModState_comp(const cuo_ModState *v) { return cuo_comp_bytes(cuo_ModState_id(), cuo_ModState_json(v)); }
-bool cuo_ModState_get(uint64_t entity, cuo_ModState *out) { return cuo_ModState_parse(cuo_component_json(entity, cuo_ModState_id()), out); }
+uint16_t cuo_ModRightClick_id(void) { TYPE_ID(cuo_ModRightClick_PATH); }
+cuo_comp cuo_ModRightClick_comp(const cuo_ModRightClick *v) { return cuo_comp_bytes(cuo_ModRightClick_id(), cuo_ModRightClick_json(v)); }
+void cuo_ModRightClick_emit(cuo_cmds *cmds, uint64_t entity, const cuo_ModRightClick *v) { cuo_emit(cmds, cuo_ModRightClick_PATH, entity, cuo_ModRightClick_json(v)); }
 
 void cuo_ModSupersedes_write(cuo_jw *w, const cuo_ModSupersedes *v)
 {
@@ -3353,6 +3729,24 @@ void cuo_MouseInputDto_write(cuo_jw *w, const cuo_MouseInputDto *v)
     cuo_jw_bool(w, v->x2);
     cuo_jw_key(w, "Wheel");
     cuo_jw_num(w, v->wheel);
+    cuo_jw_key(w, "LeftPressed");
+    cuo_jw_bool(w, v->left_pressed);
+    cuo_jw_key(w, "LeftReleased");
+    cuo_jw_bool(w, v->left_released);
+    cuo_jw_key(w, "LeftDouble");
+    cuo_jw_bool(w, v->left_double);
+    cuo_jw_key(w, "RightPressed");
+    cuo_jw_bool(w, v->right_pressed);
+    cuo_jw_key(w, "RightReleased");
+    cuo_jw_bool(w, v->right_released);
+    cuo_jw_key(w, "MiddlePressed");
+    cuo_jw_bool(w, v->middle_pressed);
+    cuo_jw_key(w, "MiddleReleased");
+    cuo_jw_bool(w, v->middle_released);
+    cuo_jw_key(w, "X1Pressed");
+    cuo_jw_bool(w, v->x1_pressed);
+    cuo_jw_key(w, "X2Pressed");
+    cuo_jw_bool(w, v->x2_pressed);
     cuo_jw_obj_end(w);
 }
 
@@ -3367,6 +3761,15 @@ void cuo_MouseInputDto_read(const cJSON *json, cuo_MouseInputDto *out)
     out->x1 = cJSON_IsTrue(FIELD(json, "X1"));
     out->x2 = cJSON_IsTrue(FIELD(json, "X2"));
     out->wheel = (float)rd_num(FIELD(json, "Wheel"));
+    out->left_pressed = cJSON_IsTrue(FIELD(json, "LeftPressed"));
+    out->left_released = cJSON_IsTrue(FIELD(json, "LeftReleased"));
+    out->left_double = cJSON_IsTrue(FIELD(json, "LeftDouble"));
+    out->right_pressed = cJSON_IsTrue(FIELD(json, "RightPressed"));
+    out->right_released = cJSON_IsTrue(FIELD(json, "RightReleased"));
+    out->middle_pressed = cJSON_IsTrue(FIELD(json, "MiddlePressed"));
+    out->middle_released = cJSON_IsTrue(FIELD(json, "MiddleReleased"));
+    out->x1_pressed = cJSON_IsTrue(FIELD(json, "X1Pressed"));
+    out->x2_pressed = cJSON_IsTrue(FIELD(json, "X2Pressed"));
 }
 
 cuo_bytes cuo_MouseInputDto_json(const cuo_MouseInputDto *v)
@@ -3659,38 +4062,6 @@ uint16_t cuo_OnLoginRequest_id(void) { TYPE_ID(cuo_OnLoginRequest_PATH); }
 cuo_comp cuo_OnLoginRequest_comp(const cuo_OnLoginRequest *v) { return cuo_comp_bytes(cuo_OnLoginRequest_id(), cuo_OnLoginRequest_json(v)); }
 void cuo_OnLoginRequest_emit(cuo_cmds *cmds, uint64_t entity, const cuo_OnLoginRequest *v) { cuo_emit(cmds, cuo_OnLoginRequest_PATH, entity, cuo_OnLoginRequest_json(v)); }
 
-void cuo_OpenDoorAction_write(cuo_jw *w, const cuo_OpenDoorAction *v)
-{
-    (void)v;
-    cuo_jw_obj(w);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_OpenDoorAction_read(const cJSON *json, cuo_OpenDoorAction *out)
-{
-    memset(out, 0, sizeof *out);
-    (void)json;
-}
-
-cuo_bytes cuo_OpenDoorAction_json(const cuo_OpenDoorAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_OpenDoorAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_OpenDoorAction_parse(cuo_bytes json, cuo_OpenDoorAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_OpenDoorAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_OpenDoorAction_id(void) { TYPE_ID(cuo_OpenDoorAction_PATH); }
-cuo_comp cuo_OpenDoorAction_comp(void) { return cuo_comp_marker(cuo_OpenDoorAction_id()); }
-void cuo_OpenDoorAction_emit(cuo_cmds *cmds, uint64_t entity) { cuo_emit(cmds, cuo_OpenDoorAction_PATH, entity, cuo_str_bytes("{}")); }
-
 void cuo_OplLineDto_write(cuo_jw *w, const cuo_OplLineDto *v)
 {
     cuo_jw_obj(w);
@@ -3950,42 +4321,6 @@ bool cuo_PartyMemberDto_parse(cuo_bytes json, cuo_PartyMemberDto *out)
     cuo_PartyMemberDto_read(j, out);
     return j != NULL;
 }
-
-void cuo_PickupAction_write(cuo_jw *w, const cuo_PickupAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_key(w, "Amount");
-    cuo_jw_uint(w, v->amount);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_PickupAction_read(const cJSON *json, cuo_PickupAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-    out->amount = (uint16_t)rd_u64(FIELD(json, "Amount"));
-}
-
-cuo_bytes cuo_PickupAction_json(const cuo_PickupAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_PickupAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_PickupAction_parse(cuo_bytes json, cuo_PickupAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_PickupAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_PickupAction_id(void) { TYPE_ID(cuo_PickupAction_PATH); }
-cuo_comp cuo_PickupAction_comp(const cuo_PickupAction *v) { return cuo_comp_bytes(cuo_PickupAction_id(), cuo_PickupAction_json(v)); }
-void cuo_PickupAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_PickupAction *v) { cuo_emit(cmds, cuo_PickupAction_PATH, entity, cuo_PickupAction_json(v)); }
 
 void cuo_Player_write(cuo_jw *w, const cuo_Player *v)
 {
@@ -4532,42 +4867,6 @@ uint16_t cuo_PromptOpenedEvent_id(void) { TYPE_ID(cuo_PromptOpenedEvent_PATH); }
 cuo_comp cuo_PromptOpenedEvent_comp(const cuo_PromptOpenedEvent *v) { return cuo_comp_bytes(cuo_PromptOpenedEvent_id(), cuo_PromptOpenedEvent_json(v)); }
 void cuo_PromptOpenedEvent_emit(cuo_cmds *cmds, uint64_t entity, const cuo_PromptOpenedEvent *v) { cuo_emit(cmds, cuo_PromptOpenedEvent_PATH, entity, cuo_PromptOpenedEvent_json(v)); }
 
-void cuo_PromptReplyAction_write(cuo_jw *w, const cuo_PromptReplyAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Text");
-    cuo_jw_str(w, v->text);
-    cuo_jw_key(w, "Cancel");
-    cuo_jw_bool(w, v->cancel);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_PromptReplyAction_read(const cJSON *json, cuo_PromptReplyAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->text = rd_str(FIELD(json, "Text"));
-    out->cancel = cJSON_IsTrue(FIELD(json, "Cancel"));
-}
-
-cuo_bytes cuo_PromptReplyAction_json(const cuo_PromptReplyAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_PromptReplyAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_PromptReplyAction_parse(cuo_bytes json, cuo_PromptReplyAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_PromptReplyAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_PromptReplyAction_id(void) { TYPE_ID(cuo_PromptReplyAction_PATH); }
-cuo_comp cuo_PromptReplyAction_comp(const cuo_PromptReplyAction *v) { return cuo_comp_bytes(cuo_PromptReplyAction_id(), cuo_PromptReplyAction_json(v)); }
-void cuo_PromptReplyAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_PromptReplyAction *v) { cuo_emit(cmds, cuo_PromptReplyAction_PATH, entity, cuo_PromptReplyAction_json(v)); }
-
 void cuo_RacialBookWindow_write(cuo_jw *w, const cuo_RacialBookWindow *v)
 {
     cuo_jw_obj(w);
@@ -4627,243 +4926,6 @@ bool cuo_RacialBookWindow_parse(cuo_bytes json, cuo_RacialBookWindow *out)
 uint16_t cuo_RacialBookWindow_id(void) { TYPE_ID(cuo_RacialBookWindow_PATH); }
 cuo_comp cuo_RacialBookWindow_comp(const cuo_RacialBookWindow *v) { return cuo_comp_bytes(cuo_RacialBookWindow_id(), cuo_RacialBookWindow_json(v)); }
 bool cuo_RacialBookWindow_get(uint64_t entity, cuo_RacialBookWindow *out) { return cuo_RacialBookWindow_parse(cuo_component_json(entity, cuo_RacialBookWindow_id()), out); }
-
-void cuo_RenameAction_write(cuo_jw *w, const cuo_RenameAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_key(w, "Name");
-    cuo_jw_str(w, v->name);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_RenameAction_read(const cJSON *json, cuo_RenameAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-    out->name = rd_str(FIELD(json, "Name"));
-}
-
-cuo_bytes cuo_RenameAction_json(const cuo_RenameAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_RenameAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_RenameAction_parse(cuo_bytes json, cuo_RenameAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_RenameAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_RenameAction_id(void) { TYPE_ID(cuo_RenameAction_PATH); }
-cuo_comp cuo_RenameAction_comp(const cuo_RenameAction *v) { return cuo_comp_bytes(cuo_RenameAction_id(), cuo_RenameAction_json(v)); }
-void cuo_RenameAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RenameAction *v) { cuo_emit(cmds, cuo_RenameAction_PATH, entity, cuo_RenameAction_json(v)); }
-
-void cuo_RequestContextMenuAction_write(cuo_jw *w, const cuo_RequestContextMenuAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_RequestContextMenuAction_read(const cJSON *json, cuo_RequestContextMenuAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-}
-
-cuo_bytes cuo_RequestContextMenuAction_json(const cuo_RequestContextMenuAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_RequestContextMenuAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_RequestContextMenuAction_parse(cuo_bytes json, cuo_RequestContextMenuAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_RequestContextMenuAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_RequestContextMenuAction_id(void) { TYPE_ID(cuo_RequestContextMenuAction_PATH); }
-cuo_comp cuo_RequestContextMenuAction_comp(const cuo_RequestContextMenuAction *v) { return cuo_comp_bytes(cuo_RequestContextMenuAction_id(), cuo_RequestContextMenuAction_json(v)); }
-void cuo_RequestContextMenuAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RequestContextMenuAction *v) { cuo_emit(cmds, cuo_RequestContextMenuAction_PATH, entity, cuo_RequestContextMenuAction_json(v)); }
-
-void cuo_RequestPropertiesAction_write(cuo_jw *w, const cuo_RequestPropertiesAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_RequestPropertiesAction_read(const cJSON *json, cuo_RequestPropertiesAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-}
-
-cuo_bytes cuo_RequestPropertiesAction_json(const cuo_RequestPropertiesAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_RequestPropertiesAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_RequestPropertiesAction_parse(cuo_bytes json, cuo_RequestPropertiesAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_RequestPropertiesAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_RequestPropertiesAction_id(void) { TYPE_ID(cuo_RequestPropertiesAction_PATH); }
-cuo_comp cuo_RequestPropertiesAction_comp(const cuo_RequestPropertiesAction *v) { return cuo_comp_bytes(cuo_RequestPropertiesAction_id(), cuo_RequestPropertiesAction_json(v)); }
-void cuo_RequestPropertiesAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RequestPropertiesAction *v) { cuo_emit(cmds, cuo_RequestPropertiesAction_PATH, entity, cuo_RequestPropertiesAction_json(v)); }
-
-void cuo_RequestSkillsAction_write(cuo_jw *w, const cuo_RequestSkillsAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_RequestSkillsAction_read(const cJSON *json, cuo_RequestSkillsAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-}
-
-cuo_bytes cuo_RequestSkillsAction_json(const cuo_RequestSkillsAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_RequestSkillsAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_RequestSkillsAction_parse(cuo_bytes json, cuo_RequestSkillsAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_RequestSkillsAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_RequestSkillsAction_id(void) { TYPE_ID(cuo_RequestSkillsAction_PATH); }
-cuo_comp cuo_RequestSkillsAction_comp(const cuo_RequestSkillsAction *v) { return cuo_comp_bytes(cuo_RequestSkillsAction_id(), cuo_RequestSkillsAction_json(v)); }
-void cuo_RequestSkillsAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RequestSkillsAction *v) { cuo_emit(cmds, cuo_RequestSkillsAction_PATH, entity, cuo_RequestSkillsAction_json(v)); }
-
-void cuo_RequestStatusAction_write(cuo_jw *w, const cuo_RequestStatusAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_RequestStatusAction_read(const cJSON *json, cuo_RequestStatusAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-}
-
-cuo_bytes cuo_RequestStatusAction_json(const cuo_RequestStatusAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_RequestStatusAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_RequestStatusAction_parse(cuo_bytes json, cuo_RequestStatusAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_RequestStatusAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_RequestStatusAction_id(void) { TYPE_ID(cuo_RequestStatusAction_PATH); }
-cuo_comp cuo_RequestStatusAction_comp(const cuo_RequestStatusAction *v) { return cuo_comp_bytes(cuo_RequestStatusAction_id(), cuo_RequestStatusAction_json(v)); }
-void cuo_RequestStatusAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RequestStatusAction *v) { cuo_emit(cmds, cuo_RequestStatusAction_PATH, entity, cuo_RequestStatusAction_json(v)); }
-
-void cuo_RequestTargetAction_write(cuo_jw *w, const cuo_RequestTargetAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "PromptText");
-    cuo_jw_str(w, v->prompt_text);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_RequestTargetAction_read(const cJSON *json, cuo_RequestTargetAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->prompt_text = rd_str(FIELD(json, "PromptText"));
-}
-
-cuo_bytes cuo_RequestTargetAction_json(const cuo_RequestTargetAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_RequestTargetAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_RequestTargetAction_parse(cuo_bytes json, cuo_RequestTargetAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_RequestTargetAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_RequestTargetAction_id(void) { TYPE_ID(cuo_RequestTargetAction_PATH); }
-cuo_comp cuo_RequestTargetAction_comp(const cuo_RequestTargetAction *v) { return cuo_comp_bytes(cuo_RequestTargetAction_id(), cuo_RequestTargetAction_json(v)); }
-void cuo_RequestTargetAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_RequestTargetAction *v) { cuo_emit(cmds, cuo_RequestTargetAction_PATH, entity, cuo_RequestTargetAction_json(v)); }
-
-void cuo_SayAction_write(cuo_jw *w, const cuo_SayAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Text");
-    cuo_jw_str(w, v->text);
-    cuo_jw_key(w, "Hue");
-    cuo_jw_uint(w, v->hue);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_SayAction_read(const cJSON *json, cuo_SayAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->text = rd_str(FIELD(json, "Text"));
-    out->hue = (uint16_t)rd_u64(FIELD(json, "Hue"));
-}
-
-cuo_bytes cuo_SayAction_json(const cuo_SayAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_SayAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_SayAction_parse(cuo_bytes json, cuo_SayAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_SayAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_SayAction_id(void) { TYPE_ID(cuo_SayAction_PATH); }
-cuo_comp cuo_SayAction_comp(const cuo_SayAction *v) { return cuo_comp_bytes(cuo_SayAction_id(), cuo_SayAction_json(v)); }
-void cuo_SayAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_SayAction *v) { cuo_emit(cmds, cuo_SayAction_PATH, entity, cuo_SayAction_json(v)); }
 
 void cuo_ScrollPosition_write(cuo_jw *w, const cuo_ScrollPosition *v)
 {
@@ -5349,39 +5411,6 @@ uint16_t cuo_ServerSelectionScene_id(void) { TYPE_ID(cuo_ServerSelectionScene_PA
 cuo_comp cuo_ServerSelectionScene_comp(void) { return cuo_comp_marker(cuo_ServerSelectionScene_id()); }
 bool cuo_ServerSelectionScene_has(uint64_t entity) { return cuo_component_json(entity, cuo_ServerSelectionScene_id()).ptr != NULL; }
 
-void cuo_SingleClickAction_write(cuo_jw *w, const cuo_SingleClickAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_SingleClickAction_read(const cJSON *json, cuo_SingleClickAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-}
-
-cuo_bytes cuo_SingleClickAction_json(const cuo_SingleClickAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_SingleClickAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_SingleClickAction_parse(cuo_bytes json, cuo_SingleClickAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_SingleClickAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_SingleClickAction_id(void) { TYPE_ID(cuo_SingleClickAction_PATH); }
-cuo_comp cuo_SingleClickAction_comp(const cuo_SingleClickAction *v) { return cuo_comp_bytes(cuo_SingleClickAction_id(), cuo_SingleClickAction_json(v)); }
-void cuo_SingleClickAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_SingleClickAction *v) { cuo_emit(cmds, cuo_SingleClickAction_PATH, entity, cuo_SingleClickAction_json(v)); }
-
 void cuo_SkillsWindow_write(cuo_jw *w, const cuo_SkillsWindow *v)
 {
     cuo_jw_obj(w);
@@ -5855,113 +5884,6 @@ bool cuo_StatusBarWindow_parse(cuo_bytes json, cuo_StatusBarWindow *out)
 uint16_t cuo_StatusBarWindow_id(void) { TYPE_ID(cuo_StatusBarWindow_PATH); }
 cuo_comp cuo_StatusBarWindow_comp(const cuo_StatusBarWindow *v) { return cuo_comp_bytes(cuo_StatusBarWindow_id(), cuo_StatusBarWindow_json(v)); }
 bool cuo_StatusBarWindow_get(uint64_t entity, cuo_StatusBarWindow *out) { return cuo_StatusBarWindow_parse(cuo_component_json(entity, cuo_StatusBarWindow_id()), out); }
-
-void cuo_TargetCancelAction_write(cuo_jw *w, const cuo_TargetCancelAction *v)
-{
-    (void)v;
-    cuo_jw_obj(w);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_TargetCancelAction_read(const cJSON *json, cuo_TargetCancelAction *out)
-{
-    memset(out, 0, sizeof *out);
-    (void)json;
-}
-
-cuo_bytes cuo_TargetCancelAction_json(const cuo_TargetCancelAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_TargetCancelAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_TargetCancelAction_parse(cuo_bytes json, cuo_TargetCancelAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_TargetCancelAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_TargetCancelAction_id(void) { TYPE_ID(cuo_TargetCancelAction_PATH); }
-cuo_comp cuo_TargetCancelAction_comp(void) { return cuo_comp_marker(cuo_TargetCancelAction_id()); }
-void cuo_TargetCancelAction_emit(cuo_cmds *cmds, uint64_t entity) { cuo_emit(cmds, cuo_TargetCancelAction_PATH, entity, cuo_str_bytes("{}")); }
-
-void cuo_TargetLocationAction_write(cuo_jw *w, const cuo_TargetLocationAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "X");
-    cuo_jw_uint(w, v->x);
-    cuo_jw_key(w, "Y");
-    cuo_jw_uint(w, v->y);
-    cuo_jw_key(w, "Z");
-    cuo_jw_int(w, v->z);
-    cuo_jw_key(w, "Graphic");
-    cuo_jw_uint(w, v->graphic);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_TargetLocationAction_read(const cJSON *json, cuo_TargetLocationAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->x = (uint16_t)rd_u64(FIELD(json, "X"));
-    out->y = (uint16_t)rd_u64(FIELD(json, "Y"));
-    out->z = (int8_t)rd_i64(FIELD(json, "Z"));
-    out->graphic = (uint16_t)rd_u64(FIELD(json, "Graphic"));
-}
-
-cuo_bytes cuo_TargetLocationAction_json(const cuo_TargetLocationAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_TargetLocationAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_TargetLocationAction_parse(cuo_bytes json, cuo_TargetLocationAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_TargetLocationAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_TargetLocationAction_id(void) { TYPE_ID(cuo_TargetLocationAction_PATH); }
-cuo_comp cuo_TargetLocationAction_comp(const cuo_TargetLocationAction *v) { return cuo_comp_bytes(cuo_TargetLocationAction_id(), cuo_TargetLocationAction_json(v)); }
-void cuo_TargetLocationAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_TargetLocationAction *v) { cuo_emit(cmds, cuo_TargetLocationAction_PATH, entity, cuo_TargetLocationAction_json(v)); }
-
-void cuo_TargetObjectAction_write(cuo_jw *w, const cuo_TargetObjectAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Serial");
-    cuo_jw_uint(w, v->serial);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_TargetObjectAction_read(const cJSON *json, cuo_TargetObjectAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
-}
-
-cuo_bytes cuo_TargetObjectAction_json(const cuo_TargetObjectAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_TargetObjectAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_TargetObjectAction_parse(cuo_bytes json, cuo_TargetObjectAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_TargetObjectAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_TargetObjectAction_id(void) { TYPE_ID(cuo_TargetObjectAction_PATH); }
-cuo_comp cuo_TargetObjectAction_comp(const cuo_TargetObjectAction *v) { return cuo_comp_bytes(cuo_TargetObjectAction_id(), cuo_TargetObjectAction_json(v)); }
-void cuo_TargetObjectAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_TargetObjectAction *v) { cuo_emit(cmds, cuo_TargetObjectAction_PATH, entity, cuo_TargetObjectAction_json(v)); }
 
 void cuo_TargetingState_write(cuo_jw *w, const cuo_TargetingState *v)
 {
@@ -6637,38 +6559,6 @@ uint16_t cuo_TipNoticeWindow_id(void) { TYPE_ID(cuo_TipNoticeWindow_PATH); }
 cuo_comp cuo_TipNoticeWindow_comp(const cuo_TipNoticeWindow *v) { return cuo_comp_bytes(cuo_TipNoticeWindow_id(), cuo_TipNoticeWindow_json(v)); }
 bool cuo_TipNoticeWindow_get(uint64_t entity, cuo_TipNoticeWindow *out) { return cuo_TipNoticeWindow_parse(cuo_component_json(entity, cuo_TipNoticeWindow_id()), out); }
 
-void cuo_ToggleWarModeAction_write(cuo_jw *w, const cuo_ToggleWarModeAction *v)
-{
-    (void)v;
-    cuo_jw_obj(w);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_ToggleWarModeAction_read(const cJSON *json, cuo_ToggleWarModeAction *out)
-{
-    memset(out, 0, sizeof *out);
-    (void)json;
-}
-
-cuo_bytes cuo_ToggleWarModeAction_json(const cuo_ToggleWarModeAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_ToggleWarModeAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_ToggleWarModeAction_parse(cuo_bytes json, cuo_ToggleWarModeAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_ToggleWarModeAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_ToggleWarModeAction_id(void) { TYPE_ID(cuo_ToggleWarModeAction_PATH); }
-cuo_comp cuo_ToggleWarModeAction_comp(void) { return cuo_comp_marker(cuo_ToggleWarModeAction_id()); }
-void cuo_ToggleWarModeAction_emit(cuo_cmds *cmds, uint64_t entity) { cuo_emit(cmds, cuo_ToggleWarModeAction_PATH, entity, cuo_str_bytes("{}")); }
-
 void cuo_TopBarButton_write(cuo_jw *w, const cuo_TopBarButton *v)
 {
     (void)v;
@@ -6947,6 +6837,8 @@ void cuo_UiCustomDto_write(cuo_jw *w, const cuo_UiCustomDto *v)
     cuo_jw_num(w, v->hue_y);
     cuo_jw_key(w, "HueZ");
     cuo_jw_num(w, v->hue_z);
+    cuo_jw_key(w, "Stacked");
+    cuo_jw_bool(w, v->stacked);
     cuo_jw_obj_end(w);
 }
 
@@ -6958,6 +6850,7 @@ void cuo_UiCustomDto_read(const cJSON *json, cuo_UiCustomDto *out)
     out->hue_x = (float)rd_num(FIELD(json, "HueX"));
     out->hue_y = (float)rd_num(FIELD(json, "HueY"));
     out->hue_z = (float)rd_num(FIELD(json, "HueZ"));
+    out->stacked = cJSON_IsTrue(FIELD(json, "Stacked"));
 }
 
 cuo_bytes cuo_UiCustomDto_json(const cuo_UiCustomDto *v)
@@ -7208,6 +7101,51 @@ uint16_t cuo_UiNoWindowDrag_id(void) { TYPE_ID(cuo_UiNoWindowDrag_PATH); }
 cuo_comp cuo_UiNoWindowDrag_comp(void) { return cuo_comp_marker(cuo_UiNoWindowDrag_id()); }
 bool cuo_UiNoWindowDrag_has(uint64_t entity) { return cuo_component_json(entity, cuo_UiNoWindowDrag_id()).ptr != NULL; }
 
+void cuo_UiPickDto_write(cuo_jw *w, const cuo_UiPickDto *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Entity");
+    cuo_jw_uint(w, v->entity);
+    cuo_jw_key(w, "Root");
+    cuo_jw_uint(w, v->root);
+    cuo_jw_key(w, "PaintOrder");
+    cuo_jw_int(w, v->paint_order);
+    cuo_jw_key(w, "X");
+    cuo_jw_num(w, v->x);
+    cuo_jw_key(w, "Y");
+    cuo_jw_num(w, v->y);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_UiPickDto_read(const cJSON *json, cuo_UiPickDto *out)
+{
+    memset(out, 0, sizeof *out);
+    out->entity = (uint64_t)rd_u64(FIELD(json, "Entity"));
+    out->root = (uint64_t)rd_u64(FIELD(json, "Root"));
+    out->paint_order = (int32_t)rd_i64(FIELD(json, "PaintOrder"));
+    out->x = (float)rd_num(FIELD(json, "X"));
+    out->y = (float)rd_num(FIELD(json, "Y"));
+}
+
+cuo_bytes cuo_UiPickDto_json(const cuo_UiPickDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_UiPickDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_UiPickDto_parse(cuo_bytes json, cuo_UiPickDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_UiPickDto_read(j, out);
+    return j != NULL;
+}
+
+uint16_t cuo_UiPickDto_id(void) { TYPE_ID(cuo_UiPickDto_PATH); }
+cuo_comp cuo_UiPickDto_comp(const cuo_UiPickDto *v) { return cuo_comp_bytes(cuo_UiPickDto_id(), cuo_UiPickDto_json(v)); }
+bool cuo_UiPickDto_resource(cuo_UiPickDto *out) { return cuo_UiPickDto_parse(cuo_resource_json(cuo_UiPickDto_id()), out); }
+
 void cuo_UiPopup_write(cuo_jw *w, const cuo_UiPopup *v)
 {
     (void)v;
@@ -7253,6 +7191,10 @@ void cuo_UiResizable_write(cuo_jw *w, const cuo_UiResizable *v)
     cuo_jw_num(w, v->max_h);
     cuo_jw_key(w, "Grip");
     cuo_jw_num(w, v->grip);
+    cuo_jw_key(w, "GripInset");
+    cuo_jw_num(w, v->grip_inset);
+    cuo_jw_key(w, "WholePixels");
+    cuo_jw_bool(w, v->whole_pixels);
     cuo_jw_obj_end(w);
 }
 
@@ -7264,6 +7206,8 @@ void cuo_UiResizable_read(const cJSON *json, cuo_UiResizable *out)
     out->max_w = (float)rd_num(FIELD(json, "MaxW"));
     out->max_h = (float)rd_num(FIELD(json, "MaxH"));
     out->grip = (float)rd_num(FIELD(json, "Grip"));
+    out->grip_inset = (float)rd_num(FIELD(json, "GripInset"));
+    out->whole_pixels = cJSON_IsTrue(FIELD(json, "WholePixels"));
 }
 
 cuo_bytes cuo_UiResizable_json(const cuo_UiResizable *v)
@@ -7393,38 +7337,38 @@ uint16_t cuo_UiTooltip_id(void) { TYPE_ID(cuo_UiTooltip_PATH); }
 cuo_comp cuo_UiTooltip_comp(const cuo_UiTooltip *v) { return cuo_comp_bytes(cuo_UiTooltip_id(), cuo_UiTooltip_json(v)); }
 bool cuo_UiTooltip_get(uint64_t entity, cuo_UiTooltip *out) { return cuo_UiTooltip_parse(cuo_component_json(entity, cuo_UiTooltip_id()), out); }
 
-void cuo_UseSkillAction_write(cuo_jw *w, const cuo_UseSkillAction *v)
+void cuo_UiTooltipSerial_write(cuo_jw *w, const cuo_UiTooltipSerial *v)
 {
     cuo_jw_obj(w);
-    cuo_jw_key(w, "Id");
-    cuo_jw_int(w, v->id);
+    cuo_jw_key(w, "Serial");
+    cuo_jw_uint(w, v->serial);
     cuo_jw_obj_end(w);
 }
 
-void cuo_UseSkillAction_read(const cJSON *json, cuo_UseSkillAction *out)
+void cuo_UiTooltipSerial_read(const cJSON *json, cuo_UiTooltipSerial *out)
 {
     memset(out, 0, sizeof *out);
-    out->id = (int32_t)rd_i64(FIELD(json, "Id"));
+    out->serial = (uint32_t)rd_u64(FIELD(json, "Serial"));
 }
 
-cuo_bytes cuo_UseSkillAction_json(const cuo_UseSkillAction *v)
+cuo_bytes cuo_UiTooltipSerial_json(const cuo_UiTooltipSerial *v)
 {
     cuo_jw w;
     cuo_jw_init(&w);
-    cuo_UseSkillAction_write(&w, v);
+    cuo_UiTooltipSerial_write(&w, v);
     return cuo_jw_bytes(&w);
 }
 
-bool cuo_UseSkillAction_parse(cuo_bytes json, cuo_UseSkillAction *out)
+bool cuo_UiTooltipSerial_parse(cuo_bytes json, cuo_UiTooltipSerial *out)
 {
     cJSON *j = cuo_json_parse(json);
-    cuo_UseSkillAction_read(j, out);
+    cuo_UiTooltipSerial_read(j, out);
     return j != NULL;
 }
 
-uint16_t cuo_UseSkillAction_id(void) { TYPE_ID(cuo_UseSkillAction_PATH); }
-cuo_comp cuo_UseSkillAction_comp(const cuo_UseSkillAction *v) { return cuo_comp_bytes(cuo_UseSkillAction_id(), cuo_UseSkillAction_json(v)); }
-void cuo_UseSkillAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_UseSkillAction *v) { cuo_emit(cmds, cuo_UseSkillAction_PATH, entity, cuo_UseSkillAction_json(v)); }
+uint16_t cuo_UiTooltipSerial_id(void) { TYPE_ID(cuo_UiTooltipSerial_PATH); }
+cuo_comp cuo_UiTooltipSerial_comp(const cuo_UiTooltipSerial *v) { return cuo_comp_bytes(cuo_UiTooltipSerial_id(), cuo_UiTooltipSerial_json(v)); }
+bool cuo_UiTooltipSerial_get(uint64_t entity, cuo_UiTooltipSerial *out) { return cuo_UiTooltipSerial_parse(cuo_component_json(entity, cuo_UiTooltipSerial_id()), out); }
 
 void cuo_VendorWindow_write(cuo_jw *w, const cuo_VendorWindow *v)
 {
@@ -7457,81 +7401,6 @@ bool cuo_VendorWindow_parse(cuo_bytes json, cuo_VendorWindow *out)
 uint16_t cuo_VendorWindow_id(void) { TYPE_ID(cuo_VendorWindow_PATH); }
 cuo_comp cuo_VendorWindow_comp(void) { return cuo_comp_marker(cuo_VendorWindow_id()); }
 bool cuo_VendorWindow_has(uint64_t entity) { return cuo_component_json(entity, cuo_VendorWindow_id()).ptr != NULL; }
-
-void cuo_WalkAction_write(cuo_jw *w, const cuo_WalkAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "Direction");
-    cuo_jw_uint(w, v->direction);
-    cuo_jw_key(w, "Run");
-    cuo_jw_bool(w, v->run);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_WalkAction_read(const cJSON *json, cuo_WalkAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->direction = (uint8_t)rd_u64(FIELD(json, "Direction"));
-    out->run = cJSON_IsTrue(FIELD(json, "Run"));
-}
-
-cuo_bytes cuo_WalkAction_json(const cuo_WalkAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_WalkAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_WalkAction_parse(cuo_bytes json, cuo_WalkAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_WalkAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_WalkAction_id(void) { TYPE_ID(cuo_WalkAction_PATH); }
-cuo_comp cuo_WalkAction_comp(const cuo_WalkAction *v) { return cuo_comp_bytes(cuo_WalkAction_id(), cuo_WalkAction_json(v)); }
-void cuo_WalkAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_WalkAction *v) { cuo_emit(cmds, cuo_WalkAction_PATH, entity, cuo_WalkAction_json(v)); }
-
-void cuo_WalkToAction_write(cuo_jw *w, const cuo_WalkToAction *v)
-{
-    cuo_jw_obj(w);
-    cuo_jw_key(w, "X");
-    cuo_jw_uint(w, v->x);
-    cuo_jw_key(w, "Y");
-    cuo_jw_uint(w, v->y);
-    cuo_jw_key(w, "Z");
-    cuo_jw_int(w, v->z);
-    cuo_jw_obj_end(w);
-}
-
-void cuo_WalkToAction_read(const cJSON *json, cuo_WalkToAction *out)
-{
-    memset(out, 0, sizeof *out);
-    out->x = (uint16_t)rd_u64(FIELD(json, "X"));
-    out->y = (uint16_t)rd_u64(FIELD(json, "Y"));
-    out->z = (int8_t)rd_i64(FIELD(json, "Z"));
-}
-
-cuo_bytes cuo_WalkToAction_json(const cuo_WalkToAction *v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_WalkToAction_write(&w, v);
-    return cuo_jw_bytes(&w);
-}
-
-bool cuo_WalkToAction_parse(cuo_bytes json, cuo_WalkToAction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    cuo_WalkToAction_read(j, out);
-    return j != NULL;
-}
-
-uint16_t cuo_WalkToAction_id(void) { TYPE_ID(cuo_WalkToAction_PATH); }
-cuo_comp cuo_WalkToAction_comp(const cuo_WalkToAction *v) { return cuo_comp_bytes(cuo_WalkToAction_id(), cuo_WalkToAction_json(v)); }
-void cuo_WalkToAction_emit(cuo_cmds *cmds, uint64_t entity, const cuo_WalkToAction *v) { cuo_emit(cmds, cuo_WalkToAction_PATH, entity, cuo_WalkToAction_json(v)); }
 
 void cuo_WorldMapWindow_write(cuo_jw *w, const cuo_WorldMapWindow *v)
 {
@@ -7639,240 +7508,4 @@ bool cuo_WorldSingleClickDto_parse(cuo_bytes json, cuo_WorldSingleClickDto *out)
 uint16_t cuo_WorldSingleClickDto_id(void) { TYPE_ID(cuo_WorldSingleClickDto_PATH); }
 cuo_comp cuo_WorldSingleClickDto_comp(const cuo_WorldSingleClickDto *v) { return cuo_comp_bytes(cuo_WorldSingleClickDto_id(), cuo_WorldSingleClickDto_json(v)); }
 bool cuo_WorldSingleClickDto_resource(cuo_WorldSingleClickDto *out) { return cuo_WorldSingleClickDto_parse(cuo_resource_json(cuo_WorldSingleClickDto_id()), out); }
-
-uint16_t cuo_Interaction_id(void) { TYPE_ID(cuo_Interaction_PATH); }
-cuo_comp cuo_Interaction_comp(cuo_Interaction v)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_jw_uint(&w, v);
-    return cuo_comp_bytes(cuo_Interaction_id(), cuo_jw_bytes(&w));
-}
-bool cuo_Interaction_parse(cuo_bytes json, cuo_Interaction *out)
-{
-    cJSON *j = cuo_json_parse(json);
-    *out = (cuo_Interaction)(j ? rd_i64(j) : 0);
-    return j != NULL;
-}
-bool cuo_Interaction_get(uint64_t entity, cuo_Interaction *out) { return cuo_Interaction_parse(cuo_component_json(entity, cuo_Interaction_id()), out); }
-
-void cuo_action_cast_spell(cuo_cmds *cmds, int32_t id)
-{
-    cuo_CastSpellAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.id = id;
-    cuo_CastSpellAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_context_menu_reply(cuo_cmds *cmds, uint32_t serial, uint16_t index)
-{
-    cuo_ContextMenuReplyAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    a_.index = index;
-    cuo_ContextMenuReplyAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_double_click(cuo_cmds *cmds, uint32_t serial)
-{
-    cuo_DoubleClickAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    cuo_DoubleClickAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_drop(cuo_cmds *cmds, uint32_t serial, uint16_t x, uint16_t y, int8_t z, uint32_t container)
-{
-    cuo_DropAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    a_.x = x;
-    a_.y = y;
-    a_.z = z;
-    a_.container = container;
-    cuo_DropAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_equip(cuo_cmds *cmds, uint32_t serial, uint8_t layer, uint32_t container)
-{
-    cuo_EquipAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    a_.layer = layer;
-    a_.container = container;
-    cuo_EquipAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_gump_close(cuo_cmds *cmds, uint32_t gump_id)
-{
-    cuo_GumpCloseAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.gump_id = gump_id;
-    cuo_GumpCloseAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_gump_reply(cuo_cmds *cmds, uint32_t gump_id, int32_t button_id, cuo_vec_u32 switches, cuo_vec_GumpTextEntry text_entries)
-{
-    cuo_GumpReplyAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.gump_id = gump_id;
-    a_.button_id = button_id;
-    a_.switches = switches;
-    a_.text_entries = text_entries;
-    cuo_GumpReplyAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_open_door(cuo_cmds *cmds)
-{
-    cuo_OpenDoorAction a_;
-    memset(&a_, 0, sizeof a_);
-    (void)a_;
-    cuo_OpenDoorAction_emit(cmds, 0);
-}
-
-void cuo_action_pickup(cuo_cmds *cmds, uint32_t serial, uint16_t amount)
-{
-    cuo_PickupAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    a_.amount = amount;
-    cuo_PickupAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_prompt_reply(cuo_cmds *cmds, const char *text, bool cancel)
-{
-    cuo_PromptReplyAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.text = text;
-    a_.cancel = cancel;
-    cuo_PromptReplyAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_rename(cuo_cmds *cmds, uint32_t serial, const char *name)
-{
-    cuo_RenameAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    a_.name = name;
-    cuo_RenameAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_request_context_menu(cuo_cmds *cmds, uint32_t serial)
-{
-    cuo_RequestContextMenuAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    cuo_RequestContextMenuAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_request_properties(cuo_cmds *cmds, uint32_t serial)
-{
-    cuo_RequestPropertiesAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    cuo_RequestPropertiesAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_request_skills(cuo_cmds *cmds, uint32_t serial)
-{
-    cuo_RequestSkillsAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    cuo_RequestSkillsAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_request_status(cuo_cmds *cmds, uint32_t serial)
-{
-    cuo_RequestStatusAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    cuo_RequestStatusAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_request_target(cuo_cmds *cmds, const char *prompt_text)
-{
-    cuo_RequestTargetAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.prompt_text = prompt_text;
-    cuo_RequestTargetAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_say(cuo_cmds *cmds, const char *text, uint16_t hue)
-{
-    cuo_SayAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.text = text;
-    a_.hue = hue;
-    cuo_SayAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_single_click(cuo_cmds *cmds, uint32_t serial)
-{
-    cuo_SingleClickAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    cuo_SingleClickAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_target_cancel(cuo_cmds *cmds)
-{
-    cuo_TargetCancelAction a_;
-    memset(&a_, 0, sizeof a_);
-    (void)a_;
-    cuo_TargetCancelAction_emit(cmds, 0);
-}
-
-void cuo_action_target_location(cuo_cmds *cmds, uint16_t x, uint16_t y, int8_t z, uint16_t graphic)
-{
-    cuo_TargetLocationAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.x = x;
-    a_.y = y;
-    a_.z = z;
-    a_.graphic = graphic;
-    cuo_TargetLocationAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_target_object(cuo_cmds *cmds, uint32_t serial)
-{
-    cuo_TargetObjectAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.serial = serial;
-    cuo_TargetObjectAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_toggle_war_mode(cuo_cmds *cmds)
-{
-    cuo_ToggleWarModeAction a_;
-    memset(&a_, 0, sizeof a_);
-    (void)a_;
-    cuo_ToggleWarModeAction_emit(cmds, 0);
-}
-
-void cuo_action_use_skill(cuo_cmds *cmds, int32_t id)
-{
-    cuo_UseSkillAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.id = id;
-    cuo_UseSkillAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_walk(cuo_cmds *cmds, uint8_t direction, bool run)
-{
-    cuo_WalkAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.direction = direction;
-    a_.run = run;
-    cuo_WalkAction_emit(cmds, 0, &a_);
-}
-
-void cuo_action_walk_to(cuo_cmds *cmds, uint16_t x, uint16_t y, int8_t z)
-{
-    cuo_WalkToAction a_;
-    memset(&a_, 0, sizeof a_);
-    a_.x = x;
-    a_.y = y;
-    a_.z = z;
-    cuo_WalkToAction_emit(cmds, 0, &a_);
-}
 

@@ -1,5 +1,5 @@
 //! Minimal absolute-offset FlatBuffer reader for the host-written input buffers
-//! (Handshake / SystemInput / ObserverInput).
+//! (Handshake / SystemInput / ObserverInput / SpawnedInput).
 //!
 //! WHY THIS EXISTS: the host serializes with FlatSharp, the guest reads. planus's
 //! generated readers advance the buffer slice for every nested object and resolve a
@@ -38,9 +38,6 @@ impl<'a> Buf<'a> {
         Buf { data }
     }
 
-    fn u8(&self, p: usize) -> Option<u8> {
-        self.data.get(p).copied()
-    }
     fn u16(&self, p: usize) -> Option<u16> {
         self.data.get(p..p + 2).map(|b| u16::from_le_bytes([b[0], b[1]]))
     }
@@ -94,9 +91,6 @@ impl<'a> Buf<'a> {
     fn field_u64(&self, table: usize, index: usize) -> u64 {
         self.field(table, index).and_then(|p| self.u64(p)).unwrap_or(0)
     }
-    fn field_u8(&self, table: usize, index: usize) -> u8 {
-        self.field(table, index).and_then(|p| self.u8(p)).unwrap_or(0)
-    }
 
     /// Absolute position of the object referenced by a table/vector/string field.
     fn field_ref(&self, table: usize, index: usize) -> Option<usize> {
@@ -128,137 +122,106 @@ impl<'a> Buf<'a> {
     }
 }
 
-// ── typed views over the raw reader ─────────────────────────────────────────────
+// ── run inputs ──────────────────────────────────────────────────────────────────
 // Field indices mirror abi/mod-abi.fbs declaration order.
 
-/// A CompValue: `{ type_id: u16 (0), encoding: u8 (1), data: [ubyte] (2) }`.
+/// Where a root table keeps its parameter vectors.
 #[derive(Clone, Copy)]
-pub struct CompRef<'a> {
-    buf: Buf<'a>,
-    table: usize,
+pub struct ParamFields {
+    queries: usize,
+    resources: usize,
+    events: usize,
 }
 
-impl<'a> CompRef<'a> {
-    pub fn type_id(&self) -> u16 {
-        self.buf.field_u16(self.table, 0)
-    }
-    /// Raw encoding byte (0 = Json, 1 = Typed).
-    pub fn encoding_raw(&self) -> u8 {
-        self.buf.field_u8(self.table, 1)
-    }
-    pub fn data(&self) -> &'a [u8] {
-        match self.buf.field_ref(self.table, 2) {
-            Some(p) => self.buf.bytes_at(p),
-            None => &[],
-        }
-    }
+/// SystemInput: `sys_id 0, queries 1, tick 2, resources 3, events 4`.
+pub const SYSTEM_INPUT: ParamFields = ParamFields { queries: 1, resources: 3, events: 4 };
+/// ObserverInput: `obs_id 0, entity 1, value 2, queries 3, resources 4, events 5`.
+pub const OBSERVER_INPUT: ParamFields = ParamFields { queries: 3, resources: 4, events: 5 };
+
+/// One Res param as delivered.
+#[derive(Debug, PartialEq)]
+pub enum ResInput {
+    /// The host has no such resource.
+    Absent,
+    /// The value, as JSON.
+    Value(String),
+    /// Byte-identical to what this param received on its previous run.
+    Unchanged,
 }
 
-/// A Row: `{ entity: u64 (0), comps: [CompValue] (1) }`.
-#[derive(Clone, Copy)]
-pub struct RowRef<'a> {
-    buf: Buf<'a>,
-    table: usize,
-}
-
-impl<'a> RowRef<'a> {
-    pub fn entity(&self) -> u64 {
-        self.buf.field_u64(self.table, 0)
-    }
-    pub fn comp_count(&self) -> usize {
-        self.buf.field_ref(self.table, 1).map(|v| self.buf.vector_len(v)).unwrap_or(0)
-    }
-    pub fn comp(&self, i: usize) -> Option<CompRef<'a>> {
-        let vec = self.buf.field_ref(self.table, 1)?;
-        if i >= self.buf.vector_len(vec) {
-            return None;
-        }
-        let table = self.buf.vector_table(vec, i)?;
-        Some(CompRef { buf: self.buf, table })
-    }
-}
-
-/// A QueryRows: `{ param_index: u32 (0), rows: [Row] (1) }`.
-#[derive(Clone, Copy)]
-pub struct QueryRowsRef<'a> {
-    buf: Buf<'a>,
-    table: usize,
-}
-
-impl<'a> QueryRowsRef<'a> {
-    pub fn param_index(&self) -> u32 {
-        self.buf.field_u32(self.table, 0)
-    }
-    pub fn len(&self) -> usize {
-        self.buf.field_ref(self.table, 1).map(|v| self.buf.vector_len(v)).unwrap_or(0)
-    }
-    pub fn is_empty(&self) -> bool {
-        self.len() == 0
-    }
-    pub fn row(&self, i: usize) -> Option<RowRef<'a>> {
-        let vec = self.buf.field_ref(self.table, 1)?;
-        if i >= self.buf.vector_len(vec) {
-            return None;
-        }
-        let table = self.buf.vector_table(vec, i)?;
-        Some(RowRef { buf: self.buf, table })
-    }
-}
-
-/// A SystemInput: `{ sys_id: u32 (0), queries: [QueryRows] (1), tick: u64 (2) }`.
-#[derive(Clone, Copy)]
-pub struct SystemInputRef<'a> {
+/// The parameter data of a SystemInput / ObserverInput, by param index.
+pub struct Params<'a> {
     buf: Buf<'a>,
     root: Option<usize>,
+    fields: ParamFields,
 }
 
-impl<'a> SystemInputRef<'a> {
-    pub fn new(bytes: &'a [u8]) -> SystemInputRef<'a> {
+impl<'a> Params<'a> {
+    pub fn new(bytes: &'a [u8], fields: ParamFields) -> Params<'a> {
         let buf = Buf::new(bytes);
-        let root = buf.root();
-        SystemInputRef { buf, root }
+        Params { buf, root: buf.root(), fields }
     }
-    pub fn sys_id(&self) -> u32 {
-        self.root.map(|r| self.buf.field_u32(r, 0)).unwrap_or(0)
+
+    /// Tables of the vector at `field` (each `{ param_index: u32 (0), .. }`) whose
+    /// param_index is `param`.
+    fn entry(&self, field: usize, param: u32) -> Option<usize> {
+        let vec = self.buf.field_ref(self.root?, field)?;
+        (0..self.buf.vector_len(vec))
+            .filter_map(|i| self.buf.vector_table(vec, i))
+            .find(|&t| self.buf.field_u32(t, 0) == param)
     }
-    pub fn tick(&self) -> u64 {
-        self.root.map(|r| self.buf.field_u64(r, 2)).unwrap_or(0)
+
+    /// The `data` of a CompValue table, as text.
+    fn comp_json(&self, comp: usize) -> String {
+        let data = self.buf.field_ref(comp, 2).map(|p| self.buf.bytes_at(p)).unwrap_or(&[]);
+        String::from_utf8_lossy(data).into_owned()
     }
-    /// The `n`th QueryRows in the vector, or `None`. The host emits exactly one entry
-    /// per declared query param, in declaration order, so `n` is the query ORDINAL —
-    /// non-query params (`commands()`) never occupy a slot. The wire `param_index` is
-    /// still readable off the entry.
-    pub fn query_at(&self, n: usize) -> Option<QueryRowsRef<'a>> {
-        let root = self.root?;
-        let vec = self.buf.field_ref(root, 1)?;
-        if n >= self.buf.vector_len(vec) {
-            return None;
+
+    fn comps(&self, vec: Option<usize>) -> Vec<String> {
+        let Some(vec) = vec else { return Vec::new() };
+        (0..self.buf.vector_len(vec))
+            .filter_map(|i| self.buf.vector_table(vec, i))
+            .map(|c| self.comp_json(c))
+            .collect()
+    }
+
+    /// QueryRows `{ param_index 0, rows 1 }`, Row `{ entity 0, comps 1 }`.
+    pub fn rows(&self, param: u32) -> Vec<(u64, Vec<String>)> {
+        let Some(q) = self.entry(self.fields.queries, param) else { return Vec::new() };
+        let Some(vec) = self.buf.field_ref(q, 1) else { return Vec::new() };
+        (0..self.buf.vector_len(vec))
+            .filter_map(|i| self.buf.vector_table(vec, i))
+            .map(|row| (self.buf.field_u64(row, 0), self.comps(self.buf.field_ref(row, 1))))
+            .collect()
+    }
+
+    /// ResValue `{ param_index 0, value 1, unchanged 2 }`.
+    pub fn resource(&self, param: u32) -> ResInput {
+        let Some(r) = self.entry(self.fields.resources, param) else { return ResInput::Absent };
+        match self.buf.field_ref(r, 1) {
+            Some(comp) => ResInput::Value(self.comp_json(comp)),
+            None if self.buf.field(r, 2).and_then(|p| self.buf.data.get(p).copied()).unwrap_or(0) != 0 => {
+                ResInput::Unchanged
+            }
+            None => ResInput::Absent,
         }
-        let table = self.buf.vector_table(vec, n)?;
-        Some(QueryRowsRef { buf: self.buf, table })
+    }
+
+    /// EventValues `{ param_index 0, values 1 }`.
+    pub fn events(&self, param: u32) -> Vec<String> {
+        match self.entry(self.fields.events, param) {
+            Some(e) => self.comps(self.buf.field_ref(e, 1)),
+            None => Vec::new(),
+        }
     }
 }
 
-/// An ObserverInput: `{ obs_id: u32 (0), entity: u64 (1), value: CompValue (2) }`.
-#[derive(Clone, Copy)]
-pub struct ObserverInputRef<'a> {
-    buf: Buf<'a>,
-    root: Option<usize>,
-}
-
-impl<'a> ObserverInputRef<'a> {
-    pub fn new(bytes: &'a [u8]) -> ObserverInputRef<'a> {
-        let buf = Buf::new(bytes);
-        let root = buf.root();
-        ObserverInputRef { buf, root }
-    }
-    pub fn obs_id(&self) -> u32 {
-        self.root.map(|r| self.buf.field_u32(r, 0)).unwrap_or(0)
-    }
-    pub fn value(&self) -> Option<CompRef<'a>> {
-        let root = self.root?;
-        let table = self.buf.field_ref(root, 2)?;
-        Some(CompRef { buf: self.buf, table })
+/// An ObserverInput's `value` (field 2) as text; empty when absent.
+pub fn observer_value(bytes: &[u8]) -> String {
+    let p = Params::new(bytes, OBSERVER_INPUT);
+    match p.root.and_then(|r| p.buf.field_ref(r, 2)) {
+        Some(c) => p.comp_json(c),
+        None => String::new(),
     }
 }
 

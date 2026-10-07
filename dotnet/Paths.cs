@@ -15,66 +15,18 @@ namespace CuoModSdk;
 /// </summary>
 public static class Paths
 {
-    public static class Action
-    {
-        /// <summary><c>cuo:action/cast-spell</c> — event.</summary>
-        public const string CastSpell = "cuo:action/cast-spell";
-        /// <summary><c>cuo:action/context-menu-reply</c> — event.</summary>
-        public const string ContextMenuReply = "cuo:action/context-menu-reply";
-        /// <summary><c>cuo:action/double-click</c> — event.</summary>
-        public const string DoubleClick = "cuo:action/double-click";
-        /// <summary><c>cuo:action/drop</c> — event.</summary>
-        public const string Drop = "cuo:action/drop";
-        /// <summary><c>cuo:action/equip</c> — event.</summary>
-        public const string Equip = "cuo:action/equip";
-        /// <summary><c>cuo:action/gump-close</c> — event.</summary>
-        public const string GumpClose = "cuo:action/gump-close";
-        /// <summary><c>cuo:action/gump-reply</c> — event.</summary>
-        public const string GumpReply = "cuo:action/gump-reply";
-        /// <summary><c>cuo:action/open-door</c> — event.</summary>
-        public const string OpenDoor = "cuo:action/open-door";
-        /// <summary><c>cuo:action/pickup</c> — event.</summary>
-        public const string Pickup = "cuo:action/pickup";
-        /// <summary><c>cuo:action/prompt-reply</c> — event.</summary>
-        public const string PromptReply = "cuo:action/prompt-reply";
-        /// <summary><c>cuo:action/rename</c> — event.</summary>
-        public const string Rename = "cuo:action/rename";
-        /// <summary><c>cuo:action/request-context-menu</c> — event.</summary>
-        public const string RequestContextMenu = "cuo:action/request-context-menu";
-        /// <summary><c>cuo:action/request-properties</c> — event.</summary>
-        public const string RequestProperties = "cuo:action/request-properties";
-        /// <summary><c>cuo:action/request-skills</c> — event.</summary>
-        public const string RequestSkills = "cuo:action/request-skills";
-        /// <summary><c>cuo:action/request-status</c> — event.</summary>
-        public const string RequestStatus = "cuo:action/request-status";
-        /// <summary><c>cuo:action/request-target</c> — event.</summary>
-        public const string RequestTarget = "cuo:action/request-target";
-        /// <summary><c>cuo:action/say</c> — event.</summary>
-        public const string Say = "cuo:action/say";
-        /// <summary><c>cuo:action/single-click</c> — event.</summary>
-        public const string SingleClick = "cuo:action/single-click";
-        /// <summary><c>cuo:action/target-cancel</c> — event.</summary>
-        public const string TargetCancel = "cuo:action/target-cancel";
-        /// <summary><c>cuo:action/target-location</c> — event.</summary>
-        public const string TargetLocation = "cuo:action/target-location";
-        /// <summary><c>cuo:action/target-object</c> — event.</summary>
-        public const string TargetObject = "cuo:action/target-object";
-        /// <summary><c>cuo:action/toggle-war-mode</c> — event.</summary>
-        public const string ToggleWarMode = "cuo:action/toggle-war-mode";
-        /// <summary><c>cuo:action/use-skill</c> — event.</summary>
-        public const string UseSkill = "cuo:action/use-skill";
-        /// <summary><c>cuo:action/walk</c> — event.</summary>
-        public const string Walk = "cuo:action/walk";
-        /// <summary><c>cuo:action/walk-to</c> — event.</summary>
-        public const string WalkTo = "cuo:action/walk-to";
-    }
-
     public static class Chat
     {
         /// <summary><c>cuo:chat/message</c> — event.</summary>
         public const string Message = "cuo:chat/message";
         /// <summary><c>cuo:chat/prompt</c> — event.</summary>
         public const string Prompt = "cuo:chat/prompt";
+    }
+
+    public static class Ecs
+    {
+        /// <summary><c>cuo:ecs/child-of</c> — component.</summary>
+        public const string ChildOf = "cuo:ecs/child-of";
     }
 
     public static class Engine
@@ -89,10 +41,10 @@ public static class Paths
         public const string Amount = "cuo:ent/amount";
         /// <summary><c>cuo:ent/animation</c> — component.</summary>
         public const string Animation = "cuo:ent/animation";
+        /// <summary><c>cuo:ent/auto-opened-corpse</c> — component.</summary>
+        public const string AutoOpenedCorpse = "cuo:ent/auto-opened-corpse";
         /// <summary><c>cuo:ent/contained-into</c> — component.</summary>
         public const string ContainedInto = "cuo:ent/contained-into";
-        /// <summary><c>cuo:ent/container</c> — component.</summary>
-        public const string Container = "cuo:ent/container";
         /// <summary><c>cuo:ent/equipment</c> — component.</summary>
         public const string Equipment = "cuo:ent/equipment";
         /// <summary><c>cuo:ent/facing</c> — component.</summary>
@@ -109,6 +61,8 @@ public static class Paths
         public const string IsMobile = "cuo:ent/is-mobile";
         /// <summary><c>cuo:ent/is-multi</c> — component.</summary>
         public const string IsMulti = "cuo:ent/is-multi";
+        /// <summary><c>cuo:ent/manual-opened-corpse</c> — component.</summary>
+        public const string ManualOpenedCorpse = "cuo:ent/manual-opened-corpse";
         /// <summary><c>cuo:ent/mob-steps</c> — component.</summary>
         public const string MobSteps = "cuo:ent/mob-steps";
         /// <summary><c>cuo:ent/name</c> — component.</summary>
@@ -131,6 +85,8 @@ public static class Paths
     {
         /// <summary><c>cuo:game/context</c> — resource.</summary>
         public const string Context = "cuo:game/context";
+        /// <summary><c>cuo:game/settings</c> — resource.</summary>
+        public const string Settings = "cuo:game/settings";
         /// <summary><c>cuo:game/state</c> — resource.</summary>
         public const string State = "cuo:game/state";
     }
@@ -151,6 +107,12 @@ public static class Paths
         public const string ContainerClosed = "cuo:gump/container-closed";
         /// <summary><c>cuo:gump/container-opened</c> — event.</summary>
         public const string ContainerOpened = "cuo:gump/container-opened";
+        /// <summary><c>cuo:gump/container-positions</c> — resource.</summary>
+        public const string ContainerPositions = "cuo:gump/container-positions";
+        /// <summary><c>cuo:gump/container-slot</c> — event.</summary>
+        public const string ContainerSlot = "cuo:gump/container-slot";
+        /// <summary><c>cuo:gump/container-tag</c> — component.</summary>
+        public const string ContainerTag = "cuo:gump/container-tag";
         /// <summary><c>cuo:gump/context-menu</c> — event.</summary>
         public const string ContextMenu = "cuo:gump/context-menu";
         /// <summary><c>cuo:gump/grid-container</c> — component.</summary>
@@ -207,6 +169,8 @@ public static class Paths
 
     public static class Input
     {
+        /// <summary><c>cuo:input/consume</c> — event.</summary>
+        public const string Consume = "cuo:input/consume";
         /// <summary><c>cuo:input/host-hotkeys</c> — resource.</summary>
         public const string HostHotkeys = "cuo:input/host-hotkeys";
         /// <summary><c>cuo:input/hotkey</c> — event.</summary>
@@ -221,12 +185,20 @@ public static class Paths
         public const string WorldSingleClick = "cuo:input/world-single-click";
     }
 
-    public static class Mod
+    public static class Item
     {
-        /// <summary><c>cuo:mod/owned</c> — component (presence-only).</summary>
-        public const string Owned = "cuo:mod/owned";
-        /// <summary><c>cuo:mod/state</c> — component.</summary>
-        public const string State = "cuo:mod/state";
+        /// <summary><c>cuo:item/drop-sent</c> — event.</summary>
+        public const string DropSent = "cuo:item/drop-sent";
+        /// <summary><c>cuo:item/move-result</c> — event.</summary>
+        public const string MoveResult = "cuo:item/move-result";
+    }
+
+    public static class Options
+    {
+        /// <summary><c>cuo:options/schema</c> — resource.</summary>
+        public const string Schema = "cuo:options/schema";
+        /// <summary><c>cuo:options/values</c> — resource.</summary>
+        public const string Values = "cuo:options/values";
     }
 
     public static class Player
@@ -291,24 +263,24 @@ public static class Paths
         public const string State = "cuo:target/state";
     }
 
-    public static class Test
-    {
-        /// <summary><c>cuo:test/counter</c> — component.</summary>
-        public const string Counter = "cuo:test/counter";
-    }
-
     public static class Ui
     {
         /// <summary><c>cuo:ui/bg-color</c> — component.</summary>
         public const string BgColor = "cuo:ui/bg-color";
+        /// <summary><c>cuo:ui/border-color</c> — component.</summary>
+        public const string BorderColor = "cuo:ui/border-color";
         /// <summary><c>cuo:ui/border-radius</c> — component.</summary>
         public const string BorderRadius = "cuo:ui/border-radius";
         /// <summary><c>cuo:ui/button</c> — component.</summary>
         public const string Button = "cuo:ui/button";
-        /// <summary><c>cuo:ui/clicked</c> — component.</summary>
-        public const string Clicked = "cuo:ui/clicked";
+        /// <summary><c>cuo:ui/click</c> — event.</summary>
+        public const string Click = "cuo:ui/click";
         /// <summary><c>cuo:ui/clipboard-set</c> — resource.</summary>
         public const string ClipboardSet = "cuo:ui/clipboard-set";
+        /// <summary><c>cuo:ui/computed</c> — component.</summary>
+        public const string Computed = "cuo:ui/computed";
+        /// <summary><c>cuo:ui/container-item</c> — component.</summary>
+        public const string ContainerItem = "cuo:ui/container-item";
         /// <summary><c>cuo:ui/contains-by-bounds</c> — component.</summary>
         public const string ContainsByBounds = "cuo:ui/contains-by-bounds";
         /// <summary><c>cuo:ui/custom</c> — component.</summary>
@@ -319,10 +291,10 @@ public static class Paths
         public const string FocusedInput = "cuo:ui/focused-input";
         /// <summary><c>cuo:ui/global-z</c> — component.</summary>
         public const string GlobalZ = "cuo:ui/global-z";
+        /// <summary><c>cuo:ui/hover</c> — event.</summary>
+        public const string Hover = "cuo:ui/hover";
         /// <summary><c>cuo:ui/hover-tint</c> — component.</summary>
         public const string HoverTint = "cuo:ui/hover-tint";
-        /// <summary><c>cuo:ui/hovered</c> — component.</summary>
-        public const string Hovered = "cuo:ui/hovered";
         /// <summary><c>cuo:ui/interaction</c> — component.</summary>
         public const string Interaction = "cuo:ui/interaction";
         /// <summary><c>cuo:ui/masked-text</c> — component.</summary>
@@ -335,6 +307,8 @@ public static class Paths
         public const string Name = "cuo:ui/name";
         /// <summary><c>cuo:ui/no-blur</c> — component.</summary>
         public const string NoBlur = "cuo:ui/no-blur";
+        /// <summary><c>cuo:ui/no-pickup</c> — component.</summary>
+        public const string NoPickup = "cuo:ui/no-pickup";
         /// <summary><c>cuo:ui/no-right-click-close</c> — component.</summary>
         public const string NoRightClickClose = "cuo:ui/no-right-click-close";
         /// <summary><c>cuo:ui/no-window-drag</c> — component.</summary>
@@ -343,12 +317,14 @@ public static class Paths
         public const string Node = "cuo:ui/node";
         /// <summary><c>cuo:ui/options-window</c> — component.</summary>
         public const string OptionsWindow = "cuo:ui/options-window";
+        /// <summary><c>cuo:ui/pick</c> — resource.</summary>
+        public const string Pick = "cuo:ui/pick";
         /// <summary><c>cuo:ui/popup</c> — component.</summary>
         public const string Popup = "cuo:ui/popup";
         /// <summary><c>cuo:ui/resizable</c> — component.</summary>
         public const string Resizable = "cuo:ui/resizable";
-        /// <summary><c>cuo:ui/right-clicked</c> — component.</summary>
-        public const string RightClicked = "cuo:ui/right-clicked";
+        /// <summary><c>cuo:ui/right-click</c> — event.</summary>
+        public const string RightClick = "cuo:ui/right-click";
         /// <summary><c>cuo:ui/scroll</c> — component.</summary>
         public const string Scroll = "cuo:ui/scroll";
         /// <summary><c>cuo:ui/scrollbar</c> — component.</summary>
@@ -387,6 +363,8 @@ public static class Paths
         public const string TextWrap = "cuo:ui/text-wrap";
         /// <summary><c>cuo:ui/tooltip</c> — component.</summary>
         public const string Tooltip = "cuo:ui/tooltip";
+        /// <summary><c>cuo:ui/tooltip-serial</c> — component.</summary>
+        public const string TooltipSerial = "cuo:ui/tooltip-serial";
         /// <summary><c>cuo:ui/topbar-bg</c> — component.</summary>
         public const string TopbarBg = "cuo:ui/topbar-bg";
         /// <summary><c>cuo:ui/topbar-button</c> — component.</summary>
