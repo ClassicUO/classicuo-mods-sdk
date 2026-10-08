@@ -36,18 +36,28 @@ internal static unsafe class Wit
     {
         _writer.WriteEndArray();
         _writer.Flush();
-        var nameBytes = System.Text.Encoding.UTF8.GetBytes(name);
+        var nameBytes = NameUtf8(name);
         long packed;
         fixed (byte* n = nameBytes)
         fixed (byte* a = _args.WrittenSpan)
             packed = ModCall((int)(nint)n, nameBytes.Length, (int)(nint)a, _args.WrittenCount);
         if (packed == 0)
             return default;
-        // The result lives in the arena; copy it out before anything can grow it.
+        // The result lives in the arena: ParseValue copies it into the element's own
+        // document before anything can grow the arena (one copy, not ToArray + Clone).
         var len = (int)((ulong)packed >> 32);
-        var bytes = new ReadOnlySpan<byte>((void*)(nint)(uint)packed, len).ToArray();
-        using var doc = JsonDocument.Parse(bytes);
-        return doc.RootElement.Clone();
+        var reader = new Utf8JsonReader(new ReadOnlySpan<byte>((void*)(nint)(uint)packed, len));
+        return JsonElement.ParseValue(ref reader);
+    }
+
+    // Function names are the generated bindings' string constants: encoded once each.
+    static readonly Dictionary<string, byte[]> _names = new(StringComparer.Ordinal);
+
+    static byte[] NameUtf8(string name)
+    {
+        if (!_names.TryGetValue(name, out var bytes))
+            _names[name] = bytes = System.Text.Encoding.UTF8.GetBytes(name);
+        return bytes;
     }
 
     internal static Exception Bad(string type, string? value) =>

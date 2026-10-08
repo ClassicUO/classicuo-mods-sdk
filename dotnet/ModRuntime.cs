@@ -80,9 +80,14 @@ public static unsafe class ModRuntime
         return Execute(_observers[obsId], new ParamsView(oi), (ulong)entity, value);
     }
 
+    // One builder for every run: runs never nest (the host drives the exports serially)
+    // and the buffer is packed into the arena before the run returns.
+    static readonly CommandBufferBuilder _buffer = new();
+
     static long Execute(Entry entry, ParamsView input, ulong triggerEntity, CompView? triggerValue)
     {
-        var buffer = new CommandBufferBuilder();
+        var buffer = _buffer;
+        buffer.Clear();
         var scope = new RunScope
         {
             Host = Host,
@@ -114,9 +119,13 @@ public static unsafe class ModRuntime
     {
         if (_onPacket == null)
             return 0;
-        var packet = new ReadOnlySpan<byte>((void*)(nint)ptr, len).ToArray();
+        // Copied out of the arena (a mod_call from the handler may grow and move it) into
+        // a reused buffer: the handler only sees a span, and packets don't nest.
+        if (_packet.Length < len)
+            _packet = new byte[Math.Max(len, _packet.Length * 2)];
+        new ReadOnlySpan<byte>((void*)(nint)ptr, len).CopyTo(_packet);
         var d = dir == 0 ? Packets.Direction.Incoming : Packets.Direction.Outgoing;
-        return _onPacket(d, packet) switch
+        return _onPacket(d, _packet.AsSpan(0, len)) switch
         {
             Packets.Verdict.Block => 1,
             Packets.Verdict.Replace r => PackBytes(r.Value),
@@ -127,13 +136,26 @@ public static unsafe class ModRuntime
     // ── FlatBuffers <-> arena plumbing ───────────────────────────────────────────
     static readonly FlatBufferBuilder _fbb = new(1024);
 
+    static byte[] _packet = new byte[512];
+
     // The input is copied out of the arena before any mod code runs: a mod_call result
-    // lands in the arena too, and growing it may move earlier regions.
+    // lands in the arena too, and growing it may move earlier regions. The copy goes into
+    // ONE grow-only buffer, reused by every export call: they never nest, and nothing
+    // reads the input past its run (every view / RowReader / Mut column is run-scoped).
+    // A larger-than-needed buffer is fine: a flatbuffer is addressed from its root.
+    static byte[] _input = new byte[4096];
+    static ByteBuffer _inputBuffer = new(_input);
+
     static ByteBuffer Wrap(int ptr, int len)
     {
-        var arr = new byte[len];
-        new ReadOnlySpan<byte>((void*)(nint)ptr, len).CopyTo(arr);
-        return new ByteBuffer(arr);
+        if (_input.Length < len)
+        {
+            _input = new byte[Math.Max(len, _input.Length * 2)];
+            _inputBuffer = new ByteBuffer(_input);
+        }
+        new ReadOnlySpan<byte>((void*)(nint)ptr, len).CopyTo(_input);
+        _inputBuffer.Reset();
+        return _inputBuffer;
     }
 
     static FlatBufferBuilder Begin()

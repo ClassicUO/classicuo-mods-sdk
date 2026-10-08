@@ -53,17 +53,31 @@ internal readonly struct ParamsView
         return null;
     }
 
-    /// <summary>The Events param's values since the last run.</summary>
-    public IEnumerable<CompView> EventValues(int param)
+    /// <summary>The Events param's values since the last run (count 0 when none).</summary>
+    public EventValuesView EventValues(int param)
     {
         for (var i = 0; i < EventsLength; i++)
             if (Events(i) is { } e && e.ParamIndex == (uint)param)
-            {
-                for (var j = 0; j < e.ValuesLength; j++)
-                    yield return new CompView(e.Values(j)!.Value);
-                yield break;
-            }
+                return new EventValuesView(e);
+        return default;
     }
+}
+
+/// <summary>One Events param's values, indexed (no iterator allocation).</summary>
+internal readonly struct EventValuesView
+{
+    readonly EventValues _e;
+    readonly bool _has;
+
+    internal EventValuesView(EventValues e)
+    {
+        _e = e;
+        _has = true;
+    }
+
+    public int Count => _has ? _e.ValuesLength : 0;
+
+    public CompView this[int i] => new(_e.Values(i)!.Value);
 }
 
 /// <summary>The rows of one query param.</summary>

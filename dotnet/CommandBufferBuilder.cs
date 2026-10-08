@@ -56,8 +56,13 @@ internal struct PendingCmd
 internal sealed class CommandBufferBuilder
 {
     readonly List<PendingCmd> _cmds = new();
+    // Finish's scratch, grown as needed (the builder is reused run after run).
+    Cmd[] _types = [];
+    int[] _offsets = [];
 
     public bool IsEmpty => _cmds.Count == 0;
+
+    public void Clear() => _cmds.Clear();
 
     /// <summary>Spawn under a temp id the caller allocated (<see cref="ModRuntime.NextTemp"/>).</summary>
     public void Spawn(uint tempId, Comp[] comps) =>
@@ -88,9 +93,15 @@ internal sealed class CommandBufferBuilder
     /// <summary>Write the recorded commands into <paramref name="b"/>; returns the CommandBuffer root offset.</summary>
     internal int Finish(FlatBufferBuilder b)
     {
-        var types = new Cmd[_cmds.Count];
-        var offsets = new int[_cmds.Count];
-        for (var i = 0; i < _cmds.Count; i++)
+        var n = _cmds.Count;
+        if (_types.Length < n)
+        {
+            _types = new Cmd[Math.Max(n, _types.Length * 2)];
+            _offsets = new int[_types.Length];
+        }
+        var types = _types.AsSpan(0, n);
+        var offsets = _offsets.AsSpan(0, n);
+        for (var i = 0; i < n; i++)
         {
             var c = _cmds[i];
             types[i] = c.Type;
@@ -107,8 +118,19 @@ internal sealed class CommandBufferBuilder
                 _ => throw new InvalidOperationException($"unknown command {c.Type}"),
             };
         }
-        var typeVec = types.Length == 0 ? default : CommandBuffer.CreateCmdsTypeVector(b, types);
-        var cmdVec = offsets.Length == 0 ? default : CommandBuffer.CreateCmdsVector(b, offsets);
+        VectorOffset typeVec = default, cmdVec = default;
+        if (n > 0)
+        {
+            // CreateCmdsTypeVector / CreateCmdsVector, without their exact-size arrays.
+            b.StartVector(1, n, 1);
+            for (var i = n - 1; i >= 0; i--)
+                b.AddByte((byte)types[i]);
+            typeVec = b.EndVector();
+            b.StartVector(4, n, 4);
+            for (var i = n - 1; i >= 0; i--)
+                b.AddOffset(offsets[i]);
+            cmdVec = b.EndVector();
+        }
         return CommandBuffer.CreateCommandBuffer(b, typeVec, cmdVec).Value;
     }
 

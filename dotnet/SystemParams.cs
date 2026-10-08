@@ -65,6 +65,8 @@ internal sealed class RunScope
     internal required ParamsView Input;
     internal required List<object> Locals;
     internal List<Action>? WriteBacks;
+    // Mut<T> row storage, keyed (query param slot << 8 | term index).
+    internal Dictionary<int, object>? MutColumns;
     internal ulong TriggerEntity;
     internal CompView? TriggerValue;
 
@@ -133,14 +135,22 @@ public sealed class ResMut<T> : ISystemParam<ResMut<T>>
             return false;
         var res = new ResMut<T>(parsed);
         // Compare against our own serialization, not the host's text: the two format
-        // differently, and a spurious write marks the resource changed.
-        var original = JsonSerializer.SerializeToUtf8Bytes(parsed, info);
+        // differently, and a spurious write marks the resource changed. The snapshot is
+        // pooled (a T that is a class is mutated in place, so it must be taken now); only
+        // a real change materializes a payload.
+        var original = JsonScratch.Rent(parsed, info);
         var scope = c.Scope;
         scope.AfterRun(() =>
         {
-            var now = JsonSerializer.SerializeToUtf8Bytes(res.Value, info);
-            if (!now.AsSpan().SequenceEqual(original))
-                scope.Commands.ResourceSetRaw(scope.Host.Id<T>(), now);
+            try
+            {
+                if (JsonScratch.Differs(res.Value, info, original.Span, out var now))
+                    scope.Commands.ResourceSetRaw(scope.Host.Id<T>(), now);
+            }
+            finally
+            {
+                original.Return();
+            }
         });
         value = res;
         return true;
@@ -172,6 +182,52 @@ public readonly struct Opt<P> : ISystemParam<Opt<P>> where P : ISystemParam<P>
     }
 }
 
+/// <summary>
+/// The write-back compares (ResMut, Mut): serialize into reused writers, compare in
+/// place, and allocate a payload only for a value that really changed.
+/// </summary>
+internal static class JsonScratch
+{
+    static readonly System.Buffers.ArrayBufferWriter<byte> _buf = new(256);
+    static readonly Utf8JsonWriter _writer = new(_buf);
+
+    /// <summary>A pooled copy of <paramref name="value"/>'s JSON (Return it when done).</summary>
+    internal static Rented Rent<T>(T value, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> info)
+    {
+        var json = Write(value, info);
+        var arr = System.Buffers.ArrayPool<byte>.Shared.Rent(Math.Max(1, json.Length));
+        json.CopyTo(arr);
+        return new Rented(arr, json.Length);
+    }
+
+    /// <summary>True (and the new payload) when <paramref name="value"/> serializes differently from <paramref name="original"/>.</summary>
+    internal static bool Differs<T>(T value, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> info, ReadOnlySpan<byte> original, out byte[] now)
+    {
+        var json = Write(value, info);
+        if (json.SequenceEqual(original))
+        {
+            now = [];
+            return false;
+        }
+        now = json.ToArray();
+        return true;
+    }
+
+    static ReadOnlySpan<byte> Write<T>(T value, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> info)
+    {
+        _buf.ResetWrittenCount();
+        _writer.Reset(_buf);
+        JsonSerializer.Serialize(_writer, value, info);
+        return _buf.WrittenSpan;
+    }
+
+    internal readonly struct Rented(byte[] array, int length)
+    {
+        public ReadOnlySpan<byte> Span => array.AsSpan(0, length);
+        public void Return() => System.Buffers.ArrayPool<byte>.Shared.Return(array);
+    }
+}
+
 /// <summary>The events of type <typeparamref name="T"/> sent since this system last ran.</summary>
 public readonly struct EventReader<T> : ISystemParam<EventReader<T>>
 {
@@ -185,11 +241,20 @@ public readonly struct EventReader<T> : ISystemParam<EventReader<T>>
     public static bool TryCreate(ParamContext c, out EventReader<T> value)
     {
         var info = c.Host.Json<T>();
-        var list = new List<T>();
-        foreach (var v in c.Scope.Input.EventValues(c.Slot))
-            if (v.Parse(info) is { } e)
-                list.Add(e);
-        value = new EventReader<T>(list.ToArray());
+        var values = c.Scope.Input.EventValues(c.Slot);
+        if (values.Count == 0)
+        {
+            value = new EventReader<T>([]);
+            return true;
+        }
+        var events = new T[values.Count];
+        var n = 0;
+        for (var i = 0; i < values.Count; i++)
+            if (values[i].Parse(info) is { } e)
+                events[n++] = e;
+        if (n != events.Length)
+            Array.Resize(ref events, n);
+        value = new EventReader<T>(events);
         return true;
     }
 

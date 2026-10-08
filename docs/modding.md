@@ -31,7 +31,8 @@ export_mod!(setup);
 ```
 
 Build it (`cargo build --release --target wasm32-wasip1`), drop the `.wasm` (as
-`mod.wasm`) + `mod.json` in the client's `mods/<name>/` folder, start the client.
+`mod.wasm`) + `mod.json` in the client's `Data/Mods/<name>/` folder (next to the
+exe; settings.json `mods_path`), start the client.
 `rust/examples/low_hp` is this mod, ready to build.
 
 ## The seven ideas
@@ -52,6 +53,16 @@ own state between runs (a counter, a timer, the window it spawned).
 
 Schedules, in frame order: `Startup` (once), `First`, `PreUpdate`, `Update`,
 `PostUpdate`, `Last`.
+
+### Writing through a query
+
+A `&mut T` term (C#: `Mut<T>` in `Data<..>`, then `row.Value.Field = x`) is written back
+when the system or observer **returns**, after its own commands — so it wins over a
+`cmds.insert` of the same component on the same entity in that run. It is written only
+when the value actually changed: assigning the same value sends nothing, so it never
+fires `Changed<T>` (or a UI relayout) on its own. Read-only types — marked *(ro)* in the
+[reference](modding-reference.md), like `cuo:player/hits` or `cuo:ui/computed` — can't
+be `&mut` / `Mut`: the client refuses to load the mod and names the system and the path.
 
 ### Parents and children
 

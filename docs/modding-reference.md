@@ -10,7 +10,7 @@ types you can put in a system's parameters.
 
 Kinds: **C** component (query it) · **R** resource (`Res` / `ResMut`) · **E** event
 (read it / observe it / send it) · **A** a request the client acts on (send it).
-Read-only data is marked *(ro)*; writing it is ignored.
+Read-only data is marked *(ro)*; writing it is ignored, and a `&mut` / `Mut<T>` query term on it fails the mod's load.
 
 ## ECS
 
@@ -85,7 +85,8 @@ Read-only data is marked *(ro)*; writing it is ignored.
 |---|---|---|
 | `cuo:gump/<name>` (paperdoll, container, journal, skills, spellbook, health-bar, …) | C (markers) | keep — find / close host windows |
 | `cuo:gump/container-opened` · `container-closed` · `container-slot` | E | keep |
-| `cuo:gump/server` · `server-opened` · `server-closed` · `context-menu` | C / E | keep |
+| `cuo:gump/server` | C (ro) | keep |
+| `cuo:gump/server-opened` · `server-closed` · `context-menu` | E | keep |
 | `cuo:gump/container-tag` · `cuo:ui/container-item` · `cuo:gump/container-positions` | C / R | keep — make your window a real container window |
 | `cuo:gump/grid-container` · `cuo:gump/grid-loot` · `cuo:ui/grid-pinned` | C | **rename**: `grid-pinned` → **`cuo:ui/no-pickup`**; the other two keep (gumps.xml + corpse highlight read them) |
 

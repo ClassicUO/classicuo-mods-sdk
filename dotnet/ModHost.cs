@@ -51,7 +51,16 @@ internal sealed class ModHost
     /// host payload types, else any context the mod handed to <c>ModBuilder.UseJson</c>.
     /// <c>GetTypeInfo(Type)</c> keeps this reflection-free under ILC.
     /// </summary>
-    internal JsonTypeInfo<T> Json<T>()
+    internal JsonTypeInfo<T> Json<T>() => JsonOf<T>.Info ??= ResolveJson<T>();
+
+    // Resolved once per type (Json<T> runs per row per term): a module hosts one ModHost
+    // for its lifetime (a reload re-instantiates the module, statics and all).
+    static class JsonOf<T>
+    {
+        internal static JsonTypeInfo<T>? Info;
+    }
+
+    JsonTypeInfo<T> ResolveJson<T>()
     {
         if (ModTypesJsonContext.Default.GetTypeInfo(typeof(T)) is JsonTypeInfo<T> generated)
             return generated;

@@ -34,8 +34,16 @@ public sealed class QueryTermSink
 
     internal QueryTermSink(ModHost host) => _host = host;
 
-    /// <summary>A read term: the row carries <typeparamref name="T"/>.</summary>
-    internal void Read<T>() => Terms.Add(new QueryTermT { Kind = QueryTermKind.Ref, TypeId = _host.Id<T>() });
+    /// <summary>A read term: the row carries <typeparamref name="T"/> (a <see cref="Mut{T}"/> declares a writable term).</summary>
+    internal void Read<T>()
+    {
+        if (MutTerm<T>.Binder is { } mut)
+            mut.Describe(this);
+        else
+            Terms.Add(new QueryTermT { Kind = QueryTermKind.Ref, TypeId = _host.Id<T>() });
+    }
+
+    internal void Mut<T>() => Terms.Add(new QueryTermT { Kind = QueryTermKind.Mut, TypeId = _host.Id<T>() });
 
     /// <summary>Presence filter. Dropped when the type is already a term — a read term already implies presence.</summary>
     internal void With<T>()
@@ -53,12 +61,14 @@ public sealed class QueryTermSink
 
     // Read + change / added filter. When the type is already a term (a Data<T> read, or
     // a redundant With<T>) the kind is upgraded IN PLACE: two terms on one type would
-    // put two payloads in the row and shift every later read index.
+    // put two payloads in the row and shift every later read index. A Mut term keeps
+    // its kind (upgrading would drop the write) and the filter rides as its own term —
+    // appended after Data's, so its payload lands past every Data read index.
     void Reading<T>(QueryTermKind kind)
     {
         var id = _host.Id<T>();
         var at = Find(id);
-        if (at >= 0)
+        if (at >= 0 && Terms[at].Kind != QueryTermKind.Mut)
             Terms[at].Kind = kind;
         else
             Terms.Add(new QueryTermT { Kind = kind, TypeId = id });
@@ -76,19 +86,30 @@ public sealed class QueryTermSink
 /// <summary>One pushed row, being turned back into a <c>Data&lt;…&gt;</c>.</summary>
 public readonly struct RowReader
 {
-    readonly ModHost _host;
+    internal readonly RunScope Scope;
+    internal readonly QueryRowsView Rows;
+    internal readonly int Slot;
+    internal readonly int RowIndex;
     readonly RowView _row;
 
-    internal RowReader(ModHost host, RowView row)
+    internal RowReader(RunScope scope, int slot, QueryRowsView rows, int rowIndex)
     {
-        _host = host;
-        _row = row;
+        Scope = scope;
+        Slot = slot;
+        Rows = rows;
+        RowIndex = rowIndex;
+        _row = rows.Row(rowIndex);
     }
 
     public Entity Entity => new(_row.Entity);
 
     /// <summary>The component at read-term index <paramref name="index"/> (<c>default</c> when the slot is empty).</summary>
-    public T Comp<T>(int index) => _row.Comp(index) is { } comp ? comp.Parse(_host.Json<T>())! : default!;
+    public T Comp<T>(int index)
+    {
+        if (MutTerm<T>.Binder is { } mut)
+            return mut.Bind(this, index);
+        return _row.Comp(index) is { } comp ? comp.Parse(Scope.Host.Json<T>())! : default!;
+    }
 }
 
 // ── Data ─────────────────────────────────────────────────────────────────────────
@@ -300,7 +321,8 @@ public readonly struct Filter<F1, F2, F3, F4> : IQueryFilter<Filter<F1, F2, F3, 
 /// <summary>
 /// The entities that have <c>TData</c> (and pass <c>TFilter</c>), with their
 /// components, as the host pushed them for THIS run. A snapshot: the components are
-/// value copies, and writing one back is <c>Commands.Insert</c>.
+/// value copies — declare a term as <see cref="Mut{T}"/> to write it back (applied
+/// after the run, only when changed), or use <c>Commands.Insert</c>.
 ///
 /// <para>Declaration order of the terms is load-bearing on the host: it picks the FIRST
 /// present-required term as the scan driver, so put the narrowest one (a
@@ -310,12 +332,14 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
     where TData : struct, IQueryData<TData>
     where TFilter : struct, IQueryFilter<TFilter>
 {
-    readonly ModHost _host;
+    readonly RunScope _scope;
+    readonly int _slot;
     readonly QueryRowsView _rows;
 
-    Query(ModHost host, QueryRowsView rows)
+    Query(RunScope scope, int slot, QueryRowsView rows)
     {
-        _host = host;
+        _scope = scope;
+        _slot = slot;
         _rows = rows;
     }
 
@@ -330,7 +354,7 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
 
     public static bool TryCreate(ParamContext c, out Query<TData, TFilter> value)
     {
-        value = new Query<TData, TFilter>(c.Host, c.Scope.Input.Rows(c.Slot));
+        value = new Query<TData, TFilter>(c.Scope, c.Slot, c.Scope.Input.Rows(c.Slot));
         return true;
     }
 
@@ -351,14 +375,11 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
     {
         var id = entity.Id;
         for (var i = 0; i < _rows.Count; i++)
-        {
-            var row = _rows.Row(i);
-            if (row.Entity == id)
+            if (_rows.Row(i).Entity == id)
             {
-                data = TData.Read(new RowReader(_host, row));
+                data = TData.Read(new RowReader(_scope, _slot, _rows, i));
                 return true;
             }
-        }
         data = default;
         return false;
     }
@@ -371,22 +392,24 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
             data = default;
             return false;
         }
-        data = TData.Read(new RowReader(_host, _rows.Row(0)));
+        data = TData.Read(new RowReader(_scope, _slot, _rows, 0));
         return true;
     }
 
-    public Enumerator GetEnumerator() => new(_host, _rows);
+    public Enumerator GetEnumerator() => new(_scope, _slot, _rows);
 
     /// <summary>Struct enumerator — <c>foreach</c> over a query allocates nothing.</summary>
     public struct Enumerator
     {
-        readonly ModHost _host;
+        readonly RunScope _scope;
+        readonly int _slot;
         readonly QueryRowsView _rows;
         int _index;
 
-        internal Enumerator(ModHost host, QueryRowsView rows)
+        internal Enumerator(RunScope scope, int slot, QueryRowsView rows)
         {
-            _host = host;
+            _scope = scope;
+            _slot = slot;
             _rows = rows;
             _index = -1;
             Current = default;
@@ -398,7 +421,7 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
         {
             if (++_index >= _rows.Count)
                 return false;
-            Current = TData.Read(new RowReader(_host, _rows.Row(_index)));
+            Current = TData.Read(new RowReader(_scope, _slot, _rows, _index));
             return true;
         }
     }
