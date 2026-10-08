@@ -1,6 +1,5 @@
-//! The docs/modding.md example, built for both targets:
-//!   cargo build --example low_hp --target wasm32-wasip1
-//!   cargo build --example low_hp --target wasm32-wasip2 --no-default-features --features p2
+//! The docs/modding.md example:
+//!   cargo build --example low_hp --target wasm32-wasip2
 #![allow(dead_code)]
 
 use cuo_mod_sdk::prelude::*;

@@ -1,18 +1,17 @@
 # classicuo-mods-sdk
 
-Guest-side SDKs for out-of-process, core-wasm ClassicUO mods (FlatBuffers ABI, NOT the
-WebAssembly Component Model). Consumed as a git submodule — by the client
+Guest-side SDKs for out-of-process ClassicUO mods: `wasm32-wasip2` WebAssembly components
+implementing `wit/cuo-mod.wit`. Consumed as a git submodule — by the client
 (`external/classicuo-mods-sdk`) and by standalone mod repos.
 
 | Folder | What |
 |---|---|
-| `abi/mod-abi.fbs` | snapshot of the wire schema; canonical copy lives in `TinyEcs.Bevy.Modding/abi/` |
-| `rust/` | `cuo-mod-sdk` crate (rlib) — `cuo-mod-sdk = { path = ".../rust" }` from a `cdylib` targeting `wasm32-wasip1` |
+| `rust/` | `cuo-mod-sdk` crate (rlib) — `cuo-mod-sdk = { path = ".../rust" }` from a `cdylib` targeting `wasm32-wasip2` |
 | `dotnet/` | `CuoModSdk` classlib + `ModSdk.props` / `ModSdk.targets` — import them top/bottom of a mod csproj, publish `-r wasi-wasm` (NativeAOT-LLVM) |
-| `c/` | C11 SDK (flatcc + cJSON vendored) — a mod Makefile includes `c/mod.mk`, wasi-sdk clang → `wasm32-wasip1` reactor; see `c/README.md` |
+| `c/` | C11 SDK (wit-bindgen C bindings + cJSON vendored) — a mod Makefile includes `c/mod.mk`, wasi-sdk clang → `wasm32-wasip2` component; see `c/README.md` |
 
-`rust/src/{paths,types}.rs`, `dotnet/{Paths,Types,Actions,KeyCode}.cs`, `c/include/cuo/{paths,types}.h`,
-`c/src/types.c` and `abi/mod-abi.fbs`
+`rust/src/{paths,types}.rs`, `dotnet/{Paths,Types,Actions,KeyCode}.cs`, `c/include/cuo/{paths,types}.h`
+and `c/src/types.c`
 are GENERATED from the client's modding registry by `make gen-mod-sdk` in the ClassicUO repo.
 Do not edit them here; change the registry and regenerate.
 

@@ -1,5 +1,5 @@
 //! The C# signature table the ClassicUO host uses to bridge wasm32-wasip2 components
-//! onto the same JSON host functions the p1 wire reaches (docs/p1-wire.md): every
+//! onto the JSON host functions: every
 //! imported function of `host` / `packets` / `assets` / `actions` and every function the
 //! world exports, as a tree of `WitType` values the host's generic ComponentValue <->
 //! JSON converter walks. `WitType` / `WitFunction` are defined host-side.

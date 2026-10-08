@@ -4,48 +4,65 @@
 
 #include "cuo/cuo.h"
 
-#include "mod_abi_reader.h"
-#include "mod_abi_builder.h"
-
 _Noreturn void cuo__trap(const char *msg);
 
 /* call-scoped scratch */
 void cuo__scratch_reset(void);
 void *cuo__scratch_grow(void *p, size_t old_n, size_t new_n);
 
-/* string -> u64 map (keys are copied) */
-typedef struct cuo__map {
-    char **keys;
-    uint64_t *vals;
-    size_t cap, count, used; /* used = live + tombstones */
-} cuo__map;
+/* A wit string over scratch / caller memory (the import only reads it). */
+static inline cuo_wit_string_t cuo__wstr(const char *s)
+{
+    cuo_wit_string_t w;
+    cuo_wit_string_set(&w, s ? s : "");
+    return w;
+}
 
-bool cuo__map_get(const cuo__map *m, const char *key, uint64_t *out);
-void cuo__map_put(cuo__map *m, const char *key, uint64_t val);
-bool cuo__map_remove(cuo__map *m, const char *key, uint64_t *out);
+static inline cuo_wit_string_t cuo__wbytes(cuo_bytes b)
+{
+    cuo_wit_string_t w = { (uint8_t *)b.ptr, b.len };
+    return w;
+}
 
-/* The one builder shared by the setup reply and every command buffer. */
-flatcc_builder_t *cuo__builder(void);
+/* One parameter of the running system / observer, fetched when the call starts. */
+typedef struct cuo__pval {
+    uint8_t tag; /* TINYECS_MODDING_ECS_PARAM_* */
+    uint16_t type_id; /* res: its type (cuo_resource_set looks the res-mut param up by it) */
+    bool mut;
+    int32_t handle; /* the owned handle (dropped when the call returns) */
+    tinyecs_modding_ecs_list_row_t rows; /* query */
+    bool has_res;
+    tinyecs_modding_ecs_json_t res; /* res */
+    cuo_wit_list_json_t events; /* events */
+} cuo__pval;
 
-/* Copy the finished buffer into the ABI arena; returns the packed len<<32 | ptr. */
-uint64_t cuo__pack_builder(flatcc_builder_t *B);
+typedef struct cuo__params {
+    cuo__pval *v;
+    size_t n;
+} cuo__params;
 
-/* Command buffer plumbing for the dispatcher. */
-void cuo__cmds_begin(cuo_cmds *c);
-/* 0 when empty and CUO_PASS. `replacement` is read only for CUO_REPLACE. */
-uint64_t cuo__cmds_finish(cuo_cmds *c, cuo_verdict verdict, cuo_bytes replacement);
-cuo_cmds *cuo__cmds_instance(void);
+struct cuo_cmds {
+    tinyecs_modding_ecs_borrow_commands_t handle;
+    const cuo__params *params;
+    size_t count;
+};
 
 struct cuo_input {
-    ModAbi_SystemInput_table_t t;
+    uint32_t sys_id;
+    uint64_t tick;
+    const cuo__params *params;
 };
 
 struct cuo_obs {
-    ModAbi_ObserverInput_table_t t;
+    uint32_t obs_id;
     uint64_t entity;
+    cuo_bytes value;
+    cuo_bytes packet;
+    cuo_dir dir;
+    const cuo__params *params;
 };
 
-/* Called by the dispatcher once setup returned, before building the reply. */
+/* Called by the dispatcher once cuo_setup returned, before declaring to the host. */
 void cuo__publish_hotkeys(cuo_builder *m);
 
 #endif

@@ -1,8 +1,6 @@
-using ModAbi;
-
 namespace CuoModSdk;
 
-/// <summary>Which way a packet travels. Values match <c>ModAbi.PacketDirection</c>.</summary>
+/// <summary>Which way a packet travels. Values match the WIT <c>packet-direction</c>.</summary>
 public enum PacketDirection : byte
 {
     /// <summary>Server to client.</summary>
@@ -36,10 +34,10 @@ public readonly struct Packet
 /// <summary>What a packet observer decides: <see cref="Pass"/>, <see cref="Block"/> or <see cref="Replace"/>.</summary>
 public readonly struct Verdict
 {
-    internal readonly PacketVerdict Kind;
+    internal readonly VerdictKind Kind;
     internal readonly byte[]? Replacement;
 
-    Verdict(PacketVerdict kind, byte[]? replacement)
+    Verdict(VerdictKind kind, byte[]? replacement)
     {
         Kind = kind;
         Replacement = replacement;
@@ -49,8 +47,11 @@ public readonly struct Verdict
     public static Verdict Pass => default;
 
     /// <summary>Drop it: the client never handles / sends it, later observers never see it.</summary>
-    public static Verdict Block => new(PacketVerdict.Block, null);
+    public static Verdict Block => new(VerdictKind.Block, null);
 
     /// <summary>Forward these bytes (full wire bytes, id first) instead.</summary>
-    public static Verdict Replace(byte[] packet) => new(PacketVerdict.Replace, packet);
+    public static Verdict Replace(byte[] packet) => new(VerdictKind.Replace, packet);
 }
+
+/// <summary>WIT <c>verdict</c> case order.</summary>
+internal enum VerdictKind : byte { Pass, Block, Replace }

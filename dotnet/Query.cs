@@ -1,10 +1,8 @@
-using ModAbi;
-
 namespace CuoModSdk;
 
 /// <summary>
 /// The read side of a query: which components the row carries, and how to rebuild them
-/// from a pushed row. Implemented by <see cref="Data{T1}"/> and friends.
+/// from a query row. Implemented by <see cref="Data{T1}"/> and friends.
 /// </summary>
 public interface IQueryData<TSelf> where TSelf : struct, IQueryData<TSelf>
 {
@@ -29,10 +27,9 @@ public interface IQueryFilter<TSelf> where TSelf : struct, IQueryFilter<TSelf>
 /// </summary>
 public sealed class QueryTermSink
 {
-    readonly ModHost _host;
-    internal readonly List<QueryTermT> Terms = new();
+    internal readonly List<QueryTerm> Terms = new();
 
-    internal QueryTermSink(ModHost host) => _host = host;
+    internal QueryTermSink() { }
 
     /// <summary>A read term: the row carries <typeparamref name="T"/> (a <see cref="Mut{T}"/> declares a writable term).</summary>
     internal void Read<T>()
@@ -40,76 +37,84 @@ public sealed class QueryTermSink
         if (MutTerm<T>.Binder is { } mut)
             mut.Describe(this);
         else
-            Terms.Add(new QueryTermT { Kind = QueryTermKind.Ref, TypeId = _host.Id<T>() });
+            Terms.Add(new QueryTerm(TermKind.Ref, ModHost.PathOf<T>()));
     }
 
-    internal void Mut<T>() => Terms.Add(new QueryTermT { Kind = QueryTermKind.Mut, TypeId = _host.Id<T>() });
+    internal void Mut<T>() => Terms.Add(new QueryTerm(TermKind.Mut, ModHost.PathOf<T>()));
 
     /// <summary>Presence filter. Dropped when the type is already a term — a read term already implies presence.</summary>
     internal void With<T>()
     {
-        var id = _host.Id<T>();
-        if (Find(id) < 0)
-            Terms.Add(new QueryTermT { Kind = QueryTermKind.With, TypeId = id });
+        var path = ModHost.PathOf<T>();
+        if (Find(path) < 0)
+            Terms.Add(new QueryTerm(TermKind.With, path));
     }
 
-    internal void Without<T>() => Terms.Add(new QueryTermT { Kind = QueryTermKind.Without, TypeId = _host.Id<T>() });
+    internal void Without<T>() => Terms.Add(new QueryTerm(TermKind.Without, ModHost.PathOf<T>()));
 
-    internal void Changed<T>() => Reading<T>(QueryTermKind.Changed);
+    internal void Changed<T>() => Reading<T>(TermKind.Changed);
 
-    internal void Added<T>() => Reading<T>(QueryTermKind.Added);
+    internal void Added<T>() => Reading<T>(TermKind.Added);
 
     // Read + change / added filter. When the type is already a term (a Data<T> read, or
     // a redundant With<T>) the kind is upgraded IN PLACE: two terms on one type would
-    // put two payloads in the row and shift every later read index. A Mut term keeps
+    // put two values in the row and shift every later read index. A Mut term keeps
     // its kind (upgrading would drop the write) and the filter rides as its own term —
-    // appended after Data's, so its payload lands past every Data read index.
-    void Reading<T>(QueryTermKind kind)
+    // appended after Data's, so its value lands past every Data read index.
+    void Reading<T>(TermKind kind)
     {
-        var id = _host.Id<T>();
-        var at = Find(id);
-        if (at >= 0 && Terms[at].Kind != QueryTermKind.Mut)
-            Terms[at].Kind = kind;
+        var path = ModHost.PathOf<T>();
+        var at = Find(path);
+        if (at >= 0 && Terms[at].Kind != TermKind.Mut)
+            Terms[at] = new QueryTerm(kind, path);
         else
-            Terms.Add(new QueryTermT { Kind = kind, TypeId = id });
+            Terms.Add(new QueryTerm(kind, path));
     }
 
-    int Find(ushort typeId)
+    int Find(string path)
     {
         for (var i = 0; i < Terms.Count; i++)
-            if (Terms[i].TypeId == typeId && Terms[i].Kind != QueryTermKind.Without)
+            if (Terms[i].Path == path && Terms[i].Kind != TermKind.Without)
                 return i;
         return -1;
     }
 }
 
-/// <summary>One pushed row, being turned back into a <c>Data&lt;…&gt;</c>.</summary>
+/// <summary>One term of a query (WIT <c>term</c>).</summary>
+internal enum TermKind : byte { Ref, Mut, With, Without, Changed, Added }
+
+internal readonly record struct QueryTerm(TermKind Kind, string Path);
+
+/// <summary>One row of a query, being turned back into a <c>Data&lt;…&gt;</c>.</summary>
 public readonly struct RowReader
 {
     internal readonly RunScope Scope;
-    internal readonly QueryRowsView Rows;
     internal readonly int Slot;
+    internal readonly nint Rows;
     internal readonly int RowIndex;
-    readonly RowView _row;
 
-    internal RowReader(RunScope scope, int slot, QueryRowsView rows, int rowIndex)
+    internal RowReader(RunScope scope, int slot, nint rows, int rowIndex)
     {
         Scope = scope;
         Slot = slot;
         Rows = rows;
         RowIndex = rowIndex;
-        _row = rows.Row(rowIndex);
     }
 
-    public Entity Entity => new(_row.Entity);
+    public Entity Entity => new(EcsAbi.RowEntity(Rows, RowIndex));
 
     /// <summary>The component at read-term index <paramref name="index"/> (<c>default</c> when the slot is empty).</summary>
     public T Comp<T>(int index)
     {
         if (MutTerm<T>.Binder is { } mut)
             return mut.Bind(this, index);
-        return _row.Comp(index) is { } comp ? comp.Parse(Scope.Host.Json<T>())! : default!;
+        return ReadComp<T>(Scope, Rows, RowIndex, index);
     }
+
+    internal static T ReadComp<T>(RunScope scope, nint rows, int row, int index) =>
+        (uint)index < (uint)EcsAbi.RowValueCount(rows, row)
+            ? Payload.Parse(EcsAbi.RowValue(rows, row, index), scope.Host.Json<T>())!
+            : default!;
 }
 
 // ── Data ─────────────────────────────────────────────────────────────────────────
@@ -320,7 +325,7 @@ public readonly struct Filter<F1, F2, F3, F4> : IQueryFilter<Filter<F1, F2, F3, 
 
 /// <summary>
 /// The entities that have <c>TData</c> (and pass <c>TFilter</c>), with their
-/// components, as the host pushed them for THIS run. A snapshot: the components are
+/// components, as the host returned them for THIS run (one <c>query.rows</c> call). A snapshot: the components are
 /// value copies — declare a term as <see cref="Mut{T}"/> to write it back (applied
 /// after the run, only when changed), or use <c>Commands.Insert</c>.
 ///
@@ -334,33 +339,34 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
 {
     readonly RunScope _scope;
     readonly int _slot;
-    readonly QueryRowsView _rows;
 
-    Query(RunScope scope, int slot, QueryRowsView rows)
+    Query(RunScope scope, int slot)
     {
         _scope = scope;
         _slot = slot;
-        _rows = rows;
     }
 
     public static void Describe(ParamDescriber d)
     {
-        var sink = new QueryTermSink(d.Host);
+        var sink = new QueryTermSink();
         // TData first: it owns read indices 0..n-1 (see QueryTermSink).
         TData.Describe(sink);
         TFilter.Describe(sink);
-        d.Add(new ParamDeclT { Kind = ParamKind.Query, Query = new QueryDeclT { Terms = sink.Terms }, TypeId = ModHost.NoneType });
+        d.Add(new ParamDecl { Kind = ParamKind.Query, Terms = sink.Terms });
     }
 
     public static bool TryCreate(ParamContext c, out Query<TData, TFilter> value)
     {
-        value = new Query<TData, TFilter>(c.Scope, c.Slot, c.Scope.Input.Rows(c.Slot));
+        value = new Query<TData, TFilter>(c.Scope, c.Slot);
         return true;
     }
 
-    public int Count => _rows.Count;
+    // query.rows() is one host call, made the first time this run looks at the rows.
+    (nint Rows, int Count) Fetch() => _scope == null ? default : _scope.Rows(_slot);
 
-    public bool IsEmpty => _rows.Count == 0;
+    public int Count => Fetch().Count;
+
+    public bool IsEmpty => Count == 0;
 
     public bool Contains(Entity entity) => TryGet(entity, out _);
 
@@ -373,11 +379,12 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
 
     public bool TryGet(Entity entity, out TData data)
     {
+        var (rows, count) = Fetch();
         var id = entity.Id;
-        for (var i = 0; i < _rows.Count; i++)
-            if (_rows.Row(i).Entity == id)
+        for (var i = 0; i < count; i++)
+            if (EcsAbi.RowEntity(rows, i) == id)
             {
-                data = TData.Read(new RowReader(_scope, _slot, _rows, i));
+                data = TData.Read(new RowReader(_scope, _slot, rows, i));
                 return true;
             }
         data = default;
@@ -387,30 +394,37 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
     /// <summary>The only row; false when there are none or several.</summary>
     public bool TrySingle(out TData data)
     {
-        if (_rows.Count != 1)
+        var (rows, count) = Fetch();
+        if (count != 1)
         {
             data = default;
             return false;
         }
-        data = TData.Read(new RowReader(_scope, _slot, _rows, 0));
+        data = TData.Read(new RowReader(_scope, _slot, rows, 0));
         return true;
     }
 
-    public Enumerator GetEnumerator() => new(_scope, _slot, _rows);
+    public Enumerator GetEnumerator()
+    {
+        var (rows, count) = Fetch();
+        return new(_scope, _slot, rows, count);
+    }
 
     /// <summary>Struct enumerator — <c>foreach</c> over a query allocates nothing.</summary>
     public struct Enumerator
     {
         readonly RunScope _scope;
         readonly int _slot;
-        readonly QueryRowsView _rows;
+        readonly nint _rows;
+        readonly int _count;
         int _index;
 
-        internal Enumerator(RunScope scope, int slot, QueryRowsView rows)
+        internal Enumerator(RunScope scope, int slot, nint rows, int count)
         {
             _scope = scope;
             _slot = slot;
             _rows = rows;
+            _count = count;
             _index = -1;
             Current = default;
         }
@@ -419,7 +433,7 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
 
         public bool MoveNext()
         {
-            if (++_index >= _rows.Count)
+            if (++_index >= _count)
                 return false;
             Current = TData.Read(new RowReader(_scope, _slot, _rows, _index));
             return true;

@@ -1,43 +1,15 @@
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using CuoModSdk.Types;
-using ModAbi;
 
 namespace CuoModSdk;
 
-/// <summary>
-/// The per-guest state the SDK threads through every run: the interned type-path table
-/// from the handshake and the JSON contexts that can resolve a payload type.
-/// </summary>
+/// <summary>The per-guest state the SDK threads through every run: the JSON contexts that can resolve a payload type.</summary>
 internal sealed class ModHost
 {
-    internal const ushort NoneType = 0xFFFF;
-
-    readonly Dictionary<string, ushort> _typeIds = new();
     readonly List<JsonSerializerContext> _json = new();
 
-    internal ModHost(HandshakeT hs)
-    {
-        if (hs.TypePaths != null)
-            foreach (var tp in hs.TypePaths)
-                if (tp.Path != null)
-                    _typeIds[tp.Path] = tp.Id;
-    }
-
     internal void UseJson(JsonSerializerContext context) => _json.Add(context);
-
-    /// <summary>
-    /// Interned id for a registry type path. THROWS when the host doesn't register it —
-    /// a sentinel id would make every later command on that type a silent no-op (UI that
-    /// never appears, reads that never resolve), which costs far more to diagnose.
-    /// </summary>
-    internal ushort Id(string path) =>
-        _typeIds.TryGetValue(path, out var id)
-            ? id
-            : throw new InvalidOperationException(
-                $"the client has no type path '{path}'");
-
-    internal ushort Id<T>() => Id(PathOf<T>());
 
     internal static string PathOf<T>() =>
         TypePaths.TryOf<T>(out var path)
@@ -53,8 +25,8 @@ internal sealed class ModHost
     /// </summary>
     internal JsonTypeInfo<T> Json<T>() => JsonOf<T>.Info ??= ResolveJson<T>();
 
-    // Resolved once per type (Json<T> runs per row per term): a module hosts one ModHost
-    // for its lifetime (a reload re-instantiates the module, statics and all).
+    // Resolved once per type (Json<T> runs per row per term): a component hosts one
+    // ModHost for its lifetime (a reload re-instantiates it, statics and all).
     static class JsonOf<T>
     {
         internal static JsonTypeInfo<T>? Info;

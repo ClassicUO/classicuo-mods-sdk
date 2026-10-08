@@ -167,6 +167,8 @@ static void publish(const cuo_input *in, cuo_cmds *c, void *user)
 
 void cuo__publish_hotkeys(cuo_builder *m)
 {
-    if (nbindings)
-        cuo_add_system(m, "hotkeys", CUO_STAGE_STARTUP, publish, NULL);
+    if (!nbindings)
+        return;
+    cuo_sys s = cuo_add_system(m, "hotkeys", CUO_STAGE_STARTUP, publish, NULL);
+    cuo_system_res(m, s, cuo_ModHotkeyBindingsDto_id(), true);
 }

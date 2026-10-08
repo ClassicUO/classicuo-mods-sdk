@@ -1,101 +1,26 @@
-/* Command buffer: streamed straight into the flatcc builder as the mod records
- * commands (a CommandBuffer root with one open cmds union vector), so nothing is
- * buffered twice.
- *
- * Entities: a spawn returns CUO_PENDING | temp id. Temp ids are unique for the mod's
- * lifetime, so a placeholder kept across runs still names one spawn; mod_spawned
- * records the real ids, and cuo_resolve swaps them in. In a command an unresolved
- * placeholder is the wire ref -(temp_id) - 1 (abi/mod-abi.fbs). */
-#include <stdlib.h>
+/* Commands: each call goes straight to the host's command buffer through the running
+ * system's `commands` param (applied after the callback returns). A spawn returns the
+ * real entity id. */
 #include <string.h>
 
 #include "internal.h"
 
-struct cuo_cmds {
-    flatcc_builder_t *B;
-    size_t count;
-};
+typedef cuo_wit_tuple2_type_path_json_t pair_t;
 
-static cuo_cmds instance;
-static uint32_t next_temp;
-
-/* real id + 1 per temp id (0 = not resolved yet); temp ids are dense from 0. */
-static uint64_t *resolved;
-static size_t nresolved;
-
-cuo_cmds *cuo__cmds_instance(void)
+static tinyecs_modding_ecs_bundle_t bundle(const cuo_comp *comps, size_t n)
 {
-    return &instance;
-}
-
-cuo_entity cuo_resolve(cuo_entity e)
-{
-    if (!(e & CUO_PENDING))
-        return e;
-    uint32_t temp = (uint32_t)e;
-    return temp < nresolved && resolved[temp] ? resolved[temp] - 1 : e;
-}
-
-static int64_t wire_ref(cuo_entity e)
-{
-    e = cuo_resolve(e);
-    return (e & CUO_PENDING) ? -(int64_t)(uint32_t)e - 1 : (int64_t)e;
-}
-
-void cuo__cmds_begin(cuo_cmds *c)
-{
-    c->B = cuo__builder();
-    c->count = 0;
-}
-
-static flatcc_builder_t *open_cmd(cuo_cmds *c)
-{
-    if (c->count++ == 0) {
-        ModAbi_CommandBuffer_start_as_root(c->B);
-        ModAbi_CommandBuffer_cmds_start(c->B);
+    pair_t *p = cuo_alloc((n ? n : 1) * sizeof *p);
+    for (size_t i = 0; i < n; i++) {
+        p[i].f0 = cuo__wstr(cuo_type_path(comps[i].type_id));
+        p[i].f1 = cuo__wbytes(comps[i].data);
     }
-    return c->B;
-}
-
-uint64_t cuo__cmds_finish(cuo_cmds *c, cuo_verdict verdict, cuo_bytes replacement)
-{
-    if (c->count == 0) {
-        if (verdict == CUO_PASS)
-            return 0;
-        ModAbi_CommandBuffer_start_as_root(c->B);
-    } else {
-        ModAbi_CommandBuffer_cmds_end(c->B);
-    }
-    if (verdict != CUO_PASS)
-        ModAbi_CommandBuffer_verdict_add(c->B, (ModAbi_PacketVerdict_enum_t)verdict);
-    if (verdict == CUO_REPLACE)
-        ModAbi_CommandBuffer_replacement_create(c->B, replacement.ptr, replacement.len);
-    ModAbi_CommandBuffer_end_as_root(c->B);
-    return cuo__pack_builder(c->B);
+    tinyecs_modding_ecs_bundle_t b = { p, n };
+    return b;
 }
 
 size_t cuo_cmds_len(const cuo_cmds *c)
 {
     return c->count;
-}
-
-static ModAbi_CompValue_ref_t comp_value(flatcc_builder_t *B, cuo_comp comp)
-{
-    /* Not ModAbi_CompValue_create: it fails on a null data ref, i.e. on a marker.
-     * Encoding stays at its default (Json). */
-    ModAbi_CompValue_start(B);
-    ModAbi_CompValue_type_id_add(B, comp.type_id);
-    if (comp.data.len)
-        ModAbi_CompValue_data_create(B, comp.data.ptr, comp.data.len);
-    return ModAbi_CompValue_end(B);
-}
-
-static ModAbi_CompValue_vec_ref_t comp_vec(flatcc_builder_t *B, const cuo_comp *comps, size_t n)
-{
-    ModAbi_CompValue_vec_start(B);
-    for (size_t i = 0; i < n; i++)
-        ModAbi_CompValue_vec_push(B, comp_value(B, comps[i]));
-    return ModAbi_CompValue_vec_end(B);
 }
 
 cuo_comp cuo_comp_bytes(uint16_t type_id, cuo_bytes json)
@@ -117,21 +42,15 @@ cuo_comp cuo_comp_marker(uint16_t type_id)
 
 cuo_comp cuo_child_of(cuo_entity parent)
 {
-    /* The placeholder of a parent spawned in this run is fine: the host maps it. */
-    cuo_ChildOfDto dto = { .parent = cuo_resolve(parent) };
+    cuo_ChildOfDto dto = { .parent = parent };
     return cuo_ChildOfDto_comp(&dto);
 }
 
 cuo_entity cuo_spawn(cuo_cmds *c, const cuo_comp *comps, size_t n)
 {
-    flatcc_builder_t *B = open_cmd(c);
-    uint32_t temp = next_temp++;
-    ModAbi_CommandBuffer_cmds_SpawnCmd_push_start(B);
-    ModAbi_SpawnCmd_temp_id_add(B, temp);
-    if (n)
-        ModAbi_SpawnCmd_comps_add(B, comp_vec(B, comps, n));
-    ModAbi_CommandBuffer_cmds_SpawnCmd_push_end(B);
-    return CUO_PENDING | temp;
+    c->count++;
+    tinyecs_modding_ecs_bundle_t b = bundle(comps, n);
+    return tinyecs_modding_ecs_method_commands_spawn(c->handle, &b);
 }
 
 cuo_entity cuo_spawn_child(cuo_cmds *c, cuo_entity parent, const cuo_comp *comps, size_t n)
@@ -144,12 +63,9 @@ cuo_entity cuo_spawn_child(cuo_cmds *c, cuo_entity parent, const cuo_comp *comps
 
 void cuo_insert(cuo_cmds *c, cuo_entity e, const cuo_comp *comps, size_t n)
 {
-    flatcc_builder_t *B = open_cmd(c);
-    ModAbi_CommandBuffer_cmds_InsertCmd_push_start(B);
-    ModAbi_InsertCmd_entity_add(B, wire_ref(e));
-    if (n)
-        ModAbi_InsertCmd_comps_add(B, comp_vec(B, comps, n));
-    ModAbi_CommandBuffer_cmds_InsertCmd_push_end(B);
+    c->count++;
+    tinyecs_modding_ecs_bundle_t b = bundle(comps, n);
+    tinyecs_modding_ecs_method_commands_insert(c->handle, e, &b);
 }
 
 void cuo_insert1(cuo_cmds *c, cuo_entity e, cuo_comp comp)
@@ -159,57 +75,41 @@ void cuo_insert1(cuo_cmds *c, cuo_entity e, cuo_comp comp)
 
 void cuo_remove(cuo_cmds *c, cuo_entity e, const uint16_t *type_ids, size_t n)
 {
-    flatcc_builder_t *B = open_cmd(c);
-    ModAbi_CommandBuffer_cmds_RemoveCmd_push_start(B);
-    ModAbi_RemoveCmd_entity_add(B, wire_ref(e));
-    if (n)
-        ModAbi_RemoveCmd_type_ids_create(B, type_ids, n);
-    ModAbi_CommandBuffer_cmds_RemoveCmd_push_end(B);
+    c->count++;
+    cuo_wit_string_t *paths = cuo_alloc((n ? n : 1) * sizeof *paths);
+    for (size_t i = 0; i < n; i++)
+        paths[i] = cuo__wstr(cuo_type_path(type_ids[i]));
+    cuo_wit_list_type_path_t l = { paths, n };
+    tinyecs_modding_ecs_method_commands_remove(c->handle, e, &l);
 }
 
 void cuo_despawn(cuo_cmds *c, cuo_entity e)
 {
-    flatcc_builder_t *B = open_cmd(c);
-    ModAbi_CommandBuffer_cmds_DespawnCmd_push_start(B);
-    ModAbi_DespawnCmd_entity_add(B, wire_ref(e));
-    ModAbi_CommandBuffer_cmds_DespawnCmd_push_end(B);
+    c->count++;
+    tinyecs_modding_ecs_method_commands_despawn(c->handle, e);
 }
 
 void cuo_resource_set(cuo_cmds *c, cuo_comp value)
 {
-    flatcc_builder_t *B = open_cmd(c);
-    ModAbi_CommandBuffer_cmds_ResourceSetCmd_push_start(B);
-    ModAbi_ResourceSetCmd_value_add(B, comp_value(B, value));
-    ModAbi_CommandBuffer_cmds_ResourceSetCmd_push_end(B);
+    const cuo__params *ps = c->params;
+    for (size_t i = 0; i < ps->n; i++) {
+        const cuo__pval *v = &ps->v[i];
+        if (v->tag == TINYECS_MODDING_ECS_PARAM_RES && v->mut && v->type_id == value.type_id) {
+            c->count++;
+            cuo_wit_string_t json = cuo__wbytes(value.data);
+            tinyecs_modding_ecs_method_res_set((tinyecs_modding_ecs_borrow_res_t){ v->handle }, &json);
+            return;
+        }
+    }
+    cuo__trap(cuo_fmt("cuo: cuo_resource_set('%s') needs a cuo_system_res(..., true) param of that type",
+                      cuo_type_path(value.type_id)));
 }
 
 void cuo_emit(cuo_cmds *c, const char *event_path, uint64_t entity, cuo_bytes json)
 {
-    flatcc_builder_t *B = open_cmd(c);
-    ModAbi_CommandBuffer_cmds_EmitEventCmd_push_start(B);
-    ModAbi_EmitEventCmd_event_name_create_str(B, event_path);
-    ModAbi_EmitEventCmd_entity_add(B, cuo_resolve(entity));
-    if (json.len)
-        ModAbi_EmitEventCmd_data_create(B, json.ptr, json.len);
-    ModAbi_CommandBuffer_cmds_EmitEventCmd_push_end(B);
-}
-
-__attribute__((export_name("mod_spawned"))) void mod_spawned(uint32_t ptr, uint32_t len)
-{
-    (void)len;
-    ModAbi_SpawnedInput_table_t in = ModAbi_SpawnedInput_as_root((const void *)(uintptr_t)ptr);
-    ModAbi_SpawnResolved_vec_t v = in ? ModAbi_SpawnedInput_spawned(in) : NULL;
-    for (size_t i = 0, n = ModAbi_SpawnResolved_vec_len(v); i < n; i++) {
-        ModAbi_SpawnResolved_table_t sr = ModAbi_SpawnResolved_vec_at(v, i);
-        uint32_t temp = ModAbi_SpawnResolved_temp_id(sr);
-        if (temp >= nresolved) {
-            size_t cap = nresolved ? nresolved : 64;
-            while (cap <= temp)
-                cap *= 2;
-            resolved = realloc(resolved, cap * sizeof *resolved);
-            memset(resolved + nresolved, 0, (cap - nresolved) * sizeof *resolved);
-            nresolved = cap;
-        }
-        resolved[temp] = ModAbi_SpawnResolved_entity(sr) + 1;
-    }
+    (void)entity;
+    c->count++;
+    cuo_wit_string_t path = cuo__wstr(event_path);
+    cuo_wit_string_t v = cuo__wbytes(json);
+    tinyecs_modding_ecs_method_commands_send(c->handle, &path, &v);
 }

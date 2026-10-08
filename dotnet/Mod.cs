@@ -2,9 +2,9 @@ namespace CuoModSdk;
 
 /// <summary>
 /// A mod. Subclass it, override <see cref="Setup"/>, and name the subclass in the
-/// csproj's <c>&lt;CuoModType&gt;</c> — ModSdk.targets generates the <c>mod_setup</c>
-/// export that instantiates it. Everything else (arena, FlatBuffers, the other ABI
-/// exports, <c>env.mod_call</c>) is the SDK's.
+/// csproj's <c>&lt;CuoModType&gt;</c> — ModSdk.targets generates the component's
+/// <c>setup</c> export that instantiates it. Everything else (the other exports, the
+/// canonical-ABI glue for world <c>cuo:modding/mod</c>) is the SDK's.
 ///
 /// One instance per guest, created once at setup: mod state goes in instance fields,
 /// not statics. The guest is single-threaded, so no locking.
@@ -17,8 +17,7 @@ public abstract class Mod
 
 /// <summary>
 /// Host stage a system runs in — the mod-side mirror of <c>TinyEcs.Bevy.Stage</c>.
-/// Values match <c>ModAbi.Schedule</c> (abi/mod-abi.fbs) so a mod never needs
-/// <c>using ModAbi</c>; keep the two in lockstep.
+/// Values match the WIT <c>schedule</c> enum (wit/deps/tinyecs-mod); keep the two in lockstep.
 /// </summary>
 public enum Stage : byte
 {

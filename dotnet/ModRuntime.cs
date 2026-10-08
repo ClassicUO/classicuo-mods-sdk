@@ -1,183 +1,184 @@
 using System.Runtime.InteropServices;
-using Google.FlatBuffers;
-using ModAbi;
+using Ecs = ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports;
 
 namespace CuoModSdk;
 
 /// <summary>
-/// Dispatch layer over the raw ABI — the twin of the Rust SDK's rust/src/p1/mod.rs.
+/// The component's exports (world <c>cuo:modding/mod</c>) on top of <see cref="ModBuilder"/>.
 ///
-/// Lifecycle (host drives, serially):
-/// 1. <c>mod_setup(Handshake)</c> — the generated stub calls <see cref="Setup"/>: intern
-///    the type-path table, run the mod's Setup, return the SetupReply.
-/// 2. <c>mod_run</c> / <c>mod_observer</c> — build the parameters from the pushed data,
-///    run the body, return the CommandBuffer (0 = none). A packet observer's verdict
-///    rides that CommandBuffer (0 = pass).
-/// 3. <c>mod_spawned</c> — the host assigned real ids to the buffer's spawns.
+/// Lifecycle (the host drives, serially):
+/// 1. <c>setup(app)</c> — the export generated into the mod (ModSdk.targets, from
+///    <c>&lt;CuoModType&gt;</c>) calls <see cref="Setup"/>: run the mod's Setup, then
+///    declare every system / observer on the host.
+/// 2. <c>run</c> / <c>observe</c> / <c>observe-packet</c> — look the system up by name,
+///    build its parameters from the param handles, run the body, drop the handles.
 ///
-/// Packed guest returns are <c>len&lt;&lt;32 | ptr</c> (0 = none).
+/// The exports lift their arguments by hand (no per-call strings or lists): the system
+/// name is matched as UTF-8, the params land in reused arrays.
 /// </summary>
 public static unsafe class ModRuntime
 {
-    /// <summary>
-    /// The mod ABI version this SDK speaks. <see cref="Setup"/> throws when the host's
-    /// Handshake.AbiVersion differs — a silent mismatch corrupts every buffer that follows.
-    /// </summary>
-    public const uint AbiVersion = 4;
+    static List<Entry> _entries = new();
+    // FNV-1a of the UTF-8 name -> entry index (collisions fall back to a scan).
+    static readonly Dictionary<ulong, int> _byName = new();
+    static readonly ModHost _host = new();
 
-    static List<Entry> _systems = new();
-    static List<Entry> _observers = new();
-    static ModHost? _host;
+    internal static ModHost Host => _host;
 
-    // Temp ids are unique for the mod's lifetime, so a placeholder kept across runs
-    // (in a field, a Local) still names exactly one spawn.
-    static uint _nextTemp;
-    static readonly Dictionary<uint, ulong> _resolved = new();
-
-    internal static ModHost Host => _host ?? throw new InvalidOperationException("the mod is not set up yet");
-
-    internal static uint NextTemp() => _nextTemp++;
-
-    /// <summary>A placeholder's real id once the host resolved it; anything else unchanged.</summary>
-    internal static ulong Resolve(ulong bits) =>
-        (bits & Entity.Pending) != 0 && _resolved.TryGetValue((uint)bits, out var real) ? real : bits;
-
-    /// <summary>Body of the generated <c>mod_setup</c> export (ModSdk.targets, from <c>&lt;CuoModType&gt;</c>).</summary>
-    public static long Setup(int ptr, int len, Mod mod)
+    /// <summary>Body of the generated <c>setup</c> export (ModSdk.targets, from <c>&lt;CuoModType&gt;</c>).</summary>
+    public static void Setup(int appHandle, Mod mod)
     {
-        var hs = Handshake.GetRootAsHandshake(Wrap(ptr, len)).UnPack();
-        if (hs.AbiVersion != AbiVersion)
-            throw new InvalidOperationException(
-                $"mod ABI mismatch: the client speaks v{hs.AbiVersion}, this mod was built for " +
-                $"v{AbiVersion}: rebuild it against the current SDK");
-        var host = new ModHost(hs);
-        _host = host;
-        var m = new ModBuilder(host);
+        using var app = new Ecs.App(new Ecs.App.THandle(appHandle));
+        var m = new ModBuilder(_host);
         mod.Setup(m);
         m.Finish();
-        _systems = m.Systems;
-        _observers = m.Observers;
-        return Pack(SetupReply.Pack(Begin(), m.BuildReply()).Value);
+        _entries = m.Entries;
+        _byName.Clear();
+        for (var i = 0; i < _entries.Count; i++)
+            _byName[Hash(_entries[i].NameUtf8)] = i;
+        m.Declare(app);
     }
 
-    internal static long Run(int sysId, int ptr, int len)
+    static ulong Hash(ReadOnlySpan<byte> s)
     {
-        if ((uint)sysId >= (uint)_systems.Count)
-            return 0;
-        var input = new ParamsView(SystemInput.GetRootAsSystemInput(Wrap(ptr, len)));
-        return Execute(_systems[sysId], input, 0, null, default);
+        var h = 14695981039346656037UL;
+        foreach (var b in s)
+            h = (h ^ b) * 1099511628211UL;
+        return h;
     }
 
-    internal static long Observer(int obsId, long entity, int ptr, int len)
+    static Entry? Find(ReadOnlySpan<byte> name)
     {
-        if ((uint)obsId >= (uint)_observers.Count)
-            return 0;
-        var oi = ObserverInput.GetRootAsObserverInput(Wrap(ptr, len));
-        var value = oi.Value is { } v ? new CompView(v) : (CompView?)null;
-        // The packet lives in the input copy, which outlives the run: no second copy.
-        var packet = oi.GetPacketBytes() is { } bytes ? new Packet((PacketDirection)oi.PacketDirection, bytes) : default;
-        return Execute(_observers[obsId], new ParamsView(oi), (ulong)entity, value, packet);
+        if (_byName.TryGetValue(Hash(name), out var i) && _entries[i].NameUtf8.AsSpan().SequenceEqual(name))
+            return _entries[i];
+        foreach (var e in _entries)
+            if (e.NameUtf8.AsSpan().SequenceEqual(name))
+                return e;
+        return null;
     }
 
-    // One builder for every run: runs never nest (the host drives the exports serially)
-    // and the buffer is packed into the arena before the run returns.
-    static readonly CommandBufferBuilder _buffer = new();
+    // ── per-run state (runs never nest: the host drives the exports serially) ──
+    static readonly RunScope _scope = new();
+    static byte[] _kinds = new byte[8];
+    static int[] _handles = new int[8];
+    static byte[] _packet = new byte[512];
 
-    static long Execute(Entry entry, ParamsView input, ulong triggerEntity, CompView? triggerValue, Packet packet)
+    // Lifts list<param> (8 bytes each: tag u8 @0, own handle i32 @4) and frees the list.
+    static void LiftParams(nint list, int count)
     {
-        var buffer = _buffer;
-        buffer.Clear();
-        var scope = new RunScope
+        if (_kinds.Length < count)
         {
-            Host = Host,
-            Commands = new Commands(buffer, Host),
-            Input = input,
-            Locals = entry.Locals,
-            TriggerEntity = triggerEntity,
-            TriggerValue = triggerValue,
-            Packet = packet,
-        };
-        entry.Run(scope);
-        if (scope.WriteBacks != null)
-            foreach (var wb in scope.WriteBacks)
-                wb();
-        scope.Commands.Flush();
-        return buffer.IsEmpty && scope.Verdict.Kind == PacketVerdict.Pass ? 0L : Pack(buffer.Finish(Begin(), scope.Verdict));
+            _kinds = new byte[count];
+            _handles = new int[count];
+        }
+        for (var i = 0; i < count; i++)
+        {
+            _kinds[i] = *(byte*)(list + i * 8);
+            _handles[i] = *(int*)(list + i * 8 + 4);
+        }
+        if (count > 0)
+            NativeMemory.Free((void*)list);
     }
 
-    internal static void Spawned(int ptr, int len)
+    static Verdict Execute(nint name, int nameLen, nint paramList, int paramCount, ulong triggerEntity, nint value, int valueLen, Packet packet, bool isObserver)
     {
-        var input = SpawnedInput.GetRootAsSpawnedInput(Wrap(ptr, len));
-        for (var i = 0; i < input.SpawnedLength; i++)
+        LiftParams(paramList, paramCount);
+        var entry = Find(new ReadOnlySpan<byte>((void*)name, nameLen));
+        EcsAbi.Free(name, nameLen);
+        var scope = _scope;
+        scope.Begin(_kinds, _handles, paramCount, entry?.Locals);
+        scope.TriggerEntity = triggerEntity;
+        scope.TriggerValue = value;
+        scope.TriggerValueLen = valueLen;
+        scope.Packet = packet;
+        try
         {
-            var sr = input.Spawned(i)!.Value;
-            _resolved[sr.TempId] = sr.Entity;
+            if (entry != null)
+                entry.Run(scope);
+            scope.End();
+            return scope.Verdict;
+        }
+        finally
+        {
+            scope.Release();
+            if (isObserver)
+                EcsAbi.Free(value, valueLen);
+            for (var i = 0; i < paramCount; i++)
+                EcsAbi.Drop(_kinds[i], _handles[i]);
         }
     }
 
-    // ── FlatBuffers <-> arena plumbing ───────────────────────────────────────────
-    static readonly FlatBufferBuilder _fbb = new(1024);
+    internal static void Run(nint name, int nameLen, nint paramList, int paramCount) =>
+        Execute(name, nameLen, paramList, paramCount, 0, 0, 0, default, false);
 
-    // The input is copied out of the arena before any mod code runs: a mod_call result
-    // lands in the arena too, and growing it may move earlier regions. The copy goes into
-    // ONE grow-only buffer, reused by every export call: they never nest, and nothing
-    // reads the input past its run (every view / RowReader / Mut column is run-scoped).
-    // A larger-than-needed buffer is fine: a flatbuffer is addressed from its root.
-    static byte[] _input = new byte[4096];
-    static ByteBuffer _inputBuffer = new(_input);
+    internal static void Observe(nint name, int nameLen, long entity, nint value, int valueLen, nint paramList, int paramCount) =>
+        Execute(name, nameLen, paramList, paramCount, (ulong)entity, value, valueLen, default, true);
 
-    static ByteBuffer Wrap(int ptr, int len)
+    // The verdict's return area: tag u8 @0, replacement list<u8> @4/@8.
+    [StructLayout(LayoutKind.Sequential)]
+    struct VerdictRet
     {
-        if (_input.Length < len)
+        public int Tag, Ptr, Len;
+    }
+
+    [System.Runtime.CompilerServices.FixedAddressValueType]
+    static VerdictRet _verdictRet;
+
+    internal static nint ObservePacket(nint name, int nameLen, int direction, nint packet, int packetLen, nint paramList, int paramCount)
+    {
+        // Copy into a reused buffer (the Packet the observer sees stays valid for its run).
+        if (_packet.Length < packetLen)
+            _packet = new byte[Math.Max(packetLen, _packet.Length * 2)];
+        new ReadOnlySpan<byte>((void*)packet, packetLen).CopyTo(_packet);
+        EcsAbi.Free(packet, packetLen);
+        var p = new Packet((PacketDirection)direction, new ArraySegment<byte>(_packet, 0, packetLen));
+        var verdict = Execute(name, nameLen, paramList, paramCount, 0, 0, 0, p, true);
+
+        fixed (VerdictRet* ret = &_verdictRet)
         {
-            _input = new byte[Math.Max(len, _input.Length * 2)];
-            _inputBuffer = new ByteBuffer(_input);
+            *ret = default;
+            ret->Tag = (byte)verdict.Kind;
+            if (verdict.Kind == VerdictKind.Replace)
+            {
+                var bytes = verdict.Replacement!;
+                var mem = (byte*)NativeMemory.Alloc((nuint)Math.Max(1, bytes.Length));
+                bytes.CopyTo(new Span<byte>(mem, bytes.Length));
+                ret->Ptr = (int)(nint)mem;
+                ret->Len = bytes.Length;
+            }
+            return (nint)ret;
         }
-        new ReadOnlySpan<byte>((void*)(nint)ptr, len).CopyTo(_input);
-        _inputBuffer.Reset();
-        return _inputBuffer;
     }
 
-    static FlatBufferBuilder Begin()
+    internal static void PostObservePacket(nint ret)
     {
-        _fbb.Clear();
-        return _fbb;
-    }
-
-    // Finish the root, copy the bytes into a fresh arena reservation, return len<<32 | ptr.
-    static long Pack(int root)
-    {
-        _fbb.Finish(root);
-        var bytes = _fbb.DataBuffer.ToArraySegment(_fbb.DataBuffer.Position, _fbb.Offset);
-        return PackBytes(bytes);
-    }
-
-    static long PackBytes(ReadOnlySpan<byte> bytes)
-    {
-        var n = bytes.Length;
-        var ptr = Arena.Alloc(n);
-        bytes.CopyTo(new Span<byte>((void*)(nint)ptr, n));
-        return ((long)n << 32) | (uint)ptr;
+        var r = (VerdictRet*)ret;
+        if ((byte)r->Tag == (byte)VerdictKind.Replace)
+            NativeMemory.Free((void*)(nint)r->Ptr);
     }
 }
 
-// The generic ABI exports — everything except mod_setup, which must construct the mod's
-// own type and is therefore GENERATED into the mod (ModSdk.targets, from <CuoModType>).
-// Exported from this assembly into the mod's module via UnmanagedEntryPointsAssembly.
-internal static class ModExports
+// The generic exports — everything except `setup`, which must construct the mod's own
+// type and is therefore GENERATED into the mod (ModSdk.targets, from <CuoModType>).
+// Exported from this assembly into the mod's component via UnmanagedEntryPointsAssembly.
+// Signatures are the canonical-ABI flattening of the WIT exports.
+internal static class WitExports
 {
-    [UnmanagedCallersOnly(EntryPoint = "mod_alloc")]
-    static int Alloc(int size) => Arena.Alloc(size);
+    // run: func(system: string, params: list<param>)
+    [UnmanagedCallersOnly(EntryPoint = "run")]
+    static void Run(nint name, int nameLen, nint paramList, int paramCount) =>
+        ModRuntime.Run(name, nameLen, paramList, paramCount);
 
-    [UnmanagedCallersOnly(EntryPoint = "mod_arena_reset")]
-    static void ArenaReset() => Arena.Reset();
+    // observe: func(system: string, trigger: trigger-data { entity: u64, value: string }, params: list<param>)
+    [UnmanagedCallersOnly(EntryPoint = "observe")]
+    static void Observe(nint name, int nameLen, long entity, nint value, int valueLen, nint paramList, int paramCount) =>
+        ModRuntime.Observe(name, nameLen, entity, value, valueLen, paramList, paramCount);
 
-    [UnmanagedCallersOnly(EntryPoint = "mod_run")]
-    static long Run(int sysId, int ptr, int len) => ModRuntime.Run(sysId, ptr, len);
+    // observe-packet: func(system: string, direction: packet-direction, packet: list<u8>, params: list<param>) -> verdict
+    [UnmanagedCallersOnly(EntryPoint = "observe-packet")]
+    static nint ObservePacket(nint name, int nameLen, int direction, nint packet, int packetLen, nint paramList, int paramCount) =>
+        ModRuntime.ObservePacket(name, nameLen, direction, packet, packetLen, paramList, paramCount);
 
-    [UnmanagedCallersOnly(EntryPoint = "mod_observer")]
-    static long Observer(int obsId, long entity, int ptr, int len) => ModRuntime.Observer(obsId, entity, ptr, len);
-
-    [UnmanagedCallersOnly(EntryPoint = "mod_spawned")]
-    static void Spawned(int ptr, int len) => ModRuntime.Spawned(ptr, len);
+    [UnmanagedCallersOnly(EntryPoint = "cabi_post_observe-packet")]
+    static void PostObservePacket(nint ret) => ModRuntime.PostObservePacket(ret);
 }

@@ -1,0 +1,451 @@
+package cuo:modding@0.1.0;
+
+interface host {
+  use tinyecs:modding/ecs@0.1.0.{entity, json};
+
+  enum scope {
+    global,
+    character,
+  }
+
+  log: func(message: string);
+
+  measure-text: func(font: u16, text: string) -> u32;
+
+  resolve-serial: func(serial: u32) -> option<entity>;
+
+  storage-get: func(scope: scope) -> string;
+
+  storage-set: func(scope: scope, value: string);
+}
+
+interface assets {
+  enum image-kind {
+    land,
+    art,
+    gump,
+    texmap,
+    light,
+  }
+
+  record size {
+    width: u32,
+    height: u32,
+  }
+
+  record image {
+    width: u32,
+    height: u32,
+    rgba: list<u8>,
+  }
+
+  record anim-key {
+    body: u16,
+    action: u8,
+    direction: u8,
+  }
+
+  record frame-info {
+    width: u32,
+    height: u32,
+    center-x: s32,
+    center-y: s32,
+  }
+
+  record static-info {
+    name: string,
+    %flags: u64,
+    weight: u8,
+    layer: u8,
+    count: s32,
+    anim-id: u16,
+    hue: u16,
+    light-index: u16,
+    height: u8,
+  }
+
+  record land-info {
+    name: string,
+    %flags: u64,
+    texmap: u16,
+  }
+
+  record land-cell {
+    graphic: u16,
+    z: s8,
+  }
+
+  record static-cell {
+    graphic: u16,
+    z: s8,
+    hue: u16,
+  }
+
+  record multi-part {
+    graphic: u16,
+    x: s16,
+    y: s16,
+    z: s16,
+  }
+
+  record skill {
+    index: u16,
+    name: string,
+    has-action: bool,
+  }
+
+  image-size: func(kind: image-kind, id: u32) -> option<size>;
+
+  image-pixels: func(kind: image-kind, id: u32, hue: u16) -> option<image>;
+
+  anim-frames: func(key: anim-key) -> option<u32>;
+
+  anim-frame: func(key: anim-key, frame: u32) -> option<frame-info>;
+
+  anim-pixels: func(key: anim-key, frame: u32, hue: u16) -> option<image>;
+
+  static-tile: func(graphic: u16) -> option<static-info>;
+
+  land-tile: func(id: u16) -> option<land-info>;
+
+  hue-ramp: func(hue: u16) -> option<list<u32>>;
+
+  cliloc: func(id: u32, args: list<string>) -> string;
+
+  map-size: func(%map: u8) -> option<size>;
+
+  map-land: func(%map: u8, x: u16, y: u16) -> option<land-cell>;
+
+  map-statics: func(%map: u8, x: u16, y: u16) -> list<static-cell>;
+
+  multi: func(id: u16) -> list<multi-part>;
+
+  skills: func() -> list<skill>;
+}
+
+interface actions {
+  type serial = u32;
+
+  enum direction {
+    north,
+    north-east,
+    east,
+    south-east,
+    south,
+    south-west,
+    west,
+    north-west,
+  }
+
+  enum speech-kind {
+    regular,
+    emote,
+    whisper,
+    yell,
+    guild,
+    alliance,
+  }
+
+  enum lock-state {
+    up,
+    down,
+    locked,
+  }
+
+  enum stat {
+    str,
+    dex,
+    int,
+  }
+
+  enum virtue {
+    honor,
+    sacrifice,
+    valor,
+  }
+
+  enum ability {
+    primary,
+    secondary,
+  }
+
+  enum window {
+    paperdoll,
+    status,
+    journal,
+    skills,
+    backpack,
+    world-map,
+    minimap,
+    options,
+    buffs,
+    combat-book,
+    party,
+    guild,
+    quest,
+    logout,
+  }
+
+  record point {
+    x: u16,
+    y: u16,
+    z: s8,
+  }
+
+  variant destination {
+    container(serial),
+    container-at(tuple<serial, u16, u16>),
+    ground(point),
+  }
+
+  double-click: func(target: serial);
+
+  single-click: func(target: serial);
+
+  pick-up: func(item: serial, amount: u16);
+
+  drop: func(to: destination);
+
+  equip: func(layer: u8, mobile: serial);
+
+  move-item: func(item: serial, amount: u16, to: destination);
+
+  wear: func(item: serial, layer: u8, mobile: serial);
+
+  use-item-on: func(item: serial, target: serial);
+
+  equip-last-weapon: func();
+
+  rename: func(mobile: serial, name: string);
+
+  request-properties: func(target: serial);
+
+  close-container: func(container: serial);
+
+  walk: func(dir: direction, run: bool);
+
+  walk-to: func(at: point);
+
+  cancel-walk-to: func();
+
+  open-door: func();
+
+  resync: func();
+
+  set-war-mode: func(on: bool);
+
+  attack: func(mobile: serial);
+
+  use-ability: func(which: ability);
+
+  clear-ability: func();
+
+  toggle-flying: func();
+
+  target-object: func(target: serial);
+
+  target-location: func(at: point, graphic: u16);
+
+  target-cancel: func();
+
+  clear-target-queue: func();
+
+  request-target: func(prompt: string);
+
+  cast-spell: func(id: u16);
+
+  open-spellbook: func(kind: u8);
+
+  use-skill: func(index: u16);
+
+  set-skill-lock: func(index: u16, state: lock-state);
+
+  set-stat-lock: func(which: stat, state: lock-state);
+
+  invoke-virtue: func(which: virtue);
+
+  emote-action: func(name: string);
+
+  say: func(text: string, kind: speech-kind, hue: option<u16>);
+
+  party-say: func(text: string, to: option<serial>);
+
+  gump-reply: func(gump: u32, button: s32, switches: list<u32>, texts: list<tuple<u16, string>>);
+
+  gump-close: func(gump: u32);
+
+  request-context-menu: func(target: serial);
+
+  context-menu-reply: func(target: serial, index: u16);
+
+  prompt-reply: func(text: string);
+
+  prompt-cancel: func();
+
+  menu-reply: func(menu: serial, menu-id: u16, index: u16, graphic: u16, hue: u16);
+
+  text-entry-reply: func(dialog: serial, parent-id: u8, button: u8, text: string, ok: bool);
+
+  dye-reply: func(tub: serial, graphic: u16, hue: u16);
+
+  help-request: func();
+
+  party-invite: func();
+
+  party-remove: func(member: option<serial>);
+
+  party-accept: func(leader: serial);
+
+  party-decline: func(leader: serial);
+
+  party-set-loot: func(shareable: bool);
+
+  trade-accept: func(container: serial, accepted: bool);
+
+  trade-cancel: func(container: serial);
+
+  trade-set-gold: func(container: serial, gold: u32, platinum: u32);
+
+  vendor-buy: func(vendor: serial, items: list<tuple<serial, u16>>);
+
+  vendor-sell: func(vendor: serial, items: list<tuple<serial, u16>>);
+
+  request-status: func(mobile: option<serial>);
+
+  request-skills: func(mobile: option<serial>);
+
+  open-window: func(w: window, target: option<serial>);
+
+  close-window: func(w: window);
+
+  set-view-range: func(range: u8);
+
+  logout: func();
+}
+
+interface packets {
+  send-to-server: func(packet: list<u8>);
+
+  send-to-client: func(packet: list<u8>);
+}
+
+world mod {
+  import tinyecs:modding/ecs@0.1.0;
+  import host;
+  import assets;
+  import actions;
+  import packets;
+  use tinyecs:modding/ecs@0.1.0.{app, param, trigger-data, packet-direction, verdict};
+
+  export setup: func(app: app);
+  export run: func(system: string, params: list<param>);
+  export observe: func(system: string, trigger: trigger-data, params: list<param>);
+  export observe-packet: func(system: string, direction: packet-direction, packet: list<u8>, params: list<param>) -> verdict;
+}
+package tinyecs:modding@0.1.0 {
+  interface ecs {
+    type type-path = string;
+
+    type json = string;
+
+    type entity = u64;
+
+    type bundle = list<tuple<type-path, json>>;
+
+    enum schedule {
+      startup,
+      first,
+      pre-update,
+      update,
+      post-update,
+      last,
+    }
+
+    variant term {
+      ref(type-path),
+      mut(type-path),
+      %with(type-path),
+      without(type-path),
+      changed(type-path),
+      added(type-path),
+    }
+
+    enum packet-direction {
+      incoming,
+      outgoing,
+    }
+
+    record packet-filter {
+      direction: packet-direction,
+      ids: list<u8>,
+    }
+
+    variant verdict {
+      pass,
+      block,
+      replace(list<u8>),
+    }
+
+    variant trigger {
+      on-add(type-path),
+      on-remove(type-path),
+      on-event(type-path),
+      on-packet(packet-filter),
+    }
+
+    resource system {
+      constructor(name: string);
+      add-commands: func();
+      add-query: func(terms: list<term>);
+      add-res: func(path: type-path);
+      add-res-mut: func(path: type-path);
+      add-events: func(path: type-path);
+      after: func(other: borrow<system>);
+      before: func(other: borrow<system>);
+    }
+
+    resource app {
+      add-systems: func(schedule: schedule, systems: list<borrow<system>>);
+      add-observer: func(trigger: trigger, system: borrow<system>);
+    }
+
+    resource commands {
+      spawn: func(bundle: bundle) -> entity;
+      insert: func(entity: entity, bundle: bundle);
+      remove: func(entity: entity, types: list<type-path>);
+      despawn: func(entity: entity);
+      send: func(event: type-path, value: json);
+    }
+
+    record row {
+      entity: entity,
+      values: list<json>,
+    }
+
+    resource query {
+      rows: func() -> list<row>;
+      set: func(entity: entity, index: u8, value: json);
+    }
+
+    resource res {
+      get: func() -> option<json>;
+      set: func(value: json);
+    }
+
+    resource events {
+      read: func() -> list<json>;
+    }
+
+    variant param {
+      commands(commands),
+      query(query),
+      res(res),
+      events(events),
+    }
+
+    record trigger-data {
+      entity: entity,
+      value: json,
+    }
+  }
+}

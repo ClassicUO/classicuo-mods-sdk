@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 namespace CuoModSdk;
 
 /// <summary>
@@ -7,7 +5,7 @@ namespace CuoModSdk;
 /// carries a handle into SDK-owned row storage; change the component through
 /// <see cref="Value"/> and it is written back when the system (or observer) returns —
 /// after the run's own commands, so it wins over a <c>Commands.Insert</c> of the same
-/// component — and ONLY when the value actually differs from what the host pushed (an
+/// component (<c>query.set</c>, or <c>commands.insert</c> when the run has a Commands) — and ONLY when the value actually differs from what the host returned (an
 /// unconditional write would fire <c>Changed</c> and UI relayout every frame).
 ///
 /// <para>The handle is a (storage, row) pair: copying it is fine, every copy names the
@@ -38,9 +36,9 @@ public readonly struct Mut<T> : IMutTerm
         internal override Mut<T> Bind(RowReader row, int index)
         {
             var key = (row.Slot << 8) | index;
-            var columns = row.Scope.MutColumns ??= new Dictionary<int, object>();
+            var columns = row.Scope.MutColumns;
             if (!columns.TryGetValue(key, out var column))
-                columns[key] = column = new MutColumn<T>(row.Scope, row.Rows, index);
+                columns[key] = column = new MutColumn<T>(row.Scope, row.Slot, row.Rows, index);
             return new Mut<T>((MutColumn<T>)column, row.RowIndex);
         }
     }
@@ -73,20 +71,23 @@ internal static class MutTerm<T>
 internal sealed class MutColumn<T>
 {
     readonly RunScope _scope;
-    readonly QueryRowsView _rows;
+    readonly int _slot;
+    readonly nint _rows;
     readonly int _index;
     readonly T[] _values;
     readonly bool[] _loaded;
     readonly bool[] _dirty;
 
-    internal MutColumn(RunScope scope, QueryRowsView rows, int index)
+    internal MutColumn(RunScope scope, int slot, nint rows, int index)
     {
         _scope = scope;
+        _slot = slot;
         _rows = rows;
         _index = index;
-        _values = new T[rows.Count];
-        _loaded = new bool[rows.Count];
-        _dirty = new bool[rows.Count];
+        var count = scope.Rows(slot).Count;
+        _values = new T[count];
+        _loaded = new bool[count];
+        _dirty = new bool[count];
         scope.AfterRun(WriteBack);
     }
 
@@ -101,23 +102,31 @@ internal sealed class MutColumn<T>
         return ref _values[row];
     }
 
-    T Parse(int row) => _rows.Row(row).Comp(_index) is { } comp ? comp.Parse(_scope.Host.Json<T>())! : default!;
+    T Parse(int row) => RowReader.ReadComp<T>(_scope, _rows, row, _index);
 
     void WriteBack()
     {
         var info = _scope.Host.Json<T>();
+        string? path = null;
         for (var i = 0; i < _dirty.Length; i++)
         {
             if (!_dirty[i])
                 continue;
-            // Compare against our own serialization of the pushed value, not the host's
+            // Compare against our own serialization of the host's value, not the host's
             // bytes: the two format differently, and a spurious write marks it changed.
-            // Both sides go through the reused scratch; only a change allocates a payload.
             var original = JsonScratch.Rent(Parse(i), info);
             try
             {
-                if (JsonScratch.Differs(_values[i], info, original.Span, out var now))
-                    _scope.Commands.InsertRaw(new Entity(_rows.Row(i).Entity), Comp.FromBytes(_scope.Host.Id<T>(), now));
+                if (!JsonScratch.Differs(_values[i], info, original.Span, out var now))
+                    continue;
+                var entity = EcsAbi.RowEntity(_rows, i);
+                // With a Commands param in the run, write through commands.insert: it is
+                // applied after the run's own commands (query.set lands at once, so a
+                // Commands.Insert of the same component would win over the Mut).
+                if (_scope.CommandsHandle != 0)
+                    _scope.Commands.InsertJson(entity, path ??= ModHost.PathOf<T>(), now);
+                else
+                    EcsAbi.QuerySet(_scope.Handle(_slot), entity, (byte)_index, now);
             }
             finally
             {

@@ -18,34 +18,18 @@
 //! export_mod!(setup);
 //! ```
 //!
-//! One source, two targets (pick one feature):
-//! - `p1` (default) — `wasm32-wasip1` core module: ECS over the FlatBuffers ABI
-//!   (abi/mod-abi.fbs), host functions over `env.mod_call` (docs/p1-wire.md).
-//! - `p2` — `wasm32-wasip2` component implementing wit/cuo-mod.wit.
+//! Build for `wasm32-wasip2`: the mod is a component implementing wit/cuo-mod.wit.
 //!
-//! `host`, `assets`, `actions` and `packets` are the WIT interfaces: wit-bindgen's
-//! modules on p2, a generated twin with the same API on p1. To see / block / rewrite
-//! packets, add a packet observer: `app.add_packet_observer(dir, ids, f)`.
+//! `host`, `assets`, `actions` and `packets` are the WIT interfaces (wit-bindgen's
+//! modules). To see / block / rewrite packets, add a packet observer:
+//! `app.add_packet_observer(dir, ids, f)`.
 
-#[cfg(all(feature = "p1", feature = "p2"))]
-compile_error!("enable exactly one of the `p1` / `p2` features");
-#[cfg(not(any(feature = "p1", feature = "p2")))]
-compile_error!("enable one of the `p1` (wasm32-wasip1) / `p2` (wasm32-wasip2) features");
+// The exports exist only on wasm: a host build (`cargo test`) has no mod to export.
+#![cfg_attr(not(target_family = "wasm"), allow(dead_code, unused_imports))]
 
-#[cfg(feature = "p1")]
-#[doc(hidden)]
-pub mod p1;
-#[cfg(feature = "p1")]
-pub(crate) use p1 as backend;
-#[cfg(feature = "p1")]
-pub use p1::cuo::{actions, assets, host, packets};
-
-#[cfg(feature = "p2")]
 #[doc(hidden)]
 pub mod p2;
-#[cfg(feature = "p2")]
 pub(crate) use p2 as backend;
-#[cfg(feature = "p2")]
 pub use p2::{actions, assets, host, packets};
 
 // Every ```rust block of the user guide compiles (`cargo test`).
@@ -57,7 +41,6 @@ mod ecs;
 mod extra;
 pub mod helpers;
 pub mod paths;
-mod sigcheck;
 pub mod storage;
 pub mod types;
 pub mod ui;

@@ -2,7 +2,7 @@
 //! parameters those run with. A system's parameter list IS its declaration: the SDK
 //! reads it once at setup and tells the client what to pass.
 //!
-//! Everything here is target-independent; `crate::backend` (p1 or p2) moves the data.
+//! `crate::backend` (the wit-bindgen glue) moves the data.
 
 use crate::backend;
 use crate::types::HasPath;
@@ -18,11 +18,7 @@ use std::ops::{Deref, DerefMut};
 pub trait Component: HasPath + Serialize + DeserializeOwned + 'static {}
 impl<T: HasPath + Serialize + DeserializeOwned + 'static> Component for T {}
 
-/// An entity id.
-///
-/// On the p1 target an entity you just spawned gets its real id when your system
-/// returns; until then it holds a placeholder that commands and components (e.g.
-/// `ChildOf`) in the same system still accept. Compare / hash entities after that.
+/// An entity id, valid as soon as `Commands::spawn` returns it.
 /// `Entity::default()` is the null entity (bits 0).
 #[derive(Clone, Copy, Default)]
 pub struct Entity(u64);
@@ -32,7 +28,7 @@ impl Entity {
         Entity(bits)
     }
     pub fn to_bits(self) -> u64 {
-        backend::resolve(self.0)
+        self.0
     }
 }
 impl From<u64> for Entity {
@@ -94,7 +90,7 @@ pub enum Schedule {
     Last,
 }
 
-// ── declarations (SDK-internal, shared by both backends) ─────────────────────────
+// ── declarations (SDK-internal) ─────────────────────────
 
 #[doc(hidden)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -145,7 +141,7 @@ pub enum TriggerDesc {
 #[doc(hidden)]
 pub enum Fetched {
     Commands(backend::CmdSink),
-    Query(Vec<RawRow>),
+    Query(Vec<RawRow>, backend::QuerySink),
     Res(Option<String>, backend::ResSink),
     Events(Vec<String>),
     Taken,
@@ -156,7 +152,6 @@ pub struct RawRow {
     pub entity: u64,
     /// JSON of the reading terms, in term order.
     pub comps: Vec<String>,
-    pub sink: backend::RowSink,
 }
 
 /// What a system run gets: its parameters' data, in declaration order, plus its
@@ -205,9 +200,6 @@ pub(crate) struct Entry {
     pub params: Vec<ParamDesc>,
     run: RunFn,
     locals: Vec<Box<dyn Any>>,
-    /// Each Res param's last delivered JSON, by param index: what a host
-    /// `unchanged` resource value stands for (p1 backend).
-    pub(crate) res_cache: Vec<Option<String>>,
 }
 
 impl Entry {
@@ -274,7 +266,6 @@ impl App {
             params: built.params,
             run: built.run,
             locals: Vec::new(),
-            res_cache: Vec::new(),
         });
     }
 
@@ -367,7 +358,7 @@ impl<T: Component> Drop for ResMut<T> {
     fn drop(&mut self) {
         let json = to_json(&self.value);
         if json != self.original {
-            backend::res_set(&self.sink, T::PATH, json);
+            backend::res_set(&self.sink, json);
         }
     }
 }
@@ -814,7 +805,6 @@ fn query_layout<D: QueryData, F: QueryFilter>() -> (Vec<Term>, usize) {
 struct QRow<D: QueryData> {
     entity: Entity,
     data: D::Owned,
-    sink: backend::RowSink,
 }
 
 /// The entities that have `D` (and pass `F`), with their components. Iterate with
@@ -822,6 +812,7 @@ struct QRow<D: QueryData> {
 /// changes are written back when the system returns).
 pub struct Query<D: QueryData, F: QueryFilter = ()> {
     rows: Vec<QRow<D>>,
+    sink: Option<backend::QuerySink>,
     /// Leading filter values per row (see `query_layout`): `D`'s reading index base.
     skip: u8,
     _f: PhantomData<F>,
@@ -860,11 +851,10 @@ impl<D: QueryData, F: QueryFilter> Query<D, F> {
 
 impl<D: QueryData, F: QueryFilter> Drop for Query<D, F> {
     fn drop(&mut self) {
+        let Some(sink) = &self.sink else { return };
         for r in &self.rows {
             let mut idx = self.skip;
-            D::write_back(&r.data, &mut idx, &mut |i, path, json| {
-                backend::row_set(&r.sink, r.entity.0, i, path, json)
-            });
+            D::write_back(&r.data, &mut idx, &mut |i, _path, json| backend::row_set(sink, r.entity.0, i, json));
         }
     }
 }
@@ -905,9 +895,9 @@ impl<D: QueryData + 'static, F: QueryFilter + 'static> SystemParam for Query<D, 
         params.push(ParamDesc::Query(query_terms::<D, F>()));
     }
     fn fetch(ctx: &mut ParamCtx) -> Option<Self> {
-        let raw = match ctx.take() {
-            Fetched::Query(rows) => rows,
-            _ => Vec::new(),
+        let (raw, sink) = match ctx.take() {
+            Fetched::Query(rows, sink) => (rows, Some(sink)),
+            _ => (Vec::new(), None),
         };
         let skip = query_layout::<D, F>().1;
         let rows = raw
@@ -916,10 +906,10 @@ impl<D: QueryData + 'static, F: QueryFilter + 'static> SystemParam for Query<D, 
                 let mut comps = r.comps.iter();
                 comps.by_ref().take(skip).for_each(drop);
                 let data = D::decode(&mut comps)?;
-                Some(QRow { entity: Entity(r.entity), data, sink: r.sink })
+                Some(QRow { entity: Entity(r.entity), data })
             })
             .collect();
-        Some(Query { rows, skip: skip as u8, _f: PhantomData })
+        Some(Query { rows, sink, skip: skip as u8, _f: PhantomData })
     }
 }
 
@@ -1360,12 +1350,8 @@ mod tests {
         app.add_systems(Schedule::Update, counted);
         let fetched = |res: Option<&str>| {
             vec![
-                Fetched::Query(vec![RawRow {
-                    entity: 9,
-                    comps: vec![r#"{"Value":3}"#.into()],
-                    sink: test_sink(),
-                }]),
-                Fetched::Res(res.map(String::from), test_res_sink()),
+                Fetched::Query(vec![RawRow { entity: 9, comps: vec![r#"{"Value":3}"#.into()] }], backend::QuerySink(None)),
+                Fetched::Res(res.map(String::from), backend::ResSink(None)),
             ]
         };
         let e = &mut app.entries[0];
@@ -1384,17 +1370,9 @@ mod tests {
         }
         let mut app = App::default();
         app.add_systems(Schedule::Update, read);
-        let row = RawRow { entity: 1, comps: vec![r#"{"Value":7}"#.into(), r#"{"Value":42}"#.into()], sink: test_sink() };
-        app.entries[0].run(vec![Fetched::Query(vec![row])], None);
+        let row = RawRow { entity: 1, comps: vec![r#"{"Value":7}"#.into(), r#"{"Value":42}"#.into()] };
+        app.entries[0].run(vec![Fetched::Query(vec![row], backend::QuerySink(None))], None);
         assert_eq!(HUE.with(|h| h.get()), 42);
     }
 
-    #[cfg(feature = "p1")]
-    fn test_sink() -> backend::RowSink {
-        backend::RowSink
-    }
-    #[cfg(feature = "p1")]
-    fn test_res_sink() -> backend::ResSink {
-        backend::ResSink
-    }
 }

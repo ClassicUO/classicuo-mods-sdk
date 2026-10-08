@@ -1,6 +1,6 @@
 //! wasm32-wasip2 backend: a component implementing the `cuo:modding/mod` world
 //! (wit/cuo-mod.wit) with wit-bindgen. `setup` / `run` / `observe` / `observe-packet`
-//! map onto the same App and system machinery as p1.
+//! map onto the App and its systems.
 
 #[allow(clippy::all, dead_code, unused)]
 mod bindings {
@@ -23,14 +23,11 @@ pub use bindings::cuo::modding::{actions, assets, host, packets};
 
 #[doc(hidden)]
 pub struct CmdSink(wit::Commands);
+/// `None` only in unit tests (no host).
 #[doc(hidden)]
-pub struct RowSink(wit::Row);
+pub struct QuerySink(pub(crate) Option<wit::Query>);
 #[doc(hidden)]
-pub struct ResSink(wit::Res);
-
-pub(crate) fn resolve(bits: u64) -> u64 {
-    bits
-}
+pub struct ResSink(pub(crate) Option<wit::Res>);
 
 fn bundle(b: Vec<(&'static str, String)>) -> Vec<(String, String)> {
     b.into_iter().map(|(p, j)| (p.to_string(), j)).collect()
@@ -52,11 +49,15 @@ pub(crate) fn despawn(c: &CmdSink, entity: u64) {
 pub(crate) fn send(c: &CmdSink, path: &'static str, json: String) {
     c.0.send(path, &json)
 }
-pub(crate) fn row_set(r: &RowSink, _entity: u64, index: u8, _path: &'static str, json: String) {
-    r.0.set(index, &json)
+pub(crate) fn row_set(q: &QuerySink, entity: u64, index: u8, json: String) {
+    if let Some(q) = &q.0 {
+        q.set(entity, index, &json)
+    }
 }
-pub(crate) fn res_set(r: &ResSink, _path: &'static str, json: String) {
-    r.0.set(&json)
+pub(crate) fn res_set(r: &ResSink, json: String) {
+    if let Some(r) = &r.0 {
+        r.set(&json)
+    }
 }
 
 struct State {
@@ -73,6 +74,7 @@ fn state() -> &'static mut State {
     }
 }
 
+#[cfg(target_family = "wasm")]
 extern "Rust" {
     fn __cuo_mod_setup(app: &mut App);
 }
@@ -100,32 +102,17 @@ fn schedule(s: Schedule) -> wit::Schedule {
     }
 }
 
-/// Reading terms (the ones whose value each row carries) of a query param.
-fn reading_terms(p: &ParamDesc) -> u8 {
-    match p {
-        ParamDesc::Query(terms) => {
-            terms.iter().filter(|t| t.reads()).count() as u8
-        }
-        _ => 0,
-    }
-}
-
-fn fetch(descs: &[ParamDesc], params: Vec<wit::Param>) -> Vec<Fetched> {
-    descs
-        .iter()
-        .zip(params)
-        .map(|(d, p)| match p {
+fn fetch(params: Vec<wit::Param>) -> Vec<Fetched> {
+    params
+        .into_iter()
+        .map(|p| match p {
             wit::Param::Commands(c) => Fetched::Commands(CmdSink(c)),
             wit::Param::Query(q) => {
-                let n = reading_terms(d);
-                let mut rows = Vec::new();
-                while let Some(row) = q.next() {
-                    let comps = (0..n).map(|i| row.get(i)).collect();
-                    rows.push(RawRow { entity: row.entity(), comps, sink: RowSink(row) });
-                }
-                Fetched::Query(rows)
+                // One host call per query param per run: every row at once.
+                let rows = q.rows().into_iter().map(|r| RawRow { entity: r.entity, comps: r.values }).collect();
+                Fetched::Query(rows, QuerySink(Some(q)))
             }
-            wit::Param::Res(r) => Fetched::Res(r.get(), ResSink(r)),
+            wit::Param::Res(r) => Fetched::Res(r.get(), ResSink(Some(r))),
             wit::Param::Events(e) => Fetched::Events(e.read()),
         })
         .collect()
@@ -136,7 +123,7 @@ fn run(name: &str, params: Vec<wit::Param>, trigger: Option<TriggerData>) -> Ver
     let Some(&i) = st.by_name.get(name) else { return Verdict::Pass };
     let mut app = std::mem::take(&mut st.app);
     let entry = &mut app.entries[i];
-    let fetched = fetch(&entry.params, params);
+    let fetched = fetch(params);
     let verdict = entry.run(fetched, trigger);
     state().app = app;
     verdict
@@ -151,6 +138,7 @@ fn wit_direction(d: PacketDirection) -> wit::PacketDirection {
 
 struct Mod;
 
+#[cfg(target_family = "wasm")]
 impl bindings::Guest for Mod {
     fn setup(wit_app: wit::App) {
         let mut app = App::default();
@@ -225,4 +213,5 @@ impl bindings::Guest for Mod {
     }
 }
 
+#[cfg(target_family = "wasm")]
 bindings::export!(Mod with_types_in bindings);

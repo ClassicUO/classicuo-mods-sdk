@@ -1,26 +1,22 @@
 using System.Text.Json;
-using ModAbi;
 
 namespace CuoModSdk;
 
 /// <summary>
 /// Changes to the world — spawn, insert, remove, despawn, send events — applied by the
 /// host in order AFTER the system returns. Payload types are the generated
-/// <c>CuoModSdk.Types</c> shapes; their type ids and JSON metadata are resolved for you.
+/// <c>CuoModSdk.Types</c> shapes; their type paths and JSON metadata are resolved for you.
+/// A spawned entity's id is real as soon as the spawn is emitted.
 /// </summary>
 public sealed class Commands : ISystemParam<Commands>
 {
-    readonly CommandBufferBuilder _buffer;
-    readonly ModHost _host;
+    int _handle;
     EntityBuilder? _pending;
+    readonly Utf8JsonWriter _writer = new(EcsAbi.Json);
 
-    internal Commands(CommandBufferBuilder buffer, ModHost host)
-    {
-        _buffer = buffer;
-        _host = host;
-    }
+    internal Commands() { }
 
-    public static void Describe(ParamDescriber d) => d.Add(new ParamDeclT { Kind = ParamKind.Commands, TypeId = ModHost.NoneType });
+    public static void Describe(ParamDescriber d) => d.Add(new ParamDecl { Kind = ParamKind.Commands });
 
     public static bool TryCreate(ParamContext c, out Commands value)
     {
@@ -28,75 +24,101 @@ public sealed class Commands : ISystemParam<Commands>
         return true;
     }
 
+    internal void Begin(int handle) => _handle = handle;
+
+    internal void End()
+    {
+        _pending = null;
+        _handle = 0;
+        EcsAbi.BundleClear();
+    }
+
+    int Handle => _handle != 0
+        ? _handle
+        : throw new InvalidOperationException("Commands used outside a run that declared a Commands parameter");
+
     /// <summary>Journal / overhead text, through the <c>cuo:chat/message</c> event.</summary>
     public ChatApi Chat => new(this);
 
     /// <summary>
     /// Spawn an entity; chain <c>.With(..)</c> for its components and
     /// <c>.ChildOf(parent)</c> to parent it. The builder converts to the
-    /// <see cref="CuoModSdk.Entity"/> (a placeholder until the host assigned the real id).
+    /// <see cref="CuoModSdk.Entity"/> (asking for it emits the spawn).
     /// </summary>
     public EntityBuilder Spawn()
     {
         Flush();
-        return _pending = new EntityBuilder(this, ModRuntime.NextTemp());
+        return _pending = new EntityBuilder(this);
     }
 
     /// <summary>Insert / overwrite a component.</summary>
     public void Insert<T>(Entity entity, T value)
     {
         Flush();
-        _buffer.Insert(entity.Wire, Payload(value));
+        AddToBundle(value);
+        EcsAbi.Insert(Handle, entity.Id);
     }
 
     /// <summary>Insert a zero-size marker component.</summary>
     public void Insert<T>(Entity entity)
     {
         Flush();
-        _buffer.Insert(entity.Wire, Comp.Marker(_host.Id<T>()));
+        EcsAbi.BundleAddMarker(ModHost.PathOf<T>());
+        EcsAbi.Insert(Handle, entity.Id);
     }
 
     public void Remove<T>(Entity entity)
     {
         Flush();
-        _buffer.Remove(entity.Wire, _host.Id<T>());
+        EcsAbi.Remove(Handle, entity.Id, ModHost.PathOf<T>());
     }
 
     /// <summary>Despawn an entity and its children.</summary>
     public void Despawn(Entity entity)
     {
         Flush();
-        _buffer.Despawn(entity.Wire);
+        EcsAbi.Despawn(Handle, entity.Id);
     }
 
-    /// <summary>Send an event: observers of it fire, <see cref="EventReader{T}"/>s see it. <paramref name="target"/> aims it at an entity.</summary>
-    public void Send<T>(T @event, Entity target = default)
+    /// <summary>Send an event: observers of it fire, <see cref="EventReader{T}"/>s see it.</summary>
+    public void Send<T>(T @event)
     {
         Flush();
-        _buffer.EmitEvent(ModHost.PathOf<T>(), target.Id, JsonSerializer.Serialize(@event, _host.Json<T>()));
+        EcsAbi.BundleClear();
+        var start = WriteJson(@event);
+        EcsAbi.Send(Handle, ModHost.PathOf<T>(), start);
+        EcsAbi.BundleClear();
     }
 
-    /// <summary>Overwrite a resource (<see cref="ResMut{T}"/> is the parameter form).</summary>
-    public void SetResource<T>(T value)
+    /// <summary>
+    /// Overwrite a resource. Declare it once in Setup with
+    /// <see cref="ModBuilder.WritesResource{T}"/>; the write lands at the end of this
+    /// system's stage (<see cref="ResMut{T}"/> is the parameter form, applied when the
+    /// system returns).
+    /// </summary>
+    public void SetResource<T>(T value) => ResourceWrites.Queue(value);
+
+    // Serializes into EcsAbi.Json; returns where the value starts.
+    int WriteJson<T>(T value)
     {
-        Flush();
-        _buffer.ResourceSet(Payload(value));
+        var start = EcsAbi.Json.WrittenCount;
+        _writer.Reset(EcsAbi.Json);
+        JsonSerializer.Serialize(_writer, value, ModRuntime.Host.Json<T>());
+        _writer.Flush();
+        return start;
     }
 
-    internal ModHost Host => _host;
+    internal void AddToBundle<T>(T value) => EcsAbi.BundleAdd(ModHost.PathOf<T>(), WriteJson(value));
 
-    internal Comp Payload<T>(T value) => Comp.Value(_host.Id<T>(), value, _host.Json<T>());
-
-    internal void ResourceSetRaw(ushort typeId, byte[] json)
+    /// <summary>Mut write-back: an insert, so it lands after this run's own commands.</summary>
+    internal void InsertJson(ulong entity, string path, ReadOnlySpan<byte> json)
     {
         Flush();
-        _buffer.ResourceSet(Comp.FromBytes(typeId, json));
-    }
-
-    internal void InsertRaw(Entity entity, Comp comp)
-    {
-        Flush();
-        _buffer.Insert(entity.Wire, comp);
+        var start = EcsAbi.Json.WrittenCount;
+        json.CopyTo(EcsAbi.Json.GetSpan(json.Length));
+        EcsAbi.Json.Advance(json.Length);
+        EcsAbi.BundleAdd(path, start);
+        EcsAbi.Insert(Handle, entity);
     }
 
     /// <summary>Emit the open <c>Spawn()</c> chain, if any. Every other command — and the end of the run — does this first.</summary>
@@ -106,56 +128,52 @@ public sealed class Commands : ISystemParam<Commands>
         if (pending == null)
             return;
         _pending = null;
-        pending.Emit(_buffer);
+        pending.Emit(EcsAbi.Spawn(Handle));
     }
 
-    internal void FlushIf(EntityBuilder builder)
-    {
-        if (_pending == builder)
-            Flush();
-    }
+    internal bool IsPending(EntityBuilder builder) => _pending == builder;
 }
 
 /// <summary>
-/// An entity being spawned. Its SpawnCmd is emitted when the chain ends (the next
-/// command, or the end of the run), so it always precedes anything referring to it.
-/// A <c>.With</c> after that becomes an insert.
+/// An entity being spawned. The spawn is emitted when the chain ends (the next command,
+/// the end of the run, or when its <see cref="Id"/> is asked for), so its components
+/// arrive in one bundle. A <c>.With</c> after that becomes an insert.
 /// </summary>
 public sealed class EntityBuilder
 {
     readonly Commands _commands;
-    readonly uint _temp;
-    readonly List<Comp> _comps = new();
-    bool _emitted;
+    ulong _id;
 
-    internal EntityBuilder(Commands commands, uint temp)
+    internal EntityBuilder(Commands commands) => _commands = commands;
+
+    /// <summary>The spawned entity (emits the spawn if it is still open).</summary>
+    public Entity Id
     {
-        _commands = commands;
-        _temp = temp;
+        get
+        {
+            if (_commands.IsPending(this))
+                _commands.Flush();
+            return new Entity(_id);
+        }
     }
-
-    /// <summary>The spawned entity (a placeholder until the host assigned the real id).</summary>
-    public Entity Id => new(Entity.Pending | _temp);
 
     /// <summary>Set a component (generated payload type, or a bare enum like <c>Interaction</c>).</summary>
     public EntityBuilder With<T>(T value)
     {
-        var comp = _commands.Payload(value);
-        if (_emitted)
-            _commands.InsertRaw(Id, comp);
+        if (_commands.IsPending(this))
+            _commands.AddToBundle(value);
         else
-            _comps.Add(comp);
+            _commands.Insert(new Entity(_id), value);
         return this;
     }
 
     /// <summary>Set a zero-size marker component (<c>UiMovable</c>, <c>UiContainsByBounds</c>, …).</summary>
     public EntityBuilder With<T>()
     {
-        var comp = Comp.Marker(_commands.Host.Id<T>());
-        if (_emitted)
-            _commands.InsertRaw(Id, comp);
+        if (_commands.IsPending(this))
+            EcsAbi.BundleAddMarker(ModHost.PathOf<T>());
         else
-            _comps.Add(comp);
+            _commands.Insert<T>(new Entity(_id));
         return this;
     }
 
@@ -164,11 +182,7 @@ public sealed class EntityBuilder
 
     public static implicit operator Entity(EntityBuilder builder) => builder.Id;
 
-    internal void Emit(CommandBufferBuilder buffer)
-    {
-        _emitted = true;
-        buffer.Spawn(_temp, _comps.ToArray());
-    }
+    internal void Emit(ulong id) => _id = id;
 }
 
 /// <summary>Chat output, through the <c>cuo:chat/message</c> event. Reached as <c>Commands.Chat</c>.</summary>
@@ -196,4 +210,30 @@ public readonly struct ChatApi
         {
             Text = text, Name = name, Hue = hue, Serial = serial, Font = font, IsUnicode = unicode, Kind = 0,
         });
+}
+
+/// <summary>The <see cref="Commands.SetResource{T}"/> queue and the SDK systems that apply it.</summary>
+internal static class ResourceWrites
+{
+    /// <summary>The declared writable resources, in the flush systems' param order.</summary>
+    internal static readonly List<string> Paths = new();
+    static readonly List<(int Slot, byte[] Json)> _queue = new();
+
+    internal static void Queue<T>(T value)
+    {
+        var path = ModHost.PathOf<T>();
+        var slot = Paths.IndexOf(path);
+        if (slot < 0)
+            throw new InvalidOperationException(
+                $"SetResource<{typeof(T).Name}>: declare m.WritesResource<{typeof(T).Name}>() in Setup " +
+                $"('{path}' must be held writable by the SDK's flush systems)");
+        _queue.Add((slot, JsonSerializer.SerializeToUtf8Bytes(value, ModRuntime.Host.Json<T>())));
+    }
+
+    internal static void Flush(RunScope scope)
+    {
+        foreach (var (slot, json) in _queue)
+            EcsAbi.ResSet(scope.Handle(slot), json);
+        _queue.Clear();
+    }
 }

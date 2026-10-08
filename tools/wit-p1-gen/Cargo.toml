@@ -1,7 +1,5 @@
-# Generates from wit/cuo-mod.wit:
-#   rust/src/p1/cuo.rs       the wasm32-wasip1 twin of the cuo:mod interfaces (JSON over mod_call)
-#   rust/src/sigcheck.rs     compile-time proof that the two agree
-# Run from the SDK root: `make gen-p1`.
+# Generates from wit/cuo-mod.wit the ClassicUO host's C# signature table for the p2
+# component bridge (root `make gen-mod-wit-sig`); bin wit-cs-gen writes dotnet/Cuo.g.cs.
 [workspace]
 
 [package]

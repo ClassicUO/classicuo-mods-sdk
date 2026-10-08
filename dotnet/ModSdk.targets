@@ -6,49 +6,33 @@
     <PackageReference Include="runtime.$(NETCoreSdkRuntimeIdentifier).Microsoft.DotNet.ILCompiler.LLVM" Version="10.0.0-*" />
     <ProjectReference Include="$(MSBuildThisFileDirectory)CuoModSdk.csproj" />
 
-    <!-- Export the SDK's UnmanagedCallersOnly ABI entrypoints (mod_alloc /
-         mod_arena_reset / mod_run / mod_observer / mod_spawned) from the
-         mod's module. mod_setup is the one export that must construct the mod's own
-         type, so it is generated below instead. -->
+    <!-- Export the SDK's UnmanagedCallersOnly entrypoints (run / observe /
+         observe-packet / cabi_post_observe-packet) from the mod's component. `setup` is
+         the one export that must construct the mod's own type, so it is generated below
+         instead. -->
     <UnmanagedEntryPointsAssembly Include="CuoModSdk" />
+
+    <!-- World cuo:modding/mod: wasm-component-ld encodes the module as a wasip2
+         COMPONENT of this world (NativeAOT-LLVM's default wasi target is wasip2; the
+         runtime's own wasi wit is globbed in beside it by Microsoft.NETCore.Native.Wasm.targets). -->
+    <WasmComponentTypeWit Include="$(MSBuildThisFileDirectory)Wit\ModWorld_component_type.wit" />
   </ItemGroup>
 
-  <!-- The mod_setup export, generated from <CuoModType>. It is also ILC's only root for
+  <!-- The `setup` export, generated from <CuoModType>. It is also ILC's only root for
        the mod's own code (nothing in the SDK references the mod assembly), so it cannot
        live in the SDK. No Inputs/Outputs: the Compile item must be added on every build,
        and WriteOnlyWhenDifferent keeps the file's timestamp stable for incremental. -->
   <Target Name="GenerateModEntry" BeforeTargets="BeforeCompile;CoreCompile">
     <Error Condition="'$(CuoModType)' == ''"
-           Text="Set &lt;CuoModType&gt; to the mod's CuoModSdk.Mod subclass (e.g. &lt;CuoModType&gt;MyMod.Entry&lt;/CuoModType&gt;) — the SDK generates the mod_setup export from it." />
+           Text="Set &lt;CuoModType&gt; to the mod's CuoModSdk.Mod subclass (e.g. &lt;CuoModType&gt;MyMod.Entry&lt;/CuoModType&gt;) — the SDK generates the setup export from it." />
     <PropertyGroup>
       <_CuoModEntry>$(IntermediateOutputPath)ModEntry.g.cs</_CuoModEntry>
     </PropertyGroup>
     <WriteLinesToFile File="$(_CuoModEntry)" Overwrite="true" WriteOnlyWhenDifferent="true"
-                      Lines="// &lt;auto-generated&gt; by ModSdk.targets — the mod ABI entry point for $(CuoModType).;internal static class CuoModEntry;{;    [System.Runtime.InteropServices.UnmanagedCallersOnly(EntryPoint = &quot;mod_setup&quot;)];    static long ModSetup(int ptr, int len) =&gt; CuoModSdk.ModRuntime.Setup(ptr, len, new global::$(CuoModType)())%3B;}" />
+                      Lines="// &lt;auto-generated&gt; by ModSdk.targets — the component's setup export for $(CuoModType).;internal static class CuoModEntry;{;    // setup: func(app: own&lt;app&gt;);    [System.Runtime.InteropServices.UnmanagedCallersOnly(EntryPoint = &quot;setup&quot;)];    static void Setup(int app) =&gt; CuoModSdk.ModRuntime.Setup(app, new global::$(CuoModType)())%3B;}" />
     <ItemGroup>
       <Compile Include="$(_CuoModEntry)" />
       <FileWrites Include="$(_CuoModEntry)" />
-    </ItemGroup>
-  </Target>
-
-  <!-- CORE-MODULE LEVER 1 (retarget wasip1). Microsoft.NETCore.Native.targets sets
-       IlcLlvmTarget=wasm32-unknown-wasip2, making clang pick wasm-component-ld — which
-       ALWAYS encodes a wasip2 COMPONENT. Retargeting to wasip1 makes clang pick plain
-       wasm-ld, emitting a bare CORE MODULE. Override in an execution-phase Target
-       (import-time PropertyGroup would win over a csproj property);
-       WriteIlcRspFileForCompilation is the first IlcLlvmTarget consumer. -->
-  <Target Name="ForceWasip1CoreModule" BeforeTargets="WriteIlcRspFileForCompilation">
-    <PropertyGroup>
-      <IlcLlvmTarget>wasm32-unknown-wasip1</IlcLlvmTarget>
-    </PropertyGroup>
-  </Target>
-
-  <!-- CORE-MODULE LEVER 2 (strip component-type wits). Wasm.targets auto-globs
-       $(IlcFrameworkNativePath)*.wit into WasmComponentTypeWit; Native.targets turns each
-       into a component-type linker arg plain wasm-ld rejects. Clear them after the glob. -->
-  <Target Name="StripComponentType" AfterTargets="SetupOSSpecificProps">
-    <ItemGroup>
-      <WasmComponentTypeWit Remove="@(WasmComponentTypeWit)" />
     </ItemGroup>
   </Target>
 </Project>

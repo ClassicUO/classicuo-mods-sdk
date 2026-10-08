@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <!-- cuo-mod-sdk-dotnet — guest-side SDK for C# core-wasm ClassicUO mods; the .NET
-         twin of ../rust. Plain net10.0 classlib: a mod references
-         it through ModSdk.props / ModSdk.targets and publishes wasi-wasm — ILC compiles
-         the SDK IL into the mod's core module and exports the SDK's ABI entrypoints
-         (UnmanagedEntryPointsAssembly in ModSdk.targets). -->
+    <!-- cuo-mod-sdk-dotnet — guest-side SDK for C# ClassicUO mods (wasm32-wasip2
+         components, world cuo:modding/mod); the .NET twin of ../rust. Plain net10.0
+         classlib: a mod references it through ModSdk.props / ModSdk.targets and publishes
+         wasi-wasm — ILC compiles the SDK IL into the mod's component and exports the
+         SDK's entrypoints (UnmanagedEntryPointsAssembly in ModSdk.targets). Wit/ is the
+         wit-bindgen canonical-ABI glue (regen-wit.sh). -->
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -16,14 +17,5 @@
         <AssemblyName>CuoModSdk</AssemblyName>
         <RootNamespace>CuoModSdk</RootNamespace>
     </PropertyGroup>
-
-    <!-- Core-wasm mod ABI: Google.FlatBuffers (official, no reflection, no generic virtual
-         methods). ModAbi.g.cs is flatc output for ../abi/mod-abi.fbs, committed so mod
-         authors don't need flatc; regenerate with ./regen-abi.sh. flatc and the runtime
-         package must be the same release. The host still uses FlatSharp; the wire format is
-         plain FlatBuffers either way. -->
-    <ItemGroup>
-        <PackageReference Include="Google.FlatBuffers" Version="25.2.10" />
-    </ItemGroup>
 
 </Project>

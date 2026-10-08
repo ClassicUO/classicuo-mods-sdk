@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using ModAbi;
+using Ecs = ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports;
 
 namespace CuoModSdk;
 
@@ -22,12 +22,11 @@ namespace CuoModSdk;
 public sealed class ModBuilder
 {
     readonly ModHost _host;
-    readonly List<SystemDeclT> _sysDecls = new();
-    readonly List<ObserverDeclT> _obsDecls = new();
     readonly List<Types.ModHotkeyBinding> _hotkeys = new();
 
-    internal readonly List<Entry> Systems = new();
-    internal readonly List<Entry> Observers = new();
+    /// <summary>Systems and observers, in declaration order.</summary>
+    internal readonly List<Entry> Entries = new();
+    int _systems, _observers;
 
     internal ModBuilder(ModHost host) => _host = host;
 
@@ -539,59 +538,139 @@ public sealed class ModBuilder
 
     ParamDescriber Describer() => new(_host);
 
-    static ObserverDeclT PacketDecl(PacketDirection direction, ReadOnlySpan<byte> ids) => new()
-    {
-        Kind = ObserverKind.Packet,
-        TypeId = ModHost.NoneType,
-        PacketDirection = (ModAbi.PacketDirection)direction,
-        PacketIds = ids.IsEmpty ? null : [.. ids],
-    };
+    static ObserverTrigger PacketDecl(PacketDirection direction, ReadOnlySpan<byte> ids) =>
+        new(ObserverKind.OnPacket, "", direction, ids.ToArray());
 
     SystemHandle AddSystem(ParamDescriber d, Action<RunScope> run)
     {
-        var id = (uint)_sysDecls.Count;
-        var decl = new SystemDeclT
-        {
-            Id = id,
-            // Host diagnostics; must stay unique within the mod.
-            Name = $"sys-{id}",
-            Schedule = ModAbi.Schedule.Update,
-            Params = d.Params,
-        };
-        _sysDecls.Add(decl);
-        Systems.Add(new Entry(run));
-        return new SystemHandle(decl);
+        // Host diagnostics + the name `run` is called with; must stay unique within the mod.
+        var entry = new Entry(run, $"sys-{_systems++}", d.Params) { Schedule = Stage.Update };
+        Entries.Add(entry);
+        return new SystemHandle(entry);
     }
 
-    void AddObserver(ObserverDeclT decl, ParamDescriber d, Action<RunScope> run)
+    void AddObserver(ObserverTrigger trigger, ParamDescriber d, Action<RunScope> run) =>
+        Entries.Add(new Entry(run, $"obs-{_observers++}", d.Params) { Trigger = trigger });
+
+    /// <summary>
+    /// Declares that this mod writes resource <typeparamref name="T"/> with
+    /// <see cref="Commands.SetResource{T}"/>. The component contract has no
+    /// resource-set command: the SDK queues those writes and applies them through its own
+    /// systems (one per stage the mod runs in, after the mod's systems there, plus
+    /// <see cref="Stage.Last"/>) that hold the declared resources writable. A write from
+    /// a system lands at the end of that system's stage; from an observer, at the next
+    /// such point.
+    /// </summary>
+    public void WritesResource<T>()
     {
-        decl.Id = (uint)_obsDecls.Count;
-        decl.Params = d.Params;
-        _obsDecls.Add(decl);
-        Observers.Add(new Entry(run));
+        var path = ModHost.PathOf<T>();
+        if (!ResourceWrites.Paths.Contains(path))
+            ResourceWrites.Paths.Add(path);
     }
 
-    /// <summary>Declarations the collected hotkeys imply. Called once, after the mod's Setup returned.</summary>
+    /// <summary>Declarations the collected hotkeys and resource writes imply. Called once, after the mod's Setup returned.</summary>
     internal void Finish()
     {
-        if (_hotkeys.Count == 0)
+        // Only the mod's own SetResource calls need a flush in every stage; the hotkey
+        // set is written once, by the Startup flush.
+        var everyStage = ResourceWrites.Paths.Count > 0;
+        if (_hotkeys.Count > 0)
+        {
+            // The binding set is this mod's slice of cuo:input/mod-hotkeys, written by the
+            // Startup flush whether or not the host has a value yet.
+            WritesResource<Types.ModHotkeyBindingsDto>();
+            ResourceWrites.Queue(new Types.ModHotkeyBindingsDto { Bindings = _hotkeys.ToArray() });
+        }
+        var paths = ResourceWrites.Paths;
+        if (paths.Count == 0)
             return;
-        var bindings = new Types.ModHotkeyBindingsDto { Bindings = _hotkeys.ToArray() };
-        AddSystem((Commands cmds) => cmds.SetResource(bindings)).InStage(Stage.Startup).Label("hotkeys");
+        var mods = Entries.ToArray();
+        for (var stage = Stage.Startup; stage <= Stage.Last; stage++)
+        {
+            var here = Array.FindAll(mods, e => e.Trigger == null && e.Schedule == stage);
+            if (stage != Stage.Startup && (!everyStage || (here.Length == 0 && stage != Stage.Last)))
+                continue;
+            var d = Describer();
+            foreach (var path in paths)
+                d.Add(new ParamDecl { Kind = ParamKind.ResMut, Path = path });
+            var flush = AddSystem(d, ResourceWrites.Flush).InStage(stage).Label($"sdk-resource-writes-{stage}");
+            foreach (var e in here)
+                flush.After(new SystemHandle(e));
+        }
     }
 
-    internal SetupReplyT BuildReply() => new()
+    /// <summary>Declares every entry on the host (called once, after <see cref="Finish"/>).</summary>
+    internal void Declare(Ecs.App app)
     {
-        Systems = _sysDecls,
-        Observers = _obsDecls,
+        // Every handle first: `after` / `before` borrow the other system.
+        var systems = new Ecs.System[Entries.Count];
+        for (var i = 0; i < systems.Length; i++)
+            systems[i] = new Ecs.System(Entries[i].Name);
+        try
+        {
+            for (var i = 0; i < systems.Length; i++)
+            {
+                var e = Entries[i];
+                var sys = systems[i];
+                foreach (var other in e.After)
+                    sys.After(systems[Entries.IndexOf(other)]);
+                foreach (var other in e.Before)
+                    sys.Before(systems[Entries.IndexOf(other)]);
+                foreach (var p in e.Params)
+                {
+                    switch (p.Kind)
+                    {
+                        case ParamKind.Commands: sys.AddCommands(); break;
+                        case ParamKind.Query: sys.AddQuery(p.Terms!.ConvertAll(Term)); break;
+                        case ParamKind.Res: sys.AddRes(p.Path); break;
+                        case ParamKind.ResMut: sys.AddResMut(p.Path); break;
+                        case ParamKind.Events: sys.AddEvents(p.Path); break;
+                    }
+                }
+                if (e.Trigger is { } t)
+                    app.AddObserver(Trigger(t), sys);
+                else
+                    app.AddSystems((Ecs.Schedule)(byte)e.Schedule, [sys]);
+            }
+        }
+        finally
+        {
+            foreach (var sys in systems)
+                sys.Dispose();
+        }
+    }
+
+    static Ecs.Term Term(QueryTerm t) => t.Kind switch
+    {
+        TermKind.Ref => Ecs.Term.@ref(t.Path),
+        TermKind.Mut => Ecs.Term.Mut(t.Path),
+        TermKind.With => Ecs.Term.With(t.Path),
+        TermKind.Without => Ecs.Term.Without(t.Path),
+        TermKind.Changed => Ecs.Term.Changed(t.Path),
+        _ => Ecs.Term.Added(t.Path),
+    };
+
+    static Ecs.Trigger Trigger(ObserverTrigger t) => t.Kind switch
+    {
+        ObserverKind.OnAdd => Ecs.Trigger.OnAdd(t.Path),
+        ObserverKind.OnRemove => Ecs.Trigger.OnRemove(t.Path),
+        ObserverKind.OnEvent => Ecs.Trigger.OnEvent(t.Path),
+        _ => Ecs.Trigger.OnPacket(new Ecs.PacketFilter((Ecs.PacketDirection)(byte)t.Direction, t.Ids)),
     };
 }
 
-/// <summary>A registered system / observer body and its <see cref="Local{T}"/> slots.</summary>
-internal sealed class Entry(Action<RunScope> run)
+/// <summary>A registered system / observer: its body, declaration and <see cref="Local{T}"/> slots.</summary>
+internal sealed class Entry(Action<RunScope> run, string name, List<ParamDecl> @params)
 {
     internal readonly Action<RunScope> Run = run;
     internal readonly List<object> Locals = new();
+    internal readonly List<ParamDecl> Params = @params;
+    internal string Name = name;
+    internal byte[] NameUtf8 = System.Text.Encoding.UTF8.GetBytes(name);
+    internal Stage Schedule;
+    internal ObserverTrigger? Trigger;
+    internal readonly List<Entry> After = new();
+    internal readonly List<Entry> Before = new();
 }
 
 /// <summary>
@@ -600,36 +679,34 @@ internal sealed class Entry(Action<RunScope> run)
 /// </summary>
 public readonly struct SystemHandle
 {
-    readonly SystemDeclT _decl;
+    readonly Entry _entry;
 
-    internal SystemHandle(SystemDeclT decl) => _decl = decl;
-
-    internal uint Id => _decl.Id;
+    internal SystemHandle(Entry entry) => _entry = entry;
 
     /// <summary>Run in a host stage.</summary>
     public SystemHandle InStage(Stage stage)
     {
-        _decl.Schedule = (ModAbi.Schedule)(byte)stage;
-        _decl.CustomStage = null;
+        _entry.Schedule = stage;
         return this;
     }
 
     public SystemHandle After(SystemHandle system)
     {
-        (_decl.After ??= new List<uint>()).Add(system.Id);
+        _entry.After.Add(system._entry);
         return this;
     }
 
     public SystemHandle Before(SystemHandle system)
     {
-        (_decl.Before ??= new List<uint>()).Add(system.Id);
+        _entry.Before.Add(system._entry);
         return this;
     }
 
     /// <summary>Name the system for host diagnostics (default <c>sys-N</c>). Must stay unique within the mod.</summary>
     public SystemHandle Label(string name)
     {
-        _decl.Name = name;
+        _entry.Name = name;
+        _entry.NameUtf8 = System.Text.Encoding.UTF8.GetBytes(name);
         return this;
     }
 }

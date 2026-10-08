@@ -1,5 +1,4 @@
 using System.Text.Json;
-using ModAbi;
 
 namespace CuoModSdk;
 
@@ -9,8 +8,8 @@ namespace CuoModSdk;
 /// — the same shape as a host <c>TinyEcs.Bevy</c> system.
 ///
 /// <para><see cref="Describe"/> runs once, at <c>AddSystem</c> time, and appends this
-/// parameter's wire declaration. <see cref="TryCreate"/> runs per call and builds the
-/// value from the data the host pushed; <c>false</c> skips the run (a <see cref="Res{T}"/>
+/// parameter's declaration. <see cref="TryCreate"/> runs per call and builds the value
+/// from the param handle the host passed; <c>false</c> skips the run (a <see cref="Res{T}"/>
 /// the host has no value for — take <see cref="Opt{P}"/> to run anyway).</para>
 ///
 /// <para>Static abstract members keep the whole resolution reflection-free under the
@@ -23,32 +22,42 @@ public interface ISystemParam<TSelf> where TSelf : ISystemParam<TSelf>
     static abstract bool TryCreate(ParamContext c, out TSelf value);
 }
 
+internal enum ParamKind : byte { Commands, Query, Res, ResMut, Events }
+
+/// <summary>One declared host parameter (what <c>system.add-*</c> is called with).</summary>
+internal sealed class ParamDecl
+{
+    internal ParamKind Kind;
+    internal string Path = "";
+    internal List<QueryTerm>? Terms;
+}
+
 /// <summary>
-/// Collects the wire parameter declarations of one system / observer as its parameter
-/// types describe themselves. The param index of each declaration is what the host's
-/// pushed data is keyed by.
+/// Collects the parameter declarations of one system / observer as its parameter types
+/// describe themselves. The index of each declaration is the index of the param handle
+/// the host passes to <c>run</c> / <c>observe</c>.
 /// </summary>
 public sealed class ParamDescriber
 {
     internal readonly ModHost Host;
-    internal readonly List<ParamDeclT> Params = new();
+    internal readonly List<ParamDecl> Params = new();
     int _locals;
     int _last = -1;
 
     internal ParamDescriber(ModHost host) => Host = host;
 
-    /// <summary>Append a wire parameter; the describing parameter gets its index.</summary>
-    internal void Add(ParamDeclT decl)
+    /// <summary>Append a host parameter; the describing parameter gets its index.</summary>
+    internal void Add(ParamDecl decl)
     {
         _last = Params.Count;
         Params.Add(decl);
     }
 
-    /// <summary>A guest-only slot (a <see cref="Local{T}"/>), not on the wire.</summary>
+    /// <summary>A guest-only slot (a <see cref="Local{T}"/>), not declared to the host.</summary>
     internal void AddLocal() => _last = _locals++;
 
     // The slot the parameter just described (-1 = none). Captured per parameter position
-    // so TryCreate() can index the pushed data without re-running Describe.
+    // so TryCreate() can index the param handles without re-running Describe.
     internal int Take()
     {
         var last = _last;
@@ -57,22 +66,103 @@ public sealed class ParamDescriber
     }
 }
 
-/// <summary>Per-run state shared by a run's parameters.</summary>
+/// <summary>
+/// Per-run state shared by a run's parameters. ONE instance, reused by every run (runs
+/// never nest); <see cref="Release"/> hands back everything the run borrowed.
+/// </summary>
 internal sealed class RunScope
 {
-    internal required ModHost Host;
-    internal required Commands Commands;
-    internal required ParamsView Input;
-    internal required List<object> Locals;
-    internal List<Action>? WriteBacks;
-    // Mut<T> row storage, keyed (query param slot << 8 | term index).
-    internal Dictionary<int, object>? MutColumns;
+    internal ModHost Host => ModRuntime.Host;
+    internal readonly Commands Commands = new();
+    internal List<object>? Locals;
     internal ulong TriggerEntity;
-    internal CompView? TriggerValue;
+    internal nint TriggerValue;
+    internal int TriggerValueLen;
     internal Packet Packet;
     internal Verdict Verdict;
 
-    internal void AfterRun(Action writeBack) => (WriteBacks ??= new List<Action>()).Add(writeBack);
+    byte[] _kinds = [];
+    int[] _handles = [];
+    int _count;
+    // The handle Mut write-backs go through as commands.insert (0 = none: query.set).
+    internal int CommandsHandle;
+
+    // query.rows() results, fetched on first use per param.
+    nint[] _rows = new nint[4];
+    int[] _rowCounts = new int[4];
+    bool[] _fetched = new bool[4];
+
+    readonly List<Action> _writeBacks = new();
+    // Mut<T> row storage, keyed (query param slot << 8 | term index).
+    internal readonly Dictionary<int, object> MutColumns = new();
+
+    internal void Begin(byte[] kinds, int[] handles, int count, List<object>? locals)
+    {
+        _kinds = kinds;
+        _handles = handles;
+        _count = count;
+        Locals = locals;
+        Verdict = default;
+        CommandsHandle = 0;
+        for (var i = 0; i < count; i++)
+            if (kinds[i] == EcsAbi.ParamCommands)
+            {
+                CommandsHandle = handles[i];
+                break;
+            }
+        Commands.Begin(CommandsHandle);
+        if (_fetched.Length < count)
+        {
+            _rows = new nint[count];
+            _rowCounts = new int[count];
+            _fetched = new bool[count];
+        }
+    }
+
+    internal int Handle(int slot) => (uint)slot < (uint)_count ? _handles[slot] : 0;
+
+    internal (nint Rows, int Count) Rows(int slot)
+    {
+        if ((uint)slot >= (uint)_count || _kinds[slot] != EcsAbi.ParamQuery)
+            return (0, 0);
+        if (!_fetched[slot])
+        {
+            (_rows[slot], _rowCounts[slot]) = EcsAbi.Rows(_handles[slot]);
+            _fetched[slot] = true;
+        }
+        return (_rows[slot], _rowCounts[slot]);
+    }
+
+    internal void AfterRun(Action writeBack) => _writeBacks.Add(writeBack);
+
+    /// <summary>After the body: the pending spawn, then the write-backs (they land after the run's commands).</summary>
+    internal void End()
+    {
+        Commands.Flush();
+        for (var i = 0; i < _writeBacks.Count; i++)
+            _writeBacks[i]();
+        Commands.Flush();
+    }
+
+    internal void Release()
+    {
+        Commands.End();
+        _writeBacks.Clear();
+        MutColumns.Clear();
+        for (var i = 0; i < _count; i++)
+            if (_fetched[i])
+            {
+                EcsAbi.FreeRows(_rows[i], _rowCounts[i]);
+                _fetched[i] = false;
+                _rows[i] = 0;
+                _rowCounts[i] = 0;
+            }
+        _count = 0;
+        Locals = null;
+        TriggerValue = 0;
+        TriggerValueLen = 0;
+        Packet = default;
+    }
 }
 
 /// <summary>
@@ -104,15 +194,35 @@ public readonly struct Res<T> : ISystemParam<Res<T>>
     Res(T value) => Value = value;
 
     public static void Describe(ParamDescriber d) =>
-        d.Add(new ParamDeclT { Kind = ParamKind.Res, TypeId = d.Host.Id<T>() });
+        d.Add(new ParamDecl { Kind = ParamKind.Res, Path = ModHost.PathOf<T>() });
 
     public static bool TryCreate(ParamContext c, out Res<T> value)
     {
         value = default;
-        if (c.Scope.Input.Resource(c.Slot) is not { } v || v.Parse(c.Host.Json<T>()) is not { } parsed)
+        if (!ResJson.TryGet(c, out T? parsed))
             return false;
-        value = new Res<T>(parsed);
+        value = new Res<T>(parsed!);
         return true;
+    }
+}
+
+internal static unsafe class ResJson
+{
+    internal static bool TryGet<T>(ParamContext c, out T? parsed)
+    {
+        parsed = default;
+        var handle = c.Scope.Handle(c.Slot);
+        if (handle == 0 || !EcsAbi.ResGet(handle, out var ptr, out var len))
+            return false;
+        try
+        {
+            parsed = Payload.Parse(new ReadOnlySpan<byte>((void*)ptr, len), c.Host.Json<T>());
+        }
+        finally
+        {
+            EcsAbi.Free(ptr, len);
+        }
+        return parsed is not null;
     }
 }
 
@@ -127,27 +237,26 @@ public sealed class ResMut<T> : ISystemParam<ResMut<T>>
     ResMut(T value) => Value = value;
 
     public static void Describe(ParamDescriber d) =>
-        d.Add(new ParamDeclT { Kind = ParamKind.ResMut, TypeId = d.Host.Id<T>() });
+        d.Add(new ParamDecl { Kind = ParamKind.ResMut, Path = ModHost.PathOf<T>() });
 
     public static bool TryCreate(ParamContext c, out ResMut<T> value)
     {
         value = null!;
-        var info = c.Host.Json<T>();
-        if (c.Scope.Input.Resource(c.Slot) is not { } v || v.Parse(info) is not { } parsed)
+        if (!ResJson.TryGet(c, out T? parsed))
             return false;
-        var res = new ResMut<T>(parsed);
+        var info = c.Host.Json<T>();
+        var res = new ResMut<T>(parsed!);
         // Compare against our own serialization, not the host's text: the two format
         // differently, and a spurious write marks the resource changed. The snapshot is
-        // pooled (a T that is a class is mutated in place, so it must be taken now); only
-        // a real change materializes a payload.
-        var original = JsonScratch.Rent(parsed, info);
-        var scope = c.Scope;
-        scope.AfterRun(() =>
+        // pooled (a T that is a class is mutated in place, so it must be taken now).
+        var original = JsonScratch.Rent(parsed!, info);
+        var handle = c.Scope.Handle(c.Slot);
+        c.Scope.AfterRun(() =>
         {
             try
             {
                 if (JsonScratch.Differs(res.Value, info, original.Span, out var now))
-                    scope.Commands.ResourceSetRaw(scope.Host.Id<T>(), now);
+                    EcsAbi.ResSet(handle, now);
             }
             finally
             {
@@ -184,9 +293,22 @@ public readonly struct Opt<P> : ISystemParam<Opt<P>> where P : ISystemParam<P>
     }
 }
 
+/// <summary>JSON payloads as the host sends them: a marker's empty payload reads as <c>{}</c>, <c>null</c> as default.</summary>
+internal static class Payload
+{
+    internal static T? Parse<T>(ReadOnlySpan<byte> json, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> info)
+    {
+        if (json.Length == 0)
+            json = "{}"u8;
+        else if (json.SequenceEqual("null"u8))
+            return default;
+        return JsonSerializer.Deserialize(json, info);
+    }
+}
+
 /// <summary>
 /// The write-back compares (ResMut, Mut): serialize into reused writers, compare in
-/// place, and allocate a payload only for a value that really changed.
+/// place; a write goes out of the scratch, without a payload allocation.
 /// </summary>
 internal static class JsonScratch
 {
@@ -202,17 +324,14 @@ internal static class JsonScratch
         return new Rented(arr, json.Length);
     }
 
-    /// <summary>True (and the new payload) when <paramref name="value"/> serializes differently from <paramref name="original"/>.</summary>
-    internal static bool Differs<T>(T value, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> info, ReadOnlySpan<byte> original, out byte[] now)
+    /// <summary>
+    /// True when <paramref name="value"/> serializes differently from <paramref name="original"/>;
+    /// <paramref name="now"/> is the new JSON, valid until the next scratch use.
+    /// </summary>
+    internal static bool Differs<T>(T value, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> info, ReadOnlySpan<byte> original, out ReadOnlySpan<byte> now)
     {
-        var json = Write(value, info);
-        if (json.SequenceEqual(original))
-        {
-            now = [];
-            return false;
-        }
-        now = json.ToArray();
-        return true;
+        now = Write(value, info);
+        return !now.SequenceEqual(original);
     }
 
     static ReadOnlySpan<byte> Write<T>(T value, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> info)
@@ -238,26 +357,39 @@ public readonly struct EventReader<T> : ISystemParam<EventReader<T>>
     EventReader(T[] events) => _events = events;
 
     public static void Describe(ParamDescriber d) =>
-        d.Add(new ParamDeclT { Kind = ParamKind.Events, TypeId = d.Host.Id<T>() });
+        d.Add(new ParamDecl { Kind = ParamKind.Events, Path = ModHost.PathOf<T>() });
 
     public static bool TryCreate(ParamContext c, out EventReader<T> value)
     {
-        var info = c.Host.Json<T>();
-        var values = c.Scope.Input.EventValues(c.Slot);
-        if (values.Count == 0)
+        var handle = c.Scope.Handle(c.Slot);
+        if (handle == 0)
         {
             value = new EventReader<T>([]);
             return true;
         }
-        var events = new T[values.Count];
-        var n = 0;
-        for (var i = 0; i < values.Count; i++)
-            if (values[i].Parse(info) is { } e)
-                events[n++] = e;
-        if (n != events.Length)
-            Array.Resize(ref events, n);
-        value = new EventReader<T>(events);
-        return true;
+        var (list, count) = EcsAbi.EventsRead(handle);
+        try
+        {
+            if (count == 0)
+            {
+                value = new EventReader<T>([]);
+                return true;
+            }
+            var info = c.Host.Json<T>();
+            var events = new T[count];
+            var n = 0;
+            for (var i = 0; i < count; i++)
+                if (Payload.Parse(EcsAbi.StringAt(list, i), info) is { } e)
+                    events[n++] = e;
+            if (n != events.Length)
+                Array.Resize(ref events, n);
+            value = new EventReader<T>(events);
+            return true;
+        }
+        finally
+        {
+            EcsAbi.FreeStrings(list, count);
+        }
     }
 
     public ReadOnlySpan<T> Read() => _events ?? [];
@@ -271,7 +403,7 @@ public readonly struct EventReader<T> : ISystemParam<EventReader<T>>
 
 /// <summary>
 /// State that belongs to one system and survives between its runs (a counter, a timer,
-/// the window it spawned). Guest-only: nothing on the wire.
+/// the window it spawned). Guest-only: never declared to the host.
 /// </summary>
 public sealed class Local<T> : ISystemParam<Local<T>> where T : new()
 {
@@ -281,7 +413,7 @@ public sealed class Local<T> : ISystemParam<Local<T>> where T : new()
 
     public static bool TryCreate(ParamContext c, out Local<T> value)
     {
-        var locals = c.Scope.Locals;
+        var locals = c.Scope.Locals!;
         while (locals.Count <= c.Slot)
             locals.Add(null!);
         if (locals[c.Slot] is not Local<T> local)

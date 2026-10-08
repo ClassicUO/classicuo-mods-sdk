@@ -1,6 +1,6 @@
 <Project>
   <!-- Import at the TOP of a mod csproj (pair with ModSdk.targets at the bottom).
-       The standard property block for a core-wasm C# mod; everything a mod may want
+       The standard property block for a C# mod (a wasm32-wasip2 component); everything a mod may want
        to override is Condition-guarded. See ecs-csharp for the canonical consumer. -->
   <PropertyGroup>
     <OutputType Condition="'$(OutputType)' == ''">Library</OutputType>
@@ -39,8 +39,8 @@
 
   <!-- A mod writes `class MyMod : Mod` and names host types (Node, Hits, Color…)
        unqualified; these are the only namespaces it needs and they are never ambiguous
-       with the implicit System.* set. ModAbi (the raw wire tables) is deliberately NOT
-       here — nothing in the mod-facing API exposes it. -->
+       with the implicit System.* set. The Wit/ glue (namespace ModWorld) is internal to
+       the SDK — nothing in the mod-facing API exposes it. -->
   <ItemGroup>
     <Using Include="CuoModSdk" />
     <Using Include="CuoModSdk.Types" />

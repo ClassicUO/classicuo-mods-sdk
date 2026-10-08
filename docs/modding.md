@@ -30,7 +30,7 @@ fn low_hp_warning(player: Query<&Hits, (With<Player>, Changed<Hits>)>, mut cmds:
 export_mod!(setup);
 ```
 
-Build it (`cargo build --release --target wasm32-wasip1`), drop the `.wasm` (as
+Build it (`cargo build --release --target wasm32-wasip2`), drop the `.wasm` (as
 `mod.wasm`) + `mod.json` in the client's `Data/Mods/<name>/` folder (next to the
 exe; settings.json `mods_path`), start the client.
 `rust/examples/low_hp` is this mod, ready to build.
@@ -123,10 +123,7 @@ Options window under **Mods**, saved per character. Read them back from
 
 ## Targets
 
-Same source, two builds:
-
-- `wasm32-wasip1` — a core module, via the SDK (feature `p1`, the default):
-  `cargo build --release --target wasm32-wasip1`.
-- `wasm32-wasip2` — a WebAssembly component. Any language with WIT bindings works
-  against `wit/cuo-mod.wit`; with the Rust SDK:
-  `cargo build --release --target wasm32-wasip2 --no-default-features --features p2`.
+A mod is a `wasm32-wasip2` WebAssembly component implementing `wit/cuo-mod.wit`. Any
+language with WIT bindings works; with the Rust SDK:
+`cargo build --release --target wasm32-wasip2`. The client rejects core-wasm
+(`wasm32-wasip1`) modules.
