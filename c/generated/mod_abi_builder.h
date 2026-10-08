@@ -32,6 +32,12 @@ __flatbuffers_build_scalar(flatbuffers_, ModAbi_ParamKind, ModAbi_ParamKind_enum
 #define __ModAbi_ObserverKind_formal_args , ModAbi_ObserverKind_enum_t v0
 #define __ModAbi_ObserverKind_call_args , v0
 __flatbuffers_build_scalar(flatbuffers_, ModAbi_ObserverKind, ModAbi_ObserverKind_enum_t)
+#define __ModAbi_PacketDirection_formal_args , ModAbi_PacketDirection_enum_t v0
+#define __ModAbi_PacketDirection_call_args , v0
+__flatbuffers_build_scalar(flatbuffers_, ModAbi_PacketDirection, ModAbi_PacketDirection_enum_t)
+#define __ModAbi_PacketVerdict_formal_args , ModAbi_PacketVerdict_enum_t v0
+#define __ModAbi_PacketVerdict_call_args , v0
+__flatbuffers_build_scalar(flatbuffers_, ModAbi_PacketVerdict, ModAbi_PacketVerdict_enum_t)
 
 typedef flatbuffers_union_ref_t ModAbi_Cmd_union_ref_t;
 typedef flatbuffers_union_vec_ref_t ModAbi_Cmd_union_vec_ref_t;
@@ -75,7 +81,7 @@ __flatbuffers_build_table(flatbuffers_, ModAbi_SystemDecl, 8)
 static const flatbuffers_voffset_t __ModAbi_ObserverDecl_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_ObserverDecl_ref_t;
 static ModAbi_ObserverDecl_ref_t ModAbi_ObserverDecl_clone(flatbuffers_builder_t *B, ModAbi_ObserverDecl_table_t t);
-__flatbuffers_build_table(flatbuffers_, ModAbi_ObserverDecl, 5)
+__flatbuffers_build_table(flatbuffers_, ModAbi_ObserverDecl, 7)
 
 static const flatbuffers_voffset_t __ModAbi_SetupReply_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_SetupReply_ref_t;
@@ -155,12 +161,12 @@ __flatbuffers_build_table(flatbuffers_, ModAbi_ConsumeKeyCmd, 1)
 static const flatbuffers_voffset_t __ModAbi_CommandBuffer_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_CommandBuffer_ref_t;
 static ModAbi_CommandBuffer_ref_t ModAbi_CommandBuffer_clone(flatbuffers_builder_t *B, ModAbi_CommandBuffer_table_t t);
-__flatbuffers_build_table(flatbuffers_, ModAbi_CommandBuffer, 2)
+__flatbuffers_build_table(flatbuffers_, ModAbi_CommandBuffer, 4)
 
 static const flatbuffers_voffset_t __ModAbi_ObserverInput_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_ObserverInput_ref_t;
 static ModAbi_ObserverInput_ref_t ModAbi_ObserverInput_clone(flatbuffers_builder_t *B, ModAbi_ObserverInput_table_t t);
-__flatbuffers_build_table(flatbuffers_, ModAbi_ObserverInput, 6)
+__flatbuffers_build_table(flatbuffers_, ModAbi_ObserverInput, 8)
 
 static const flatbuffers_voffset_t __ModAbi_SpawnResolved_required[] = { 0 };
 typedef flatbuffers_ref_t ModAbi_SpawnResolved_ref_t;
@@ -212,9 +218,11 @@ static inline ModAbi_SystemDecl_ref_t ModAbi_SystemDecl_create(flatbuffers_build
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_SystemDecl, ModAbi_SystemDecl_file_identifier, ModAbi_SystemDecl_type_identifier)
 
 #define __ModAbi_ObserverDecl_formal_args ,\
-  uint32_t v0, ModAbi_ObserverKind_enum_t v1, uint16_t v2, flatbuffers_string_ref_t v3, ModAbi_ParamDecl_vec_ref_t v4
+  uint32_t v0, ModAbi_ObserverKind_enum_t v1, uint16_t v2, flatbuffers_string_ref_t v3,\
+  ModAbi_ParamDecl_vec_ref_t v4, ModAbi_PacketDirection_enum_t v5, flatbuffers_uint8_vec_ref_t v6
 #define __ModAbi_ObserverDecl_call_args ,\
-  v0, v1, v2, v3, v4
+  v0, v1, v2, v3,\
+  v4, v5, v6
 static inline ModAbi_ObserverDecl_ref_t ModAbi_ObserverDecl_create(flatbuffers_builder_t *B __ModAbi_ObserverDecl_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_ObserverDecl, ModAbi_ObserverDecl_file_identifier, ModAbi_ObserverDecl_type_identifier)
 
@@ -297,15 +305,17 @@ __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_ConsumeMouseCmd, ModAbi_Co
 static inline ModAbi_ConsumeKeyCmd_ref_t ModAbi_ConsumeKeyCmd_create(flatbuffers_builder_t *B __ModAbi_ConsumeKeyCmd_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_ConsumeKeyCmd, ModAbi_ConsumeKeyCmd_file_identifier, ModAbi_ConsumeKeyCmd_type_identifier)
 
-#define __ModAbi_CommandBuffer_formal_args , ModAbi_Cmd_union_vec_ref_t v1
-#define __ModAbi_CommandBuffer_call_args , v1
+#define __ModAbi_CommandBuffer_formal_args , ModAbi_Cmd_union_vec_ref_t v1, ModAbi_PacketVerdict_enum_t v2, flatbuffers_uint8_vec_ref_t v3
+#define __ModAbi_CommandBuffer_call_args , v1, v2, v3
 static inline ModAbi_CommandBuffer_ref_t ModAbi_CommandBuffer_create(flatbuffers_builder_t *B __ModAbi_CommandBuffer_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_CommandBuffer, ModAbi_CommandBuffer_file_identifier, ModAbi_CommandBuffer_type_identifier)
 
 #define __ModAbi_ObserverInput_formal_args ,\
-  uint32_t v0, uint64_t v1, ModAbi_CompValue_ref_t v2, ModAbi_QueryRows_vec_ref_t v3, ModAbi_ResValue_vec_ref_t v4, ModAbi_EventValues_vec_ref_t v5
+  uint32_t v0, uint64_t v1, ModAbi_CompValue_ref_t v2, ModAbi_QueryRows_vec_ref_t v3,\
+  ModAbi_ResValue_vec_ref_t v4, ModAbi_EventValues_vec_ref_t v5, ModAbi_PacketDirection_enum_t v6, flatbuffers_uint8_vec_ref_t v7
 #define __ModAbi_ObserverInput_call_args ,\
-  v0, v1, v2, v3, v4, v5
+  v0, v1, v2, v3,\
+  v4, v5, v6, v7
 static inline ModAbi_ObserverInput_ref_t ModAbi_ObserverInput_create(flatbuffers_builder_t *B __ModAbi_ObserverInput_formal_args);
 __flatbuffers_build_table_prolog(flatbuffers_, ModAbi_ObserverInput, ModAbi_ObserverInput_file_identifier, ModAbi_ObserverInput_type_identifier)
 
@@ -551,6 +561,8 @@ __flatbuffers_build_scalar_field(1, flatbuffers_, ModAbi_ObserverDecl_kind, ModA
 __flatbuffers_build_scalar_field(2, flatbuffers_, ModAbi_ObserverDecl_type_id, flatbuffers_uint16, uint16_t, 2, 2, UINT16_C(0), ModAbi_ObserverDecl)
 __flatbuffers_build_string_field(3, flatbuffers_, ModAbi_ObserverDecl_event_name, ModAbi_ObserverDecl)
 __flatbuffers_build_table_vector_field(4, flatbuffers_, ModAbi_ObserverDecl_params, ModAbi_ParamDecl, ModAbi_ObserverDecl)
+__flatbuffers_build_scalar_field(5, flatbuffers_, ModAbi_ObserverDecl_packet_direction, ModAbi_PacketDirection, ModAbi_PacketDirection_enum_t, 1, 1, UINT8_C(0), ModAbi_ObserverDecl)
+__flatbuffers_build_vector_field(6, flatbuffers_, ModAbi_ObserverDecl_packet_ids, flatbuffers_uint8, uint8_t, ModAbi_ObserverDecl)
 
 static inline ModAbi_ObserverDecl_ref_t ModAbi_ObserverDecl_create(flatbuffers_builder_t *B __ModAbi_ObserverDecl_formal_args)
 {
@@ -558,8 +570,10 @@ static inline ModAbi_ObserverDecl_ref_t ModAbi_ObserverDecl_create(flatbuffers_b
         || ModAbi_ObserverDecl_id_add(B, v0)
         || ModAbi_ObserverDecl_event_name_add(B, v3)
         || ModAbi_ObserverDecl_params_add(B, v4)
+        || ModAbi_ObserverDecl_packet_ids_add(B, v6)
         || ModAbi_ObserverDecl_type_id_add(B, v2)
-        || ModAbi_ObserverDecl_kind_add(B, v1)) {
+        || ModAbi_ObserverDecl_kind_add(B, v1)
+        || ModAbi_ObserverDecl_packet_direction_add(B, v5)) {
         return 0;
     }
     return ModAbi_ObserverDecl_end(B);
@@ -572,8 +586,10 @@ static ModAbi_ObserverDecl_ref_t ModAbi_ObserverDecl_clone(flatbuffers_builder_t
         || ModAbi_ObserverDecl_id_pick(B, t)
         || ModAbi_ObserverDecl_event_name_pick(B, t)
         || ModAbi_ObserverDecl_params_pick(B, t)
+        || ModAbi_ObserverDecl_packet_ids_pick(B, t)
         || ModAbi_ObserverDecl_type_id_pick(B, t)
-        || ModAbi_ObserverDecl_kind_pick(B, t)) {
+        || ModAbi_ObserverDecl_kind_pick(B, t)
+        || ModAbi_ObserverDecl_packet_direction_pick(B, t)) {
         return 0;
     }
     __flatbuffers_memoize_end(B, t, ModAbi_ObserverDecl_end(B));
@@ -964,11 +980,15 @@ __flatbuffers_build_union_table_vector_value_field(flatbuffers_, ModAbi_CommandB
 __flatbuffers_build_union_table_vector_value_field(flatbuffers_, ModAbi_CommandBuffer_cmds, ModAbi_Cmd, EmitEventCmd, ModAbi_EmitEventCmd)
 __flatbuffers_build_union_table_vector_value_field(flatbuffers_, ModAbi_CommandBuffer_cmds, ModAbi_Cmd, ConsumeMouseCmd, ModAbi_ConsumeMouseCmd)
 __flatbuffers_build_union_table_vector_value_field(flatbuffers_, ModAbi_CommandBuffer_cmds, ModAbi_Cmd, ConsumeKeyCmd, ModAbi_ConsumeKeyCmd)
+__flatbuffers_build_scalar_field(2, flatbuffers_, ModAbi_CommandBuffer_verdict, ModAbi_PacketVerdict, ModAbi_PacketVerdict_enum_t, 1, 1, UINT8_C(0), ModAbi_CommandBuffer)
+__flatbuffers_build_vector_field(3, flatbuffers_, ModAbi_CommandBuffer_replacement, flatbuffers_uint8, uint8_t, ModAbi_CommandBuffer)
 
 static inline ModAbi_CommandBuffer_ref_t ModAbi_CommandBuffer_create(flatbuffers_builder_t *B __ModAbi_CommandBuffer_formal_args)
 {
     if (ModAbi_CommandBuffer_start(B)
-        || ModAbi_CommandBuffer_cmds_add(B, v1)) {
+        || ModAbi_CommandBuffer_cmds_add(B, v1)
+        || ModAbi_CommandBuffer_replacement_add(B, v3)
+        || ModAbi_CommandBuffer_verdict_add(B, v2)) {
         return 0;
     }
     return ModAbi_CommandBuffer_end(B);
@@ -978,7 +998,9 @@ static ModAbi_CommandBuffer_ref_t ModAbi_CommandBuffer_clone(flatbuffers_builder
 {
     __flatbuffers_memoize_begin(B, t);
     if (ModAbi_CommandBuffer_start(B)
-        || ModAbi_CommandBuffer_cmds_pick(B, t)) {
+        || ModAbi_CommandBuffer_cmds_pick(B, t)
+        || ModAbi_CommandBuffer_replacement_pick(B, t)
+        || ModAbi_CommandBuffer_verdict_pick(B, t)) {
         return 0;
     }
     __flatbuffers_memoize_end(B, t, ModAbi_CommandBuffer_end(B));
@@ -990,6 +1012,8 @@ __flatbuffers_build_table_field(2, flatbuffers_, ModAbi_ObserverInput_value, Mod
 __flatbuffers_build_table_vector_field(3, flatbuffers_, ModAbi_ObserverInput_queries, ModAbi_QueryRows, ModAbi_ObserverInput)
 __flatbuffers_build_table_vector_field(4, flatbuffers_, ModAbi_ObserverInput_resources, ModAbi_ResValue, ModAbi_ObserverInput)
 __flatbuffers_build_table_vector_field(5, flatbuffers_, ModAbi_ObserverInput_events, ModAbi_EventValues, ModAbi_ObserverInput)
+__flatbuffers_build_scalar_field(6, flatbuffers_, ModAbi_ObserverInput_packet_direction, ModAbi_PacketDirection, ModAbi_PacketDirection_enum_t, 1, 1, UINT8_C(0), ModAbi_ObserverInput)
+__flatbuffers_build_vector_field(7, flatbuffers_, ModAbi_ObserverInput_packet, flatbuffers_uint8, uint8_t, ModAbi_ObserverInput)
 
 static inline ModAbi_ObserverInput_ref_t ModAbi_ObserverInput_create(flatbuffers_builder_t *B __ModAbi_ObserverInput_formal_args)
 {
@@ -999,7 +1023,9 @@ static inline ModAbi_ObserverInput_ref_t ModAbi_ObserverInput_create(flatbuffers
         || ModAbi_ObserverInput_value_add(B, v2)
         || ModAbi_ObserverInput_queries_add(B, v3)
         || ModAbi_ObserverInput_resources_add(B, v4)
-        || ModAbi_ObserverInput_events_add(B, v5)) {
+        || ModAbi_ObserverInput_events_add(B, v5)
+        || ModAbi_ObserverInput_packet_add(B, v7)
+        || ModAbi_ObserverInput_packet_direction_add(B, v6)) {
         return 0;
     }
     return ModAbi_ObserverInput_end(B);
@@ -1014,7 +1040,9 @@ static ModAbi_ObserverInput_ref_t ModAbi_ObserverInput_clone(flatbuffers_builder
         || ModAbi_ObserverInput_value_pick(B, t)
         || ModAbi_ObserverInput_queries_pick(B, t)
         || ModAbi_ObserverInput_resources_pick(B, t)
-        || ModAbi_ObserverInput_events_pick(B, t)) {
+        || ModAbi_ObserverInput_events_pick(B, t)
+        || ModAbi_ObserverInput_packet_pick(B, t)
+        || ModAbi_ObserverInput_packet_direction_pick(B, t)) {
         return 0;
     }
     __flatbuffers_memoize_end(B, t, ModAbi_ObserverInput_end(B));

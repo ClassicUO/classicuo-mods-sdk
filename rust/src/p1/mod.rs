@@ -11,14 +11,17 @@ pub mod call;
 pub mod cuo;
 mod wire;
 
-use crate::ecs::{App, EntryKind, Fetched, ParamDesc, RawRow, Schedule, TermKind, TriggerData, TriggerDesc};
+use crate::ecs::{
+    App, EntryKind, Fetched, Packet, PacketDirection, ParamDesc, RawRow, Schedule, TermKind, TriggerData, TriggerDesc,
+    Verdict,
+};
 use abi::{Encoding, ObserverKind, ParamKind, QueryTermKind};
 use core::ptr::addr_of_mut;
 use planus::Builder;
 use std::collections::HashMap;
 
 /// The ABI version this SDK speaks; `mod_setup` traps on a mismatch.
-pub const ABI_VERSION: u32 = 3;
+pub const ABI_VERSION: u32 = 4;
 
 const NONE_TYPE: u16 = 0xFFFF;
 /// An entity spawned in this run, before the host assigned its id: `PENDING | temp_id`.
@@ -137,13 +140,17 @@ pub(crate) fn res_set(_: &ResSink, path: &'static str, json: String) {
     push(abi::Cmd::ResourceSetCmd(Box::new(abi::ResourceSetCmd { value: Some(Box::new(comp(path, json))) })));
 }
 
-/// The command buffer the last run produced, packed for the host (0 = none).
-fn finish_cmds() -> u64 {
+/// The command buffer the last run produced plus a packet observer's verdict,
+/// packed for the host (0 = no commands, pass).
+fn finish_cmds(verdict: Verdict) -> u64 {
     let cmds = std::mem::take(&mut state().cmds);
-    if cmds.is_empty() {
-        return 0;
-    }
-    let cb = abi::CommandBuffer { cmds: Some(cmds) };
+    let (verdict, replacement) = match verdict {
+        Verdict::Pass if cmds.is_empty() => return 0,
+        Verdict::Pass => (abi::PacketVerdict::Pass, None),
+        Verdict::Block => (abi::PacketVerdict::Block, None),
+        Verdict::Replace(bytes) => (abi::PacketVerdict::Replace, Some(bytes)),
+    };
+    let cb = abi::CommandBuffer { cmds: Some(cmds), verdict, replacement };
     arena::pack_ret(Builder::new().finish(&cb, None))
 }
 
@@ -198,11 +205,11 @@ pub(crate) fn setup_reply(app: &App) -> abi::SetupReply {
     let mut observers = Vec::new();
     for (i, e) in app.entries.iter().enumerate() {
         let params: Vec<_> = e.params.iter().map(param_decl).collect();
-        match e.kind {
+        match &e.kind {
             EntryKind::System(s) => systems.push(abi::SystemDecl {
                 id: i as u32,
                 name: Some(e.name.clone()),
-                schedule: schedule(s),
+                schedule: schedule(*s),
                 custom_stage: None,
                 params: Some(params),
                 after: Some(app.resolve_order(&e.after).into_iter().map(|i| i as u32).collect()),
@@ -210,12 +217,29 @@ pub(crate) fn setup_reply(app: &App) -> abi::SetupReply {
                 interval_ms: 0,
             }),
             EntryKind::Observer(t) => {
-                let (kind, type_id, event_name) = match t {
-                    TriggerDesc::Add(p) => (ObserverKind::Insert, type_id(p), None),
-                    TriggerDesc::Remove(p) => (ObserverKind::Remove, type_id(p), None),
-                    TriggerDesc::Event(p) => (ObserverKind::Custom, NONE_TYPE, Some(p.to_string())),
+                let mut decl = abi::ObserverDecl {
+                    id: i as u32,
+                    kind: ObserverKind::Insert,
+                    type_id: NONE_TYPE,
+                    event_name: None,
+                    params: Some(params),
+                    packet_direction: abi::PacketDirection::Incoming,
+                    packet_ids: None,
                 };
-                observers.push(abi::ObserverDecl { id: i as u32, kind, type_id, event_name, params: Some(params) });
+                match t {
+                    TriggerDesc::Add(p) => (decl.kind, decl.type_id) = (ObserverKind::Insert, type_id(p)),
+                    TriggerDesc::Remove(p) => (decl.kind, decl.type_id) = (ObserverKind::Remove, type_id(p)),
+                    TriggerDesc::Event(p) => (decl.kind, decl.event_name) = (ObserverKind::Custom, Some(p.to_string())),
+                    TriggerDesc::Packet(dir, ids) => {
+                        decl.kind = ObserverKind::Packet;
+                        decl.packet_direction = match dir {
+                            PacketDirection::Incoming => abi::PacketDirection::Incoming,
+                            PacketDirection::Outgoing => abi::PacketDirection::Outgoing,
+                        };
+                        decl.packet_ids = Some(ids.clone());
+                    }
+                }
+                observers.push(decl);
             }
         }
     }
@@ -272,20 +296,35 @@ fn fetch(params: &[ParamDesc], res_cache: &mut Vec<Option<String>>, input: &wire
 }
 
 fn run(id: u32, input: &[u8], fields: wire::ParamFields, trigger: Option<TriggerData>) -> u64 {
-    run_entry(id, input, fields, trigger);
-    finish_cmds()
+    let verdict = run_entry(id, input, fields, trigger);
+    finish_cmds(verdict)
 }
 
 /// Runs an entry; its commands stay in the state until `finish_cmds`.
-fn run_entry(id: u32, input: &[u8], fields: wire::ParamFields, trigger: Option<TriggerData>) {
+fn run_entry(id: u32, input: &[u8], fields: wire::ParamFields, trigger: Option<TriggerData>) -> Verdict {
     // Out of the state while it runs: user code reaches back into the state
     // (commands), never into the app.
     let mut app = std::mem::take(&mut state().app);
-    if let Some(entry) = app.entries.get_mut(id as usize) {
-        let fetched = fetch(&entry.params, &mut entry.res_cache, &wire::Params::new(input, fields));
-        entry.run(fetched, trigger.as_ref());
-    }
+    let verdict = match app.entries.get_mut(id as usize) {
+        Some(entry) => {
+            let fetched = fetch(&entry.params, &mut entry.res_cache, &wire::Params::new(input, fields));
+            entry.run(fetched, trigger)
+        }
+        None => Verdict::Pass,
+    };
     state().app = app;
+    verdict
+}
+
+/// An observer's trigger: the packet for a packet observer, else entity + value.
+fn observer_trigger(entity: u64, input: &[u8]) -> TriggerData {
+    match wire::observer_packet(input) {
+        Some((dir, bytes)) => {
+            let dir = if dir == 0 { PacketDirection::Incoming } else { PacketDirection::Outgoing };
+            TriggerData::Packet(Packet::new(dir, bytes))
+        }
+        None => TriggerData::Entity { entity, value: wire::observer_value(input) },
+    }
 }
 
 // ── exports ──────────────────────────────────────────────────────────────────────
@@ -296,7 +335,6 @@ mod exports {
 
     extern "Rust" {
         fn __cuo_mod_setup(app: &mut App);
-        fn __cuo_mod_on_packet(dir: cuo::packets::Direction, packet: &[u8]) -> cuo::packets::Verdict;
     }
 
     #[no_mangle]
@@ -324,8 +362,8 @@ mod exports {
     #[no_mangle]
     pub extern "C" fn mod_observer(obs_id: u32, entity: u64, ptr: u32, len: u32) -> u64 {
         let input = unsafe { arena::input_slice(ptr, len) }.to_vec();
-        let value = wire::observer_value(&input);
-        run(obs_id, &input, wire::OBSERVER_INPUT, Some(TriggerData { entity, value }))
+        let trigger = observer_trigger(entity, &input);
+        run(obs_id, &input, wire::OBSERVER_INPUT, Some(trigger))
     }
 
     #[no_mangle]
@@ -334,17 +372,6 @@ mod exports {
         let st = state();
         for (temp, real) in wire::read_spawned(bytes) {
             st.resolved.insert(temp, real);
-        }
-    }
-
-    #[no_mangle]
-    pub extern "C" fn mod_on_packet(dir: u32, ptr: u32, len: u32) -> u64 {
-        let packet = unsafe { arena::input_slice(ptr, len) }.to_vec();
-        let dir = if dir == 0 { cuo::packets::Direction::Incoming } else { cuo::packets::Direction::Outgoing };
-        match unsafe { __cuo_mod_on_packet(dir, &packet) } {
-            cuo::packets::Verdict::Pass => 0,
-            cuo::packets::Verdict::Block => 1,
-            cuo::packets::Verdict::Replace(bytes) => arena::pack_ret(&bytes),
         }
     }
 }
@@ -433,6 +460,38 @@ mod tests {
         assert_eq!(entity_ref(PENDING | 7), 1234);
         assert_eq!(entity_ref(PENDING | 8), -9);
         assert_eq!(entity_ref(55), 55);
+    }
+
+    #[test]
+    fn packet_observer_declares_its_filter_and_reads_its_packet() {
+        fn pass(_: Packet) -> Verdict {
+            Verdict::Pass
+        }
+        let mut app = App::default();
+        app.add_packet_observer(PacketDirection::Outgoing, &[0x03, 0x9B], pass);
+        let reply = setup_reply(&app);
+        let decl = &reply.observers.as_ref().unwrap()[0];
+        assert_eq!(decl.kind, ObserverKind::Packet);
+        assert_eq!(decl.packet_direction, abi::PacketDirection::Outgoing);
+        assert_eq!(decl.packet_ids.as_deref(), Some(&[0x03, 0x9B][..]));
+
+        let input = abi::ObserverInput {
+            obs_id: 0,
+            entity: 0,
+            value: None,
+            queries: None,
+            resources: None,
+            events: None,
+            packet_direction: abi::PacketDirection::Outgoing,
+            packet: Some(vec![0x03, 1, 2]),
+        };
+        let bytes = Builder::new().finish(&input, None).to_vec();
+        let TriggerData::Packet(p) = observer_trigger(0, &bytes) else { panic!("not a packet") };
+        assert_eq!((p.direction(), p.id(), p.bytes()), (PacketDirection::Outgoing, 0x03, &[0x03, 1, 2][..]));
+
+        let input = abi::ObserverInput { packet: None, packet_direction: abi::PacketDirection::Incoming, ..input };
+        let bytes = Builder::new().finish(&input, None).to_vec();
+        assert!(matches!(observer_trigger(5, &bytes), TriggerData::Entity { entity: 5, .. }));
     }
 
     #[test]

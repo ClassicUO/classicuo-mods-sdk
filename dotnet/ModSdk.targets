@@ -7,7 +7,7 @@
     <ProjectReference Include="$(MSBuildThisFileDirectory)CuoModSdk.csproj" />
 
     <!-- Export the SDK's UnmanagedCallersOnly ABI entrypoints (mod_alloc /
-         mod_arena_reset / mod_run / mod_observer / mod_spawned / mod_on_packet) from the
+         mod_arena_reset / mod_run / mod_observer / mod_spawned) from the
          mod's module. mod_setup is the one export that must construct the mod's own
          type, so it is generated below instead. -->
     <UnmanagedEntryPointsAssembly Include="CuoModSdk" />

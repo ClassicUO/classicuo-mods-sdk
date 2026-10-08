@@ -126,22 +126,6 @@ static void jw_base64(cuo_jw *w, const uint8_t *p, size_t n)
     cuo_jw_strn(w, s, o);
 }
 
-static const char *dir_name(cuo_dir dir)
-{
-    return dir == CUO_OUTGOING ? "outgoing" : "incoming";
-}
-
-void cuo_intercept(cuo_dir dir, const uint8_t *ids, size_t n)
-{
-    cuo_jw w;
-    cuo_jw_init(&w);
-    cuo_jw_arr(&w);
-    cuo_jw_str(&w, dir_name(dir));
-    jw_base64(&w, ids, n);
-    cuo_jw_arr_end(&w);
-    cuo_call("cuo:modding/packets#intercept", (const char *)cuo_jw_bytes(&w).ptr);
-}
-
 static void send_bytes(const char *fn, const uint8_t *data, size_t len)
 {
     cuo_jw w;

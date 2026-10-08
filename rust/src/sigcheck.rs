@@ -16,21 +16,7 @@ fn fns_host() {
     let _: fn(host::Scope) -> String = host::storage_get;
     let _: fn(host::Scope, &str) = host::storage_set;
 }
-fn enum_packets_direction(v: packets::Direction) {
-    match v {
-        packets::Direction::Incoming => {}
-        packets::Direction::Outgoing => {}
-    }
-}
-fn variant_packets_verdict(v: packets::Verdict) {
-    match v {
-        packets::Verdict::Pass => {}
-        packets::Verdict::Block => {}
-        packets::Verdict::Replace(p) => { let _: Vec<u8> = p; }
-    }
-}
 fn fns_packets() {
-    let _: fn(packets::Direction, &[u8]) = packets::intercept;
     let _: fn(&[u8]) = packets::send_to_server;
     let _: fn(&[u8]) = packets::send_to_client;
 }

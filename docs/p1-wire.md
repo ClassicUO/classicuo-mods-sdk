@@ -33,13 +33,11 @@ import "env" "mod_call" (name_ptr: i32, name_len: i32, args_ptr: i32, args_len: 
 | `variant` | `{"<case>": payload}`; a case without payload has `null` |
 | `option<T>` | `null` or the value |
 
-## `on-packet`
+## `on-packet` observers
 
-Hot path, so binary:
-
-```
-export "mod_on_packet" (dir: i32, ptr: i32, len: i32) -> i64
-```
-
-`dir` 0 = incoming, 1 = outgoing; the packet bytes are in the arena. Returns `0` pass,
-`1` block, otherwise `len << 32 | ptr` of the replacement bytes in the arena.
+Packets ride the ECS ABI, not `mod_call`. An `on-packet` observer is an `ObserverDecl`
+with `kind = Packet`, `packet_direction` and `packet_ids` (empty = every id). The host
+calls it through `mod_observer` synchronously, before the client handles (incoming) or
+sends (outgoing) the packet: `ObserverInput.packet` holds the full wire bytes, id first.
+The verdict rides the returned `CommandBuffer` (`verdict` + `replacement`); a `0` return
+is `Pass`.

@@ -11,7 +11,7 @@ namespace CuoModSdk;
 /// </summary>
 public abstract class Mod
 {
-    /// <summary>Declare systems, observers, hotkeys and the packet handler (call <see cref="Packets.Intercept"/> here). Runs once, before the first tick.</summary>
+    /// <summary>Declare systems, observers (packet observers too) and hotkeys. Runs once, before the first tick.</summary>
     public abstract void Setup(ModBuilder m);
 }
 

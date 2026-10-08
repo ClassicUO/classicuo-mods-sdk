@@ -99,103 +99,12 @@ public static partial class Host
 /// <summary>
 /// Raw UO packets, both ways. A packet is the full wire bytes, id first. Prefer
 /// world data and `actions` when they cover what you need: they keep the client's
-/// own state in step.
+/// own state in step. To see / block / rewrite packets, add an observer with the
+/// `on-packet` trigger (tinyecs:modding/ecs): incoming = server to client, outgoing =
+/// client to server.
 /// </summary>
 public static partial class Packets
 {
-
-    public enum Direction
-    {
-        /// <summary>
-        /// Server to client.
-        /// </summary>
-        Incoming,
-        /// <summary>
-        /// Client to server.
-        /// </summary>
-        Outgoing,
-    }
-
-    internal static void Write(Utf8JsonWriter w, Direction v) => w.WriteStringValue(v switch
-    {
-        Direction.Incoming => "incoming",
-        Direction.Outgoing => "outgoing",
-        _ => throw new System.ArgumentOutOfRangeException(nameof(v)),
-    });
-
-    internal static Direction ReadDirection(JsonElement e) => e.GetString() switch
-    {
-        "incoming" => Direction.Incoming,
-        "outgoing" => Direction.Outgoing,
-        var s => throw Wit.Bad("Direction", s),
-    };
-
-    /// <summary>
-    /// What `on-packet` decides.
-    /// </summary>
-    public abstract record Verdict
-    {
-        private Verdict() { }
-        /// <summary>
-        /// Let it through unchanged.
-        /// </summary>
-        public sealed record Pass : Verdict;
-        /// <summary>
-        /// Drop it: the client never handles / sends it.
-        /// </summary>
-        public sealed record Block : Verdict;
-        /// <summary>
-        /// Let these bytes through instead.
-        /// </summary>
-        public sealed record Replace(byte[] Value) : Verdict;
-    }
-
-    internal static void Write(Utf8JsonWriter w, Verdict v)
-    {
-        w.WriteStartObject();
-        switch (v)
-        {
-            case Verdict.Pass:
-                w.WritePropertyName("pass");
-                w.WriteNullValue();
-                break;
-            case Verdict.Block:
-                w.WritePropertyName("block");
-                w.WriteNullValue();
-                break;
-            case Verdict.Replace c:
-                w.WritePropertyName("replace");
-                w.WriteBase64StringValue(c.Value);
-                break;
-            default:
-                throw new System.ArgumentOutOfRangeException(nameof(v));
-        }
-        w.WriteEndObject();
-    }
-
-    internal static Verdict ReadVerdict(JsonElement e)
-    {
-        var (k, p) = Wit.Case(e);
-        return k switch
-        {
-            "pass" => new Verdict.Pass(),
-            "block" => new Verdict.Block(),
-            "replace" => new Verdict.Replace(Wit.ReadBytes(p)),
-            _ => throw Wit.Bad("Verdict", k),
-        };
-    }
-
-    /// <summary>
-    /// Asks for `on-packet` calls for these packet ids in one direction. Call it in
-    /// `setup`; a mod that never calls it gets no packets. Calling again adds ids.
-    /// </summary>
-    public static void Intercept(Direction dir, System.ReadOnlySpan<byte> ids)
-    {
-        var w = Wit.Begin();
-        Write(w, dir);
-        w.WriteBase64StringValue(ids);
-        Wit.Call("cuo:modding/packets#intercept");
-    }
 
     /// <summary>
     /// Sends a packet to the server, as if the client had sent it.

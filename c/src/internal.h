@@ -32,7 +32,8 @@ uint64_t cuo__pack_builder(flatcc_builder_t *B);
 
 /* Command buffer plumbing for the dispatcher. */
 void cuo__cmds_begin(cuo_cmds *c);
-uint64_t cuo__cmds_finish(cuo_cmds *c); /* 0 when empty */
+/* 0 when empty and CUO_PASS. `replacement` is read only for CUO_REPLACE. */
+uint64_t cuo__cmds_finish(cuo_cmds *c, cuo_verdict verdict, cuo_bytes replacement);
 cuo_cmds *cuo__cmds_instance(void);
 
 struct cuo_input {

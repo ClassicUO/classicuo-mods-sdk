@@ -132,11 +132,13 @@ pub enum ParamDesc {
 }
 
 #[doc(hidden)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum TriggerDesc {
     Add(&'static str),
     Remove(&'static str),
     Event(&'static str),
+    /// A direction and the packet ids; no ids = every packet.
+    Packet(PacketDirection, Vec<u8>),
 }
 
 /// One parameter's data as the backend delivered it.
@@ -180,12 +182,12 @@ impl ParamCtx<'_> {
 }
 
 #[doc(hidden)]
-pub struct TriggerData {
-    pub entity: u64,
-    pub value: String,
+pub enum TriggerData {
+    Entity { entity: u64, value: String },
+    Packet(Packet),
 }
 
-pub(crate) type RunFn = Box<dyn FnMut(&mut ParamCtx, Option<&TriggerData>)>;
+pub(crate) type RunFn = Box<dyn FnMut(&mut ParamCtx, Option<TriggerData>) -> Verdict>;
 
 pub(crate) enum EntryKind {
     System(Schedule),
@@ -209,10 +211,11 @@ pub(crate) struct Entry {
 }
 
 impl Entry {
-    /// Runs the entry with the backend-delivered parameter data.
-    pub(crate) fn run(&mut self, fetched: Vec<Fetched>, trigger: Option<&TriggerData>) {
+    /// Runs the entry with the backend-delivered parameter data. Only a packet
+    /// observer decides anything but `Pass`.
+    pub(crate) fn run(&mut self, fetched: Vec<Fetched>, trigger: Option<TriggerData>) -> Verdict {
         let mut ctx = ParamCtx { fetched, next: 0, locals: &mut self.locals, next_local: 0 };
-        (self.run)(&mut ctx, trigger);
+        (self.run)(&mut ctx, trigger)
     }
 }
 
@@ -237,6 +240,22 @@ impl App {
     pub fn add_observer<M>(&mut self, observer: impl IntoObserver<M>) -> &mut App {
         let (trigger, built) = observer.into_observer();
         self.push(built, EntryKind::Observer(trigger));
+        self
+    }
+
+    /// Runs `observer` (`fn(Packet, ...params) -> Verdict`) for each packet travelling
+    /// in `direction` whose id is in `ids` (empty = every id), before the client
+    /// handles (incoming) or sends (outgoing) it. Mods run in load order, then their
+    /// packet observers in the order added; each sees the previous one's replacement
+    /// and a `Block` stops the chain. Packets this mod sent itself skip its observers.
+    pub fn add_packet_observer<M>(
+        &mut self,
+        direction: PacketDirection,
+        ids: &[u8],
+        observer: impl IntoPacketObserver<M>,
+    ) -> &mut App {
+        let built = observer.into_packet_observer();
+        self.push(built, EntryKind::Observer(TriggerDesc::Packet(direction, ids.to_vec())));
         self
     }
 
@@ -961,10 +980,67 @@ impl<K, T> Deref for On<K, T> {
 
 impl<K: TriggerKind, T: Component> On<K, T> {
     fn from_trigger(t: &TriggerData) -> Option<Self> {
+        let TriggerData::Entity { entity, value } = t else { return None };
         // Marker components cross as an empty payload.
-        let json = if t.value.is_empty() { "{}" } else { t.value.as_str() };
+        let json = if value.is_empty() { "{}" } else { value.as_str() };
         let event = serde_json::from_str(json).ok()?;
-        Some(On { entity: Entity(t.entity), event, _k: PhantomData })
+        Some(On { entity: Entity(*entity), event, _k: PhantomData })
+    }
+}
+
+// ── packets ──────────────────────────────────────────────────────────────────────
+
+/// Which way a packet travels.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum PacketDirection {
+    /// Server to client.
+    Incoming,
+    /// Client to server.
+    Outgoing,
+}
+
+/// What a packet observer decides.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Verdict {
+    /// Let it through unchanged.
+    Pass,
+    /// Drop it: the client never handles / sends it.
+    Block,
+    /// Let these bytes through instead.
+    Replace(Vec<u8>),
+}
+
+/// A packet observer's first parameter: the full wire bytes, id first.
+pub struct Packet {
+    direction: PacketDirection,
+    bytes: Vec<u8>,
+}
+
+impl Packet {
+    #[doc(hidden)]
+    pub fn new(direction: PacketDirection, bytes: Vec<u8>) -> Packet {
+        Packet { direction, bytes }
+    }
+    /// The packet id (byte 0).
+    pub fn id(&self) -> u8 {
+        self.bytes[0]
+    }
+    pub fn direction(&self) -> PacketDirection {
+        self.direction
+    }
+    pub fn bytes(&self) -> &[u8] {
+        &self.bytes
+    }
+    /// The bytes, to edit and hand back in `Verdict::Replace`.
+    pub fn into_bytes(self) -> Vec<u8> {
+        self.bytes
+    }
+}
+
+impl Deref for Packet {
+    type Target = [u8];
+    fn deref(&self) -> &[u8] {
+        &self.bytes
     }
 }
 
@@ -982,6 +1058,13 @@ pub trait IntoObserver<M> {
     fn into_observer(self) -> (TriggerDesc, Built);
 }
 
+/// A function whose first parameter is [`Packet`], the rest [`SystemParam`]s, and
+/// that returns a [`Verdict`].
+pub trait IntoPacketObserver<M> {
+    #[doc(hidden)]
+    fn into_packet_observer(self) -> Built;
+}
+
 macro_rules! fn_params {
     ($($P:ident),*) => {
         impl<Func, $($P: SystemParam + 'static),*> IntoSystem<fn($($P,)*)> for Func
@@ -997,9 +1080,10 @@ macro_rules! fn_params {
                     params,
                     after: Vec::new(),
                     before: Vec::new(),
-                    run: Box::new(move |ctx: &mut ParamCtx, _: Option<&TriggerData>| {
-                        $(let Some($P) = $P::fetch(ctx) else { return };)*
+                    run: Box::new(move |ctx: &mut ParamCtx, _: Option<TriggerData>| {
+                        $(let Some($P) = $P::fetch(ctx) else { return Verdict::Pass };)*
                         self($($P),*);
+                        Verdict::Pass
                     }),
                 }
             }
@@ -1019,13 +1103,36 @@ macro_rules! fn_params {
                     params,
                     after: Vec::new(),
                     before: Vec::new(),
-                    run: Box::new(move |ctx: &mut ParamCtx, trigger: Option<&TriggerData>| {
-                        let Some(on) = trigger.and_then(On::<K, T>::from_trigger) else { return };
-                        $(let Some($P) = $P::fetch(ctx) else { return };)*
+                    run: Box::new(move |ctx: &mut ParamCtx, trigger: Option<TriggerData>| {
+                        let Some(on) = trigger.as_ref().and_then(On::<K, T>::from_trigger) else { return Verdict::Pass };
+                        $(let Some($P) = $P::fetch(ctx) else { return Verdict::Pass };)*
                         self(on, $($P),*);
+                        Verdict::Pass
                     }),
                 };
                 (K::desc(T::PATH), built)
+            }
+        }
+
+        impl<Func, $($P: SystemParam + 'static),*> IntoPacketObserver<fn($($P,)*)> for Func
+        where
+            Func: FnMut(Packet, $($P),*) -> Verdict + 'static,
+        {
+            #[allow(non_snake_case, unused_mut, unused_variables)]
+            fn into_packet_observer(mut self) -> Built {
+                let mut params = Vec::new();
+                $($P::declare(&mut params);)*
+                Built {
+                    name: std::any::type_name::<Func>(),
+                    params,
+                    after: Vec::new(),
+                    before: Vec::new(),
+                    run: Box::new(move |ctx: &mut ParamCtx, trigger: Option<TriggerData>| {
+                        let Some(TriggerData::Packet(packet)) = trigger else { return Verdict::Pass };
+                        $(let Some($P) = $P::fetch(ctx) else { return Verdict::Pass };)*
+                        self(packet, $($P),*)
+                    }),
+                }
             }
         }
     };
@@ -1197,6 +1304,23 @@ mod tests {
             vec![ParamDesc::Query(vec![t(TermKind::Ref, "cuo:ent/graphic")]), ParamDesc::Commands]
         );
         assert_eq!(on_added.into_observer().0, TriggerDesc::Add("cuo:ent/graphic"));
+    }
+
+    #[test]
+    fn packet_observer_returns_its_verdict() {
+        fn tag(p: Packet, _l: Local<u32>) -> Verdict {
+            let mut b = p.into_bytes();
+            b.push(0x42);
+            Verdict::Replace(b)
+        }
+        let mut app = App::default();
+        app.add_packet_observer(PacketDirection::Incoming, &[0x1D], tag);
+        let e = &mut app.entries[0];
+        assert!(matches!(&e.kind, EntryKind::Observer(TriggerDesc::Packet(PacketDirection::Incoming, ids)) if ids == &[0x1D]));
+        assert!(e.params.is_empty());
+        let packet = TriggerData::Packet(Packet::new(PacketDirection::Incoming, vec![0x1D, 1]));
+        assert_eq!(e.run(Vec::new(), Some(packet)), Verdict::Replace(vec![0x1D, 1, 0x42]));
+        assert_eq!(e.run(Vec::new(), None), Verdict::Pass);
     }
 
     #[test]

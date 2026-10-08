@@ -52,6 +52,20 @@ public enum ObserverKind : byte
   Insert = 2,
   Remove = 3,
   Custom = 4,
+  Packet = 5,
+};
+
+public enum PacketDirection : byte
+{
+  Incoming = 0,
+  Outgoing = 1,
+};
+
+public enum PacketVerdict : byte
+{
+  Pass = 0,
+  Block = 1,
+  Replace = 2,
 };
 
 public enum Cmd : byte
@@ -839,23 +853,36 @@ public struct ObserverDecl : IFlatbufferObject
   public byte[] GetEventNameArray() { return __p.__vector_as_array<byte>(10); }
   public ModAbi.ParamDecl? Params(int j) { int o = __p.__offset(12); return o != 0 ? (ModAbi.ParamDecl?)(new ModAbi.ParamDecl()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
   public int ParamsLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public ModAbi.PacketDirection PacketDirection { get { int o = __p.__offset(14); return o != 0 ? (ModAbi.PacketDirection)__p.bb.Get(o + __p.bb_pos) : ModAbi.PacketDirection.Incoming; } }
+  public byte PacketIds(int j) { int o = __p.__offset(16); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
+  public int PacketIdsLength { get { int o = __p.__offset(16); return o != 0 ? __p.__vector_len(o) : 0; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetPacketIdsBytes() { return __p.__vector_as_span<byte>(16, 1); }
+#else
+  public ArraySegment<byte>? GetPacketIdsBytes() { return __p.__vector_as_arraysegment(16); }
+#endif
+  public byte[] GetPacketIdsArray() { return __p.__vector_as_array<byte>(16); }
 
   public static Offset<ModAbi.ObserverDecl> CreateObserverDecl(FlatBufferBuilder builder,
       uint id = 0,
       ModAbi.ObserverKind kind = ModAbi.ObserverKind.Spawn,
       ushort type_id = 0,
       StringOffset event_nameOffset = default(StringOffset),
-      VectorOffset @paramsOffset = default(VectorOffset)) {
-    builder.StartTable(5);
+      VectorOffset @paramsOffset = default(VectorOffset),
+      ModAbi.PacketDirection packet_direction = ModAbi.PacketDirection.Incoming,
+      VectorOffset packet_idsOffset = default(VectorOffset)) {
+    builder.StartTable(7);
+    ObserverDecl.AddPacketIds(builder, packet_idsOffset);
     ObserverDecl.AddParams(builder, @paramsOffset);
     ObserverDecl.AddEventName(builder, event_nameOffset);
     ObserverDecl.AddId(builder, id);
     ObserverDecl.AddTypeId(builder, type_id);
+    ObserverDecl.AddPacketDirection(builder, packet_direction);
     ObserverDecl.AddKind(builder, kind);
     return ObserverDecl.EndObserverDecl(builder);
   }
 
-  public static void StartObserverDecl(FlatBufferBuilder builder) { builder.StartTable(5); }
+  public static void StartObserverDecl(FlatBufferBuilder builder) { builder.StartTable(7); }
   public static void AddId(FlatBufferBuilder builder, uint id) { builder.AddUint(0, id, 0); }
   public static void AddKind(FlatBufferBuilder builder, ModAbi.ObserverKind kind) { builder.AddByte(1, (byte)kind, 0); }
   public static void AddTypeId(FlatBufferBuilder builder, ushort typeId) { builder.AddUshort(2, typeId, 0); }
@@ -866,6 +893,13 @@ public struct ObserverDecl : IFlatbufferObject
   public static VectorOffset CreateParamsVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<ModAbi.ParamDecl>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateParamsVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<ModAbi.ParamDecl>>(dataPtr, sizeInBytes); return builder.EndVector(); }
   public static void StartParamsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddPacketDirection(FlatBufferBuilder builder, ModAbi.PacketDirection packetDirection) { builder.AddByte(5, (byte)packetDirection, 0); }
+  public static void AddPacketIds(FlatBufferBuilder builder, VectorOffset packetIdsOffset) { builder.AddOffset(6, packetIdsOffset.Value, 0); }
+  public static VectorOffset CreatePacketIdsVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
+  public static VectorOffset CreatePacketIdsVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreatePacketIdsVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreatePacketIdsVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<byte>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartPacketIdsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(1, numElems, 1); }
   public static Offset<ModAbi.ObserverDecl> EndObserverDecl(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<ModAbi.ObserverDecl>(o);
@@ -882,6 +916,9 @@ public struct ObserverDecl : IFlatbufferObject
     _o.EventName = this.EventName;
     _o.Params = new List<ModAbi.ParamDeclT>();
     for (var _j = 0; _j < this.ParamsLength; ++_j) {_o.Params.Add(this.Params(_j).HasValue ? this.Params(_j).Value.UnPack() : null);}
+    _o.PacketDirection = this.PacketDirection;
+    _o.PacketIds = new List<byte>();
+    for (var _j = 0; _j < this.PacketIdsLength; ++_j) {_o.PacketIds.Add(this.PacketIds(_j));}
   }
   public static Offset<ModAbi.ObserverDecl> Pack(FlatBufferBuilder builder, ObserverDeclT _o) {
     if (_o == null) return default(Offset<ModAbi.ObserverDecl>);
@@ -892,13 +929,20 @@ public struct ObserverDecl : IFlatbufferObject
       for (var _j = 0; _j < __params.Length; ++_j) { __params[_j] = ModAbi.ParamDecl.Pack(builder, _o.Params[_j]); }
       _params = CreateParamsVector(builder, __params);
     }
+    var _packet_ids = default(VectorOffset);
+    if (_o.PacketIds != null) {
+      var __packet_ids = _o.PacketIds.ToArray();
+      _packet_ids = CreatePacketIdsVector(builder, __packet_ids);
+    }
     return CreateObserverDecl(
       builder,
       _o.Id,
       _o.Kind,
       _o.TypeId,
       _event_name,
-      _params);
+      _params,
+      _o.PacketDirection,
+      _packet_ids);
   }
 }
 
@@ -909,6 +953,8 @@ public class ObserverDeclT
   public ushort TypeId { get; set; }
   public string EventName { get; set; }
   public List<ModAbi.ParamDeclT> Params { get; set; }
+  public ModAbi.PacketDirection PacketDirection { get; set; }
+  public List<byte> PacketIds { get; set; }
 
   public ObserverDeclT() {
     this.Id = 0;
@@ -916,6 +962,8 @@ public class ObserverDeclT
     this.TypeId = 0;
     this.EventName = null;
     this.Params = null;
+    this.PacketDirection = ModAbi.PacketDirection.Incoming;
+    this.PacketIds = null;
   }
 }
 
@@ -930,6 +978,8 @@ static public class ObserverDeclVerify
       && verifier.VerifyField(tablePos, 8 /*TypeId*/, 2 /*ushort*/, 2, false)
       && verifier.VerifyString(tablePos, 10 /*EventName*/, false)
       && verifier.VerifyVectorOfTables(tablePos, 12 /*Params*/, ModAbi.ParamDeclVerify.Verify, false)
+      && verifier.VerifyField(tablePos, 14 /*PacketDirection*/, 1 /*ModAbi.PacketDirection*/, 1, false)
+      && verifier.VerifyVectorOfData(tablePos, 16 /*PacketIds*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
@@ -2209,17 +2259,30 @@ public struct CommandBuffer : IFlatbufferObject
   public ModAbi.Cmd[] GetCmdsTypeArray() { int o = __p.__offset(4); if (o == 0) return null; int p = __p.__vector(o); int l = __p.__vector_len(o); ModAbi.Cmd[] a = new ModAbi.Cmd[l]; for (int i = 0; i < l; i++) { a[i] = (ModAbi.Cmd)__p.bb.Get(p + i * 1); } return a; }
   public TTable? Cmds<TTable>(int j) where TTable : struct, IFlatbufferObject { int o = __p.__offset(6); return o != 0 ? (TTable?)__p.__union<TTable>(__p.__vector(o) + j * 4) : null; }
   public int CmdsLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public ModAbi.PacketVerdict Verdict { get { int o = __p.__offset(8); return o != 0 ? (ModAbi.PacketVerdict)__p.bb.Get(o + __p.bb_pos) : ModAbi.PacketVerdict.Pass; } }
+  public byte Replacement(int j) { int o = __p.__offset(10); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
+  public int ReplacementLength { get { int o = __p.__offset(10); return o != 0 ? __p.__vector_len(o) : 0; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetReplacementBytes() { return __p.__vector_as_span<byte>(10, 1); }
+#else
+  public ArraySegment<byte>? GetReplacementBytes() { return __p.__vector_as_arraysegment(10); }
+#endif
+  public byte[] GetReplacementArray() { return __p.__vector_as_array<byte>(10); }
 
   public static Offset<ModAbi.CommandBuffer> CreateCommandBuffer(FlatBufferBuilder builder,
       VectorOffset cmds_typeOffset = default(VectorOffset),
-      VectorOffset cmdsOffset = default(VectorOffset)) {
-    builder.StartTable(2);
+      VectorOffset cmdsOffset = default(VectorOffset),
+      ModAbi.PacketVerdict verdict = ModAbi.PacketVerdict.Pass,
+      VectorOffset replacementOffset = default(VectorOffset)) {
+    builder.StartTable(4);
+    CommandBuffer.AddReplacement(builder, replacementOffset);
     CommandBuffer.AddCmds(builder, cmdsOffset);
     CommandBuffer.AddCmdsType(builder, cmds_typeOffset);
+    CommandBuffer.AddVerdict(builder, verdict);
     return CommandBuffer.EndCommandBuffer(builder);
   }
 
-  public static void StartCommandBuffer(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void StartCommandBuffer(FlatBufferBuilder builder) { builder.StartTable(4); }
   public static void AddCmdsType(FlatBufferBuilder builder, VectorOffset cmdsTypeOffset) { builder.AddOffset(0, cmdsTypeOffset.Value, 0); }
   public static VectorOffset CreateCmdsTypeVector(FlatBufferBuilder builder, ModAbi.Cmd[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte((byte)data[i]); return builder.EndVector(); }
   public static VectorOffset CreateCmdsTypeVectorBlock(FlatBufferBuilder builder, ModAbi.Cmd[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
@@ -2232,6 +2295,13 @@ public struct CommandBuffer : IFlatbufferObject
   public static VectorOffset CreateCmdsVectorBlock(FlatBufferBuilder builder, ArraySegment<int> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateCmdsVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<int>(dataPtr, sizeInBytes); return builder.EndVector(); }
   public static void StartCmdsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddVerdict(FlatBufferBuilder builder, ModAbi.PacketVerdict verdict) { builder.AddByte(2, (byte)verdict, 0); }
+  public static void AddReplacement(FlatBufferBuilder builder, VectorOffset replacementOffset) { builder.AddOffset(3, replacementOffset.Value, 0); }
+  public static VectorOffset CreateReplacementVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
+  public static VectorOffset CreateReplacementVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateReplacementVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateReplacementVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<byte>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartReplacementVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(1, numElems, 1); }
   public static Offset<ModAbi.CommandBuffer> EndCommandBuffer(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<ModAbi.CommandBuffer>(o);
@@ -2280,6 +2350,9 @@ public struct CommandBuffer : IFlatbufferObject
       }
       _o.Cmds.Add(_o_Cmds);
     }
+    _o.Verdict = this.Verdict;
+    _o.Replacement = new List<byte>();
+    for (var _j = 0; _j < this.ReplacementLength; ++_j) {_o.Replacement.Add(this.Replacement(_j));}
   }
   public static Offset<ModAbi.CommandBuffer> Pack(FlatBufferBuilder builder, CommandBufferT _o) {
     if (_o == null) return default(Offset<ModAbi.CommandBuffer>);
@@ -2295,19 +2368,30 @@ public struct CommandBuffer : IFlatbufferObject
       for (var _j = 0; _j < __cmds.Length; ++_j) { __cmds[_j] = ModAbi.CmdUnion.Pack(builder,  _o.Cmds[_j]); }
       _cmds = CreateCmdsVector(builder, __cmds);
     }
+    var _replacement = default(VectorOffset);
+    if (_o.Replacement != null) {
+      var __replacement = _o.Replacement.ToArray();
+      _replacement = CreateReplacementVector(builder, __replacement);
+    }
     return CreateCommandBuffer(
       builder,
       _cmds_type,
-      _cmds);
+      _cmds,
+      _o.Verdict,
+      _replacement);
   }
 }
 
 public class CommandBufferT
 {
   public List<ModAbi.CmdUnion> Cmds { get; set; }
+  public ModAbi.PacketVerdict Verdict { get; set; }
+  public List<byte> Replacement { get; set; }
 
   public CommandBufferT() {
     this.Cmds = null;
+    this.Verdict = ModAbi.PacketVerdict.Pass;
+    this.Replacement = null;
   }
   public static CommandBufferT DeserializeFromBinary(byte[] fbBuffer) {
     return CommandBuffer.GetRootAsCommandBuffer(new ByteBuffer(fbBuffer)).UnPack();
@@ -2326,6 +2410,8 @@ static public class CommandBufferVerify
   {
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyVectorOfData(tablePos, 4 /*CmdsType*/, 1 /*ModAbi.Cmd*/, false)
+      && verifier.VerifyField(tablePos, 8 /*Verdict*/, 1 /*ModAbi.PacketVerdict*/, 1, false)
+      && verifier.VerifyVectorOfData(tablePos, 10 /*Replacement*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
@@ -2348,6 +2434,15 @@ public struct ObserverInput : IFlatbufferObject
   public int ResourcesLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
   public ModAbi.EventValues? Events(int j) { int o = __p.__offset(14); return o != 0 ? (ModAbi.EventValues?)(new ModAbi.EventValues()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
   public int EventsLength { get { int o = __p.__offset(14); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public ModAbi.PacketDirection PacketDirection { get { int o = __p.__offset(16); return o != 0 ? (ModAbi.PacketDirection)__p.bb.Get(o + __p.bb_pos) : ModAbi.PacketDirection.Incoming; } }
+  public byte Packet(int j) { int o = __p.__offset(18); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
+  public int PacketLength { get { int o = __p.__offset(18); return o != 0 ? __p.__vector_len(o) : 0; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetPacketBytes() { return __p.__vector_as_span<byte>(18, 1); }
+#else
+  public ArraySegment<byte>? GetPacketBytes() { return __p.__vector_as_arraysegment(18); }
+#endif
+  public byte[] GetPacketArray() { return __p.__vector_as_array<byte>(18); }
 
   public static Offset<ModAbi.ObserverInput> CreateObserverInput(FlatBufferBuilder builder,
       uint obs_id = 0,
@@ -2355,18 +2450,22 @@ public struct ObserverInput : IFlatbufferObject
       Offset<ModAbi.CompValue> valueOffset = default(Offset<ModAbi.CompValue>),
       VectorOffset queriesOffset = default(VectorOffset),
       VectorOffset resourcesOffset = default(VectorOffset),
-      VectorOffset eventsOffset = default(VectorOffset)) {
-    builder.StartTable(6);
+      VectorOffset eventsOffset = default(VectorOffset),
+      ModAbi.PacketDirection packet_direction = ModAbi.PacketDirection.Incoming,
+      VectorOffset packetOffset = default(VectorOffset)) {
+    builder.StartTable(8);
     ObserverInput.AddEntity(builder, entity);
+    ObserverInput.AddPacket(builder, packetOffset);
     ObserverInput.AddEvents(builder, eventsOffset);
     ObserverInput.AddResources(builder, resourcesOffset);
     ObserverInput.AddQueries(builder, queriesOffset);
     ObserverInput.AddValue(builder, valueOffset);
     ObserverInput.AddObsId(builder, obs_id);
+    ObserverInput.AddPacketDirection(builder, packet_direction);
     return ObserverInput.EndObserverInput(builder);
   }
 
-  public static void StartObserverInput(FlatBufferBuilder builder) { builder.StartTable(6); }
+  public static void StartObserverInput(FlatBufferBuilder builder) { builder.StartTable(8); }
   public static void AddObsId(FlatBufferBuilder builder, uint obsId) { builder.AddUint(0, obsId, 0); }
   public static void AddEntity(FlatBufferBuilder builder, ulong entity) { builder.AddUlong(1, entity, 0); }
   public static void AddValue(FlatBufferBuilder builder, Offset<ModAbi.CompValue> valueOffset) { builder.AddOffset(2, valueOffset.Value, 0); }
@@ -2388,6 +2487,13 @@ public struct ObserverInput : IFlatbufferObject
   public static VectorOffset CreateEventsVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<ModAbi.EventValues>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateEventsVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<ModAbi.EventValues>>(dataPtr, sizeInBytes); return builder.EndVector(); }
   public static void StartEventsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddPacketDirection(FlatBufferBuilder builder, ModAbi.PacketDirection packetDirection) { builder.AddByte(6, (byte)packetDirection, 0); }
+  public static void AddPacket(FlatBufferBuilder builder, VectorOffset packetOffset) { builder.AddOffset(7, packetOffset.Value, 0); }
+  public static VectorOffset CreatePacketVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
+  public static VectorOffset CreatePacketVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreatePacketVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreatePacketVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<byte>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartPacketVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(1, numElems, 1); }
   public static Offset<ModAbi.ObserverInput> EndObserverInput(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<ModAbi.ObserverInput>(o);
@@ -2407,6 +2513,9 @@ public struct ObserverInput : IFlatbufferObject
     for (var _j = 0; _j < this.ResourcesLength; ++_j) {_o.Resources.Add(this.Resources(_j).HasValue ? this.Resources(_j).Value.UnPack() : null);}
     _o.Events = new List<ModAbi.EventValuesT>();
     for (var _j = 0; _j < this.EventsLength; ++_j) {_o.Events.Add(this.Events(_j).HasValue ? this.Events(_j).Value.UnPack() : null);}
+    _o.PacketDirection = this.PacketDirection;
+    _o.Packet = new List<byte>();
+    for (var _j = 0; _j < this.PacketLength; ++_j) {_o.Packet.Add(this.Packet(_j));}
   }
   public static Offset<ModAbi.ObserverInput> Pack(FlatBufferBuilder builder, ObserverInputT _o) {
     if (_o == null) return default(Offset<ModAbi.ObserverInput>);
@@ -2429,6 +2538,11 @@ public struct ObserverInput : IFlatbufferObject
       for (var _j = 0; _j < __events.Length; ++_j) { __events[_j] = ModAbi.EventValues.Pack(builder, _o.Events[_j]); }
       _events = CreateEventsVector(builder, __events);
     }
+    var _packet = default(VectorOffset);
+    if (_o.Packet != null) {
+      var __packet = _o.Packet.ToArray();
+      _packet = CreatePacketVector(builder, __packet);
+    }
     return CreateObserverInput(
       builder,
       _o.ObsId,
@@ -2436,7 +2550,9 @@ public struct ObserverInput : IFlatbufferObject
       _value,
       _queries,
       _resources,
-      _events);
+      _events,
+      _o.PacketDirection,
+      _packet);
   }
 }
 
@@ -2448,6 +2564,8 @@ public class ObserverInputT
   public List<ModAbi.QueryRowsT> Queries { get; set; }
   public List<ModAbi.ResValueT> Resources { get; set; }
   public List<ModAbi.EventValuesT> Events { get; set; }
+  public ModAbi.PacketDirection PacketDirection { get; set; }
+  public List<byte> Packet { get; set; }
 
   public ObserverInputT() {
     this.ObsId = 0;
@@ -2456,6 +2574,8 @@ public class ObserverInputT
     this.Queries = null;
     this.Resources = null;
     this.Events = null;
+    this.PacketDirection = ModAbi.PacketDirection.Incoming;
+    this.Packet = null;
   }
 }
 
@@ -2471,6 +2591,8 @@ static public class ObserverInputVerify
       && verifier.VerifyVectorOfTables(tablePos, 10 /*Queries*/, ModAbi.QueryRowsVerify.Verify, false)
       && verifier.VerifyVectorOfTables(tablePos, 12 /*Resources*/, ModAbi.ResValueVerify.Verify, false)
       && verifier.VerifyVectorOfTables(tablePos, 14 /*Events*/, ModAbi.EventValuesVerify.Verify, false)
+      && verifier.VerifyField(tablePos, 16 /*PacketDirection*/, 1 /*ModAbi.PacketDirection*/, 1, false)
+      && verifier.VerifyVectorOfData(tablePos, 18 /*Packet*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

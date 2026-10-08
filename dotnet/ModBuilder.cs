@@ -3,12 +3,9 @@ using ModAbi;
 
 namespace CuoModSdk;
 
-/// <summary>An intercepted packet (full wire bytes, id first): pass it, block it, or replace it.</summary>
-public delegate Packets.Verdict PacketHandler(Packets.Direction direction, ReadOnlySpan<byte> packet);
-
 /// <summary>
-/// What a mod's <see cref="Mod.Setup"/> populates: systems, observers, hotkeys and the
-/// packet handler.
+/// What a mod's <see cref="Mod.Setup"/> populates: systems, observers (packet observers
+/// included) and hotkeys.
 ///
 /// <para>Systems and observers are LAMBDAS whose PARAMETER TYPES declare what they need
 /// — the same shape as a host <c>TinyEcs.Bevy</c> plugin (and the Rust SDK):</para>
@@ -31,7 +28,6 @@ public sealed class ModBuilder
 
     internal readonly List<Entry> Systems = new();
     internal readonly List<Entry> Observers = new();
-    internal PacketHandler? PacketHandler;
 
     internal ModBuilder(ModHost host) => _host = host;
 
@@ -61,13 +57,6 @@ public sealed class ModBuilder
         {
             Name = name, Mouse = mouseButton, Ctrl = ctrl, Shift = shift, Alt = alt, Consume = consume,
         });
-
-    /// <summary>
-    /// The packet handler: sees each packet whose id was passed to
-    /// <see cref="Packets.Intercept"/> (call it here, in setup) before the client handles
-    /// (incoming) or sends (outgoing) it. Packets this mod injects skip it.
-    /// </summary>
-    public void OnPacket(PacketHandler handler) => PacketHandler = handler;
 
     // ── AddSystem ────────────────────────────────────────────────────────────────
     // One overload per arity (all the same shape).
@@ -413,9 +402,150 @@ public sealed class ModBuilder
         });
     }
 
+    // ── AddPacketObserver ────────────────────────────────────────────────────────
+    // The tinyecs-mod `on-packet` trigger: runs synchronously before the client handles
+    // (incoming) or sends (outgoing) a packet whose id is in `ids` (empty = every id).
+    // Mods run in load order, a mod's packet observers in declaration order; each sees
+    // the previous replacement, Block stops the chain. Packets this mod sent skip them.
+    // A run skipped for a missing parameter passes.
+
+    public void AddPacketObserver(PacketDirection direction, ReadOnlySpan<byte> ids, Func<Packet, Verdict> body)
+    {
+        var d = Describer();
+        AddObserver(PacketDecl(direction, ids), d, scope =>
+        {
+            scope.Verdict = body(scope.Packet);
+        });
+    }
+
+    public void AddPacketObserver<P1>(PacketDirection direction, ReadOnlySpan<byte> ids, Func<Packet, P1, Verdict> body)
+        where P1 : ISystemParam<P1>
+    {
+        var d = Describer();
+        P1.Describe(d); var s1 = d.Take();
+        AddObserver(PacketDecl(direction, ids), d, scope =>
+        {
+            if (!P1.TryCreate(new ParamContext(scope, s1), out var p1)) return;
+            scope.Verdict = body(scope.Packet, p1);
+        });
+    }
+
+    public void AddPacketObserver<P1, P2>(PacketDirection direction, ReadOnlySpan<byte> ids, Func<Packet, P1, P2, Verdict> body)
+        where P1 : ISystemParam<P1>
+        where P2 : ISystemParam<P2>
+    {
+        var d = Describer();
+        P1.Describe(d); var s1 = d.Take();
+        P2.Describe(d); var s2 = d.Take();
+        AddObserver(PacketDecl(direction, ids), d, scope =>
+        {
+            if (!P1.TryCreate(new ParamContext(scope, s1), out var p1)) return;
+            if (!P2.TryCreate(new ParamContext(scope, s2), out var p2)) return;
+            scope.Verdict = body(scope.Packet, p1, p2);
+        });
+    }
+
+    public void AddPacketObserver<P1, P2, P3>(PacketDirection direction, ReadOnlySpan<byte> ids, Func<Packet, P1, P2, P3, Verdict> body)
+        where P1 : ISystemParam<P1>
+        where P2 : ISystemParam<P2>
+        where P3 : ISystemParam<P3>
+    {
+        var d = Describer();
+        P1.Describe(d); var s1 = d.Take();
+        P2.Describe(d); var s2 = d.Take();
+        P3.Describe(d); var s3 = d.Take();
+        AddObserver(PacketDecl(direction, ids), d, scope =>
+        {
+            if (!P1.TryCreate(new ParamContext(scope, s1), out var p1)) return;
+            if (!P2.TryCreate(new ParamContext(scope, s2), out var p2)) return;
+            if (!P3.TryCreate(new ParamContext(scope, s3), out var p3)) return;
+            scope.Verdict = body(scope.Packet, p1, p2, p3);
+        });
+    }
+
+    public void AddPacketObserver<P1, P2, P3, P4>(PacketDirection direction, ReadOnlySpan<byte> ids, Func<Packet, P1, P2, P3, P4, Verdict> body)
+        where P1 : ISystemParam<P1>
+        where P2 : ISystemParam<P2>
+        where P3 : ISystemParam<P3>
+        where P4 : ISystemParam<P4>
+    {
+        var d = Describer();
+        P1.Describe(d); var s1 = d.Take();
+        P2.Describe(d); var s2 = d.Take();
+        P3.Describe(d); var s3 = d.Take();
+        P4.Describe(d); var s4 = d.Take();
+        AddObserver(PacketDecl(direction, ids), d, scope =>
+        {
+            if (!P1.TryCreate(new ParamContext(scope, s1), out var p1)) return;
+            if (!P2.TryCreate(new ParamContext(scope, s2), out var p2)) return;
+            if (!P3.TryCreate(new ParamContext(scope, s3), out var p3)) return;
+            if (!P4.TryCreate(new ParamContext(scope, s4), out var p4)) return;
+            scope.Verdict = body(scope.Packet, p1, p2, p3, p4);
+        });
+    }
+
+    public void AddPacketObserver<P1, P2, P3, P4, P5>(PacketDirection direction, ReadOnlySpan<byte> ids, Func<Packet, P1, P2, P3, P4, P5, Verdict> body)
+        where P1 : ISystemParam<P1>
+        where P2 : ISystemParam<P2>
+        where P3 : ISystemParam<P3>
+        where P4 : ISystemParam<P4>
+        where P5 : ISystemParam<P5>
+    {
+        var d = Describer();
+        P1.Describe(d); var s1 = d.Take();
+        P2.Describe(d); var s2 = d.Take();
+        P3.Describe(d); var s3 = d.Take();
+        P4.Describe(d); var s4 = d.Take();
+        P5.Describe(d); var s5 = d.Take();
+        AddObserver(PacketDecl(direction, ids), d, scope =>
+        {
+            if (!P1.TryCreate(new ParamContext(scope, s1), out var p1)) return;
+            if (!P2.TryCreate(new ParamContext(scope, s2), out var p2)) return;
+            if (!P3.TryCreate(new ParamContext(scope, s3), out var p3)) return;
+            if (!P4.TryCreate(new ParamContext(scope, s4), out var p4)) return;
+            if (!P5.TryCreate(new ParamContext(scope, s5), out var p5)) return;
+            scope.Verdict = body(scope.Packet, p1, p2, p3, p4, p5);
+        });
+    }
+
+    public void AddPacketObserver<P1, P2, P3, P4, P5, P6>(PacketDirection direction, ReadOnlySpan<byte> ids, Func<Packet, P1, P2, P3, P4, P5, P6, Verdict> body)
+        where P1 : ISystemParam<P1>
+        where P2 : ISystemParam<P2>
+        where P3 : ISystemParam<P3>
+        where P4 : ISystemParam<P4>
+        where P5 : ISystemParam<P5>
+        where P6 : ISystemParam<P6>
+    {
+        var d = Describer();
+        P1.Describe(d); var s1 = d.Take();
+        P2.Describe(d); var s2 = d.Take();
+        P3.Describe(d); var s3 = d.Take();
+        P4.Describe(d); var s4 = d.Take();
+        P5.Describe(d); var s5 = d.Take();
+        P6.Describe(d); var s6 = d.Take();
+        AddObserver(PacketDecl(direction, ids), d, scope =>
+        {
+            if (!P1.TryCreate(new ParamContext(scope, s1), out var p1)) return;
+            if (!P2.TryCreate(new ParamContext(scope, s2), out var p2)) return;
+            if (!P3.TryCreate(new ParamContext(scope, s3), out var p3)) return;
+            if (!P4.TryCreate(new ParamContext(scope, s4), out var p4)) return;
+            if (!P5.TryCreate(new ParamContext(scope, s5), out var p5)) return;
+            if (!P6.TryCreate(new ParamContext(scope, s6), out var p6)) return;
+            scope.Verdict = body(scope.Packet, p1, p2, p3, p4, p5, p6);
+        });
+    }
+
     // ── declaration plumbing ─────────────────────────────────────────────────────
 
     ParamDescriber Describer() => new(_host);
+
+    static ObserverDeclT PacketDecl(PacketDirection direction, ReadOnlySpan<byte> ids) => new()
+    {
+        Kind = ObserverKind.Packet,
+        TypeId = ModHost.NoneType,
+        PacketDirection = (ModAbi.PacketDirection)direction,
+        PacketIds = ids.IsEmpty ? null : [.. ids],
+    };
 
     SystemHandle AddSystem(ParamDescriber d, Action<RunScope> run)
     {

@@ -10,7 +10,7 @@ fn setup(app: &mut App) {
     app.add_observer(bandage_hotkey);
     app.add_systems(Schedule::Startup, spawn_window);
     app.add_observer(on_click);
-    packets::intercept(Direction::Incoming, &[0x1C]); // ASCII speech
+    app.add_packet_observer(PacketDirection::Incoming, &[0x1C], block_spam); // ASCII speech
 }
 
 // The parameters ARE the declaration: the client sees the query + `Local` + `Commands`
@@ -59,7 +59,7 @@ fn on_click(click: On<Event, UiClick>, texts: Query<&Text>) {
     }
 }
 
-fn on_packet(_dir: Direction, packet: &[u8]) -> Verdict {
+fn block_spam(packet: Packet) -> Verdict {
     if packet.windows(4).any(|w| w == b"spam") {
         Verdict::Block
     } else {
@@ -67,4 +67,4 @@ fn on_packet(_dir: Direction, packet: &[u8]) -> Verdict {
     }
 }
 
-export_mod!(setup, on_packet);
+export_mod!(setup);

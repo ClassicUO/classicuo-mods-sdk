@@ -135,7 +135,8 @@ pub struct ParamFields {
 
 /// SystemInput: `sys_id 0, queries 1, tick 2, resources 3, events 4`.
 pub const SYSTEM_INPUT: ParamFields = ParamFields { queries: 1, resources: 3, events: 4 };
-/// ObserverInput: `obs_id 0, entity 1, value 2, queries 3, resources 4, events 5`.
+/// ObserverInput: `obs_id 0, entity 1, value 2, queries 3, resources 4, events 5,
+/// packet_direction 6, packet 7`.
 pub const OBSERVER_INPUT: ParamFields = ParamFields { queries: 3, resources: 4, events: 5 };
 
 /// One Res param as delivered.
@@ -223,6 +224,16 @@ pub fn observer_value(bytes: &[u8]) -> String {
         Some(c) => p.comp_json(c),
         None => String::new(),
     }
+}
+
+/// A packet observer's ObserverInput `(packet_direction (6), packet (7))`; `None`
+/// when there is no packet (any other observer).
+pub fn observer_packet(bytes: &[u8]) -> Option<(u8, Vec<u8>)> {
+    let buf = Buf::new(bytes);
+    let root = buf.root()?;
+    let packet = buf.bytes_at(buf.field_ref(root, 7)?).to_vec();
+    let dir = buf.field(root, 6).and_then(|p| buf.data.get(p).copied()).unwrap_or(0);
+    Some((dir, packet))
 }
 
 /// A Handshake's `abi_version` (field 0). 0 when absent/malformed.

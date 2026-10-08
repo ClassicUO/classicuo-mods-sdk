@@ -292,7 +292,7 @@ pub fn base64_decode(s: &str) -> Option<Vec<u8>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{actions, assets, host, packets};
+    use crate::{actions, assets, host};
     use serde_json::json;
 
     #[test]
@@ -326,14 +326,13 @@ mod tests {
     }
 
     #[test]
-    fn variant_cases_carry_payload_or_null() {
+    fn variant_cases_carry_their_payload() {
         let d = actions::Destination::ContainerAt((0x4000_0001, 10, 20));
         assert_eq!(d.to_wit(), json!({"container-at": [1073741825, 10, 20]}));
         let g = actions::Destination::Ground(actions::Point { x: 1, y: 2, z: -3 });
         assert_eq!(g.to_wit(), json!({"ground": {"x": 1, "y": 2, "z": -3}}));
-        assert!(matches!(packets::Verdict::from_wit(&json!({"pass": null})), Some(packets::Verdict::Pass)));
-        match packets::Verdict::from_wit(&json!({"replace": "AQID"})) {
-            Some(packets::Verdict::Replace(b)) => assert_eq!(b, vec![1, 2, 3]),
+        match actions::Destination::from_wit(&json!({"container": 7})) {
+            Some(actions::Destination::Container(s)) => assert_eq!(s, 7),
             other => panic!("{other:?}"),
         }
     }

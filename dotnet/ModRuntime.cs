@@ -11,10 +11,9 @@ namespace CuoModSdk;
 /// 1. <c>mod_setup(Handshake)</c> — the generated stub calls <see cref="Setup"/>: intern
 ///    the type-path table, run the mod's Setup, return the SetupReply.
 /// 2. <c>mod_run</c> / <c>mod_observer</c> — build the parameters from the pushed data,
-///    run the body, return the CommandBuffer (0 = none).
+///    run the body, return the CommandBuffer (0 = none). A packet observer's verdict
+///    rides that CommandBuffer (0 = pass).
 /// 3. <c>mod_spawned</c> — the host assigned real ids to the buffer's spawns.
-/// 4. <c>mod_on_packet(dir, bytes)</c> — the packet handler: 0 pass, 1 block, else the
-///    packed replacement.
 ///
 /// Packed guest returns are <c>len&lt;&lt;32 | ptr</c> (0 = none).
 /// </summary>
@@ -24,11 +23,10 @@ public static unsafe class ModRuntime
     /// The mod ABI version this SDK speaks. <see cref="Setup"/> throws when the host's
     /// Handshake.AbiVersion differs — a silent mismatch corrupts every buffer that follows.
     /// </summary>
-    public const uint AbiVersion = 3;
+    public const uint AbiVersion = 4;
 
     static List<Entry> _systems = new();
     static List<Entry> _observers = new();
-    static PacketHandler? _onPacket;
     static ModHost? _host;
 
     // Temp ids are unique for the mod's lifetime, so a placeholder kept across runs
@@ -59,7 +57,6 @@ public static unsafe class ModRuntime
         m.Finish();
         _systems = m.Systems;
         _observers = m.Observers;
-        _onPacket = m.PacketHandler;
         return Pack(SetupReply.Pack(Begin(), m.BuildReply()).Value);
     }
 
@@ -68,7 +65,7 @@ public static unsafe class ModRuntime
         if ((uint)sysId >= (uint)_systems.Count)
             return 0;
         var input = new ParamsView(SystemInput.GetRootAsSystemInput(Wrap(ptr, len)));
-        return Execute(_systems[sysId], input, 0, null);
+        return Execute(_systems[sysId], input, 0, null, default);
     }
 
     internal static long Observer(int obsId, long entity, int ptr, int len)
@@ -77,14 +74,16 @@ public static unsafe class ModRuntime
             return 0;
         var oi = ObserverInput.GetRootAsObserverInput(Wrap(ptr, len));
         var value = oi.Value is { } v ? new CompView(v) : (CompView?)null;
-        return Execute(_observers[obsId], new ParamsView(oi), (ulong)entity, value);
+        // The packet lives in the input copy, which outlives the run: no second copy.
+        var packet = oi.GetPacketBytes() is { } bytes ? new Packet((PacketDirection)oi.PacketDirection, bytes) : default;
+        return Execute(_observers[obsId], new ParamsView(oi), (ulong)entity, value, packet);
     }
 
     // One builder for every run: runs never nest (the host drives the exports serially)
     // and the buffer is packed into the arena before the run returns.
     static readonly CommandBufferBuilder _buffer = new();
 
-    static long Execute(Entry entry, ParamsView input, ulong triggerEntity, CompView? triggerValue)
+    static long Execute(Entry entry, ParamsView input, ulong triggerEntity, CompView? triggerValue, Packet packet)
     {
         var buffer = _buffer;
         buffer.Clear();
@@ -96,13 +95,14 @@ public static unsafe class ModRuntime
             Locals = entry.Locals,
             TriggerEntity = triggerEntity,
             TriggerValue = triggerValue,
+            Packet = packet,
         };
         entry.Run(scope);
         if (scope.WriteBacks != null)
             foreach (var wb in scope.WriteBacks)
                 wb();
         scope.Commands.Flush();
-        return buffer.IsEmpty ? 0L : Pack(buffer.Finish(Begin()));
+        return buffer.IsEmpty && scope.Verdict.Kind == PacketVerdict.Pass ? 0L : Pack(buffer.Finish(Begin(), scope.Verdict));
     }
 
     internal static void Spawned(int ptr, int len)
@@ -115,28 +115,8 @@ public static unsafe class ModRuntime
         }
     }
 
-    internal static long OnPacket(int dir, int ptr, int len)
-    {
-        if (_onPacket == null)
-            return 0;
-        // Copied out of the arena (a mod_call from the handler may grow and move it) into
-        // a reused buffer: the handler only sees a span, and packets don't nest.
-        if (_packet.Length < len)
-            _packet = new byte[Math.Max(len, _packet.Length * 2)];
-        new ReadOnlySpan<byte>((void*)(nint)ptr, len).CopyTo(_packet);
-        var d = dir == 0 ? Packets.Direction.Incoming : Packets.Direction.Outgoing;
-        return _onPacket(d, _packet.AsSpan(0, len)) switch
-        {
-            Packets.Verdict.Block => 1,
-            Packets.Verdict.Replace r => PackBytes(r.Value),
-            _ => 0,
-        };
-    }
-
     // ── FlatBuffers <-> arena plumbing ───────────────────────────────────────────
     static readonly FlatBufferBuilder _fbb = new(1024);
-
-    static byte[] _packet = new byte[512];
 
     // The input is copied out of the arena before any mod code runs: a mod_call result
     // lands in the arena too, and growing it may move earlier regions. The copy goes into
@@ -200,7 +180,4 @@ internal static class ModExports
 
     [UnmanagedCallersOnly(EntryPoint = "mod_spawned")]
     static void Spawned(int ptr, int len) => ModRuntime.Spawned(ptr, len);
-
-    [UnmanagedCallersOnly(EntryPoint = "mod_on_packet")]
-    static long OnPacket(int dir, int ptr, int len) => ModRuntime.OnPacket(dir, ptr, len);
 }

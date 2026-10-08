@@ -4,9 +4,9 @@
  * 1. mod_setup(Handshake) — intern the type-path table, call the mod's cuo_setup,
  *    return the SetupReply.
  * 2. mod_run / mod_observer — dispatch to the registered callback with the pushed
- *    parameter data, return its CommandBuffer (0 = none).
+ *    parameter data, return its CommandBuffer (0 = none). A packet observer's verdict
+ *    rides that CommandBuffer.
  * 3. mod_spawned — the host assigned real ids to the buffer it just applied (cmds.c).
- * 4. mod_on_packet — the packet handler: 0 pass, 1 block, else the replacement.
  */
 #include <stdarg.h>
 #include <stdio.h>
@@ -362,6 +362,12 @@ typedef struct obs_rec {
     uint16_t type_id;
     char *event_name;
     param_list params;
+    /* kind == Packet: fn is unused */
+    cuo_packet_fn packet_fn;
+    cuo_packet_tap_fn tap_fn;
+    uint8_t packet_dir;
+    uint8_t *packet_ids;
+    size_t npacket_ids;
 } obs_rec;
 
 struct cuo_builder {
@@ -373,8 +379,6 @@ static sys_rec *systems;
 static size_t nsys, capsys;
 static obs_rec *observers;
 static size_t nobs, capobs;
-static cuo_packet_fn packet_fn;
-static void *packet_user;
 
 static void require_setup(cuo_builder *m)
 {
@@ -477,7 +481,7 @@ static cuo_observer add_observer(cuo_builder *m, uint8_t kind, uint16_t type_id,
                                  cuo_observer_fn fn, void *user)
 {
     require_setup(m);
-    obs_rec r = { fn, user, kind, type_id, event ? xstrdup(event) : NULL, { 0 } };
+    obs_rec r = { fn, user, kind, type_id, event ? xstrdup(event) : NULL };
     add_param(&r.params, ModAbi_ParamKind_Commands, CUO_NONE_TYPE, NULL, 0);
     PUSH(observers, nobs, capobs, r);
     return (cuo_observer)(nobs - 1);
@@ -513,13 +517,35 @@ cuo_param cuo_observer_events(cuo_builder *m, cuo_observer o, uint16_t type_id)
     return add_param(&obs_at(m, o)->params, ModAbi_ParamKind_Events, type_id, NULL, 0);
 }
 
-void cuo_on_packet(cuo_builder *m, cuo_packet_fn fn, void *user)
+static cuo_observer add_packet_observer(cuo_builder *m, cuo_dir dir, const uint8_t *ids, size_t n,
+                                        cuo_packet_fn fn, cuo_packet_tap_fn tap, void *user)
 {
-    require_setup(m);
-    if (packet_fn)
-        cuo__trap("cuo: cuo_on_packet registered twice (one mod_on_packet export per mod)");
-    packet_fn = fn;
-    packet_user = user;
+    cuo_observer o = add_observer(m, ModAbi_ObserverKind_Packet, CUO_NONE_TYPE, NULL, NULL, user);
+    obs_rec *r = &observers[o];
+    r->packet_fn = fn;
+    r->tap_fn = tap;
+    r->packet_dir = (uint8_t)dir;
+    if (n) {
+        r->packet_ids = memcpy(xrealloc(NULL, n), ids, n);
+        r->npacket_ids = n;
+    }
+    return o;
+}
+
+cuo_observer cuo_on_packet(cuo_builder *m, cuo_dir dir, const uint8_t *ids, size_t n, cuo_packet_fn fn,
+                           void *user)
+{
+    return add_packet_observer(m, dir, ids, n, fn, NULL, user);
+}
+
+cuo_observer cuo_on_packet_in(cuo_builder *m, cuo_packet_tap_fn fn, void *user)
+{
+    return add_packet_observer(m, CUO_INCOMING, NULL, 0, NULL, fn, user);
+}
+
+cuo_observer cuo_on_packet_out(cuo_builder *m, cuo_packet_tap_fn fn, void *user)
+{
+    return add_packet_observer(m, CUO_OUTGOING, NULL, 0, NULL, fn, user);
 }
 
 /* ── setup reply ─────────────────────────────────────────────────────────── */
@@ -590,6 +616,11 @@ static uint64_t build_reply(void)
         ModAbi_ObserverDecl_type_id_add(B, r->type_id);
         if (r->event_name)
             ModAbi_ObserverDecl_event_name_create_str(B, r->event_name);
+        if (r->kind == ModAbi_ObserverKind_Packet) {
+            ModAbi_ObserverDecl_packet_direction_add(B, r->packet_dir);
+            if (r->npacket_ids)
+                ModAbi_ObserverDecl_packet_ids_create(B, r->packet_ids, r->npacket_ids);
+        }
         ModAbi_ObserverDecl_params_start(B);
         for (size_t p = 0; p < r->params.n; p++) {
             ModAbi_ObserverDecl_params_push_start(B);
@@ -643,7 +674,7 @@ EXPORT(mod_run) uint64_t mod_run(uint32_t sys_id, uint32_t ptr, uint32_t len)
     cuo_cmds *c = cuo__cmds_instance();
     cuo__cmds_begin(c);
     systems[sys_id].fn(&in, c, systems[sys_id].user);
-    return cuo__cmds_finish(c);
+    return cuo__cmds_finish(c, CUO_PASS, (cuo_bytes){ NULL, 0 });
 }
 
 EXPORT(mod_observer) uint64_t mod_observer(uint32_t obs_id, uint64_t entity, uint32_t ptr, uint32_t len)
@@ -655,30 +686,19 @@ EXPORT(mod_observer) uint64_t mod_observer(uint32_t obs_id, uint64_t entity, uin
     cuo_obs ev = { ModAbi_ObserverInput_as_root((const void *)(uintptr_t)ptr), entity };
     cuo_cmds *c = cuo__cmds_instance();
     cuo__cmds_begin(c);
-    observers[obs_id].fn(&ev, c, observers[obs_id].user);
-    return cuo__cmds_finish(c);
-}
-
-EXPORT(mod_on_packet) uint64_t mod_on_packet(uint32_t dir, uint32_t ptr, uint32_t len)
-{
-    if (!packet_fn)
-        return 0;
-    cuo__scratch_reset();
-    /* The packet sits in the ABI arena, which a cuo_call result may move: copy it. */
-    uint8_t *packet = cuo_alloc(len);
-    memcpy(packet, (const void *)(uintptr_t)ptr, len);
+    obs_rec *r = &observers[obs_id];
+    cuo_verdict verdict = CUO_PASS;
     cuo_bytes replacement = { NULL, 0 };
-    switch (packet_fn(dir == 0 ? CUO_INCOMING : CUO_OUTGOING, packet, len, &replacement, packet_user)) {
-    case CUO_BLOCK:
-        return 1;
-    case CUO_REPLACE: {
-        void *dst = abi_alloc(replacement.len);
-        memcpy(dst, replacement.ptr, replacement.len);
-        return ((uint64_t)replacement.len << 32) | (uint32_t)(uintptr_t)dst;
+    if (r->kind != ModAbi_ObserverKind_Packet) {
+        r->fn(&ev, c, r->user);
+    } else if (r->packet_fn) {
+        verdict = r->packet_fn(&ev, c, &replacement, r->user);
+    } else {
+        cuo_bytes p = cuo_obs_packet(&ev);
+        if (p.len && r->tap_fn(p.ptr[0], p.ptr, p.len, r->user))
+            verdict = CUO_BLOCK;
     }
-    default:
-        return 0;
-    }
+    return cuo__cmds_finish(c, verdict, replacement);
 }
 
 /* ── input views ─────────────────────────────────────────────────────────── */
@@ -851,4 +871,21 @@ cuo_events cuo_obs_events(const cuo_obs *ev, cuo_param p)
 {
     cuo_events none = { NULL, 0 };
     return ev->t ? events_of(ModAbi_ObserverInput_events(ev->t), p) : none;
+}
+
+cuo_bytes cuo_obs_packet(const cuo_obs *ev)
+{
+    cuo_bytes b = { NULL, 0 };
+    if (!ev->t)
+        return b;
+    flatbuffers_uint8_vec_t d = ModAbi_ObserverInput_packet(ev->t);
+    b.len = flatbuffers_uint8_vec_len(d);
+    b.ptr = b.len ? d : NULL;
+    return b;
+}
+
+cuo_dir cuo_obs_packet_dir(const cuo_obs *ev)
+{
+    return ev->t && ModAbi_ObserverInput_packet_direction(ev->t) == ModAbi_PacketDirection_Outgoing ? CUO_OUTGOING
+                                                                                                     : CUO_INCOMING;
 }

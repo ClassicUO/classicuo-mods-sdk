@@ -90,8 +90,8 @@ internal sealed class CommandBufferBuilder
             Data = json.Length == 0 ? null : Utf8.UTF8.GetBytes(json),
         });
 
-    /// <summary>Write the recorded commands into <paramref name="b"/>; returns the CommandBuffer root offset.</summary>
-    internal int Finish(FlatBufferBuilder b)
+    /// <summary>Write the recorded commands (and a packet observer's verdict) into <paramref name="b"/>; returns the CommandBuffer root offset.</summary>
+    internal int Finish(FlatBufferBuilder b, Verdict verdict)
     {
         var n = _cmds.Count;
         if (_types.Length < n)
@@ -131,7 +131,8 @@ internal sealed class CommandBufferBuilder
                 b.AddOffset(offsets[i]);
             cmdVec = b.EndVector();
         }
-        return CommandBuffer.CreateCommandBuffer(b, typeVec, cmdVec).Value;
+        var replacement = verdict.Replacement == null ? default : CommandBuffer.CreateReplacementVectorBlock(b, verdict.Replacement);
+        return CommandBuffer.CreateCommandBuffer(b, typeVec, cmdVec, verdict.Kind, replacement).Value;
     }
 
     static VectorOffset CompsVector(FlatBufferBuilder b, Comp[]? comps, Func<FlatBufferBuilder, Offset<CompValue>[], VectorOffset> create)

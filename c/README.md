@@ -1,7 +1,7 @@
 # C mod SDK
 
 C11 SDK for ClassicUO mods: a `wasm32-wasip1` **reactor core module** built with wasi-sdk
-clang. The ECS half speaks the FlatBuffers ABI v3 in `../abi/mod-abi.fbs`; everything
+clang. The ECS half speaks the FlatBuffers ABI v4 in `../abi/mod-abi.fbs`; everything
 else (host / assets / actions / packets in `../wit/cuo-mod.wit`) is JSON over the single
 `env.mod_call` import (`../docs/p1-wire.md`). Same model as the Rust (`../rust`) and C#
 (`../dotnet`) SDKs, at a lower level: you declare parameters by hand and read them by
@@ -72,11 +72,12 @@ void cuo_setup(cuo_builder *m)
   `cuo_spawn_child`); a parent spawned in the same run is fine.
 - **Host functions**: `cuo_call("cuo:modding/<iface>#<fn>", "<json args>")` for anything
   in the WIT; typed wrappers for the common ones (`cuo_log`, `cuo_storage_get/set`,
-  `cuo_measure_text`, `cuo_resolve_serial`, `cuo_gump_size`, `cuo_cliloc`, `cuo_intercept`,
+  `cuo_measure_text`, `cuo_resolve_serial`, `cuo_gump_size`, `cuo_cliloc`,
   `cuo_send_to_server/client`) and `cuo_action("cast-spell", "[29]")`.
-- **Packets**: `cuo_intercept(CUO_INCOMING, ids, n)` in `cuo_setup`, then
-  `cuo_on_packet(m, fn, user)`; the handler returns `CUO_PASS`, `CUO_BLOCK` or
-  `CUO_REPLACE` (with `*replacement` set).
+- **Packets**: packet observers. `cuo_on_packet(m, CUO_INCOMING, CUO_PACKET_IDS(0x1C), fn, user)`
+  (n 0 = every id); the observer reads `cuo_obs_packet`, may record commands and declare
+  `cuo_observer_*` params, and returns `CUO_PASS`, `CUO_BLOCK` or `CUO_REPLACE` (with
+  `*replacement` set). `cuo_on_packet_in/out(m, fn, user)` are block-or-pass taps on every id.
 
 `make` writes `build/mod.wasm` (`-Oz`, LTO, stripped). Ship it as
 `<mods>/<name>/{mod.wasm,mod.json}`. wasi-sdk location: `WASI_SDK` or `WASI_SDK_PATH`

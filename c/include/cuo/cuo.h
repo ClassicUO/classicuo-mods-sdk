@@ -4,9 +4,9 @@
  *
  *     void cuo_setup(cuo_builder *m);
  *
- * and registers systems / observers / hotkeys / the packet handler from it. The SDK owns
- * every ABI export (mod_setup, mod_run, mod_observer, mod_spawned, mod_on_packet,
- * mod_alloc, mod_arena_reset).
+ * and registers systems / observers (packet observers too) / hotkeys from it. The SDK
+ * owns every ABI export (mod_setup, mod_run, mod_observer, mod_spawned, mod_alloc,
+ * mod_arena_reset).
  *
  * Two halves (docs/p1-wire.md):
  * - The ECS rides the FlatBuffers ABI (abi/mod-abi.fbs), PUSH model: a system DECLARES
@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 
-#define CUO_ABI_VERSION 3u
+#define CUO_ABI_VERSION 4u
 #define CUO_NONE_TYPE 0xFFFFu
 
 /* ── basics ──────────────────────────────────────────────────────────────────── */
@@ -182,19 +182,30 @@ void cuo_hotkey_mouse(cuo_builder *m, const char *name, int32_t mouse_button, un
 
 /* ── packets ─────────────────────────────────────────────────────────────────── */
 
+/* Values match ModAbi.PacketDirection / ModAbi.PacketVerdict. */
 typedef enum cuo_dir { CUO_INCOMING = 0, CUO_OUTGOING = 1 } cuo_dir;
 typedef enum cuo_verdict { CUO_PASS = 0, CUO_BLOCK = 1, CUO_REPLACE = 2 } cuo_verdict;
 
-/* The packet handler: sees each packet (full wire bytes, id first) whose id was passed to
- * cuo_intercept, before the client handles (incoming) / sends (outgoing) it. Return
- * CUO_REPLACE after pointing *replacement at the new bytes (scratch is fine). Packets
- * this mod injects skip it. Runs outside the ECS: no command buffer. */
-typedef cuo_verdict (*cuo_packet_fn)(cuo_dir dir, const uint8_t *data, size_t len, cuo_bytes *replacement,
-                                     void *user);
-void cuo_on_packet(cuo_builder *m, cuo_packet_fn fn, void *user);
+#define CUO_PACKET_IDS(...) (const uint8_t[]){__VA_ARGS__}, CUO_COUNT(uint8_t, __VA_ARGS__)
 
-/* packets.intercept: ask for cuo_on_packet calls for these ids (call it in cuo_setup). */
-void cuo_intercept(cuo_dir dir, const uint8_t *ids, size_t n);
+/* A packet observer (the on-packet trigger): sees each `dir` packet whose id (byte 0)
+ * is in `ids` (n 0 = every id) before the client handles (incoming) / sends (outgoing)
+ * it; read it with cuo_obs_packet. Runs synchronously, so keep it cheap. Return
+ * CUO_REPLACE after pointing *replacement at the new bytes (scratch is fine). Mods run
+ * in load order, then each mod's packet observers in registration order; each sees the
+ * previous replacement and CUO_BLOCK stops the chain. Packets this mod injects skip
+ * its own observers. Like any observer it records commands and takes params
+ * (cuo_observer_query / _res / _events). */
+typedef cuo_verdict (*cuo_packet_fn)(const cuo_obs *ev, cuo_cmds *cmds, cuo_bytes *replacement, void *user);
+cuo_observer cuo_on_packet(cuo_builder *m, cuo_dir dir, const uint8_t *ids, size_t n, cuo_packet_fn fn,
+                           void *user);
+
+/* Taps over cuo_on_packet: every id in one direction, `id` = data[0]; return true to
+ * block. */
+typedef bool (*cuo_packet_tap_fn)(uint8_t id, const uint8_t *data, size_t len, void *user);
+cuo_observer cuo_on_packet_in(cuo_builder *m, cuo_packet_tap_fn fn, void *user);
+cuo_observer cuo_on_packet_out(cuo_builder *m, cuo_packet_tap_fn fn, void *user);
+
 /* packets.send-to-server / send-to-client: inject a packet, as if the client sent it /
  * the server sent it. */
 void cuo_send_to_server(const uint8_t *data, size_t len);
@@ -237,6 +248,9 @@ cuo_bytes cuo_obs_value(const cuo_obs *ev);
 cuo_query cuo_obs_query(const cuo_obs *ev, cuo_param p);
 cuo_bytes cuo_obs_res(const cuo_obs *ev, cuo_param p);
 cuo_events cuo_obs_events(const cuo_obs *ev, cuo_param p);
+/* Packet observers: the packet (full wire bytes, id first) and its direction. */
+cuo_bytes cuo_obs_packet(const cuo_obs *ev);
+cuo_dir cuo_obs_packet_dir(const cuo_obs *ev);
 
 /* ── commands (applied by the host after the callback returns) ───────────────── */
 

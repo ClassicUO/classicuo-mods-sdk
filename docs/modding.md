@@ -95,23 +95,24 @@ Things that are not world data are plain functions, in four groups:
   ... They go through the client's own code, so last target / held item / war mode
   stay right. Combinations (`move_type`, `target_self`, `bandage_self`, ...) are SDK
   helpers.
-- **`packets`** — raw packets both ways. `intercept(dir, ids)` in `setup`, then
-  your `on_packet(dir, bytes)` sees each one first and returns `Pass`, `Block` or
-  `Replace(bytes)`. `send_to_server` / `send_to_client` inject your own.
+- **`packets`** — raw packets both ways. `send_to_server` / `send_to_client` inject
+  your own. To see them, add a packet observer for a direction and a set of ids (none
+  = every id): it gets each one first and returns `Pass`, `Block` or
+  `Replace(bytes)`. Like any observer it can take `Commands`, queries, resources.
 - **`host`** — `log`, `measure_text`, `resolve_serial`, `storage_get` /
   `storage_set` (global or per character; `storage::load::<T>(scope)` /
   `storage::save(scope, &value)` do the JSON for you).
 
 ```rust,ignore
 fn setup(app: &mut App) {
-    packets::intercept(Direction::Incoming, &[0x1C]); // ASCII speech
+    app.add_packet_observer(PacketDirection::Incoming, &[0x1C], block_spam); // ASCII speech
 }
 
-fn on_packet(dir: Direction, p: &[u8]) -> Verdict {
-    if is_spam(p) { Verdict::Block } else { Verdict::Pass }
+fn block_spam(p: Packet) -> Verdict {
+    if is_spam(&p) { Verdict::Block } else { Verdict::Pass }
 }
 
-export_mod!(setup, on_packet);
+export_mod!(setup);
 ```
 
 ### Settings

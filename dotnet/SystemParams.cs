@@ -69,6 +69,8 @@ internal sealed class RunScope
     internal Dictionary<int, object>? MutColumns;
     internal ulong TriggerEntity;
     internal CompView? TriggerValue;
+    internal Packet Packet;
+    internal Verdict Verdict;
 
     internal void AfterRun(Action writeBack) => (WriteBacks ??= new List<Action>()).Add(writeBack);
 }

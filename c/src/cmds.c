@@ -57,11 +57,19 @@ static flatcc_builder_t *open_cmd(cuo_cmds *c)
     return c->B;
 }
 
-uint64_t cuo__cmds_finish(cuo_cmds *c)
+uint64_t cuo__cmds_finish(cuo_cmds *c, cuo_verdict verdict, cuo_bytes replacement)
 {
-    if (c->count == 0)
-        return 0;
-    ModAbi_CommandBuffer_cmds_end(c->B);
+    if (c->count == 0) {
+        if (verdict == CUO_PASS)
+            return 0;
+        ModAbi_CommandBuffer_start_as_root(c->B);
+    } else {
+        ModAbi_CommandBuffer_cmds_end(c->B);
+    }
+    if (verdict != CUO_PASS)
+        ModAbi_CommandBuffer_verdict_add(c->B, (ModAbi_PacketVerdict_enum_t)verdict);
+    if (verdict == CUO_REPLACE)
+        ModAbi_CommandBuffer_replacement_create(c->B, replacement.ptr, replacement.len);
     ModAbi_CommandBuffer_end_as_root(c->B);
     return cuo__pack_builder(c->B);
 }

@@ -17,7 +17,7 @@ mod root {
         /// The enum `Encoding` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `Encoding` in the file `mod-abi.fbs:44`
+        /// * Enum `Encoding` in the file `mod-abi.fbs:43`
         #[derive(
             Copy,
             Clone,
@@ -186,7 +186,7 @@ mod root {
         /// The table `CompValue` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `CompValue` in the file `mod-abi.fbs:50`
+        /// * Table `CompValue` in the file `mod-abi.fbs:49`
         #[derive(
             Clone,
             Debug,
@@ -544,7 +544,7 @@ mod root {
         /// The table `TypePath` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `TypePath` in the file `mod-abi.fbs:59`
+        /// * Table `TypePath` in the file `mod-abi.fbs:58`
         #[derive(
             Clone,
             Debug,
@@ -853,7 +853,7 @@ mod root {
         /// The table `Handshake` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `Handshake` in the file `mod-abi.fbs:64`
+        /// * Table `Handshake` in the file `mod-abi.fbs:63`
         #[derive(
             Clone,
             Debug,
@@ -1188,7 +1188,7 @@ mod root {
         /// The enum `Schedule` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `Schedule` in the file `mod-abi.fbs:72`
+        /// * Enum `Schedule` in the file `mod-abi.fbs:71`
         #[derive(
             Copy,
             Clone,
@@ -1385,7 +1385,7 @@ mod root {
         /// The enum `QueryTermKind` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `QueryTermKind` in the file `mod-abi.fbs:82`
+        /// * Enum `QueryTermKind` in the file `mod-abi.fbs:81`
         #[derive(
             Copy,
             Clone,
@@ -1577,7 +1577,7 @@ mod root {
         /// The enum `ParamKind` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `ParamKind` in the file `mod-abi.fbs:95`
+        /// * Enum `ParamKind` in the file `mod-abi.fbs:94`
         #[derive(
             Copy,
             Clone,
@@ -1764,7 +1764,7 @@ mod root {
         /// The enum `ObserverKind` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Enum `ObserverKind` in the file `mod-abi.fbs:103`
+        /// * Enum `ObserverKind` in the file `mod-abi.fbs:102`
         #[derive(
             Copy,
             Clone,
@@ -1793,16 +1793,20 @@ mod root {
 
             /// The variant `Custom` in the enum `ObserverKind`
             Custom = 4,
+
+            /// The variant `Packet` in the enum `ObserverKind`
+            Packet = 5,
         }
 
         impl ObserverKind {
             /// Array containing all valid variants of ObserverKind
-            pub const ENUM_VALUES: [Self; 5] = [
+            pub const ENUM_VALUES: [Self; 6] = [
                 Self::Spawn,
                 Self::Despawn,
                 Self::Insert,
                 Self::Remove,
                 Self::Custom,
+                Self::Packet,
             ];
         }
 
@@ -1819,6 +1823,7 @@ mod root {
                     2 => ::core::result::Result::Ok(ObserverKind::Insert),
                     3 => ::core::result::Result::Ok(ObserverKind::Remove),
                     4 => ::core::result::Result::Ok(ObserverKind::Custom),
+                    5 => ::core::result::Result::Ok(ObserverKind::Packet),
 
                     _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
                         tag: value as i128,
@@ -1948,10 +1953,352 @@ mod root {
             }
         }
 
+        /// The enum `PacketDirection` in the namespace `ModAbi`
+        ///
+        /// Generated from these locations:
+        /// * Enum `PacketDirection` in the file `mod-abi.fbs:111`
+        #[derive(
+            Copy,
+            Clone,
+            Debug,
+            PartialEq,
+            Eq,
+            PartialOrd,
+            Ord,
+            Hash,
+            ::serde::Serialize,
+            ::serde::Deserialize,
+        )]
+        #[repr(u8)]
+        pub enum PacketDirection {
+            /// The variant `Incoming` in the enum `PacketDirection`
+            Incoming = 0,
+
+            /// The variant `Outgoing` in the enum `PacketDirection`
+            Outgoing = 1,
+        }
+
+        impl PacketDirection {
+            /// Array containing all valid variants of PacketDirection
+            pub const ENUM_VALUES: [Self; 2] = [Self::Incoming, Self::Outgoing];
+        }
+
+        impl ::core::convert::TryFrom<u8> for PacketDirection {
+            type Error = ::planus::errors::UnknownEnumTagKind;
+            #[inline]
+            fn try_from(
+                value: u8,
+            ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind> {
+                #[allow(clippy::match_single_binding)]
+                match value {
+                    0 => ::core::result::Result::Ok(PacketDirection::Incoming),
+                    1 => ::core::result::Result::Ok(PacketDirection::Outgoing),
+
+                    _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                        tag: value as i128,
+                    }),
+                }
+            }
+        }
+
+        impl ::core::convert::From<PacketDirection> for u8 {
+            #[inline]
+            fn from(value: PacketDirection) -> Self {
+                value as u8
+            }
+        }
+
+        /// # Safety
+        /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+        unsafe impl ::planus::Primitive for PacketDirection {
+            const ALIGNMENT: usize = 1;
+            const SIZE: usize = 1;
+        }
+
+        impl ::planus::WriteAsPrimitive<PacketDirection> for PacketDirection {
+            #[inline]
+            fn write<const N: usize>(&self, cursor: ::planus::Cursor<'_, N>, buffer_position: u32) {
+                (*self as u8).write(cursor, buffer_position);
+            }
+        }
+
+        impl ::planus::WriteAs<PacketDirection> for PacketDirection {
+            type Prepared = Self;
+
+            #[inline]
+            fn prepare(&self, _builder: &mut ::planus::Builder) -> PacketDirection {
+                *self
+            }
+        }
+
+        impl ::planus::WriteAsDefault<PacketDirection, PacketDirection> for PacketDirection {
+            type Prepared = Self;
+
+            #[inline]
+            fn prepare(
+                &self,
+                _builder: &mut ::planus::Builder,
+                default: &PacketDirection,
+            ) -> ::core::option::Option<PacketDirection> {
+                if self == default {
+                    ::core::option::Option::None
+                } else {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+        }
+
+        impl ::planus::WriteAsOptional<PacketDirection> for PacketDirection {
+            type Prepared = Self;
+
+            #[inline]
+            fn prepare(
+                &self,
+                _builder: &mut ::planus::Builder,
+            ) -> ::core::option::Option<PacketDirection> {
+                ::core::option::Option::Some(*self)
+            }
+        }
+
+        impl<'buf> ::planus::TableRead<'buf> for PacketDirection {
+            #[inline]
+            fn from_buffer(
+                buffer: ::planus::SliceWithStartOffset<'buf>,
+                offset: usize,
+            ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+            }
+        }
+
+        impl<'buf> ::planus::VectorReadInner<'buf> for PacketDirection {
+            type Error = ::planus::errors::UnknownEnumTag;
+            const STRIDE: usize = 1;
+            #[inline]
+            unsafe fn from_buffer(
+                buffer: ::planus::SliceWithStartOffset<'buf>,
+                offset: usize,
+            ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag> {
+                let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                let value: ::core::result::Result<Self, _> =
+                    ::core::convert::TryInto::try_into(value);
+                value.map_err(|error_kind| {
+                    error_kind.with_error_location(
+                        "PacketDirection",
+                        "VectorRead::from_buffer",
+                        buffer.offset_from_start,
+                    )
+                })
+            }
+        }
+
+        /// # Safety
+        /// The planus compiler generates implementations that initialize
+        /// the bytes in `write_values`.
+        unsafe impl ::planus::VectorWrite<PacketDirection> for PacketDirection {
+            const STRIDE: usize = 1;
+
+            type Value = Self;
+
+            #[inline]
+            fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                *self
+            }
+
+            #[inline]
+            unsafe fn write_values(
+                values: &[Self],
+                bytes: *mut ::core::mem::MaybeUninit<u8>,
+                buffer_position: u32,
+            ) {
+                let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                    ::planus::WriteAsPrimitive::write(
+                        v,
+                        ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                        buffer_position - i as u32,
+                    );
+                }
+            }
+        }
+
+        /// The enum `PacketVerdict` in the namespace `ModAbi`
+        ///
+        /// Generated from these locations:
+        /// * Enum `PacketVerdict` in the file `mod-abi.fbs:116`
+        #[derive(
+            Copy,
+            Clone,
+            Debug,
+            PartialEq,
+            Eq,
+            PartialOrd,
+            Ord,
+            Hash,
+            ::serde::Serialize,
+            ::serde::Deserialize,
+        )]
+        #[repr(u8)]
+        pub enum PacketVerdict {
+            /// The variant `Pass` in the enum `PacketVerdict`
+            Pass = 0,
+
+            /// The variant `Block` in the enum `PacketVerdict`
+            Block = 1,
+
+            /// The variant `Replace` in the enum `PacketVerdict`
+            Replace = 2,
+        }
+
+        impl PacketVerdict {
+            /// Array containing all valid variants of PacketVerdict
+            pub const ENUM_VALUES: [Self; 3] = [Self::Pass, Self::Block, Self::Replace];
+        }
+
+        impl ::core::convert::TryFrom<u8> for PacketVerdict {
+            type Error = ::planus::errors::UnknownEnumTagKind;
+            #[inline]
+            fn try_from(
+                value: u8,
+            ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTagKind> {
+                #[allow(clippy::match_single_binding)]
+                match value {
+                    0 => ::core::result::Result::Ok(PacketVerdict::Pass),
+                    1 => ::core::result::Result::Ok(PacketVerdict::Block),
+                    2 => ::core::result::Result::Ok(PacketVerdict::Replace),
+
+                    _ => ::core::result::Result::Err(::planus::errors::UnknownEnumTagKind {
+                        tag: value as i128,
+                    }),
+                }
+            }
+        }
+
+        impl ::core::convert::From<PacketVerdict> for u8 {
+            #[inline]
+            fn from(value: PacketVerdict) -> Self {
+                value as u8
+            }
+        }
+
+        /// # Safety
+        /// The Planus compiler correctly calculates `ALIGNMENT` and `SIZE`.
+        unsafe impl ::planus::Primitive for PacketVerdict {
+            const ALIGNMENT: usize = 1;
+            const SIZE: usize = 1;
+        }
+
+        impl ::planus::WriteAsPrimitive<PacketVerdict> for PacketVerdict {
+            #[inline]
+            fn write<const N: usize>(&self, cursor: ::planus::Cursor<'_, N>, buffer_position: u32) {
+                (*self as u8).write(cursor, buffer_position);
+            }
+        }
+
+        impl ::planus::WriteAs<PacketVerdict> for PacketVerdict {
+            type Prepared = Self;
+
+            #[inline]
+            fn prepare(&self, _builder: &mut ::planus::Builder) -> PacketVerdict {
+                *self
+            }
+        }
+
+        impl ::planus::WriteAsDefault<PacketVerdict, PacketVerdict> for PacketVerdict {
+            type Prepared = Self;
+
+            #[inline]
+            fn prepare(
+                &self,
+                _builder: &mut ::planus::Builder,
+                default: &PacketVerdict,
+            ) -> ::core::option::Option<PacketVerdict> {
+                if self == default {
+                    ::core::option::Option::None
+                } else {
+                    ::core::option::Option::Some(*self)
+                }
+            }
+        }
+
+        impl ::planus::WriteAsOptional<PacketVerdict> for PacketVerdict {
+            type Prepared = Self;
+
+            #[inline]
+            fn prepare(
+                &self,
+                _builder: &mut ::planus::Builder,
+            ) -> ::core::option::Option<PacketVerdict> {
+                ::core::option::Option::Some(*self)
+            }
+        }
+
+        impl<'buf> ::planus::TableRead<'buf> for PacketVerdict {
+            #[inline]
+            fn from_buffer(
+                buffer: ::planus::SliceWithStartOffset<'buf>,
+                offset: usize,
+            ) -> ::core::result::Result<Self, ::planus::errors::ErrorKind> {
+                let n: u8 = ::planus::TableRead::from_buffer(buffer, offset)?;
+                ::core::result::Result::Ok(::core::convert::TryInto::try_into(n)?)
+            }
+        }
+
+        impl<'buf> ::planus::VectorReadInner<'buf> for PacketVerdict {
+            type Error = ::planus::errors::UnknownEnumTag;
+            const STRIDE: usize = 1;
+            #[inline]
+            unsafe fn from_buffer(
+                buffer: ::planus::SliceWithStartOffset<'buf>,
+                offset: usize,
+            ) -> ::core::result::Result<Self, ::planus::errors::UnknownEnumTag> {
+                let value = unsafe { *buffer.buffer.get_unchecked(offset) };
+                let value: ::core::result::Result<Self, _> =
+                    ::core::convert::TryInto::try_into(value);
+                value.map_err(|error_kind| {
+                    error_kind.with_error_location(
+                        "PacketVerdict",
+                        "VectorRead::from_buffer",
+                        buffer.offset_from_start,
+                    )
+                })
+            }
+        }
+
+        /// # Safety
+        /// The planus compiler generates implementations that initialize
+        /// the bytes in `write_values`.
+        unsafe impl ::planus::VectorWrite<PacketVerdict> for PacketVerdict {
+            const STRIDE: usize = 1;
+
+            type Value = Self;
+
+            #[inline]
+            fn prepare(&self, _builder: &mut ::planus::Builder) -> Self {
+                *self
+            }
+
+            #[inline]
+            unsafe fn write_values(
+                values: &[Self],
+                bytes: *mut ::core::mem::MaybeUninit<u8>,
+                buffer_position: u32,
+            ) {
+                let bytes = bytes as *mut [::core::mem::MaybeUninit<u8>; 1];
+                for (i, v) in ::core::iter::Iterator::enumerate(values.iter()) {
+                    ::planus::WriteAsPrimitive::write(
+                        v,
+                        ::planus::Cursor::new(unsafe { &mut *bytes.add(i) }),
+                        buffer_position - i as u32,
+                    );
+                }
+            }
+        }
+
         /// The table `QueryTerm` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `QueryTerm` in the file `mod-abi.fbs:111`
+        /// * Table `QueryTerm` in the file `mod-abi.fbs:122`
         #[derive(
             Clone,
             Debug,
@@ -2265,7 +2612,7 @@ mod root {
         /// The table `QueryDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `QueryDecl` in the file `mod-abi.fbs:116`
+        /// * Table `QueryDecl` in the file `mod-abi.fbs:127`
         #[derive(
             Clone,
             Debug,
@@ -2549,7 +2896,7 @@ mod root {
         /// The table `ParamDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ParamDecl` in the file `mod-abi.fbs:120`
+        /// * Table `ParamDecl` in the file `mod-abi.fbs:131`
         #[derive(
             Clone,
             Debug,
@@ -2915,7 +3262,7 @@ mod root {
         /// The table `SystemDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SystemDecl` in the file `mod-abi.fbs:126`
+        /// * Table `SystemDecl` in the file `mod-abi.fbs:137`
         #[derive(
             Clone,
             Debug,
@@ -3553,7 +3900,7 @@ mod root {
         /// The table `ObserverDecl` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ObserverDecl` in the file `mod-abi.fbs:137`
+        /// * Table `ObserverDecl` in the file `mod-abi.fbs:148`
         #[derive(
             Clone,
             Debug,
@@ -3576,6 +3923,10 @@ mod root {
             pub event_name: ::core::option::Option<::planus::alloc::string::String>,
             /// The field `params` in the table `ObserverDecl`
             pub params: ::core::option::Option<::planus::alloc::vec::Vec<self::ParamDecl>>,
+            /// The field `packet_direction` in the table `ObserverDecl`
+            pub packet_direction: self::PacketDirection,
+            /// The field `packet_ids` in the table `ObserverDecl`
+            pub packet_ids: ::core::option::Option<::planus::alloc::vec::Vec<u8>>,
         }
 
         #[allow(clippy::derivable_impls)]
@@ -3587,6 +3938,8 @@ mod root {
                     type_id: 0,
                     event_name: ::core::default::Default::default(),
                     params: ::core::default::Default::default(),
+                    packet_direction: self::PacketDirection::Incoming,
+                    packet_ids: ::core::default::Default::default(),
                 }
             }
         }
@@ -3610,14 +3963,22 @@ mod root {
                 field_params: impl ::planus::WriteAsOptional<
                     ::planus::Offset<[::planus::Offset<self::ParamDecl>]>,
                 >,
+                field_packet_direction: impl ::planus::WriteAsDefault<
+                    self::PacketDirection,
+                    self::PacketDirection,
+                >,
+                field_packet_ids: impl ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
             ) -> ::planus::Offset<Self> {
                 let prepared_id = field_id.prepare(builder, &0);
                 let prepared_kind = field_kind.prepare(builder, &self::ObserverKind::Spawn);
                 let prepared_type_id = field_type_id.prepare(builder, &0);
                 let prepared_event_name = field_event_name.prepare(builder);
                 let prepared_params = field_params.prepare(builder);
+                let prepared_packet_direction =
+                    field_packet_direction.prepare(builder, &self::PacketDirection::Incoming);
+                let prepared_packet_ids = field_packet_ids.prepare(builder);
 
-                let mut table_writer: ::planus::table_writer::TableWriter<14> =
+                let mut table_writer: ::planus::table_writer::TableWriter<18> =
                     ::core::default::Default::default();
                 if prepared_id.is_some() {
                     table_writer.write_entry::<u32>(0);
@@ -3629,11 +3990,17 @@ mod root {
                     table_writer
                         .write_entry::<::planus::Offset<[::planus::Offset<self::ParamDecl>]>>(4);
                 }
+                if prepared_packet_ids.is_some() {
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(6);
+                }
                 if prepared_type_id.is_some() {
                     table_writer.write_entry::<u16>(2);
                 }
                 if prepared_kind.is_some() {
                     table_writer.write_entry::<self::ObserverKind>(1);
+                }
+                if prepared_packet_direction.is_some() {
+                    table_writer.write_entry::<self::PacketDirection>(5);
                 }
 
                 unsafe {
@@ -3649,11 +4016,21 @@ mod root {
                         if let ::core::option::Option::Some(prepared_params) = prepared_params {
                             object_writer.write::<_, _, 4>(&prepared_params);
                         }
+                        if let ::core::option::Option::Some(prepared_packet_ids) =
+                            prepared_packet_ids
+                        {
+                            object_writer.write::<_, _, 4>(&prepared_packet_ids);
+                        }
                         if let ::core::option::Option::Some(prepared_type_id) = prepared_type_id {
                             object_writer.write::<_, _, 2>(&prepared_type_id);
                         }
                         if let ::core::option::Option::Some(prepared_kind) = prepared_kind {
                             object_writer.write::<_, _, 1>(&prepared_kind);
+                        }
+                        if let ::core::option::Option::Some(prepared_packet_direction) =
+                            prepared_packet_direction
+                        {
+                            object_writer.write::<_, _, 1>(&prepared_packet_direction);
                         }
                     });
                 }
@@ -3692,6 +4069,8 @@ mod root {
                     self.type_id,
                     &self.event_name,
                     &self.params,
+                    self.packet_direction,
+                    &self.packet_ids,
                 )
             }
         }
@@ -3807,6 +4186,54 @@ mod root {
         }
 
         impl<T0, T1, T2, T3, T4> ObserverDeclBuilder<(T0, T1, T2, T3, T4)> {
+            /// Setter for the [`packet_direction` field](ObserverDecl#structfield.packet_direction).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn packet_direction<T5>(
+                self,
+                value: T5,
+            ) -> ObserverDeclBuilder<(T0, T1, T2, T3, T4, T5)>
+            where
+                T5: ::planus::WriteAsDefault<self::PacketDirection, self::PacketDirection>,
+            {
+                let (v0, v1, v2, v3, v4) = self.0;
+                ObserverDeclBuilder((v0, v1, v2, v3, v4, value))
+            }
+
+            /// Sets the [`packet_direction` field](ObserverDecl#structfield.packet_direction) to the default value.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn packet_direction_as_default(
+                self,
+            ) -> ObserverDeclBuilder<(T0, T1, T2, T3, T4, ::planus::DefaultValue)> {
+                self.packet_direction(::planus::DefaultValue)
+            }
+        }
+
+        impl<T0, T1, T2, T3, T4, T5> ObserverDeclBuilder<(T0, T1, T2, T3, T4, T5)> {
+            /// Setter for the [`packet_ids` field](ObserverDecl#structfield.packet_ids).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn packet_ids<T6>(
+                self,
+                value: T6,
+            ) -> ObserverDeclBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            where
+                T6: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+            {
+                let (v0, v1, v2, v3, v4, v5) = self.0;
+                ObserverDeclBuilder((v0, v1, v2, v3, v4, v5, value))
+            }
+
+            /// Sets the [`packet_ids` field](ObserverDecl#structfield.packet_ids) to null.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn packet_ids_as_null(self) -> ObserverDeclBuilder<(T0, T1, T2, T3, T4, T5, ())> {
+                self.packet_ids(())
+            }
+        }
+
+        impl<T0, T1, T2, T3, T4, T5, T6> ObserverDeclBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
             /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ObserverDecl].
             #[inline]
             pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<ObserverDecl>
@@ -3823,8 +4250,10 @@ mod root {
                 T2: ::planus::WriteAsDefault<u16, u16>,
                 T3: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
                 T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ParamDecl>]>>,
+                T5: ::planus::WriteAsDefault<self::PacketDirection, self::PacketDirection>,
+                T6: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
             > ::planus::WriteAs<::planus::Offset<ObserverDecl>>
-            for ObserverDeclBuilder<(T0, T1, T2, T3, T4)>
+            for ObserverDeclBuilder<(T0, T1, T2, T3, T4, T5, T6)>
         {
             type Prepared = ::planus::Offset<ObserverDecl>;
 
@@ -3840,8 +4269,10 @@ mod root {
                 T2: ::planus::WriteAsDefault<u16, u16>,
                 T3: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
                 T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ParamDecl>]>>,
+                T5: ::planus::WriteAsDefault<self::PacketDirection, self::PacketDirection>,
+                T6: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
             > ::planus::WriteAsOptional<::planus::Offset<ObserverDecl>>
-            for ObserverDeclBuilder<(T0, T1, T2, T3, T4)>
+            for ObserverDeclBuilder<(T0, T1, T2, T3, T4, T5, T6)>
         {
             type Prepared = ::planus::Offset<ObserverDecl>;
 
@@ -3860,12 +4291,15 @@ mod root {
                 T2: ::planus::WriteAsDefault<u16, u16>,
                 T3: ::planus::WriteAsOptional<::planus::Offset<::core::primitive::str>>,
                 T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ParamDecl>]>>,
-            > ::planus::WriteAsOffset<ObserverDecl> for ObserverDeclBuilder<(T0, T1, T2, T3, T4)>
+                T5: ::planus::WriteAsDefault<self::PacketDirection, self::PacketDirection>,
+                T6: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+            > ::planus::WriteAsOffset<ObserverDecl>
+            for ObserverDeclBuilder<(T0, T1, T2, T3, T4, T5, T6)>
         {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ObserverDecl> {
-                let (v0, v1, v2, v3, v4) = &self.0;
-                ObserverDecl::create(builder, v0, v1, v2, v3, v4)
+                let (v0, v1, v2, v3, v4, v5, v6) = &self.0;
+                ObserverDecl::create(builder, v0, v1, v2, v3, v4, v5, v6)
             }
         }
 
@@ -3917,6 +4351,22 @@ mod root {
             > {
                 self.0.access(4, "ObserverDecl", "params")
             }
+
+            /// Getter for the [`packet_direction` field](ObserverDecl#structfield.packet_direction).
+            #[inline]
+            pub fn packet_direction(&self) -> ::planus::Result<self::PacketDirection> {
+                ::core::result::Result::Ok(
+                    self.0
+                        .access(5, "ObserverDecl", "packet_direction")?
+                        .unwrap_or(self::PacketDirection::Incoming),
+                )
+            }
+
+            /// Getter for the [`packet_ids` field](ObserverDecl#structfield.packet_ids).
+            #[inline]
+            pub fn packet_ids(&self) -> ::planus::Result<::core::option::Option<&'a [u8]>> {
+                self.0.access(6, "ObserverDecl", "packet_ids")
+            }
         }
 
         impl<'a> ::core::fmt::Debug for ObserverDeclRef<'a> {
@@ -3932,6 +4382,12 @@ mod root {
                 }
                 if let ::core::option::Option::Some(field_params) = self.params().transpose() {
                     f.field("params", &field_params);
+                }
+                f.field("packet_direction", &self.packet_direction());
+                if let ::core::option::Option::Some(field_packet_ids) =
+                    self.packet_ids().transpose()
+                {
+                    f.field("packet_ids", &field_packet_ids);
                 }
                 f.finish()
             }
@@ -3952,6 +4408,10 @@ mod root {
                     } else {
                         ::core::option::Option::None
                     },
+                    packet_direction: ::core::convert::TryInto::try_into(
+                        value.packet_direction()?,
+                    )?,
+                    packet_ids: value.packet_ids()?.map(|v| v.to_vec()),
                 })
             }
         }
@@ -4032,7 +4492,7 @@ mod root {
         /// The table `SetupReply` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SetupReply` in the file `mod-abi.fbs:145`
+        /// * Table `SetupReply` in the file `mod-abi.fbs:158`
         #[derive(
             Clone,
             Debug,
@@ -4538,7 +4998,7 @@ mod root {
         /// The table `Row` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `Row` in the file `mod-abi.fbs:156`
+        /// * Table `Row` in the file `mod-abi.fbs:169`
         #[derive(
             Clone,
             Debug,
@@ -4858,7 +5318,7 @@ mod root {
         /// The table `QueryRows` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `QueryRows` in the file `mod-abi.fbs:161`
+        /// * Table `QueryRows` in the file `mod-abi.fbs:174`
         #[derive(
             Clone,
             Debug,
@@ -5184,7 +5644,7 @@ mod root {
         /// The table `ResValue` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ResValue` in the file `mod-abi.fbs:170`
+        /// * Table `ResValue` in the file `mod-abi.fbs:183`
         #[derive(
             Clone,
             Debug,
@@ -5549,7 +6009,7 @@ mod root {
         /// The table `EventValues` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `EventValues` in the file `mod-abi.fbs:177`
+        /// * Table `EventValues` in the file `mod-abi.fbs:190`
         #[derive(
             Clone,
             Debug,
@@ -5880,7 +6340,7 @@ mod root {
         /// The table `SystemInput` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SystemInput` in the file `mod-abi.fbs:182`
+        /// * Table `SystemInput` in the file `mod-abi.fbs:195`
         #[derive(
             Clone,
             Debug,
@@ -6375,7 +6835,7 @@ mod root {
         /// The table `SpawnCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SpawnCmd` in the file `mod-abi.fbs:197`
+        /// * Table `SpawnCmd` in the file `mod-abi.fbs:210`
         #[derive(
             Clone,
             Debug,
@@ -6697,7 +7157,7 @@ mod root {
         /// The table `InsertCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `InsertCmd` in the file `mod-abi.fbs:202`
+        /// * Table `InsertCmd` in the file `mod-abi.fbs:215`
         #[derive(
             Clone,
             Debug,
@@ -7024,7 +7484,7 @@ mod root {
         /// The table `RemoveCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `RemoveCmd` in the file `mod-abi.fbs:207`
+        /// * Table `RemoveCmd` in the file `mod-abi.fbs:220`
         #[derive(
             Clone,
             Debug,
@@ -7342,7 +7802,7 @@ mod root {
         /// The table `DespawnCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `DespawnCmd` in the file `mod-abi.fbs:212`
+        /// * Table `DespawnCmd` in the file `mod-abi.fbs:225`
         #[derive(
             Clone,
             Debug,
@@ -7604,7 +8064,7 @@ mod root {
         /// The table `AddChildCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `AddChildCmd` in the file `mod-abi.fbs:217`
+        /// * Table `AddChildCmd` in the file `mod-abi.fbs:230`
         #[derive(
             Clone,
             Debug,
@@ -7957,7 +8417,7 @@ mod root {
         /// The table `ResourceSetCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ResourceSetCmd` in the file `mod-abi.fbs:223`
+        /// * Table `ResourceSetCmd` in the file `mod-abi.fbs:236`
         #[derive(
             Clone,
             Debug,
@@ -8232,7 +8692,7 @@ mod root {
         /// The table `EmitEventCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `EmitEventCmd` in the file `mod-abi.fbs:227`
+        /// * Table `EmitEventCmd` in the file `mod-abi.fbs:240`
         #[derive(
             Clone,
             Debug,
@@ -8597,7 +9057,7 @@ mod root {
         /// The table `ConsumeMouseCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ConsumeMouseCmd` in the file `mod-abi.fbs:234`
+        /// * Table `ConsumeMouseCmd` in the file `mod-abi.fbs:247`
         #[derive(
             Clone,
             Debug,
@@ -8877,7 +9337,7 @@ mod root {
         /// The table `ConsumeKeyCmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ConsumeKeyCmd` in the file `mod-abi.fbs:238`
+        /// * Table `ConsumeKeyCmd` in the file `mod-abi.fbs:251`
         #[derive(
             Clone,
             Debug,
@@ -9140,7 +9600,7 @@ mod root {
         /// The union `Cmd` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Union `Cmd` in the file `mod-abi.fbs:244`
+        /// * Union `Cmd` in the file `mod-abi.fbs:257`
         #[derive(
             Clone,
             Debug,
@@ -9708,7 +10168,7 @@ mod root {
         /// The table `CommandBuffer` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `CommandBuffer` in the file `mod-abi.fbs:256`
+        /// * Table `CommandBuffer` in the file `mod-abi.fbs:269`
         #[derive(
             Clone,
             Debug,
@@ -9723,6 +10183,10 @@ mod root {
         pub struct CommandBuffer {
             /// The field `cmds` in the table `CommandBuffer`
             pub cmds: ::core::option::Option<::planus::alloc::vec::Vec<self::Cmd>>,
+            /// The field `verdict` in the table `CommandBuffer`
+            pub verdict: self::PacketVerdict,
+            /// The field `replacement` in the table `CommandBuffer`
+            pub replacement: ::core::option::Option<::planus::alloc::vec::Vec<u8>>,
         }
 
         #[allow(clippy::derivable_impls)]
@@ -9730,6 +10194,8 @@ mod root {
             fn default() -> Self {
                 Self {
                     cmds: ::core::default::Default::default(),
+                    verdict: self::PacketVerdict::Pass,
+                    replacement: ::core::default::Default::default(),
                 }
             }
         }
@@ -9745,16 +10211,26 @@ mod root {
             pub fn create(
                 builder: &mut ::planus::Builder,
                 field_cmds: impl ::planus::WriteAsOptionalUnionVector<self::Cmd>,
+                field_verdict: impl ::planus::WriteAsDefault<self::PacketVerdict, self::PacketVerdict>,
+                field_replacement: impl ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
             ) -> ::planus::Offset<Self> {
                 let prepared_cmds = field_cmds.prepare(builder);
+                let prepared_verdict = field_verdict.prepare(builder, &self::PacketVerdict::Pass);
+                let prepared_replacement = field_replacement.prepare(builder);
 
-                let mut table_writer: ::planus::table_writer::TableWriter<8> =
+                let mut table_writer: ::planus::table_writer::TableWriter<12> =
                     ::core::default::Default::default();
                 if prepared_cmds.is_some() {
                     table_writer.write_entry::<::planus::Offset<[u8]>>(0);
                 }
                 if prepared_cmds.is_some() {
                     table_writer.write_entry::<::planus::Offset<[::planus::Offset<self::Cmd>]>>(1);
+                }
+                if prepared_replacement.is_some() {
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(3);
+                }
+                if prepared_verdict.is_some() {
+                    table_writer.write_entry::<self::PacketVerdict>(2);
                 }
 
                 unsafe {
@@ -9764,6 +10240,14 @@ mod root {
                         }
                         if let ::core::option::Option::Some(prepared_cmds) = prepared_cmds {
                             object_writer.write::<_, _, 4>(&prepared_cmds.values_offset());
+                        }
+                        if let ::core::option::Option::Some(prepared_replacement) =
+                            prepared_replacement
+                        {
+                            object_writer.write::<_, _, 4>(&prepared_replacement);
+                        }
+                        if let ::core::option::Option::Some(prepared_verdict) = prepared_verdict {
+                            object_writer.write::<_, _, 1>(&prepared_verdict);
                         }
                     });
                 }
@@ -9795,7 +10279,7 @@ mod root {
         impl ::planus::WriteAsOffset<CommandBuffer> for CommandBuffer {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<CommandBuffer> {
-                CommandBuffer::create(builder, &self.cmds)
+                CommandBuffer::create(builder, &self.cmds, self.verdict, &self.replacement)
             }
         }
 
@@ -9826,6 +10310,46 @@ mod root {
         }
 
         impl<T0> CommandBufferBuilder<(T0,)> {
+            /// Setter for the [`verdict` field](CommandBuffer#structfield.verdict).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn verdict<T1>(self, value: T1) -> CommandBufferBuilder<(T0, T1)>
+            where
+                T1: ::planus::WriteAsDefault<self::PacketVerdict, self::PacketVerdict>,
+            {
+                let (v0,) = self.0;
+                CommandBufferBuilder((v0, value))
+            }
+
+            /// Sets the [`verdict` field](CommandBuffer#structfield.verdict) to the default value.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn verdict_as_default(self) -> CommandBufferBuilder<(T0, ::planus::DefaultValue)> {
+                self.verdict(::planus::DefaultValue)
+            }
+        }
+
+        impl<T0, T1> CommandBufferBuilder<(T0, T1)> {
+            /// Setter for the [`replacement` field](CommandBuffer#structfield.replacement).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn replacement<T2>(self, value: T2) -> CommandBufferBuilder<(T0, T1, T2)>
+            where
+                T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+            {
+                let (v0, v1) = self.0;
+                CommandBufferBuilder((v0, v1, value))
+            }
+
+            /// Sets the [`replacement` field](CommandBuffer#structfield.replacement) to null.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn replacement_as_null(self) -> CommandBufferBuilder<(T0, T1, ())> {
+                self.replacement(())
+            }
+        }
+
+        impl<T0, T1, T2> CommandBufferBuilder<(T0, T1, T2)> {
             /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [CommandBuffer].
             #[inline]
             pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<CommandBuffer>
@@ -9836,8 +10360,12 @@ mod root {
             }
         }
 
-        impl<T0: ::planus::WriteAsOptionalUnionVector<self::Cmd>>
-            ::planus::WriteAs<::planus::Offset<CommandBuffer>> for CommandBufferBuilder<(T0,)>
+        impl<
+                T0: ::planus::WriteAsOptionalUnionVector<self::Cmd>,
+                T1: ::planus::WriteAsDefault<self::PacketVerdict, self::PacketVerdict>,
+                T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+            > ::planus::WriteAs<::planus::Offset<CommandBuffer>>
+            for CommandBufferBuilder<(T0, T1, T2)>
         {
             type Prepared = ::planus::Offset<CommandBuffer>;
 
@@ -9847,9 +10375,12 @@ mod root {
             }
         }
 
-        impl<T0: ::planus::WriteAsOptionalUnionVector<self::Cmd>>
-            ::planus::WriteAsOptional<::planus::Offset<CommandBuffer>>
-            for CommandBufferBuilder<(T0,)>
+        impl<
+                T0: ::planus::WriteAsOptionalUnionVector<self::Cmd>,
+                T1: ::planus::WriteAsDefault<self::PacketVerdict, self::PacketVerdict>,
+                T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+            > ::planus::WriteAsOptional<::planus::Offset<CommandBuffer>>
+            for CommandBufferBuilder<(T0, T1, T2)>
         {
             type Prepared = ::planus::Offset<CommandBuffer>;
 
@@ -9862,13 +10393,16 @@ mod root {
             }
         }
 
-        impl<T0: ::planus::WriteAsOptionalUnionVector<self::Cmd>>
-            ::planus::WriteAsOffset<CommandBuffer> for CommandBufferBuilder<(T0,)>
+        impl<
+                T0: ::planus::WriteAsOptionalUnionVector<self::Cmd>,
+                T1: ::planus::WriteAsDefault<self::PacketVerdict, self::PacketVerdict>,
+                T2: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+            > ::planus::WriteAsOffset<CommandBuffer> for CommandBufferBuilder<(T0, T1, T2)>
         {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<CommandBuffer> {
-                let (v0,) = &self.0;
-                CommandBuffer::create(builder, v0)
+                let (v0, v1, v2) = &self.0;
+                CommandBuffer::create(builder, v0, v1, v2)
             }
         }
 
@@ -9885,6 +10419,22 @@ mod root {
             {
                 self.0.access_union_vector(0, "CommandBuffer", "cmds")
             }
+
+            /// Getter for the [`verdict` field](CommandBuffer#structfield.verdict).
+            #[inline]
+            pub fn verdict(&self) -> ::planus::Result<self::PacketVerdict> {
+                ::core::result::Result::Ok(
+                    self.0
+                        .access(2, "CommandBuffer", "verdict")?
+                        .unwrap_or(self::PacketVerdict::Pass),
+                )
+            }
+
+            /// Getter for the [`replacement` field](CommandBuffer#structfield.replacement).
+            #[inline]
+            pub fn replacement(&self) -> ::planus::Result<::core::option::Option<&'a [u8]>> {
+                self.0.access(3, "CommandBuffer", "replacement")
+            }
         }
 
         impl<'a> ::core::fmt::Debug for CommandBufferRef<'a> {
@@ -9892,6 +10442,12 @@ mod root {
                 let mut f = f.debug_struct("CommandBufferRef");
                 if let ::core::option::Option::Some(field_cmds) = self.cmds().transpose() {
                     f.field("cmds", &field_cmds);
+                }
+                f.field("verdict", &self.verdict());
+                if let ::core::option::Option::Some(field_replacement) =
+                    self.replacement().transpose()
+                {
+                    f.field("replacement", &field_replacement);
                 }
                 f.finish()
             }
@@ -9908,6 +10464,8 @@ mod root {
                     } else {
                         ::core::option::Option::None
                     },
+                    verdict: ::core::convert::TryInto::try_into(value.verdict()?)?,
+                    replacement: value.replacement()?.map(|v| v.to_vec()),
                 })
             }
         }
@@ -9988,7 +10546,7 @@ mod root {
         /// The table `ObserverInput` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `ObserverInput` in the file `mod-abi.fbs:263`
+        /// * Table `ObserverInput` in the file `mod-abi.fbs:278`
         #[derive(
             Clone,
             Debug,
@@ -10013,6 +10571,10 @@ mod root {
             pub resources: ::core::option::Option<::planus::alloc::vec::Vec<self::ResValue>>,
             /// The field `events` in the table `ObserverInput`
             pub events: ::core::option::Option<::planus::alloc::vec::Vec<self::EventValues>>,
+            /// The field `packet_direction` in the table `ObserverInput`
+            pub packet_direction: self::PacketDirection,
+            /// The field `packet` in the table `ObserverInput`
+            pub packet: ::core::option::Option<::planus::alloc::vec::Vec<u8>>,
         }
 
         #[allow(clippy::derivable_impls)]
@@ -10025,6 +10587,8 @@ mod root {
                     queries: ::core::default::Default::default(),
                     resources: ::core::default::Default::default(),
                     events: ::core::default::Default::default(),
+                    packet_direction: self::PacketDirection::Incoming,
+                    packet: ::core::default::Default::default(),
                 }
             }
         }
@@ -10051,6 +10615,11 @@ mod root {
                 field_events: impl ::planus::WriteAsOptional<
                     ::planus::Offset<[::planus::Offset<self::EventValues>]>,
                 >,
+                field_packet_direction: impl ::planus::WriteAsDefault<
+                    self::PacketDirection,
+                    self::PacketDirection,
+                >,
+                field_packet: impl ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
             ) -> ::planus::Offset<Self> {
                 let prepared_obs_id = field_obs_id.prepare(builder, &0);
                 let prepared_entity = field_entity.prepare(builder, &0);
@@ -10058,8 +10627,11 @@ mod root {
                 let prepared_queries = field_queries.prepare(builder);
                 let prepared_resources = field_resources.prepare(builder);
                 let prepared_events = field_events.prepare(builder);
+                let prepared_packet_direction =
+                    field_packet_direction.prepare(builder, &self::PacketDirection::Incoming);
+                let prepared_packet = field_packet.prepare(builder);
 
-                let mut table_writer: ::planus::table_writer::TableWriter<16> =
+                let mut table_writer: ::planus::table_writer::TableWriter<20> =
                     ::core::default::Default::default();
                 if prepared_entity.is_some() {
                     table_writer.write_entry::<u64>(1);
@@ -10082,6 +10654,12 @@ mod root {
                     table_writer
                         .write_entry::<::planus::Offset<[::planus::Offset<self::EventValues>]>>(5);
                 }
+                if prepared_packet.is_some() {
+                    table_writer.write_entry::<::planus::Offset<[u8]>>(7);
+                }
+                if prepared_packet_direction.is_some() {
+                    table_writer.write_entry::<self::PacketDirection>(6);
+                }
 
                 unsafe {
                     table_writer.finish(builder, |object_writer| {
@@ -10103,6 +10681,14 @@ mod root {
                         }
                         if let ::core::option::Option::Some(prepared_events) = prepared_events {
                             object_writer.write::<_, _, 4>(&prepared_events);
+                        }
+                        if let ::core::option::Option::Some(prepared_packet) = prepared_packet {
+                            object_writer.write::<_, _, 4>(&prepared_packet);
+                        }
+                        if let ::core::option::Option::Some(prepared_packet_direction) =
+                            prepared_packet_direction
+                        {
+                            object_writer.write::<_, _, 1>(&prepared_packet_direction);
                         }
                     });
                 }
@@ -10142,6 +10728,8 @@ mod root {
                     &self.queries,
                     &self.resources,
                     &self.events,
+                    self.packet_direction,
+                    &self.packet,
                 )
             }
         }
@@ -10277,6 +10865,55 @@ mod root {
         }
 
         impl<T0, T1, T2, T3, T4, T5> ObserverInputBuilder<(T0, T1, T2, T3, T4, T5)> {
+            /// Setter for the [`packet_direction` field](ObserverInput#structfield.packet_direction).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn packet_direction<T6>(
+                self,
+                value: T6,
+            ) -> ObserverInputBuilder<(T0, T1, T2, T3, T4, T5, T6)>
+            where
+                T6: ::planus::WriteAsDefault<self::PacketDirection, self::PacketDirection>,
+            {
+                let (v0, v1, v2, v3, v4, v5) = self.0;
+                ObserverInputBuilder((v0, v1, v2, v3, v4, v5, value))
+            }
+
+            /// Sets the [`packet_direction` field](ObserverInput#structfield.packet_direction) to the default value.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn packet_direction_as_default(
+                self,
+            ) -> ObserverInputBuilder<(T0, T1, T2, T3, T4, T5, ::planus::DefaultValue)>
+            {
+                self.packet_direction(::planus::DefaultValue)
+            }
+        }
+
+        impl<T0, T1, T2, T3, T4, T5, T6> ObserverInputBuilder<(T0, T1, T2, T3, T4, T5, T6)> {
+            /// Setter for the [`packet` field](ObserverInput#structfield.packet).
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn packet<T7>(
+                self,
+                value: T7,
+            ) -> ObserverInputBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
+            where
+                T7: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
+            {
+                let (v0, v1, v2, v3, v4, v5, v6) = self.0;
+                ObserverInputBuilder((v0, v1, v2, v3, v4, v5, v6, value))
+            }
+
+            /// Sets the [`packet` field](ObserverInput#structfield.packet) to null.
+            #[inline]
+            #[allow(clippy::type_complexity)]
+            pub fn packet_as_null(self) -> ObserverInputBuilder<(T0, T1, T2, T3, T4, T5, T6, ())> {
+                self.packet(())
+            }
+        }
+
+        impl<T0, T1, T2, T3, T4, T5, T6, T7> ObserverInputBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)> {
             /// Finish writing the builder to get an [Offset](::planus::Offset) to a serialized [ObserverInput].
             #[inline]
             pub fn finish(self, builder: &mut ::planus::Builder) -> ::planus::Offset<ObserverInput>
@@ -10294,8 +10931,10 @@ mod root {
                 T3: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::QueryRows>]>>,
                 T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ResValue>]>>,
                 T5: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::EventValues>]>>,
+                T6: ::planus::WriteAsDefault<self::PacketDirection, self::PacketDirection>,
+                T7: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
             > ::planus::WriteAs<::planus::Offset<ObserverInput>>
-            for ObserverInputBuilder<(T0, T1, T2, T3, T4, T5)>
+            for ObserverInputBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
         {
             type Prepared = ::planus::Offset<ObserverInput>;
 
@@ -10312,8 +10951,10 @@ mod root {
                 T3: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::QueryRows>]>>,
                 T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ResValue>]>>,
                 T5: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::EventValues>]>>,
+                T6: ::planus::WriteAsDefault<self::PacketDirection, self::PacketDirection>,
+                T7: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
             > ::planus::WriteAsOptional<::planus::Offset<ObserverInput>>
-            for ObserverInputBuilder<(T0, T1, T2, T3, T4, T5)>
+            for ObserverInputBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
         {
             type Prepared = ::planus::Offset<ObserverInput>;
 
@@ -10333,13 +10974,15 @@ mod root {
                 T3: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::QueryRows>]>>,
                 T4: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::ResValue>]>>,
                 T5: ::planus::WriteAsOptional<::planus::Offset<[::planus::Offset<self::EventValues>]>>,
+                T6: ::planus::WriteAsDefault<self::PacketDirection, self::PacketDirection>,
+                T7: ::planus::WriteAsOptional<::planus::Offset<[u8]>>,
             > ::planus::WriteAsOffset<ObserverInput>
-            for ObserverInputBuilder<(T0, T1, T2, T3, T4, T5)>
+            for ObserverInputBuilder<(T0, T1, T2, T3, T4, T5, T6, T7)>
         {
             #[inline]
             fn prepare(&self, builder: &mut ::planus::Builder) -> ::planus::Offset<ObserverInput> {
-                let (v0, v1, v2, v3, v4, v5) = &self.0;
-                ObserverInput::create(builder, v0, v1, v2, v3, v4, v5)
+                let (v0, v1, v2, v3, v4, v5, v6, v7) = &self.0;
+                ObserverInput::create(builder, v0, v1, v2, v3, v4, v5, v6, v7)
             }
         }
 
@@ -10407,6 +11050,22 @@ mod root {
             > {
                 self.0.access(5, "ObserverInput", "events")
             }
+
+            /// Getter for the [`packet_direction` field](ObserverInput#structfield.packet_direction).
+            #[inline]
+            pub fn packet_direction(&self) -> ::planus::Result<self::PacketDirection> {
+                ::core::result::Result::Ok(
+                    self.0
+                        .access(6, "ObserverInput", "packet_direction")?
+                        .unwrap_or(self::PacketDirection::Incoming),
+                )
+            }
+
+            /// Getter for the [`packet` field](ObserverInput#structfield.packet).
+            #[inline]
+            pub fn packet(&self) -> ::planus::Result<::core::option::Option<&'a [u8]>> {
+                self.0.access(7, "ObserverInput", "packet")
+            }
         }
 
         impl<'a> ::core::fmt::Debug for ObserverInputRef<'a> {
@@ -10426,6 +11085,10 @@ mod root {
                 }
                 if let ::core::option::Option::Some(field_events) = self.events().transpose() {
                     f.field("events", &field_events);
+                }
+                f.field("packet_direction", &self.packet_direction());
+                if let ::core::option::Option::Some(field_packet) = self.packet().transpose() {
+                    f.field("packet", &field_packet);
                 }
                 f.finish()
             }
@@ -10461,6 +11124,10 @@ mod root {
                     } else {
                         ::core::option::Option::None
                     },
+                    packet_direction: ::core::convert::TryInto::try_into(
+                        value.packet_direction()?,
+                    )?,
+                    packet: value.packet()?.map(|v| v.to_vec()),
                 })
             }
         }
@@ -10541,7 +11208,7 @@ mod root {
         /// The table `SpawnResolved` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SpawnResolved` in the file `mod-abi.fbs:275`
+        /// * Table `SpawnResolved` in the file `mod-abi.fbs:292`
         #[derive(
             Clone,
             Debug,
@@ -10849,7 +11516,7 @@ mod root {
         /// The table `SpawnedInput` in the namespace `ModAbi`
         ///
         /// Generated from these locations:
-        /// * Table `SpawnedInput` in the file `mod-abi.fbs:280`
+        /// * Table `SpawnedInput` in the file `mod-abi.fbs:297`
         #[derive(
             Clone,
             Debug,

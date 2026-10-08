@@ -56,69 +56,11 @@ pub mod host {
 }
 /// Raw UO packets, both ways. A packet is the full wire bytes, id first. Prefer
 /// world data and `actions` when they cover what you need: they keep the client's
-/// own state in step.
+/// own state in step. To see / block / rewrite packets, add an observer with the
+/// `on-packet` trigger (tinyecs:modding/ecs): incoming = server to client, outgoing =
+/// client to server.
 pub mod packets {
     use crate::p1::call::{FromWit, ToWit, Value};
-    #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
-    pub enum Direction {
-        /// Server to client.
-        Incoming,
-        /// Client to server.
-        Outgoing,
-    }
-    impl ToWit for Direction {
-        fn to_wit(&self) -> Value {
-            Value::String(match self {
-                Self::Incoming => "incoming",
-                Self::Outgoing => "outgoing",
-            }.into())
-        }
-    }
-    impl FromWit for Direction {
-        fn from_wit(v: &Value) -> Option<Self> {
-            Some(match v.as_str()? {
-                "incoming" => Self::Incoming,
-                "outgoing" => Self::Outgoing,
-                _ => return None,
-            })
-        }
-    }
-    /// What `on-packet` decides.
-    #[derive(Clone, Debug)]
-    pub enum Verdict {
-        /// Let it through unchanged.
-        Pass,
-        /// Drop it: the client never handles / sends it.
-        Block,
-        /// Let these bytes through instead.
-        Replace(Vec<u8>),
-    }
-    impl ToWit for Verdict {
-        fn to_wit(&self) -> Value {
-            let (k, v) = match self {
-                Self::Pass => ("pass", Value::Null),
-                Self::Block => ("block", Value::Null),
-                Self::Replace(p) => ("replace", p.to_wit()),
-            };
-            crate::p1::call::variant(k, v)
-        }
-    }
-    impl FromWit for Verdict {
-        fn from_wit(v: &Value) -> Option<Self> {
-            let (k, p) = crate::p1::call::case(v)?;
-            Some(match k {
-                "pass" => Self::Pass,
-                "block" => Self::Block,
-                "replace" => Self::Replace(FromWit::from_wit(p)?),
-                _ => return None,
-            })
-        }
-    }
-    /// Asks for `on-packet` calls for these packet ids in one direction. Call it in
-    /// `setup`; a mod that never calls it gets no packets. Calling again adds ids.
-    pub fn intercept(dir: Direction, ids: &[u8]) {
-        crate::p1::call::call("cuo:modding/packets#intercept", ::std::vec![ToWit::to_wit(&dir), ToWit::to_wit(&ids)])
-    }
     /// Sends a packet to the server, as if the client had sent it.
     pub fn send_to_server(packet: &[u8]) {
         crate::p1::call::call("cuo:modding/packets#send-to-server", ::std::vec![ToWit::to_wit(&packet)])

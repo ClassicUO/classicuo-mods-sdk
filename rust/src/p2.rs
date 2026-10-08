@@ -1,6 +1,6 @@
 //! wasm32-wasip2 backend: a component implementing the `cuo:modding/mod` world
-//! (wit/cuo-mod.wit) with wit-bindgen. `setup` / `run` / `observe` / `on-packet` map
-//! onto the same App and system machinery as p1.
+//! (wit/cuo-mod.wit) with wit-bindgen. `setup` / `run` / `observe` / `observe-packet`
+//! map onto the same App and system machinery as p1.
 
 #[allow(clippy::all, dead_code, unused)]
 mod bindings {
@@ -11,7 +11,10 @@ mod bindings {
     });
 }
 
-use crate::ecs::{App, EntryKind, Fetched, ParamDesc, RawRow, Schedule, TermKind, TriggerData, TriggerDesc};
+use crate::ecs::{
+    App, EntryKind, Fetched, Packet, PacketDirection, ParamDesc, RawRow, Schedule, TermKind, TriggerData, TriggerDesc,
+    Verdict,
+};
 use core::ptr::addr_of_mut;
 use std::collections::HashMap;
 use bindings::tinyecs::modding::ecs as wit;
@@ -72,7 +75,6 @@ fn state() -> &'static mut State {
 
 extern "Rust" {
     fn __cuo_mod_setup(app: &mut App);
-    fn __cuo_mod_on_packet(dir: packets::Direction, packet: &[u8]) -> packets::Verdict;
 }
 
 fn term(t: &crate::ecs::Term) -> wit::Term {
@@ -129,23 +131,27 @@ fn fetch(descs: &[ParamDesc], params: Vec<wit::Param>) -> Vec<Fetched> {
         .collect()
 }
 
-fn run(name: &str, params: Vec<wit::Param>, trigger: Option<TriggerData>) {
+fn run(name: &str, params: Vec<wit::Param>, trigger: Option<TriggerData>) -> Verdict {
     let st = state();
-    let Some(&i) = st.by_name.get(name) else { return };
+    let Some(&i) = st.by_name.get(name) else { return Verdict::Pass };
     let mut app = std::mem::take(&mut st.app);
     let entry = &mut app.entries[i];
     let fetched = fetch(&entry.params, params);
-    entry.run(fetched, trigger.as_ref());
+    let verdict = entry.run(fetched, trigger);
     state().app = app;
+    verdict
+}
+
+fn wit_direction(d: PacketDirection) -> wit::PacketDirection {
+    match d {
+        PacketDirection::Incoming => wit::PacketDirection::Incoming,
+        PacketDirection::Outgoing => wit::PacketDirection::Outgoing,
+    }
 }
 
 struct Mod;
 
 impl bindings::Guest for Mod {
-    fn on_packet(dir: packets::Direction, packet: Vec<u8>) -> packets::Verdict {
-        unsafe { __cuo_mod_on_packet(dir, &packet) }
-    }
-
     fn setup(wit_app: wit::App) {
         let mut app = App::default();
         unsafe { __cuo_mod_setup(&mut app) };
@@ -172,13 +178,16 @@ impl bindings::Guest for Mod {
                     ParamDesc::Events(path) => sys.add_events(path),
                 }
             }
-            match e.kind {
-                EntryKind::System(s) => wit_app.add_systems(schedule(s), &[sys]),
+            match &e.kind {
+                EntryKind::System(s) => wit_app.add_systems(schedule(*s), &[sys]),
                 EntryKind::Observer(t) => {
                     let trigger = match t {
                         TriggerDesc::Add(p) => wit::Trigger::OnAdd(p.to_string()),
                         TriggerDesc::Remove(p) => wit::Trigger::OnRemove(p.to_string()),
                         TriggerDesc::Event(p) => wit::Trigger::OnEvent(p.to_string()),
+                        TriggerDesc::Packet(dir, ids) => {
+                            wit::Trigger::OnPacket(wit::PacketFilter { direction: wit_direction(*dir), ids: ids.clone() })
+                        }
                     };
                     wit_app.add_observer(&trigger, sys)
                 }
@@ -191,11 +200,28 @@ impl bindings::Guest for Mod {
     }
 
     fn run(system: String, params: Vec<wit::Param>) {
-        run(&system, params, None)
+        run(&system, params, None);
     }
 
     fn observe(system: String, trigger: wit::TriggerData, params: Vec<wit::Param>) {
-        run(&system, params, Some(TriggerData { entity: trigger.entity, value: trigger.value }))
+        run(&system, params, Some(TriggerData::Entity { entity: trigger.entity, value: trigger.value }));
+    }
+
+    fn observe_packet(
+        system: String,
+        direction: wit::PacketDirection,
+        packet: Vec<u8>,
+        params: Vec<wit::Param>,
+    ) -> wit::Verdict {
+        let direction = match direction {
+            wit::PacketDirection::Incoming => PacketDirection::Incoming,
+            wit::PacketDirection::Outgoing => PacketDirection::Outgoing,
+        };
+        match run(&system, params, Some(TriggerData::Packet(Packet::new(direction, packet)))) {
+            Verdict::Pass => wit::Verdict::Pass,
+            Verdict::Block => wit::Verdict::Block,
+            Verdict::Replace(bytes) => wit::Verdict::Replace(bytes),
+        }
     }
 }
 

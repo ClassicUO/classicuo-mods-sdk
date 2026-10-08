@@ -587,6 +587,7 @@ __flatbuffers_define_integer_type(ModAbi_ObserverKind, ModAbi_ObserverKind_enum_
 #define ModAbi_ObserverKind_Insert ((ModAbi_ObserverKind_enum_t)UINT8_C(2))
 #define ModAbi_ObserverKind_Remove ((ModAbi_ObserverKind_enum_t)UINT8_C(3))
 #define ModAbi_ObserverKind_Custom ((ModAbi_ObserverKind_enum_t)UINT8_C(4))
+#define ModAbi_ObserverKind_Packet ((ModAbi_ObserverKind_enum_t)UINT8_C(5))
 
 static inline const char *ModAbi_ObserverKind_name(ModAbi_ObserverKind_enum_t value)
 {
@@ -596,6 +597,7 @@ static inline const char *ModAbi_ObserverKind_name(ModAbi_ObserverKind_enum_t va
     case ModAbi_ObserverKind_Insert: return "Insert";
     case ModAbi_ObserverKind_Remove: return "Remove";
     case ModAbi_ObserverKind_Custom: return "Custom";
+    case ModAbi_ObserverKind_Packet: return "Packet";
     default: return "";
     }
 }
@@ -608,6 +610,56 @@ static inline int ModAbi_ObserverKind_is_known_value(ModAbi_ObserverKind_enum_t 
     case ModAbi_ObserverKind_Insert: return 1;
     case ModAbi_ObserverKind_Remove: return 1;
     case ModAbi_ObserverKind_Custom: return 1;
+    case ModAbi_ObserverKind_Packet: return 1;
+    default: return 0;
+    }
+}
+
+typedef uint8_t ModAbi_PacketDirection_enum_t;
+__flatbuffers_define_integer_type(ModAbi_PacketDirection, ModAbi_PacketDirection_enum_t, 8)
+#define ModAbi_PacketDirection_Incoming ((ModAbi_PacketDirection_enum_t)UINT8_C(0))
+#define ModAbi_PacketDirection_Outgoing ((ModAbi_PacketDirection_enum_t)UINT8_C(1))
+
+static inline const char *ModAbi_PacketDirection_name(ModAbi_PacketDirection_enum_t value)
+{
+    switch (value) {
+    case ModAbi_PacketDirection_Incoming: return "Incoming";
+    case ModAbi_PacketDirection_Outgoing: return "Outgoing";
+    default: return "";
+    }
+}
+
+static inline int ModAbi_PacketDirection_is_known_value(ModAbi_PacketDirection_enum_t value)
+{
+    switch (value) {
+    case ModAbi_PacketDirection_Incoming: return 1;
+    case ModAbi_PacketDirection_Outgoing: return 1;
+    default: return 0;
+    }
+}
+
+typedef uint8_t ModAbi_PacketVerdict_enum_t;
+__flatbuffers_define_integer_type(ModAbi_PacketVerdict, ModAbi_PacketVerdict_enum_t, 8)
+#define ModAbi_PacketVerdict_Pass ((ModAbi_PacketVerdict_enum_t)UINT8_C(0))
+#define ModAbi_PacketVerdict_Block ((ModAbi_PacketVerdict_enum_t)UINT8_C(1))
+#define ModAbi_PacketVerdict_Replace ((ModAbi_PacketVerdict_enum_t)UINT8_C(2))
+
+static inline const char *ModAbi_PacketVerdict_name(ModAbi_PacketVerdict_enum_t value)
+{
+    switch (value) {
+    case ModAbi_PacketVerdict_Pass: return "Pass";
+    case ModAbi_PacketVerdict_Block: return "Block";
+    case ModAbi_PacketVerdict_Replace: return "Replace";
+    default: return "";
+    }
+}
+
+static inline int ModAbi_PacketVerdict_is_known_value(ModAbi_PacketVerdict_enum_t value)
+{
+    switch (value) {
+    case ModAbi_PacketVerdict_Pass: return 1;
+    case ModAbi_PacketVerdict_Block: return 1;
+    case ModAbi_PacketVerdict_Replace: return 1;
     default: return 0;
     }
 }
@@ -711,6 +763,8 @@ __flatbuffers_define_scalar_field(1, ModAbi_ObserverDecl, kind, ModAbi_ObserverK
 __flatbuffers_define_scalar_field(2, ModAbi_ObserverDecl, type_id, flatbuffers_uint16, uint16_t, UINT16_C(0))
 __flatbuffers_define_string_field(3, ModAbi_ObserverDecl, event_name, 0)
 __flatbuffers_define_vector_field(4, ModAbi_ObserverDecl, params, ModAbi_ParamDecl_vec_t, 0)
+__flatbuffers_define_scalar_field(5, ModAbi_ObserverDecl, packet_direction, ModAbi_PacketDirection, ModAbi_PacketDirection_enum_t, UINT8_C(0))
+__flatbuffers_define_vector_field(6, ModAbi_ObserverDecl, packet_ids, flatbuffers_uint8_vec_t, 0)
 
 struct ModAbi_SetupReply_table { uint8_t unused__; };
 
@@ -939,6 +993,8 @@ __flatbuffers_offset_vec_at(ModAbi_CommandBuffer_table_t, vec, i, 0)
 __flatbuffers_table_as_root(ModAbi_CommandBuffer)
 
 __flatbuffers_define_union_vector_field(flatbuffers_, 1, ModAbi_CommandBuffer, cmds, ModAbi_Cmd, 0)
+__flatbuffers_define_scalar_field(2, ModAbi_CommandBuffer, verdict, ModAbi_PacketVerdict, ModAbi_PacketVerdict_enum_t, UINT8_C(0))
+__flatbuffers_define_vector_field(3, ModAbi_CommandBuffer, replacement, flatbuffers_uint8_vec_t, 0)
 
 struct ModAbi_ObserverInput_table { uint8_t unused__; };
 
@@ -954,6 +1010,8 @@ __flatbuffers_define_table_field(2, ModAbi_ObserverInput, value, ModAbi_CompValu
 __flatbuffers_define_vector_field(3, ModAbi_ObserverInput, queries, ModAbi_QueryRows_vec_t, 0)
 __flatbuffers_define_vector_field(4, ModAbi_ObserverInput, resources, ModAbi_ResValue_vec_t, 0)
 __flatbuffers_define_vector_field(5, ModAbi_ObserverInput, events, ModAbi_EventValues_vec_t, 0)
+__flatbuffers_define_scalar_field(6, ModAbi_ObserverInput, packet_direction, ModAbi_PacketDirection, ModAbi_PacketDirection_enum_t, UINT8_C(0))
+__flatbuffers_define_vector_field(7, ModAbi_ObserverInput, packet, flatbuffers_uint8_vec_t, 0)
 
 struct ModAbi_SpawnResolved_table { uint8_t unused__; };
 

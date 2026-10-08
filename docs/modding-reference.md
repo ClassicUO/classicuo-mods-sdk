@@ -123,4 +123,4 @@ Read-only data is marked *(ro)*; writing it is ignored, and a `&mut` / `Mut<T>` 
 | `spawn-named` / `entity(name)` | `spawn` returns the entity id |
 | `every-ms` | check `Res<Time>` in the system |
 | `tile` / `hue-ramp` / `gump-size` / `cliloc` host functions | moved to `assets` (`static-tile`, `hue-ramp`, `image-size`, `cliloc` with args) |
-| `net-send` host function, `filter-packet` / `on-incoming-packet` export (block-only, every packet) | → `packets` interface: `intercept(dir, ids)` opt-in, `on-packet` returns pass / block / replace, `send-to-server`, `send-to-client` (new: inject incoming) |
+| `net-send` host function, `filter-packet` / `on-incoming-packet` export (block-only, every packet) | → `on-packet(direction, ids)` observer trigger returning pass / block / replace; `packets` interface keeps `send-to-server`, `send-to-client` (new: inject incoming) |
