@@ -97,25 +97,6 @@ namespace ModWorld {
         internal T? Value { get; }
     }
 
-    internal static class InteropReturnArea
-    {
-        [global::System.Runtime.CompilerServices.InlineArrayAttribute(3)]
-        [global::System.Runtime.InteropServices.StructLayoutAttribute(global::System.Runtime.InteropServices.LayoutKind.Sequential, Pack = 4)]
-        internal struct ReturnArea
-        {
-            private uint buffer;
-
-            internal unsafe nint AddressOfReturnArea()
-            {
-                return (nint)global::System.Runtime.CompilerServices.Unsafe.AsPointer(ref buffer);
-            }
-        }
-
-        [global::System.ThreadStaticAttribute]
-        [global::System.Runtime.CompilerServices.FixedAddressValueTypeAttribute]
-        internal static ReturnArea returnArea = default;
-    }
-
     internal static class MemoryHelper
     {
         internal static unsafe void* AlignStackPtr(void* stackAddress, uint alignment)

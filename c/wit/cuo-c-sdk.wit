@@ -1,0 +1,13 @@
+/// What a C mod's world includes in place of `cuo:modding/mod`: the same world plus
+/// the export the C SDK implements itself (the Startup system `cuo_hotkey` publishes
+/// its bindings from). Its commands type is renamed so the mod's own
+/// `use tinyecs:modding/ecs@0.1.0.{commands, ...}` does not clash with it.
+package cuo:c-sdk@0.1.0;
+
+world mod {
+    use tinyecs:modding/ecs@0.1.0.{commands as cuo-sdk-commands};
+
+    export cuo-sdk-hotkeys: func(commands: cuo-sdk-commands);
+
+    include cuo:modding/mod@0.1.0;
+}

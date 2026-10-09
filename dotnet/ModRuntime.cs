@@ -4,56 +4,58 @@ using Ecs = ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports;
 namespace CuoModSdk;
 
 /// <summary>
-/// The component's exports (world <c>cuo:modding/mod</c>) on top of <see cref="ModBuilder"/>.
+/// The component's exports on top of <see cref="ModBuilder"/>. A mod is a component of
+/// its OWN world: <c>setup</c> plus one export per system / observer it declares, named
+/// like the system (wasvy-style; see ModDescribe.cs for how the build derives them).
 ///
 /// Lifecycle (the host drives, serially):
-/// 1. <c>setup(app)</c> — the export generated into the mod (ModSdk.targets, from
-///    <c>&lt;CuoModType&gt;</c>) calls <see cref="Setup"/>: run the mod's Setup, then
-///    declare every system / observer on the host.
-/// 2. <c>run</c> / <c>observe</c> / <c>observe-packet</c> — look the system up by name,
-///    build its parameters from the param handles, run the body, drop the handles.
-///
-/// The exports lift their arguments by hand (no per-call strings or lists): the system
-/// name is matched as UTF-8, the params land in reused arrays.
+/// 1. <c>setup(app)</c> — generated into the mod: run the mod's Setup, check it
+///    registered exactly the systems the build exported, declare them on the host.
+/// 2. <c>&lt;system&gt;(params…)</c> — the generated export hands its param handles (and
+///    trigger / packet) to <see cref="RunSystem"/> / <see cref="RunObserver"/> /
+///    <see cref="RunPacket"/> with the system's index; the body runs, the handles drop.
 /// </summary>
 public static unsafe class ModRuntime
 {
     static List<Entry> _entries = new();
-    // FNV-1a of the UTF-8 name -> entry index (collisions fall back to a scan).
-    static readonly Dictionary<ulong, int> _byName = new();
     static readonly ModHost _host = new();
 
     internal static ModHost Host => _host;
 
-    /// <summary>Body of the generated <c>setup</c> export (ModSdk.targets, from <c>&lt;CuoModType&gt;</c>).</summary>
-    public static void Setup(int appHandle, Mod mod)
+    /// <summary>
+    /// Body of the generated <c>setup</c> export. <paramref name="exported"/> is the
+    /// build-time signature of every export (<see cref="Entry.Signature"/>), in
+    /// registration order: the exports dispatch by index, so Setup must register the
+    /// same systems, in the same order, as it did when the mod was built.
+    /// </summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public static void Setup(int appHandle, Mod mod, string[] exported)
     {
         using var app = new Ecs.App(new Ecs.App.THandle(appHandle));
         var m = new ModBuilder(_host);
         mod.Setup(m);
         m.Finish();
         _entries = m.Entries;
-        _byName.Clear();
-        for (var i = 0; i < _entries.Count; i++)
-            _byName[Hash(_entries[i].NameUtf8)] = i;
+        var mismatch = Mismatch(_entries, exported);
+        if (mismatch != null)
+        {
+            CuoModSdk.Host.Log(mismatch);
+            throw new InvalidOperationException(mismatch);
+        }
         m.Declare(app);
     }
 
-    static ulong Hash(ReadOnlySpan<byte> s)
+    static string? Mismatch(List<Entry> entries, string[] exported)
     {
-        var h = 14695981039346656037UL;
-        foreach (var b in s)
-            h = (h ^ b) * 1099511628211UL;
-        return h;
-    }
-
-    static Entry? Find(ReadOnlySpan<byte> name)
-    {
-        if (_byName.TryGetValue(Hash(name), out var i) && _entries[i].NameUtf8.AsSpan().SequenceEqual(name))
-            return _entries[i];
-        foreach (var e in _entries)
-            if (e.NameUtf8.AsSpan().SequenceEqual(name))
-                return e;
+        for (var i = 0; i < Math.Max(entries.Count, exported.Length); i++)
+        {
+            var now = i < entries.Count ? entries[i].Signature() : "(none)";
+            var built = i < exported.Length ? exported[i] : "(none)";
+            if (now != built)
+                return $"mod setup registered system #{i} as {now}, but the mod was built exporting {built}: " +
+                       "Setup must register the same systems in the same order on every run (no registration " +
+                       "that depends on runtime state); rebuild the mod after changing its systems";
+        }
         return null;
     }
 
@@ -63,9 +65,9 @@ public static unsafe class ModRuntime
     static int[] _handles = new int[8];
     static byte[] _packet = new byte[512];
 
-    // Lifts list<param> (8 bytes each: tag u8 @0, own handle i32 @4) and frees the list.
-    static void LiftParams(nint list, int count)
+    static Entry Lift(int index, int* handles, int count)
     {
+        var entry = _entries[index];
         if (_kinds.Length < count)
         {
             _kinds = new byte[count];
@@ -73,20 +75,22 @@ public static unsafe class ModRuntime
         }
         for (var i = 0; i < count; i++)
         {
-            _kinds[i] = *(byte*)(list + i * 8);
-            _handles[i] = *(int*)(list + i * 8 + 4);
+            _kinds[i] = entry.Params[i].Kind switch
+            {
+                ParamKind.Commands => EcsAbi.ParamCommands,
+                ParamKind.Query => EcsAbi.ParamQuery,
+                ParamKind.Events => EcsAbi.ParamEvents,
+                _ => EcsAbi.ParamRes,
+            };
+            _handles[i] = handles[i];
         }
-        if (count > 0)
-            NativeMemory.Free((void*)list);
+        return entry;
     }
 
-    static Verdict Execute(nint name, int nameLen, nint paramList, int paramCount, ulong triggerEntity, nint value, int valueLen, Packet packet, bool isObserver)
+    static Verdict Execute(Entry entry, int paramCount, ulong triggerEntity, nint value, int valueLen, Packet packet, bool ownsValue)
     {
-        LiftParams(paramList, paramCount);
-        var entry = Find(new ReadOnlySpan<byte>((void*)name, nameLen));
-        EcsAbi.Free(name, nameLen);
         var scope = _scope;
-        scope.Begin(_kinds, _handles, paramCount, entry?.Locals);
+        scope.Begin(_kinds, _handles, paramCount, entry.Locals);
         scope.Entry = entry;
         scope.TriggerEntity = triggerEntity;
         scope.TriggerValue = value;
@@ -94,26 +98,29 @@ public static unsafe class ModRuntime
         scope.Packet = packet;
         try
         {
-            if (entry != null)
-                entry.Run(scope);
+            entry.Run(scope);
             scope.End();
             return scope.Verdict;
         }
         finally
         {
             scope.Release();
-            if (isObserver)
+            if (ownsValue)
                 EcsAbi.Free(value, valueLen);
             for (var i = 0; i < paramCount; i++)
                 EcsAbi.Drop(_kinds[i], _handles[i]);
         }
     }
 
-    internal static void Run(nint name, int nameLen, nint paramList, int paramCount) =>
-        Execute(name, nameLen, paramList, paramCount, 0, 0, 0, default, false);
+    /// <summary>A scheduled system's export: <c>func(&lt;params&gt;)</c>.</summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public static void RunSystem(int index, int* handles, int count) =>
+        Execute(Lift(index, handles, count), count, 0, 0, 0, default, false);
 
-    internal static void Observe(nint name, int nameLen, long entity, nint value, int valueLen, nint paramList, int paramCount) =>
-        Execute(name, nameLen, paramList, paramCount, (ulong)entity, value, valueLen, default, true);
+    /// <summary>An observer's export: <c>func(trigger: trigger-data, &lt;params&gt;)</c>.</summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public static void RunObserver(int index, long entity, nint value, int valueLen, int* handles, int count) =>
+        Execute(Lift(index, handles, count), count, (ulong)entity, value, valueLen, default, true);
 
     // The verdict's return area: tag u8 @0, replacement list<u8> @4/@8.
     [StructLayout(LayoutKind.Sequential)]
@@ -125,15 +132,18 @@ public static unsafe class ModRuntime
     [System.Runtime.CompilerServices.FixedAddressValueType]
     static VerdictRet _verdictRet;
 
-    internal static nint ObservePacket(nint name, int nameLen, int direction, nint packet, int packetLen, nint paramList, int paramCount)
+    /// <summary>An on-packet observer's export: <c>func(direction, packet: list&lt;u8&gt;, &lt;params&gt;) -&gt; verdict</c>.</summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public static nint RunPacket(int index, int direction, nint packet, int packetLen, int* handles, int count)
     {
+        var entry = Lift(index, handles, count);
         // Copy into a reused buffer (the Packet the observer sees stays valid for its run).
         if (_packet.Length < packetLen)
             _packet = new byte[Math.Max(packetLen, _packet.Length * 2)];
         new ReadOnlySpan<byte>((void*)packet, packetLen).CopyTo(_packet);
         EcsAbi.Free(packet, packetLen);
         var p = new Packet((PacketDirection)direction, new ArraySegment<byte>(_packet, 0, packetLen));
-        var verdict = Execute(name, nameLen, paramList, paramCount, 0, 0, 0, p, true);
+        var verdict = Execute(entry, count, 0, 0, 0, p, false);
 
         fixed (VerdictRet* ret = &_verdictRet)
         {
@@ -151,35 +161,12 @@ public static unsafe class ModRuntime
         }
     }
 
-    internal static void PostObservePacket(nint ret)
+    /// <summary><c>cabi_post_&lt;packet observer&gt;</c>: frees the replacement bytes.</summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public static void PostPacket(nint ret)
     {
         var r = (VerdictRet*)ret;
         if ((byte)r->Tag == (byte)VerdictKind.Replace)
             NativeMemory.Free((void*)(nint)r->Ptr);
     }
-}
-
-// The generic exports — everything except `setup`, which must construct the mod's own
-// type and is therefore GENERATED into the mod (ModSdk.targets, from <CuoModType>).
-// Exported from this assembly into the mod's component via UnmanagedEntryPointsAssembly.
-// Signatures are the canonical-ABI flattening of the WIT exports.
-internal static class WitExports
-{
-    // run: func(system: string, params: list<param>)
-    [UnmanagedCallersOnly(EntryPoint = "run")]
-    static void Run(nint name, int nameLen, nint paramList, int paramCount) =>
-        ModRuntime.Run(name, nameLen, paramList, paramCount);
-
-    // observe: func(system: string, trigger: trigger-data { entity: u64, value: string }, params: list<param>)
-    [UnmanagedCallersOnly(EntryPoint = "observe")]
-    static void Observe(nint name, int nameLen, long entity, nint value, int valueLen, nint paramList, int paramCount) =>
-        ModRuntime.Observe(name, nameLen, entity, value, valueLen, paramList, paramCount);
-
-    // observe-packet: func(system: string, direction: packet-direction, packet: list<u8>, params: list<param>) -> verdict
-    [UnmanagedCallersOnly(EntryPoint = "observe-packet")]
-    static nint ObservePacket(nint name, int nameLen, int direction, nint packet, int packetLen, nint paramList, int paramCount) =>
-        ModRuntime.ObservePacket(name, nameLen, direction, packet, packetLen, paramList, paramCount);
-
-    [UnmanagedCallersOnly(EntryPoint = "cabi_post_observe-packet")]
-    static void PostObservePacket(nint ret) => ModRuntime.PostObservePacket(ret);
 }

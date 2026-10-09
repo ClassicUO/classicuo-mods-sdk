@@ -18,7 +18,9 @@ fn setup(app: &mut App) {
 }
 
 // The parameters ARE the declaration: the client sees the query + `Commands`
-// and passes exactly those.
+// and passes exactly those. `#[system]` makes the fn an export of the mod
+// (`low-hp-warning`), which is what the client calls.
+#[system]
 fn low_hp_warning(player: Query<&Hits, (With<Player>, Changed<Hits>)>, mut cmds: Commands) {
     for (_, hits) in &player {
         if hits.value < hits.max_value / 4 {
@@ -40,12 +42,12 @@ exe; settings.json `mods_path`), start the client.
 | Idea | What it is | How you use it |
 |---|---|---|
 | **Type path** | The name of a piece of game data: `cuo:ent/graphic`, `cuo:player/hits`. | Every component, resource and event has one. See the [reference](modding-reference.md). |
-| **System** | A function the client runs every frame (or once, in `Startup`). | `app.add_systems(Schedule::Update, my_fn)`; its parameters say what it gets. |
+| **System** | A function the client runs every frame (or once, in `Startup`). | Mark it `#[system]`, then `app.add_systems(Schedule::Update, my_fn)`; its parameters say what it gets. |
 | **Query** | The entities that have some components. | `Query<(&Graphic, &mut Hue), (With<Item>, Changed<Amount>)>`, then `for (e, (g, h)) in &mut q` (`&q` to only read). Also `q.get(e)`, `q.contains(e)`, `q.single()`. Filters: `With`, `Without`, `Changed`, `Added`. `&mut` changes are written back when the system returns. |
 | **Resource** | One global value (the mouse, the time, the game state). | `Res<Time>` to read, `ResMut<T>` to write. A system whose resource is missing is skipped; take `Option<Res<T>>` to run anyway. |
 | **Event** | Something that happened (a message, a container opening). | `EventReader<T>` to read the ones since last run; `cmds.send(value)` to send your own. |
 | **Commands** | Changes to the world: spawn, insert, remove, despawn. | `Commands`; applied after your system returns. |
-| **Observer** | A system that runs the moment something happens, instead of every frame. | `app.add_observer(my_fn)` where the first parameter is `On<Add, T>`, `On<Remove, T>` or `On<Event, T>`. |
+| **Observer** | A system that runs the moment something happens, instead of every frame. | `#[system]` too, then `app.add_observer(my_fn)` where the first parameter is `On<Add, T>`, `On<Remove, T>` or `On<Event, T>`. |
 
 Every type (`Hits`, `Graphic`, `ChatMessage`, ...) comes from the SDK and knows its own
 type path, so you never write path strings in a typical mod. `Local<T>` is a system's
@@ -53,6 +55,15 @@ own state between runs (a counter, a timer, the window it spawned).
 
 Schedules, in frame order: `Startup` (once), `First`, `PreUpdate`, `Update`,
 `PostUpdate`, `Last`.
+
+Every system and observer is its own export of the mod, named after the function in
+kebab-case (`low_hp_warning` -> `low-hp-warning`), so names must be unique. Rust: mark
+each one `#[system]` and write its parameter types out (no `type` alias in the
+signature — the macro reads the type names); closures can't be systems. C#: a system's
+name is its `.Label(...)` (kebab-cased), else `systemN` / `observerN` in registration
+order; `Setup` must only register systems, the build runs it to generate the exports.
+C: list the exports in the mod's `wit/world.wit` (which includes `cuo:c-sdk/mod@0.1.0`); the
+build generates the bindings from it (needs `wit-bindgen` and `awk`).
 
 ### Writing through a query
 
@@ -108,6 +119,7 @@ fn setup(app: &mut App) {
     app.add_packet_observer(PacketDirection::Incoming, &[0x1C], block_spam); // ASCII speech
 }
 
+#[system]
 fn block_spam(p: Packet) -> Verdict {
     if is_spam(&p) { Verdict::Block } else { Verdict::Pass }
 }
@@ -153,7 +165,31 @@ Options window under **Mods**, saved per character. Read them back from
 
 ## Targets
 
-A mod is a `wasm32-wasip2` WebAssembly component implementing `wit/cuo-mod.wit`. Any
-language with WIT bindings works; with the Rust SDK:
-`cargo build --release --target wasm32-wasip2`. The client rejects core-wasm
-(`wasm32-wasip1`) modules.
+A mod is a `wasm32-wasip2` WebAssembly component. Any language with WIT bindings works;
+with the Rust SDK: `cargo build --release --target wasm32-wasip2`. The client rejects
+core-wasm (`wasm32-wasip1`) modules.
+
+Without an SDK, a mod is a component of its **own world**, which includes
+`cuo:modding/mod` (the `setup` export plus the host imports) and exports one function per
+system it declares in `setup`, named like the system (wasvy-style):
+
+```wit
+package example:hello;
+
+world hello {
+    use tinyecs:modding/ecs@0.1.0.{commands, query, trigger-data, packet-direction, verdict};
+
+    export show-hits: func(hits: query, commands: commands);       // a scheduled system
+    export on-click: func(trigger: trigger-data);                  // an observer
+    export filter: func(direction: packet-direction, packet: list<u8>) -> verdict; // on-packet
+
+    include cuo:modding/mod@0.1.0;
+}
+```
+
+`setup` declares `System::new("show-hits")`, adds its params (`add-query`, then
+`add-commands`) and schedules it; the client then calls `show-hits` with those params as
+typed arguments, in the order they were added. Observers get the `trigger-data` first,
+on-packet observers the direction and the packet. A declared system without a matching
+export fails the mod's load. A complete example: `src/Mods/ecs-hello-raw` in the client
+repo.

@@ -2,9 +2,12 @@ namespace CuoModSdk;
 
 /// <summary>
 /// A mod. Subclass it, override <see cref="Setup"/>, and name the subclass in the
-/// csproj's <c>&lt;CuoModType&gt;</c> — ModSdk.targets generates the component's
-/// <c>setup</c> export that instantiates it. Everything else (the other exports, the
-/// canonical-ABI glue for world <c>cuo:modding/mod</c>) is the SDK's.
+/// csproj's <c>&lt;CuoModType&gt;</c>. The component's exports are generated from it at
+/// build time: <c>setup</c>, and one export per system / observer Setup registers, named
+/// like the system (<see cref="SystemHandle.Label"/>, default <c>systemN</c> /
+/// <c>observerN</c> in registration order). To learn them the build RUNS Setup on the
+/// build machine (ModDescribe.cs), so Setup (and the constructor) must only register —
+/// no host calls — and must register the same systems in the same order every time.
 ///
 /// One instance per guest, created once at setup: mod state goes in instance fields,
 /// not statics. The guest is single-threaded, so no locking.

@@ -1,13 +1,18 @@
 //! wasm32-wasip2 backend: a component implementing the `cuo:modding/mod` world
-//! (wit/cuo-mod.wit) with wit-bindgen. `setup` / `run` / `observe` / `observe-packet`
-//! map onto the App and its systems.
+//! (wit/cuo-mod.wit) with wit-bindgen. `setup` declares the App's systems; each system
+//! is its own export of the mod's world (`#[system]` generates it), which lands in
+//! `run_system` / `run_observer` / `run_packet_observer` with the typed handles.
 
+#[doc(hidden)]
 #[allow(clippy::all, dead_code, unused)]
-mod bindings {
+pub mod bindings {
+    // Every type, used or not: trigger-data / verdict only appear in system exports,
+    // which `#[system]` generates against these bindings.
     wit_bindgen::generate!({
         path: "../wit",
         world: "cuo:modding/mod",
         generate_all,
+        generate_unused_types: true,
     });
 }
 
@@ -108,26 +113,35 @@ fn schedule(s: Schedule) -> wit::Schedule {
     }
 }
 
-fn fetch(params: Vec<wit::Param>) -> Vec<Fetched> {
+/// One wire parameter of a system's export, as the host passed it.
+#[doc(hidden)]
+pub enum Param {
+    Commands(wit::Commands),
+    Query(wit::Query),
+    Res(wit::Res),
+    Events(wit::Events),
+}
+
+fn fetch(params: Vec<Param>) -> Vec<Fetched> {
     params
         .into_iter()
         .map(|p| match p {
-            wit::Param::Commands(c) => Fetched::Commands(CmdSink(c)),
-            wit::Param::Query(q) => {
+            Param::Commands(c) => Fetched::Commands(CmdSink(c)),
+            Param::Query(q) => {
                 // One host call per query param per run: every row at once.
                 let rows = q.rows().into_iter().map(|r| RawRow { entity: r.entity, comps: r.values }).collect();
                 Fetched::Query(rows, QuerySink(Some(q)))
             }
-            wit::Param::Res(r) => {
+            Param::Res(r) => {
                 let data = if r.unchanged() { ResData::Unchanged } else { ResData::Value(r.get()) };
                 Fetched::Res(data, ResSink(Some(r)))
             }
-            wit::Param::Events(e) => Fetched::Events(e.read()),
+            Param::Events(e) => Fetched::Events(e.read()),
         })
         .collect()
 }
 
-fn run(name: &str, params: Vec<wit::Param>, trigger: Option<TriggerData>) -> Verdict {
+fn run(name: &str, params: Vec<Param>, trigger: Option<TriggerData>) -> Verdict {
     let st = state();
     let Some(&i) = st.by_name.get(name) else { return Verdict::Pass };
     let mut app = std::mem::take(&mut st.app);
@@ -192,36 +206,38 @@ impl bindings::Guest for Mod {
                     wit_app.add_observer(&trigger, sys)
                 }
             }
-            by_name.insert(e.name.clone(), i);
+            by_name.entry(e.name.clone()).or_insert(i);
         }
         let st = state();
         st.app = app;
         st.by_name = by_name;
     }
 
-    fn run(system: String, params: Vec<wit::Param>) {
-        run(&system, params, None);
-    }
+}
 
-    fn observe(system: String, trigger: wit::TriggerData, params: Vec<wit::Param>) {
-        run(&system, params, Some(TriggerData::Entity { entity: trigger.entity, value: trigger.value }));
-    }
+/// A scheduled system's export (`#[system]` glue).
+#[doc(hidden)]
+pub fn run_system(name: &str, params: Vec<Param>) {
+    run(name, params, None);
+}
 
-    fn observe_packet(
-        system: String,
-        direction: wit::PacketDirection,
-        packet: Vec<u8>,
-        params: Vec<wit::Param>,
-    ) -> wit::Verdict {
-        let direction = match direction {
-            wit::PacketDirection::Incoming => PacketDirection::Incoming,
-            wit::PacketDirection::Outgoing => PacketDirection::Outgoing,
-        };
-        match run(&system, params, Some(TriggerData::Packet(Packet::new(direction, packet)))) {
-            Verdict::Pass => wit::Verdict::Pass,
-            Verdict::Block => wit::Verdict::Block,
-            Verdict::Replace(bytes) => wit::Verdict::Replace(bytes),
-        }
+/// An observer's export (`#[system]` glue).
+#[doc(hidden)]
+pub fn run_observer(name: &str, trigger: wit::TriggerData, params: Vec<Param>) {
+    run(name, params, Some(TriggerData::Entity { entity: trigger.entity, value: trigger.value }));
+}
+
+/// A packet observer's export (`#[system]` glue).
+#[doc(hidden)]
+pub fn run_packet_observer(name: &str, direction: wit::PacketDirection, packet: Vec<u8>, params: Vec<Param>) -> wit::Verdict {
+    let direction = match direction {
+        wit::PacketDirection::Incoming => PacketDirection::Incoming,
+        wit::PacketDirection::Outgoing => PacketDirection::Outgoing,
+    };
+    match run(name, params, Some(TriggerData::Packet(Packet::new(direction, packet)))) {
+        Verdict::Pass => wit::Verdict::Pass,
+        Verdict::Block => wit::Verdict::Block,
+        Verdict::Replace(bytes) => wit::Verdict::Replace(bytes),
     }
 }
 

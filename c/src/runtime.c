@@ -1,12 +1,14 @@
-/* Scratch, registration and the component exports — twin of rust/src/p2.rs.
+/* Scratch, registration, setup and the dispatcher behind the mod's exports.
  *
  * Lifecycle (host drives, serially; the guest is single-threaded, so plain statics):
- * 1. setup(app) — call the mod's cuo_setup, then declare every system / observer and
- *    its parameters to the host (system resources, app.add-systems / add-observer).
- * 2. run / observe / observe-packet — look the system up by name, fetch each param's
- *    data (one host call per param), dispatch to the registered callback, drop the
- *    param handles. Commands go straight to the host's buffer as they are recorded.
- */
+ * 1. setup(app) — call the mod's cuo_setup, link every system / observer to the
+ *    export of the mod's world named like it (gen-exports.awk wrote the table), check
+ *    its parameters match, then declare them to the host (app.add-systems /
+ *    add-observer) in the export's parameter order.
+ * 2. The host calls an export with the params as typed arguments; its generated
+ *    trampoline hands them to cuo__dispatch, which fetches each param's data (one host
+ *    call per param), runs the registered callback and drops the handles. Commands go
+ *    straight to the host's buffer as they are recorded. */
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -236,7 +238,7 @@ const char *cuo_type_path(uint16_t id)
 /* ── registration ────────────────────────────────────────────────────────── */
 
 typedef struct param_decl {
-    uint8_t tag; /* TINYECS_MODDING_ECS_PARAM_* */
+    uint8_t kind; /* CUO__K_QUERY / CUO__K_RES / CUO__K_EVENTS */
     bool mut;
     uint16_t type_id;
     cuo_term *terms;
@@ -254,10 +256,13 @@ typedef struct param_list {
 enum { OBS_ADD, OBS_REMOVE, OBS_EVENT, OBS_PACKET };
 
 typedef struct entry {
-    char *name;
+    char *name; /* kebab-case: the export's name */
     bool is_observer;
-    param_list params;
+    param_list params; /* without commands: the export's signature places that */
     uint64_t runs;
+    /* the export, linked once cuo_setup returned; [first, end) = its ECS params */
+    const cuo__export *x;
+    size_t first, end;
     /* system */
     cuo_system_fn fn;
     uint8_t schedule;
@@ -312,9 +317,9 @@ static entry *obs_at(cuo_builder *m, cuo_observer o)
     return &entries[obs_idx[o]];
 }
 
-static cuo_param add_param(param_list *l, uint8_t tag, bool mut, uint16_t type_id, cuo_term *terms, size_t n)
+static cuo_param add_param(param_list *l, uint8_t kind, bool mut, uint16_t type_id, cuo_term *terms, size_t n)
 {
-    param_decl p = { tag, mut, type_id, terms, n };
+    param_decl p = { kind, mut, type_id, terms, n };
     PUSH(l->v, l->n, l->cap, p);
     return (cuo_param)(l->n - 1);
 }
@@ -348,29 +353,33 @@ static cuo_param add_query(param_list *l, const cuo_term *terms, size_t n)
         }
         q[qn++] = t;
     }
-    return add_param(l, TINYECS_MODDING_ECS_PARAM_QUERY, false, 0, q, qn);
+    return add_param(l, CUO__K_QUERY, false, 0, q, qn);
 }
 
 static entry *new_entry(const char *name, bool is_observer, void *user)
 {
+    if (!name || !*name)
+        cuo__trap("cuo: systems and observers are named like their export in wit/world.wit");
     entry e = { 0 };
+    /* The C spelling (spin_cube) of a kebab-case export name (spin-cube) works too. */
     e.name = xstrdup(name);
+    for (char *p = e.name; *p; p++)
+        if (*p == '_')
+            *p = '-';
     e.is_observer = is_observer;
     e.user = user;
-    /* Param 0 is always Commands: the SDK hands every callback a command buffer. */
-    add_param(&e.params, TINYECS_MODDING_ECS_PARAM_COMMANDS, false, 0, NULL, 0);
     uint64_t dup;
     if (map_getn(&by_name, e.name, strlen(e.name), &dup))
-        cuo__trap(cuo_fmt("cuo: two systems named '%s'", e.name));
+        cuo__trap(cuo_fmt("cuo: two systems / observers named '%s'", e.name));
     map_put(&by_name, e.name, nentries);
     PUSH(entries, nentries, capentries, e);
     return &entries[nentries - 1];
 }
 
-cuo_sys cuo_add_system(cuo_builder *m, const char *label, cuo_stage stage, cuo_system_fn fn, void *user)
+cuo_sys cuo_add_system(cuo_builder *m, const char *name, cuo_stage stage, cuo_system_fn fn, void *user)
 {
     require_setup(m);
-    entry *e = new_entry(label ? label : cuo_fmt("sys-%zu", nsys), false, user);
+    entry *e = new_entry(name, false, user);
     e->fn = fn;
     e->schedule = (uint8_t)stage;
     uint32_t at = (uint32_t)(nentries - 1);
@@ -385,12 +394,12 @@ cuo_param cuo_system_query(cuo_builder *m, cuo_sys s, const cuo_term *terms, siz
 
 cuo_param cuo_system_res(cuo_builder *m, cuo_sys s, uint16_t type_id, bool mut)
 {
-    return add_param(&sys_at(m, s)->params, TINYECS_MODDING_ECS_PARAM_RES, mut, type_id, NULL, 0);
+    return add_param(&sys_at(m, s)->params, CUO__K_RES, mut, type_id, NULL, 0);
 }
 
 cuo_param cuo_system_events(cuo_builder *m, cuo_sys s, uint16_t type_id)
 {
-    return add_param(&sys_at(m, s)->params, TINYECS_MODDING_ECS_PARAM_EVENTS, false, type_id, NULL, 0);
+    return add_param(&sys_at(m, s)->params, CUO__K_EVENTS, false, type_id, NULL, 0);
 }
 
 void cuo_system_after(cuo_builder *m, cuo_sys s, cuo_sys other)
@@ -410,11 +419,11 @@ void cuo_system_run_on_change(cuo_builder *m, cuo_sys s)
     sys_at(m, s)->run_on_change = true;
 }
 
-static cuo_observer add_observer(cuo_builder *m, uint8_t kind, uint16_t type_id, const char *event,
-                                 cuo_observer_fn fn, void *user)
+static cuo_observer add_observer(cuo_builder *m, const char *name, uint8_t kind, uint16_t type_id,
+                                 const char *event, cuo_observer_fn fn, void *user)
 {
     require_setup(m);
-    entry *e = new_entry(cuo_fmt("obs-%zu", nobs), true, user);
+    entry *e = new_entry(name, true, user);
     e->obs_fn = fn;
     e->obs_kind = kind;
     e->type_id = type_id;
@@ -424,19 +433,19 @@ static cuo_observer add_observer(cuo_builder *m, uint8_t kind, uint16_t type_id,
     return (cuo_observer)(nobs - 1);
 }
 
-cuo_observer cuo_on_event(cuo_builder *m, const char *event_path, cuo_observer_fn fn, void *user)
+cuo_observer cuo_on_event(cuo_builder *m, const char *name, const char *event_path, cuo_observer_fn fn, void *user)
 {
-    return add_observer(m, OBS_EVENT, 0, event_path, fn, user);
+    return add_observer(m, name, OBS_EVENT, 0, event_path, fn, user);
 }
 
-cuo_observer cuo_on_add(cuo_builder *m, uint16_t type_id, cuo_observer_fn fn, void *user)
+cuo_observer cuo_on_add(cuo_builder *m, const char *name, uint16_t type_id, cuo_observer_fn fn, void *user)
 {
-    return add_observer(m, OBS_ADD, type_id, NULL, fn, user);
+    return add_observer(m, name, OBS_ADD, type_id, NULL, fn, user);
 }
 
-cuo_observer cuo_on_remove(cuo_builder *m, uint16_t type_id, cuo_observer_fn fn, void *user)
+cuo_observer cuo_on_remove(cuo_builder *m, const char *name, uint16_t type_id, cuo_observer_fn fn, void *user)
 {
-    return add_observer(m, OBS_REMOVE, type_id, NULL, fn, user);
+    return add_observer(m, name, OBS_REMOVE, type_id, NULL, fn, user);
 }
 
 cuo_param cuo_observer_query(cuo_builder *m, cuo_observer o, const cuo_term *terms, size_t n)
@@ -446,18 +455,18 @@ cuo_param cuo_observer_query(cuo_builder *m, cuo_observer o, const cuo_term *ter
 
 cuo_param cuo_observer_res(cuo_builder *m, cuo_observer o, uint16_t type_id, bool mut)
 {
-    return add_param(&obs_at(m, o)->params, TINYECS_MODDING_ECS_PARAM_RES, mut, type_id, NULL, 0);
+    return add_param(&obs_at(m, o)->params, CUO__K_RES, mut, type_id, NULL, 0);
 }
 
 cuo_param cuo_observer_events(cuo_builder *m, cuo_observer o, uint16_t type_id)
 {
-    return add_param(&obs_at(m, o)->params, TINYECS_MODDING_ECS_PARAM_EVENTS, false, type_id, NULL, 0);
+    return add_param(&obs_at(m, o)->params, CUO__K_EVENTS, false, type_id, NULL, 0);
 }
 
-static cuo_observer add_packet_observer(cuo_builder *m, cuo_dir dir, const uint8_t *ids, size_t n,
-                                        cuo_packet_fn fn, cuo_packet_tap_fn tap, void *user)
+static cuo_observer add_packet_observer(cuo_builder *m, const char *name, cuo_dir dir, const uint8_t *ids,
+                                        size_t n, cuo_packet_fn fn, cuo_packet_tap_fn tap, void *user)
 {
-    cuo_observer o = add_observer(m, OBS_PACKET, 0, NULL, NULL, user);
+    cuo_observer o = add_observer(m, name, OBS_PACKET, 0, NULL, NULL, user);
     entry *r = &entries[obs_idx[o]];
     r->packet_fn = fn;
     r->tap_fn = tap;
@@ -469,20 +478,102 @@ static cuo_observer add_packet_observer(cuo_builder *m, cuo_dir dir, const uint8
     return o;
 }
 
-cuo_observer cuo_on_packet(cuo_builder *m, cuo_dir dir, const uint8_t *ids, size_t n, cuo_packet_fn fn,
-                           void *user)
+cuo_observer cuo_on_packet(cuo_builder *m, const char *name, cuo_dir dir, const uint8_t *ids, size_t n,
+                           cuo_packet_fn fn, void *user)
 {
-    return add_packet_observer(m, dir, ids, n, fn, NULL, user);
+    return add_packet_observer(m, name, dir, ids, n, fn, NULL, user);
 }
 
-cuo_observer cuo_on_packet_in(cuo_builder *m, cuo_packet_tap_fn fn, void *user)
+cuo_observer cuo_on_packet_in(cuo_builder *m, const char *name, cuo_packet_tap_fn fn, void *user)
 {
-    return add_packet_observer(m, CUO_INCOMING, NULL, 0, NULL, fn, user);
+    return add_packet_observer(m, name, CUO_INCOMING, NULL, 0, NULL, fn, user);
 }
 
-cuo_observer cuo_on_packet_out(cuo_builder *m, cuo_packet_tap_fn fn, void *user)
+cuo_observer cuo_on_packet_out(cuo_builder *m, const char *name, cuo_packet_tap_fn fn, void *user)
 {
-    return add_packet_observer(m, CUO_OUTGOING, NULL, 0, NULL, fn, user);
+    return add_packet_observer(m, name, CUO_OUTGOING, NULL, 0, NULL, fn, user);
+}
+
+/* ── linking a declaration to its export ─────────────────────────────────── */
+
+/* The SDK's own system (cuo_hotkey's Startup publisher): an export of cuo:c-sdk/mod,
+ * which every C mod's world includes. */
+static const uint8_t hotkeys_kinds[] = { CUO__K_COMMANDS };
+static const cuo__export hotkeys_export = { "cuo-sdk-hotkeys", hotkeys_kinds, 1 };
+
+void exports_cuo_wit_cuo_sdk_hotkeys(tinyecs_modding_ecs_own_commands_t commands)
+{
+    cuo__arg a[] = { CUO__ARG(commands) };
+    cuo__dispatch(&hotkeys_export, a);
+}
+
+static const cuo__export *find_export(const char *name)
+{
+    for (size_t i = 0; i < cuo__nexports; i++)
+        if (strcmp(cuo__exports[i].name, name) == 0)
+            return &cuo__exports[i];
+    return strcmp(name, hotkeys_export.name) == 0 ? &hotkeys_export : NULL;
+}
+
+static const char *wit_type(uint8_t kind)
+{
+    switch (kind) {
+    case CUO__K_QUERY: return "query";
+    case CUO__K_RES: return "res";
+    default: return "events";
+    }
+}
+
+/* The export line wit/world.wit needs for this declaration. */
+static const char *expected_export(const entry *e)
+{
+    bool packet = e->is_observer && e->obs_kind == OBS_PACKET;
+    const char *s = cuo_fmt("export %s: func(%scommands: commands", e->name,
+                            packet ? "direction: packet-direction, packet: list<u8>, "
+                                   : e->is_observer ? "trigger: trigger-data, " : "");
+    for (size_t i = 0; i < e->params.n; i++)
+        s = cuo_fmt("%s, p%zu: %s", s, i, wit_type(e->params.v[i].kind));
+    return cuo_fmt("%s)%s;", s, packet ? " -> verdict" : "");
+}
+
+/* The export's ECS params must be the declared ones, in order, with at most one
+ * `commands` anywhere among them (none: the callback's cuo_cmds traps on use). */
+static void link_export(entry *e)
+{
+    const cuo__export *x = find_export(e->name);
+    if (!x)
+        cuo__trap(cuo_fmt("cuo: '%s' is declared in cuo_setup but the mod's world has no export for it: add `%s` "
+                          "to wit/world.wit",
+                          e->name, expected_export(e)));
+    size_t first = 0, end = x->n;
+    bool ok = true;
+    if (e->is_observer && e->obs_kind == OBS_PACKET) {
+        ok = x->n >= 3 && x->kinds[0] == CUO__K_DIR && x->kinds[1] == CUO__K_PACKET &&
+             x->kinds[x->n - 1] == CUO__K_VERDICT;
+        first = 2;
+        end = ok ? x->n - 1 : 0;
+    } else if (e->is_observer) {
+        ok = x->n >= 1 && x->kinds[0] == CUO__K_TRIGGER;
+        first = 1;
+    }
+    size_t p = 0;
+    bool cmds = false;
+    for (size_t i = first; ok && i < end; i++) {
+        uint8_t k = x->kinds[i];
+        if (k == CUO__K_COMMANDS) {
+            ok = !cmds;
+            cmds = true;
+        } else {
+            ok = p < e->params.n && e->params.v[p++].kind == k;
+        }
+    }
+    if (!ok || p != e->params.n)
+        cuo__trap(cuo_fmt("cuo: the export '%s' in wit/world.wit does not match its declaration in cuo_setup: "
+                          "expected `%s` (`commands` may sit anywhere among the params, or be left out)",
+                          e->name, expected_export(e)));
+    e->x = x;
+    e->first = first;
+    e->end = end;
 }
 
 /* ── setup: declare to the host ──────────────────────────────────────────── */
@@ -492,46 +583,51 @@ static cuo_wit_string_t path_of(uint16_t type_id)
     return cuo__wstr(cuo_type_path(type_id));
 }
 
-static void declare_params(tinyecs_modding_ecs_borrow_system_t sys, const param_list *l)
+/* In the export's order: the order the host passes them back in. */
+static void declare_params(tinyecs_modding_ecs_borrow_system_t sys, const entry *e)
 {
-    for (size_t p = 0; p < l->n; p++) {
-        const param_decl *d = &l->v[p];
-        cuo_wit_string_t path = path_of(d->type_id);
-        switch (d->tag) {
-        case TINYECS_MODDING_ECS_PARAM_COMMANDS:
+    size_t p = 0;
+    for (size_t i = e->first; i < e->end; i++) {
+        if (e->x->kinds[i] == CUO__K_COMMANDS) {
             tinyecs_modding_ecs_method_system_add_commands(sys);
-            break;
-        case TINYECS_MODDING_ECS_PARAM_QUERY: {
+            continue;
+        }
+        const param_decl *d = &e->params.v[p++];
+        cuo_wit_string_t path = path_of(d->type_id);
+        switch (d->kind) {
+        case CUO__K_QUERY: {
             tinyecs_modding_ecs_term_t *t = cuo_alloc((d->n ? d->n : 1) * sizeof *t);
-            for (size_t i = 0; i < d->n; i++) {
+            for (size_t j = 0; j < d->n; j++) {
                 /* cuo_term_kind values are the WIT variant's cases; every case is a path. */
-                t[i].tag = d->terms[i].kind;
-                t[i].val.ref = path_of(d->terms[i].type_id);
+                t[j].tag = d->terms[j].kind;
+                t[j].val.ref = path_of(d->terms[j].type_id);
             }
             tinyecs_modding_ecs_list_term_t terms = { t, d->n };
             tinyecs_modding_ecs_method_system_add_query(sys, &terms);
             break;
         }
-        case TINYECS_MODDING_ECS_PARAM_RES:
+        case CUO__K_RES:
             if (d->mut)
                 tinyecs_modding_ecs_method_system_add_res_mut(sys, &path);
             else
                 tinyecs_modding_ecs_method_system_add_res(sys, &path);
             break;
-        case TINYECS_MODDING_ECS_PARAM_EVENTS:
+        case CUO__K_EVENTS:
             tinyecs_modding_ecs_method_system_add_events(sys, &path);
             break;
         }
     }
 }
 
-void exports_cuo_wit_setup(cuo_wit_own_app_t own_app)
+void exports_cuo_wit_setup(tinyecs_modding_ecs_own_app_t own_app)
 {
     cuo__scratch_reset();
     the_builder.open = true;
     cuo_setup(&the_builder);
     cuo__publish_hotkeys(&the_builder);
     the_builder.open = false;
+    for (size_t i = 0; i < nentries; i++)
+        link_export(&entries[i]);
 
     tinyecs_modding_ecs_borrow_app_t app = tinyecs_modding_ecs_borrow_app(own_app);
     /* Every handle first: `after` / `before` borrow the other system. */
@@ -550,7 +646,7 @@ void exports_cuo_wit_setup(cuo_wit_own_app_t own_app)
             tinyecs_modding_ecs_method_system_before(sys, BORROW(sys_idx[e->before[j]]));
         if (e->run_on_change)
             tinyecs_modding_ecs_method_system_run_on_change(sys);
-        declare_params(sys, &e->params);
+        declare_params(sys, e);
 
         if (!e->is_observer) {
             tinyecs_modding_ecs_list_borrow_system_t one = { &sys, 1 };
@@ -586,89 +682,59 @@ void exports_cuo_wit_setup(cuo_wit_own_app_t own_app)
     tinyecs_modding_ecs_app_drop_own(own_app);
 }
 
-/* ── run / observe ───────────────────────────────────────────────────────── */
+/* ── dispatch: the host called an export ─────────────────────────────────── */
 
-/* Fetch every param's data up front: one host call per query / res / events (none for
- * a res the host reports unchanged: its cached bytes are handed out again). */
-static cuo__params fetch(entry *e, cuo_wit_list_param_t *in)
+/* One host call per query / res / events (none for a res the host reports unchanged:
+ * its cached bytes are handed out again). */
+static void fetch(param_decl *d, cuo__pval *v, int32_t handle)
 {
-    if (in->len != e->params.n)
-        cuo__trap(cuo_fmt("cuo: '%s' got %zu params, declared %zu", e->name, in->len, e->params.n));
-    cuo__params ps = { cuo_alloc((in->len ? in->len : 1) * sizeof(cuo__pval)), in->len };
-    for (size_t i = 0; i < in->len; i++) {
-        cuo_wit_param_t *p = &in->ptr[i];
-        cuo__pval *v = &ps.v[i];
-        v->tag = p->tag;
-        v->type_id = e->params.v[i].type_id;
-        v->mut = e->params.v[i].mut;
-        switch (p->tag) {
-        case TINYECS_MODDING_ECS_PARAM_COMMANDS:
-            v->handle = p->val.commands.__handle;
-            break;
-        case TINYECS_MODDING_ECS_PARAM_QUERY:
-            v->handle = p->val.query.__handle;
-            tinyecs_modding_ecs_method_query_rows(tinyecs_modding_ecs_borrow_query(p->val.query), &v->rows);
-            break;
-        case TINYECS_MODDING_ECS_PARAM_RES: {
-            v->handle = p->val.res.__handle;
-            param_decl *d = &e->params.v[i];
-            tinyecs_modding_ecs_borrow_res_t r = tinyecs_modding_ecs_borrow_res(p->val.res);
-            if (!d->res_known || !tinyecs_modding_ecs_method_res_unchanged(r)) {
-                if (d->res_has)
-                    tinyecs_modding_ecs_json_free(&d->res_cache);
-                d->res_known = true;
-                d->res_has = tinyecs_modding_ecs_method_res_get(r, &d->res_cache);
-            }
-            /* A view: the cache owns the bytes. */
-            v->has_res = d->res_has;
-            v->res = d->res_cache;
-            break;
+    v->tag = d->kind;
+    v->type_id = d->type_id;
+    v->mut = d->mut;
+    v->handle = handle;
+    switch (d->kind) {
+    case CUO__K_QUERY:
+        tinyecs_modding_ecs_method_query_rows((tinyecs_modding_ecs_borrow_query_t){ handle }, &v->rows);
+        break;
+    case CUO__K_RES: {
+        tinyecs_modding_ecs_borrow_res_t r = { handle };
+        if (!d->res_known || !tinyecs_modding_ecs_method_res_unchanged(r)) {
+            if (d->res_has)
+                tinyecs_modding_ecs_json_free(&d->res_cache);
+            d->res_known = true;
+            d->res_has = tinyecs_modding_ecs_method_res_get(r, &d->res_cache);
         }
-        case TINYECS_MODDING_ECS_PARAM_EVENTS:
-            v->handle = p->val.events.__handle;
-            tinyecs_modding_ecs_method_events_read(tinyecs_modding_ecs_borrow_events(p->val.events), &v->events);
-            break;
-        }
+        /* A view: the cache owns the bytes. */
+        v->has_res = d->res_has;
+        v->res = d->res_cache;
+        break;
     }
-    return ps;
+    case CUO__K_EVENTS:
+        tinyecs_modding_ecs_method_events_read((tinyecs_modding_ecs_borrow_events_t){ handle }, &v->events);
+        break;
+    }
 }
 
-static void release(cuo__params *ps, cuo_wit_list_param_t *in)
+static void release(cuo__params *ps, cuo_cmds *c)
 {
+    if (c->handle.__handle >= 0)
+        tinyecs_modding_ecs_commands_drop_own((tinyecs_modding_ecs_own_commands_t){ c->handle.__handle });
     for (size_t i = 0; i < ps->n; i++) {
         cuo__pval *v = &ps->v[i];
         switch (v->tag) {
-        case TINYECS_MODDING_ECS_PARAM_COMMANDS:
-            tinyecs_modding_ecs_commands_drop_own((tinyecs_modding_ecs_own_commands_t){ v->handle });
-            break;
-        case TINYECS_MODDING_ECS_PARAM_QUERY:
+        case CUO__K_QUERY:
             tinyecs_modding_ecs_list_row_free(&v->rows);
             tinyecs_modding_ecs_query_drop_own((tinyecs_modding_ecs_own_query_t){ v->handle });
             break;
-        case TINYECS_MODDING_ECS_PARAM_RES:
+        case CUO__K_RES:
             tinyecs_modding_ecs_res_drop_own((tinyecs_modding_ecs_own_res_t){ v->handle });
             break;
-        case TINYECS_MODDING_ECS_PARAM_EVENTS:
+        case CUO__K_EVENTS:
             cuo_wit_list_json_free(&v->events);
             tinyecs_modding_ecs_events_drop_own((tinyecs_modding_ecs_own_events_t){ v->handle });
             break;
         }
     }
-    cuo_wit_list_param_free(in);
-}
-
-static cuo_cmds cmds_for(const cuo__params *ps)
-{
-    cuo_cmds c = { { ps->v[0].handle }, ps, 0 };
-    return c;
-}
-
-static entry *lookup(cuo_wit_string_t *name)
-{
-    uint64_t i;
-    bool ok = map_getn(&by_name, (const char *)name->ptr, name->len, &i);
-    cuo_wit_string_free(name);
-    return ok ? &entries[i] : NULL;
 }
 
 static cuo_bytes json_bytes(const cuo_wit_string_t *s)
@@ -677,67 +743,56 @@ static cuo_bytes json_bytes(const cuo_wit_string_t *s)
     return b;
 }
 
-void exports_cuo_wit_run(cuo_wit_string_t *system, cuo_wit_list_param_t *params)
+void cuo__dispatch(const cuo__export *x, const cuo__arg *a)
 {
     cuo__scratch_reset();
-    entry *e = lookup(system);
-    if (!e || e->is_observer)
-        cuo__trap("cuo: run of an unknown system");
-    cuo__params ps = fetch(e, params);
-    cuo_input in = { (uint32_t)(e - entries), ++e->runs, &ps };
-    cuo_cmds c = cmds_for(&ps);
-    e->fn(&in, &c, e->user);
-    release(&ps, params);
-}
-
-static cuo_verdict dispatch_observer(entry *e, cuo_obs *ev, cuo_cmds *c, cuo_bytes *replacement)
-{
-    if (e->obs_kind != OBS_PACKET) {
-        e->obs_fn(ev, c, e->user);
-        return CUO_PASS;
+    uint64_t at;
+    if (!map_getn(&by_name, x->name, strlen(x->name), &at) || entries[at].x != x)
+        cuo__trap(cuo_fmt("cuo: export '%s' was called but cuo_setup declared nothing by that name", x->name));
+    entry *e = &entries[at];
+    cuo__params ps = { cuo_alloc((e->params.n ? e->params.n : 1) * sizeof(cuo__pval)), e->params.n };
+    cuo_cmds c = { { -1 }, &ps, 0, e->name };
+    for (size_t i = e->first, p = 0; i < e->end; i++) {
+        if (x->kinds[i] == CUO__K_COMMANDS) {
+            c.handle.__handle = a[i].handle;
+        } else {
+            fetch(&e->params.v[p], &ps.v[p], a[i].handle);
+            p++;
+        }
     }
-    if (e->packet_fn)
-        return e->packet_fn(ev, c, replacement, e->user);
-    return ev->packet.len && e->tap_fn(ev->packet.ptr[0], ev->packet.ptr, ev->packet.len, e->user) ? CUO_BLOCK
-                                                                                                   : CUO_PASS;
-}
+    e->runs++;
 
-void exports_cuo_wit_observe(cuo_wit_string_t *system, cuo_wit_trigger_data_t *trigger, cuo_wit_list_param_t *params)
-{
-    cuo__scratch_reset();
-    entry *e = lookup(system);
-    if (!e || !e->is_observer)
-        cuo__trap("cuo: observe of an unknown observer");
-    cuo__params ps = fetch(e, params);
+    if (!e->is_observer) {
+        cuo_input in = { (uint32_t)at, e->runs, &ps };
+        e->fn(&in, &c, e->user);
+        release(&ps, &c);
+        return;
+    }
+
     cuo_obs ev = { 0 };
-    ev.obs_id = (uint32_t)(e - entries);
-    ev.entity = trigger->entity;
-    ev.value = json_bytes(&trigger->value);
+    ev.obs_id = (uint32_t)at;
     ev.params = &ps;
-    cuo_cmds c = cmds_for(&ps);
-    cuo_bytes unused = { NULL, 0 };
-    dispatch_observer(e, &ev, &c, &unused);
-    release(&ps, params);
-    cuo_wit_trigger_data_free(trigger);
-}
+    if (e->obs_kind != OBS_PACKET) {
+        tinyecs_modding_ecs_trigger_data_t *trigger = a[0].ptr;
+        ev.entity = trigger->entity;
+        ev.value = json_bytes(&trigger->value);
+        e->obs_fn(&ev, &c, e->user);
+        release(&ps, &c);
+        tinyecs_modding_ecs_trigger_data_free(trigger);
+        return;
+    }
 
-void exports_cuo_wit_observe_packet(cuo_wit_string_t *system, cuo_wit_packet_direction_t direction,
-                                    cuo_wit_list_u8_t *packet, cuo_wit_list_param_t *params, cuo_wit_verdict_t *ret)
-{
-    cuo__scratch_reset();
-    entry *e = lookup(system);
-    if (!e || !e->is_observer || e->obs_kind != OBS_PACKET)
-        cuo__trap("cuo: observe-packet of an unknown packet observer");
-    cuo__params ps = fetch(e, params);
-    cuo_obs ev = { 0 };
-    ev.obs_id = (uint32_t)(e - entries);
+    cuo_wit_list_u8_t *packet = a[1].ptr;
+    tinyecs_modding_ecs_verdict_t *ret = a[x->n - 1].ptr;
     ev.packet.ptr = packet->ptr;
     ev.packet.len = packet->len;
-    ev.dir = direction == TINYECS_MODDING_ECS_PACKET_DIRECTION_OUTGOING ? CUO_OUTGOING : CUO_INCOMING;
-    ev.params = &ps;
-    cuo_cmds c = cmds_for(&ps);
+    ev.dir = a[0].dir == TINYECS_MODDING_ECS_PACKET_DIRECTION_OUTGOING ? CUO_OUTGOING : CUO_INCOMING;
     cuo_bytes replacement = { NULL, 0 };
-    cuo_verdict v = dispatch_observer(e, &ev, &c, &replacement);
+    cuo_verdict v;
+    if (e->packet_fn)
+        v = e->packet_fn(&ev, &c, &replacement, e->user);
+    else
+        v = packet->len && e->tap_fn(packet->ptr[0], packet->ptr, packet->len, e->user) ? CUO_BLOCK : CUO_PASS;
     ret->tag = (uint8_t)v;
     if (v == CUO_REPLACE) {
         /* Freed by the post-return hook: it must be malloc'd, and may alias `packet`. */
@@ -747,7 +802,7 @@ void exports_cuo_wit_observe_packet(cuo_wit_string_t *system, cuo_wit_packet_dir
         ret->val.replace.ptr = copy;
         ret->val.replace.len = replacement.len;
     }
-    release(&ps, params);
+    release(&ps, &c);
     cuo_wit_list_u8_free(packet);
 }
 
@@ -761,7 +816,7 @@ static const cuo__pval *pval(const cuo__params *ps, cuo_param p, uint8_t tag)
 static cuo_query query_of(const cuo__params *ps, cuo_param p)
 {
     cuo_query q = { NULL, 0, -1 };
-    const cuo__pval *v = pval(ps, p, TINYECS_MODDING_ECS_PARAM_QUERY);
+    const cuo__pval *v = pval(ps, p, CUO__K_QUERY);
     if (v) {
         q.vec = v->rows.ptr;
         q.len = v->rows.len;
@@ -773,7 +828,7 @@ static cuo_query query_of(const cuo__params *ps, cuo_param p)
 static cuo_bytes res_of(const cuo__params *ps, cuo_param p)
 {
     cuo_bytes none = { NULL, 0 };
-    const cuo__pval *v = pval(ps, p, TINYECS_MODDING_ECS_PARAM_RES);
+    const cuo__pval *v = pval(ps, p, CUO__K_RES);
     if (!v || !v->has_res)
         return none;
     /* A present marker resource: report "{}", not absence. */
@@ -783,7 +838,7 @@ static cuo_bytes res_of(const cuo__params *ps, cuo_param p)
 static cuo_events events_of(const cuo__params *ps, cuo_param p)
 {
     cuo_events e = { NULL, 0 };
-    const cuo__pval *v = pval(ps, p, TINYECS_MODDING_ECS_PARAM_EVENTS);
+    const cuo__pval *v = pval(ps, p, CUO__K_EVENTS);
     if (v) {
         e.vec = v->events.ptr;
         e.len = v->events.len;

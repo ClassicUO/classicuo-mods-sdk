@@ -543,17 +543,32 @@ public sealed class ModBuilder
 
     SystemHandle AddSystem(ParamDescriber d, Action<RunScope> run)
     {
-        // Host diagnostics + the name `run` is called with; must stay unique within the mod.
-        var entry = new Entry(run, $"sys-{_systems++}", d.Params) { Schedule = Stage.Update };
+        // The name of the system's export (and what host diagnostics show); unique within the mod.
+        var entry = new Entry(run, $"system{_systems++}", d.Params) { Schedule = Stage.Update };
         Entries.Add(entry);
         return new SystemHandle(entry);
     }
 
     void AddObserver(ObserverTrigger trigger, ParamDescriber d, Action<RunScope> run) =>
-        Entries.Add(new Entry(run, $"obs-{_observers++}", d.Params) { Trigger = trigger });
+        Entries.Add(new Entry(run, $"observer{_observers++}", d.Params) { Trigger = trigger });
 
     /// <summary>Declarations the collected hotkeys imply. Called once, after the mod's Setup returned.</summary>
     internal void Finish()
+    {
+        AddHotkeys();
+        var seen = new Dictionary<string, Entry>(StringComparer.Ordinal);
+        foreach (var e in Entries)
+        {
+            if (Entry.Reserved.Contains(e.Name))
+                throw new InvalidOperationException($"system name '{e.Name}' is reserved (it names a world import / export); Label it differently");
+            if (!seen.TryAdd(e.Name, e))
+                throw new InvalidOperationException(
+                    $"two systems are named '{e.Name}' ({seen[e.Name].Signature()} and {e.Signature()}): every system is an " +
+                    "export of the mod named like the system, so names (Label) must be unique within the mod");
+        }
+    }
+
+    void AddHotkeys()
     {
         if (_hotkeys.Count == 0)
             return;
@@ -629,11 +644,14 @@ public sealed class ModBuilder
 /// <summary>A registered system / observer: its body, declaration and <see cref="Local{T}"/> slots.</summary>
 internal sealed class Entry(Action<RunScope> run, string name, List<ParamDecl> @params)
 {
+    // A system name may not shadow the world's own items.
+    internal static readonly HashSet<string> Reserved =
+        ["setup", "host", "assets", "actions", "packets", "ecs", "app", "commands", "query", "res", "events", "trigger-data", "packet-direction", "verdict"];
+
     internal readonly Action<RunScope> Run = run;
     internal readonly List<object> Locals = new();
     internal readonly List<ParamDecl> Params = @params;
     internal string Name = name;
-    internal byte[] NameUtf8 = System.Text.Encoding.UTF8.GetBytes(name);
     internal Stage Schedule;
     internal bool RunOnChange;
     internal ObserverTrigger? Trigger;
@@ -641,6 +659,69 @@ internal sealed class Entry(Action<RunScope> run, string name, List<ParamDecl> @
     internal object?[] ResCells = [];
     internal readonly List<Entry> After = new();
     internal readonly List<Entry> Before = new();
+
+    internal bool IsPacket => Trigger is { Kind: ObserverKind.OnPacket };
+
+    /// <summary>
+    /// The export's shape, e.g. <c>observer on-click(trigger, commands)</c>: what the build
+    /// exported and what setup must register again (ModRuntime.Setup compares the two).
+    /// </summary>
+    internal string Signature()
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.Append(Trigger == null ? "system " : IsPacket ? "packet-observer " : "observer ").Append(Name).Append('(');
+        var first = true;
+        void Arg(string a)
+        {
+            if (!first)
+                sb.Append(", ");
+            sb.Append(a);
+            first = false;
+        }
+        if (IsPacket)
+        {
+            Arg("direction");
+            Arg("packet");
+        }
+        else if (Trigger != null)
+            Arg("trigger");
+        foreach (var p in Params)
+            Arg(WitType(p.Kind));
+        return sb.Append(')').ToString();
+    }
+
+    internal static string WitType(ParamKind kind) => kind switch
+    {
+        ParamKind.Commands => "commands",
+        ParamKind.Query => "query",
+        ParamKind.Events => "events",
+        _ => "res",
+    };
+
+    /// <summary>
+    /// A <see cref="SystemHandle.Label"/> as a WIT export name: lower-case, '.', '_' and
+    /// spaces become '-' ("assistant.load" -> "assistant-load"). Each '-'-separated word
+    /// must start with a letter.
+    /// </summary>
+    internal static string ExportName(string label)
+    {
+        var sb = new System.Text.StringBuilder(label.Length);
+        foreach (var ch in label)
+        {
+            var c = char.ToLowerInvariant(ch);
+            if (c is >= 'a' and <= 'z' or >= '0' and <= '9')
+                sb.Append(c);
+            else if (c is '-' or '.' or '_' or ' ' && sb.Length > 0 && sb[^1] != '-')
+                sb.Append('-');
+            else
+                throw new ArgumentException($"system label '{label}': only letters, digits and '-', '.', '_', ' ' separators are allowed (it becomes the export name)");
+        }
+        var name = sb.ToString().TrimEnd('-');
+        foreach (var word in name.Split('-'))
+            if (word.Length == 0 || word[0] is < 'a' or > 'z')
+                throw new ArgumentException($"system label '{label}' -> '{name}': every '-'-separated word must start with a letter (WIT export name)");
+        return name;
+    }
 }
 
 /// <summary>
@@ -686,11 +767,14 @@ public readonly struct SystemHandle
         return this;
     }
 
-    /// <summary>Name the system for host diagnostics (default <c>sys-N</c>). Must stay unique within the mod.</summary>
+    /// <summary>
+    /// Name the system (default <c>systemN</c>, N = registration order). The name is the
+    /// mod's export for this system, kebab-cased ("assistant.load" -> <c>assistant-load</c>),
+    /// and what host diagnostics show. Must stay unique within the mod.
+    /// </summary>
     public SystemHandle Label(string name)
     {
-        _entry.Name = name;
-        _entry.NameUtf8 = System.Text.Encoding.UTF8.GetBytes(name);
+        _entry.Name = Entry.ExportName(name);
         return this;
     }
 }

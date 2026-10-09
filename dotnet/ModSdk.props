@@ -37,6 +37,23 @@
     <!-- Do NOT set <PublishAot>: the experimental ILC engages AOT itself on -r wasi-wasm. -->
   </PropertyGroup>
 
+  <!-- The describe build (ModSdk.targets, CuoDescribeMod): the same sources as a plain
+       net10.0 exe that runs the mod's Setup on the build machine to learn its systems.
+       Own obj/bin so it never touches the wasi-wasm build's outputs. -->
+  <PropertyGroup Condition="'$(CuoModDescribe)' == 'true'">
+    <OutputType>Exe</OutputType>
+    <RuntimeIdentifier></RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <PublishTrimmed>false</PublishTrimmed>
+    <UseAppHost>false</UseAppHost>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)cuo-describe/</IntermediateOutputPath>
+    <OutputPath>$(BaseIntermediateOutputPath)cuo-describe/bin/</OutputPath>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <!-- dotnet exec pairs X.dll with X.runtimeconfig.json; the latter follows the project name. -->
+    <TargetName>$(MSBuildProjectName)</TargetName>
+  </PropertyGroup>
+
   <!-- A mod writes `class MyMod : Mod` and names host types (Node, Hits, Color…)
        unqualified; these are the only namespaces it needs and they are never ambiguous
        with the implicit System.* set. The Wit/ glue (namespace ModWorld) is internal to

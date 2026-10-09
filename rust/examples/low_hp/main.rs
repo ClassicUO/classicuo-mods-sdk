@@ -12,8 +12,10 @@ fn setup(app: &mut App) {
     app.add_packet_observer(PacketDirection::Incoming, &[0x1C], block_spam); // ASCII speech
 }
 
-// The parameters ARE the declaration: the client sees the query + `Local` + `Commands`
-// and passes exactly those.
+// The parameters ARE the declaration: the client sees the query + `Commands` and passes
+// exactly those (`Local` stays in the mod). `#[system]` makes the fn the mod's
+// `low-hp-warning` export.
+#[system]
 fn low_hp_warning(
     player: Query<&Hits, (With<Player>, Changed<Hits>)>,
     mut warned: Local<bool>,
@@ -29,6 +31,7 @@ fn low_hp_warning(
 }
 
 // A key bound to "bandage" in the mod's hotkeys: bandage yourself.
+#[system]
 fn bandage_hotkey(
     on: On<Event, ModHotkeyFired>,
     me: Query<(&Serial, &EquipmentSlotsDto), With<Player>>,
@@ -46,18 +49,21 @@ fn bandage_hotkey(
 }
 
 // A movable window with two lines of text; clicking a line logs it.
+#[system]
 fn spawn_window(mut cmds: Commands) {
     let root = cmds.spawn((Node::abs(30.0, 120.0, 200.0, 100.0), UiMovable {})).id();
     cmds.spawn((Text { value: "Hello".into() }, ChildOf::new(root)));
     cmds.entity(root).with_child(Text { value: "World".into() });
 }
 
+#[system]
 fn on_click(click: On<Event, UiClick>, texts: Query<&Text>) {
     if let Some(text) = texts.get(click.entity()) {
         host::log(&format!("clicked {}", text.value));
     }
 }
 
+#[system]
 fn block_spam(packet: Packet) -> Verdict {
     if packet.windows(4).any(|w| w == b"spam") {
         Verdict::Block

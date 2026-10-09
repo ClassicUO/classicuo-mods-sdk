@@ -1,17 +1,29 @@
 /* cuo.h — C SDK for ClassicUO mods (wasm32-wasip2 components, world cuo:modding/mod).
  *
- * A mod defines ONE function,
+ * A mod is a component of its OWN world (the mod's wit/world.wit): it includes
+ * cuo:c-sdk/mod@0.1.0 (= cuo:modding/mod + the SDK's hotkey export) and exports one
+ * function per system / observer, named like it:
  *
- *     void cuo_setup(cuo_builder *m);
+ *     world my-mod {
+ *         use tinyecs:modding/ecs@0.1.0.{commands, query, res, trigger-data};
+ *         export low-hp: func(commands: commands, hits: query, time: res);
+ *         export on-click: func(trigger: trigger-data, commands: commands);
+ *         include cuo:c-sdk/mod@0.1.0;
+ *     }
  *
- * and registers systems / observers (packet observers too) / hotkeys from it. The SDK
- * implements the component's exports (setup / run / observe / observe-packet in
- * wit/cuo-mod.wit + wit/deps/tinyecs-mod) over the wit-bindgen C bindings in
- * c/generated.
+ * The mod defines ONE function, `void cuo_setup(cuo_builder *m)`, and registers each
+ * system / observer there under its export's name, with its parameters in the
+ * export's order. The build (mod.mk) generates the C bindings of that world
+ * (wit-bindgen c) and a trampoline per export that hands the arguments to the SDK,
+ * which calls the callback registered under that name. A mismatch between cuo_setup
+ * and the world traps at load, naming the export line the world needs.
  *
  * - The ECS: a system DECLARES its parameters (queries, resources, event readers); each
  *   run the SDK fetches their data (one host call per param), the system reads it and
- *   records commands, which the host applies AFTER the callback returns.
+ *   records commands, which the host applies AFTER the callback returns. `commands`
+ *   is a parameter of the export like the others: anywhere in its signature (it is not
+ *   declared in cuo_setup), or left out - then the cuo_cmds the callback gets traps on
+ *   use.
  * - Everything else (host / assets / actions / packets) is a typed import: the typed
  *   wrappers below, or the generated functions directly (cuo_modding_actions_cast_spell,
  *   cuo_modding_assets_static_tile, ... — declared in cuo_wit.h, included here).
@@ -145,9 +157,9 @@ uint16_t cuo_type_id(const char *path);
 bool cuo_try_type_id(const char *path, uint16_t *out);
 const char *cuo_type_path(uint16_t id); /* NULL when never interned */
 
-/* label: unique within the mod (NULL = "sys-<id>"). Runs every frame in `stage` (once
- * for STARTUP). Every system gets a command buffer. */
-cuo_sys cuo_add_system(cuo_builder *m, const char *label, cuo_stage stage, cuo_system_fn fn, void *user);
+/* name: the export of the mod's world that runs it ("low-hp"; the C spelling "low_hp"
+ * works too), unique within the mod. Runs every frame in `stage` (once for STARTUP). */
+cuo_sys cuo_add_system(cuo_builder *m, const char *name, cuo_stage stage, cuo_system_fn fn, void *user);
 void cuo_system_after(cuo_builder *m, cuo_sys s, cuo_sys other);
 void cuo_system_before(cuo_builder *m, cuo_sys s, cuo_sys other);
 /* Skip a call when nothing it reads changed: every res param unchanged since its
@@ -170,19 +182,21 @@ cuo_param cuo_system_query(cuo_builder *m, cuo_sys s, const cuo_term *terms, siz
 cuo_param cuo_system_res(cuo_builder *m, cuo_sys s, uint16_t type_id, bool mut);
 cuo_param cuo_system_events(cuo_builder *m, cuo_sys s, uint16_t type_id);
 
-/* Observers run the moment their trigger fires (no polling, no frame lag). */
-cuo_observer cuo_on_event(cuo_builder *m, const char *event_path, cuo_observer_fn fn, void *user);
-cuo_observer cuo_on_add(cuo_builder *m, uint16_t type_id, cuo_observer_fn fn, void *user);
-cuo_observer cuo_on_remove(cuo_builder *m, uint16_t type_id, cuo_observer_fn fn, void *user);
+/* Observers run the moment their trigger fires (no polling, no frame lag). name: as for
+ * cuo_add_system; the export takes `trigger: trigger-data` first, then its params. */
+cuo_observer cuo_on_event(cuo_builder *m, const char *name, const char *event_path, cuo_observer_fn fn,
+                          void *user);
+cuo_observer cuo_on_add(cuo_builder *m, const char *name, uint16_t type_id, cuo_observer_fn fn, void *user);
+cuo_observer cuo_on_remove(cuo_builder *m, const char *name, uint16_t type_id, cuo_observer_fn fn, void *user);
 /* An observer's own parameters, fetched with each trigger (read with cuo_obs_*). */
 cuo_param cuo_observer_query(cuo_builder *m, cuo_observer o, const cuo_term *terms, size_t n);
 cuo_param cuo_observer_res(cuo_builder *m, cuo_observer o, uint16_t type_id, bool mut);
 cuo_param cuo_observer_events(cuo_builder *m, cuo_observer o, uint16_t type_id);
 
 /* Hotkeys the host fires back as the cuo:input/hotkey event (observe it with
- * cuo_on_event(m, CUO_PATH_INPUT_HOTKEY, …) and parse cuo_ModHotkeyFired). All bindings
- * are published once, as the cuo:input/mod-hotkeys resource, from a Startup system
- * the SDK adds; to rebind, cuo_resource_set a new cuo_ModHotkeyBindingsDto.
+ * cuo_on_event(m, "on-hotkey", CUO_PATH_INPUT_HOTKEY, …) and parse cuo_ModHotkeyFired).
+ * All bindings are published once, as the cuo:input/mod-hotkeys resource, from a
+ * Startup system the SDK adds (`cuo-sdk-hotkeys`, exported by cuo:c-sdk/mod); to rebind, cuo_resource_set a new cuo_ModHotkeyBindingsDto.
  * CUO_HK_CONSUME: this mod owns the combo (the host's own binding does not fire). */
 enum { CUO_HK_CONSUME = 1, CUO_HK_CTRL = 2, CUO_HK_SHIFT = 4, CUO_HK_ALT = 8 };
 void cuo_hotkey(cuo_builder *m, const char *name, uint32_t key, unsigned flags);
@@ -203,16 +217,17 @@ typedef enum cuo_verdict { CUO_PASS = 0, CUO_BLOCK = 1, CUO_REPLACE = 2 } cuo_ve
  * in load order, then each mod's packet observers in registration order; each sees the
  * previous replacement and CUO_BLOCK stops the chain. Packets this mod injects skip
  * its own observers. Like any observer it records commands and takes params
- * (cuo_observer_query / _res / _events). */
+ * (cuo_observer_query / _res / _events). Its export:
+ * `func(direction: packet-direction, packet: list<u8>, <params>) -> verdict`. */
 typedef cuo_verdict (*cuo_packet_fn)(const cuo_obs *ev, cuo_cmds *cmds, cuo_bytes *replacement, void *user);
-cuo_observer cuo_on_packet(cuo_builder *m, cuo_dir dir, const uint8_t *ids, size_t n, cuo_packet_fn fn,
-                           void *user);
+cuo_observer cuo_on_packet(cuo_builder *m, const char *name, cuo_dir dir, const uint8_t *ids, size_t n,
+                           cuo_packet_fn fn, void *user);
 
 /* Taps over cuo_on_packet: every id in one direction, `id` = data[0]; return true to
  * block. */
 typedef bool (*cuo_packet_tap_fn)(uint8_t id, const uint8_t *data, size_t len, void *user);
-cuo_observer cuo_on_packet_in(cuo_builder *m, cuo_packet_tap_fn fn, void *user);
-cuo_observer cuo_on_packet_out(cuo_builder *m, cuo_packet_tap_fn fn, void *user);
+cuo_observer cuo_on_packet_in(cuo_builder *m, const char *name, cuo_packet_tap_fn fn, void *user);
+cuo_observer cuo_on_packet_out(cuo_builder *m, const char *name, cuo_packet_tap_fn fn, void *user);
 
 /* packets.send-to-server / send-to-client: inject a packet, as if the client sent it /
  * the server sent it. */

@@ -7,6 +7,17 @@
 
 typedef cuo_wit_tuple2_type_path_json_t pair_t;
 
+/* The running export's `commands`, counted. An export without one cannot record. */
+static tinyecs_modding_ecs_borrow_commands_t H(cuo_cmds *c)
+{
+    if (c->handle.__handle < 0)
+        cuo__trap(cuo_fmt("cuo: '%s' recorded a command but its export in wit/world.wit takes no "
+                          "`commands: commands`",
+                          c->system));
+    c->count++;
+    return c->handle;
+}
+
 static tinyecs_modding_ecs_bundle_t bundle(const cuo_comp *comps, size_t n)
 {
     pair_t *p = cuo_alloc((n ? n : 1) * sizeof *p);
@@ -48,9 +59,8 @@ cuo_comp cuo_child_of(cuo_entity parent)
 
 cuo_entity cuo_spawn(cuo_cmds *c, const cuo_comp *comps, size_t n)
 {
-    c->count++;
     tinyecs_modding_ecs_bundle_t b = bundle(comps, n);
-    return tinyecs_modding_ecs_method_commands_spawn(c->handle, &b);
+    return tinyecs_modding_ecs_method_commands_spawn(H(c), &b);
 }
 
 cuo_entity cuo_spawn_child(cuo_cmds *c, cuo_entity parent, const cuo_comp *comps, size_t n)
@@ -63,9 +73,8 @@ cuo_entity cuo_spawn_child(cuo_cmds *c, cuo_entity parent, const cuo_comp *comps
 
 void cuo_insert(cuo_cmds *c, cuo_entity e, const cuo_comp *comps, size_t n)
 {
-    c->count++;
     tinyecs_modding_ecs_bundle_t b = bundle(comps, n);
-    tinyecs_modding_ecs_method_commands_insert(c->handle, e, &b);
+    tinyecs_modding_ecs_method_commands_insert(H(c), e, &b);
 }
 
 void cuo_insert1(cuo_cmds *c, cuo_entity e, cuo_comp comp)
@@ -75,18 +84,16 @@ void cuo_insert1(cuo_cmds *c, cuo_entity e, cuo_comp comp)
 
 void cuo_remove(cuo_cmds *c, cuo_entity e, const uint16_t *type_ids, size_t n)
 {
-    c->count++;
     cuo_wit_string_t *paths = cuo_alloc((n ? n : 1) * sizeof *paths);
     for (size_t i = 0; i < n; i++)
         paths[i] = cuo__wstr(cuo_type_path(type_ids[i]));
     cuo_wit_list_type_path_t l = { paths, n };
-    tinyecs_modding_ecs_method_commands_remove(c->handle, e, &l);
+    tinyecs_modding_ecs_method_commands_remove(H(c), e, &l);
 }
 
 void cuo_despawn(cuo_cmds *c, cuo_entity e)
 {
-    c->count++;
-    tinyecs_modding_ecs_method_commands_despawn(c->handle, e);
+    tinyecs_modding_ecs_method_commands_despawn(H(c), e);
 }
 
 void cuo_resource_set(cuo_cmds *c, cuo_comp value)
@@ -94,7 +101,7 @@ void cuo_resource_set(cuo_cmds *c, cuo_comp value)
     const cuo__params *ps = c->params;
     for (size_t i = 0; i < ps->n; i++) {
         const cuo__pval *v = &ps->v[i];
-        if (v->tag == TINYECS_MODDING_ECS_PARAM_RES && v->mut && v->type_id == value.type_id) {
+        if (v->tag == CUO__K_RES && v->mut && v->type_id == value.type_id) {
             c->count++;
             cuo_wit_string_t json = cuo__wbytes(value.data);
             tinyecs_modding_ecs_method_res_set((tinyecs_modding_ecs_borrow_res_t){ v->handle }, &json);
@@ -106,17 +113,15 @@ void cuo_resource_set(cuo_cmds *c, cuo_comp value)
 
 void cuo_set_resource(cuo_cmds *c, const char *path, cuo_bytes json)
 {
-    c->count++;
     cuo_wit_string_t p = cuo__wstr(path);
     cuo_wit_string_t v = cuo__wbytes(json);
-    tinyecs_modding_ecs_method_commands_set_resource(c->handle, &p, &v);
+    tinyecs_modding_ecs_method_commands_set_resource(H(c), &p, &v);
 }
 
 void cuo_emit(cuo_cmds *c, const char *event_path, uint64_t entity, cuo_bytes json)
 {
     (void)entity;
-    c->count++;
     cuo_wit_string_t path = cuo__wstr(event_path);
     cuo_wit_string_t v = cuo__wbytes(json);
-    tinyecs_modding_ecs_method_commands_send(c->handle, &path, &v);
+    tinyecs_modding_ecs_method_commands_send(H(c), &path, &v);
 }

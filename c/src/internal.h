@@ -3,6 +3,7 @@
 #define CUO_INTERNAL_H
 
 #include "cuo/cuo.h"
+#include "cuo/exports.h"
 
 _Noreturn void cuo__trap(const char *msg);
 
@@ -26,7 +27,7 @@ static inline cuo_wit_string_t cuo__wbytes(cuo_bytes b)
 
 /* One parameter of the running system / observer, fetched when the call starts. */
 typedef struct cuo__pval {
-    uint8_t tag; /* TINYECS_MODDING_ECS_PARAM_* */
+    uint8_t tag; /* CUO__K_QUERY / CUO__K_RES / CUO__K_EVENTS */
     uint16_t type_id; /* res: its type (cuo_resource_set looks the res-mut param up by it) */
     bool mut;
     int32_t handle; /* the owned handle (dropped when the call returns) */
@@ -42,9 +43,10 @@ typedef struct cuo__params {
 } cuo__params;
 
 struct cuo_cmds {
-    tinyecs_modding_ecs_borrow_commands_t handle;
+    tinyecs_modding_ecs_borrow_commands_t handle; /* -1: the export takes no `commands` */
     const cuo__params *params;
     size_t count;
+    const char *system;
 };
 
 struct cuo_input {

@@ -1,0 +1,15 @@
+# `#[system]` for cuo-mod-sdk: turns a system / observer fn into an export of the mod's
+# world (one WIT `export <name>: func(...)` per fn). Re-exported by cuo-mod-sdk; mods
+# don't depend on it directly.
+[package]
+name = "cuo-mod-sdk-macros"
+version = "0.4.0"
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "2", features = ["full"] }

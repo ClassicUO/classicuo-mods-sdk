@@ -335,12 +335,9 @@ world mod {
   import assets;
   import actions;
   import packets;
-  use tinyecs:modding/ecs@0.1.0.{app, param, trigger-data, packet-direction, verdict};
+  use tinyecs:modding/ecs@0.1.0.{app};
 
   export setup: func(app: app);
-  export run: func(system: string, params: list<param>);
-  export observe: func(system: string, trigger: trigger-data, params: list<param>);
-  export observe-packet: func(system: string, direction: packet-direction, packet: list<u8>, params: list<param>) -> verdict;
 }
 package tinyecs:modding@0.1.0 {
   interface ecs {
@@ -437,13 +434,6 @@ package tinyecs:modding@0.1.0 {
 
     resource events {
       read: func() -> list<json>;
-    }
-
-    variant param {
-      commands(commands),
-      query(query),
-      res(res),
-      events(events),
     }
 
     record trigger-data {

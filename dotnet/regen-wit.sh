@@ -3,10 +3,10 @@
 #
 #   ./dotnet/regen-wit.sh            (needs wit-bindgen-cli on PATH: cargo install wit-bindgen-cli)
 #
-# The import bindings are used as generated. The EXPORTS are the SDK's own
-# (WitExports.cs: allocation-free lifting of run / observe / observe-packet; the mod's
-# `setup` export is generated into the mod by ModSdk.targets), so wit-bindgen's export
-# half is stripped from ModWorld.cs.
+# The import bindings are used as generated. The EXPORTS are per mod (`setup` + one
+# export per system, generated into the mod by ModSdk.targets / ModDescribe.cs, which
+# also writes the mod's own world around Wit/ModWorld_component_type.wit), so
+# wit-bindgen's export half is stripped from ModWorld.cs.
 set -e
 here=$(cd "$(dirname "$0")" && pwd)
 tmp=$(mktemp -d)

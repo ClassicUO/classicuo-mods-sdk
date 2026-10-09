@@ -1,38 +1,57 @@
 <Project>
-  <!-- Import at the BOTTOM of a mod csproj (pair with ModSdk.props at the top). -->
+  <!-- Import at the BOTTOM of a mod csproj (pair with ModSdk.props at the top).
+
+       A mod is a component of its OWN world: `setup` plus one export per system, named
+       like the system (see ModDescribe.cs). Which systems those are is whatever the mod's
+       Setup registers, so CuoDescribeMod builds the mod a second time as a plain net10.0
+       exe (CuoModDescribe=true, obj/cuo-describe/), runs its Setup, and gets back
+         $(IntermediateOutputPath)CuoModExports.g.cs  the setup + per-system exports
+         $(IntermediateOutputPath)CuoModWorld.wit     the world wasm-component-ld encodes
+       which the real (wasi-wasm) build then compiles / links in. -->
 
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.ILCompiler.LLVM" Version="10.0.0-*" />
     <PackageReference Include="runtime.$(NETCoreSdkRuntimeIdentifier).Microsoft.DotNet.ILCompiler.LLVM" Version="10.0.0-*" />
     <ProjectReference Include="$(MSBuildThisFileDirectory)CuoModSdk.csproj" />
-
-    <!-- Export the SDK's UnmanagedCallersOnly entrypoints (run / observe /
-         observe-packet / cabi_post_observe-packet) from the mod's component. `setup` is
-         the one export that must construct the mod's own type, so it is generated below
-         instead. -->
-    <UnmanagedEntryPointsAssembly Include="CuoModSdk" />
-
-    <!-- World cuo:modding/mod: wasm-component-ld encodes the module as a wasip2
-         COMPONENT of this world (NativeAOT-LLVM's default wasi target is wasip2; the
-         runtime's own wasi wit is globbed in beside it by Microsoft.NETCore.Native.Wasm.targets). -->
-    <WasmComponentTypeWit Include="$(MSBuildThisFileDirectory)Wit\ModWorld_component_type.wit" />
   </ItemGroup>
 
-  <!-- The `setup` export, generated from <CuoModType>. It is also ILC's only root for
-       the mod's own code (nothing in the SDK references the mod assembly), so it cannot
-       live in the SDK. No Inputs/Outputs: the Compile item must be added on every build,
-       and WriteOnlyWhenDifferent keeps the file's timestamp stable for incremental. -->
-  <Target Name="GenerateModEntry" BeforeTargets="BeforeCompile;CoreCompile">
+  <!-- The describe exe's entry point: run the mod's Setup, write the exports + world. -->
+  <Target Name="GenerateCuoDescribeMain" BeforeTargets="BeforeCompile;CoreCompile" Condition="'$(CuoModDescribe)' == 'true'">
+    <PropertyGroup>
+      <_CuoDescribeMain>$(IntermediateOutputPath)CuoDescribeMain.g.cs</_CuoDescribeMain>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(_CuoDescribeMain)" Overwrite="true" WriteOnlyWhenDifferent="true"
+                      Lines="// &lt;auto-generated&gt; by ModSdk.targets — the describe build's entry point.;internal static class CuoDescribeMain;{;    static int Main(string[] args) =&gt; CuoModSdk.ModDescribe.Main(new global::$(CuoModType)(), args)%3B;}" />
+    <ItemGroup>
+      <Compile Include="$(_CuoDescribeMain)" />
+      <FileWrites Include="$(_CuoDescribeMain)" />
+    </ItemGroup>
+  </Target>
+
+  <!-- No Inputs/Outputs: the describe build is itself incremental, and ModDescribe only
+       rewrites its outputs when they change (stable timestamps for the real build). -->
+  <Target Name="CuoDescribeMod" BeforeTargets="BeforeCompile;CoreCompile" Condition="'$(CuoModDescribe)' != 'true'">
     <Error Condition="'$(CuoModType)' == ''"
            Text="Set &lt;CuoModType&gt; to the mod's CuoModSdk.Mod subclass (e.g. &lt;CuoModType&gt;MyMod.Entry&lt;/CuoModType&gt;) — the SDK generates the setup export from it." />
+    <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Build"
+             Properties="CuoModDescribe=true;Configuration=$(Configuration)"
+             RemoveProperties="RuntimeIdentifier;SelfContained;_IsPublishing;PublishTrimmed;OutputType">
+      <Output TaskParameter="TargetOutputs" ItemName="_CuoDescribeDll" />
+    </MSBuild>
     <PropertyGroup>
-      <_CuoModEntry>$(IntermediateOutputPath)ModEntry.g.cs</_CuoModEntry>
+      <_CuoModExports>$(IntermediateOutputPath)CuoModExports.g.cs</_CuoModExports>
+      <_CuoModWorld>$(IntermediateOutputPath)CuoModWorld.wit</_CuoModWorld>
+      <_CuoDotnet>$(DOTNET_HOST_PATH)</_CuoDotnet>
+      <_CuoDotnet Condition="'$(_CuoDotnet)' == ''">dotnet</_CuoDotnet>
     </PropertyGroup>
-    <WriteLinesToFile File="$(_CuoModEntry)" Overwrite="true" WriteOnlyWhenDifferent="true"
-                      Lines="// &lt;auto-generated&gt; by ModSdk.targets — the component's setup export for $(CuoModType).;internal static class CuoModEntry;{;    // setup: func(app: own&lt;app&gt;);    [System.Runtime.InteropServices.UnmanagedCallersOnly(EntryPoint = &quot;setup&quot;)];    static void Setup(int app) =&gt; CuoModSdk.ModRuntime.Setup(app, new global::$(CuoModType)())%3B;}" />
+    <Exec Command="&quot;$(_CuoDotnet)&quot; exec &quot;@(_CuoDescribeDll->'%(FullPath)')&quot; &quot;$(_CuoModExports)&quot; &quot;$(_CuoModWorld)&quot; &quot;$(MSBuildThisFileDirectory)Wit/ModWorld_component_type.wit&quot; &quot;$(CuoModType)&quot; &quot;$(TargetName)&quot;" />
     <ItemGroup>
-      <Compile Include="$(_CuoModEntry)" />
-      <FileWrites Include="$(_CuoModEntry)" />
+      <Compile Include="$(_CuoModExports)" />
+      <FileWrites Include="$(_CuoModExports);$(_CuoModWorld)" />
+      <!-- The mod's world (imports cuo:modding/mod, exports setup + every system):
+           wasm-component-ld encodes the module as a wasip2 COMPONENT of it (the runtime's
+           own wasi wit is globbed in beside it by Microsoft.NETCore.Native.Wasm.targets). -->
+      <WasmComponentTypeWit Include="$(_CuoModWorld)" />
     </ItemGroup>
   </Target>
 </Project>

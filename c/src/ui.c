@@ -169,5 +169,5 @@ void cuo__publish_hotkeys(cuo_builder *m)
 {
     if (!nbindings)
         return;
-    cuo_add_system(m, "hotkeys", CUO_STAGE_STARTUP, publish, NULL);
+    cuo_add_system(m, "cuo-sdk-hotkeys", CUO_STAGE_STARTUP, publish, NULL);
 }

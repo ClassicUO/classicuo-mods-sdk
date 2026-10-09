@@ -215,6 +215,7 @@ pub(crate) enum EntryKind {
 
 /// A registered system or observer.
 pub(crate) struct Entry {
+    /// The export that runs it (`snap_input` -> "snap-input").
     pub name: String,
     /// The fn's type name, what `.after(f)` / `.before(f)` refer to.
     pub base: &'static str,
@@ -279,10 +280,14 @@ impl App {
     }
 
     fn push(&mut self, built: Built, kind: EntryKind) {
-        // `run` / `observe` find the entry by name: keep names unique.
-        let mut name = built.name.to_string();
-        if self.entries.iter().any(|e| e.name == name) {
-            name = format!("{name}#{}", self.entries.len());
+        // The export is named by the fn alone: two fns may not share it. The same fn added
+        // again (another schedule / trigger) is fine: one export, one set of `Local`s.
+        let name = export_name(built.name);
+        if let Some(other) = self.entries.iter().find(|e| e.name == name && e.base != built.name) {
+            panic!(
+                "systems `{}` and `{}` would both be the mod's export `{name}`: rename one",
+                other.base, built.name
+            );
         }
         self.entries.push(Entry {
             name,
@@ -312,6 +317,17 @@ impl App {
     }
 }
 
+/// The export a system fn runs as: its name in kebab-case (`snap_input` ->
+/// "snap-input"), what `#[system]` exports it as.
+fn export_name(type_name: &'static str) -> String {
+    let fn_name = type_name.rsplit("::").next().unwrap_or(type_name);
+    assert!(
+        !type_name.contains('{') && !type_name.contains('<'),
+        "`{type_name}` can't be a system: each system is an export of the mod named like its fn,          so pass a plain `#[system] fn`, not a closure or a generic fn"
+    );
+    fn_name.trim_start_matches("r#").replace('_', "-")
+}
+
 #[doc(hidden)]
 pub struct Built {
     name: &'static str,
@@ -324,8 +340,28 @@ pub struct Built {
 
 // ── system params ────────────────────────────────────────────────────────────────
 
+/// What a system parameter is on the wire: the WIT parameter type of the system's
+/// export (`None`: guest-side only, like `Local`).
+#[doc(hidden)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Wire {
+    None,
+    Commands,
+    Query,
+    Res,
+    Events,
+}
+
+/// `#[system]` checks its reading of each parameter type against this.
+#[doc(hidden)]
+pub const fn wire_is<P: SystemParam>(w: Wire) -> bool {
+    P::WIRE as u8 == w as u8
+}
+
 /// Something a system can take as a parameter.
 pub trait SystemParam: Sized {
+    #[doc(hidden)]
+    const WIRE: Wire;
     #[doc(hidden)]
     fn declare(params: &mut Vec<ParamDesc>);
     /// `None` skips this run (e.g. a `Res` the client doesn't have right now).
@@ -335,6 +371,7 @@ pub trait SystemParam: Sized {
 
 /// `Option<Res<T>>` and friends: `None` instead of skipping the system.
 impl<P: SystemParam> SystemParam for Option<P> {
+    const WIRE: Wire = P::WIRE;
     fn declare(params: &mut Vec<ParamDesc>) {
         P::declare(params)
     }
@@ -370,6 +407,7 @@ impl<T> Default for ResCell<T> {
 }
 
 impl<T: Component> SystemParam for Res<T> {
+    const WIRE: Wire = Wire::Res;
     fn declare(params: &mut Vec<ParamDesc>) {
         params.push(ParamDesc::Res(T::PATH));
     }
@@ -441,6 +479,7 @@ impl<T: Component> Drop for ResMut<T> {
 }
 
 impl<T: Component> SystemParam for ResMut<T> {
+    const WIRE: Wire = Wire::Res;
     fn declare(params: &mut Vec<ParamDesc>) {
         params.push(ParamDesc::ResMut(T::PATH));
     }
@@ -484,6 +523,7 @@ impl<T> EventReader<T> {
 }
 
 impl<T: Component> SystemParam for EventReader<T> {
+    const WIRE: Wire = Wire::Events;
     fn declare(params: &mut Vec<ParamDesc>) {
         params.push(ParamDesc::Events(T::PATH));
     }
@@ -515,6 +555,7 @@ impl<T> DerefMut for Local<T> {
 }
 
 impl<T: Default + 'static> SystemParam for Local<T> {
+    const WIRE: Wire = Wire::None;
     fn declare(_: &mut Vec<ParamDesc>) {}
     fn fetch(ctx: &mut ParamCtx) -> Option<Self> {
         let i = ctx.next_local;
@@ -653,6 +694,7 @@ impl Commands {
 }
 
 impl SystemParam for Commands {
+    const WIRE: Wire = Wire::Commands;
     fn declare(params: &mut Vec<ParamDesc>) {
         params.push(ParamDesc::Commands);
     }
@@ -984,6 +1026,7 @@ impl<'q, D: QueryData, F: QueryFilter> IntoIterator for &'q mut Query<D, F> {
 }
 
 impl<D: QueryData + 'static, F: QueryFilter + 'static> SystemParam for Query<D, F> {
+    const WIRE: Wire = Wire::Query;
     fn declare(params: &mut Vec<ParamDesc>) {
         params.push(ParamDesc::Query(query_terms::<D, F>()));
     }
@@ -1378,7 +1421,8 @@ mod tests {
                 ParamDesc::Commands,
             ]
         );
-        assert!(built.name.ends_with("sys"));
+        assert!(built.name.ends_with("::sys"));
+        assert_eq!(export_name(built.name), "sys");
     }
 
     #[test]
@@ -1425,15 +1469,35 @@ mod tests {
     }
 
     #[test]
-    fn app_registers_tuples_in_order_with_unique_names() {
-        fn a(_: Commands) {}
+    fn app_registers_tuples_in_order_named_like_their_export() {
+        fn snap_input(_: Commands) {}
         fn b(_: Res<Time>) {}
         let mut app = App::default();
-        app.add_systems(Schedule::Update, (a, b)).add_systems(Schedule::Last, a);
+        app.add_systems(Schedule::Update, (snap_input, b)).add_systems(Schedule::Last, snap_input);
         let names: Vec<_> = app.entries.iter().map(|e| e.name.as_str()).collect();
-        assert!(names[0].ends_with("::a") && names[1].ends_with("::b"));
-        assert_ne!(names[0], names[2]);
+        // The same fn twice is one export.
+        assert_eq!(names, ["snap-input", "b", "snap-input"]);
         assert!(matches!(app.entries[2].kind, EntryKind::System(Schedule::Last)));
+    }
+
+    #[test]
+    #[should_panic(expected = "would both be the mod's export `tick`")]
+    fn two_fns_with_one_export_name_are_rejected() {
+        mod a {
+            pub fn tick(_: super::Commands) {}
+        }
+        mod b {
+            pub fn tick() {}
+        }
+        let mut app = App::default();
+        app.add_systems(Schedule::Update, (a::tick, b::tick));
+    }
+
+    #[test]
+    #[should_panic(expected = "not a closure")]
+    fn closures_are_rejected() {
+        let mut app = App::default();
+        app.add_systems(Schedule::Update, |_: Commands| {});
     }
 
     #[test]
