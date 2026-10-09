@@ -115,6 +115,36 @@ fn block_spam(p: Packet) -> Verdict {
 export_mod!(setup);
 ```
 
+### Idle cost
+
+By default every system runs every frame, and each run ships its resources across the
+wasm boundary. A system that only reacts to input can opt out of idle frames:
+
+```rust,ignore
+app.add_systems(Schedule::Update, refresh_window.run_on_change());
+```
+
+(C#: `m.AddSystem(...).RunOnChange()`; C: `cuo_system_run_on_change(m, sys)`.) The
+system is skipped on a frame when every `Res` / `ResMut` it takes is unchanged since its
+previous run, no new event arrived for its `EventReader`s, and every query matched no
+rows. Only queries with `Changed` / `Added` filters can be empty while idle — a plain
+query that matches keeps the system running — and a system with no parameters always
+runs. `Commands` doesn't count as an input.
+
+Don't use it for anything driven by its own state or the clock: timers, cooldowns,
+macro / state machines stepping through `Local`s, retries. With nothing new to read
+they would never wake up. There is no periodic safety-net run.
+
+To write a resource without reading it, use `cmds.set_resource(value)` (C#:
+`cmds.SetResource(value)`; C: `cuo_set_resource(cmds, path, json)`): no `ResMut`
+parameter, applied with the run's other commands. The client refuses an unknown or
+read-only path.
+
+Resource reads are cached for you: while the client reports a resource unchanged since
+the system's previous run, the SDK reuses the value it parsed then instead of fetching
+and parsing it again (C# also parses `Res<T>.Value` only on first access). Treat a
+`Res` value as read-only — the same object comes back next run.
+
 ### Settings
 
 Declare your options once (`cuo:options/schema`) and they appear in the client's

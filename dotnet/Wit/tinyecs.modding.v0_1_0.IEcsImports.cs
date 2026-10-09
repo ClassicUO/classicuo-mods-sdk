@@ -644,6 +644,13 @@ internal interface IEcsImports {
 
         }
 
+        internal  unsafe void RunOnChange()
+        {
+            var handle = this.Handle;
+            EcsImportsInterop.System.RunOnChangeWasmInterop.wasmImportRunOnChange(handle);
+
+        }
+
     }
 
     /**
@@ -997,6 +1004,33 @@ internal interface IEcsImports {
 
         }
 
+        internal  unsafe void SetResource(string path, string value)
+        {
+            var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+            var handle = this.Handle;
+
+            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(path);
+            var length = utf8Bytes.Length;
+            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr = gcHandle.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle.Free());
+
+            var utf8Bytes1 = global::System.Text.Encoding.UTF8.GetBytes(value);
+            var length2 = utf8Bytes1.Length;
+            var gcHandle3 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes1, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr0 = gcHandle3.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle3.Free());
+            EcsImportsInterop.Commands.SetResourceWasmInterop.wasmImportSetResource(handle, strPtr.ToInt32(), length, strPtr0.ToInt32(), length2);
+
+            foreach (var cleanup in cleanups)
+            {
+                cleanup();
+            }
+
+        }
+
     }
 
     /**
@@ -1144,6 +1178,14 @@ internal interface IEcsImports {
                 default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
             }
             return lifted;
+
+        }
+
+        internal  unsafe bool Unchanged()
+        {
+            var handle = this.Handle;
+            var result =  EcsImportsInterop.Res.UnchangedWasmInterop.wasmImportUnchanged(handle);
+            return (result != 0);
 
         }
 

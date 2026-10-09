@@ -29,6 +29,9 @@ extern void __wasm_import_tinyecs_modding_ecs_method_system_after(int32_t, int32
 __attribute__((__import_module__("tinyecs:modding/ecs@0.1.0"), __import_name__("[method]system.before")))
 extern void __wasm_import_tinyecs_modding_ecs_method_system_before(int32_t, int32_t);
 
+__attribute__((__import_module__("tinyecs:modding/ecs@0.1.0"), __import_name__("[method]system.run-on-change")))
+extern void __wasm_import_tinyecs_modding_ecs_method_system_run_on_change(int32_t);
+
 __attribute__((__import_module__("tinyecs:modding/ecs@0.1.0"), __import_name__("[method]app.add-systems")))
 extern void __wasm_import_tinyecs_modding_ecs_method_app_add_systems(int32_t, int32_t, uint8_t *, size_t);
 
@@ -50,6 +53,9 @@ extern void __wasm_import_tinyecs_modding_ecs_method_commands_despawn(int32_t, i
 __attribute__((__import_module__("tinyecs:modding/ecs@0.1.0"), __import_name__("[method]commands.send")))
 extern void __wasm_import_tinyecs_modding_ecs_method_commands_send(int32_t, uint8_t *, size_t, uint8_t *, size_t);
 
+__attribute__((__import_module__("tinyecs:modding/ecs@0.1.0"), __import_name__("[method]commands.set-resource")))
+extern void __wasm_import_tinyecs_modding_ecs_method_commands_set_resource(int32_t, uint8_t *, size_t, uint8_t *, size_t);
+
 __attribute__((__import_module__("tinyecs:modding/ecs@0.1.0"), __import_name__("[method]query.rows")))
 extern void __wasm_import_tinyecs_modding_ecs_method_query_rows(int32_t, uint8_t *);
 
@@ -58,6 +64,9 @@ extern void __wasm_import_tinyecs_modding_ecs_method_query_set(int32_t, int64_t,
 
 __attribute__((__import_module__("tinyecs:modding/ecs@0.1.0"), __import_name__("[method]res.get")))
 extern void __wasm_import_tinyecs_modding_ecs_method_res_get(int32_t, uint8_t *);
+
+__attribute__((__import_module__("tinyecs:modding/ecs@0.1.0"), __import_name__("[method]res.unchanged")))
+extern int32_t __wasm_import_tinyecs_modding_ecs_method_res_unchanged(int32_t);
 
 __attribute__((__import_module__("tinyecs:modding/ecs@0.1.0"), __import_name__("[method]res.set")))
 extern void __wasm_import_tinyecs_modding_ecs_method_res_set(int32_t, uint8_t *, size_t);
@@ -887,6 +896,10 @@ void tinyecs_modding_ecs_method_system_before(tinyecs_modding_ecs_borrow_system_
   __wasm_import_tinyecs_modding_ecs_method_system_before((self).__handle, (other).__handle);
 }
 
+void tinyecs_modding_ecs_method_system_run_on_change(tinyecs_modding_ecs_borrow_system_t self) {
+  __wasm_import_tinyecs_modding_ecs_method_system_run_on_change((self).__handle);
+}
+
 void tinyecs_modding_ecs_method_app_add_systems(tinyecs_modding_ecs_borrow_app_t self, tinyecs_modding_ecs_schedule_t schedule, tinyecs_modding_ecs_list_borrow_system_t *systems) {
   __wasm_import_tinyecs_modding_ecs_method_app_add_systems((self).__handle, (int32_t) schedule, (uint8_t *) (*systems).ptr, (*systems).len);
 }
@@ -954,6 +967,10 @@ void tinyecs_modding_ecs_method_commands_send(tinyecs_modding_ecs_borrow_command
   __wasm_import_tinyecs_modding_ecs_method_commands_send((self).__handle, (uint8_t *) (*event).ptr, (*event).len, (uint8_t *) (*value).ptr, (*value).len);
 }
 
+void tinyecs_modding_ecs_method_commands_set_resource(tinyecs_modding_ecs_borrow_commands_t self, tinyecs_modding_ecs_type_path_t *path, tinyecs_modding_ecs_json_t *value) {
+  __wasm_import_tinyecs_modding_ecs_method_commands_set_resource((self).__handle, (uint8_t *) (*path).ptr, (*path).len, (uint8_t *) (*value).ptr, (*value).len);
+}
+
 void tinyecs_modding_ecs_method_query_rows(tinyecs_modding_ecs_borrow_query_t self, tinyecs_modding_ecs_list_row_t *ret) {
   __attribute__((__aligned__(sizeof(void*))))
   uint8_t ret_area[(2*sizeof(void*))];
@@ -985,6 +1002,11 @@ bool tinyecs_modding_ecs_method_res_get(tinyecs_modding_ecs_borrow_res_t self, t
   }
   *ret = option.val;
   return option.is_some;
+}
+
+bool tinyecs_modding_ecs_method_res_unchanged(tinyecs_modding_ecs_borrow_res_t self) {
+  int32_t ret = __wasm_import_tinyecs_modding_ecs_method_res_unchanged((self).__handle);
+  return ret;
 }
 
 void tinyecs_modding_ecs_method_res_set(tinyecs_modding_ecs_borrow_res_t self, tinyecs_modding_ecs_json_t *value) {

@@ -59,6 +59,12 @@ namespace ModWorld.wit.Imports.tinyecs.modding.v0_1_0
                 public static extern void wasmImportBefore(int p0, int p1);
             }
 
+            public static class RunOnChangeWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]system.run-on-change"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern void wasmImportRunOnChange(int p0);
+            }
+
         }
 
         internal static class App
@@ -111,6 +117,12 @@ namespace ModWorld.wit.Imports.tinyecs.modding.v0_1_0
                 public static extern void wasmImportSend(int p0, nint p1, int p2, nint p3, int p4);
             }
 
+            public static class SetResourceWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]commands.set-resource"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern void wasmImportSetResource(int p0, nint p1, int p2, nint p3, int p4);
+            }
+
         }
 
         internal static class Query
@@ -137,6 +149,12 @@ namespace ModWorld.wit.Imports.tinyecs.modding.v0_1_0
             {
                 [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]res.get"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
                 public static extern void wasmImportGet(int p0, nint p1);
+            }
+
+            public static class UnchangedWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]res.unchanged"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportUnchanged(int p0);
             }
 
             public static class SetWasmInterop

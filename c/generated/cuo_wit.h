@@ -562,6 +562,13 @@ extern void tinyecs_modding_ecs_method_system_add_events(tinyecs_modding_ecs_bor
 extern void tinyecs_modding_ecs_method_system_after(tinyecs_modding_ecs_borrow_system_t self, tinyecs_modding_ecs_borrow_system_t other);
 // Runs this system before `other` (same schedule).
 extern void tinyecs_modding_ecs_method_system_before(tinyecs_modding_ecs_borrow_system_t self, tinyecs_modding_ecs_borrow_system_t other);
+// Skip a run when nothing it reads changed: every resource parameter is
+// unchanged since its previous run, no event arrived, and every query
+// matched no rows (only queries with `changed` / `added` terms can be
+// empty on an idle frame, so a plain query keeps the system running). A
+// system without parameters always runs. Off by default: timers and
+// state machines driven by the mod's own state must keep running.
+extern void tinyecs_modding_ecs_method_system_run_on_change(tinyecs_modding_ecs_borrow_system_t self);
 extern void tinyecs_modding_ecs_method_app_add_systems(tinyecs_modding_ecs_borrow_app_t self, tinyecs_modding_ecs_schedule_t schedule, tinyecs_modding_ecs_list_borrow_system_t *systems);
 // Runs `system` (via `observe`) each time `trigger` fires.
 extern void tinyecs_modding_ecs_method_app_add_observer(tinyecs_modding_ecs_borrow_app_t self, tinyecs_modding_ecs_trigger_t *trigger, tinyecs_modding_ecs_borrow_system_t system);
@@ -575,6 +582,8 @@ extern void tinyecs_modding_ecs_method_commands_remove(tinyecs_modding_ecs_borro
 extern void tinyecs_modding_ecs_method_commands_despawn(tinyecs_modding_ecs_borrow_commands_t self, tinyecs_modding_ecs_entity_t entity);
 // Sends an event (observers fire, event readers see it next).
 extern void tinyecs_modding_ecs_method_commands_send(tinyecs_modding_ecs_borrow_commands_t self, tinyecs_modding_ecs_type_path_t *event, tinyecs_modding_ecs_json_t *value);
+// Sets a writable resource. No `add-res-mut` parameter needed.
+extern void tinyecs_modding_ecs_method_commands_set_resource(tinyecs_modding_ecs_borrow_commands_t self, tinyecs_modding_ecs_type_path_t *path, tinyecs_modding_ecs_json_t *value);
 // Every matching row, in one call.
 extern void tinyecs_modding_ecs_method_query_rows(tinyecs_modding_ecs_borrow_query_t self, tinyecs_modding_ecs_list_row_t *ret);
 // Writes the n-th reading term of `entity` back. Traps unless that term is
@@ -582,6 +591,10 @@ extern void tinyecs_modding_ecs_method_query_rows(tinyecs_modding_ecs_borrow_que
 extern void tinyecs_modding_ecs_method_query_set(tinyecs_modding_ecs_borrow_query_t self, tinyecs_modding_ecs_entity_t entity, uint8_t index, tinyecs_modding_ecs_json_t *value);
 // None when the host has no such resource right now.
 extern bool tinyecs_modding_ecs_method_res_get(tinyecs_modding_ecs_borrow_res_t self, tinyecs_modding_ecs_json_t *ret);
+// True when the value equals the one this parameter received on this
+// system's previous run: a value parsed then can be reused instead of
+// calling `get`.
+extern bool tinyecs_modding_ecs_method_res_unchanged(tinyecs_modding_ecs_borrow_res_t self);
 // Traps unless declared with `add-res-mut`.
 extern void tinyecs_modding_ecs_method_res_set(tinyecs_modding_ecs_borrow_res_t self, tinyecs_modding_ecs_json_t *value);
 extern void tinyecs_modding_ecs_method_events_read(tinyecs_modding_ecs_borrow_events_t self, cuo_wit_list_json_t *ret);

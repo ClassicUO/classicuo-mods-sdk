@@ -87,6 +87,7 @@ public static unsafe class ModRuntime
         EcsAbi.Free(name, nameLen);
         var scope = _scope;
         scope.Begin(_kinds, _handles, paramCount, entry?.Locals);
+        scope.Entry = entry;
         scope.TriggerEntity = triggerEntity;
         scope.TriggerValue = value;
         scope.TriggerValueLen = valueLen;

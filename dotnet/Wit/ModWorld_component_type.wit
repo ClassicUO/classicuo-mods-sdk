@@ -402,6 +402,7 @@ package tinyecs:modding@0.1.0 {
       add-events: func(path: type-path);
       after: func(other: borrow<system>);
       before: func(other: borrow<system>);
+      run-on-change: func();
     }
 
     resource app {
@@ -415,6 +416,7 @@ package tinyecs:modding@0.1.0 {
       remove: func(entity: entity, types: list<type-path>);
       despawn: func(entity: entity);
       send: func(event: type-path, value: json);
+      set-resource: func(path: type-path, value: json);
     }
 
     record row {
@@ -429,6 +431,7 @@ package tinyecs:modding@0.1.0 {
 
     resource res {
       get: func() -> option<json>;
+      unchanged: func() -> bool;
       set: func(value: json);
     }
 

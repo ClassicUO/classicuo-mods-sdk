@@ -91,12 +91,18 @@ public sealed class Commands : ISystemParam<Commands>
     }
 
     /// <summary>
-    /// Overwrite a resource. Declare it once in Setup with
-    /// <see cref="ModBuilder.WritesResource{T}"/>; the write lands at the end of this
-    /// system's stage (<see cref="ResMut{T}"/> is the parameter form, applied when the
-    /// system returns).
+    /// Overwrite a writable host resource, applied with this run's other commands. No
+    /// declaration needed (<see cref="ResMut{T}"/> is the parameter form when the system
+    /// also reads it).
     /// </summary>
-    public void SetResource<T>(T value) => ResourceWrites.Queue(value);
+    public void SetResource<T>(T value)
+    {
+        Flush();
+        EcsAbi.BundleClear();
+        var start = WriteJson(value);
+        EcsAbi.SetResource(Handle, ModHost.PathOf<T>(), start);
+        EcsAbi.BundleClear();
+    }
 
     // Serializes into EcsAbi.Json; returns where the value starts.
     int WriteJson<T>(T value)
@@ -210,30 +216,4 @@ public readonly struct ChatApi
         {
             Text = text, Name = name, Hue = hue, Serial = serial, Font = font, IsUnicode = unicode, Kind = 0,
         });
-}
-
-/// <summary>The <see cref="Commands.SetResource{T}"/> queue and the SDK systems that apply it.</summary>
-internal static class ResourceWrites
-{
-    /// <summary>The declared writable resources, in the flush systems' param order.</summary>
-    internal static readonly List<string> Paths = new();
-    static readonly List<(int Slot, byte[] Json)> _queue = new();
-
-    internal static void Queue<T>(T value)
-    {
-        var path = ModHost.PathOf<T>();
-        var slot = Paths.IndexOf(path);
-        if (slot < 0)
-            throw new InvalidOperationException(
-                $"SetResource<{typeof(T).Name}>: declare m.WritesResource<{typeof(T).Name}>() in Setup " +
-                $"('{path}' must be held writable by the SDK's flush systems)");
-        _queue.Add((slot, JsonSerializer.SerializeToUtf8Bytes(value, ModRuntime.Host.Json<T>())));
-    }
-
-    internal static void Flush(RunScope scope)
-    {
-        foreach (var (slot, json) in _queue)
-            EcsAbi.ResSet(scope.Handle(slot), json);
-        _queue.Clear();
-    }
 }

@@ -142,9 +142,19 @@ pub enum TriggerDesc {
 pub enum Fetched {
     Commands(backend::CmdSink),
     Query(Vec<RawRow>, backend::QuerySink),
-    Res(Option<String>, backend::ResSink),
+    Res(ResData, backend::ResSink),
     Events(Vec<String>),
     Taken,
+}
+
+/// A resource parameter's value as the backend delivered it.
+#[doc(hidden)]
+pub enum ResData {
+    /// Equal to what this parameter received on the system's previous run: reuse that
+    /// parse (`get` was not called).
+    Unchanged,
+    /// The current value; `None` when the client has none.
+    Value(Option<String>),
 }
 
 #[doc(hidden)]
@@ -162,9 +172,23 @@ pub struct ParamCtx<'a> {
     next: usize,
     locals: &'a mut Vec<Box<dyn Any>>,
     next_local: usize,
+    res_cells: &'a mut Vec<Option<Box<dyn Any>>>,
 }
 
 impl ParamCtx<'_> {
+    /// The cell this system keeps across runs for host param `slot`. Boxed: the
+    /// address stays put while a param points into it.
+    fn cell<C: Default + 'static>(&mut self, slot: usize) -> *mut C {
+        if self.res_cells.len() <= slot {
+            self.res_cells.resize_with(slot + 1, || None);
+        }
+        let cell = &mut self.res_cells[slot];
+        if !cell.as_ref().is_some_and(|c| c.is::<C>()) {
+            *cell = Some(Box::new(C::default()));
+        }
+        cell.as_mut().unwrap().downcast_mut::<C>().unwrap() as *mut C
+    }
+
     fn take(&mut self) -> Fetched {
         let f = self
             .fetched
@@ -198,15 +222,18 @@ pub(crate) struct Entry {
     pub before: Vec<&'static str>,
     pub kind: EntryKind,
     pub params: Vec<ParamDesc>,
+    pub run_on_change: bool,
     run: RunFn,
     locals: Vec<Box<dyn Any>>,
+    res_cells: Vec<Option<Box<dyn Any>>>,
 }
 
 impl Entry {
     /// Runs the entry with the backend-delivered parameter data. Only a packet
     /// observer decides anything but `Pass`.
     pub(crate) fn run(&mut self, fetched: Vec<Fetched>, trigger: Option<TriggerData>) -> Verdict {
-        let mut ctx = ParamCtx { fetched, next: 0, locals: &mut self.locals, next_local: 0 };
+        let mut ctx =
+            ParamCtx { fetched, next: 0, locals: &mut self.locals, next_local: 0, res_cells: &mut self.res_cells };
         (self.run)(&mut ctx, trigger)
     }
 }
@@ -264,8 +291,10 @@ impl App {
             before: built.before,
             kind,
             params: built.params,
+            run_on_change: built.run_on_change,
             run: built.run,
             locals: Vec::new(),
+            res_cells: Vec::new(),
         });
     }
 
@@ -290,6 +319,7 @@ pub struct Built {
     run: RunFn,
     after: Vec<&'static str>,
     before: Vec<&'static str>,
+    run_on_change: bool,
 }
 
 // ── system params ────────────────────────────────────────────────────────────────
@@ -314,13 +344,28 @@ impl<P: SystemParam> SystemParam for Option<P> {
 }
 
 /// Read-only access to a resource. The system is skipped while the client has none
-/// (take `Option<Res<T>>` to run anyway).
-pub struct Res<T>(T);
+/// (take `Option<Res<T>>` to run anyway). While the client reports the value unchanged
+/// since this system's previous run, that run's parse is reused.
+pub struct Res<T: 'static>(*const T);
 
-impl<T> Deref for Res<T> {
+impl<T: 'static> Deref for Res<T> {
     type Target = T;
     fn deref(&self) -> &T {
-        &self.0
+        // SAFETY: points into a Box owned by the system's entry (its res cell), which
+        // outlives the run and is not touched again until the next run.
+        unsafe { &*self.0 }
+    }
+}
+
+/// One `Res<T>` parameter's parse, kept across its system's runs.
+struct ResCell<T> {
+    known: bool,
+    value: Option<T>,
+}
+
+impl<T> Default for ResCell<T> {
+    fn default() -> Self {
+        ResCell { known: false, value: None }
     }
 }
 
@@ -329,36 +374,68 @@ impl<T: Component> SystemParam for Res<T> {
         params.push(ParamDesc::Res(T::PATH));
     }
     fn fetch(ctx: &mut ParamCtx) -> Option<Self> {
-        match ctx.take() {
-            Fetched::Res(Some(json), _) => serde_json::from_str(&json).ok().map(Res),
-            _ => None,
+        let slot = ctx.next;
+        let Fetched::Res(data, sink) = ctx.take() else { return None };
+        // SAFETY: see `Deref`; the cell is boxed in the entry.
+        let cell = unsafe { &mut *ctx.cell::<ResCell<T>>(slot) };
+        let json = match data {
+            ResData::Unchanged if cell.known => None,
+            ResData::Unchanged => Some(backend::res_get(&sink)),
+            ResData::Value(json) => Some(json),
+        };
+        if let Some(json) = json {
+            cell.known = true;
+            cell.value = json.and_then(|j| serde_json::from_str(&j).ok());
         }
+        cell.value.as_ref().map(|v| Res(v as *const T))
+    }
+}
+
+/// One `ResMut<T>` parameter's parse and our serialization of it, kept across runs
+/// until a write (the value may then have been edited in place).
+struct ResMutCell<T> {
+    valid: bool,
+    value: Option<T>,
+    original: String,
+}
+
+impl<T> Default for ResMutCell<T> {
+    fn default() -> Self {
+        ResMutCell { valid: false, value: None, original: String::new() }
     }
 }
 
 /// Writable access to a resource: changes are written back when the system returns.
 pub struct ResMut<T: Component> {
-    value: T,
-    original: String,
+    cell: *mut ResMutCell<T>,
     sink: backend::ResSink,
+}
+
+impl<T: Component> ResMut<T> {
+    fn cell(&self) -> &mut ResMutCell<T> {
+        // SAFETY: as for `Res`: a Box owned by the system's entry, alive for the run.
+        unsafe { &mut *self.cell }
+    }
 }
 
 impl<T: Component> Deref for ResMut<T> {
     type Target = T;
     fn deref(&self) -> &T {
-        &self.value
+        self.cell().value.as_ref().unwrap()
     }
 }
 impl<T: Component> DerefMut for ResMut<T> {
     fn deref_mut(&mut self) -> &mut T {
-        &mut self.value
+        self.cell().value.as_mut().unwrap()
     }
 }
 impl<T: Component> Drop for ResMut<T> {
     fn drop(&mut self) {
-        let json = to_json(&self.value);
-        if json != self.original {
+        let cell = self.cell();
+        let json = to_json(cell.value.as_ref().unwrap());
+        if json != cell.original {
             backend::res_set(&self.sink, json);
+            cell.valid = false;
         }
     }
 }
@@ -368,16 +445,26 @@ impl<T: Component> SystemParam for ResMut<T> {
         params.push(ParamDesc::ResMut(T::PATH));
     }
     fn fetch(ctx: &mut ParamCtx) -> Option<Self> {
-        match ctx.take() {
-            Fetched::Res(Some(json), sink) => {
-                let value: T = serde_json::from_str(&json).ok()?;
-                // Compare against our own serialization, not the host's text: the
-                // two format differently, and a spurious write marks it changed.
-                let original = to_json(&value);
-                Some(ResMut { value, original, sink })
-            }
-            _ => None,
+        let slot = ctx.next;
+        let Fetched::Res(data, sink) = ctx.take() else { return None };
+        let cell_ptr = ctx.cell::<ResMutCell<T>>(slot);
+        // SAFETY: see `ResMut::cell`.
+        let cell = unsafe { &mut *cell_ptr };
+        let json = match data {
+            ResData::Unchanged if cell.valid => None,
+            ResData::Unchanged => Some(backend::res_get(&sink)),
+            ResData::Value(json) => Some(json),
+        };
+        if let Some(json) = json {
+            cell.valid = false;
+            let value: T = serde_json::from_str(&json?).ok()?;
+            // Compare against our own serialization, not the host's text: the two
+            // format differently, and a spurious write marks it changed.
+            cell.original = to_json(&value);
+            cell.value = Some(value);
+            cell.valid = true;
         }
+        Some(ResMut { cell: cell_ptr, sink })
     }
 }
 
@@ -556,6 +643,12 @@ impl Commands {
     /// Sends an event: observers of it fire, `EventReader`s see it.
     pub fn send<E: Component>(&mut self, event: E) {
         backend::send(&self.sink, E::PATH, to_json(&event));
+    }
+
+    /// Overwrites a writable resource, applied with this run's other commands. No
+    /// `ResMut` parameter needed.
+    pub fn set_resource<R: Component>(&mut self, value: R) {
+        backend::set_resource(&self.sink, R::PATH, to_json(&value));
     }
 }
 
@@ -1070,6 +1163,7 @@ macro_rules! fn_params {
                     params,
                     after: Vec::new(),
                     before: Vec::new(),
+                    run_on_change: false,
                     run: Box::new(move |ctx: &mut ParamCtx, _: Option<TriggerData>| {
                         $(let Some($P) = $P::fetch(ctx) else { return Verdict::Pass };)*
                         self($($P),*);
@@ -1093,6 +1187,7 @@ macro_rules! fn_params {
                     params,
                     after: Vec::new(),
                     before: Vec::new(),
+                    run_on_change: false,
                     run: Box::new(move |ctx: &mut ParamCtx, trigger: Option<TriggerData>| {
                         let Some(on) = trigger.as_ref().and_then(On::<K, T>::from_trigger) else { return Verdict::Pass };
                         $(let Some($P) = $P::fetch(ctx) else { return Verdict::Pass };)*
@@ -1117,6 +1212,7 @@ macro_rules! fn_params {
                     params,
                     after: Vec::new(),
                     before: Vec::new(),
+                    run_on_change: false,
                     run: Box::new(move |ctx: &mut ParamCtx, trigger: Option<TriggerData>| {
                         let Some(TriggerData::Packet(packet)) = trigger else { return Verdict::Pass };
                         $(let Some($P) = $P::fetch(ctx) else { return Verdict::Pass };)*
@@ -1138,7 +1234,8 @@ fn_params!(P1, P2, P3, P4, P5, P6, P7);
 fn_params!(P1, P2, P3, P4, P5, P6, P7, P8);
 
 /// `.after(other)` / `.before(other)` on a system fn: run it after / before `other`
-/// (a system added to the same schedule, by its fn).
+/// (a system added to the same schedule, by its fn). `.run_on_change()`: skip the
+/// runs where nothing it reads changed.
 pub trait SystemOrder<M>: IntoSystem<M> + Sized {
     fn after<M2>(self, other: impl IntoSystem<M2>) -> Ordered<Self, M> {
         Ordered::new(self).after(other)
@@ -1146,14 +1243,18 @@ pub trait SystemOrder<M>: IntoSystem<M> + Sized {
     fn before<M2>(self, other: impl IntoSystem<M2>) -> Ordered<Self, M> {
         Ordered::new(self).before(other)
     }
+    fn run_on_change(self) -> Ordered<Self, M> {
+        Ordered::new(self).run_on_change()
+    }
 }
 impl<M, S: IntoSystem<M>> SystemOrder<M> for S {}
 
-/// A system with ordering constraints; chain more `.after` / `.before`.
+/// A configured system; chain more `.after` / `.before` / `.run_on_change`.
 pub struct Ordered<S, M> {
     system: S,
     after: Vec<&'static str>,
     before: Vec<&'static str>,
+    run_on_change: bool,
     _m: PhantomData<fn() -> M>,
 }
 
@@ -1163,7 +1264,7 @@ fn type_name_of<T>(_: &T) -> &'static str {
 
 impl<S: IntoSystem<M>, M> Ordered<S, M> {
     fn new(system: S) -> Self {
-        Ordered { system, after: Vec::new(), before: Vec::new(), _m: PhantomData }
+        Ordered { system, after: Vec::new(), before: Vec::new(), run_on_change: false, _m: PhantomData }
     }
     pub fn after<M2>(mut self, other: impl IntoSystem<M2>) -> Self {
         self.after.push(type_name_of(&other));
@@ -1171,6 +1272,15 @@ impl<S: IntoSystem<M>, M> Ordered<S, M> {
     }
     pub fn before<M2>(mut self, other: impl IntoSystem<M2>) -> Self {
         self.before.push(type_name_of(&other));
+        self
+    }
+    /// Skip a run when nothing it reads changed: every `Res` / `ResMut` unchanged
+    /// since its previous run, no new event for its `EventReader`s, and every query
+    /// matched no rows (only `Changed` / `Added` queries can be empty while idle; a
+    /// plain query that matches keeps it running). A system without parameters always
+    /// runs. Not for timers or state machines driven by `Local`s / the clock.
+    pub fn run_on_change(mut self) -> Self {
+        self.run_on_change = true;
         self
     }
 }
@@ -1183,6 +1293,7 @@ impl<S: IntoSystem<M>, M> IntoSystem<(OrderedMarker, M)> for Ordered<S, M> {
         let mut built = self.system.into_system();
         built.after = self.after;
         built.before = self.before;
+        built.run_on_change = self.run_on_change;
         built
     }
 }
@@ -1351,7 +1462,7 @@ mod tests {
         let fetched = |res: Option<&str>| {
             vec![
                 Fetched::Query(vec![RawRow { entity: 9, comps: vec![r#"{"Value":3}"#.into()] }], backend::QuerySink(None)),
-                Fetched::Res(res.map(String::from), backend::ResSink(None)),
+                Fetched::Res(ResData::Value(res.map(String::from)), backend::ResSink(None)),
             ]
         };
         let e = &mut app.entries[0];
@@ -1359,6 +1470,52 @@ mod tests {
         e.run(fetched(None), None); // no Time: skipped, Local untouched
         e.run(fetched(Some(r#"{"Total":8.0,"Frame":0.016}"#)), None);
         assert_eq!(SEEN.with(|s| s.get()), (2, 3, 8));
+    }
+
+    #[test]
+    fn unchanged_res_reuses_the_previous_parse() {
+        use std::cell::Cell;
+        thread_local!(static TOTAL: Cell<(f32, u32)> = const { Cell::new((0.0, 0)) });
+        fn read(time: Res<Time>, mut runs: Local<u32>) {
+            *runs += 1;
+            TOTAL.with(|t| t.set((time.total, *runs)));
+        }
+        let mut app = App::default();
+        app.add_systems(Schedule::Update, read.run_on_change());
+        assert!(app.entries[0].run_on_change);
+        let e = &mut app.entries[0];
+        let res = |d: ResData| vec![Fetched::Res(d, backend::ResSink(None))];
+        e.run(res(ResData::Value(Some(r#"{"Total":7.0,"Frame":0.016}"#.into()))), None);
+        e.run(res(ResData::Unchanged), None);
+        assert_eq!(TOTAL.with(|t| t.get()), (7.0, 2));
+        // Absent, then unchanged-absent: both skip.
+        e.run(res(ResData::Value(None)), None);
+        e.run(res(ResData::Unchanged), None);
+        assert_eq!(TOTAL.with(|t| t.get()), (7.0, 2));
+    }
+
+    #[test]
+    fn unchanged_res_mut_reuses_until_written() {
+        use std::cell::Cell;
+        thread_local!(static SEEN: Cell<f32> = const { Cell::new(0.0) });
+        fn bump(mut time: ResMut<Time>) {
+            SEEN.with(|s| s.set(time.total));
+            if time.total < 2.0 {
+                time.total += 1.0;
+            }
+        }
+        let mut app = App::default();
+        app.add_systems(Schedule::Update, bump);
+        let e = &mut app.entries[0];
+        let res = |d: ResData| vec![Fetched::Res(d, backend::ResSink(None))];
+        e.run(res(ResData::Value(Some(r#"{"Total":5.0,"Frame":0.0}"#.into()))), None);
+        e.run(res(ResData::Unchanged), None);
+        assert_eq!(SEEN.with(|s| s.get()), 5.0);
+        // A write drops the cache: an "unchanged" with no host (unit test) then skips.
+        e.run(res(ResData::Value(Some(r#"{"Total":1.0,"Frame":0.0}"#.into()))), None);
+        SEEN.with(|s| s.set(-1.0));
+        e.run(res(ResData::Unchanged), None);
+        assert_eq!(SEEN.with(|s| s.get()), -1.0);
     }
 
     #[test]

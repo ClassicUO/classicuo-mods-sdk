@@ -153,6 +153,14 @@ internal static unsafe class EcsAbi
             Interop.Commands.SendWasmInterop.wasmImportSend(commands, pp, pl, (nint)(json + start), Json.WrittenCount - start);
     }
 
+    /// <summary>commands.set-resource(path, json) with the JSON appended to <see cref="Json"/> from <paramref name="start"/>.</summary>
+    internal static void SetResource(int commands, string path, int start)
+    {
+        var (pp, pl) = Path(path);
+        fixed (byte* json = Json.WrittenSpan)
+            Interop.Commands.SetResourceWasmInterop.wasmImportSetResource(commands, pp, pl, (nint)(json + start), Json.WrittenCount - start);
+    }
+
     internal static void QuerySet(int query, ulong entity, byte index, ReadOnlySpan<byte> json)
     {
         fixed (byte* p = json)
@@ -164,6 +172,8 @@ internal static unsafe class EcsAbi
         fixed (byte* p = json)
             Interop.Res.SetWasmInterop.wasmImportSet(res, (nint)p, json.Length);
     }
+
+    internal static bool ResUnchanged(int res) => Interop.Res.UnchangedWasmInterop.wasmImportUnchanged(res) != 0;
 
     // ── results: host-allocated (cabi_realloc = malloc) and owned by the guest ──
 

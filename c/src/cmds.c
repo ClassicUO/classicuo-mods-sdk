@@ -101,8 +101,15 @@ void cuo_resource_set(cuo_cmds *c, cuo_comp value)
             return;
         }
     }
-    cuo__trap(cuo_fmt("cuo: cuo_resource_set('%s') needs a cuo_system_res(..., true) param of that type",
-                      cuo_type_path(value.type_id)));
+    cuo_set_resource(c, cuo_type_path(value.type_id), value.data);
+}
+
+void cuo_set_resource(cuo_cmds *c, const char *path, cuo_bytes json)
+{
+    c->count++;
+    cuo_wit_string_t p = cuo__wstr(path);
+    cuo_wit_string_t v = cuo__wbytes(json);
+    tinyecs_modding_ecs_method_commands_set_resource(c->handle, &p, &v);
 }
 
 void cuo_emit(cuo_cmds *c, const char *event_path, uint64_t entity, cuo_bytes json)

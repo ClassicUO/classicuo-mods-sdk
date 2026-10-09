@@ -75,6 +75,9 @@ internal sealed class RunScope
     internal ModHost Host => ModRuntime.Host;
     internal readonly Commands Commands = new();
     internal List<object>? Locals;
+    internal Entry? Entry;
+    // Res cells holding this run's host bytes, released with the run.
+    readonly List<IRunHeld> _held = new();
     internal ulong TriggerEntity;
     internal nint TriggerValue;
     internal int TriggerValueLen;
@@ -135,6 +138,17 @@ internal sealed class RunScope
 
     internal void AfterRun(Action writeBack) => _writeBacks.Add(writeBack);
 
+    internal void Hold(IRunHeld held) => _held.Add(held);
+
+    /// <summary>The cell this system keeps for host param <paramref name="slot"/> across its runs.</summary>
+    internal TCell Cell<TCell>(int slot) where TCell : class, new()
+    {
+        var entry = Entry!;
+        if (entry.ResCells.Length <= slot)
+            Array.Resize(ref entry.ResCells, slot + 1);
+        return entry.ResCells[slot] as TCell ?? (TCell)(entry.ResCells[slot] = new TCell());
+    }
+
     /// <summary>After the body: the pending spawn, then the write-backs (they land after the run's commands).</summary>
     internal void End()
     {
@@ -148,6 +162,10 @@ internal sealed class RunScope
     {
         Commands.End();
         _writeBacks.Clear();
+        for (var i = 0; i < _held.Count; i++)
+            _held[i].EndRun();
+        _held.Clear();
+        Entry = null;
         MutColumns.Clear();
         for (var i = 0; i < _count; i++)
             if (_fetched[i])
@@ -185,13 +203,17 @@ public readonly struct ParamContext
 
 /// <summary>
 /// Read-only access to a resource. The system is skipped while the client has none
-/// (take <c>Opt&lt;Res&lt;T&gt;&gt;</c> to run anyway).
+/// (take <c>Opt&lt;Res&lt;T&gt;&gt;</c> to run anyway). <see cref="Value"/> is parsed on
+/// first access, and a value parsed on an earlier run is reused while the host reports
+/// it unchanged: treat it as read-only.
 /// </summary>
 public readonly struct Res<T> : ISystemParam<Res<T>>
 {
-    public readonly T Value;
+    readonly ResCell<T> _cell;
 
-    Res(T value) => Value = value;
+    Res(ResCell<T> cell) => _cell = cell;
+
+    public T Value => _cell != null ? _cell.Get() : default!;
 
     public static void Describe(ParamDescriber d) =>
         d.Add(new ParamDecl { Kind = ParamKind.Res, Path = ModHost.PathOf<T>() });
@@ -199,24 +221,99 @@ public readonly struct Res<T> : ISystemParam<Res<T>>
     public static bool TryCreate(ParamContext c, out Res<T> value)
     {
         value = default;
-        if (!ResJson.TryGet(c, out T? parsed))
+        var handle = c.Scope.Handle(c.Slot);
+        if (handle == 0)
             return false;
-        value = new Res<T>(parsed!);
+        var cell = c.Scope.Cell<ResCell<T>>(c.Slot);
+        if (!cell.Begin(c.Scope, handle))
+            return false;
+        value = new Res<T>(cell);
         return true;
+    }
+}
+
+internal interface IRunHeld
+{
+    void EndRun();
+}
+
+/// <summary>
+/// One <see cref="Res{T}"/> parameter's state across its system's runs: whether the host
+/// had a value, and the parse of it. <c>res.unchanged</c> lets a run skip both
+/// <c>get</c> and the parse.
+/// </summary>
+internal sealed unsafe class ResCell<T> : IRunHeld
+{
+    bool _known, _present, _parsed;
+    T? _value;
+    System.Text.Json.Serialization.Metadata.JsonTypeInfo<T>? _info;
+    // This run's handle and (once fetched) the host bytes, owned until EndRun.
+    int _handle;
+    nint _ptr;
+    int _len;
+    bool _held;
+
+    /// <summary>Starts a run; false when the host has no value.</summary>
+    internal bool Begin(RunScope scope, int handle)
+    {
+        _info ??= scope.Host.Json<T>();
+        _handle = handle;
+        scope.Hold(this);
+        if (_known && EcsAbi.ResUnchanged(handle))
+            return _present;
+        _parsed = false;
+        _value = default;
+        _known = true;
+        _present = Fetch();
+        return _present;
+    }
+
+    bool Fetch()
+    {
+        if (!EcsAbi.ResGet(_handle, out var ptr, out var len))
+            return false;
+        _ptr = ptr;
+        _len = len;
+        _held = true;
+        return !new ReadOnlySpan<byte>((void*)ptr, len).SequenceEqual("null"u8);
+    }
+
+    internal T Get()
+    {
+        if (_parsed)
+            return _value!;
+        if (!_held)
+        {
+            if (_handle == 0)
+                throw new InvalidOperationException("Res<T>.Value read outside its system's run");
+            Fetch();
+        }
+        _value = Payload.Parse(new ReadOnlySpan<byte>((void*)_ptr, _len), _info!);
+        _parsed = true;
+        return _value!;
+    }
+
+    public void EndRun()
+    {
+        if (_held)
+            EcsAbi.Free(_ptr, _len);
+        _held = false;
+        _ptr = 0;
+        _len = 0;
+        _handle = 0;
     }
 }
 
 internal static unsafe class ResJson
 {
-    internal static bool TryGet<T>(ParamContext c, out T? parsed)
+    internal static bool TryGet<T>(int handle, ModHost host, out T? parsed)
     {
         parsed = default;
-        var handle = c.Scope.Handle(c.Slot);
-        if (handle == 0 || !EcsAbi.ResGet(handle, out var ptr, out var len))
+        if (!EcsAbi.ResGet(handle, out var ptr, out var len))
             return false;
         try
         {
-            parsed = Payload.Parse(new ReadOnlySpan<byte>((void*)ptr, len), c.Host.Json<T>());
+            parsed = Payload.Parse(new ReadOnlySpan<byte>((void*)ptr, len), host.Json<T>());
         }
         finally
         {
@@ -229,6 +326,7 @@ internal static unsafe class ResJson
 /// <summary>
 /// Writable access to a resource: change <see cref="Value"/> and it is written back when
 /// the system returns (only when it actually changed). Skipped like <see cref="Res{T}"/>.
+/// While the host reports it unchanged, the previous run's parse is reused.
 /// </summary>
 public sealed class ResMut<T> : ISystemParam<ResMut<T>>
 {
@@ -242,29 +340,54 @@ public sealed class ResMut<T> : ISystemParam<ResMut<T>>
     public static bool TryCreate(ParamContext c, out ResMut<T> value)
     {
         value = null!;
-        if (!ResJson.TryGet(c, out T? parsed))
-            return false;
-        var info = c.Host.Json<T>();
-        var res = new ResMut<T>(parsed!);
-        // Compare against our own serialization, not the host's text: the two format
-        // differently, and a spurious write marks the resource changed. The snapshot is
-        // pooled (a T that is a class is mutated in place, so it must be taken now).
-        var original = JsonScratch.Rent(parsed!, info);
         var handle = c.Scope.Handle(c.Slot);
+        if (handle == 0)
+            return false;
+        var cell = c.Scope.Cell<ResMutCell<T>>(c.Slot);
+        var info = c.Host.Json<T>();
+        if (!(cell.Valid && EcsAbi.ResUnchanged(handle)))
+        {
+            cell.Valid = false;
+            if (!ResJson.TryGet(handle, c.Host, out T? parsed))
+                return false;
+            cell.Value = parsed;
+            // Compare against our own serialization, not the host's text: the two format
+            // differently, and a spurious write marks the resource changed. Taken now: a T
+            // that is a class is mutated in place.
+            cell.SetSnapshot(JsonScratch.Write(parsed!, info));
+            cell.Valid = true;
+        }
+        var res = new ResMut<T>(cell.Value!);
         c.Scope.AfterRun(() =>
         {
-            try
+            if (JsonScratch.Differs(res.Value, info, cell.Snapshot, out var now))
             {
-                if (JsonScratch.Differs(res.Value, info, original.Span, out var now))
-                    EcsAbi.ResSet(handle, now);
-            }
-            finally
-            {
-                original.Return();
+                EcsAbi.ResSet(handle, now);
+                // The cached object may have been mutated in place: parse afresh next run.
+                cell.Valid = false;
             }
         });
         value = res;
         return true;
+    }
+}
+
+/// <summary>A <see cref="ResMut{T}"/> parameter's parse and its JSON snapshot, kept across runs.</summary>
+internal sealed class ResMutCell<T>
+{
+    internal bool Valid;
+    internal T? Value;
+    byte[] _snapshot = new byte[64];
+    int _len;
+
+    internal ReadOnlySpan<byte> Snapshot => _snapshot.AsSpan(0, _len);
+
+    internal void SetSnapshot(ReadOnlySpan<byte> json)
+    {
+        if (_snapshot.Length < json.Length)
+            _snapshot = new byte[Math.Max(json.Length, _snapshot.Length * 2)];
+        json.CopyTo(_snapshot);
+        _len = json.Length;
     }
 }
 
@@ -315,15 +438,6 @@ internal static class JsonScratch
     static readonly System.Buffers.ArrayBufferWriter<byte> _buf = new(256);
     static readonly Utf8JsonWriter _writer = new(_buf);
 
-    /// <summary>A pooled copy of <paramref name="value"/>'s JSON (Return it when done).</summary>
-    internal static Rented Rent<T>(T value, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> info)
-    {
-        var json = Write(value, info);
-        var arr = System.Buffers.ArrayPool<byte>.Shared.Rent(Math.Max(1, json.Length));
-        json.CopyTo(arr);
-        return new Rented(arr, json.Length);
-    }
-
     /// <summary>
     /// True when <paramref name="value"/> serializes differently from <paramref name="original"/>;
     /// <paramref name="now"/> is the new JSON, valid until the next scratch use.
@@ -334,12 +448,22 @@ internal static class JsonScratch
         return !now.SequenceEqual(original);
     }
 
-    static ReadOnlySpan<byte> Write<T>(T value, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> info)
+    /// <summary>The JSON of <paramref name="value"/>, valid until the next scratch use.</summary>
+    internal static ReadOnlySpan<byte> Write<T>(T value, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> info)
     {
         _buf.ResetWrittenCount();
         _writer.Reset(_buf);
         JsonSerializer.Serialize(_writer, value, info);
         return _buf.WrittenSpan;
+    }
+
+    /// <summary>A pooled copy of <paramref name="value"/>'s JSON (Return it when done).</summary>
+    internal static Rented Rent<T>(T value, System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> info)
+    {
+        var json = Write(value, info);
+        var arr = System.Buffers.ArrayPool<byte>.Shared.Rent(Math.Max(1, json.Length));
+        json.CopyTo(arr);
+        return new Rented(arr, json.Length);
     }
 
     internal readonly struct Rented(byte[] array, int length)

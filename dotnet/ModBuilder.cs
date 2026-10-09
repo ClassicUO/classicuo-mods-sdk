@@ -552,51 +552,16 @@ public sealed class ModBuilder
     void AddObserver(ObserverTrigger trigger, ParamDescriber d, Action<RunScope> run) =>
         Entries.Add(new Entry(run, $"obs-{_observers++}", d.Params) { Trigger = trigger });
 
-    /// <summary>
-    /// Declares that this mod writes resource <typeparamref name="T"/> with
-    /// <see cref="Commands.SetResource{T}"/>. The component contract has no
-    /// resource-set command: the SDK queues those writes and applies them through its own
-    /// systems (one per stage the mod runs in, after the mod's systems there, plus
-    /// <see cref="Stage.Last"/>) that hold the declared resources writable. A write from
-    /// a system lands at the end of that system's stage; from an observer, at the next
-    /// such point.
-    /// </summary>
-    public void WritesResource<T>()
-    {
-        var path = ModHost.PathOf<T>();
-        if (!ResourceWrites.Paths.Contains(path))
-            ResourceWrites.Paths.Add(path);
-    }
-
-    /// <summary>Declarations the collected hotkeys and resource writes imply. Called once, after the mod's Setup returned.</summary>
+    /// <summary>Declarations the collected hotkeys imply. Called once, after the mod's Setup returned.</summary>
     internal void Finish()
     {
-        // Only the mod's own SetResource calls need a flush in every stage; the hotkey
-        // set is written once, by the Startup flush.
-        var everyStage = ResourceWrites.Paths.Count > 0;
-        if (_hotkeys.Count > 0)
-        {
-            // The binding set is this mod's slice of cuo:input/mod-hotkeys, written by the
-            // Startup flush whether or not the host has a value yet.
-            WritesResource<Types.ModHotkeyBindingsDto>();
-            ResourceWrites.Queue(new Types.ModHotkeyBindingsDto { Bindings = _hotkeys.ToArray() });
-        }
-        var paths = ResourceWrites.Paths;
-        if (paths.Count == 0)
+        if (_hotkeys.Count == 0)
             return;
-        var mods = Entries.ToArray();
-        for (var stage = Stage.Startup; stage <= Stage.Last; stage++)
-        {
-            var here = Array.FindAll(mods, e => e.Trigger == null && e.Schedule == stage);
-            if (stage != Stage.Startup && (!everyStage || (here.Length == 0 && stage != Stage.Last)))
-                continue;
-            var d = Describer();
-            foreach (var path in paths)
-                d.Add(new ParamDecl { Kind = ParamKind.ResMut, Path = path });
-            var flush = AddSystem(d, ResourceWrites.Flush).InStage(stage).Label($"sdk-resource-writes-{stage}");
-            foreach (var e in here)
-                flush.After(new SystemHandle(e));
-        }
+        // The binding set is this mod's slice of cuo:input/mod-hotkeys, written once at startup.
+        var bindings = new Types.ModHotkeyBindingsDto { Bindings = _hotkeys.ToArray() };
+        var d = Describer();
+        d.Add(new ParamDecl { Kind = ParamKind.Commands });
+        AddSystem(d, scope => scope.Commands.SetResource(bindings)).InStage(Stage.Startup).Label("sdk-hotkeys");
     }
 
     /// <summary>Declares every entry on the host (called once, after <see cref="Finish"/>).</summary>
@@ -616,6 +581,8 @@ public sealed class ModBuilder
                     sys.After(systems[Entries.IndexOf(other)]);
                 foreach (var other in e.Before)
                     sys.Before(systems[Entries.IndexOf(other)]);
+                if (e.RunOnChange)
+                    sys.RunOnChange();
                 foreach (var p in e.Params)
                 {
                     switch (p.Kind)
@@ -668,7 +635,10 @@ internal sealed class Entry(Action<RunScope> run, string name, List<ParamDecl> @
     internal string Name = name;
     internal byte[] NameUtf8 = System.Text.Encoding.UTF8.GetBytes(name);
     internal Stage Schedule;
+    internal bool RunOnChange;
     internal ObserverTrigger? Trigger;
+    // Per host-param slot: the Res / ResMut parse kept across runs (see ResCell).
+    internal object?[] ResCells = [];
     internal readonly List<Entry> After = new();
     internal readonly List<Entry> Before = new();
 }
@@ -699,6 +669,20 @@ public readonly struct SystemHandle
     public SystemHandle Before(SystemHandle system)
     {
         _entry.Before.Add(system._entry);
+        return this;
+    }
+
+    /// <summary>
+    /// Skip a run when nothing it reads changed: every <see cref="Res{T}"/> /
+    /// <see cref="ResMut{T}"/> unchanged since its previous run, no new event for its
+    /// <see cref="EventReader{T}"/>s, and every query matched no rows (only queries with
+    /// <c>Changed</c> / <c>Added</c> filters can be empty while idle; a plain query that
+    /// matches keeps it running). A system without parameters always runs. Do NOT use it
+    /// for timers or state machines driven by <see cref="Local{T}"/> / the clock.
+    /// </summary>
+    public SystemHandle RunOnChange()
+    {
+        _entry.RunOnChange = true;
         return this;
     }
 

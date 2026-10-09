@@ -241,6 +241,9 @@ typedef struct param_decl {
     uint16_t type_id;
     cuo_term *terms;
     size_t n;
+    /* res: the value received on the previous call, reused while res.unchanged. */
+    bool res_known, res_has;
+    tinyecs_modding_ecs_json_t res_cache;
 } param_decl;
 
 typedef struct param_list {
@@ -258,6 +261,7 @@ typedef struct entry {
     /* system */
     cuo_system_fn fn;
     uint8_t schedule;
+    bool run_on_change;
     uint32_t *after, *before;
     size_t nafter, capafter, nbefore, capbefore;
     /* observer */
@@ -401,6 +405,11 @@ void cuo_system_before(cuo_builder *m, cuo_sys s, cuo_sys other)
     PUSH(r->before, r->nbefore, r->capbefore, other);
 }
 
+void cuo_system_run_on_change(cuo_builder *m, cuo_sys s)
+{
+    sys_at(m, s)->run_on_change = true;
+}
+
 static cuo_observer add_observer(cuo_builder *m, uint8_t kind, uint16_t type_id, const char *event,
                                  cuo_observer_fn fn, void *user)
 {
@@ -539,6 +548,8 @@ void exports_cuo_wit_setup(cuo_wit_own_app_t own_app)
             tinyecs_modding_ecs_method_system_after(sys, BORROW(sys_idx[e->after[j]]));
         for (size_t j = 0; j < e->nbefore; j++)
             tinyecs_modding_ecs_method_system_before(sys, BORROW(sys_idx[e->before[j]]));
+        if (e->run_on_change)
+            tinyecs_modding_ecs_method_system_run_on_change(sys);
         declare_params(sys, &e->params);
 
         if (!e->is_observer) {
@@ -577,8 +588,9 @@ void exports_cuo_wit_setup(cuo_wit_own_app_t own_app)
 
 /* ── run / observe ───────────────────────────────────────────────────────── */
 
-/* Fetch every param's data up front: one host call per query / res / events. */
-static cuo__params fetch(const entry *e, cuo_wit_list_param_t *in)
+/* Fetch every param's data up front: one host call per query / res / events (none for
+ * a res the host reports unchanged: its cached bytes are handed out again). */
+static cuo__params fetch(entry *e, cuo_wit_list_param_t *in)
 {
     if (in->len != e->params.n)
         cuo__trap(cuo_fmt("cuo: '%s' got %zu params, declared %zu", e->name, in->len, e->params.n));
@@ -597,10 +609,21 @@ static cuo__params fetch(const entry *e, cuo_wit_list_param_t *in)
             v->handle = p->val.query.__handle;
             tinyecs_modding_ecs_method_query_rows(tinyecs_modding_ecs_borrow_query(p->val.query), &v->rows);
             break;
-        case TINYECS_MODDING_ECS_PARAM_RES:
+        case TINYECS_MODDING_ECS_PARAM_RES: {
             v->handle = p->val.res.__handle;
-            v->has_res = tinyecs_modding_ecs_method_res_get(tinyecs_modding_ecs_borrow_res(p->val.res), &v->res);
+            param_decl *d = &e->params.v[i];
+            tinyecs_modding_ecs_borrow_res_t r = tinyecs_modding_ecs_borrow_res(p->val.res);
+            if (!d->res_known || !tinyecs_modding_ecs_method_res_unchanged(r)) {
+                if (d->res_has)
+                    tinyecs_modding_ecs_json_free(&d->res_cache);
+                d->res_known = true;
+                d->res_has = tinyecs_modding_ecs_method_res_get(r, &d->res_cache);
+            }
+            /* A view: the cache owns the bytes. */
+            v->has_res = d->res_has;
+            v->res = d->res_cache;
             break;
+        }
         case TINYECS_MODDING_ECS_PARAM_EVENTS:
             v->handle = p->val.events.__handle;
             tinyecs_modding_ecs_method_events_read(tinyecs_modding_ecs_borrow_events(p->val.events), &v->events);
@@ -623,8 +646,6 @@ static void release(cuo__params *ps, cuo_wit_list_param_t *in)
             tinyecs_modding_ecs_query_drop_own((tinyecs_modding_ecs_own_query_t){ v->handle });
             break;
         case TINYECS_MODDING_ECS_PARAM_RES:
-            if (v->has_res)
-                tinyecs_modding_ecs_json_free(&v->res);
             tinyecs_modding_ecs_res_drop_own((tinyecs_modding_ecs_own_res_t){ v->handle });
             break;
         case TINYECS_MODDING_ECS_PARAM_EVENTS:

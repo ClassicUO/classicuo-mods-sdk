@@ -12,7 +12,7 @@ mod bindings {
 }
 
 use crate::ecs::{
-    App, EntryKind, Fetched, Packet, PacketDirection, ParamDesc, RawRow, Schedule, TermKind, TriggerData, TriggerDesc,
+    App, EntryKind, Fetched, Packet, ResData, PacketDirection, ParamDesc, RawRow, Schedule, TermKind, TriggerData, TriggerDesc,
     Verdict,
 };
 use core::ptr::addr_of_mut;
@@ -58,6 +58,12 @@ pub(crate) fn res_set(r: &ResSink, json: String) {
     if let Some(r) = &r.0 {
         r.set(&json)
     }
+}
+pub(crate) fn res_get(r: &ResSink) -> Option<String> {
+    r.0.as_ref().and_then(|r| r.get())
+}
+pub(crate) fn set_resource(c: &CmdSink, path: &'static str, json: String) {
+    c.0.set_resource(path, &json)
 }
 
 struct State {
@@ -112,7 +118,10 @@ fn fetch(params: Vec<wit::Param>) -> Vec<Fetched> {
                 let rows = q.rows().into_iter().map(|r| RawRow { entity: r.entity, comps: r.values }).collect();
                 Fetched::Query(rows, QuerySink(Some(q)))
             }
-            wit::Param::Res(r) => Fetched::Res(r.get(), ResSink(Some(r))),
+            wit::Param::Res(r) => {
+                let data = if r.unchanged() { ResData::Unchanged } else { ResData::Value(r.get()) };
+                Fetched::Res(data, ResSink(Some(r)))
+            }
             wit::Param::Events(e) => Fetched::Events(e.read()),
         })
         .collect()
@@ -153,6 +162,9 @@ impl bindings::Guest for Mod {
             }
             for j in app.resolve_order(&e.before) {
                 sys.before(&systems[j]);
+            }
+            if e.run_on_change {
+                sys.run_on_change();
             }
             for p in &e.params {
                 match p {

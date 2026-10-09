@@ -150,13 +150,21 @@ const char *cuo_type_path(uint16_t id); /* NULL when never interned */
 cuo_sys cuo_add_system(cuo_builder *m, const char *label, cuo_stage stage, cuo_system_fn fn, void *user);
 void cuo_system_after(cuo_builder *m, cuo_sys s, cuo_sys other);
 void cuo_system_before(cuo_builder *m, cuo_sys s, cuo_sys other);
+/* Skip a call when nothing it reads changed: every res param unchanged since its
+ * previous call, no new event for its events params, and every query matched no rows
+ * (only CHANGED / ADDED queries can be empty while idle; a plain query that matches
+ * keeps it running). A system with no params always runs. Not for timers or state
+ * machines driven by the mod's own state / the clock. */
+void cuo_system_run_on_change(cuo_builder *m, cuo_sys s);
 
 /* System parameters. Each returns the handle its data is read by.
  * - query: read terms (REF/MUT/CHANGED/ADDED) fill row comp slots in declaration order.
  *   A WITH on a type already read is dropped and a CHANGED/ADDED/MUT on a type already
  *   read upgrades that term in place (one payload per type).
  * - res: a resource (`mut`: you may write it back with cuo_resource_set). Reads
- *   {NULL,0} while the host has none.
+ *   {NULL,0} while the host has none. The bytes stay the same pointer while the host
+ *   reports the value unchanged (res.unchanged: no get, no copy), so a parse keyed on
+ *   that pointer can be reused.
  * - events: the events of a type sent since this system's last run. */
 cuo_param cuo_system_query(cuo_builder *m, cuo_sys s, const cuo_term *terms, size_t n);
 cuo_param cuo_system_res(cuo_builder *m, cuo_sys s, uint16_t type_id, bool mut);
@@ -174,8 +182,7 @@ cuo_param cuo_observer_events(cuo_builder *m, cuo_observer o, uint16_t type_id);
 /* Hotkeys the host fires back as the cuo:input/hotkey event (observe it with
  * cuo_on_event(m, CUO_PATH_INPUT_HOTKEY, …) and parse cuo_ModHotkeyFired). All bindings
  * are published once, as the cuo:input/mod-hotkeys resource, from a Startup system
- * the SDK adds; to rebind, declare cuo_system_res(m, s, cuo_ModHotkeyBindingsDto_id(),
- * true) and cuo_resource_set a new cuo_ModHotkeyBindingsDto.
+ * the SDK adds; to rebind, cuo_resource_set a new cuo_ModHotkeyBindingsDto.
  * CUO_HK_CONSUME: this mod owns the combo (the host's own binding does not fire). */
 enum { CUO_HK_CONSUME = 1, CUO_HK_CTRL = 2, CUO_HK_SHIFT = 4, CUO_HK_ALT = 8 };
 void cuo_hotkey(cuo_builder *m, const char *name, uint32_t key, unsigned flags);
@@ -268,9 +275,13 @@ void cuo_insert(cuo_cmds *c, cuo_entity e, const cuo_comp *comps, size_t n);
 void cuo_insert1(cuo_cmds *c, cuo_entity e, cuo_comp comp);
 void cuo_remove(cuo_cmds *c, cuo_entity e, const uint16_t *type_ids, size_t n);
 void cuo_despawn(cuo_cmds *c, cuo_entity e); /* the host despawns the children too */
-/* Writes a resource through the running system's / observer's res-mut param of that
- * type (cuo_system_res(..., true)); traps when it declared none. */
+/* Writes a resource: through the running system's / observer's res-mut param of that
+ * type when it has one, else as cuo_set_resource. */
 void cuo_resource_set(cuo_cmds *c, cuo_comp value);
+/* commands.set-resource: overwrite any writable resource by its type path, applied with
+ * the other commands; no res-mut param needed. The host traps on an unknown or
+ * read-only path. */
+void cuo_set_resource(cuo_cmds *c, const char *path, cuo_bytes json);
 /* Send an event (utf8 JSON payload) by its type path. `entity` is ignored (events are
  * global). Typed: cuo_X_emit. */
 void cuo_emit(cuo_cmds *c, const char *event_path, uint64_t entity, cuo_bytes json);
