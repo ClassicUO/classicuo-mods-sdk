@@ -300,6 +300,10 @@ const cuo_ItemMoveResult *cuo_ItemMoveResult_obs_typed(const cuo_obs *ev);
 bool cuo_ModOptionsSchemaDto_res(const cuo_input *in, cuo_param p, cuo_ModOptionsSchemaDto *out);
 bool cuo_ModOptionsSchemaDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsSchemaDto *out);
 
+/* `cuo:options/values` */
+bool cuo_ModOptionsValuesDto_res(const cuo_input *in, cuo_param p, cuo_ModOptionsValuesDto *out);
+bool cuo_ModOptionsValuesDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsValuesDto *out);
+
 /* `cuo:player/buffs` */
 bool cuo_PlayerBuffsDto_res(const cuo_input *in, cuo_param p, cuo_PlayerBuffsDto *out);
 bool cuo_PlayerBuffsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerBuffsDto *out);
@@ -503,6 +507,228 @@ cuo_comp cuo_TopBarFull_typed(void);
 
 /* `cuo:ui/topbar-root` */
 cuo_comp cuo_IsTopBar_typed(void);
+
+/* `cuo:ent/animation` */
+const cuo_MobAnimation *cuo_MobAnimation_column(cuo_query q, size_t term);
+const cuo_MobAnimation *cuo_MobAnimation_obs_typed(const cuo_obs *ev);
+
+/* `cuo:ent/is-multi` */
+
+/* `cuo:ent/mob-steps` */
+const cuo_MobileStepsDto *cuo_MobileStepsDto_column(cuo_query q, size_t term);
+const cuo_MobileStepsDto *cuo_MobileStepsDto_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/book` */
+
+/* `cuo:gump/buff` */
+cuo_comp cuo_BuffGumpUI_typed(void);
+
+/* `cuo:gump/bulletin-board` */
+
+/* `cuo:gump/combat-book` */
+cuo_comp cuo_CombatBookWindow_typed(const cuo_CombatBookWindow *v);
+const cuo_CombatBookWindow *cuo_CombatBookWindow_column(cuo_query q, size_t term);
+void cuo_CombatBookWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_CombatBookWindow *v);
+const cuo_CombatBookWindow *cuo_CombatBookWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/house-design` */
+cuo_comp cuo_HouseDesignWindow_typed(const cuo_HouseDesignWindow *v);
+const cuo_HouseDesignWindow *cuo_HouseDesignWindow_column(cuo_query q, size_t term);
+void cuo_HouseDesignWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_HouseDesignWindow *v);
+const cuo_HouseDesignWindow *cuo_HouseDesignWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/journal` */
+cuo_comp cuo_JournalWindow_typed(const cuo_JournalWindow *v);
+const cuo_JournalWindow *cuo_JournalWindow_column(cuo_query q, size_t term);
+void cuo_JournalWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_JournalWindow *v);
+const cuo_JournalWindow *cuo_JournalWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/logout` */
+cuo_comp cuo_LogoutGumpWindow_typed(void);
+
+/* `cuo:gump/map` */
+
+/* `cuo:gump/menu` */
+cuo_comp cuo_MenuGumpWindow_typed(const cuo_MenuGumpWindow *v);
+const cuo_MenuGumpWindow *cuo_MenuGumpWindow_column(cuo_query q, size_t term);
+void cuo_MenuGumpWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_MenuGumpWindow *v);
+const cuo_MenuGumpWindow *cuo_MenuGumpWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/message-box` */
+cuo_comp cuo_MessageBoxWindow_typed(void);
+
+/* `cuo:gump/minimap` */
+cuo_comp cuo_MiniMapWindow_typed(const cuo_MiniMapWindow *v);
+const cuo_MiniMapWindow *cuo_MiniMapWindow_column(cuo_query q, size_t term);
+void cuo_MiniMapWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_MiniMapWindow *v);
+const cuo_MiniMapWindow *cuo_MiniMapWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/paperdoll` */
+cuo_comp cuo_PaperdollWindow_typed(const cuo_PaperdollWindow *v);
+const cuo_PaperdollWindow *cuo_PaperdollWindow_column(cuo_query q, size_t term);
+void cuo_PaperdollWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_PaperdollWindow *v);
+const cuo_PaperdollWindow *cuo_PaperdollWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/party-invite` */
+cuo_comp cuo_PartyInviteWindow_typed(const cuo_PartyInviteWindow *v);
+const cuo_PartyInviteWindow *cuo_PartyInviteWindow_column(cuo_query q, size_t term);
+void cuo_PartyInviteWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_PartyInviteWindow *v);
+const cuo_PartyInviteWindow *cuo_PartyInviteWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/party-manifest` */
+cuo_comp cuo_PartyManifestWindow_typed(const cuo_PartyManifestWindow *v);
+const cuo_PartyManifestWindow *cuo_PartyManifestWindow_column(cuo_query q, size_t term);
+void cuo_PartyManifestWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_PartyManifestWindow *v);
+const cuo_PartyManifestWindow *cuo_PartyManifestWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/profile` */
+cuo_comp cuo_ProfileWindow_typed(const cuo_ProfileWindow *v);
+const cuo_ProfileWindow *cuo_ProfileWindow_column(cuo_query q, size_t term);
+void cuo_ProfileWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_ProfileWindow *v);
+const cuo_ProfileWindow *cuo_ProfileWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/racial-book` */
+cuo_comp cuo_RacialBookWindow_typed(const cuo_RacialBookWindow *v);
+const cuo_RacialBookWindow *cuo_RacialBookWindow_column(cuo_query q, size_t term);
+void cuo_RacialBookWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_RacialBookWindow *v);
+const cuo_RacialBookWindow *cuo_RacialBookWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/server-closed` */
+void cuo_ServerGumpClosedEvent_send(cuo_cmds *c, const cuo_ServerGumpClosedEvent *v);
+const cuo_ServerGumpClosedEvent *cuo_ServerGumpClosedEvent_events(const cuo_input *in, cuo_param p, size_t *count);
+const cuo_ServerGumpClosedEvent *cuo_ServerGumpClosedEvent_obs_events(const cuo_obs *ev, cuo_param p, size_t *count);
+const cuo_ServerGumpClosedEvent *cuo_ServerGumpClosedEvent_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/server-opened` */
+void cuo_ServerGumpOpenedEvent_send(cuo_cmds *c, const cuo_ServerGumpOpenedEvent *v);
+const cuo_ServerGumpOpenedEvent *cuo_ServerGumpOpenedEvent_events(const cuo_input *in, cuo_param p, size_t *count);
+const cuo_ServerGumpOpenedEvent *cuo_ServerGumpOpenedEvent_obs_events(const cuo_obs *ev, cuo_param p, size_t *count);
+const cuo_ServerGumpOpenedEvent *cuo_ServerGumpOpenedEvent_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/skills` */
+cuo_comp cuo_SkillsWindow_typed(const cuo_SkillsWindow *v);
+const cuo_SkillsWindow *cuo_SkillsWindow_column(cuo_query q, size_t term);
+void cuo_SkillsWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_SkillsWindow *v);
+const cuo_SkillsWindow *cuo_SkillsWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/spellbook` */
+cuo_comp cuo_SpellbookWindow_typed(const cuo_SpellbookWindow *v);
+const cuo_SpellbookWindow *cuo_SpellbookWindow_column(cuo_query q, size_t term);
+void cuo_SpellbookWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_SpellbookWindow *v);
+const cuo_SpellbookWindow *cuo_SpellbookWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/split-menu` */
+cuo_comp cuo_SplitMenuWindow_typed(const cuo_SplitMenuWindow *v);
+const cuo_SplitMenuWindow *cuo_SplitMenuWindow_column(cuo_query q, size_t term);
+void cuo_SplitMenuWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_SplitMenuWindow *v);
+const cuo_SplitMenuWindow *cuo_SplitMenuWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/tip-notice` */
+cuo_comp cuo_TipNoticeWindow_typed(const cuo_TipNoticeWindow *v);
+const cuo_TipNoticeWindow *cuo_TipNoticeWindow_column(cuo_query q, size_t term);
+void cuo_TipNoticeWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_TipNoticeWindow *v);
+const cuo_TipNoticeWindow *cuo_TipNoticeWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/trade` */
+cuo_comp cuo_TradeWindow_typed(const cuo_TradeWindow *v);
+const cuo_TradeWindow *cuo_TradeWindow_column(cuo_query q, size_t term);
+void cuo_TradeWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_TradeWindow *v);
+const cuo_TradeWindow *cuo_TradeWindow_obs_typed(const cuo_obs *ev);
+
+/* `cuo:gump/worldmap` */
+cuo_comp cuo_WorldMapWindow_typed(void);
+
+/* `cuo:player/move-request` */
+void cuo_ModMoveRequest_send(cuo_cmds *c, const cuo_ModMoveRequest *v);
+const cuo_ModMoveRequest *cuo_ModMoveRequest_events(const cuo_input *in, cuo_param p, size_t *count);
+const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_events(const cuo_obs *ev, cuo_param p, size_t *count);
+const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_typed(const cuo_obs *ev);
+
+/* `cuo:player/party` */
+bool cuo_PartyDto_res(const cuo_input *in, cuo_param p, cuo_PartyDto *out);
+bool cuo_PartyDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PartyDto *out);
+
+/* `cuo:player/spellbook` */
+bool cuo_SpellbooksDto_res(const cuo_input *in, cuo_param p, cuo_SpellbooksDto *out);
+bool cuo_SpellbooksDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_SpellbooksDto *out);
+
+/* `cuo:player/steps` */
+bool cuo_PlayerStepsDto_res(const cuo_input *in, cuo_param p, cuo_PlayerStepsDto *out);
+bool cuo_PlayerStepsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerStepsDto *out);
+
+/* `cuo:scene/character-creation` */
+cuo_comp cuo_CharCreationScene_typed(void);
+
+/* `cuo:scene/character-list` */
+void cuo_CharacterSelectionDto_send(cuo_cmds *c, const cuo_CharacterSelectionDto *v);
+const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_events(const cuo_input *in, cuo_param p, size_t *count);
+const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_obs_events(const cuo_obs *ev, cuo_param p, size_t *count);
+const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_obs_typed(const cuo_obs *ev);
+
+/* `cuo:scene/character-selection` */
+cuo_comp cuo_CharacterSelectionScene_typed(void);
+
+/* `cuo:scene/game` */
+cuo_comp cuo_GameScene_typed(void);
+
+/* `cuo:scene/login` */
+cuo_comp cuo_LoginScene_typed(void);
+
+/* `cuo:scene/login-error` */
+cuo_comp cuo_LoginErrorScene_typed(void);
+
+/* `cuo:scene/login-error-info` */
+void cuo_LoginErrorsInfoEvent_send(cuo_cmds *c, const cuo_LoginErrorsInfoEvent *v);
+const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_events(const cuo_input *in, cuo_param p, size_t *count);
+const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_events(const cuo_obs *ev, cuo_param p, size_t *count);
+const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_typed(const cuo_obs *ev);
+
+/* `cuo:scene/login-request` */
+void cuo_OnLoginRequest_send(cuo_cmds *c, const cuo_OnLoginRequest *v);
+const cuo_OnLoginRequest *cuo_OnLoginRequest_events(const cuo_input *in, cuo_param p, size_t *count);
+const cuo_OnLoginRequest *cuo_OnLoginRequest_obs_events(const cuo_obs *ev, cuo_param p, size_t *count);
+const cuo_OnLoginRequest *cuo_OnLoginRequest_obs_typed(const cuo_obs *ev);
+
+/* `cuo:scene/server-list` */
+void cuo_ServerSelectionInfoEvent_send(cuo_cmds *c, const cuo_ServerSelectionInfoEvent *v);
+const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_events(const cuo_input *in, cuo_param p, size_t *count);
+const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_events(const cuo_obs *ev, cuo_param p, size_t *count);
+const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_typed(const cuo_obs *ev);
+
+/* `cuo:scene/server-selection` */
+cuo_comp cuo_ServerSelectionScene_typed(void);
+
+/* `cuo:ui/clipboard-set` */
+bool cuo_ClipboardSetDto_res(const cuo_input *in, cuo_param p, cuo_ClipboardSetDto *out);
+bool cuo_ClipboardSetDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ClipboardSetDto *out);
+
+/* `cuo:ui/focused-input` */
+bool cuo_FocusedInput_res(const cuo_input *in, cuo_param p, cuo_FocusedInput *out);
+bool cuo_FocusedInput_obs_res(const cuo_obs *ev, cuo_param p, cuo_FocusedInput *out);
+
+/* `cuo:ui/masked-text` */
+cuo_comp cuo_MaskedText_typed(const cuo_MaskedText *v);
+const cuo_MaskedText *cuo_MaskedText_column(cuo_query q, size_t term);
+void cuo_MaskedText_set(cuo_query q, cuo_entity e, size_t term, const cuo_MaskedText *v);
+const cuo_MaskedText *cuo_MaskedText_obs_typed(const cuo_obs *ev);
+
+/* `cuo:ui/text-clipboard-action` */
+bool cuo_TextClipboardActionDto_res(const cuo_input *in, cuo_param p, cuo_TextClipboardActionDto *out);
+bool cuo_TextClipboardActionDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextClipboardActionDto *out);
+
+/* `cuo:ui/text-completion` */
+bool cuo_TextCompletionDto_res(const cuo_input *in, cuo_param p, cuo_TextCompletionDto *out);
+bool cuo_TextCompletionDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionDto *out);
+
+/* `cuo:ui/text-completion-pick` */
+bool cuo_TextCompletionPickDto_res(const cuo_input *in, cuo_param p, cuo_TextCompletionPickDto *out);
+bool cuo_TextCompletionPickDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionPickDto *out);
+
+/* `cuo:ui/tooltip-serial` */
+cuo_comp cuo_UiTooltipSerial_typed(const cuo_UiTooltipSerial *v);
+const cuo_UiTooltipSerial *cuo_UiTooltipSerial_column(cuo_query q, size_t term);
+void cuo_UiTooltipSerial_set(cuo_query q, cuo_entity e, size_t term, const cuo_UiTooltipSerial *v);
+const cuo_UiTooltipSerial *cuo_UiTooltipSerial_obs_typed(const cuo_obs *ev);
 
 #ifdef __cplusplus
 }

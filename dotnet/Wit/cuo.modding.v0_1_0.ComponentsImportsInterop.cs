@@ -341,6 +341,168 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
                 public static extern int wasmImportTopbarRoot(int p0);
             }
 
+            public static class BuffWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.buff"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportBuff(int p0);
+            }
+
+            public static class CombatBookWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.combat-book"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportCombatBook(int p0, int p1, int p2, int p3, int p4, int p5, int p6, long p7, long p8, long p9);
+            }
+
+            public static class HouseDesignWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.house-design"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportHouseDesign(int p0, long p1, int p2);
+            }
+
+            public static class JournalWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.journal"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportJournal(nint p0);
+            }
+
+            public static class LogoutWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.logout"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportLogout(int p0);
+            }
+
+            public static class MenuWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.menu"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportMenu(int p0, int p1, int p2, int p3, int p4);
+            }
+
+            public static class MessageBoxWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.message-box"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportMessageBox(int p0);
+            }
+
+            public static class MinimapWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.minimap"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportMinimap(int p0, int p1);
+            }
+
+            public static class PaperdollWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.paperdoll"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportPaperdoll(int p0, int p1, int p2, int p3, int p4);
+            }
+
+            public static class PartyInviteWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.party-invite"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportPartyInvite(int p0, int p1);
+            }
+
+            public static class PartyManifestWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.party-manifest"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportPartyManifest(int p0, int p1);
+            }
+
+            public static class ProfileWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.profile"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportProfile(int p0, int p1, int p2, float p3, long p4, long p5, long p6, long p7, int p8, int p9, long p10);
+            }
+
+            public static class RacialBookWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.racial-book"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportRacialBook(int p0, int p1, int p2, int p3, int p4, int p5, int p6, int p7, long p8, long p9, long p10);
+            }
+
+            public static class GumpSkillsWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.gump-skills"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportGumpSkills(nint p0);
+            }
+
+            public static class SpellbookWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.spellbook"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportSpellbook(int p0, int p1, int p2, int p3, int p4, int p5, int p6, int p7, long p8, long p9, long p10, int p11);
+            }
+
+            public static class SplitMenuWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.split-menu"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportSplitMenu(nint p0);
+            }
+
+            public static class TipNoticeWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.tip-notice"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportTipNotice(int p0, int p1, int p2, float p3, long p4, long p5, long p6, long p7, long p8);
+            }
+
+            public static class TradeWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.trade"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportTrade(int p0, int p1, int p2, int p3, int p4, int p5, int p6);
+            }
+
+            public static class WorldmapWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.worldmap"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportWorldmap(int p0);
+            }
+
+            public static class CharacterCreationWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.character-creation"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportCharacterCreation(int p0);
+            }
+
+            public static class CharacterSelectionWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.character-selection"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportCharacterSelection(int p0);
+            }
+
+            public static class GameWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.game"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportGame(int p0);
+            }
+
+            public static class LoginWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.login"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportLogin(int p0);
+            }
+
+            public static class LoginErrorWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.login-error"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportLoginError(int p0);
+            }
+
+            public static class ServerSelectionWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.server-selection"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportServerSelection(int p0);
+            }
+
+            public static class MaskedTextWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.masked-text"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportMaskedText(int p0, nint p1, int p2, int p3);
+            }
+
+            public static class TooltipSerialWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.tooltip-serial"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportTooltipSerial(int p0, int p1);
+            }
+
         }
 
         public static class EntityOfWasmInterop
@@ -889,6 +1051,222 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
             public static extern void wasmImportSetTooltip(int p0, long p1, int p2, nint p3, int p4, int p5);
         }
 
+        public static class ColumnAnimationWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-animation"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnAnimation(int p0, int p1, nint p2);
+        }
+
+        public static class ColumnMobStepsWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-mob-steps"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnMobSteps(int p0, int p1, nint p2);
+        }
+
+        public static class ColumnCombatBookWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-combat-book"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnCombatBook(int p0, int p1, nint p2);
+        }
+
+        public static class SetCombatBookWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-combat-book"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetCombatBook(int p0, long p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8, long p9, long p10, long p11);
+        }
+
+        public static class ColumnHouseDesignWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-house-design"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnHouseDesign(int p0, int p1, nint p2);
+        }
+
+        public static class SetHouseDesignWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-house-design"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetHouseDesign(int p0, long p1, int p2, long p3, int p4);
+        }
+
+        public static class ColumnJournalWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-journal"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnJournal(int p0, int p1, nint p2);
+        }
+
+        public static class SetJournalWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-journal"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetJournal(nint p0);
+        }
+
+        public static class ColumnMenuWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-menu"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnMenu(int p0, int p1, nint p2);
+        }
+
+        public static class SetMenuWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-menu"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetMenu(int p0, long p1, int p2, int p3, int p4, int p5, int p6);
+        }
+
+        public static class ColumnMinimapWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-minimap"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnMinimap(int p0, int p1, nint p2);
+        }
+
+        public static class SetMinimapWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-minimap"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetMinimap(int p0, long p1, int p2, int p3);
+        }
+
+        public static class ColumnPaperdollWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-paperdoll"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnPaperdoll(int p0, int p1, nint p2);
+        }
+
+        public static class SetPaperdollWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-paperdoll"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetPaperdoll(int p0, long p1, int p2, int p3, int p4, int p5, int p6);
+        }
+
+        public static class ColumnPartyInviteWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-party-invite"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnPartyInvite(int p0, int p1, nint p2);
+        }
+
+        public static class SetPartyInviteWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-party-invite"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetPartyInvite(int p0, long p1, int p2, int p3);
+        }
+
+        public static class ColumnPartyManifestWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-party-manifest"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnPartyManifest(int p0, int p1, nint p2);
+        }
+
+        public static class SetPartyManifestWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-party-manifest"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetPartyManifest(int p0, long p1, int p2, int p3);
+        }
+
+        public static class ColumnProfileWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-profile"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnProfile(int p0, int p1, nint p2);
+        }
+
+        public static class SetProfileWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-profile"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetProfile(int p0, long p1, int p2, int p3, int p4, float p5, long p6, long p7, long p8, long p9, int p10, int p11, long p12);
+        }
+
+        public static class ColumnRacialBookWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-racial-book"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnRacialBook(int p0, int p1, nint p2);
+        }
+
+        public static class SetRacialBookWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-racial-book"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetRacialBook(int p0, long p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8, int p9, long p10, long p11, long p12);
+        }
+
+        public static class ColumnGumpSkillsWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-gump-skills"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnGumpSkills(int p0, int p1, nint p2);
+        }
+
+        public static class SetGumpSkillsWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-gump-skills"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetGumpSkills(nint p0);
+        }
+
+        public static class ColumnSpellbookWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-spellbook"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnSpellbook(int p0, int p1, nint p2);
+        }
+
+        public static class SetSpellbookWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-spellbook"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetSpellbook(int p0, long p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8, int p9, long p10, long p11, long p12, int p13);
+        }
+
+        public static class ColumnSplitMenuWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-split-menu"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnSplitMenu(int p0, int p1, nint p2);
+        }
+
+        public static class SetSplitMenuWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-split-menu"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetSplitMenu(nint p0);
+        }
+
+        public static class ColumnTipNoticeWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-tip-notice"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnTipNotice(int p0, int p1, nint p2);
+        }
+
+        public static class SetTipNoticeWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-tip-notice"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetTipNotice(int p0, long p1, int p2, int p3, int p4, float p5, long p6, long p7, long p8, long p9, long p10);
+        }
+
+        public static class ColumnTradeWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-trade"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnTrade(int p0, int p1, nint p2);
+        }
+
+        public static class SetTradeWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-trade"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetTrade(int p0, long p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8);
+        }
+
+        public static class ColumnMaskedTextWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-masked-text"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnMaskedText(int p0, int p1, nint p2);
+        }
+
+        public static class SetMaskedTextWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-masked-text"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetMaskedText(int p0, long p1, int p2, nint p3, int p4, int p5);
+        }
+
+        public static class ColumnTooltipSerialWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-tooltip-serial"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnTooltipSerial(int p0, int p1, nint p2);
+        }
+
+        public static class SetTooltipSerialWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-tooltip-serial"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetTooltipSerial(int p0, long p1, int p2, int p3);
+        }
+
         public static class GetMouseWasmInterop
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-mouse"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
@@ -985,6 +1363,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
             public static extern void wasmImportSetResourceSchema(int p0, nint p1, int p2);
         }
 
+        public static class GetValuesWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-values"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportGetValues(int p0, nint p1);
+        }
+
         public static class GetBuffsWasmInterop
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-buffs"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
@@ -1031,6 +1415,84 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-text-completion-state"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
             public static extern void wasmImportGetTextCompletionState(int p0, nint p1);
+        }
+
+        public static class GetPartyWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-party"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportGetParty(int p0, nint p1);
+        }
+
+        public static class GetPlayerSpellbookWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-player-spellbook"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportGetPlayerSpellbook(int p0, nint p1);
+        }
+
+        public static class GetStepsWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-steps"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportGetSteps(int p0, nint p1);
+        }
+
+        public static class GetClipboardSetWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-clipboard-set"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportGetClipboardSet(int p0, nint p1);
+        }
+
+        public static class SetResourceClipboardSetWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-resource-clipboard-set"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetResourceClipboardSet(int p0, int p1, nint p2, int p3);
+        }
+
+        public static class GetFocusedInputWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-focused-input"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportGetFocusedInput(int p0, nint p1);
+        }
+
+        public static class SetResourceFocusedInputWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-resource-focused-input"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetResourceFocusedInput(int p0, long p1);
+        }
+
+        public static class GetTextClipboardActionWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-text-clipboard-action"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportGetTextClipboardAction(int p0, nint p1);
+        }
+
+        public static class SetResourceTextClipboardActionWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-resource-text-clipboard-action"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetResourceTextClipboardAction(int p0, long p1, int p2, int p3);
+        }
+
+        public static class GetTextCompletionWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-text-completion"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportGetTextCompletion(int p0, nint p1);
+        }
+
+        public static class SetResourceTextCompletionWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-resource-text-completion"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetResourceTextCompletion(int p0, long p1, nint p2, int p3, nint p4, int p5);
+        }
+
+        public static class GetTextCompletionPickWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-text-completion-pick"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportGetTextCompletionPick(int p0, nint p1);
+        }
+
+        public static class SetResourceTextCompletionPickWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-resource-text-completion-pick"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetResourceTextCompletionPick(int p0, long p1, int p2, int p3);
         }
 
         public static class SendMessageWasmInterop
@@ -1199,6 +1661,90 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "read-right-click"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
             public static extern void wasmImportReadRightClick(int p0, nint p1);
+        }
+
+        public static class SendServerClosedWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "send-server-closed"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSendServerClosed(int p0, int p1, int p2);
+        }
+
+        public static class ReadServerClosedWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "read-server-closed"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportReadServerClosed(int p0, nint p1);
+        }
+
+        public static class SendServerOpenedWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "send-server-opened"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSendServerOpened(int p0, int p1, int p2);
+        }
+
+        public static class ReadServerOpenedWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "read-server-opened"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportReadServerOpened(int p0, nint p1);
+        }
+
+        public static class SendMoveRequestWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "send-move-request"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSendMoveRequest(int p0, int p1, int p2, int p3);
+        }
+
+        public static class ReadMoveRequestWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "read-move-request"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportReadMoveRequest(int p0, nint p1);
+        }
+
+        public static class SendCharacterListWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "send-character-list"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSendCharacterList(int p0, nint p1, int p2, nint p3, int p4);
+        }
+
+        public static class ReadCharacterListWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "read-character-list"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportReadCharacterList(int p0, nint p1);
+        }
+
+        public static class SendLoginErrorInfoWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "send-login-error-info"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSendLoginErrorInfo(int p0, nint p1, int p2);
+        }
+
+        public static class ReadLoginErrorInfoWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "read-login-error-info"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportReadLoginErrorInfo(int p0, nint p1);
+        }
+
+        public static class SendLoginRequestWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "send-login-request"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSendLoginRequest(int p0, nint p1, int p2, nint p3, int p4, nint p5, int p6, int p7);
+        }
+
+        public static class ReadLoginRequestWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "read-login-request"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportReadLoginRequest(int p0, nint p1);
+        }
+
+        public static class SendServerListWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "send-server-list"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSendServerList(int p0, nint p1, int p2);
+        }
+
+        public static class ReadServerListWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "read-server-list"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportReadServerList(int p0, nint p1);
         }
 
     }

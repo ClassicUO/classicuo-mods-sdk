@@ -136,6 +136,10 @@ static void to_ModOption(cuo_modding_types_mod_option_t *w, const cuo_ModOptionD
 static void from_ModOption(cuo_ModOptionDto *o, const cuo_modding_types_mod_option_t *w);
 static void to_ModOptionsSchema(cuo_modding_types_mod_options_schema_t *w, const cuo_ModOptionsSchemaDto *v);
 static void from_ModOptionsSchema(cuo_ModOptionsSchemaDto *o, const cuo_modding_types_mod_options_schema_t *w);
+static void to_ModOptionValue(cuo_modding_types_mod_option_value_t *w, const cuo_ModOptionValueDto *v);
+static void from_ModOptionValue(cuo_ModOptionValueDto *o, const cuo_modding_types_mod_option_value_t *w);
+static void to_ModOptionsValues(cuo_modding_types_mod_options_values_t *w, const cuo_ModOptionsValuesDto *v);
+static void from_ModOptionsValues(cuo_ModOptionsValuesDto *o, const cuo_modding_types_mod_options_values_t *w);
 static void to_PlayerBuff(cuo_modding_types_player_buff_t *w, const cuo_PlayerBuffDto *v);
 static void from_PlayerBuff(cuo_PlayerBuffDto *o, const cuo_modding_types_player_buff_t *w);
 static void to_PlayerBuffs(cuo_modding_types_player_buffs_t *w, const cuo_PlayerBuffsDto *v);
@@ -206,6 +210,90 @@ static void to_TextWrap(cuo_modding_types_text_wrap_t *w, const cuo_TextWrap *v)
 static void from_TextWrap(cuo_TextWrap *o, const cuo_modding_types_text_wrap_t *w);
 static void to_UiTooltip(cuo_modding_types_ui_tooltip_t *w, const cuo_UiTooltip *v);
 static void from_UiTooltip(cuo_UiTooltip *o, const cuo_modding_types_ui_tooltip_t *w);
+static void to_MobAnimation(cuo_modding_types_mob_animation_t *w, const cuo_MobAnimation *v);
+static void from_MobAnimation(cuo_MobAnimation *o, const cuo_modding_types_mob_animation_t *w);
+static void to_MobStep(cuo_modding_types_mob_step_t *w, const cuo_MobStepDto *v);
+static void from_MobStep(cuo_MobStepDto *o, const cuo_modding_types_mob_step_t *w);
+static void to_MobileSteps(cuo_modding_types_mobile_steps_t *w, const cuo_MobileStepsDto *v);
+static void from_MobileSteps(cuo_MobileStepsDto *o, const cuo_modding_types_mobile_steps_t *w);
+static void to_CombatBookWindow(cuo_modding_types_combat_book_window_t *w, const cuo_CombatBookWindow *v);
+static void from_CombatBookWindow(cuo_CombatBookWindow *o, const cuo_modding_types_combat_book_window_t *w);
+static void to_HouseDesignWindow(cuo_modding_types_house_design_window_t *w, const cuo_HouseDesignWindow *v);
+static void from_HouseDesignWindow(cuo_HouseDesignWindow *o, const cuo_modding_types_house_design_window_t *w);
+static void to_JournalWindow(cuo_modding_types_journal_window_t *w, const cuo_JournalWindow *v);
+static void from_JournalWindow(cuo_JournalWindow *o, const cuo_modding_types_journal_window_t *w);
+static void to_MenuGumpWindow(cuo_modding_types_menu_gump_window_t *w, const cuo_MenuGumpWindow *v);
+static void from_MenuGumpWindow(cuo_MenuGumpWindow *o, const cuo_modding_types_menu_gump_window_t *w);
+static void to_MiniMapWindow(cuo_modding_types_mini_map_window_t *w, const cuo_MiniMapWindow *v);
+static void from_MiniMapWindow(cuo_MiniMapWindow *o, const cuo_modding_types_mini_map_window_t *w);
+static void to_PaperdollWindow(cuo_modding_types_paperdoll_window_t *w, const cuo_PaperdollWindow *v);
+static void from_PaperdollWindow(cuo_PaperdollWindow *o, const cuo_modding_types_paperdoll_window_t *w);
+static void to_PartyInviteWindow(cuo_modding_types_party_invite_window_t *w, const cuo_PartyInviteWindow *v);
+static void from_PartyInviteWindow(cuo_PartyInviteWindow *o, const cuo_modding_types_party_invite_window_t *w);
+static void to_PartyManifestWindow(cuo_modding_types_party_manifest_window_t *w, const cuo_PartyManifestWindow *v);
+static void from_PartyManifestWindow(cuo_PartyManifestWindow *o, const cuo_modding_types_party_manifest_window_t *w);
+static void to_ProfileWindow(cuo_modding_types_profile_window_t *w, const cuo_ProfileWindow *v);
+static void from_ProfileWindow(cuo_ProfileWindow *o, const cuo_modding_types_profile_window_t *w);
+static void to_RacialBookWindow(cuo_modding_types_racial_book_window_t *w, const cuo_RacialBookWindow *v);
+static void from_RacialBookWindow(cuo_RacialBookWindow *o, const cuo_modding_types_racial_book_window_t *w);
+static void to_ServerGumpClosedEvent(cuo_modding_types_server_gump_closed_event_t *w, const cuo_ServerGumpClosedEvent *v);
+static void from_ServerGumpClosedEvent(cuo_ServerGumpClosedEvent *o, const cuo_modding_types_server_gump_closed_event_t *w);
+static void to_ServerGumpOpenedEvent(cuo_modding_types_server_gump_opened_event_t *w, const cuo_ServerGumpOpenedEvent *v);
+static void from_ServerGumpOpenedEvent(cuo_ServerGumpOpenedEvent *o, const cuo_modding_types_server_gump_opened_event_t *w);
+static void to_SkillsWindow(cuo_modding_types_skills_window_t *w, const cuo_SkillsWindow *v);
+static void from_SkillsWindow(cuo_SkillsWindow *o, const cuo_modding_types_skills_window_t *w);
+static void to_SpellbookWindow(cuo_modding_types_spellbook_window_t *w, const cuo_SpellbookWindow *v);
+static void from_SpellbookWindow(cuo_SpellbookWindow *o, const cuo_modding_types_spellbook_window_t *w);
+static void to_SplitMenuWindow(cuo_modding_types_split_menu_window_t *w, const cuo_SplitMenuWindow *v);
+static void from_SplitMenuWindow(cuo_SplitMenuWindow *o, const cuo_modding_types_split_menu_window_t *w);
+static void to_TipNoticeWindow(cuo_modding_types_tip_notice_window_t *w, const cuo_TipNoticeWindow *v);
+static void from_TipNoticeWindow(cuo_TipNoticeWindow *o, const cuo_modding_types_tip_notice_window_t *w);
+static void to_TradeWindow(cuo_modding_types_trade_window_t *w, const cuo_TradeWindow *v);
+static void from_TradeWindow(cuo_TradeWindow *o, const cuo_modding_types_trade_window_t *w);
+static void to_ModMoveRequest(cuo_modding_types_mod_move_request_t *w, const cuo_ModMoveRequest *v);
+static void from_ModMoveRequest(cuo_ModMoveRequest *o, const cuo_modding_types_mod_move_request_t *w);
+static void to_PartyMember(cuo_modding_types_party_member_t *w, const cuo_PartyMemberDto *v);
+static void from_PartyMember(cuo_PartyMemberDto *o, const cuo_modding_types_party_member_t *w);
+static void to_Party(cuo_modding_types_party_t *w, const cuo_PartyDto *v);
+static void from_Party(cuo_PartyDto *o, const cuo_modding_types_party_t *w);
+static void to_Spellbook(cuo_modding_types_spellbook_t *w, const cuo_SpellbookDto *v);
+static void from_Spellbook(cuo_SpellbookDto *o, const cuo_modding_types_spellbook_t *w);
+static void to_Spellbooks(cuo_modding_types_spellbooks_t *w, const cuo_SpellbooksDto *v);
+static void from_Spellbooks(cuo_SpellbooksDto *o, const cuo_modding_types_spellbooks_t *w);
+static void to_PlayerStep(cuo_modding_types_player_step_t *w, const cuo_PlayerStepDto *v);
+static void from_PlayerStep(cuo_PlayerStepDto *o, const cuo_modding_types_player_step_t *w);
+static void to_PlayerSteps(cuo_modding_types_player_steps_t *w, const cuo_PlayerStepsDto *v);
+static void from_PlayerSteps(cuo_PlayerStepsDto *o, const cuo_modding_types_player_steps_t *w);
+static void to_CharInfo(cuo_modding_types_char_info_t *w, const cuo_CharInfoDto *v);
+static void from_CharInfo(cuo_CharInfoDto *o, const cuo_modding_types_char_info_t *w);
+static void to_TownInfo(cuo_modding_types_town_info_t *w, const cuo_TownInfoDto *v);
+static void from_TownInfo(cuo_TownInfoDto *o, const cuo_modding_types_town_info_t *w);
+static void to_CharacterSelection(cuo_modding_types_character_selection_t *w, const cuo_CharacterSelectionDto *v);
+static void from_CharacterSelection(cuo_CharacterSelectionDto *o, const cuo_modding_types_character_selection_t *w);
+static void to_LoginErrorInfo(cuo_modding_types_login_error_info_t *w, const cuo_LoginErrorInfo *v);
+static void from_LoginErrorInfo(cuo_LoginErrorInfo *o, const cuo_modding_types_login_error_info_t *w);
+static void to_LoginErrorsInfoEvent(cuo_modding_types_login_errors_info_event_t *w, const cuo_LoginErrorsInfoEvent *v);
+static void from_LoginErrorsInfoEvent(cuo_LoginErrorsInfoEvent *o, const cuo_modding_types_login_errors_info_event_t *w);
+static void to_OnLoginRequest(cuo_modding_types_on_login_request_t *w, const cuo_OnLoginRequest *v);
+static void from_OnLoginRequest(cuo_OnLoginRequest *o, const cuo_modding_types_on_login_request_t *w);
+static void to_ServerInfo(cuo_modding_types_server_info_t *w, const cuo_ServerInfo *v);
+static void from_ServerInfo(cuo_ServerInfo *o, const cuo_modding_types_server_info_t *w);
+static void to_ServerSelectionInfoEvent(cuo_modding_types_server_selection_info_event_t *w, const cuo_ServerSelectionInfoEvent *v);
+static void from_ServerSelectionInfoEvent(cuo_ServerSelectionInfoEvent *o, const cuo_modding_types_server_selection_info_event_t *w);
+static void to_ClipboardSet(cuo_modding_types_clipboard_set_t *w, const cuo_ClipboardSetDto *v);
+static void from_ClipboardSet(cuo_ClipboardSetDto *o, const cuo_modding_types_clipboard_set_t *w);
+static void to_FocusedInput(cuo_modding_types_focused_input_t *w, const cuo_FocusedInput *v);
+static void from_FocusedInput(cuo_FocusedInput *o, const cuo_modding_types_focused_input_t *w);
+static void to_MaskedText(cuo_modding_types_masked_text_t *w, const cuo_MaskedText *v);
+static void from_MaskedText(cuo_MaskedText *o, const cuo_modding_types_masked_text_t *w);
+static void to_TextClipboardAction(cuo_modding_types_text_clipboard_action_t *w, const cuo_TextClipboardActionDto *v);
+static void from_TextClipboardAction(cuo_TextClipboardActionDto *o, const cuo_modding_types_text_clipboard_action_t *w);
+static void to_TextCompletion(cuo_modding_types_text_completion_t *w, const cuo_TextCompletionDto *v);
+static void from_TextCompletion(cuo_TextCompletionDto *o, const cuo_modding_types_text_completion_t *w);
+static void to_TextCompletionPick(cuo_modding_types_text_completion_pick_t *w, const cuo_TextCompletionPickDto *v);
+static void from_TextCompletionPick(cuo_TextCompletionPickDto *o, const cuo_modding_types_text_completion_pick_t *w);
+static void to_UiTooltipSerial(cuo_modding_types_ui_tooltip_serial_t *w, const cuo_UiTooltipSerial *v);
+static void from_UiTooltipSerial(cuo_UiTooltipSerial *o, const cuo_modding_types_ui_tooltip_serial_t *w);
 
 static void to_Hits(cuo_modding_types_hits_t *w, const cuo_Hits *v)
 {
@@ -1375,6 +1463,36 @@ static void from_ModOptionsSchema(cuo_ModOptionsSchemaDto *o, const cuo_modding_
     }
 }
 
+static void to_ModOptionValue(cuo_modding_types_mod_option_value_t *w, const cuo_ModOptionValueDto *v)
+{
+    w->key = cuo__wstr_copy(v->key);
+    w->value = v->value;
+}
+
+static void from_ModOptionValue(cuo_ModOptionValueDto *o, const cuo_modding_types_mod_option_value_t *w)
+{
+    o->key = cuo_strndup((const char *)w->key.ptr, w->key.len);
+    o->value = w->value;
+}
+
+static void to_ModOptionsValues(cuo_modding_types_mod_options_values_t *w, const cuo_ModOptionsValuesDto *v)
+{
+    w->values.len = v->values.len;
+    w->values.ptr = cuo_alloc((v->values.len ? v->values.len : 1) * sizeof *w->values.ptr);
+    for (size_t i0 = 0; i0 < v->values.len; i0++) {
+        to_ModOptionValue(&w->values.ptr[i0], &v->values.items[i0]);
+    }
+}
+
+static void from_ModOptionsValues(cuo_ModOptionsValuesDto *o, const cuo_modding_types_mod_options_values_t *w)
+{
+    o->values.len = w->values.len;
+    o->values.items = cuo_alloc((w->values.len ? w->values.len : 1) * sizeof *o->values.items);
+    for (size_t i0 = 0; i0 < w->values.len; i0++) {
+        from_ModOptionValue(&o->values.items[i0], &w->values.ptr[i0]);
+    }
+}
+
 static void to_PlayerBuff(cuo_modding_types_player_buff_t *w, const cuo_PlayerBuffDto *v)
 {
     w->type = v->type;
@@ -1947,6 +2065,844 @@ static void from_UiTooltip(cuo_UiTooltip *o, const cuo_modding_types_ui_tooltip_
     o->max_width = w->max_width;
 }
 
+static void to_MobAnimation(cuo_modding_types_mob_animation_t *w, const cuo_MobAnimation *v)
+{
+    w->index = v->index;
+    w->frames_count = v->frames_count;
+    w->interval = v->interval;
+    w->repeat_mode = v->repeat_mode;
+    w->repeat_mode_count = v->repeat_mode_count;
+    w->repeat = v->repeat;
+    w->is_from_server = v->is_from_server;
+    w->forward_direction = v->forward_direction;
+    w->action = v->action;
+    w->mount_action = v->mount_action;
+    w->direction = v->direction;
+    w->time = v->time;
+    w->run = v->run;
+}
+
+static void from_MobAnimation(cuo_MobAnimation *o, const cuo_modding_types_mob_animation_t *w)
+{
+    o->index = w->index;
+    o->frames_count = w->frames_count;
+    o->interval = w->interval;
+    o->repeat_mode = w->repeat_mode;
+    o->repeat_mode_count = w->repeat_mode_count;
+    o->repeat = w->repeat;
+    o->is_from_server = w->is_from_server;
+    o->forward_direction = w->forward_direction;
+    o->action = w->action;
+    o->mount_action = w->mount_action;
+    o->direction = w->direction;
+    o->time = w->time;
+    o->run = w->run;
+}
+
+static void to_MobStep(cuo_modding_types_mob_step_t *w, const cuo_MobStepDto *v)
+{
+    w->x = v->x;
+    w->y = v->y;
+    w->z = v->z;
+    w->direction = v->direction;
+    w->run = v->run;
+}
+
+static void from_MobStep(cuo_MobStepDto *o, const cuo_modding_types_mob_step_t *w)
+{
+    o->x = w->x;
+    o->y = w->y;
+    o->z = w->z;
+    o->direction = w->direction;
+    o->run = w->run;
+}
+
+static void to_MobileSteps(cuo_modding_types_mobile_steps_t *w, const cuo_MobileStepsDto *v)
+{
+    w->index = v->index;
+    w->time = v->time;
+    w->steps.len = v->steps.len;
+    w->steps.ptr = cuo_alloc((v->steps.len ? v->steps.len : 1) * sizeof *w->steps.ptr);
+    for (size_t i0 = 0; i0 < v->steps.len; i0++) {
+        to_MobStep(&w->steps.ptr[i0], &v->steps.items[i0]);
+    }
+}
+
+static void from_MobileSteps(cuo_MobileStepsDto *o, const cuo_modding_types_mobile_steps_t *w)
+{
+    o->index = w->index;
+    o->time = w->time;
+    o->steps.len = w->steps.len;
+    o->steps.items = cuo_alloc((w->steps.len ? w->steps.len : 1) * sizeof *o->steps.items);
+    for (size_t i0 = 0; i0 < w->steps.len; i0++) {
+        from_MobStep(&o->steps.items[i0], &w->steps.ptr[i0]);
+    }
+}
+
+static void to_CombatBookWindow(cuo_modding_types_combat_book_window_t *w, const cuo_CombatBookWindow *v)
+{
+    w->page = v->page;
+    w->sounded_page = v->sounded_page;
+    w->page_count = v->page_count;
+    w->dict_pages = v->dict_pages;
+    w->ability_count = v->ability_count;
+    w->dirty = v->dirty;
+    w->content = v->content;
+    w->left = v->left;
+    w->right = v->right;
+}
+
+static void from_CombatBookWindow(cuo_CombatBookWindow *o, const cuo_modding_types_combat_book_window_t *w)
+{
+    o->page = w->page;
+    o->sounded_page = w->sounded_page;
+    o->page_count = w->page_count;
+    o->dict_pages = w->dict_pages;
+    o->ability_count = w->ability_count;
+    o->dirty = w->dirty;
+    o->content = w->content;
+    o->left = w->left;
+    o->right = w->right;
+}
+
+static void to_HouseDesignWindow(cuo_modding_types_house_design_window_t *w, const cuo_HouseDesignWindow *v)
+{
+    w->content = v->content;
+    w->serial = v->serial;
+}
+
+static void from_HouseDesignWindow(cuo_HouseDesignWindow *o, const cuo_modding_types_house_design_window_t *w)
+{
+    o->content = w->content;
+    o->serial = w->serial;
+}
+
+static void to_JournalWindow(cuo_modding_types_journal_window_t *w, const cuo_JournalWindow *v)
+{
+    w->special_height = v->special_height;
+    w->minimized = v->minimized;
+    w->dark_mode = v->dark_mode;
+    w->show_system = v->show_system;
+    w->show_objects = v->show_objects;
+    w->show_client = v->show_client;
+    w->show_guild = v->show_guild;
+    w->built_revision = v->built_revision;
+    w->style_epoch = v->style_epoch;
+    w->built_style_epoch = v->built_style_epoch;
+    w->list_entity = v->list_entity;
+    w->flag_entity = v->flag_entity;
+    w->top_entity = v->top_entity;
+    w->mid_entity = v->mid_entity;
+    w->bottom_entity = v->bottom_entity;
+    w->title_entity = v->title_entity;
+    w->minimize_entity = v->minimize_entity;
+    w->dark_check_entity = v->dark_check_entity;
+    w->expander_entity = v->expander_entity;
+    w->width = v->width;
+    w->list_width = v->list_width;
+    w->content_height = v->content_height;
+}
+
+static void from_JournalWindow(cuo_JournalWindow *o, const cuo_modding_types_journal_window_t *w)
+{
+    o->special_height = w->special_height;
+    o->minimized = w->minimized;
+    o->dark_mode = w->dark_mode;
+    o->show_system = w->show_system;
+    o->show_objects = w->show_objects;
+    o->show_client = w->show_client;
+    o->show_guild = w->show_guild;
+    o->built_revision = w->built_revision;
+    o->style_epoch = w->style_epoch;
+    o->built_style_epoch = w->built_style_epoch;
+    o->list_entity = w->list_entity;
+    o->flag_entity = w->flag_entity;
+    o->top_entity = w->top_entity;
+    o->mid_entity = w->mid_entity;
+    o->bottom_entity = w->bottom_entity;
+    o->title_entity = w->title_entity;
+    o->minimize_entity = w->minimize_entity;
+    o->dark_check_entity = w->dark_check_entity;
+    o->expander_entity = w->expander_entity;
+    o->width = w->width;
+    o->list_width = w->list_width;
+    o->content_height = w->content_height;
+}
+
+static void to_MenuGumpWindow(cuo_modding_types_menu_gump_window_t *w, const cuo_MenuGumpWindow *v)
+{
+    w->serial = v->serial;
+    w->server_menu_id = v->server_menu_id;
+    w->is_gray = v->is_gray;
+    w->responded = v->responded;
+}
+
+static void from_MenuGumpWindow(cuo_MenuGumpWindow *o, const cuo_modding_types_menu_gump_window_t *w)
+{
+    o->serial = w->serial;
+    o->server_menu_id = w->server_menu_id;
+    o->is_gray = w->is_gray;
+    o->responded = w->responded;
+}
+
+static void to_MiniMapWindow(cuo_modding_types_mini_map_window_t *w, const cuo_MiniMapWindow *v)
+{
+    w->use_large_map = v->use_large_map;
+}
+
+static void from_MiniMapWindow(cuo_MiniMapWindow *o, const cuo_modding_types_mini_map_window_t *w)
+{
+    o->use_large_map = w->use_large_map;
+}
+
+static void to_PaperdollWindow(cuo_modding_types_paperdoll_window_t *w, const cuo_PaperdollWindow *v)
+{
+    w->serial = v->serial;
+    w->is_player = v->is_player;
+    w->can_lift = v->can_lift;
+    w->minimized = v->minimized;
+}
+
+static void from_PaperdollWindow(cuo_PaperdollWindow *o, const cuo_modding_types_paperdoll_window_t *w)
+{
+    o->serial = w->serial;
+    o->is_player = w->is_player;
+    o->can_lift = w->can_lift;
+    o->minimized = w->minimized;
+}
+
+static void to_PartyInviteWindow(cuo_modding_types_party_invite_window_t *w, const cuo_PartyInviteWindow *v)
+{
+    w->inviter = v->inviter;
+}
+
+static void from_PartyInviteWindow(cuo_PartyInviteWindow *o, const cuo_modding_types_party_invite_window_t *w)
+{
+    o->inviter = w->inviter;
+}
+
+static void to_PartyManifestWindow(cuo_modding_types_party_manifest_window_t *w, const cuo_PartyManifestWindow *v)
+{
+    w->can_loot = v->can_loot;
+}
+
+static void from_PartyManifestWindow(cuo_PartyManifestWindow *o, const cuo_modding_types_party_manifest_window_t *w)
+{
+    o->can_loot = w->can_loot;
+}
+
+static void to_ProfileWindow(cuo_modding_types_profile_window_t *w, const cuo_ProfileWindow *v)
+{
+    w->serial = v->serial;
+    w->special_height = v->special_height;
+    w->width = v->width;
+    w->mid_entity = v->mid_entity;
+    w->bottom_entity = v->bottom_entity;
+    w->expander_entity = v->expander_entity;
+    w->footer_entity = v->footer_entity;
+    w->footer_offset_from_bottom = v->footer_offset_from_bottom;
+    w->minimized = v->minimized;
+    w->knob_entity = v->knob_entity;
+}
+
+static void from_ProfileWindow(cuo_ProfileWindow *o, const cuo_modding_types_profile_window_t *w)
+{
+    o->serial = w->serial;
+    o->special_height = w->special_height;
+    o->width = w->width;
+    o->mid_entity = w->mid_entity;
+    o->bottom_entity = w->bottom_entity;
+    o->expander_entity = w->expander_entity;
+    o->footer_entity = w->footer_entity;
+    o->footer_offset_from_bottom = w->footer_offset_from_bottom;
+    o->minimized = w->minimized;
+    o->knob_entity = w->knob_entity;
+}
+
+static void to_RacialBookWindow(cuo_modding_types_racial_book_window_t *w, const cuo_RacialBookWindow *v)
+{
+    w->page = v->page;
+    w->sounded_page = v->sounded_page;
+    w->page_count = v->page_count;
+    w->dict_pages = v->dict_pages;
+    w->ability_count = v->ability_count;
+    w->race = v->race;
+    w->dirty = v->dirty;
+    w->content = v->content;
+    w->left = v->left;
+    w->right = v->right;
+}
+
+static void from_RacialBookWindow(cuo_RacialBookWindow *o, const cuo_modding_types_racial_book_window_t *w)
+{
+    o->page = w->page;
+    o->sounded_page = w->sounded_page;
+    o->page_count = w->page_count;
+    o->dict_pages = w->dict_pages;
+    o->ability_count = w->ability_count;
+    o->race = w->race;
+    o->dirty = w->dirty;
+    o->content = w->content;
+    o->left = w->left;
+    o->right = w->right;
+}
+
+static void to_ServerGumpClosedEvent(cuo_modding_types_server_gump_closed_event_t *w, const cuo_ServerGumpClosedEvent *v)
+{
+    w->serial = v->serial;
+    w->gump_id = v->gump_id;
+}
+
+static void from_ServerGumpClosedEvent(cuo_ServerGumpClosedEvent *o, const cuo_modding_types_server_gump_closed_event_t *w)
+{
+    o->serial = w->serial;
+    o->gump_id = w->gump_id;
+}
+
+static void to_ServerGumpOpenedEvent(cuo_modding_types_server_gump_opened_event_t *w, const cuo_ServerGumpOpenedEvent *v)
+{
+    w->serial = v->serial;
+    w->gump_id = v->gump_id;
+}
+
+static void from_ServerGumpOpenedEvent(cuo_ServerGumpOpenedEvent *o, const cuo_modding_types_server_gump_opened_event_t *w)
+{
+    o->serial = w->serial;
+    o->gump_id = w->gump_id;
+}
+
+static void to_SkillsWindow(cuo_modding_types_skills_window_t *w, const cuo_SkillsWindow *v)
+{
+    w->special_height = v->special_height;
+    w->minimized = v->minimized;
+    w->show_real = v->show_real;
+    w->show_caps = v->show_caps;
+    w->dirty = v->dirty;
+    w->width = v->width;
+    w->list_width = v->list_width;
+    w->content_height = v->content_height;
+    w->list_entity = v->list_entity;
+    w->top_entity = v->top_entity;
+    w->mid_entity = v->mid_entity;
+    w->bottom_entity = v->bottom_entity;
+    w->title_entity = v->title_entity;
+    w->minimize_entity = v->minimize_entity;
+    w->expander_entity = v->expander_entity;
+    w->sum_label_entity = v->sum_label_entity;
+    w->flag_entity = v->flag_entity;
+    w->last_sum = v->last_sum;
+}
+
+static void from_SkillsWindow(cuo_SkillsWindow *o, const cuo_modding_types_skills_window_t *w)
+{
+    o->special_height = w->special_height;
+    o->minimized = w->minimized;
+    o->show_real = w->show_real;
+    o->show_caps = w->show_caps;
+    o->dirty = w->dirty;
+    o->width = w->width;
+    o->list_width = w->list_width;
+    o->content_height = w->content_height;
+    o->list_entity = w->list_entity;
+    o->top_entity = w->top_entity;
+    o->mid_entity = w->mid_entity;
+    o->bottom_entity = w->bottom_entity;
+    o->title_entity = w->title_entity;
+    o->minimize_entity = w->minimize_entity;
+    o->expander_entity = w->expander_entity;
+    o->sum_label_entity = w->sum_label_entity;
+    o->flag_entity = w->flag_entity;
+    o->last_sum = w->last_sum;
+}
+
+static void to_SpellbookWindow(cuo_modding_types_spellbook_window_t *w, const cuo_SpellbookWindow *v)
+{
+    w->serial = v->serial;
+    w->school = v->school;
+    w->page = v->page;
+    w->sounded_page = v->sounded_page;
+    w->page_count = v->page_count;
+    w->built_revision = v->built_revision;
+    w->dirty = v->dirty;
+    w->content_entity = v->content_entity;
+    w->left_corner = v->left_corner;
+    w->right_corner = v->right_corner;
+    w->minimized = v->minimized;
+}
+
+static void from_SpellbookWindow(cuo_SpellbookWindow *o, const cuo_modding_types_spellbook_window_t *w)
+{
+    o->serial = w->serial;
+    o->school = w->school;
+    o->page = w->page;
+    o->sounded_page = w->sounded_page;
+    o->page_count = w->page_count;
+    o->built_revision = w->built_revision;
+    o->dirty = w->dirty;
+    o->content_entity = w->content_entity;
+    o->left_corner = w->left_corner;
+    o->right_corner = w->right_corner;
+    o->minimized = w->minimized;
+}
+
+static void to_SplitMenuWindow(cuo_modding_types_split_menu_window_t *w, const cuo_SplitMenuWindow *v)
+{
+    w->serial = v->serial;
+    w->max_amount = v->max_amount;
+    w->slider = v->slider;
+    w->text = v->text;
+    w->ok = v->ok;
+    w->last_slider = v->last_slider;
+    w->last_text = cuo__wstr_copy(v->last_text);
+    w->graphic = v->graphic;
+    w->hue = v->hue;
+    w->source_ui_entity = v->source_ui_entity;
+    w->source_container = v->source_container;
+    w->original_graphic = v->original_graphic;
+    w->original_hue = v->original_hue;
+    w->original_amount = v->original_amount;
+    w->original_x = v->original_x;
+    w->original_y = v->original_y;
+    w->original_z = v->original_z;
+    w->original_container = v->original_container;
+    w->original_grid_index = v->original_grid_index;
+    w->original_from_slot = v->original_from_slot;
+}
+
+static void from_SplitMenuWindow(cuo_SplitMenuWindow *o, const cuo_modding_types_split_menu_window_t *w)
+{
+    o->serial = w->serial;
+    o->max_amount = w->max_amount;
+    o->slider = w->slider;
+    o->text = w->text;
+    o->ok = w->ok;
+    o->last_slider = w->last_slider;
+    o->last_text = cuo_strndup((const char *)w->last_text.ptr, w->last_text.len);
+    o->graphic = w->graphic;
+    o->hue = w->hue;
+    o->source_ui_entity = w->source_ui_entity;
+    o->source_container = w->source_container;
+    o->original_graphic = w->original_graphic;
+    o->original_hue = w->original_hue;
+    o->original_amount = w->original_amount;
+    o->original_x = w->original_x;
+    o->original_y = w->original_y;
+    o->original_z = w->original_z;
+    o->original_container = w->original_container;
+    o->original_grid_index = w->original_grid_index;
+    o->original_from_slot = w->original_from_slot;
+}
+
+static void to_TipNoticeWindow(cuo_modding_types_tip_notice_window_t *w, const cuo_TipNoticeWindow *v)
+{
+    w->tip_serial = v->tip_serial;
+    w->special_height = v->special_height;
+    w->width = v->width;
+    w->mid_entity = v->mid_entity;
+    w->bottom_entity = v->bottom_entity;
+    w->expander_entity = v->expander_entity;
+    w->prev_entity = v->prev_entity;
+    w->next_entity = v->next_entity;
+}
+
+static void from_TipNoticeWindow(cuo_TipNoticeWindow *o, const cuo_modding_types_tip_notice_window_t *w)
+{
+    o->tip_serial = w->tip_serial;
+    o->special_height = w->special_height;
+    o->width = w->width;
+    o->mid_entity = w->mid_entity;
+    o->bottom_entity = w->bottom_entity;
+    o->expander_entity = w->expander_entity;
+    o->prev_entity = w->prev_entity;
+    o->next_entity = w->next_entity;
+}
+
+static void to_TradeWindow(cuo_modding_types_trade_window_t *w, const cuo_TradeWindow *v)
+{
+    w->serial = v->serial;
+    w->id1 = v->id1;
+    w->id2 = v->id2;
+    w->im_accepting = v->im_accepting;
+    w->he_is_accepting = v->he_is_accepting;
+    w->is_new = v->is_new;
+}
+
+static void from_TradeWindow(cuo_TradeWindow *o, const cuo_modding_types_trade_window_t *w)
+{
+    o->serial = w->serial;
+    o->id1 = w->id1;
+    o->id2 = w->id2;
+    o->im_accepting = w->im_accepting;
+    o->he_is_accepting = w->he_is_accepting;
+    o->is_new = w->is_new;
+}
+
+static void to_ModMoveRequest(cuo_modding_types_mod_move_request_t *w, const cuo_ModMoveRequest *v)
+{
+    w->direction = v->direction;
+    w->run = v->run;
+    w->sequence = v->sequence;
+}
+
+static void from_ModMoveRequest(cuo_ModMoveRequest *o, const cuo_modding_types_mod_move_request_t *w)
+{
+    o->direction = w->direction;
+    o->run = w->run;
+    o->sequence = w->sequence;
+}
+
+static void to_PartyMember(cuo_modding_types_party_member_t *w, const cuo_PartyMemberDto *v)
+{
+    w->serial = v->serial;
+    w->name = cuo__wstr_copy(v->name);
+}
+
+static void from_PartyMember(cuo_PartyMemberDto *o, const cuo_modding_types_party_member_t *w)
+{
+    o->serial = w->serial;
+    o->name = cuo_strndup((const char *)w->name.ptr, w->name.len);
+}
+
+static void to_Party(cuo_modding_types_party_t *w, const cuo_PartyDto *v)
+{
+    w->leader = v->leader;
+    w->members.len = v->members.len;
+    w->members.ptr = cuo_alloc((v->members.len ? v->members.len : 1) * sizeof *w->members.ptr);
+    for (size_t i0 = 0; i0 < v->members.len; i0++) {
+        to_PartyMember(&w->members.ptr[i0], &v->members.items[i0]);
+    }
+    w->in_party = v->in_party;
+    w->can_loot = v->can_loot;
+}
+
+static void from_Party(cuo_PartyDto *o, const cuo_modding_types_party_t *w)
+{
+    o->leader = w->leader;
+    o->members.len = w->members.len;
+    o->members.items = cuo_alloc((w->members.len ? w->members.len : 1) * sizeof *o->members.items);
+    for (size_t i0 = 0; i0 < w->members.len; i0++) {
+        from_PartyMember(&o->members.items[i0], &w->members.ptr[i0]);
+    }
+    o->in_party = w->in_party;
+    o->can_loot = w->can_loot;
+}
+
+static void to_Spellbook(cuo_modding_types_spellbook_t *w, const cuo_SpellbookDto *v)
+{
+    w->serial = v->serial;
+    w->book_type = v->book_type;
+    w->spells.len = v->spells.len;
+    w->spells.ptr = cuo_alloc((v->spells.len ? v->spells.len : 1) * sizeof *w->spells.ptr);
+    for (size_t i0 = 0; i0 < v->spells.len; i0++) {
+        w->spells.ptr[i0] = v->spells.items[i0];
+    }
+}
+
+static void from_Spellbook(cuo_SpellbookDto *o, const cuo_modding_types_spellbook_t *w)
+{
+    o->serial = w->serial;
+    o->book_type = w->book_type;
+    o->spells.len = w->spells.len;
+    o->spells.items = cuo_alloc((w->spells.len ? w->spells.len : 1) * sizeof *o->spells.items);
+    for (size_t i0 = 0; i0 < w->spells.len; i0++) {
+        o->spells.items[i0] = w->spells.ptr[i0];
+    }
+}
+
+static void to_Spellbooks(cuo_modding_types_spellbooks_t *w, const cuo_SpellbooksDto *v)
+{
+    w->revision = v->revision;
+    w->books.len = v->books.len;
+    w->books.ptr = cuo_alloc((v->books.len ? v->books.len : 1) * sizeof *w->books.ptr);
+    for (size_t i0 = 0; i0 < v->books.len; i0++) {
+        to_Spellbook(&w->books.ptr[i0], &v->books.items[i0]);
+    }
+}
+
+static void from_Spellbooks(cuo_SpellbooksDto *o, const cuo_modding_types_spellbooks_t *w)
+{
+    o->revision = w->revision;
+    o->books.len = w->books.len;
+    o->books.items = cuo_alloc((w->books.len ? w->books.len : 1) * sizeof *o->books.items);
+    for (size_t i0 = 0; i0 < w->books.len; i0++) {
+        from_Spellbook(&o->books.items[i0], &w->books.ptr[i0]);
+    }
+}
+
+static void to_PlayerStep(cuo_modding_types_player_step_t *w, const cuo_PlayerStepDto *v)
+{
+    w->sequence = v->sequence;
+    w->direction = v->direction;
+    w->x = v->x;
+    w->y = v->y;
+    w->z = v->z;
+}
+
+static void from_PlayerStep(cuo_PlayerStepDto *o, const cuo_modding_types_player_step_t *w)
+{
+    o->sequence = w->sequence;
+    o->direction = w->direction;
+    o->x = w->x;
+    o->y = w->y;
+    o->z = w->z;
+}
+
+static void to_PlayerSteps(cuo_modding_types_player_steps_t *w, const cuo_PlayerStepsDto *v)
+{
+    w->last_step = v->last_step;
+    w->count = v->count;
+    w->sequence = v->sequence;
+    w->resync_sent = v->resync_sent;
+    w->steps.len = v->steps.len;
+    w->steps.ptr = cuo_alloc((v->steps.len ? v->steps.len : 1) * sizeof *w->steps.ptr);
+    for (size_t i0 = 0; i0 < v->steps.len; i0++) {
+        to_PlayerStep(&w->steps.ptr[i0], &v->steps.items[i0]);
+    }
+}
+
+static void from_PlayerSteps(cuo_PlayerStepsDto *o, const cuo_modding_types_player_steps_t *w)
+{
+    o->last_step = w->last_step;
+    o->count = w->count;
+    o->sequence = w->sequence;
+    o->resync_sent = w->resync_sent;
+    o->steps.len = w->steps.len;
+    o->steps.items = cuo_alloc((w->steps.len ? w->steps.len : 1) * sizeof *o->steps.items);
+    for (size_t i0 = 0; i0 < w->steps.len; i0++) {
+        from_PlayerStep(&o->steps.items[i0], &w->steps.ptr[i0]);
+    }
+}
+
+static void to_CharInfo(cuo_modding_types_char_info_t *w, const cuo_CharInfoDto *v)
+{
+    w->name = cuo__wstr_copy(v->name);
+    w->index = v->index;
+}
+
+static void from_CharInfo(cuo_CharInfoDto *o, const cuo_modding_types_char_info_t *w)
+{
+    o->name = cuo_strndup((const char *)w->name.ptr, w->name.len);
+    o->index = w->index;
+}
+
+static void to_TownInfo(cuo_modding_types_town_info_t *w, const cuo_TownInfoDto *v)
+{
+    w->index = v->index;
+    w->name = cuo__wstr_copy(v->name);
+    w->building = cuo__wstr_copy(v->building);
+    w->x = v->x;
+    w->y = v->y;
+    w->z = v->z;
+    w->map = v->map;
+    w->cliloc_description = v->cliloc_description;
+}
+
+static void from_TownInfo(cuo_TownInfoDto *o, const cuo_modding_types_town_info_t *w)
+{
+    o->index = w->index;
+    o->name = cuo_strndup((const char *)w->name.ptr, w->name.len);
+    o->building = cuo_strndup((const char *)w->building.ptr, w->building.len);
+    o->x = w->x;
+    o->y = w->y;
+    o->z = w->z;
+    o->map = w->map;
+    o->cliloc_description = w->cliloc_description;
+}
+
+static void to_CharacterSelection(cuo_modding_types_character_selection_t *w, const cuo_CharacterSelectionDto *v)
+{
+    w->characters.len = v->characters.len;
+    w->characters.ptr = cuo_alloc((v->characters.len ? v->characters.len : 1) * sizeof *w->characters.ptr);
+    for (size_t i0 = 0; i0 < v->characters.len; i0++) {
+        to_CharInfo(&w->characters.ptr[i0], &v->characters.items[i0]);
+    }
+    w->towns.len = v->towns.len;
+    w->towns.ptr = cuo_alloc((v->towns.len ? v->towns.len : 1) * sizeof *w->towns.ptr);
+    for (size_t i1 = 0; i1 < v->towns.len; i1++) {
+        to_TownInfo(&w->towns.ptr[i1], &v->towns.items[i1]);
+    }
+}
+
+static void from_CharacterSelection(cuo_CharacterSelectionDto *o, const cuo_modding_types_character_selection_t *w)
+{
+    o->characters.len = w->characters.len;
+    o->characters.items = cuo_alloc((w->characters.len ? w->characters.len : 1) * sizeof *o->characters.items);
+    for (size_t i0 = 0; i0 < w->characters.len; i0++) {
+        from_CharInfo(&o->characters.items[i0], &w->characters.ptr[i0]);
+    }
+    o->towns.len = w->towns.len;
+    o->towns.items = cuo_alloc((w->towns.len ? w->towns.len : 1) * sizeof *o->towns.items);
+    for (size_t i1 = 0; i1 < w->towns.len; i1++) {
+        from_TownInfo(&o->towns.items[i1], &w->towns.ptr[i1]);
+    }
+}
+
+static void to_LoginErrorInfo(cuo_modding_types_login_error_info_t *w, const cuo_LoginErrorInfo *v)
+{
+    w->error_message = cuo__wstr_copy(v->error_message);
+}
+
+static void from_LoginErrorInfo(cuo_LoginErrorInfo *o, const cuo_modding_types_login_error_info_t *w)
+{
+    o->error_message = cuo_strndup((const char *)w->error_message.ptr, w->error_message.len);
+}
+
+static void to_LoginErrorsInfoEvent(cuo_modding_types_login_errors_info_event_t *w, const cuo_LoginErrorsInfoEvent *v)
+{
+    to_LoginErrorInfo(&w->error, &v->error);
+}
+
+static void from_LoginErrorsInfoEvent(cuo_LoginErrorsInfoEvent *o, const cuo_modding_types_login_errors_info_event_t *w)
+{
+    from_LoginErrorInfo(&o->error, &w->error);
+}
+
+static void to_OnLoginRequest(cuo_modding_types_on_login_request_t *w, const cuo_OnLoginRequest *v)
+{
+    w->username = cuo__wstr_copy(v->username);
+    w->password = cuo__wstr_copy(v->password);
+    w->address = cuo__wstr_copy(v->address);
+    w->port = v->port;
+}
+
+static void from_OnLoginRequest(cuo_OnLoginRequest *o, const cuo_modding_types_on_login_request_t *w)
+{
+    o->username = cuo_strndup((const char *)w->username.ptr, w->username.len);
+    o->password = cuo_strndup((const char *)w->password.ptr, w->password.len);
+    o->address = cuo_strndup((const char *)w->address.ptr, w->address.len);
+    o->port = w->port;
+}
+
+static void to_ServerInfo(cuo_modding_types_server_info_t *w, const cuo_ServerInfo *v)
+{
+    w->index = v->index;
+    w->name = cuo__wstr_copy(v->name);
+    w->percent_full = v->percent_full;
+    w->time_zone = v->time_zone;
+    w->ip = v->ip;
+}
+
+static void from_ServerInfo(cuo_ServerInfo *o, const cuo_modding_types_server_info_t *w)
+{
+    o->index = w->index;
+    o->name = cuo_strndup((const char *)w->name.ptr, w->name.len);
+    o->percent_full = w->percent_full;
+    o->time_zone = w->time_zone;
+    o->ip = w->ip;
+}
+
+static void to_ServerSelectionInfoEvent(cuo_modding_types_server_selection_info_event_t *w, const cuo_ServerSelectionInfoEvent *v)
+{
+    w->servers.len = v->servers.len;
+    w->servers.ptr = cuo_alloc((v->servers.len ? v->servers.len : 1) * sizeof *w->servers.ptr);
+    for (size_t i0 = 0; i0 < v->servers.len; i0++) {
+        to_ServerInfo(&w->servers.ptr[i0], &v->servers.items[i0]);
+    }
+}
+
+static void from_ServerSelectionInfoEvent(cuo_ServerSelectionInfoEvent *o, const cuo_modding_types_server_selection_info_event_t *w)
+{
+    o->servers.len = w->servers.len;
+    o->servers.items = cuo_alloc((w->servers.len ? w->servers.len : 1) * sizeof *o->servers.items);
+    for (size_t i0 = 0; i0 < w->servers.len; i0++) {
+        from_ServerInfo(&o->servers.items[i0], &w->servers.ptr[i0]);
+    }
+}
+
+static void to_ClipboardSet(cuo_modding_types_clipboard_set_t *w, const cuo_ClipboardSetDto *v)
+{
+    w->seq = v->seq;
+    w->text = cuo__wstr_copy(v->text);
+}
+
+static void from_ClipboardSet(cuo_ClipboardSetDto *o, const cuo_modding_types_clipboard_set_t *w)
+{
+    o->seq = w->seq;
+    o->text = cuo_strndup((const char *)w->text.ptr, w->text.len);
+}
+
+static void to_FocusedInput(cuo_modding_types_focused_input_t *w, const cuo_FocusedInput *v)
+{
+    w->entity = v->entity;
+}
+
+static void from_FocusedInput(cuo_FocusedInput *o, const cuo_modding_types_focused_input_t *w)
+{
+    o->entity = w->entity;
+}
+
+static void to_MaskedText(cuo_modding_types_masked_text_t *w, const cuo_MaskedText *v)
+{
+    w->value = cuo__wstr_copy(v->value);
+    w->mask_char = cuo__char_of(v->mask_char);
+}
+
+static void from_MaskedText(cuo_MaskedText *o, const cuo_modding_types_masked_text_t *w)
+{
+    o->value = cuo_strndup((const char *)w->value.ptr, w->value.len);
+    o->mask_char = cuo__char_str(w->mask_char);
+}
+
+static void to_TextClipboardAction(cuo_modding_types_text_clipboard_action_t *w, const cuo_TextClipboardActionDto *v)
+{
+    w->entity = v->entity;
+    w->action = v->action;
+    w->seq = v->seq;
+}
+
+static void from_TextClipboardAction(cuo_TextClipboardActionDto *o, const cuo_modding_types_text_clipboard_action_t *w)
+{
+    o->entity = w->entity;
+    o->action = w->action;
+    o->seq = w->seq;
+}
+
+static void to_TextCompletion(cuo_modding_types_text_completion_t *w, const cuo_TextCompletionDto *v)
+{
+    w->entity = v->entity;
+    w->prefix = cuo__wstr_copy(v->prefix);
+    w->items.len = v->items.len;
+    w->items.ptr = cuo_alloc((v->items.len ? v->items.len : 1) * sizeof *w->items.ptr);
+    for (size_t i0 = 0; i0 < v->items.len; i0++) {
+        w->items.ptr[i0] = cuo__wstr_copy(v->items.items[i0]);
+    }
+}
+
+static void from_TextCompletion(cuo_TextCompletionDto *o, const cuo_modding_types_text_completion_t *w)
+{
+    o->entity = w->entity;
+    o->prefix = cuo_strndup((const char *)w->prefix.ptr, w->prefix.len);
+    o->items.len = w->items.len;
+    o->items.items = cuo_alloc((w->items.len ? w->items.len : 1) * sizeof *o->items.items);
+    for (size_t i0 = 0; i0 < w->items.len; i0++) {
+        o->items.items[i0] = cuo_strndup((const char *)w->items.ptr[i0].ptr, w->items.ptr[i0].len);
+    }
+}
+
+static void to_TextCompletionPick(cuo_modding_types_text_completion_pick_t *w, const cuo_TextCompletionPickDto *v)
+{
+    w->entity = v->entity;
+    w->index = v->index;
+    w->seq = v->seq;
+}
+
+static void from_TextCompletionPick(cuo_TextCompletionPickDto *o, const cuo_modding_types_text_completion_pick_t *w)
+{
+    o->entity = w->entity;
+    o->index = w->index;
+    o->seq = w->seq;
+}
+
+static void to_UiTooltipSerial(cuo_modding_types_ui_tooltip_serial_t *w, const cuo_UiTooltipSerial *v)
+{
+    w->serial = v->serial;
+}
+
+static void from_UiTooltipSerial(cuo_UiTooltipSerial *o, const cuo_modding_types_ui_tooltip_serial_t *w)
+{
+    o->serial = w->serial;
+}
+
 /* A query read term on these paths has a typed column (or is a tag: read as its default). */
 static const char *const READABLE[] = {
     "cuo:player/hits",
@@ -2021,6 +2977,39 @@ static const char *const READABLE[] = {
     "cuo:ui/topbar-button",
     "cuo:ui/topbar-full",
     "cuo:ui/topbar-root",
+    "cuo:ent/animation",
+    "cuo:ent/is-multi",
+    "cuo:ent/mob-steps",
+    "cuo:gump/book",
+    "cuo:gump/buff",
+    "cuo:gump/bulletin-board",
+    "cuo:gump/combat-book",
+    "cuo:gump/house-design",
+    "cuo:gump/journal",
+    "cuo:gump/logout",
+    "cuo:gump/map",
+    "cuo:gump/menu",
+    "cuo:gump/message-box",
+    "cuo:gump/minimap",
+    "cuo:gump/paperdoll",
+    "cuo:gump/party-invite",
+    "cuo:gump/party-manifest",
+    "cuo:gump/profile",
+    "cuo:gump/racial-book",
+    "cuo:gump/skills",
+    "cuo:gump/spellbook",
+    "cuo:gump/split-menu",
+    "cuo:gump/tip-notice",
+    "cuo:gump/trade",
+    "cuo:gump/worldmap",
+    "cuo:scene/character-creation",
+    "cuo:scene/character-selection",
+    "cuo:scene/game",
+    "cuo:scene/login",
+    "cuo:scene/login-error",
+    "cuo:scene/server-selection",
+    "cuo:ui/masked-text",
+    "cuo:ui/tooltip-serial",
 };
 
 bool cuo__typed_readable(uint16_t type_id)
@@ -2283,6 +3272,118 @@ cuo_comp cuo_TopBarDragHandle_typed(void) { return cuo__typed_comp(cuo_TopBarDra
 cuo_comp cuo_TopBarButton_typed(void) { return cuo__typed_comp(cuo_TopBarButton_id(), 52, NULL, 0); }
 cuo_comp cuo_TopBarFull_typed(void) { return cuo__typed_comp(cuo_TopBarFull_id(), 53, NULL, 0); }
 cuo_comp cuo_IsTopBar_typed(void) { return cuo__typed_comp(cuo_IsTopBar_id(), 54, NULL, 0); }
+cuo_comp cuo_BuffGumpUI_typed(void) { return cuo__typed_comp(cuo_BuffGumpUI_id(), 55, NULL, 0); }
+cuo_comp cuo_CombatBookWindow_typed(const cuo_CombatBookWindow *v)
+{
+    cuo_modding_types_combat_book_window_t *w = cuo_alloc(sizeof *w);
+    to_CombatBookWindow(w, v);
+    return cuo__typed_comp(cuo_CombatBookWindow_id(), 56, w, sizeof *w);
+}
+cuo_comp cuo_HouseDesignWindow_typed(const cuo_HouseDesignWindow *v)
+{
+    cuo_modding_types_house_design_window_t *w = cuo_alloc(sizeof *w);
+    to_HouseDesignWindow(w, v);
+    return cuo__typed_comp(cuo_HouseDesignWindow_id(), 57, w, sizeof *w);
+}
+cuo_comp cuo_JournalWindow_typed(const cuo_JournalWindow *v)
+{
+    cuo_modding_types_journal_window_t *w = cuo_alloc(sizeof *w);
+    to_JournalWindow(w, v);
+    return cuo__typed_comp(cuo_JournalWindow_id(), 58, w, sizeof *w);
+}
+cuo_comp cuo_LogoutGumpWindow_typed(void) { return cuo__typed_comp(cuo_LogoutGumpWindow_id(), 59, NULL, 0); }
+cuo_comp cuo_MenuGumpWindow_typed(const cuo_MenuGumpWindow *v)
+{
+    cuo_modding_types_menu_gump_window_t *w = cuo_alloc(sizeof *w);
+    to_MenuGumpWindow(w, v);
+    return cuo__typed_comp(cuo_MenuGumpWindow_id(), 60, w, sizeof *w);
+}
+cuo_comp cuo_MessageBoxWindow_typed(void) { return cuo__typed_comp(cuo_MessageBoxWindow_id(), 61, NULL, 0); }
+cuo_comp cuo_MiniMapWindow_typed(const cuo_MiniMapWindow *v)
+{
+    cuo_modding_types_mini_map_window_t *w = cuo_alloc(sizeof *w);
+    to_MiniMapWindow(w, v);
+    return cuo__typed_comp(cuo_MiniMapWindow_id(), 62, w, sizeof *w);
+}
+cuo_comp cuo_PaperdollWindow_typed(const cuo_PaperdollWindow *v)
+{
+    cuo_modding_types_paperdoll_window_t *w = cuo_alloc(sizeof *w);
+    to_PaperdollWindow(w, v);
+    return cuo__typed_comp(cuo_PaperdollWindow_id(), 63, w, sizeof *w);
+}
+cuo_comp cuo_PartyInviteWindow_typed(const cuo_PartyInviteWindow *v)
+{
+    cuo_modding_types_party_invite_window_t *w = cuo_alloc(sizeof *w);
+    to_PartyInviteWindow(w, v);
+    return cuo__typed_comp(cuo_PartyInviteWindow_id(), 64, w, sizeof *w);
+}
+cuo_comp cuo_PartyManifestWindow_typed(const cuo_PartyManifestWindow *v)
+{
+    cuo_modding_types_party_manifest_window_t *w = cuo_alloc(sizeof *w);
+    to_PartyManifestWindow(w, v);
+    return cuo__typed_comp(cuo_PartyManifestWindow_id(), 65, w, sizeof *w);
+}
+cuo_comp cuo_ProfileWindow_typed(const cuo_ProfileWindow *v)
+{
+    cuo_modding_types_profile_window_t *w = cuo_alloc(sizeof *w);
+    to_ProfileWindow(w, v);
+    return cuo__typed_comp(cuo_ProfileWindow_id(), 66, w, sizeof *w);
+}
+cuo_comp cuo_RacialBookWindow_typed(const cuo_RacialBookWindow *v)
+{
+    cuo_modding_types_racial_book_window_t *w = cuo_alloc(sizeof *w);
+    to_RacialBookWindow(w, v);
+    return cuo__typed_comp(cuo_RacialBookWindow_id(), 67, w, sizeof *w);
+}
+cuo_comp cuo_SkillsWindow_typed(const cuo_SkillsWindow *v)
+{
+    cuo_modding_types_skills_window_t *w = cuo_alloc(sizeof *w);
+    to_SkillsWindow(w, v);
+    return cuo__typed_comp(cuo_SkillsWindow_id(), 68, w, sizeof *w);
+}
+cuo_comp cuo_SpellbookWindow_typed(const cuo_SpellbookWindow *v)
+{
+    cuo_modding_types_spellbook_window_t *w = cuo_alloc(sizeof *w);
+    to_SpellbookWindow(w, v);
+    return cuo__typed_comp(cuo_SpellbookWindow_id(), 69, w, sizeof *w);
+}
+cuo_comp cuo_SplitMenuWindow_typed(const cuo_SplitMenuWindow *v)
+{
+    cuo_modding_types_split_menu_window_t *w = cuo_alloc(sizeof *w);
+    to_SplitMenuWindow(w, v);
+    return cuo__typed_comp(cuo_SplitMenuWindow_id(), 70, w, sizeof *w);
+}
+cuo_comp cuo_TipNoticeWindow_typed(const cuo_TipNoticeWindow *v)
+{
+    cuo_modding_types_tip_notice_window_t *w = cuo_alloc(sizeof *w);
+    to_TipNoticeWindow(w, v);
+    return cuo__typed_comp(cuo_TipNoticeWindow_id(), 71, w, sizeof *w);
+}
+cuo_comp cuo_TradeWindow_typed(const cuo_TradeWindow *v)
+{
+    cuo_modding_types_trade_window_t *w = cuo_alloc(sizeof *w);
+    to_TradeWindow(w, v);
+    return cuo__typed_comp(cuo_TradeWindow_id(), 72, w, sizeof *w);
+}
+cuo_comp cuo_WorldMapWindow_typed(void) { return cuo__typed_comp(cuo_WorldMapWindow_id(), 73, NULL, 0); }
+cuo_comp cuo_CharCreationScene_typed(void) { return cuo__typed_comp(cuo_CharCreationScene_id(), 74, NULL, 0); }
+cuo_comp cuo_CharacterSelectionScene_typed(void) { return cuo__typed_comp(cuo_CharacterSelectionScene_id(), 75, NULL, 0); }
+cuo_comp cuo_GameScene_typed(void) { return cuo__typed_comp(cuo_GameScene_id(), 76, NULL, 0); }
+cuo_comp cuo_LoginScene_typed(void) { return cuo__typed_comp(cuo_LoginScene_id(), 77, NULL, 0); }
+cuo_comp cuo_LoginErrorScene_typed(void) { return cuo__typed_comp(cuo_LoginErrorScene_id(), 78, NULL, 0); }
+cuo_comp cuo_ServerSelectionScene_typed(void) { return cuo__typed_comp(cuo_ServerSelectionScene_id(), 79, NULL, 0); }
+cuo_comp cuo_MaskedText_typed(const cuo_MaskedText *v)
+{
+    cuo_modding_types_masked_text_t *w = cuo_alloc(sizeof *w);
+    to_MaskedText(w, v);
+    return cuo__typed_comp(cuo_MaskedText_id(), 80, w, sizeof *w);
+}
+cuo_comp cuo_UiTooltipSerial_typed(const cuo_UiTooltipSerial *v)
+{
+    cuo_modding_types_ui_tooltip_serial_t *w = cuo_alloc(sizeof *w);
+    to_UiTooltipSerial(w, v);
+    return cuo__typed_comp(cuo_UiTooltipSerial_id(), 81, w, sizeof *w);
+}
 
 cuo__own_eb cuo__typed_push(cuo__borrow_eb b, const cuo_comp *comp)
 {
@@ -2342,6 +3443,33 @@ cuo__own_eb cuo__typed_push(cuo__borrow_eb b, const cuo_comp *comp)
     case 52: return cuo_modding_components_method_entity_builder_topbar_button(b);
     case 53: return cuo_modding_components_method_entity_builder_topbar_full(b);
     case 54: return cuo_modding_components_method_entity_builder_topbar_root(b);
+    case 55: return cuo_modding_components_method_entity_builder_buff(b);
+    case 56: return cuo_modding_components_method_entity_builder_combat_book(b, w);
+    case 57: return cuo_modding_components_method_entity_builder_house_design(b, w);
+    case 58: return cuo_modding_components_method_entity_builder_journal(b, w);
+    case 59: return cuo_modding_components_method_entity_builder_logout(b);
+    case 60: return cuo_modding_components_method_entity_builder_menu(b, w);
+    case 61: return cuo_modding_components_method_entity_builder_message_box(b);
+    case 62: return cuo_modding_components_method_entity_builder_minimap(b, w);
+    case 63: return cuo_modding_components_method_entity_builder_paperdoll(b, w);
+    case 64: return cuo_modding_components_method_entity_builder_party_invite(b, w);
+    case 65: return cuo_modding_components_method_entity_builder_party_manifest(b, w);
+    case 66: return cuo_modding_components_method_entity_builder_profile(b, w);
+    case 67: return cuo_modding_components_method_entity_builder_racial_book(b, w);
+    case 68: return cuo_modding_components_method_entity_builder_gump_skills(b, w);
+    case 69: return cuo_modding_components_method_entity_builder_spellbook(b, w);
+    case 70: return cuo_modding_components_method_entity_builder_split_menu(b, w);
+    case 71: return cuo_modding_components_method_entity_builder_tip_notice(b, w);
+    case 72: return cuo_modding_components_method_entity_builder_trade(b, w);
+    case 73: return cuo_modding_components_method_entity_builder_worldmap(b);
+    case 74: return cuo_modding_components_method_entity_builder_character_creation(b);
+    case 75: return cuo_modding_components_method_entity_builder_character_selection(b);
+    case 76: return cuo_modding_components_method_entity_builder_game(b);
+    case 77: return cuo_modding_components_method_entity_builder_login(b);
+    case 78: return cuo_modding_components_method_entity_builder_login_error(b);
+    case 79: return cuo_modding_components_method_entity_builder_server_selection(b);
+    case 80: return cuo_modding_components_method_entity_builder_masked_text(b, w);
+    case 81: return cuo_modding_components_method_entity_builder_tooltip_serial(b, w);
     default: cuo__trap("cuo: unknown typed component");
     }
 }
@@ -3271,6 +4399,372 @@ void cuo_UiTooltip_set(cuo_query q, cuo_entity e, size_t term, const cuo_UiToolt
     cuo_modding_components_set_tooltip(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
+const cuo_MobAnimation *cuo_MobAnimation_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_mob_animation_t l;
+    cuo_modding_components_column_animation(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_MobAnimation *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_MobAnimation(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_mob_animation_free(&l);
+    return out;
+}
+
+const cuo_MobileStepsDto *cuo_MobileStepsDto_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_mobile_steps_t l;
+    cuo_modding_components_column_mob_steps(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_MobileStepsDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_MobileSteps(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_mobile_steps_free(&l);
+    return out;
+}
+
+const cuo_CombatBookWindow *cuo_CombatBookWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_combat_book_window_t l;
+    cuo_modding_components_column_combat_book(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_CombatBookWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_CombatBookWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_combat_book_window_free(&l);
+    return out;
+}
+
+void cuo_CombatBookWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_CombatBookWindow *v)
+{
+    cuo_modding_types_combat_book_window_t w;
+    to_CombatBookWindow(&w, v);
+    cuo_modding_components_set_combat_book(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_HouseDesignWindow *cuo_HouseDesignWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_house_design_window_t l;
+    cuo_modding_components_column_house_design(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_HouseDesignWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_HouseDesignWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_house_design_window_free(&l);
+    return out;
+}
+
+void cuo_HouseDesignWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_HouseDesignWindow *v)
+{
+    cuo_modding_types_house_design_window_t w;
+    to_HouseDesignWindow(&w, v);
+    cuo_modding_components_set_house_design(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_JournalWindow *cuo_JournalWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_journal_window_t l;
+    cuo_modding_components_column_journal(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_JournalWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_JournalWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_journal_window_free(&l);
+    return out;
+}
+
+void cuo_JournalWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_JournalWindow *v)
+{
+    cuo_modding_types_journal_window_t w;
+    to_JournalWindow(&w, v);
+    cuo_modding_components_set_journal(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_MenuGumpWindow *cuo_MenuGumpWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_menu_gump_window_t l;
+    cuo_modding_components_column_menu(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_MenuGumpWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_MenuGumpWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_menu_gump_window_free(&l);
+    return out;
+}
+
+void cuo_MenuGumpWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_MenuGumpWindow *v)
+{
+    cuo_modding_types_menu_gump_window_t w;
+    to_MenuGumpWindow(&w, v);
+    cuo_modding_components_set_menu(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_MiniMapWindow *cuo_MiniMapWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_mini_map_window_t l;
+    cuo_modding_components_column_minimap(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_MiniMapWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_MiniMapWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_mini_map_window_free(&l);
+    return out;
+}
+
+void cuo_MiniMapWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_MiniMapWindow *v)
+{
+    cuo_modding_types_mini_map_window_t w;
+    to_MiniMapWindow(&w, v);
+    cuo_modding_components_set_minimap(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_PaperdollWindow *cuo_PaperdollWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_paperdoll_window_t l;
+    cuo_modding_components_column_paperdoll(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_PaperdollWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_PaperdollWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_paperdoll_window_free(&l);
+    return out;
+}
+
+void cuo_PaperdollWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_PaperdollWindow *v)
+{
+    cuo_modding_types_paperdoll_window_t w;
+    to_PaperdollWindow(&w, v);
+    cuo_modding_components_set_paperdoll(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_PartyInviteWindow *cuo_PartyInviteWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_party_invite_window_t l;
+    cuo_modding_components_column_party_invite(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_PartyInviteWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_PartyInviteWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_party_invite_window_free(&l);
+    return out;
+}
+
+void cuo_PartyInviteWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_PartyInviteWindow *v)
+{
+    cuo_modding_types_party_invite_window_t w;
+    to_PartyInviteWindow(&w, v);
+    cuo_modding_components_set_party_invite(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_PartyManifestWindow *cuo_PartyManifestWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_party_manifest_window_t l;
+    cuo_modding_components_column_party_manifest(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_PartyManifestWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_PartyManifestWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_party_manifest_window_free(&l);
+    return out;
+}
+
+void cuo_PartyManifestWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_PartyManifestWindow *v)
+{
+    cuo_modding_types_party_manifest_window_t w;
+    to_PartyManifestWindow(&w, v);
+    cuo_modding_components_set_party_manifest(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_ProfileWindow *cuo_ProfileWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_profile_window_t l;
+    cuo_modding_components_column_profile(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_ProfileWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_ProfileWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_profile_window_free(&l);
+    return out;
+}
+
+void cuo_ProfileWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_ProfileWindow *v)
+{
+    cuo_modding_types_profile_window_t w;
+    to_ProfileWindow(&w, v);
+    cuo_modding_components_set_profile(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_RacialBookWindow *cuo_RacialBookWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_racial_book_window_t l;
+    cuo_modding_components_column_racial_book(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_RacialBookWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_RacialBookWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_racial_book_window_free(&l);
+    return out;
+}
+
+void cuo_RacialBookWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_RacialBookWindow *v)
+{
+    cuo_modding_types_racial_book_window_t w;
+    to_RacialBookWindow(&w, v);
+    cuo_modding_components_set_racial_book(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_SkillsWindow *cuo_SkillsWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_skills_window_t l;
+    cuo_modding_components_column_gump_skills(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_SkillsWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_SkillsWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_skills_window_free(&l);
+    return out;
+}
+
+void cuo_SkillsWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_SkillsWindow *v)
+{
+    cuo_modding_types_skills_window_t w;
+    to_SkillsWindow(&w, v);
+    cuo_modding_components_set_gump_skills(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_SpellbookWindow *cuo_SpellbookWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_spellbook_window_t l;
+    cuo_modding_components_column_spellbook(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_SpellbookWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_SpellbookWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_spellbook_window_free(&l);
+    return out;
+}
+
+void cuo_SpellbookWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_SpellbookWindow *v)
+{
+    cuo_modding_types_spellbook_window_t w;
+    to_SpellbookWindow(&w, v);
+    cuo_modding_components_set_spellbook(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_SplitMenuWindow *cuo_SplitMenuWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_split_menu_window_t l;
+    cuo_modding_components_column_split_menu(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_SplitMenuWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_SplitMenuWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_split_menu_window_free(&l);
+    return out;
+}
+
+void cuo_SplitMenuWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_SplitMenuWindow *v)
+{
+    cuo_modding_types_split_menu_window_t w;
+    to_SplitMenuWindow(&w, v);
+    cuo_modding_components_set_split_menu(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_TipNoticeWindow *cuo_TipNoticeWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_tip_notice_window_t l;
+    cuo_modding_components_column_tip_notice(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_TipNoticeWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_TipNoticeWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_tip_notice_window_free(&l);
+    return out;
+}
+
+void cuo_TipNoticeWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_TipNoticeWindow *v)
+{
+    cuo_modding_types_tip_notice_window_t w;
+    to_TipNoticeWindow(&w, v);
+    cuo_modding_components_set_tip_notice(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_TradeWindow *cuo_TradeWindow_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_trade_window_t l;
+    cuo_modding_components_column_trade(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_TradeWindow *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_TradeWindow(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_trade_window_free(&l);
+    return out;
+}
+
+void cuo_TradeWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_TradeWindow *v)
+{
+    cuo_modding_types_trade_window_t w;
+    to_TradeWindow(&w, v);
+    cuo_modding_components_set_trade(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_MaskedText *cuo_MaskedText_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_masked_text_t l;
+    cuo_modding_components_column_masked_text(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_MaskedText *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_MaskedText(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_masked_text_free(&l);
+    return out;
+}
+
+void cuo_MaskedText_set(cuo_query q, cuo_entity e, size_t term, const cuo_MaskedText *v)
+{
+    cuo_modding_types_masked_text_t w;
+    to_MaskedText(&w, v);
+    cuo_modding_components_set_masked_text(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_UiTooltipSerial *cuo_UiTooltipSerial_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_ui_tooltip_serial_t l;
+    cuo_modding_components_column_tooltip_serial(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_UiTooltipSerial *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_UiTooltipSerial(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_ui_tooltip_serial_free(&l);
+    return out;
+}
+
+void cuo_UiTooltipSerial_set(cuo_query q, cuo_entity e, size_t term, const cuo_UiTooltipSerial *v)
+{
+    cuo_modding_types_ui_tooltip_serial_t w;
+    to_UiTooltipSerial(&w, v);
+    cuo_modding_components_set_tooltip_serial(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
 /* ── resources (kind = cuo__res_cache.typed_kind) ── */
 
 size_t cuo__typed_res_size(uint16_t kind)
@@ -3287,14 +4781,23 @@ size_t cuo__typed_res_size(uint16_t kind)
     case 9: return sizeof(cuo_modding_types_mod_hotkey_bindings_t);
     case 10: return sizeof(cuo_modding_types_world_single_click_t);
     case 11: return sizeof(cuo_modding_types_mod_options_schema_t);
-    case 12: return sizeof(cuo_modding_types_player_buffs_t);
-    case 13: return sizeof(cuo_modding_types_grabbed_item_t);
-    case 14: return sizeof(cuo_modding_types_player_skills_t);
-    case 15: return sizeof(cuo_modding_types_targeting_state_t);
-    case 16: return sizeof(cuo_modding_types_ui_pick_t);
-    case 17: return sizeof(cuo_modding_types_ui_surface_t);
-    case 18: return sizeof(cuo_modding_types_text_caret_t);
-    case 19: return sizeof(cuo_modding_types_text_completion_state_t);
+    case 12: return sizeof(cuo_modding_types_mod_options_values_t);
+    case 13: return sizeof(cuo_modding_types_player_buffs_t);
+    case 14: return sizeof(cuo_modding_types_grabbed_item_t);
+    case 15: return sizeof(cuo_modding_types_player_skills_t);
+    case 16: return sizeof(cuo_modding_types_targeting_state_t);
+    case 17: return sizeof(cuo_modding_types_ui_pick_t);
+    case 18: return sizeof(cuo_modding_types_ui_surface_t);
+    case 19: return sizeof(cuo_modding_types_text_caret_t);
+    case 20: return sizeof(cuo_modding_types_text_completion_state_t);
+    case 21: return sizeof(cuo_modding_types_party_t);
+    case 22: return sizeof(cuo_modding_types_spellbooks_t);
+    case 23: return sizeof(cuo_modding_types_player_steps_t);
+    case 24: return sizeof(cuo_modding_types_clipboard_set_t);
+    case 25: return sizeof(cuo_modding_types_focused_input_t);
+    case 26: return sizeof(cuo_modding_types_text_clipboard_action_t);
+    case 27: return sizeof(cuo_modding_types_text_completion_t);
+    case 28: return sizeof(cuo_modding_types_text_completion_pick_t);
     default: cuo__trap("cuo: unknown typed resource");
     }
 }
@@ -3314,14 +4817,23 @@ bool cuo__typed_res_get(uint16_t kind, int32_t handle, void *out)
     case 9: return cuo_modding_components_get_mod_hotkeys(h, out);
     case 10: return cuo_modding_components_get_world_single_click(h, out);
     case 11: return cuo_modding_components_get_schema(h, out);
-    case 12: return cuo_modding_components_get_buffs(h, out);
-    case 13: return cuo_modding_components_get_grabbed_item(h, out);
-    case 14: return cuo_modding_components_get_skills(h, out);
-    case 15: return cuo_modding_components_get_target_state(h, out);
-    case 16: return cuo_modding_components_get_pick(h, out);
-    case 17: return cuo_modding_components_get_surface(h, out);
-    case 18: return cuo_modding_components_get_text_caret(h, out);
-    case 19: return cuo_modding_components_get_text_completion_state(h, out);
+    case 12: return cuo_modding_components_get_values(h, out);
+    case 13: return cuo_modding_components_get_buffs(h, out);
+    case 14: return cuo_modding_components_get_grabbed_item(h, out);
+    case 15: return cuo_modding_components_get_skills(h, out);
+    case 16: return cuo_modding_components_get_target_state(h, out);
+    case 17: return cuo_modding_components_get_pick(h, out);
+    case 18: return cuo_modding_components_get_surface(h, out);
+    case 19: return cuo_modding_components_get_text_caret(h, out);
+    case 20: return cuo_modding_components_get_text_completion_state(h, out);
+    case 21: return cuo_modding_components_get_party(h, out);
+    case 22: return cuo_modding_components_get_player_spellbook(h, out);
+    case 23: return cuo_modding_components_get_steps(h, out);
+    case 24: return cuo_modding_components_get_clipboard_set(h, out);
+    case 25: return cuo_modding_components_get_focused_input(h, out);
+    case 26: return cuo_modding_components_get_text_clipboard_action(h, out);
+    case 27: return cuo_modding_components_get_text_completion(h, out);
+    case 28: return cuo_modding_components_get_text_completion_pick(h, out);
     default: cuo__trap("cuo: unknown typed resource");
     }
 }
@@ -3335,8 +4847,14 @@ void cuo__typed_res_free(uint16_t kind, void *rec)
     case 8: cuo_modding_types_host_hotkeys_free(rec); break;
     case 9: cuo_modding_types_mod_hotkey_bindings_free(rec); break;
     case 11: cuo_modding_types_mod_options_schema_free(rec); break;
-    case 12: cuo_modding_types_player_buffs_free(rec); break;
-    case 14: cuo_modding_types_player_skills_free(rec); break;
+    case 12: cuo_modding_types_mod_options_values_free(rec); break;
+    case 13: cuo_modding_types_player_buffs_free(rec); break;
+    case 15: cuo_modding_types_player_skills_free(rec); break;
+    case 21: cuo_modding_types_party_free(rec); break;
+    case 22: cuo_modding_types_spellbooks_free(rec); break;
+    case 23: cuo_modding_types_player_steps_free(rec); break;
+    case 24: cuo_modding_types_clipboard_set_free(rec); break;
+    case 27: cuo_modding_types_text_completion_free(rec); break;
     default: break;
     }
 }
@@ -3451,9 +4969,19 @@ static bool res_ModOptionsSchema(const cuo__params *ps, cuo_param p, cuo_ModOpti
 bool cuo_ModOptionsSchemaDto_res(const cuo_input *in, cuo_param p, cuo_ModOptionsSchemaDto *out) { return res_ModOptionsSchema(in->params, p, out); }
 bool cuo_ModOptionsSchemaDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsSchemaDto *out) { return res_ModOptionsSchema(ev->params, p, out); }
 
+static bool res_ModOptionsValues(const cuo__params *ps, cuo_param p, cuo_ModOptionsValuesDto *out)
+{
+    const cuo_modding_types_mod_options_values_t *w = cuo__res_typed(ps, p, 12);
+    if (w)
+        from_ModOptionsValues(out, w);
+    return w != NULL;
+}
+bool cuo_ModOptionsValuesDto_res(const cuo_input *in, cuo_param p, cuo_ModOptionsValuesDto *out) { return res_ModOptionsValues(in->params, p, out); }
+bool cuo_ModOptionsValuesDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsValuesDto *out) { return res_ModOptionsValues(ev->params, p, out); }
+
 static bool res_PlayerBuffs(const cuo__params *ps, cuo_param p, cuo_PlayerBuffsDto *out)
 {
-    const cuo_modding_types_player_buffs_t *w = cuo__res_typed(ps, p, 12);
+    const cuo_modding_types_player_buffs_t *w = cuo__res_typed(ps, p, 13);
     if (w)
         from_PlayerBuffs(out, w);
     return w != NULL;
@@ -3463,7 +4991,7 @@ bool cuo_PlayerBuffsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerBuffsD
 
 static bool res_GrabbedItem(const cuo__params *ps, cuo_param p, cuo_GrabbedItem *out)
 {
-    const cuo_modding_types_grabbed_item_t *w = cuo__res_typed(ps, p, 13);
+    const cuo_modding_types_grabbed_item_t *w = cuo__res_typed(ps, p, 14);
     if (w)
         from_GrabbedItem(out, w);
     return w != NULL;
@@ -3473,7 +5001,7 @@ bool cuo_GrabbedItem_obs_res(const cuo_obs *ev, cuo_param p, cuo_GrabbedItem *ou
 
 static bool res_PlayerSkills(const cuo__params *ps, cuo_param p, cuo_PlayerSkillsDto *out)
 {
-    const cuo_modding_types_player_skills_t *w = cuo__res_typed(ps, p, 14);
+    const cuo_modding_types_player_skills_t *w = cuo__res_typed(ps, p, 15);
     if (w)
         from_PlayerSkills(out, w);
     return w != NULL;
@@ -3483,7 +5011,7 @@ bool cuo_PlayerSkillsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerSkill
 
 static bool res_TargetingState(const cuo__params *ps, cuo_param p, cuo_TargetingState *out)
 {
-    const cuo_modding_types_targeting_state_t *w = cuo__res_typed(ps, p, 15);
+    const cuo_modding_types_targeting_state_t *w = cuo__res_typed(ps, p, 16);
     if (w)
         from_TargetingState(out, w);
     return w != NULL;
@@ -3493,7 +5021,7 @@ bool cuo_TargetingState_obs_res(const cuo_obs *ev, cuo_param p, cuo_TargetingSta
 
 static bool res_UiPick(const cuo__params *ps, cuo_param p, cuo_UiPickDto *out)
 {
-    const cuo_modding_types_ui_pick_t *w = cuo__res_typed(ps, p, 16);
+    const cuo_modding_types_ui_pick_t *w = cuo__res_typed(ps, p, 17);
     if (w)
         from_UiPick(out, w);
     return w != NULL;
@@ -3503,7 +5031,7 @@ bool cuo_UiPickDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_UiPickDto *out) {
 
 static bool res_UiSurface(const cuo__params *ps, cuo_param p, cuo_UiSurfaceDto *out)
 {
-    const cuo_modding_types_ui_surface_t *w = cuo__res_typed(ps, p, 17);
+    const cuo_modding_types_ui_surface_t *w = cuo__res_typed(ps, p, 18);
     if (w)
         from_UiSurface(out, w);
     return w != NULL;
@@ -3513,7 +5041,7 @@ bool cuo_UiSurfaceDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_UiSurfaceDto *
 
 static bool res_TextCaret(const cuo__params *ps, cuo_param p, cuo_TextCaretDto *out)
 {
-    const cuo_modding_types_text_caret_t *w = cuo__res_typed(ps, p, 18);
+    const cuo_modding_types_text_caret_t *w = cuo__res_typed(ps, p, 19);
     if (w)
         from_TextCaret(out, w);
     return w != NULL;
@@ -3523,13 +5051,93 @@ bool cuo_TextCaretDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCaretDto *
 
 static bool res_TextCompletionState(const cuo__params *ps, cuo_param p, cuo_TextCompletionStateDto *out)
 {
-    const cuo_modding_types_text_completion_state_t *w = cuo__res_typed(ps, p, 19);
+    const cuo_modding_types_text_completion_state_t *w = cuo__res_typed(ps, p, 20);
     if (w)
         from_TextCompletionState(out, w);
     return w != NULL;
 }
 bool cuo_TextCompletionStateDto_res(const cuo_input *in, cuo_param p, cuo_TextCompletionStateDto *out) { return res_TextCompletionState(in->params, p, out); }
 bool cuo_TextCompletionStateDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionStateDto *out) { return res_TextCompletionState(ev->params, p, out); }
+
+static bool res_Party(const cuo__params *ps, cuo_param p, cuo_PartyDto *out)
+{
+    const cuo_modding_types_party_t *w = cuo__res_typed(ps, p, 21);
+    if (w)
+        from_Party(out, w);
+    return w != NULL;
+}
+bool cuo_PartyDto_res(const cuo_input *in, cuo_param p, cuo_PartyDto *out) { return res_Party(in->params, p, out); }
+bool cuo_PartyDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PartyDto *out) { return res_Party(ev->params, p, out); }
+
+static bool res_Spellbooks(const cuo__params *ps, cuo_param p, cuo_SpellbooksDto *out)
+{
+    const cuo_modding_types_spellbooks_t *w = cuo__res_typed(ps, p, 22);
+    if (w)
+        from_Spellbooks(out, w);
+    return w != NULL;
+}
+bool cuo_SpellbooksDto_res(const cuo_input *in, cuo_param p, cuo_SpellbooksDto *out) { return res_Spellbooks(in->params, p, out); }
+bool cuo_SpellbooksDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_SpellbooksDto *out) { return res_Spellbooks(ev->params, p, out); }
+
+static bool res_PlayerSteps(const cuo__params *ps, cuo_param p, cuo_PlayerStepsDto *out)
+{
+    const cuo_modding_types_player_steps_t *w = cuo__res_typed(ps, p, 23);
+    if (w)
+        from_PlayerSteps(out, w);
+    return w != NULL;
+}
+bool cuo_PlayerStepsDto_res(const cuo_input *in, cuo_param p, cuo_PlayerStepsDto *out) { return res_PlayerSteps(in->params, p, out); }
+bool cuo_PlayerStepsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerStepsDto *out) { return res_PlayerSteps(ev->params, p, out); }
+
+static bool res_ClipboardSet(const cuo__params *ps, cuo_param p, cuo_ClipboardSetDto *out)
+{
+    const cuo_modding_types_clipboard_set_t *w = cuo__res_typed(ps, p, 24);
+    if (w)
+        from_ClipboardSet(out, w);
+    return w != NULL;
+}
+bool cuo_ClipboardSetDto_res(const cuo_input *in, cuo_param p, cuo_ClipboardSetDto *out) { return res_ClipboardSet(in->params, p, out); }
+bool cuo_ClipboardSetDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ClipboardSetDto *out) { return res_ClipboardSet(ev->params, p, out); }
+
+static bool res_FocusedInput(const cuo__params *ps, cuo_param p, cuo_FocusedInput *out)
+{
+    const cuo_modding_types_focused_input_t *w = cuo__res_typed(ps, p, 25);
+    if (w)
+        from_FocusedInput(out, w);
+    return w != NULL;
+}
+bool cuo_FocusedInput_res(const cuo_input *in, cuo_param p, cuo_FocusedInput *out) { return res_FocusedInput(in->params, p, out); }
+bool cuo_FocusedInput_obs_res(const cuo_obs *ev, cuo_param p, cuo_FocusedInput *out) { return res_FocusedInput(ev->params, p, out); }
+
+static bool res_TextClipboardAction(const cuo__params *ps, cuo_param p, cuo_TextClipboardActionDto *out)
+{
+    const cuo_modding_types_text_clipboard_action_t *w = cuo__res_typed(ps, p, 26);
+    if (w)
+        from_TextClipboardAction(out, w);
+    return w != NULL;
+}
+bool cuo_TextClipboardActionDto_res(const cuo_input *in, cuo_param p, cuo_TextClipboardActionDto *out) { return res_TextClipboardAction(in->params, p, out); }
+bool cuo_TextClipboardActionDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextClipboardActionDto *out) { return res_TextClipboardAction(ev->params, p, out); }
+
+static bool res_TextCompletion(const cuo__params *ps, cuo_param p, cuo_TextCompletionDto *out)
+{
+    const cuo_modding_types_text_completion_t *w = cuo__res_typed(ps, p, 27);
+    if (w)
+        from_TextCompletion(out, w);
+    return w != NULL;
+}
+bool cuo_TextCompletionDto_res(const cuo_input *in, cuo_param p, cuo_TextCompletionDto *out) { return res_TextCompletion(in->params, p, out); }
+bool cuo_TextCompletionDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionDto *out) { return res_TextCompletion(ev->params, p, out); }
+
+static bool res_TextCompletionPick(const cuo__params *ps, cuo_param p, cuo_TextCompletionPickDto *out)
+{
+    const cuo_modding_types_text_completion_pick_t *w = cuo__res_typed(ps, p, 28);
+    if (w)
+        from_TextCompletionPick(out, w);
+    return w != NULL;
+}
+bool cuo_TextCompletionPickDto_res(const cuo_input *in, cuo_param p, cuo_TextCompletionPickDto *out) { return res_TextCompletionPick(in->params, p, out); }
+bool cuo_TextCompletionPickDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionPickDto *out) { return res_TextCompletionPick(ev->params, p, out); }
 
 /* ── events ── */
 
@@ -3854,6 +5462,174 @@ static const cuo_ModRightClick *events_right_click(const cuo__params *ps, cuo_pa
 const cuo_ModRightClick *cuo_ModRightClick_events(const cuo_input *in, cuo_param p, size_t *count) { return events_right_click(in->params, p, count); }
 const cuo_ModRightClick *cuo_ModRightClick_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_right_click(ev->params, p, count); }
 
+void cuo_ServerGumpClosedEvent_send(cuo_cmds *c, const cuo_ServerGumpClosedEvent *v)
+{
+    cuo_modding_types_server_gump_closed_event_t w;
+    to_ServerGumpClosedEvent(&w, v);
+    cuo_modding_components_send_server_closed(cuo__typed_cmds(c), &w);
+}
+static const cuo_ServerGumpClosedEvent *events_server_closed(const cuo__params *ps, cuo_param p, size_t *count)
+{
+    int32_t h = cuo__events_handle(ps, p);
+    *count = 0;
+    if (h < 0)
+        return NULL;
+    cuo_modding_components_list_server_gump_closed_event_t l;
+    cuo_modding_components_read_server_closed((cuo_modding_components_borrow_events_t){ h }, &l);
+    cuo_ServerGumpClosedEvent *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_ServerGumpClosedEvent(&out[i], &l.ptr[i]);
+    *count = l.len;
+    cuo_modding_components_list_server_gump_closed_event_free(&l);
+    return out;
+}
+const cuo_ServerGumpClosedEvent *cuo_ServerGumpClosedEvent_events(const cuo_input *in, cuo_param p, size_t *count) { return events_server_closed(in->params, p, count); }
+const cuo_ServerGumpClosedEvent *cuo_ServerGumpClosedEvent_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_server_closed(ev->params, p, count); }
+
+void cuo_ServerGumpOpenedEvent_send(cuo_cmds *c, const cuo_ServerGumpOpenedEvent *v)
+{
+    cuo_modding_types_server_gump_opened_event_t w;
+    to_ServerGumpOpenedEvent(&w, v);
+    cuo_modding_components_send_server_opened(cuo__typed_cmds(c), &w);
+}
+static const cuo_ServerGumpOpenedEvent *events_server_opened(const cuo__params *ps, cuo_param p, size_t *count)
+{
+    int32_t h = cuo__events_handle(ps, p);
+    *count = 0;
+    if (h < 0)
+        return NULL;
+    cuo_modding_components_list_server_gump_opened_event_t l;
+    cuo_modding_components_read_server_opened((cuo_modding_components_borrow_events_t){ h }, &l);
+    cuo_ServerGumpOpenedEvent *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_ServerGumpOpenedEvent(&out[i], &l.ptr[i]);
+    *count = l.len;
+    cuo_modding_components_list_server_gump_opened_event_free(&l);
+    return out;
+}
+const cuo_ServerGumpOpenedEvent *cuo_ServerGumpOpenedEvent_events(const cuo_input *in, cuo_param p, size_t *count) { return events_server_opened(in->params, p, count); }
+const cuo_ServerGumpOpenedEvent *cuo_ServerGumpOpenedEvent_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_server_opened(ev->params, p, count); }
+
+void cuo_ModMoveRequest_send(cuo_cmds *c, const cuo_ModMoveRequest *v)
+{
+    cuo_modding_types_mod_move_request_t w;
+    to_ModMoveRequest(&w, v);
+    cuo_modding_components_send_move_request(cuo__typed_cmds(c), &w);
+}
+static const cuo_ModMoveRequest *events_move_request(const cuo__params *ps, cuo_param p, size_t *count)
+{
+    int32_t h = cuo__events_handle(ps, p);
+    *count = 0;
+    if (h < 0)
+        return NULL;
+    cuo_modding_components_list_mod_move_request_t l;
+    cuo_modding_components_read_move_request((cuo_modding_components_borrow_events_t){ h }, &l);
+    cuo_ModMoveRequest *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_ModMoveRequest(&out[i], &l.ptr[i]);
+    *count = l.len;
+    cuo_modding_components_list_mod_move_request_free(&l);
+    return out;
+}
+const cuo_ModMoveRequest *cuo_ModMoveRequest_events(const cuo_input *in, cuo_param p, size_t *count) { return events_move_request(in->params, p, count); }
+const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_move_request(ev->params, p, count); }
+
+void cuo_CharacterSelectionDto_send(cuo_cmds *c, const cuo_CharacterSelectionDto *v)
+{
+    cuo_modding_types_character_selection_t w;
+    to_CharacterSelection(&w, v);
+    cuo_modding_components_send_character_list(cuo__typed_cmds(c), &w);
+}
+static const cuo_CharacterSelectionDto *events_character_list(const cuo__params *ps, cuo_param p, size_t *count)
+{
+    int32_t h = cuo__events_handle(ps, p);
+    *count = 0;
+    if (h < 0)
+        return NULL;
+    cuo_modding_components_list_character_selection_t l;
+    cuo_modding_components_read_character_list((cuo_modding_components_borrow_events_t){ h }, &l);
+    cuo_CharacterSelectionDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_CharacterSelection(&out[i], &l.ptr[i]);
+    *count = l.len;
+    cuo_modding_components_list_character_selection_free(&l);
+    return out;
+}
+const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_events(const cuo_input *in, cuo_param p, size_t *count) { return events_character_list(in->params, p, count); }
+const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_character_list(ev->params, p, count); }
+
+void cuo_LoginErrorsInfoEvent_send(cuo_cmds *c, const cuo_LoginErrorsInfoEvent *v)
+{
+    cuo_modding_types_login_errors_info_event_t w;
+    to_LoginErrorsInfoEvent(&w, v);
+    cuo_modding_components_send_login_error_info(cuo__typed_cmds(c), &w);
+}
+static const cuo_LoginErrorsInfoEvent *events_login_error_info(const cuo__params *ps, cuo_param p, size_t *count)
+{
+    int32_t h = cuo__events_handle(ps, p);
+    *count = 0;
+    if (h < 0)
+        return NULL;
+    cuo_modding_components_list_login_errors_info_event_t l;
+    cuo_modding_components_read_login_error_info((cuo_modding_components_borrow_events_t){ h }, &l);
+    cuo_LoginErrorsInfoEvent *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_LoginErrorsInfoEvent(&out[i], &l.ptr[i]);
+    *count = l.len;
+    cuo_modding_components_list_login_errors_info_event_free(&l);
+    return out;
+}
+const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_events(const cuo_input *in, cuo_param p, size_t *count) { return events_login_error_info(in->params, p, count); }
+const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_login_error_info(ev->params, p, count); }
+
+void cuo_OnLoginRequest_send(cuo_cmds *c, const cuo_OnLoginRequest *v)
+{
+    cuo_modding_types_on_login_request_t w;
+    to_OnLoginRequest(&w, v);
+    cuo_modding_components_send_login_request(cuo__typed_cmds(c), &w);
+}
+static const cuo_OnLoginRequest *events_login_request(const cuo__params *ps, cuo_param p, size_t *count)
+{
+    int32_t h = cuo__events_handle(ps, p);
+    *count = 0;
+    if (h < 0)
+        return NULL;
+    cuo_modding_components_list_on_login_request_t l;
+    cuo_modding_components_read_login_request((cuo_modding_components_borrow_events_t){ h }, &l);
+    cuo_OnLoginRequest *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_OnLoginRequest(&out[i], &l.ptr[i]);
+    *count = l.len;
+    cuo_modding_components_list_on_login_request_free(&l);
+    return out;
+}
+const cuo_OnLoginRequest *cuo_OnLoginRequest_events(const cuo_input *in, cuo_param p, size_t *count) { return events_login_request(in->params, p, count); }
+const cuo_OnLoginRequest *cuo_OnLoginRequest_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_login_request(ev->params, p, count); }
+
+void cuo_ServerSelectionInfoEvent_send(cuo_cmds *c, const cuo_ServerSelectionInfoEvent *v)
+{
+    cuo_modding_types_server_selection_info_event_t w;
+    to_ServerSelectionInfoEvent(&w, v);
+    cuo_modding_components_send_server_list(cuo__typed_cmds(c), &w);
+}
+static const cuo_ServerSelectionInfoEvent *events_server_list(const cuo__params *ps, cuo_param p, size_t *count)
+{
+    int32_t h = cuo__events_handle(ps, p);
+    *count = 0;
+    if (h < 0)
+        return NULL;
+    cuo_modding_components_list_server_selection_info_event_t l;
+    cuo_modding_components_read_server_list((cuo_modding_components_borrow_events_t){ h }, &l);
+    cuo_ServerSelectionInfoEvent *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_ServerSelectionInfoEvent(&out[i], &l.ptr[i]);
+    *count = l.len;
+    cuo_modding_components_list_server_selection_info_event_free(&l);
+    return out;
+}
+const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_events(const cuo_input *in, cuo_param p, size_t *count) { return events_server_list(in->params, p, count); }
+const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_server_list(ev->params, p, count); }
+
 /* ── typed observer triggers ── */
 
 int cuo__typed_trigger_kind(const char *path)
@@ -3944,6 +5720,46 @@ int cuo__typed_trigger_kind(const char *path)
     if (strcmp(path, "cuo:ui/topbar-button") == 0) return 0;
     if (strcmp(path, "cuo:ui/topbar-full") == 0) return 0;
     if (strcmp(path, "cuo:ui/topbar-root") == 0) return 0;
+    if (strcmp(path, "cuo:ent/animation") == 0) return 79;
+    if (strcmp(path, "cuo:ent/is-multi") == 0) return 0;
+    if (strcmp(path, "cuo:ent/mob-steps") == 0) return 80;
+    if (strcmp(path, "cuo:gump/book") == 0) return 0;
+    if (strcmp(path, "cuo:gump/buff") == 0) return 0;
+    if (strcmp(path, "cuo:gump/bulletin-board") == 0) return 0;
+    if (strcmp(path, "cuo:gump/combat-book") == 0) return 81;
+    if (strcmp(path, "cuo:gump/house-design") == 0) return 82;
+    if (strcmp(path, "cuo:gump/journal") == 0) return 83;
+    if (strcmp(path, "cuo:gump/logout") == 0) return 0;
+    if (strcmp(path, "cuo:gump/map") == 0) return 0;
+    if (strcmp(path, "cuo:gump/menu") == 0) return 84;
+    if (strcmp(path, "cuo:gump/message-box") == 0) return 0;
+    if (strcmp(path, "cuo:gump/minimap") == 0) return 85;
+    if (strcmp(path, "cuo:gump/paperdoll") == 0) return 86;
+    if (strcmp(path, "cuo:gump/party-invite") == 0) return 87;
+    if (strcmp(path, "cuo:gump/party-manifest") == 0) return 88;
+    if (strcmp(path, "cuo:gump/profile") == 0) return 89;
+    if (strcmp(path, "cuo:gump/racial-book") == 0) return 90;
+    if (strcmp(path, "cuo:gump/server-closed") == 0) return 91;
+    if (strcmp(path, "cuo:gump/server-opened") == 0) return 92;
+    if (strcmp(path, "cuo:gump/skills") == 0) return 93;
+    if (strcmp(path, "cuo:gump/spellbook") == 0) return 94;
+    if (strcmp(path, "cuo:gump/split-menu") == 0) return 95;
+    if (strcmp(path, "cuo:gump/tip-notice") == 0) return 96;
+    if (strcmp(path, "cuo:gump/trade") == 0) return 97;
+    if (strcmp(path, "cuo:gump/worldmap") == 0) return 0;
+    if (strcmp(path, "cuo:player/move-request") == 0) return 98;
+    if (strcmp(path, "cuo:scene/character-creation") == 0) return 0;
+    if (strcmp(path, "cuo:scene/character-list") == 0) return 99;
+    if (strcmp(path, "cuo:scene/character-selection") == 0) return 0;
+    if (strcmp(path, "cuo:scene/game") == 0) return 0;
+    if (strcmp(path, "cuo:scene/login") == 0) return 0;
+    if (strcmp(path, "cuo:scene/login-error") == 0) return 0;
+    if (strcmp(path, "cuo:scene/login-error-info") == 0) return 100;
+    if (strcmp(path, "cuo:scene/login-request") == 0) return 101;
+    if (strcmp(path, "cuo:scene/server-list") == 0) return 102;
+    if (strcmp(path, "cuo:scene/server-selection") == 0) return 0;
+    if (strcmp(path, "cuo:ui/masked-text") == 0) return 103;
+    if (strcmp(path, "cuo:ui/tooltip-serial") == 0) return 104;
     return -1;
 }
 
@@ -4278,6 +6094,143 @@ const void *cuo__typed_trigger_value(uint8_t kind, void *rec)
         cuo_modding_types_ui_tooltip_free(rec);
         return o;
     }
+    case 79: {
+        cuo_MobAnimation *o = cuo_alloc(sizeof *o);
+        from_MobAnimation(o, rec);
+        return o;
+    }
+    case 80: {
+        cuo_MobileStepsDto *o = cuo_alloc(sizeof *o);
+        from_MobileSteps(o, rec);
+        cuo_modding_types_mobile_steps_free(rec);
+        return o;
+    }
+    case 81: {
+        cuo_CombatBookWindow *o = cuo_alloc(sizeof *o);
+        from_CombatBookWindow(o, rec);
+        return o;
+    }
+    case 82: {
+        cuo_HouseDesignWindow *o = cuo_alloc(sizeof *o);
+        from_HouseDesignWindow(o, rec);
+        return o;
+    }
+    case 83: {
+        cuo_JournalWindow *o = cuo_alloc(sizeof *o);
+        from_JournalWindow(o, rec);
+        return o;
+    }
+    case 84: {
+        cuo_MenuGumpWindow *o = cuo_alloc(sizeof *o);
+        from_MenuGumpWindow(o, rec);
+        return o;
+    }
+    case 85: {
+        cuo_MiniMapWindow *o = cuo_alloc(sizeof *o);
+        from_MiniMapWindow(o, rec);
+        return o;
+    }
+    case 86: {
+        cuo_PaperdollWindow *o = cuo_alloc(sizeof *o);
+        from_PaperdollWindow(o, rec);
+        return o;
+    }
+    case 87: {
+        cuo_PartyInviteWindow *o = cuo_alloc(sizeof *o);
+        from_PartyInviteWindow(o, rec);
+        return o;
+    }
+    case 88: {
+        cuo_PartyManifestWindow *o = cuo_alloc(sizeof *o);
+        from_PartyManifestWindow(o, rec);
+        return o;
+    }
+    case 89: {
+        cuo_ProfileWindow *o = cuo_alloc(sizeof *o);
+        from_ProfileWindow(o, rec);
+        return o;
+    }
+    case 90: {
+        cuo_RacialBookWindow *o = cuo_alloc(sizeof *o);
+        from_RacialBookWindow(o, rec);
+        return o;
+    }
+    case 91: {
+        cuo_ServerGumpClosedEvent *o = cuo_alloc(sizeof *o);
+        from_ServerGumpClosedEvent(o, rec);
+        return o;
+    }
+    case 92: {
+        cuo_ServerGumpOpenedEvent *o = cuo_alloc(sizeof *o);
+        from_ServerGumpOpenedEvent(o, rec);
+        return o;
+    }
+    case 93: {
+        cuo_SkillsWindow *o = cuo_alloc(sizeof *o);
+        from_SkillsWindow(o, rec);
+        return o;
+    }
+    case 94: {
+        cuo_SpellbookWindow *o = cuo_alloc(sizeof *o);
+        from_SpellbookWindow(o, rec);
+        return o;
+    }
+    case 95: {
+        cuo_SplitMenuWindow *o = cuo_alloc(sizeof *o);
+        from_SplitMenuWindow(o, rec);
+        cuo_modding_types_split_menu_window_free(rec);
+        return o;
+    }
+    case 96: {
+        cuo_TipNoticeWindow *o = cuo_alloc(sizeof *o);
+        from_TipNoticeWindow(o, rec);
+        return o;
+    }
+    case 97: {
+        cuo_TradeWindow *o = cuo_alloc(sizeof *o);
+        from_TradeWindow(o, rec);
+        return o;
+    }
+    case 98: {
+        cuo_ModMoveRequest *o = cuo_alloc(sizeof *o);
+        from_ModMoveRequest(o, rec);
+        return o;
+    }
+    case 99: {
+        cuo_CharacterSelectionDto *o = cuo_alloc(sizeof *o);
+        from_CharacterSelection(o, rec);
+        cuo_modding_types_character_selection_free(rec);
+        return o;
+    }
+    case 100: {
+        cuo_LoginErrorsInfoEvent *o = cuo_alloc(sizeof *o);
+        from_LoginErrorsInfoEvent(o, rec);
+        cuo_modding_types_login_errors_info_event_free(rec);
+        return o;
+    }
+    case 101: {
+        cuo_OnLoginRequest *o = cuo_alloc(sizeof *o);
+        from_OnLoginRequest(o, rec);
+        cuo_modding_types_on_login_request_free(rec);
+        return o;
+    }
+    case 102: {
+        cuo_ServerSelectionInfoEvent *o = cuo_alloc(sizeof *o);
+        from_ServerSelectionInfoEvent(o, rec);
+        cuo_modding_types_server_selection_info_event_free(rec);
+        return o;
+    }
+    case 103: {
+        cuo_MaskedText *o = cuo_alloc(sizeof *o);
+        from_MaskedText(o, rec);
+        cuo_modding_types_masked_text_free(rec);
+        return o;
+    }
+    case 104: {
+        cuo_UiTooltipSerial *o = cuo_alloc(sizeof *o);
+        from_UiTooltipSerial(o, rec);
+        return o;
+    }
     default: cuo__trap("cuo: unknown typed trigger");
     }
 }
@@ -4345,3 +6298,29 @@ const cuo_TextHue *cuo_TextHue_obs_typed(const cuo_obs *ev) { return ev->typed_k
 const cuo_TextSpans *cuo_TextSpans_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 76 ? ev->typed : NULL; }
 const cuo_TextWrap *cuo_TextWrap_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 77 ? ev->typed : NULL; }
 const cuo_UiTooltip *cuo_UiTooltip_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 78 ? ev->typed : NULL; }
+const cuo_MobAnimation *cuo_MobAnimation_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 79 ? ev->typed : NULL; }
+const cuo_MobileStepsDto *cuo_MobileStepsDto_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 80 ? ev->typed : NULL; }
+const cuo_CombatBookWindow *cuo_CombatBookWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 81 ? ev->typed : NULL; }
+const cuo_HouseDesignWindow *cuo_HouseDesignWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 82 ? ev->typed : NULL; }
+const cuo_JournalWindow *cuo_JournalWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 83 ? ev->typed : NULL; }
+const cuo_MenuGumpWindow *cuo_MenuGumpWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 84 ? ev->typed : NULL; }
+const cuo_MiniMapWindow *cuo_MiniMapWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 85 ? ev->typed : NULL; }
+const cuo_PaperdollWindow *cuo_PaperdollWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 86 ? ev->typed : NULL; }
+const cuo_PartyInviteWindow *cuo_PartyInviteWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 87 ? ev->typed : NULL; }
+const cuo_PartyManifestWindow *cuo_PartyManifestWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 88 ? ev->typed : NULL; }
+const cuo_ProfileWindow *cuo_ProfileWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 89 ? ev->typed : NULL; }
+const cuo_RacialBookWindow *cuo_RacialBookWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 90 ? ev->typed : NULL; }
+const cuo_ServerGumpClosedEvent *cuo_ServerGumpClosedEvent_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 91 ? ev->typed : NULL; }
+const cuo_ServerGumpOpenedEvent *cuo_ServerGumpOpenedEvent_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 92 ? ev->typed : NULL; }
+const cuo_SkillsWindow *cuo_SkillsWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 93 ? ev->typed : NULL; }
+const cuo_SpellbookWindow *cuo_SpellbookWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 94 ? ev->typed : NULL; }
+const cuo_SplitMenuWindow *cuo_SplitMenuWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 95 ? ev->typed : NULL; }
+const cuo_TipNoticeWindow *cuo_TipNoticeWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 96 ? ev->typed : NULL; }
+const cuo_TradeWindow *cuo_TradeWindow_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 97 ? ev->typed : NULL; }
+const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 98 ? ev->typed : NULL; }
+const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 99 ? ev->typed : NULL; }
+const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 100 ? ev->typed : NULL; }
+const cuo_OnLoginRequest *cuo_OnLoginRequest_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 101 ? ev->typed : NULL; }
+const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 102 ? ev->typed : NULL; }
+const cuo_MaskedText *cuo_MaskedText_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 103 ? ev->typed : NULL; }
+const cuo_UiTooltipSerial *cuo_UiTooltipSerial_obs_typed(const cuo_obs *ev) { return ev->typed_kind == 104 ? ev->typed : NULL; }

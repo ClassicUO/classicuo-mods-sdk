@@ -1058,6 +1058,13 @@ public partial struct ModOptionDto
     [JsonPropertyName("Choices")] public string[] Choices;
 }
 
+/// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.ModOptionValueDto</c>).</summary>
+public partial struct ModOptionValueDto
+{
+    [JsonPropertyName("Key")] public string Key;
+    [JsonPropertyName("Value")] public int Value;
+}
+
 /// <summary><c>cuo:options/schema</c></summary>
 public partial struct ModOptionsSchemaDto
 {
@@ -1067,14 +1074,13 @@ public partial struct ModOptionsSchemaDto
     [JsonPropertyName("Options")] public ModOptionDto[] Options;
 }
 
-/// <summary><c>cuo:options/values</c>
-/// <para>Zero-size tag: its payload is <c>{}</c> in both directions.</para>
-/// <para>Dropped member <c>Values: unsupported CLR type Dictionary<String,Int32></c>.</para>
-/// </summary>
+/// <summary><c>cuo:options/values</c></summary>
 public partial struct ModOptionsValuesDto
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:options/values";
+
+    [JsonPropertyName("Values")] public ModOptionValueDto[] Values;
 }
 
 /// <summary><c>cuo:ui/right-click</c></summary>
@@ -2321,6 +2327,7 @@ public partial struct WorldSingleClickDto
 [JsonSerializable(typeof(ModInputConsume))]
 [JsonSerializable(typeof(ModMoveRequest))]
 [JsonSerializable(typeof(ModOptionDto))]
+[JsonSerializable(typeof(ModOptionValueDto))]
 [JsonSerializable(typeof(ModOptionsSchemaDto))]
 [JsonSerializable(typeof(ModOptionsValuesDto))]
 [JsonSerializable(typeof(ModRightClick))]

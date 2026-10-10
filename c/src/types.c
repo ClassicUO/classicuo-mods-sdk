@@ -3565,6 +3565,38 @@ bool cuo_ModOptionDto_parse(cuo_bytes json, cuo_ModOptionDto *out)
     return j != NULL;
 }
 
+void cuo_ModOptionValueDto_write(cuo_jw *w, const cuo_ModOptionValueDto *v)
+{
+    cuo_jw_obj(w);
+    cuo_jw_key(w, "Key");
+    cuo_jw_str(w, v->key);
+    cuo_jw_key(w, "Value");
+    cuo_jw_int(w, v->value);
+    cuo_jw_obj_end(w);
+}
+
+void cuo_ModOptionValueDto_read(const cJSON *json, cuo_ModOptionValueDto *out)
+{
+    memset(out, 0, sizeof *out);
+    out->key = rd_str(FIELD(json, "Key"));
+    out->value = (int32_t)rd_i64(FIELD(json, "Value"));
+}
+
+cuo_bytes cuo_ModOptionValueDto_json(const cuo_ModOptionValueDto *v)
+{
+    cuo_jw w;
+    cuo_jw_init(&w);
+    cuo_ModOptionValueDto_write(&w, v);
+    return cuo_jw_bytes(&w);
+}
+
+bool cuo_ModOptionValueDto_parse(cuo_bytes json, cuo_ModOptionValueDto *out)
+{
+    cJSON *j = cuo_json_parse(json);
+    cuo_ModOptionValueDto_read(j, out);
+    return j != NULL;
+}
+
 void cuo_ModOptionsSchemaDto_write(cuo_jw *w, const cuo_ModOptionsSchemaDto *v)
 {
     cuo_jw_obj(w);
@@ -3611,15 +3643,27 @@ bool cuo_ModOptionsSchemaDto_resource(cuo_ModOptionsSchemaDto *out) { return cuo
 
 void cuo_ModOptionsValuesDto_write(cuo_jw *w, const cuo_ModOptionsValuesDto *v)
 {
-    (void)v;
     cuo_jw_obj(w);
+    cuo_jw_key(w, "Values");
+    cuo_jw_arr(w);
+    for (size_t i = 0; i < v->values.len; i++)
+        cuo_ModOptionValueDto_write(w, &v->values.items[i]);
+    cuo_jw_arr_end(w);
     cuo_jw_obj_end(w);
 }
 
 void cuo_ModOptionsValuesDto_read(const cJSON *json, cuo_ModOptionsValuesDto *out)
 {
     memset(out, 0, sizeof *out);
-    (void)json;
+    {
+        const cJSON *a = FIELD(json, "Values");
+        size_t len = cJSON_IsArray(a) ? (size_t)cJSON_GetArraySize(a) : 0;
+        out->values.len = len;
+        out->values.items = len ? cuo_alloc(len * sizeof(*out->values.items)) : NULL;
+        size_t i = 0;
+        for (const cJSON *e = len ? a->child : NULL; e && i < len; e = e->next, i++)
+            cuo_ModOptionValueDto_read(e, &out->values.items[i]);
+    }
 }
 
 cuo_bytes cuo_ModOptionsValuesDto_json(const cuo_ModOptionsValuesDto *v)
@@ -3638,7 +3682,7 @@ bool cuo_ModOptionsValuesDto_parse(cuo_bytes json, cuo_ModOptionsValuesDto *out)
 }
 
 uint16_t cuo_ModOptionsValuesDto_id(void) { TYPE_ID(cuo_ModOptionsValuesDto_PATH); }
-cuo_comp cuo_ModOptionsValuesDto_comp(void) { return cuo_comp_marker(cuo_ModOptionsValuesDto_id()); }
+cuo_comp cuo_ModOptionsValuesDto_comp(const cuo_ModOptionsValuesDto *v) { return cuo_comp_bytes(cuo_ModOptionsValuesDto_id(), cuo_ModOptionsValuesDto_json(v)); }
 bool cuo_ModOptionsValuesDto_resource(cuo_ModOptionsValuesDto *out) { return cuo_ModOptionsValuesDto_parse(cuo_resource_json(cuo_ModOptionsValuesDto_id()), out); }
 
 void cuo_ModRightClick_write(cuo_jw *w, const cuo_ModRightClick *v)

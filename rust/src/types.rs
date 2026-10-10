@@ -1139,6 +1139,14 @@ pub struct ModOptionDto {
     pub choices: Vec<String>,
 }
 
+/// Nested payload type (`ClassicUO.Ecs.Modding.ModOptionValueDto`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ModOptionValueDto {
+    pub key: String,
+    pub value: i32,
+}
+
 /// `cuo:options/schema`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -1153,7 +1161,7 @@ impl HasPath for ModOptionsSchemaDto {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct ModOptionsValuesDto {
-    pub values: std::collections::HashMap<String, i32>,
+    pub values: Vec<ModOptionValueDto>,
 }
 impl HasPath for ModOptionsValuesDto {
     const PATH: &'static str = paths::options::VALUES;

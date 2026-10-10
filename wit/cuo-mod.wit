@@ -837,6 +837,17 @@ interface types {
         options: list<mod-option>,
     }
 
+    /// `ModOptionValueDto`
+    record mod-option-value {
+        key: string,
+        value: s32,
+    }
+
+    /// `cuo:options/values`
+    record mod-options-values {
+        values: list<mod-option-value>,
+    }
+
     /// `PlayerBuffDto`
     record player-buff {
         %type: s32,
@@ -1119,6 +1130,392 @@ interface types {
         text: string,
         max-width: s32,
     }
+
+    /// `cuo:ent/animation`
+    record mob-animation {
+        index: s32,
+        frames-count: s32,
+        interval: s32,
+        repeat-mode: s32,
+        repeat-mode-count: s32,
+        repeat: bool,
+        is-from-server: bool,
+        forward-direction: bool,
+        action: u8,
+        mount-action: u8,
+        /// enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)
+        direction: u8,
+        time: f32,
+        run: bool,
+    }
+
+    /// `MobStepDto`
+    record mob-step {
+        x: s32,
+        y: s32,
+        z: s8,
+        direction: u8,
+        run: bool,
+    }
+
+    /// `cuo:ent/mob-steps`
+    record mobile-steps {
+        index: s32,
+        time: f32,
+        steps: list<mob-step>,
+    }
+
+    /// `cuo:gump/combat-book`
+    record combat-book-window {
+        page: s32,
+        sounded-page: s32,
+        page-count: s32,
+        dict-pages: s32,
+        ability-count: s32,
+        dirty: bool,
+        content: u64,
+        left: u64,
+        right: u64,
+    }
+
+    /// `cuo:gump/house-design`
+    record house-design-window {
+        content: u64,
+        serial: u32,
+    }
+
+    /// `cuo:gump/journal`
+    record journal-window {
+        special-height: s32,
+        minimized: bool,
+        dark-mode: bool,
+        show-system: bool,
+        show-objects: bool,
+        show-client: bool,
+        show-guild: bool,
+        built-revision: s32,
+        style-epoch: s32,
+        built-style-epoch: s32,
+        list-entity: u64,
+        flag-entity: u64,
+        top-entity: u64,
+        mid-entity: u64,
+        bottom-entity: u64,
+        title-entity: u64,
+        minimize-entity: u64,
+        dark-check-entity: u64,
+        expander-entity: u64,
+        width: f32,
+        list-width: f32,
+        content-height: f32,
+    }
+
+    /// `cuo:gump/menu`
+    record menu-gump-window {
+        serial: u32,
+        server-menu-id: u16,
+        is-gray: bool,
+        responded: bool,
+    }
+
+    /// `cuo:gump/minimap`
+    record mini-map-window {
+        use-large-map: bool,
+    }
+
+    /// `cuo:gump/paperdoll`
+    record paperdoll-window {
+        serial: u32,
+        is-player: bool,
+        can-lift: bool,
+        minimized: bool,
+    }
+
+    /// `cuo:gump/party-invite`
+    record party-invite-window {
+        inviter: u32,
+    }
+
+    /// `cuo:gump/party-manifest`
+    record party-manifest-window {
+        can-loot: bool,
+    }
+
+    /// `cuo:gump/profile`
+    record profile-window {
+        serial: u32,
+        special-height: s32,
+        width: f32,
+        mid-entity: u64,
+        bottom-entity: u64,
+        expander-entity: u64,
+        footer-entity: u64,
+        footer-offset-from-bottom: s32,
+        minimized: bool,
+        knob-entity: u64,
+    }
+
+    /// `cuo:gump/racial-book`
+    record racial-book-window {
+        page: s32,
+        sounded-page: s32,
+        page-count: s32,
+        dict-pages: s32,
+        ability-count: s32,
+        /// enum RaceType (1=HUMAN, 2=ELF, 3=GARGOYLE)
+        race: u8,
+        dirty: bool,
+        content: u64,
+        left: u64,
+        right: u64,
+    }
+
+    /// `cuo:gump/server-closed`
+    record server-gump-closed-event {
+        serial: u32,
+        gump-id: u32,
+    }
+
+    /// `cuo:gump/server-opened`
+    record server-gump-opened-event {
+        serial: u32,
+        gump-id: u32,
+    }
+
+    /// `cuo:gump/skills`
+    record skills-window {
+        special-height: s32,
+        minimized: bool,
+        show-real: bool,
+        show-caps: bool,
+        dirty: bool,
+        width: s32,
+        list-width: f32,
+        content-height: f32,
+        list-entity: u64,
+        top-entity: u64,
+        mid-entity: u64,
+        bottom-entity: u64,
+        title-entity: u64,
+        minimize-entity: u64,
+        expander-entity: u64,
+        sum-label-entity: u64,
+        flag-entity: u64,
+        last-sum: f32,
+    }
+
+    /// `cuo:gump/spellbook`
+    record spellbook-window {
+        serial: u32,
+        /// enum SpellBookType (0=Magery, 1=Necromancy, 2=Chivalry, 4=Bushido, 5=Ninjitsu, 6=Spellweaving, 7=Mysticism, 8=Mastery, 255=Unknown)
+        school: s32,
+        page: s32,
+        sounded-page: s32,
+        page-count: s32,
+        built-revision: s32,
+        dirty: bool,
+        content-entity: u64,
+        left-corner: u64,
+        right-corner: u64,
+        minimized: bool,
+    }
+
+    /// `cuo:gump/split-menu`
+    record split-menu-window {
+        serial: u32,
+        max-amount: s32,
+        slider: u64,
+        text: u64,
+        ok: u64,
+        last-slider: s32,
+        last-text: string,
+        graphic: u16,
+        hue: u16,
+        source-ui-entity: u64,
+        source-container: u32,
+        original-graphic: u16,
+        original-hue: u16,
+        original-amount: u16,
+        original-x: u16,
+        original-y: u16,
+        original-z: s8,
+        original-container: u32,
+        original-grid-index: u8,
+        original-from-slot: bool,
+    }
+
+    /// `cuo:gump/tip-notice`
+    record tip-notice-window {
+        tip-serial: u16,
+        special-height: s32,
+        width: f32,
+        mid-entity: u64,
+        bottom-entity: u64,
+        expander-entity: u64,
+        prev-entity: u64,
+        next-entity: u64,
+    }
+
+    /// `cuo:gump/trade`
+    record trade-window {
+        serial: u32,
+        id1: u32,
+        id2: u32,
+        im-accepting: bool,
+        he-is-accepting: bool,
+        is-new: bool,
+    }
+
+    /// `cuo:player/move-request`
+    record mod-move-request {
+        direction: u8,
+        run: bool,
+        sequence: u8,
+    }
+
+    /// `PartyMemberDto`
+    record party-member {
+        serial: u32,
+        name: string,
+    }
+
+    /// `cuo:player/party`
+    record party {
+        leader: u32,
+        members: list<party-member>,
+        in-party: bool,
+        can-loot: bool,
+    }
+
+    /// `SpellbookDto`
+    record spellbook {
+        serial: u32,
+        book-type: u8,
+        spells: list<s32>,
+    }
+
+    /// `cuo:player/spellbook`
+    record spellbooks {
+        revision: s32,
+        books: list<spellbook>,
+    }
+
+    /// `PlayerStepDto`
+    record player-step {
+        sequence: u8,
+        direction: u8,
+        x: u16,
+        y: u16,
+        z: s8,
+    }
+
+    /// `cuo:player/steps`
+    record player-steps {
+        last-step: f32,
+        count: s32,
+        sequence: u8,
+        resync-sent: bool,
+        steps: list<player-step>,
+    }
+
+    /// `CharInfoDto`
+    record char-info {
+        name: string,
+        index: u32,
+    }
+
+    /// `TownInfoDto`
+    record town-info {
+        index: u8,
+        name: string,
+        building: string,
+        x: u16,
+        y: u16,
+        z: s8,
+        %map: u32,
+        cliloc-description: u32,
+    }
+
+    /// `cuo:scene/character-list`
+    record character-selection {
+        characters: list<char-info>,
+        towns: list<town-info>,
+    }
+
+    /// `LoginErrorInfo`
+    record login-error-info {
+        error-message: string,
+    }
+
+    /// `cuo:scene/login-error-info`
+    record login-errors-info-event {
+        error: login-error-info,
+    }
+
+    /// `cuo:scene/login-request`
+    record on-login-request {
+        username: string,
+        password: string,
+        address: string,
+        port: u16,
+    }
+
+    /// `ServerInfo`
+    record server-info {
+        index: s32,
+        name: string,
+        percent-full: u8,
+        time-zone: u8,
+        ip: u32,
+    }
+
+    /// `cuo:scene/server-list`
+    record server-selection-info-event {
+        servers: list<server-info>,
+    }
+
+    /// `cuo:ui/clipboard-set`
+    record clipboard-set {
+        seq: s32,
+        text: string,
+    }
+
+    /// `cuo:ui/focused-input`
+    record focused-input {
+        entity: u64,
+    }
+
+    /// `cuo:ui/masked-text`
+    record masked-text {
+        value: string,
+        mask-char: char,
+    }
+
+    /// `cuo:ui/text-clipboard-action`
+    record text-clipboard-action {
+        entity: u64,
+        action: s32,
+        seq: s32,
+    }
+
+    /// `cuo:ui/text-completion`
+    record text-completion {
+        entity: u64,
+        prefix: string,
+        items: list<string>,
+    }
+
+    /// `cuo:ui/text-completion-pick`
+    record text-completion-pick {
+        entity: u64,
+        index: s32,
+        seq: s32,
+    }
+
+    /// `cuo:ui/tooltip-serial`
+    record ui-tooltip-serial {
+        serial: u32,
+    }
 }
 
 /// Typed reads and writes of the `types` records — no JSON. Everything here is deferred
@@ -1130,7 +1527,7 @@ interface types {
 /// signature when it binds it.
 interface components {
     use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity};
-    use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip};
+    use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, on-login-request, server-selection-info-event, clipboard-set, focused-input, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial};
 
     /// Inserts components on one entity, chained: each method queues one insert and
     /// returns a new builder for the same entity.
@@ -1245,6 +1642,60 @@ interface components {
         topbar-full: func() -> entity-builder;
         /// Inserts `cuo:ui/topbar-root`.
         topbar-root: func() -> entity-builder;
+        /// Inserts `cuo:gump/buff`.
+        buff: func() -> entity-builder;
+        /// Inserts `cuo:gump/combat-book`.
+        combat-book: func(v: combat-book-window) -> entity-builder;
+        /// Inserts `cuo:gump/house-design`.
+        house-design: func(v: house-design-window) -> entity-builder;
+        /// Inserts `cuo:gump/journal`.
+        journal: func(v: journal-window) -> entity-builder;
+        /// Inserts `cuo:gump/logout`.
+        logout: func() -> entity-builder;
+        /// Inserts `cuo:gump/menu`.
+        menu: func(v: menu-gump-window) -> entity-builder;
+        /// Inserts `cuo:gump/message-box`.
+        message-box: func() -> entity-builder;
+        /// Inserts `cuo:gump/minimap`.
+        minimap: func(v: mini-map-window) -> entity-builder;
+        /// Inserts `cuo:gump/paperdoll`.
+        paperdoll: func(v: paperdoll-window) -> entity-builder;
+        /// Inserts `cuo:gump/party-invite`.
+        party-invite: func(v: party-invite-window) -> entity-builder;
+        /// Inserts `cuo:gump/party-manifest`.
+        party-manifest: func(v: party-manifest-window) -> entity-builder;
+        /// Inserts `cuo:gump/profile`.
+        profile: func(v: profile-window) -> entity-builder;
+        /// Inserts `cuo:gump/racial-book`.
+        racial-book: func(v: racial-book-window) -> entity-builder;
+        /// Inserts `cuo:gump/skills`.
+        gump-skills: func(v: skills-window) -> entity-builder;
+        /// Inserts `cuo:gump/spellbook`.
+        spellbook: func(v: spellbook-window) -> entity-builder;
+        /// Inserts `cuo:gump/split-menu`.
+        split-menu: func(v: split-menu-window) -> entity-builder;
+        /// Inserts `cuo:gump/tip-notice`.
+        tip-notice: func(v: tip-notice-window) -> entity-builder;
+        /// Inserts `cuo:gump/trade`.
+        trade: func(v: trade-window) -> entity-builder;
+        /// Inserts `cuo:gump/worldmap`.
+        worldmap: func() -> entity-builder;
+        /// Inserts `cuo:scene/character-creation`.
+        character-creation: func() -> entity-builder;
+        /// Inserts `cuo:scene/character-selection`.
+        character-selection: func() -> entity-builder;
+        /// Inserts `cuo:scene/game`.
+        game: func() -> entity-builder;
+        /// Inserts `cuo:scene/login`.
+        login: func() -> entity-builder;
+        /// Inserts `cuo:scene/login-error`.
+        login-error: func() -> entity-builder;
+        /// Inserts `cuo:scene/server-selection`.
+        server-selection: func() -> entity-builder;
+        /// Inserts `cuo:ui/masked-text`.
+        masked-text: func(v: masked-text) -> entity-builder;
+        /// Inserts `cuo:ui/tooltip-serial`.
+        tooltip-serial: func(v: ui-tooltip-serial) -> entity-builder;
     }
 
     /// A builder for an existing entity.
@@ -1530,6 +1981,116 @@ interface components {
     /// Writes `cuo:ui/tooltip` back through the `mut` reading term `term`.
     set-tooltip: func(q: borrow<query>, e: entity, term: u8, v: ui-tooltip);
 
+    /// `cuo:ent/animation` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:ent/animation`.
+    column-animation: func(q: borrow<query>, term: u8) -> list<mob-animation>;
+
+    /// `cuo:ent/mob-steps` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:ent/mob-steps`.
+    column-mob-steps: func(q: borrow<query>, term: u8) -> list<mobile-steps>;
+
+    /// `cuo:gump/combat-book` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/combat-book`.
+    column-combat-book: func(q: borrow<query>, term: u8) -> list<combat-book-window>;
+    /// Writes `cuo:gump/combat-book` back through the `mut` reading term `term`.
+    set-combat-book: func(q: borrow<query>, e: entity, term: u8, v: combat-book-window);
+
+    /// `cuo:gump/house-design` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/house-design`.
+    column-house-design: func(q: borrow<query>, term: u8) -> list<house-design-window>;
+    /// Writes `cuo:gump/house-design` back through the `mut` reading term `term`.
+    set-house-design: func(q: borrow<query>, e: entity, term: u8, v: house-design-window);
+
+    /// `cuo:gump/journal` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/journal`.
+    column-journal: func(q: borrow<query>, term: u8) -> list<journal-window>;
+    /// Writes `cuo:gump/journal` back through the `mut` reading term `term`.
+    set-journal: func(q: borrow<query>, e: entity, term: u8, v: journal-window);
+
+    /// `cuo:gump/menu` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/menu`.
+    column-menu: func(q: borrow<query>, term: u8) -> list<menu-gump-window>;
+    /// Writes `cuo:gump/menu` back through the `mut` reading term `term`.
+    set-menu: func(q: borrow<query>, e: entity, term: u8, v: menu-gump-window);
+
+    /// `cuo:gump/minimap` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/minimap`.
+    column-minimap: func(q: borrow<query>, term: u8) -> list<mini-map-window>;
+    /// Writes `cuo:gump/minimap` back through the `mut` reading term `term`.
+    set-minimap: func(q: borrow<query>, e: entity, term: u8, v: mini-map-window);
+
+    /// `cuo:gump/paperdoll` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/paperdoll`.
+    column-paperdoll: func(q: borrow<query>, term: u8) -> list<paperdoll-window>;
+    /// Writes `cuo:gump/paperdoll` back through the `mut` reading term `term`.
+    set-paperdoll: func(q: borrow<query>, e: entity, term: u8, v: paperdoll-window);
+
+    /// `cuo:gump/party-invite` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/party-invite`.
+    column-party-invite: func(q: borrow<query>, term: u8) -> list<party-invite-window>;
+    /// Writes `cuo:gump/party-invite` back through the `mut` reading term `term`.
+    set-party-invite: func(q: borrow<query>, e: entity, term: u8, v: party-invite-window);
+
+    /// `cuo:gump/party-manifest` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/party-manifest`.
+    column-party-manifest: func(q: borrow<query>, term: u8) -> list<party-manifest-window>;
+    /// Writes `cuo:gump/party-manifest` back through the `mut` reading term `term`.
+    set-party-manifest: func(q: borrow<query>, e: entity, term: u8, v: party-manifest-window);
+
+    /// `cuo:gump/profile` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/profile`.
+    column-profile: func(q: borrow<query>, term: u8) -> list<profile-window>;
+    /// Writes `cuo:gump/profile` back through the `mut` reading term `term`.
+    set-profile: func(q: borrow<query>, e: entity, term: u8, v: profile-window);
+
+    /// `cuo:gump/racial-book` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/racial-book`.
+    column-racial-book: func(q: borrow<query>, term: u8) -> list<racial-book-window>;
+    /// Writes `cuo:gump/racial-book` back through the `mut` reading term `term`.
+    set-racial-book: func(q: borrow<query>, e: entity, term: u8, v: racial-book-window);
+
+    /// `cuo:gump/skills` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/skills`.
+    column-gump-skills: func(q: borrow<query>, term: u8) -> list<skills-window>;
+    /// Writes `cuo:gump/skills` back through the `mut` reading term `term`.
+    set-gump-skills: func(q: borrow<query>, e: entity, term: u8, v: skills-window);
+
+    /// `cuo:gump/spellbook` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/spellbook`.
+    column-spellbook: func(q: borrow<query>, term: u8) -> list<spellbook-window>;
+    /// Writes `cuo:gump/spellbook` back through the `mut` reading term `term`.
+    set-spellbook: func(q: borrow<query>, e: entity, term: u8, v: spellbook-window);
+
+    /// `cuo:gump/split-menu` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/split-menu`.
+    column-split-menu: func(q: borrow<query>, term: u8) -> list<split-menu-window>;
+    /// Writes `cuo:gump/split-menu` back through the `mut` reading term `term`.
+    set-split-menu: func(q: borrow<query>, e: entity, term: u8, v: split-menu-window);
+
+    /// `cuo:gump/tip-notice` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/tip-notice`.
+    column-tip-notice: func(q: borrow<query>, term: u8) -> list<tip-notice-window>;
+    /// Writes `cuo:gump/tip-notice` back through the `mut` reading term `term`.
+    set-tip-notice: func(q: borrow<query>, e: entity, term: u8, v: tip-notice-window);
+
+    /// `cuo:gump/trade` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:gump/trade`.
+    column-trade: func(q: borrow<query>, term: u8) -> list<trade-window>;
+    /// Writes `cuo:gump/trade` back through the `mut` reading term `term`.
+    set-trade: func(q: borrow<query>, e: entity, term: u8, v: trade-window);
+
+    /// `cuo:ui/masked-text` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:ui/masked-text`.
+    column-masked-text: func(q: borrow<query>, term: u8) -> list<masked-text>;
+    /// Writes `cuo:ui/masked-text` back through the `mut` reading term `term`.
+    set-masked-text: func(q: borrow<query>, e: entity, term: u8, v: masked-text);
+
+    /// `cuo:ui/tooltip-serial` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:ui/tooltip-serial`.
+    column-tooltip-serial: func(q: borrow<query>, term: u8) -> list<ui-tooltip-serial>;
+    /// Writes `cuo:ui/tooltip-serial` back through the `mut` reading term `term`.
+    set-tooltip-serial: func(q: borrow<query>, e: entity, term: u8, v: ui-tooltip-serial);
+
     /// The `cuo:input/mouse` resource parameter's value; none when the host has none.
     get-mouse: func(r: borrow<res>) -> option<mouse-input>;
 
@@ -1573,6 +2134,9 @@ interface components {
     /// Sets the `cuo:options/schema` resource.
     set-resource-schema: func(c: borrow<commands>, v: mod-options-schema);
 
+    /// The `cuo:options/values` resource parameter's value; none when the host has none.
+    get-values: func(r: borrow<res>) -> option<mod-options-values>;
+
     /// The `cuo:player/buffs` resource parameter's value; none when the host has none.
     get-buffs: func(r: borrow<res>) -> option<player-buffs>;
 
@@ -1596,6 +2160,40 @@ interface components {
 
     /// The `cuo:ui/text-completion-state` resource parameter's value; none when the host has none.
     get-text-completion-state: func(r: borrow<res>) -> option<text-completion-state>;
+
+    /// The `cuo:player/party` resource parameter's value; none when the host has none.
+    get-party: func(r: borrow<res>) -> option<party>;
+
+    /// The `cuo:player/spellbook` resource parameter's value; none when the host has none.
+    get-player-spellbook: func(r: borrow<res>) -> option<spellbooks>;
+
+    /// The `cuo:player/steps` resource parameter's value; none when the host has none.
+    get-steps: func(r: borrow<res>) -> option<player-steps>;
+
+    /// The `cuo:ui/clipboard-set` resource parameter's value; none when the host has none.
+    get-clipboard-set: func(r: borrow<res>) -> option<clipboard-set>;
+    /// Sets the `cuo:ui/clipboard-set` resource.
+    set-resource-clipboard-set: func(c: borrow<commands>, v: clipboard-set);
+
+    /// The `cuo:ui/focused-input` resource parameter's value; none when the host has none.
+    get-focused-input: func(r: borrow<res>) -> option<focused-input>;
+    /// Sets the `cuo:ui/focused-input` resource.
+    set-resource-focused-input: func(c: borrow<commands>, v: focused-input);
+
+    /// The `cuo:ui/text-clipboard-action` resource parameter's value; none when the host has none.
+    get-text-clipboard-action: func(r: borrow<res>) -> option<text-clipboard-action>;
+    /// Sets the `cuo:ui/text-clipboard-action` resource.
+    set-resource-text-clipboard-action: func(c: borrow<commands>, v: text-clipboard-action);
+
+    /// The `cuo:ui/text-completion` resource parameter's value; none when the host has none.
+    get-text-completion: func(r: borrow<res>) -> option<text-completion>;
+    /// Sets the `cuo:ui/text-completion` resource.
+    set-resource-text-completion: func(c: borrow<commands>, v: text-completion);
+
+    /// The `cuo:ui/text-completion-pick` resource parameter's value; none when the host has none.
+    get-text-completion-pick: func(r: borrow<res>) -> option<text-completion-pick>;
+    /// Sets the `cuo:ui/text-completion-pick` resource.
+    set-resource-text-completion-pick: func(c: borrow<commands>, v: text-completion-pick);
 
     /// Sends `cuo:chat/message` (observers fire, event readers see it next).
     send-message: func(c: borrow<commands>, v: chat-message);
@@ -1666,6 +2264,41 @@ interface components {
     send-right-click: func(c: borrow<commands>, v: ui-right-click);
     /// The `cuo:ui/right-click` events of an event-reader parameter, in the order they were sent.
     read-right-click: func(e: borrow<events>) -> list<ui-right-click>;
+
+    /// Sends `cuo:gump/server-closed` (observers fire, event readers see it next).
+    send-server-closed: func(c: borrow<commands>, v: server-gump-closed-event);
+    /// The `cuo:gump/server-closed` events of an event-reader parameter, in the order they were sent.
+    read-server-closed: func(e: borrow<events>) -> list<server-gump-closed-event>;
+
+    /// Sends `cuo:gump/server-opened` (observers fire, event readers see it next).
+    send-server-opened: func(c: borrow<commands>, v: server-gump-opened-event);
+    /// The `cuo:gump/server-opened` events of an event-reader parameter, in the order they were sent.
+    read-server-opened: func(e: borrow<events>) -> list<server-gump-opened-event>;
+
+    /// Sends `cuo:player/move-request` (observers fire, event readers see it next).
+    send-move-request: func(c: borrow<commands>, v: mod-move-request);
+    /// The `cuo:player/move-request` events of an event-reader parameter, in the order they were sent.
+    read-move-request: func(e: borrow<events>) -> list<mod-move-request>;
+
+    /// Sends `cuo:scene/character-list` (observers fire, event readers see it next).
+    send-character-list: func(c: borrow<commands>, v: character-selection);
+    /// The `cuo:scene/character-list` events of an event-reader parameter, in the order they were sent.
+    read-character-list: func(e: borrow<events>) -> list<character-selection>;
+
+    /// Sends `cuo:scene/login-error-info` (observers fire, event readers see it next).
+    send-login-error-info: func(c: borrow<commands>, v: login-errors-info-event);
+    /// The `cuo:scene/login-error-info` events of an event-reader parameter, in the order they were sent.
+    read-login-error-info: func(e: borrow<events>) -> list<login-errors-info-event>;
+
+    /// Sends `cuo:scene/login-request` (observers fire, event readers see it next).
+    send-login-request: func(c: borrow<commands>, v: on-login-request);
+    /// The `cuo:scene/login-request` events of an event-reader parameter, in the order they were sent.
+    read-login-request: func(e: borrow<events>) -> list<on-login-request>;
+
+    /// Sends `cuo:scene/server-list` (observers fire, event readers see it next).
+    send-server-list: func(c: borrow<commands>, v: server-selection-info-event);
+    /// The `cuo:scene/server-list` events of an event-reader parameter, in the order they were sent.
+    read-server-list: func(e: borrow<events>) -> list<server-selection-info-event>;
 }
 
 // ── end of generated typed components ──

@@ -69,6 +69,32 @@
         cuo_modding_types_text_hue_t *: 75, \
         cuo_modding_types_text_spans_t *: 76, \
         cuo_modding_types_text_wrap_t *: 77, \
-        cuo_modding_types_ui_tooltip_t *: 78,
+        cuo_modding_types_ui_tooltip_t *: 78, \
+        cuo_modding_types_mob_animation_t *: 79, \
+        cuo_modding_types_mobile_steps_t *: 80, \
+        cuo_modding_types_combat_book_window_t *: 81, \
+        cuo_modding_types_house_design_window_t *: 82, \
+        cuo_modding_types_journal_window_t *: 83, \
+        cuo_modding_types_menu_gump_window_t *: 84, \
+        cuo_modding_types_mini_map_window_t *: 85, \
+        cuo_modding_types_paperdoll_window_t *: 86, \
+        cuo_modding_types_party_invite_window_t *: 87, \
+        cuo_modding_types_party_manifest_window_t *: 88, \
+        cuo_modding_types_profile_window_t *: 89, \
+        cuo_modding_types_racial_book_window_t *: 90, \
+        cuo_modding_types_server_gump_closed_event_t *: 91, \
+        cuo_modding_types_server_gump_opened_event_t *: 92, \
+        cuo_modding_types_skills_window_t *: 93, \
+        cuo_modding_types_spellbook_window_t *: 94, \
+        cuo_modding_types_split_menu_window_t *: 95, \
+        cuo_modding_types_tip_notice_window_t *: 96, \
+        cuo_modding_types_trade_window_t *: 97, \
+        cuo_modding_types_mod_move_request_t *: 98, \
+        cuo_modding_types_character_selection_t *: 99, \
+        cuo_modding_types_login_errors_info_event_t *: 100, \
+        cuo_modding_types_on_login_request_t *: 101, \
+        cuo_modding_types_server_selection_info_event_t *: 102, \
+        cuo_modding_types_masked_text_t *: 103, \
+        cuo_modding_types_ui_tooltip_serial_t *: 104,
 
 #endif

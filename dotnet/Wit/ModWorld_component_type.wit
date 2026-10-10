@@ -847,6 +847,15 @@ interface types {
     options: list<mod-option>,
   }
 
+  record mod-option-value {
+    key: string,
+    value: s32,
+  }
+
+  record mod-options-values {
+    values: list<mod-option-value>,
+  }
+
   record player-buff {
     %type: s32,
     graphic: u16,
@@ -1129,11 +1138,352 @@ interface types {
     text: string,
     max-width: s32,
   }
+
+  record mob-animation {
+    index: s32,
+    frames-count: s32,
+    interval: s32,
+    repeat-mode: s32,
+    repeat-mode-count: s32,
+    repeat: bool,
+    is-from-server: bool,
+    forward-direction: bool,
+    action: u8,
+    mount-action: u8,
+    direction: u8,
+    time: f32,
+    run: bool,
+  }
+
+  record mob-step {
+    x: s32,
+    y: s32,
+    z: s8,
+    direction: u8,
+    run: bool,
+  }
+
+  record mobile-steps {
+    index: s32,
+    time: f32,
+    steps: list<mob-step>,
+  }
+
+  record combat-book-window {
+    page: s32,
+    sounded-page: s32,
+    page-count: s32,
+    dict-pages: s32,
+    ability-count: s32,
+    dirty: bool,
+    content: u64,
+    left: u64,
+    right: u64,
+  }
+
+  record house-design-window {
+    content: u64,
+    serial: u32,
+  }
+
+  record journal-window {
+    special-height: s32,
+    minimized: bool,
+    dark-mode: bool,
+    show-system: bool,
+    show-objects: bool,
+    show-client: bool,
+    show-guild: bool,
+    built-revision: s32,
+    style-epoch: s32,
+    built-style-epoch: s32,
+    list-entity: u64,
+    flag-entity: u64,
+    top-entity: u64,
+    mid-entity: u64,
+    bottom-entity: u64,
+    title-entity: u64,
+    minimize-entity: u64,
+    dark-check-entity: u64,
+    expander-entity: u64,
+    width: f32,
+    list-width: f32,
+    content-height: f32,
+  }
+
+  record menu-gump-window {
+    serial: u32,
+    server-menu-id: u16,
+    is-gray: bool,
+    responded: bool,
+  }
+
+  record mini-map-window {
+    use-large-map: bool,
+  }
+
+  record paperdoll-window {
+    serial: u32,
+    is-player: bool,
+    can-lift: bool,
+    minimized: bool,
+  }
+
+  record party-invite-window {
+    inviter: u32,
+  }
+
+  record party-manifest-window {
+    can-loot: bool,
+  }
+
+  record profile-window {
+    serial: u32,
+    special-height: s32,
+    width: f32,
+    mid-entity: u64,
+    bottom-entity: u64,
+    expander-entity: u64,
+    footer-entity: u64,
+    footer-offset-from-bottom: s32,
+    minimized: bool,
+    knob-entity: u64,
+  }
+
+  record racial-book-window {
+    page: s32,
+    sounded-page: s32,
+    page-count: s32,
+    dict-pages: s32,
+    ability-count: s32,
+    race: u8,
+    dirty: bool,
+    content: u64,
+    left: u64,
+    right: u64,
+  }
+
+  record server-gump-closed-event {
+    serial: u32,
+    gump-id: u32,
+  }
+
+  record server-gump-opened-event {
+    serial: u32,
+    gump-id: u32,
+  }
+
+  record skills-window {
+    special-height: s32,
+    minimized: bool,
+    show-real: bool,
+    show-caps: bool,
+    dirty: bool,
+    width: s32,
+    list-width: f32,
+    content-height: f32,
+    list-entity: u64,
+    top-entity: u64,
+    mid-entity: u64,
+    bottom-entity: u64,
+    title-entity: u64,
+    minimize-entity: u64,
+    expander-entity: u64,
+    sum-label-entity: u64,
+    flag-entity: u64,
+    last-sum: f32,
+  }
+
+  record spellbook-window {
+    serial: u32,
+    school: s32,
+    page: s32,
+    sounded-page: s32,
+    page-count: s32,
+    built-revision: s32,
+    dirty: bool,
+    content-entity: u64,
+    left-corner: u64,
+    right-corner: u64,
+    minimized: bool,
+  }
+
+  record split-menu-window {
+    serial: u32,
+    max-amount: s32,
+    slider: u64,
+    text: u64,
+    ok: u64,
+    last-slider: s32,
+    last-text: string,
+    graphic: u16,
+    hue: u16,
+    source-ui-entity: u64,
+    source-container: u32,
+    original-graphic: u16,
+    original-hue: u16,
+    original-amount: u16,
+    original-x: u16,
+    original-y: u16,
+    original-z: s8,
+    original-container: u32,
+    original-grid-index: u8,
+    original-from-slot: bool,
+  }
+
+  record tip-notice-window {
+    tip-serial: u16,
+    special-height: s32,
+    width: f32,
+    mid-entity: u64,
+    bottom-entity: u64,
+    expander-entity: u64,
+    prev-entity: u64,
+    next-entity: u64,
+  }
+
+  record trade-window {
+    serial: u32,
+    id1: u32,
+    id2: u32,
+    im-accepting: bool,
+    he-is-accepting: bool,
+    is-new: bool,
+  }
+
+  record mod-move-request {
+    direction: u8,
+    run: bool,
+    sequence: u8,
+  }
+
+  record party-member {
+    serial: u32,
+    name: string,
+  }
+
+  record party {
+    leader: u32,
+    members: list<party-member>,
+    in-party: bool,
+    can-loot: bool,
+  }
+
+  record spellbook {
+    serial: u32,
+    book-type: u8,
+    spells: list<s32>,
+  }
+
+  record spellbooks {
+    revision: s32,
+    books: list<spellbook>,
+  }
+
+  record player-step {
+    sequence: u8,
+    direction: u8,
+    x: u16,
+    y: u16,
+    z: s8,
+  }
+
+  record player-steps {
+    last-step: f32,
+    count: s32,
+    sequence: u8,
+    resync-sent: bool,
+    steps: list<player-step>,
+  }
+
+  record char-info {
+    name: string,
+    index: u32,
+  }
+
+  record town-info {
+    index: u8,
+    name: string,
+    building: string,
+    x: u16,
+    y: u16,
+    z: s8,
+    %map: u32,
+    cliloc-description: u32,
+  }
+
+  record character-selection {
+    characters: list<char-info>,
+    towns: list<town-info>,
+  }
+
+  record login-error-info {
+    error-message: string,
+  }
+
+  record login-errors-info-event {
+    error: login-error-info,
+  }
+
+  record on-login-request {
+    username: string,
+    password: string,
+    address: string,
+    port: u16,
+  }
+
+  record server-info {
+    index: s32,
+    name: string,
+    percent-full: u8,
+    time-zone: u8,
+    ip: u32,
+  }
+
+  record server-selection-info-event {
+    servers: list<server-info>,
+  }
+
+  record clipboard-set {
+    seq: s32,
+    text: string,
+  }
+
+  record focused-input {
+    entity: u64,
+  }
+
+  record masked-text {
+    value: string,
+    mask-char: char,
+  }
+
+  record text-clipboard-action {
+    entity: u64,
+    action: s32,
+    seq: s32,
+  }
+
+  record text-completion {
+    entity: u64,
+    prefix: string,
+    items: list<string>,
+  }
+
+  record text-completion-pick {
+    entity: u64,
+    index: s32,
+    seq: s32,
+  }
+
+  record ui-tooltip-serial {
+    serial: u32,
+  }
 }
 
 interface components {
   use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity};
-  use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip};
+  use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, on-login-request, server-selection-info-event, clipboard-set, focused-input, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial};
 
   resource entity-builder {
     id: func() -> entity;
@@ -1191,6 +1541,33 @@ interface components {
     topbar-button: func() -> entity-builder;
     topbar-full: func() -> entity-builder;
     topbar-root: func() -> entity-builder;
+    buff: func() -> entity-builder;
+    combat-book: func(v: combat-book-window) -> entity-builder;
+    house-design: func(v: house-design-window) -> entity-builder;
+    journal: func(v: journal-window) -> entity-builder;
+    logout: func() -> entity-builder;
+    menu: func(v: menu-gump-window) -> entity-builder;
+    message-box: func() -> entity-builder;
+    minimap: func(v: mini-map-window) -> entity-builder;
+    paperdoll: func(v: paperdoll-window) -> entity-builder;
+    party-invite: func(v: party-invite-window) -> entity-builder;
+    party-manifest: func(v: party-manifest-window) -> entity-builder;
+    profile: func(v: profile-window) -> entity-builder;
+    racial-book: func(v: racial-book-window) -> entity-builder;
+    gump-skills: func(v: skills-window) -> entity-builder;
+    spellbook: func(v: spellbook-window) -> entity-builder;
+    split-menu: func(v: split-menu-window) -> entity-builder;
+    tip-notice: func(v: tip-notice-window) -> entity-builder;
+    trade: func(v: trade-window) -> entity-builder;
+    worldmap: func() -> entity-builder;
+    character-creation: func() -> entity-builder;
+    character-selection: func() -> entity-builder;
+    game: func() -> entity-builder;
+    login: func() -> entity-builder;
+    login-error: func() -> entity-builder;
+    server-selection: func() -> entity-builder;
+    masked-text: func(v: masked-text) -> entity-builder;
+    tooltip-serial: func(v: ui-tooltip-serial) -> entity-builder;
   }
 
   entity-of: func(c: borrow<commands>, e: entity) -> entity-builder;
@@ -1375,6 +1752,78 @@ interface components {
 
   set-tooltip: func(q: borrow<query>, e: entity, term: u8, v: ui-tooltip);
 
+  column-animation: func(q: borrow<query>, term: u8) -> list<mob-animation>;
+
+  column-mob-steps: func(q: borrow<query>, term: u8) -> list<mobile-steps>;
+
+  column-combat-book: func(q: borrow<query>, term: u8) -> list<combat-book-window>;
+
+  set-combat-book: func(q: borrow<query>, e: entity, term: u8, v: combat-book-window);
+
+  column-house-design: func(q: borrow<query>, term: u8) -> list<house-design-window>;
+
+  set-house-design: func(q: borrow<query>, e: entity, term: u8, v: house-design-window);
+
+  column-journal: func(q: borrow<query>, term: u8) -> list<journal-window>;
+
+  set-journal: func(q: borrow<query>, e: entity, term: u8, v: journal-window);
+
+  column-menu: func(q: borrow<query>, term: u8) -> list<menu-gump-window>;
+
+  set-menu: func(q: borrow<query>, e: entity, term: u8, v: menu-gump-window);
+
+  column-minimap: func(q: borrow<query>, term: u8) -> list<mini-map-window>;
+
+  set-minimap: func(q: borrow<query>, e: entity, term: u8, v: mini-map-window);
+
+  column-paperdoll: func(q: borrow<query>, term: u8) -> list<paperdoll-window>;
+
+  set-paperdoll: func(q: borrow<query>, e: entity, term: u8, v: paperdoll-window);
+
+  column-party-invite: func(q: borrow<query>, term: u8) -> list<party-invite-window>;
+
+  set-party-invite: func(q: borrow<query>, e: entity, term: u8, v: party-invite-window);
+
+  column-party-manifest: func(q: borrow<query>, term: u8) -> list<party-manifest-window>;
+
+  set-party-manifest: func(q: borrow<query>, e: entity, term: u8, v: party-manifest-window);
+
+  column-profile: func(q: borrow<query>, term: u8) -> list<profile-window>;
+
+  set-profile: func(q: borrow<query>, e: entity, term: u8, v: profile-window);
+
+  column-racial-book: func(q: borrow<query>, term: u8) -> list<racial-book-window>;
+
+  set-racial-book: func(q: borrow<query>, e: entity, term: u8, v: racial-book-window);
+
+  column-gump-skills: func(q: borrow<query>, term: u8) -> list<skills-window>;
+
+  set-gump-skills: func(q: borrow<query>, e: entity, term: u8, v: skills-window);
+
+  column-spellbook: func(q: borrow<query>, term: u8) -> list<spellbook-window>;
+
+  set-spellbook: func(q: borrow<query>, e: entity, term: u8, v: spellbook-window);
+
+  column-split-menu: func(q: borrow<query>, term: u8) -> list<split-menu-window>;
+
+  set-split-menu: func(q: borrow<query>, e: entity, term: u8, v: split-menu-window);
+
+  column-tip-notice: func(q: borrow<query>, term: u8) -> list<tip-notice-window>;
+
+  set-tip-notice: func(q: borrow<query>, e: entity, term: u8, v: tip-notice-window);
+
+  column-trade: func(q: borrow<query>, term: u8) -> list<trade-window>;
+
+  set-trade: func(q: borrow<query>, e: entity, term: u8, v: trade-window);
+
+  column-masked-text: func(q: borrow<query>, term: u8) -> list<masked-text>;
+
+  set-masked-text: func(q: borrow<query>, e: entity, term: u8, v: masked-text);
+
+  column-tooltip-serial: func(q: borrow<query>, term: u8) -> list<ui-tooltip-serial>;
+
+  set-tooltip-serial: func(q: borrow<query>, e: entity, term: u8, v: ui-tooltip-serial);
+
   get-mouse: func(r: borrow<res>) -> option<mouse-input>;
 
   get-keyboard: func(r: borrow<res>) -> option<keyboard-input>;
@@ -1407,6 +1856,8 @@ interface components {
 
   set-resource-schema: func(c: borrow<commands>, v: mod-options-schema);
 
+  get-values: func(r: borrow<res>) -> option<mod-options-values>;
+
   get-buffs: func(r: borrow<res>) -> option<player-buffs>;
 
   get-grabbed-item: func(r: borrow<res>) -> option<grabbed-item>;
@@ -1422,6 +1873,32 @@ interface components {
   get-text-caret: func(r: borrow<res>) -> option<text-caret>;
 
   get-text-completion-state: func(r: borrow<res>) -> option<text-completion-state>;
+
+  get-party: func(r: borrow<res>) -> option<party>;
+
+  get-player-spellbook: func(r: borrow<res>) -> option<spellbooks>;
+
+  get-steps: func(r: borrow<res>) -> option<player-steps>;
+
+  get-clipboard-set: func(r: borrow<res>) -> option<clipboard-set>;
+
+  set-resource-clipboard-set: func(c: borrow<commands>, v: clipboard-set);
+
+  get-focused-input: func(r: borrow<res>) -> option<focused-input>;
+
+  set-resource-focused-input: func(c: borrow<commands>, v: focused-input);
+
+  get-text-clipboard-action: func(r: borrow<res>) -> option<text-clipboard-action>;
+
+  set-resource-text-clipboard-action: func(c: borrow<commands>, v: text-clipboard-action);
+
+  get-text-completion: func(r: borrow<res>) -> option<text-completion>;
+
+  set-resource-text-completion: func(c: borrow<commands>, v: text-completion);
+
+  get-text-completion-pick: func(r: borrow<res>) -> option<text-completion-pick>;
+
+  set-resource-text-completion-pick: func(c: borrow<commands>, v: text-completion-pick);
 
   send-message: func(c: borrow<commands>, v: chat-message);
 
@@ -1478,6 +1955,34 @@ interface components {
   send-right-click: func(c: borrow<commands>, v: ui-right-click);
 
   read-right-click: func(e: borrow<events>) -> list<ui-right-click>;
+
+  send-server-closed: func(c: borrow<commands>, v: server-gump-closed-event);
+
+  read-server-closed: func(e: borrow<events>) -> list<server-gump-closed-event>;
+
+  send-server-opened: func(c: borrow<commands>, v: server-gump-opened-event);
+
+  read-server-opened: func(e: borrow<events>) -> list<server-gump-opened-event>;
+
+  send-move-request: func(c: borrow<commands>, v: mod-move-request);
+
+  read-move-request: func(e: borrow<events>) -> list<mod-move-request>;
+
+  send-character-list: func(c: borrow<commands>, v: character-selection);
+
+  read-character-list: func(e: borrow<events>) -> list<character-selection>;
+
+  send-login-error-info: func(c: borrow<commands>, v: login-errors-info-event);
+
+  read-login-error-info: func(e: borrow<events>) -> list<login-errors-info-event>;
+
+  send-login-request: func(c: borrow<commands>, v: on-login-request);
+
+  read-login-request: func(e: borrow<events>) -> list<on-login-request>;
+
+  send-server-list: func(c: borrow<commands>, v: server-selection-info-event);
+
+  read-server-list: func(e: borrow<events>) -> list<server-selection-info-event>;
 }
 
 world mod {

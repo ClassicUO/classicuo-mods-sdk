@@ -1253,6 +1253,32 @@ internal interface ITypesImports {
     }
 
     /**
+    * `ModOptionValueDto`
+    */
+
+    internal struct ModOptionValue {
+        internal string key;
+        internal int value;
+
+        internal ModOptionValue(string key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    /**
+    * `cuo:options/values`
+    */
+
+    internal struct ModOptionsValues {
+        internal global::System.Collections.Generic.List<ModOptionValue> values;
+
+        internal ModOptionsValues(global::System.Collections.Generic.List<ModOptionValue> values) {
+            this.values = values;
+        }
+    }
+
+    /**
     * `PlayerBuffDto`
     */
 
@@ -1891,6 +1917,856 @@ internal interface ITypesImports {
         internal UiTooltip(string text, int maxWidth) {
             this.text = text;
             this.maxWidth = maxWidth;
+        }
+    }
+
+    /**
+    * `cuo:ent/animation`
+    */
+
+    internal struct MobAnimation {
+        internal int index;
+        internal int framesCount;
+        internal int interval;
+        internal int repeatMode;
+        internal int repeatModeCount;
+        internal bool repeat;
+        internal bool isFromServer;
+        internal bool forwardDirection;
+        internal byte action;
+        internal byte mountAction;
+        internal byte direction;
+        internal float time;
+        internal bool run;
+
+        internal MobAnimation(int index, int framesCount, int interval, int repeatMode, int repeatModeCount, bool repeat, bool isFromServer, bool forwardDirection, byte action, byte mountAction, byte direction, float time, bool run) {
+            this.index = index;
+            this.framesCount = framesCount;
+            this.interval = interval;
+            this.repeatMode = repeatMode;
+            this.repeatModeCount = repeatModeCount;
+            this.repeat = repeat;
+            this.isFromServer = isFromServer;
+            this.forwardDirection = forwardDirection;
+            this.action = action;
+            this.mountAction = mountAction;
+            this.direction = direction;
+            this.time = time;
+            this.run = run;
+        }
+    }
+
+    /**
+    * `MobStepDto`
+    */
+
+    internal struct MobStep {
+        internal int x;
+        internal int y;
+        internal sbyte z;
+        internal byte direction;
+        internal bool run;
+
+        internal MobStep(int x, int y, sbyte z, byte direction, bool run) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.direction = direction;
+            this.run = run;
+        }
+    }
+
+    /**
+    * `cuo:ent/mob-steps`
+    */
+
+    internal struct MobileSteps {
+        internal int index;
+        internal float time;
+        internal global::System.Collections.Generic.List<MobStep> steps;
+
+        internal MobileSteps(int index, float time, global::System.Collections.Generic.List<MobStep> steps) {
+            this.index = index;
+            this.time = time;
+            this.steps = steps;
+        }
+    }
+
+    /**
+    * `cuo:gump/combat-book`
+    */
+
+    internal struct CombatBookWindow {
+        internal int page;
+        internal int soundedPage;
+        internal int pageCount;
+        internal int dictPages;
+        internal int abilityCount;
+        internal bool dirty;
+        internal ulong content;
+        internal ulong left;
+        internal ulong right;
+
+        internal CombatBookWindow(int page, int soundedPage, int pageCount, int dictPages, int abilityCount, bool dirty, ulong content, ulong left, ulong right) {
+            this.page = page;
+            this.soundedPage = soundedPage;
+            this.pageCount = pageCount;
+            this.dictPages = dictPages;
+            this.abilityCount = abilityCount;
+            this.dirty = dirty;
+            this.content = content;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    /**
+    * `cuo:gump/house-design`
+    */
+
+    internal struct HouseDesignWindow {
+        internal ulong content;
+        internal uint serial;
+
+        internal HouseDesignWindow(ulong content, uint serial) {
+            this.content = content;
+            this.serial = serial;
+        }
+    }
+
+    /**
+    * `cuo:gump/journal`
+    */
+
+    internal struct JournalWindow {
+        internal int specialHeight;
+        internal bool minimized;
+        internal bool darkMode;
+        internal bool showSystem;
+        internal bool showObjects;
+        internal bool showClient;
+        internal bool showGuild;
+        internal int builtRevision;
+        internal int styleEpoch;
+        internal int builtStyleEpoch;
+        internal ulong listEntity;
+        internal ulong flagEntity;
+        internal ulong topEntity;
+        internal ulong midEntity;
+        internal ulong bottomEntity;
+        internal ulong titleEntity;
+        internal ulong minimizeEntity;
+        internal ulong darkCheckEntity;
+        internal ulong expanderEntity;
+        internal float width;
+        internal float listWidth;
+        internal float contentHeight;
+
+        internal JournalWindow(int specialHeight, bool minimized, bool darkMode, bool showSystem, bool showObjects, bool showClient, bool showGuild, int builtRevision, int styleEpoch, int builtStyleEpoch, ulong listEntity, ulong flagEntity, ulong topEntity, ulong midEntity, ulong bottomEntity, ulong titleEntity, ulong minimizeEntity, ulong darkCheckEntity, ulong expanderEntity, float width, float listWidth, float contentHeight) {
+            this.specialHeight = specialHeight;
+            this.minimized = minimized;
+            this.darkMode = darkMode;
+            this.showSystem = showSystem;
+            this.showObjects = showObjects;
+            this.showClient = showClient;
+            this.showGuild = showGuild;
+            this.builtRevision = builtRevision;
+            this.styleEpoch = styleEpoch;
+            this.builtStyleEpoch = builtStyleEpoch;
+            this.listEntity = listEntity;
+            this.flagEntity = flagEntity;
+            this.topEntity = topEntity;
+            this.midEntity = midEntity;
+            this.bottomEntity = bottomEntity;
+            this.titleEntity = titleEntity;
+            this.minimizeEntity = minimizeEntity;
+            this.darkCheckEntity = darkCheckEntity;
+            this.expanderEntity = expanderEntity;
+            this.width = width;
+            this.listWidth = listWidth;
+            this.contentHeight = contentHeight;
+        }
+    }
+
+    /**
+    * `cuo:gump/menu`
+    */
+
+    internal struct MenuGumpWindow {
+        internal uint serial;
+        internal ushort serverMenuId;
+        internal bool isGray;
+        internal bool responded;
+
+        internal MenuGumpWindow(uint serial, ushort serverMenuId, bool isGray, bool responded) {
+            this.serial = serial;
+            this.serverMenuId = serverMenuId;
+            this.isGray = isGray;
+            this.responded = responded;
+        }
+    }
+
+    /**
+    * `cuo:gump/minimap`
+    */
+
+    internal struct MiniMapWindow {
+        internal bool useLargeMap;
+
+        internal MiniMapWindow(bool useLargeMap) {
+            this.useLargeMap = useLargeMap;
+        }
+    }
+
+    /**
+    * `cuo:gump/paperdoll`
+    */
+
+    internal struct PaperdollWindow {
+        internal uint serial;
+        internal bool isPlayer;
+        internal bool canLift;
+        internal bool minimized;
+
+        internal PaperdollWindow(uint serial, bool isPlayer, bool canLift, bool minimized) {
+            this.serial = serial;
+            this.isPlayer = isPlayer;
+            this.canLift = canLift;
+            this.minimized = minimized;
+        }
+    }
+
+    /**
+    * `cuo:gump/party-invite`
+    */
+
+    internal struct PartyInviteWindow {
+        internal uint inviter;
+
+        internal PartyInviteWindow(uint inviter) {
+            this.inviter = inviter;
+        }
+    }
+
+    /**
+    * `cuo:gump/party-manifest`
+    */
+
+    internal struct PartyManifestWindow {
+        internal bool canLoot;
+
+        internal PartyManifestWindow(bool canLoot) {
+            this.canLoot = canLoot;
+        }
+    }
+
+    /**
+    * `cuo:gump/profile`
+    */
+
+    internal struct ProfileWindow {
+        internal uint serial;
+        internal int specialHeight;
+        internal float width;
+        internal ulong midEntity;
+        internal ulong bottomEntity;
+        internal ulong expanderEntity;
+        internal ulong footerEntity;
+        internal int footerOffsetFromBottom;
+        internal bool minimized;
+        internal ulong knobEntity;
+
+        internal ProfileWindow(uint serial, int specialHeight, float width, ulong midEntity, ulong bottomEntity, ulong expanderEntity, ulong footerEntity, int footerOffsetFromBottom, bool minimized, ulong knobEntity) {
+            this.serial = serial;
+            this.specialHeight = specialHeight;
+            this.width = width;
+            this.midEntity = midEntity;
+            this.bottomEntity = bottomEntity;
+            this.expanderEntity = expanderEntity;
+            this.footerEntity = footerEntity;
+            this.footerOffsetFromBottom = footerOffsetFromBottom;
+            this.minimized = minimized;
+            this.knobEntity = knobEntity;
+        }
+    }
+
+    /**
+    * `cuo:gump/racial-book`
+    */
+
+    internal struct RacialBookWindow {
+        internal int page;
+        internal int soundedPage;
+        internal int pageCount;
+        internal int dictPages;
+        internal int abilityCount;
+        internal byte race;
+        internal bool dirty;
+        internal ulong content;
+        internal ulong left;
+        internal ulong right;
+
+        internal RacialBookWindow(int page, int soundedPage, int pageCount, int dictPages, int abilityCount, byte race, bool dirty, ulong content, ulong left, ulong right) {
+            this.page = page;
+            this.soundedPage = soundedPage;
+            this.pageCount = pageCount;
+            this.dictPages = dictPages;
+            this.abilityCount = abilityCount;
+            this.race = race;
+            this.dirty = dirty;
+            this.content = content;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    /**
+    * `cuo:gump/server-closed`
+    */
+
+    internal struct ServerGumpClosedEvent {
+        internal uint serial;
+        internal uint gumpId;
+
+        internal ServerGumpClosedEvent(uint serial, uint gumpId) {
+            this.serial = serial;
+            this.gumpId = gumpId;
+        }
+    }
+
+    /**
+    * `cuo:gump/server-opened`
+    */
+
+    internal struct ServerGumpOpenedEvent {
+        internal uint serial;
+        internal uint gumpId;
+
+        internal ServerGumpOpenedEvent(uint serial, uint gumpId) {
+            this.serial = serial;
+            this.gumpId = gumpId;
+        }
+    }
+
+    /**
+    * `cuo:gump/skills`
+    */
+
+    internal struct SkillsWindow {
+        internal int specialHeight;
+        internal bool minimized;
+        internal bool showReal;
+        internal bool showCaps;
+        internal bool dirty;
+        internal int width;
+        internal float listWidth;
+        internal float contentHeight;
+        internal ulong listEntity;
+        internal ulong topEntity;
+        internal ulong midEntity;
+        internal ulong bottomEntity;
+        internal ulong titleEntity;
+        internal ulong minimizeEntity;
+        internal ulong expanderEntity;
+        internal ulong sumLabelEntity;
+        internal ulong flagEntity;
+        internal float lastSum;
+
+        internal SkillsWindow(int specialHeight, bool minimized, bool showReal, bool showCaps, bool dirty, int width, float listWidth, float contentHeight, ulong listEntity, ulong topEntity, ulong midEntity, ulong bottomEntity, ulong titleEntity, ulong minimizeEntity, ulong expanderEntity, ulong sumLabelEntity, ulong flagEntity, float lastSum) {
+            this.specialHeight = specialHeight;
+            this.minimized = minimized;
+            this.showReal = showReal;
+            this.showCaps = showCaps;
+            this.dirty = dirty;
+            this.width = width;
+            this.listWidth = listWidth;
+            this.contentHeight = contentHeight;
+            this.listEntity = listEntity;
+            this.topEntity = topEntity;
+            this.midEntity = midEntity;
+            this.bottomEntity = bottomEntity;
+            this.titleEntity = titleEntity;
+            this.minimizeEntity = minimizeEntity;
+            this.expanderEntity = expanderEntity;
+            this.sumLabelEntity = sumLabelEntity;
+            this.flagEntity = flagEntity;
+            this.lastSum = lastSum;
+        }
+    }
+
+    /**
+    * `cuo:gump/spellbook`
+    */
+
+    internal struct SpellbookWindow {
+        internal uint serial;
+        internal int school;
+        internal int page;
+        internal int soundedPage;
+        internal int pageCount;
+        internal int builtRevision;
+        internal bool dirty;
+        internal ulong contentEntity;
+        internal ulong leftCorner;
+        internal ulong rightCorner;
+        internal bool minimized;
+
+        internal SpellbookWindow(uint serial, int school, int page, int soundedPage, int pageCount, int builtRevision, bool dirty, ulong contentEntity, ulong leftCorner, ulong rightCorner, bool minimized) {
+            this.serial = serial;
+            this.school = school;
+            this.page = page;
+            this.soundedPage = soundedPage;
+            this.pageCount = pageCount;
+            this.builtRevision = builtRevision;
+            this.dirty = dirty;
+            this.contentEntity = contentEntity;
+            this.leftCorner = leftCorner;
+            this.rightCorner = rightCorner;
+            this.minimized = minimized;
+        }
+    }
+
+    /**
+    * `cuo:gump/split-menu`
+    */
+
+    internal struct SplitMenuWindow {
+        internal uint serial;
+        internal int maxAmount;
+        internal ulong slider;
+        internal ulong text;
+        internal ulong ok;
+        internal int lastSlider;
+        internal string lastText;
+        internal ushort graphic;
+        internal ushort hue;
+        internal ulong sourceUiEntity;
+        internal uint sourceContainer;
+        internal ushort originalGraphic;
+        internal ushort originalHue;
+        internal ushort originalAmount;
+        internal ushort originalX;
+        internal ushort originalY;
+        internal sbyte originalZ;
+        internal uint originalContainer;
+        internal byte originalGridIndex;
+        internal bool originalFromSlot;
+
+        internal SplitMenuWindow(uint serial, int maxAmount, ulong slider, ulong text, ulong ok, int lastSlider, string lastText, ushort graphic, ushort hue, ulong sourceUiEntity, uint sourceContainer, ushort originalGraphic, ushort originalHue, ushort originalAmount, ushort originalX, ushort originalY, sbyte originalZ, uint originalContainer, byte originalGridIndex, bool originalFromSlot) {
+            this.serial = serial;
+            this.maxAmount = maxAmount;
+            this.slider = slider;
+            this.text = text;
+            this.ok = ok;
+            this.lastSlider = lastSlider;
+            this.lastText = lastText;
+            this.graphic = graphic;
+            this.hue = hue;
+            this.sourceUiEntity = sourceUiEntity;
+            this.sourceContainer = sourceContainer;
+            this.originalGraphic = originalGraphic;
+            this.originalHue = originalHue;
+            this.originalAmount = originalAmount;
+            this.originalX = originalX;
+            this.originalY = originalY;
+            this.originalZ = originalZ;
+            this.originalContainer = originalContainer;
+            this.originalGridIndex = originalGridIndex;
+            this.originalFromSlot = originalFromSlot;
+        }
+    }
+
+    /**
+    * `cuo:gump/tip-notice`
+    */
+
+    internal struct TipNoticeWindow {
+        internal ushort tipSerial;
+        internal int specialHeight;
+        internal float width;
+        internal ulong midEntity;
+        internal ulong bottomEntity;
+        internal ulong expanderEntity;
+        internal ulong prevEntity;
+        internal ulong nextEntity;
+
+        internal TipNoticeWindow(ushort tipSerial, int specialHeight, float width, ulong midEntity, ulong bottomEntity, ulong expanderEntity, ulong prevEntity, ulong nextEntity) {
+            this.tipSerial = tipSerial;
+            this.specialHeight = specialHeight;
+            this.width = width;
+            this.midEntity = midEntity;
+            this.bottomEntity = bottomEntity;
+            this.expanderEntity = expanderEntity;
+            this.prevEntity = prevEntity;
+            this.nextEntity = nextEntity;
+        }
+    }
+
+    /**
+    * `cuo:gump/trade`
+    */
+
+    internal struct TradeWindow {
+        internal uint serial;
+        internal uint id1;
+        internal uint id2;
+        internal bool imAccepting;
+        internal bool heIsAccepting;
+        internal bool isNew;
+
+        internal TradeWindow(uint serial, uint id1, uint id2, bool imAccepting, bool heIsAccepting, bool isNew) {
+            this.serial = serial;
+            this.id1 = id1;
+            this.id2 = id2;
+            this.imAccepting = imAccepting;
+            this.heIsAccepting = heIsAccepting;
+            this.isNew = isNew;
+        }
+    }
+
+    /**
+    * `cuo:player/move-request`
+    */
+
+    internal struct ModMoveRequest {
+        internal byte direction;
+        internal bool run;
+        internal byte sequence;
+
+        internal ModMoveRequest(byte direction, bool run, byte sequence) {
+            this.direction = direction;
+            this.run = run;
+            this.sequence = sequence;
+        }
+    }
+
+    /**
+    * `PartyMemberDto`
+    */
+
+    internal struct PartyMember {
+        internal uint serial;
+        internal string name;
+
+        internal PartyMember(uint serial, string name) {
+            this.serial = serial;
+            this.name = name;
+        }
+    }
+
+    /**
+    * `cuo:player/party`
+    */
+
+    internal struct Party {
+        internal uint leader;
+        internal global::System.Collections.Generic.List<PartyMember> members;
+        internal bool inParty;
+        internal bool canLoot;
+
+        internal Party(uint leader, global::System.Collections.Generic.List<PartyMember> members, bool inParty, bool canLoot) {
+            this.leader = leader;
+            this.members = members;
+            this.inParty = inParty;
+            this.canLoot = canLoot;
+        }
+    }
+
+    /**
+    * `SpellbookDto`
+    */
+
+    internal struct Spellbook {
+        internal uint serial;
+        internal byte bookType;
+        internal int[] spells;
+
+        internal Spellbook(uint serial, byte bookType, int[] spells) {
+            this.serial = serial;
+            this.bookType = bookType;
+            this.spells = spells;
+        }
+    }
+
+    /**
+    * `cuo:player/spellbook`
+    */
+
+    internal struct Spellbooks {
+        internal int revision;
+        internal global::System.Collections.Generic.List<Spellbook> books;
+
+        internal Spellbooks(int revision, global::System.Collections.Generic.List<Spellbook> books) {
+            this.revision = revision;
+            this.books = books;
+        }
+    }
+
+    /**
+    * `PlayerStepDto`
+    */
+
+    internal struct PlayerStep {
+        internal byte sequence;
+        internal byte direction;
+        internal ushort x;
+        internal ushort y;
+        internal sbyte z;
+
+        internal PlayerStep(byte sequence, byte direction, ushort x, ushort y, sbyte z) {
+            this.sequence = sequence;
+            this.direction = direction;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+    }
+
+    /**
+    * `cuo:player/steps`
+    */
+
+    internal struct PlayerSteps {
+        internal float lastStep;
+        internal int count;
+        internal byte sequence;
+        internal bool resyncSent;
+        internal global::System.Collections.Generic.List<PlayerStep> steps;
+
+        internal PlayerSteps(float lastStep, int count, byte sequence, bool resyncSent, global::System.Collections.Generic.List<PlayerStep> steps) {
+            this.lastStep = lastStep;
+            this.count = count;
+            this.sequence = sequence;
+            this.resyncSent = resyncSent;
+            this.steps = steps;
+        }
+    }
+
+    /**
+    * `CharInfoDto`
+    */
+
+    internal struct CharInfo {
+        internal string name;
+        internal uint index;
+
+        internal CharInfo(string name, uint index) {
+            this.name = name;
+            this.index = index;
+        }
+    }
+
+    /**
+    * `TownInfoDto`
+    */
+
+    internal struct TownInfo {
+        internal byte index;
+        internal string name;
+        internal string building;
+        internal ushort x;
+        internal ushort y;
+        internal sbyte z;
+        internal uint map;
+        internal uint clilocDescription;
+
+        internal TownInfo(byte index, string name, string building, ushort x, ushort y, sbyte z, uint map, uint clilocDescription) {
+            this.index = index;
+            this.name = name;
+            this.building = building;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.map = map;
+            this.clilocDescription = clilocDescription;
+        }
+    }
+
+    /**
+    * `cuo:scene/character-list`
+    */
+
+    internal struct CharacterSelection {
+        internal global::System.Collections.Generic.List<CharInfo> characters;
+        internal global::System.Collections.Generic.List<TownInfo> towns;
+
+        internal CharacterSelection(global::System.Collections.Generic.List<CharInfo> characters, global::System.Collections.Generic.List<TownInfo> towns) {
+            this.characters = characters;
+            this.towns = towns;
+        }
+    }
+
+    /**
+    * `LoginErrorInfo`
+    */
+
+    internal struct LoginErrorInfo {
+        internal string errorMessage;
+
+        internal LoginErrorInfo(string errorMessage) {
+            this.errorMessage = errorMessage;
+        }
+    }
+
+    /**
+    * `cuo:scene/login-error-info`
+    */
+
+    internal struct LoginErrorsInfoEvent {
+        internal LoginErrorInfo error;
+
+        internal LoginErrorsInfoEvent(LoginErrorInfo error) {
+            this.error = error;
+        }
+    }
+
+    /**
+    * `cuo:scene/login-request`
+    */
+
+    internal struct OnLoginRequest {
+        internal string username;
+        internal string password;
+        internal string address;
+        internal ushort port;
+
+        internal OnLoginRequest(string username, string password, string address, ushort port) {
+            this.username = username;
+            this.password = password;
+            this.address = address;
+            this.port = port;
+        }
+    }
+
+    /**
+    * `ServerInfo`
+    */
+
+    internal struct ServerInfo {
+        internal int index;
+        internal string name;
+        internal byte percentFull;
+        internal byte timeZone;
+        internal uint ip;
+
+        internal ServerInfo(int index, string name, byte percentFull, byte timeZone, uint ip) {
+            this.index = index;
+            this.name = name;
+            this.percentFull = percentFull;
+            this.timeZone = timeZone;
+            this.ip = ip;
+        }
+    }
+
+    /**
+    * `cuo:scene/server-list`
+    */
+
+    internal struct ServerSelectionInfoEvent {
+        internal global::System.Collections.Generic.List<ServerInfo> servers;
+
+        internal ServerSelectionInfoEvent(global::System.Collections.Generic.List<ServerInfo> servers) {
+            this.servers = servers;
+        }
+    }
+
+    /**
+    * `cuo:ui/clipboard-set`
+    */
+
+    internal struct ClipboardSet {
+        internal int seq;
+        internal string text;
+
+        internal ClipboardSet(int seq, string text) {
+            this.seq = seq;
+            this.text = text;
+        }
+    }
+
+    /**
+    * `cuo:ui/focused-input`
+    */
+
+    internal struct FocusedInput {
+        internal ulong entity;
+
+        internal FocusedInput(ulong entity) {
+            this.entity = entity;
+        }
+    }
+
+    /**
+    * `cuo:ui/masked-text`
+    */
+
+    internal struct MaskedText {
+        internal string value;
+        internal uint maskChar;
+
+        internal MaskedText(string value, uint maskChar) {
+            this.value = value;
+            this.maskChar = maskChar;
+        }
+    }
+
+    /**
+    * `cuo:ui/text-clipboard-action`
+    */
+
+    internal struct TextClipboardAction {
+        internal ulong entity;
+        internal int action;
+        internal int seq;
+
+        internal TextClipboardAction(ulong entity, int action, int seq) {
+            this.entity = entity;
+            this.action = action;
+            this.seq = seq;
+        }
+    }
+
+    /**
+    * `cuo:ui/text-completion`
+    */
+
+    internal struct TextCompletion {
+        internal ulong entity;
+        internal string prefix;
+        internal global::System.Collections.Generic.List<string> items;
+
+        internal TextCompletion(ulong entity, string prefix, global::System.Collections.Generic.List<string> items) {
+            this.entity = entity;
+            this.prefix = prefix;
+            this.items = items;
+        }
+    }
+
+    /**
+    * `cuo:ui/text-completion-pick`
+    */
+
+    internal struct TextCompletionPick {
+        internal ulong entity;
+        internal int index;
+        internal int seq;
+
+        internal TextCompletionPick(ulong entity, int index, int seq) {
+            this.entity = entity;
+            this.index = index;
+            this.seq = seq;
+        }
+    }
+
+    /**
+    * `cuo:ui/tooltip-serial`
+    */
+
+    internal struct UiTooltipSerial {
+        internal uint serial;
+
+        internal UiTooltipSerial(uint serial) {
+            this.serial = serial;
         }
     }
 

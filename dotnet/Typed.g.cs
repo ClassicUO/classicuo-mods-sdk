@@ -64,6 +64,7 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.ItemDropSent) ? new CodecDropSent() :
             typeof(T) == typeof(global::CuoModSdk.Types.ItemMoveResult) ? new CodecMoveResult() :
             typeof(T) == typeof(global::CuoModSdk.Types.ModOptionsSchemaDto) ? new CodecSchema() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ModOptionsValuesDto) ? new CodecValues() :
             typeof(T) == typeof(global::CuoModSdk.Types.PlayerBuffsDto) ? new CodecBuffs() :
             typeof(T) == typeof(global::CuoModSdk.Types.GrabbedItem) ? new CodecGrabbedItem() :
             typeof(T) == typeof(global::CuoModSdk.Types.PlayerSkillsDto) ? new CodecSkills() :
@@ -94,6 +95,40 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.TextSpans) ? new CodecTextSpans() :
             typeof(T) == typeof(global::CuoModSdk.Types.TextWrap) ? new CodecTextWrap() :
             typeof(T) == typeof(global::CuoModSdk.Types.UiTooltip) ? new CodecTooltip() :
+            typeof(T) == typeof(global::CuoModSdk.Types.MobAnimation) ? new CodecAnimation() :
+            typeof(T) == typeof(global::CuoModSdk.Types.MobileStepsDto) ? new CodecMobSteps() :
+            typeof(T) == typeof(global::CuoModSdk.Types.CombatBookWindow) ? new CodecCombatBook() :
+            typeof(T) == typeof(global::CuoModSdk.Types.HouseDesignWindow) ? new CodecHouseDesign() :
+            typeof(T) == typeof(global::CuoModSdk.Types.JournalWindow) ? new CodecJournal() :
+            typeof(T) == typeof(global::CuoModSdk.Types.MenuGumpWindow) ? new CodecMenu() :
+            typeof(T) == typeof(global::CuoModSdk.Types.MiniMapWindow) ? new CodecMinimap() :
+            typeof(T) == typeof(global::CuoModSdk.Types.PaperdollWindow) ? new CodecPaperdoll() :
+            typeof(T) == typeof(global::CuoModSdk.Types.PartyInviteWindow) ? new CodecPartyInvite() :
+            typeof(T) == typeof(global::CuoModSdk.Types.PartyManifestWindow) ? new CodecPartyManifest() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ProfileWindow) ? new CodecProfile() :
+            typeof(T) == typeof(global::CuoModSdk.Types.RacialBookWindow) ? new CodecRacialBook() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpClosedEvent) ? new CodecServerClosed() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpOpenedEvent) ? new CodecServerOpened() :
+            typeof(T) == typeof(global::CuoModSdk.Types.SkillsWindow) ? new CodecGumpSkills() :
+            typeof(T) == typeof(global::CuoModSdk.Types.SpellbookWindow) ? new CodecSpellbook() :
+            typeof(T) == typeof(global::CuoModSdk.Types.SplitMenuWindow) ? new CodecSplitMenu() :
+            typeof(T) == typeof(global::CuoModSdk.Types.TipNoticeWindow) ? new CodecTipNotice() :
+            typeof(T) == typeof(global::CuoModSdk.Types.TradeWindow) ? new CodecTrade() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ModMoveRequest) ? new CodecMoveRequest() :
+            typeof(T) == typeof(global::CuoModSdk.Types.PartyDto) ? new CodecParty() :
+            typeof(T) == typeof(global::CuoModSdk.Types.SpellbooksDto) ? new CodecPlayerSpellbook() :
+            typeof(T) == typeof(global::CuoModSdk.Types.PlayerStepsDto) ? new CodecSteps() :
+            typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionDto) ? new CodecCharacterList() :
+            typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorsInfoEvent) ? new CodecLoginErrorInfo() :
+            typeof(T) == typeof(global::CuoModSdk.Types.OnLoginRequest) ? new CodecLoginRequest() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new CodecServerList() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ClipboardSetDto) ? new CodecClipboardSet() :
+            typeof(T) == typeof(global::CuoModSdk.Types.FocusedInput) ? new CodecFocusedInput() :
+            typeof(T) == typeof(global::CuoModSdk.Types.MaskedText) ? new CodecMaskedText() :
+            typeof(T) == typeof(global::CuoModSdk.Types.TextClipboardActionDto) ? new CodecTextClipboardAction() :
+            typeof(T) == typeof(global::CuoModSdk.Types.TextCompletionDto) ? new CodecTextCompletion() :
+            typeof(T) == typeof(global::CuoModSdk.Types.TextCompletionPickDto) ? new CodecTextCompletionPick() :
+            typeof(T) == typeof(global::CuoModSdk.Types.UiTooltipSerial) ? new CodecTooltipSerial() :
             null;
         return (TypedCodec<T>?)c;
     }
@@ -115,6 +150,16 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.TopBarButton) ? new TagCodec("cuo:ui/topbar-button", &TypedImports.Tag_TopbarButton) :
         typeof(T) == typeof(global::CuoModSdk.Types.TopBarFull) ? new TagCodec("cuo:ui/topbar-full", &TypedImports.Tag_TopbarFull) :
         typeof(T) == typeof(global::CuoModSdk.Types.IsTopBar) ? new TagCodec("cuo:ui/topbar-root", &TypedImports.Tag_TopbarRoot) :
+        typeof(T) == typeof(global::CuoModSdk.Types.BuffGumpUI) ? new TagCodec("cuo:gump/buff", &TypedImports.Tag_Buff) :
+        typeof(T) == typeof(global::CuoModSdk.Types.LogoutGumpWindow) ? new TagCodec("cuo:gump/logout", &TypedImports.Tag_Logout) :
+        typeof(T) == typeof(global::CuoModSdk.Types.MessageBoxWindow) ? new TagCodec("cuo:gump/message-box", &TypedImports.Tag_MessageBox) :
+        typeof(T) == typeof(global::CuoModSdk.Types.WorldMapWindow) ? new TagCodec("cuo:gump/worldmap", &TypedImports.Tag_Worldmap) :
+        typeof(T) == typeof(global::CuoModSdk.Types.CharCreationScene) ? new TagCodec("cuo:scene/character-creation", &TypedImports.Tag_CharacterCreation) :
+        typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionScene) ? new TagCodec("cuo:scene/character-selection", &TypedImports.Tag_CharacterSelection) :
+        typeof(T) == typeof(global::CuoModSdk.Types.GameScene) ? new TagCodec("cuo:scene/game", &TypedImports.Tag_Game) :
+        typeof(T) == typeof(global::CuoModSdk.Types.LoginScene) ? new TagCodec("cuo:scene/login", &TypedImports.Tag_Login) :
+        typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorScene) ? new TagCodec("cuo:scene/login-error", &TypedImports.Tag_LoginError) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionScene) ? new TagCodec("cuo:scene/server-selection", &TypedImports.Tag_ServerSelection) :
         null;
 
     /// <summary>A curated tag component (zero-size or presence-only): it reads as default, with no host call.</summary>
@@ -140,7 +185,21 @@ internal static unsafe partial class TypedCodecs
         || typeof(T) == typeof(global::CuoModSdk.Types.TopBarDragHandle)
         || typeof(T) == typeof(global::CuoModSdk.Types.TopBarButton)
         || typeof(T) == typeof(global::CuoModSdk.Types.TopBarFull)
-        || typeof(T) == typeof(global::CuoModSdk.Types.IsTopBar);
+        || typeof(T) == typeof(global::CuoModSdk.Types.IsTopBar)
+        || typeof(T) == typeof(global::CuoModSdk.Types.IsMulti)
+        || typeof(T) == typeof(global::CuoModSdk.Types.BookWindow)
+        || typeof(T) == typeof(global::CuoModSdk.Types.BuffGumpUI)
+        || typeof(T) == typeof(global::CuoModSdk.Types.BulletinBoardWindow)
+        || typeof(T) == typeof(global::CuoModSdk.Types.LogoutGumpWindow)
+        || typeof(T) == typeof(global::CuoModSdk.Types.MapWindow)
+        || typeof(T) == typeof(global::CuoModSdk.Types.MessageBoxWindow)
+        || typeof(T) == typeof(global::CuoModSdk.Types.WorldMapWindow)
+        || typeof(T) == typeof(global::CuoModSdk.Types.CharCreationScene)
+        || typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionScene)
+        || typeof(T) == typeof(global::CuoModSdk.Types.GameScene)
+        || typeof(T) == typeof(global::CuoModSdk.Types.LoginScene)
+        || typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorScene)
+        || typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionScene);
 
     internal static TypedEvent<T>? EventOf<T>()
     {
@@ -159,6 +218,13 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.ModClick) ? new EventClick() :
             typeof(T) == typeof(global::CuoModSdk.Types.ModHover) ? new EventHover() :
             typeof(T) == typeof(global::CuoModSdk.Types.ModRightClick) ? new EventRightClick() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpClosedEvent) ? new EventServerClosed() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpOpenedEvent) ? new EventServerOpened() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ModMoveRequest) ? new EventMoveRequest() :
+            typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionDto) ? new EventCharacterList() :
+            typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorsInfoEvent) ? new EventLoginErrorInfo() :
+            typeof(T) == typeof(global::CuoModSdk.Types.OnLoginRequest) ? new EventLoginRequest() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new EventServerList() :
             null;
         return (TypedEvent<T>?)e;
     }
@@ -251,6 +317,46 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.TopBarButton) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.TopBarFull) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.IsTopBar) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.MobAnimation) ? new TypedTrigger("mob-animation", 36, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "byte"), new TypedFlat("int", 21, "byte"), new TypedFlat("int", 22, "byte"), new TypedFlat("int", 23, "byte"), new TypedFlat("int", 24, "byte"), new TypedFlat("int", 25, "byte"), new TypedFlat("float", 28, "float"), new TypedFlat("int", 32, "byte")], new CodecAnimation()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.IsMulti) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.MobileStepsDto) ? new TypedTrigger("mobile-steps", 16, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("float", 4, "float"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int")], new CodecMobSteps()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.BookWindow) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.BuffGumpUI) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.BulletinBoardWindow) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.CombatBookWindow) ? new TypedTrigger("combat-book-window", 48, 8, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "byte"), new TypedFlat("long", 24, "ulong"), new TypedFlat("long", 32, "ulong"), new TypedFlat("long", 40, "ulong")], new CodecCombatBook()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.HouseDesignWindow) ? new TypedTrigger("house-design-window", 16, 8, [new TypedFlat("long", 0, "ulong"), new TypedFlat("int", 8, "uint")], new CodecHouseDesign()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.JournalWindow) ? new TypedTrigger("journal-window", 112, 8, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "byte"), new TypedFlat("int", 5, "byte"), new TypedFlat("int", 6, "byte"), new TypedFlat("int", 7, "byte"), new TypedFlat("int", 8, "byte"), new TypedFlat("int", 9, "byte"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int"), new TypedFlat("long", 24, "ulong"), new TypedFlat("long", 32, "ulong"), new TypedFlat("long", 40, "ulong"), new TypedFlat("long", 48, "ulong"), new TypedFlat("long", 56, "ulong"), new TypedFlat("long", 64, "ulong"), new TypedFlat("long", 72, "ulong"), new TypedFlat("long", 80, "ulong"), new TypedFlat("long", 88, "ulong"), new TypedFlat("float", 96, "float"), new TypedFlat("float", 100, "float"), new TypedFlat("float", 104, "float")], new CodecJournal()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.LogoutGumpWindow) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.MapWindow) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.MenuGumpWindow) ? new TypedTrigger("menu-gump-window", 8, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "ushort"), new TypedFlat("int", 6, "byte"), new TypedFlat("int", 7, "byte")], new CodecMenu()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.MessageBoxWindow) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.MiniMapWindow) ? new TypedTrigger("mini-map-window", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecMinimap()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.PaperdollWindow) ? new TypedTrigger("paperdoll-window", 8, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "byte"), new TypedFlat("int", 5, "byte"), new TypedFlat("int", 6, "byte")], new CodecPaperdoll()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.PartyInviteWindow) ? new TypedTrigger("party-invite-window", 4, 4, [new TypedFlat("int", 0, "uint")], new CodecPartyInvite()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.PartyManifestWindow) ? new TypedTrigger("party-manifest-window", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecPartyManifest()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ProfileWindow) ? new TypedTrigger("profile-window", 64, 8, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "int"), new TypedFlat("float", 8, "float"), new TypedFlat("long", 16, "ulong"), new TypedFlat("long", 24, "ulong"), new TypedFlat("long", 32, "ulong"), new TypedFlat("long", 40, "ulong"), new TypedFlat("int", 48, "int"), new TypedFlat("int", 52, "byte"), new TypedFlat("long", 56, "ulong")], new CodecProfile()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.RacialBookWindow) ? new TypedTrigger("racial-book-window", 48, 8, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "byte"), new TypedFlat("int", 21, "byte"), new TypedFlat("long", 24, "ulong"), new TypedFlat("long", 32, "ulong"), new TypedFlat("long", 40, "ulong")], new CodecRacialBook()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpClosedEvent) ? new TypedTrigger("server-gump-closed-event", 8, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "uint")], new CodecServerClosed()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpOpenedEvent) ? new TypedTrigger("server-gump-opened-event", 8, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "uint")], new CodecServerOpened()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.SkillsWindow) ? new TypedTrigger("skills-window", 104, 8, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "byte"), new TypedFlat("int", 5, "byte"), new TypedFlat("int", 6, "byte"), new TypedFlat("int", 7, "byte"), new TypedFlat("int", 8, "int"), new TypedFlat("float", 12, "float"), new TypedFlat("float", 16, "float"), new TypedFlat("long", 24, "ulong"), new TypedFlat("long", 32, "ulong"), new TypedFlat("long", 40, "ulong"), new TypedFlat("long", 48, "ulong"), new TypedFlat("long", 56, "ulong"), new TypedFlat("long", 64, "ulong"), new TypedFlat("long", 72, "ulong"), new TypedFlat("long", 80, "ulong"), new TypedFlat("long", 88, "ulong"), new TypedFlat("float", 96, "float")], new CodecGumpSkills()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.SpellbookWindow) ? new TypedTrigger("spellbook-window", 64, 8, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int"), new TypedFlat("int", 24, "byte"), new TypedFlat("long", 32, "ulong"), new TypedFlat("long", 40, "ulong"), new TypedFlat("long", 48, "ulong"), new TypedFlat("int", 56, "byte")], new CodecSpellbook()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.SplitMenuWindow) ? new TypedTrigger("split-menu-window", 80, 8, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "int"), new TypedFlat("long", 8, "ulong"), new TypedFlat("long", 16, "ulong"), new TypedFlat("long", 24, "ulong"), new TypedFlat("int", 32, "int"), new TypedFlat("int", 36, "int"), new TypedFlat("int", 40, "int"), new TypedFlat("int", 44, "ushort"), new TypedFlat("int", 46, "ushort"), new TypedFlat("long", 48, "ulong"), new TypedFlat("int", 56, "uint"), new TypedFlat("int", 60, "ushort"), new TypedFlat("int", 62, "ushort"), new TypedFlat("int", 64, "ushort"), new TypedFlat("int", 66, "ushort"), new TypedFlat("int", 68, "ushort"), new TypedFlat("int", 70, "sbyte"), new TypedFlat("int", 72, "uint"), new TypedFlat("int", 76, "byte"), new TypedFlat("int", 77, "byte")], new CodecSplitMenu()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.TipNoticeWindow) ? new TypedTrigger("tip-notice-window", 56, 8, [new TypedFlat("int", 0, "ushort"), new TypedFlat("int", 4, "int"), new TypedFlat("float", 8, "float"), new TypedFlat("long", 16, "ulong"), new TypedFlat("long", 24, "ulong"), new TypedFlat("long", 32, "ulong"), new TypedFlat("long", 40, "ulong"), new TypedFlat("long", 48, "ulong")], new CodecTipNotice()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.TradeWindow) ? new TypedTrigger("trade-window", 16, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "uint"), new TypedFlat("int", 8, "uint"), new TypedFlat("int", 12, "byte"), new TypedFlat("int", 13, "byte"), new TypedFlat("int", 14, "byte")], new CodecTrade()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.WorldMapWindow) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ModMoveRequest) ? new TypedTrigger("mod-move-request", 3, 1, [new TypedFlat("int", 0, "byte"), new TypedFlat("int", 1, "byte"), new TypedFlat("int", 2, "byte")], new CodecMoveRequest()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.CharCreationScene) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionDto) ? new TypedTrigger("character-selection", 16, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int")], new CodecCharacterList()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionScene) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.GameScene) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.LoginScene) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorScene) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorsInfoEvent) ? new TypedTrigger("login-errors-info-event", 8, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int")], new CodecLoginErrorInfo()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.OnLoginRequest) ? new TypedTrigger("on-login-request", 28, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int"), new TypedFlat("int", 24, "ushort")], new CodecLoginRequest()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new TypedTrigger("server-selection-info-event", 8, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int")], new CodecServerList()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionScene) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.MaskedText) ? new TypedTrigger("masked-text", 12, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "uint")], new CodecMaskedText()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.UiTooltipSerial) ? new TypedTrigger("ui-tooltip-serial", 4, 4, [new TypedFlat("int", 0, "uint")], new CodecTooltipSerial()) :
         null;
 }
 
@@ -2136,6 +2242,55 @@ internal static unsafe class TypedGen
     internal static bool EqModOptionsSchema(byte* a, byte* b) =>
         EqList14(a + 0, b + 0);
 
+    // mod-option-value: 12 bytes, align 4
+    internal static global::CuoModSdk.Types.ModOptionValueDto LiftModOptionValue(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.ModOptionValueDto
+        {
+            Key = TypedCodecs.ReadString(p + 0),
+            Value = *(int*)(p + 8),
+        };
+        return v;
+    }
+
+    internal static void LowerModOptionValue(in global::CuoModSdk.Types.ModOptionValueDto v, byte* p)
+    {
+        TypedCodecs.WriteString(v.Key, p + 0);
+        *(int*)(p + 8) = v.Value;
+    }
+
+    internal static void FreeModOptionValue(byte* p)
+    {
+        TypedCodecs.FreeString(p + 0);
+    }
+
+    internal static bool EqModOptionValue(byte* a, byte* b) =>
+        TypedStrings.SameRecord(a + 0, b + 0)
+        && *(uint*)(a + 8) == *(uint*)(b + 8);
+
+    // mod-options-values: 8 bytes, align 4
+    internal static global::CuoModSdk.Types.ModOptionsValuesDto LiftModOptionsValues(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.ModOptionsValuesDto
+        {
+            Values = LiftList15(p + 0),
+        };
+        return v;
+    }
+
+    internal static void LowerModOptionsValues(in global::CuoModSdk.Types.ModOptionsValuesDto v, byte* p)
+    {
+        LowerList15(v.Values, p + 0);
+    }
+
+    internal static void FreeModOptionsValues(byte* p)
+    {
+        FreeList15(p + 0);
+    }
+
+    internal static bool EqModOptionsValues(byte* a, byte* b) =>
+        EqList15(a + 0, b + 0);
+
     // player-buff: 20 bytes, align 4
     internal static global::CuoModSdk.Types.PlayerBuffDto LiftPlayerBuff(byte* p)
     {
@@ -2173,23 +2328,23 @@ internal static unsafe class TypedGen
     {
         var v = new global::CuoModSdk.Types.PlayerBuffsDto
         {
-            Buffs = LiftList15(p + 0),
+            Buffs = LiftList16(p + 0),
         };
         return v;
     }
 
     internal static void LowerPlayerBuffs(in global::CuoModSdk.Types.PlayerBuffsDto v, byte* p)
     {
-        LowerList15(v.Buffs, p + 0);
+        LowerList16(v.Buffs, p + 0);
     }
 
     internal static void FreePlayerBuffs(byte* p)
     {
-        FreeList15(p + 0);
+        FreeList16(p + 0);
     }
 
     internal static bool EqPlayerBuffs(byte* a, byte* b) =>
-        EqList15(a + 0, b + 0);
+        EqList16(a + 0, b + 0);
 
     // vector2: 8 bytes, align 4
     internal static global::CuoModSdk.Types.Vector2 LiftVector2(byte* p)
@@ -2323,7 +2478,7 @@ internal static unsafe class TypedGen
         var v = new global::CuoModSdk.Types.PlayerSkillsDto
         {
             HasData = *(p + 0) != 0,
-            Skills = LiftList16(p + 4),
+            Skills = LiftList17(p + 4),
         };
         return v;
     }
@@ -2331,17 +2486,17 @@ internal static unsafe class TypedGen
     internal static void LowerPlayerSkills(in global::CuoModSdk.Types.PlayerSkillsDto v, byte* p)
     {
         *(p + 0) = (byte)(v.HasData ? 1 : 0);
-        LowerList16(v.Skills, p + 4);
+        LowerList17(v.Skills, p + 4);
     }
 
     internal static void FreePlayerSkills(byte* p)
     {
-        FreeList16(p + 4);
+        FreeList17(p + 4);
     }
 
     internal static bool EqPlayerSkills(byte* a, byte* b) =>
         (*(a + 0) != 0) == (*(b + 0) != 0)
-        && EqList16(a + 4, b + 4);
+        && EqList17(a + 4, b + 4);
 
     // stat-locks: 3 bytes, align 1
     internal static global::CuoModSdk.Types.StatLocks LiftStatLocks(byte* p)
@@ -3036,23 +3191,23 @@ internal static unsafe class TypedGen
     {
         var v = new global::CuoModSdk.Types.TextSpans
         {
-            Spans = LiftList17(p + 0),
+            Spans = LiftList18(p + 0),
         };
         return v;
     }
 
     internal static void LowerTextSpans(in global::CuoModSdk.Types.TextSpans v, byte* p)
     {
-        LowerList17(v.Spans, p + 0);
+        LowerList18(v.Spans, p + 0);
     }
 
     internal static void FreeTextSpans(byte* p)
     {
-        FreeList17(p + 0);
+        FreeList18(p + 0);
     }
 
     internal static bool EqTextSpans(byte* a, byte* b) =>
-        EqList17(a + 0, b + 0);
+        EqList18(a + 0, b + 0);
 
     // text-wrap: 1 bytes, align 1
     internal static global::CuoModSdk.Types.TextWrap LiftTextWrap(byte* p)
@@ -3097,6 +3252,1376 @@ internal static unsafe class TypedGen
     internal static bool EqUiTooltip(byte* a, byte* b) =>
         TypedStrings.SameRecord(a + 0, b + 0)
         && *(uint*)(a + 8) == *(uint*)(b + 8);
+
+    // mob-animation: 36 bytes, align 4
+    internal static global::CuoModSdk.Types.MobAnimation LiftMobAnimation(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.MobAnimation
+        {
+            Index = *(int*)(p + 0),
+            FramesCount = *(int*)(p + 4),
+            Interval = *(int*)(p + 8),
+            RepeatMode = *(int*)(p + 12),
+            RepeatModeCount = *(int*)(p + 16),
+            Repeat = *(p + 20) != 0,
+            IsFromServer = *(p + 21) != 0,
+            ForwardDirection = *(p + 22) != 0,
+            Action = *(p + 23),
+            MountAction = *(p + 24),
+            Direction = (global::CuoModSdk.Types.Direction)(*(byte*)(p + 25)),
+            Time = *(float*)(p + 28),
+            Run = *(p + 32) != 0,
+        };
+        return v;
+    }
+
+    internal static void LowerMobAnimation(in global::CuoModSdk.Types.MobAnimation v, byte* p)
+    {
+        *(int*)(p + 0) = v.Index;
+        *(int*)(p + 4) = v.FramesCount;
+        *(int*)(p + 8) = v.Interval;
+        *(int*)(p + 12) = v.RepeatMode;
+        *(int*)(p + 16) = v.RepeatModeCount;
+        *(p + 20) = (byte)(v.Repeat ? 1 : 0);
+        *(p + 21) = (byte)(v.IsFromServer ? 1 : 0);
+        *(p + 22) = (byte)(v.ForwardDirection ? 1 : 0);
+        *(p + 23) = v.Action;
+        *(p + 24) = v.MountAction;
+        *(byte*)(p + 25) = (byte)v.Direction;
+        *(float*)(p + 28) = v.Time;
+        *(p + 32) = (byte)(v.Run ? 1 : 0);
+    }
+
+    internal static bool EqMobAnimation(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && *(uint*)(a + 8) == *(uint*)(b + 8)
+        && *(uint*)(a + 12) == *(uint*)(b + 12)
+        && *(uint*)(a + 16) == *(uint*)(b + 16)
+        && (*(a + 20) != 0) == (*(b + 20) != 0)
+        && (*(a + 21) != 0) == (*(b + 21) != 0)
+        && (*(a + 22) != 0) == (*(b + 22) != 0)
+        && *(a + 23) == *(b + 23)
+        && *(a + 24) == *(b + 24)
+        && *(a + 25) == *(b + 25)
+        && *(uint*)(a + 28) == *(uint*)(b + 28)
+        && (*(a + 32) != 0) == (*(b + 32) != 0);
+
+    // mob-step: 12 bytes, align 4
+    internal static global::CuoModSdk.Types.MobStepDto LiftMobStep(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.MobStepDto
+        {
+            X = *(int*)(p + 0),
+            Y = *(int*)(p + 4),
+            Z = *(sbyte*)(p + 8),
+            Direction = *(p + 9),
+            Run = *(p + 10) != 0,
+        };
+        return v;
+    }
+
+    internal static void LowerMobStep(in global::CuoModSdk.Types.MobStepDto v, byte* p)
+    {
+        *(int*)(p + 0) = v.X;
+        *(int*)(p + 4) = v.Y;
+        *(sbyte*)(p + 8) = v.Z;
+        *(p + 9) = v.Direction;
+        *(p + 10) = (byte)(v.Run ? 1 : 0);
+    }
+
+    internal static bool EqMobStep(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && *(a + 8) == *(b + 8)
+        && *(a + 9) == *(b + 9)
+        && (*(a + 10) != 0) == (*(b + 10) != 0);
+
+    // mobile-steps: 16 bytes, align 4
+    internal static global::CuoModSdk.Types.MobileStepsDto LiftMobileSteps(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.MobileStepsDto
+        {
+            Index = *(int*)(p + 0),
+            Time = *(float*)(p + 4),
+            Steps = LiftList19(p + 8),
+        };
+        return v;
+    }
+
+    internal static void LowerMobileSteps(in global::CuoModSdk.Types.MobileStepsDto v, byte* p)
+    {
+        *(int*)(p + 0) = v.Index;
+        *(float*)(p + 4) = v.Time;
+        LowerList19(v.Steps, p + 8);
+    }
+
+    internal static void FreeMobileSteps(byte* p)
+    {
+        FreeList19(p + 8);
+    }
+
+    internal static bool EqMobileSteps(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && EqList19(a + 8, b + 8);
+
+    // combat-book-window: 48 bytes, align 8
+    internal static global::CuoModSdk.Types.CombatBookWindow LiftCombatBookWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.CombatBookWindow
+        {
+            Page = *(int*)(p + 0),
+            SoundedPage = *(int*)(p + 4),
+            PageCount = *(int*)(p + 8),
+            DictPages = *(int*)(p + 12),
+            AbilityCount = *(int*)(p + 16),
+            Dirty = *(p + 20) != 0,
+            Content = *(ulong*)(p + 24),
+            Left = *(ulong*)(p + 32),
+            Right = *(ulong*)(p + 40),
+        };
+        return v;
+    }
+
+    internal static void LowerCombatBookWindow(in global::CuoModSdk.Types.CombatBookWindow v, byte* p)
+    {
+        *(int*)(p + 0) = v.Page;
+        *(int*)(p + 4) = v.SoundedPage;
+        *(int*)(p + 8) = v.PageCount;
+        *(int*)(p + 12) = v.DictPages;
+        *(int*)(p + 16) = v.AbilityCount;
+        *(p + 20) = (byte)(v.Dirty ? 1 : 0);
+        *(ulong*)(p + 24) = v.Content;
+        *(ulong*)(p + 32) = v.Left;
+        *(ulong*)(p + 40) = v.Right;
+    }
+
+    internal static bool EqCombatBookWindow(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && *(uint*)(a + 8) == *(uint*)(b + 8)
+        && *(uint*)(a + 12) == *(uint*)(b + 12)
+        && *(uint*)(a + 16) == *(uint*)(b + 16)
+        && (*(a + 20) != 0) == (*(b + 20) != 0)
+        && *(ulong*)(a + 24) == *(ulong*)(b + 24)
+        && *(ulong*)(a + 32) == *(ulong*)(b + 32)
+        && *(ulong*)(a + 40) == *(ulong*)(b + 40);
+
+    // house-design-window: 16 bytes, align 8
+    internal static global::CuoModSdk.Types.HouseDesignWindow LiftHouseDesignWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.HouseDesignWindow
+        {
+            Content = *(ulong*)(p + 0),
+            Serial = *(uint*)(p + 8),
+        };
+        return v;
+    }
+
+    internal static void LowerHouseDesignWindow(in global::CuoModSdk.Types.HouseDesignWindow v, byte* p)
+    {
+        *(ulong*)(p + 0) = v.Content;
+        *(uint*)(p + 8) = v.Serial;
+    }
+
+    internal static bool EqHouseDesignWindow(byte* a, byte* b) =>
+        *(ulong*)(a + 0) == *(ulong*)(b + 0)
+        && *(uint*)(a + 8) == *(uint*)(b + 8);
+
+    // journal-window: 112 bytes, align 8
+    internal static global::CuoModSdk.Types.JournalWindow LiftJournalWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.JournalWindow
+        {
+            SpecialHeight = *(int*)(p + 0),
+            Minimized = *(p + 4) != 0,
+            DarkMode = *(p + 5) != 0,
+            ShowSystem = *(p + 6) != 0,
+            ShowObjects = *(p + 7) != 0,
+            ShowClient = *(p + 8) != 0,
+            ShowGuild = *(p + 9) != 0,
+            BuiltRevision = *(int*)(p + 12),
+            StyleEpoch = *(int*)(p + 16),
+            BuiltStyleEpoch = *(int*)(p + 20),
+            ListEntity = *(ulong*)(p + 24),
+            FlagEntity = *(ulong*)(p + 32),
+            TopEntity = *(ulong*)(p + 40),
+            MidEntity = *(ulong*)(p + 48),
+            BottomEntity = *(ulong*)(p + 56),
+            TitleEntity = *(ulong*)(p + 64),
+            MinimizeEntity = *(ulong*)(p + 72),
+            DarkCheckEntity = *(ulong*)(p + 80),
+            ExpanderEntity = *(ulong*)(p + 88),
+            Width = *(float*)(p + 96),
+            ListWidth = *(float*)(p + 100),
+            ContentHeight = *(float*)(p + 104),
+        };
+        return v;
+    }
+
+    internal static void LowerJournalWindow(in global::CuoModSdk.Types.JournalWindow v, byte* p)
+    {
+        *(int*)(p + 0) = v.SpecialHeight;
+        *(p + 4) = (byte)(v.Minimized ? 1 : 0);
+        *(p + 5) = (byte)(v.DarkMode ? 1 : 0);
+        *(p + 6) = (byte)(v.ShowSystem ? 1 : 0);
+        *(p + 7) = (byte)(v.ShowObjects ? 1 : 0);
+        *(p + 8) = (byte)(v.ShowClient ? 1 : 0);
+        *(p + 9) = (byte)(v.ShowGuild ? 1 : 0);
+        *(int*)(p + 12) = v.BuiltRevision;
+        *(int*)(p + 16) = v.StyleEpoch;
+        *(int*)(p + 20) = v.BuiltStyleEpoch;
+        *(ulong*)(p + 24) = v.ListEntity;
+        *(ulong*)(p + 32) = v.FlagEntity;
+        *(ulong*)(p + 40) = v.TopEntity;
+        *(ulong*)(p + 48) = v.MidEntity;
+        *(ulong*)(p + 56) = v.BottomEntity;
+        *(ulong*)(p + 64) = v.TitleEntity;
+        *(ulong*)(p + 72) = v.MinimizeEntity;
+        *(ulong*)(p + 80) = v.DarkCheckEntity;
+        *(ulong*)(p + 88) = v.ExpanderEntity;
+        *(float*)(p + 96) = v.Width;
+        *(float*)(p + 100) = v.ListWidth;
+        *(float*)(p + 104) = v.ContentHeight;
+    }
+
+    internal static bool EqJournalWindow(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && (*(a + 4) != 0) == (*(b + 4) != 0)
+        && (*(a + 5) != 0) == (*(b + 5) != 0)
+        && (*(a + 6) != 0) == (*(b + 6) != 0)
+        && (*(a + 7) != 0) == (*(b + 7) != 0)
+        && (*(a + 8) != 0) == (*(b + 8) != 0)
+        && (*(a + 9) != 0) == (*(b + 9) != 0)
+        && *(uint*)(a + 12) == *(uint*)(b + 12)
+        && *(uint*)(a + 16) == *(uint*)(b + 16)
+        && *(uint*)(a + 20) == *(uint*)(b + 20)
+        && *(ulong*)(a + 24) == *(ulong*)(b + 24)
+        && *(ulong*)(a + 32) == *(ulong*)(b + 32)
+        && *(ulong*)(a + 40) == *(ulong*)(b + 40)
+        && *(ulong*)(a + 48) == *(ulong*)(b + 48)
+        && *(ulong*)(a + 56) == *(ulong*)(b + 56)
+        && *(ulong*)(a + 64) == *(ulong*)(b + 64)
+        && *(ulong*)(a + 72) == *(ulong*)(b + 72)
+        && *(ulong*)(a + 80) == *(ulong*)(b + 80)
+        && *(ulong*)(a + 88) == *(ulong*)(b + 88)
+        && *(uint*)(a + 96) == *(uint*)(b + 96)
+        && *(uint*)(a + 100) == *(uint*)(b + 100)
+        && *(uint*)(a + 104) == *(uint*)(b + 104);
+
+    // menu-gump-window: 8 bytes, align 4
+    internal static global::CuoModSdk.Types.MenuGumpWindow LiftMenuGumpWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.MenuGumpWindow
+        {
+            Serial = *(uint*)(p + 0),
+            ServerMenuId = *(ushort*)(p + 4),
+            IsGray = *(p + 6) != 0,
+            Responded = *(p + 7) != 0,
+        };
+        return v;
+    }
+
+    internal static void LowerMenuGumpWindow(in global::CuoModSdk.Types.MenuGumpWindow v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Serial;
+        *(ushort*)(p + 4) = v.ServerMenuId;
+        *(p + 6) = (byte)(v.IsGray ? 1 : 0);
+        *(p + 7) = (byte)(v.Responded ? 1 : 0);
+    }
+
+    internal static bool EqMenuGumpWindow(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(ushort*)(a + 4) == *(ushort*)(b + 4)
+        && (*(a + 6) != 0) == (*(b + 6) != 0)
+        && (*(a + 7) != 0) == (*(b + 7) != 0);
+
+    // mini-map-window: 1 bytes, align 1
+    internal static global::CuoModSdk.Types.MiniMapWindow LiftMiniMapWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.MiniMapWindow
+        {
+            UseLargeMap = *(p + 0) != 0,
+        };
+        return v;
+    }
+
+    internal static void LowerMiniMapWindow(in global::CuoModSdk.Types.MiniMapWindow v, byte* p)
+    {
+        *(p + 0) = (byte)(v.UseLargeMap ? 1 : 0);
+    }
+
+    internal static bool EqMiniMapWindow(byte* a, byte* b) =>
+        (*(a + 0) != 0) == (*(b + 0) != 0);
+
+    // paperdoll-window: 8 bytes, align 4
+    internal static global::CuoModSdk.Types.PaperdollWindow LiftPaperdollWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.PaperdollWindow
+        {
+            Serial = *(uint*)(p + 0),
+            IsPlayer = *(p + 4) != 0,
+            CanLift = *(p + 5) != 0,
+            Minimized = *(p + 6) != 0,
+        };
+        return v;
+    }
+
+    internal static void LowerPaperdollWindow(in global::CuoModSdk.Types.PaperdollWindow v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Serial;
+        *(p + 4) = (byte)(v.IsPlayer ? 1 : 0);
+        *(p + 5) = (byte)(v.CanLift ? 1 : 0);
+        *(p + 6) = (byte)(v.Minimized ? 1 : 0);
+    }
+
+    internal static bool EqPaperdollWindow(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && (*(a + 4) != 0) == (*(b + 4) != 0)
+        && (*(a + 5) != 0) == (*(b + 5) != 0)
+        && (*(a + 6) != 0) == (*(b + 6) != 0);
+
+    // party-invite-window: 4 bytes, align 4
+    internal static global::CuoModSdk.Types.PartyInviteWindow LiftPartyInviteWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.PartyInviteWindow
+        {
+            Inviter = *(uint*)(p + 0),
+        };
+        return v;
+    }
+
+    internal static void LowerPartyInviteWindow(in global::CuoModSdk.Types.PartyInviteWindow v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Inviter;
+    }
+
+    internal static bool EqPartyInviteWindow(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0);
+
+    // party-manifest-window: 1 bytes, align 1
+    internal static global::CuoModSdk.Types.PartyManifestWindow LiftPartyManifestWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.PartyManifestWindow
+        {
+            CanLoot = *(p + 0) != 0,
+        };
+        return v;
+    }
+
+    internal static void LowerPartyManifestWindow(in global::CuoModSdk.Types.PartyManifestWindow v, byte* p)
+    {
+        *(p + 0) = (byte)(v.CanLoot ? 1 : 0);
+    }
+
+    internal static bool EqPartyManifestWindow(byte* a, byte* b) =>
+        (*(a + 0) != 0) == (*(b + 0) != 0);
+
+    // profile-window: 64 bytes, align 8
+    internal static global::CuoModSdk.Types.ProfileWindow LiftProfileWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.ProfileWindow
+        {
+            Serial = *(uint*)(p + 0),
+            SpecialHeight = *(int*)(p + 4),
+            Width = *(float*)(p + 8),
+            MidEntity = *(ulong*)(p + 16),
+            BottomEntity = *(ulong*)(p + 24),
+            ExpanderEntity = *(ulong*)(p + 32),
+            FooterEntity = *(ulong*)(p + 40),
+            FooterOffsetFromBottom = *(int*)(p + 48),
+            Minimized = *(p + 52) != 0,
+            KnobEntity = *(ulong*)(p + 56),
+        };
+        return v;
+    }
+
+    internal static void LowerProfileWindow(in global::CuoModSdk.Types.ProfileWindow v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Serial;
+        *(int*)(p + 4) = v.SpecialHeight;
+        *(float*)(p + 8) = v.Width;
+        *(ulong*)(p + 16) = v.MidEntity;
+        *(ulong*)(p + 24) = v.BottomEntity;
+        *(ulong*)(p + 32) = v.ExpanderEntity;
+        *(ulong*)(p + 40) = v.FooterEntity;
+        *(int*)(p + 48) = v.FooterOffsetFromBottom;
+        *(p + 52) = (byte)(v.Minimized ? 1 : 0);
+        *(ulong*)(p + 56) = v.KnobEntity;
+    }
+
+    internal static bool EqProfileWindow(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && *(uint*)(a + 8) == *(uint*)(b + 8)
+        && *(ulong*)(a + 16) == *(ulong*)(b + 16)
+        && *(ulong*)(a + 24) == *(ulong*)(b + 24)
+        && *(ulong*)(a + 32) == *(ulong*)(b + 32)
+        && *(ulong*)(a + 40) == *(ulong*)(b + 40)
+        && *(uint*)(a + 48) == *(uint*)(b + 48)
+        && (*(a + 52) != 0) == (*(b + 52) != 0)
+        && *(ulong*)(a + 56) == *(ulong*)(b + 56);
+
+    // racial-book-window: 48 bytes, align 8
+    internal static global::CuoModSdk.Types.RacialBookWindow LiftRacialBookWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.RacialBookWindow
+        {
+            Page = *(int*)(p + 0),
+            SoundedPage = *(int*)(p + 4),
+            PageCount = *(int*)(p + 8),
+            DictPages = *(int*)(p + 12),
+            AbilityCount = *(int*)(p + 16),
+            Race = (global::CuoModSdk.Types.RaceType)(*(byte*)(p + 20)),
+            Dirty = *(p + 21) != 0,
+            Content = *(ulong*)(p + 24),
+            Left = *(ulong*)(p + 32),
+            Right = *(ulong*)(p + 40),
+        };
+        return v;
+    }
+
+    internal static void LowerRacialBookWindow(in global::CuoModSdk.Types.RacialBookWindow v, byte* p)
+    {
+        *(int*)(p + 0) = v.Page;
+        *(int*)(p + 4) = v.SoundedPage;
+        *(int*)(p + 8) = v.PageCount;
+        *(int*)(p + 12) = v.DictPages;
+        *(int*)(p + 16) = v.AbilityCount;
+        *(byte*)(p + 20) = (byte)v.Race;
+        *(p + 21) = (byte)(v.Dirty ? 1 : 0);
+        *(ulong*)(p + 24) = v.Content;
+        *(ulong*)(p + 32) = v.Left;
+        *(ulong*)(p + 40) = v.Right;
+    }
+
+    internal static bool EqRacialBookWindow(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && *(uint*)(a + 8) == *(uint*)(b + 8)
+        && *(uint*)(a + 12) == *(uint*)(b + 12)
+        && *(uint*)(a + 16) == *(uint*)(b + 16)
+        && *(a + 20) == *(b + 20)
+        && (*(a + 21) != 0) == (*(b + 21) != 0)
+        && *(ulong*)(a + 24) == *(ulong*)(b + 24)
+        && *(ulong*)(a + 32) == *(ulong*)(b + 32)
+        && *(ulong*)(a + 40) == *(ulong*)(b + 40);
+
+    // server-gump-closed-event: 8 bytes, align 4
+    internal static global::CuoModSdk.Types.ServerGumpClosedEvent LiftServerGumpClosedEvent(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.ServerGumpClosedEvent
+        {
+            Serial = *(uint*)(p + 0),
+            GumpId = *(uint*)(p + 4),
+        };
+        return v;
+    }
+
+    internal static void LowerServerGumpClosedEvent(in global::CuoModSdk.Types.ServerGumpClosedEvent v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Serial;
+        *(uint*)(p + 4) = v.GumpId;
+    }
+
+    internal static bool EqServerGumpClosedEvent(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4);
+
+    // server-gump-opened-event: 8 bytes, align 4
+    internal static global::CuoModSdk.Types.ServerGumpOpenedEvent LiftServerGumpOpenedEvent(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.ServerGumpOpenedEvent
+        {
+            Serial = *(uint*)(p + 0),
+            GumpId = *(uint*)(p + 4),
+        };
+        return v;
+    }
+
+    internal static void LowerServerGumpOpenedEvent(in global::CuoModSdk.Types.ServerGumpOpenedEvent v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Serial;
+        *(uint*)(p + 4) = v.GumpId;
+    }
+
+    internal static bool EqServerGumpOpenedEvent(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4);
+
+    // skills-window: 104 bytes, align 8
+    internal static global::CuoModSdk.Types.SkillsWindow LiftSkillsWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.SkillsWindow
+        {
+            SpecialHeight = *(int*)(p + 0),
+            Minimized = *(p + 4) != 0,
+            ShowReal = *(p + 5) != 0,
+            ShowCaps = *(p + 6) != 0,
+            Dirty = *(p + 7) != 0,
+            Width = *(int*)(p + 8),
+            ListWidth = *(float*)(p + 12),
+            ContentHeight = *(float*)(p + 16),
+            ListEntity = *(ulong*)(p + 24),
+            TopEntity = *(ulong*)(p + 32),
+            MidEntity = *(ulong*)(p + 40),
+            BottomEntity = *(ulong*)(p + 48),
+            TitleEntity = *(ulong*)(p + 56),
+            MinimizeEntity = *(ulong*)(p + 64),
+            ExpanderEntity = *(ulong*)(p + 72),
+            SumLabelEntity = *(ulong*)(p + 80),
+            FlagEntity = *(ulong*)(p + 88),
+            LastSum = *(float*)(p + 96),
+        };
+        return v;
+    }
+
+    internal static void LowerSkillsWindow(in global::CuoModSdk.Types.SkillsWindow v, byte* p)
+    {
+        *(int*)(p + 0) = v.SpecialHeight;
+        *(p + 4) = (byte)(v.Minimized ? 1 : 0);
+        *(p + 5) = (byte)(v.ShowReal ? 1 : 0);
+        *(p + 6) = (byte)(v.ShowCaps ? 1 : 0);
+        *(p + 7) = (byte)(v.Dirty ? 1 : 0);
+        *(int*)(p + 8) = v.Width;
+        *(float*)(p + 12) = v.ListWidth;
+        *(float*)(p + 16) = v.ContentHeight;
+        *(ulong*)(p + 24) = v.ListEntity;
+        *(ulong*)(p + 32) = v.TopEntity;
+        *(ulong*)(p + 40) = v.MidEntity;
+        *(ulong*)(p + 48) = v.BottomEntity;
+        *(ulong*)(p + 56) = v.TitleEntity;
+        *(ulong*)(p + 64) = v.MinimizeEntity;
+        *(ulong*)(p + 72) = v.ExpanderEntity;
+        *(ulong*)(p + 80) = v.SumLabelEntity;
+        *(ulong*)(p + 88) = v.FlagEntity;
+        *(float*)(p + 96) = v.LastSum;
+    }
+
+    internal static bool EqSkillsWindow(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && (*(a + 4) != 0) == (*(b + 4) != 0)
+        && (*(a + 5) != 0) == (*(b + 5) != 0)
+        && (*(a + 6) != 0) == (*(b + 6) != 0)
+        && (*(a + 7) != 0) == (*(b + 7) != 0)
+        && *(uint*)(a + 8) == *(uint*)(b + 8)
+        && *(uint*)(a + 12) == *(uint*)(b + 12)
+        && *(uint*)(a + 16) == *(uint*)(b + 16)
+        && *(ulong*)(a + 24) == *(ulong*)(b + 24)
+        && *(ulong*)(a + 32) == *(ulong*)(b + 32)
+        && *(ulong*)(a + 40) == *(ulong*)(b + 40)
+        && *(ulong*)(a + 48) == *(ulong*)(b + 48)
+        && *(ulong*)(a + 56) == *(ulong*)(b + 56)
+        && *(ulong*)(a + 64) == *(ulong*)(b + 64)
+        && *(ulong*)(a + 72) == *(ulong*)(b + 72)
+        && *(ulong*)(a + 80) == *(ulong*)(b + 80)
+        && *(ulong*)(a + 88) == *(ulong*)(b + 88)
+        && *(uint*)(a + 96) == *(uint*)(b + 96);
+
+    // spellbook-window: 64 bytes, align 8
+    internal static global::CuoModSdk.Types.SpellbookWindow LiftSpellbookWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.SpellbookWindow
+        {
+            Serial = *(uint*)(p + 0),
+            School = (global::CuoModSdk.Types.SpellBookType)(*(int*)(p + 4)),
+            Page = *(int*)(p + 8),
+            SoundedPage = *(int*)(p + 12),
+            PageCount = *(int*)(p + 16),
+            BuiltRevision = *(int*)(p + 20),
+            Dirty = *(p + 24) != 0,
+            ContentEntity = *(ulong*)(p + 32),
+            LeftCorner = *(ulong*)(p + 40),
+            RightCorner = *(ulong*)(p + 48),
+            Minimized = *(p + 56) != 0,
+        };
+        return v;
+    }
+
+    internal static void LowerSpellbookWindow(in global::CuoModSdk.Types.SpellbookWindow v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Serial;
+        *(int*)(p + 4) = (int)v.School;
+        *(int*)(p + 8) = v.Page;
+        *(int*)(p + 12) = v.SoundedPage;
+        *(int*)(p + 16) = v.PageCount;
+        *(int*)(p + 20) = v.BuiltRevision;
+        *(p + 24) = (byte)(v.Dirty ? 1 : 0);
+        *(ulong*)(p + 32) = v.ContentEntity;
+        *(ulong*)(p + 40) = v.LeftCorner;
+        *(ulong*)(p + 48) = v.RightCorner;
+        *(p + 56) = (byte)(v.Minimized ? 1 : 0);
+    }
+
+    internal static bool EqSpellbookWindow(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && *(uint*)(a + 8) == *(uint*)(b + 8)
+        && *(uint*)(a + 12) == *(uint*)(b + 12)
+        && *(uint*)(a + 16) == *(uint*)(b + 16)
+        && *(uint*)(a + 20) == *(uint*)(b + 20)
+        && (*(a + 24) != 0) == (*(b + 24) != 0)
+        && *(ulong*)(a + 32) == *(ulong*)(b + 32)
+        && *(ulong*)(a + 40) == *(ulong*)(b + 40)
+        && *(ulong*)(a + 48) == *(ulong*)(b + 48)
+        && (*(a + 56) != 0) == (*(b + 56) != 0);
+
+    // split-menu-window: 80 bytes, align 8
+    internal static global::CuoModSdk.Types.SplitMenuWindow LiftSplitMenuWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.SplitMenuWindow
+        {
+            Serial = *(uint*)(p + 0),
+            MaxAmount = *(int*)(p + 4),
+            Slider = *(ulong*)(p + 8),
+            Text = *(ulong*)(p + 16),
+            Ok = *(ulong*)(p + 24),
+            LastSlider = *(int*)(p + 32),
+            LastText = TypedCodecs.ReadString(p + 36),
+            Graphic = *(ushort*)(p + 44),
+            Hue = *(ushort*)(p + 46),
+            SourceUiEntity = *(ulong*)(p + 48),
+            SourceContainer = *(uint*)(p + 56),
+            OriginalGraphic = *(ushort*)(p + 60),
+            OriginalHue = *(ushort*)(p + 62),
+            OriginalAmount = *(ushort*)(p + 64),
+            OriginalX = *(ushort*)(p + 66),
+            OriginalY = *(ushort*)(p + 68),
+            OriginalZ = *(sbyte*)(p + 70),
+            OriginalContainer = *(uint*)(p + 72),
+            OriginalGridIndex = *(p + 76),
+            OriginalFromSlot = *(p + 77) != 0,
+        };
+        return v;
+    }
+
+    internal static void LowerSplitMenuWindow(in global::CuoModSdk.Types.SplitMenuWindow v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Serial;
+        *(int*)(p + 4) = v.MaxAmount;
+        *(ulong*)(p + 8) = v.Slider;
+        *(ulong*)(p + 16) = v.Text;
+        *(ulong*)(p + 24) = v.Ok;
+        *(int*)(p + 32) = v.LastSlider;
+        TypedCodecs.WriteString(v.LastText, p + 36);
+        *(ushort*)(p + 44) = v.Graphic;
+        *(ushort*)(p + 46) = v.Hue;
+        *(ulong*)(p + 48) = v.SourceUiEntity;
+        *(uint*)(p + 56) = v.SourceContainer;
+        *(ushort*)(p + 60) = v.OriginalGraphic;
+        *(ushort*)(p + 62) = v.OriginalHue;
+        *(ushort*)(p + 64) = v.OriginalAmount;
+        *(ushort*)(p + 66) = v.OriginalX;
+        *(ushort*)(p + 68) = v.OriginalY;
+        *(sbyte*)(p + 70) = v.OriginalZ;
+        *(uint*)(p + 72) = v.OriginalContainer;
+        *(p + 76) = v.OriginalGridIndex;
+        *(p + 77) = (byte)(v.OriginalFromSlot ? 1 : 0);
+    }
+
+    internal static void FreeSplitMenuWindow(byte* p)
+    {
+        TypedCodecs.FreeString(p + 36);
+    }
+
+    internal static bool EqSplitMenuWindow(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && *(ulong*)(a + 8) == *(ulong*)(b + 8)
+        && *(ulong*)(a + 16) == *(ulong*)(b + 16)
+        && *(ulong*)(a + 24) == *(ulong*)(b + 24)
+        && *(uint*)(a + 32) == *(uint*)(b + 32)
+        && TypedStrings.SameRecord(a + 36, b + 36)
+        && *(ushort*)(a + 44) == *(ushort*)(b + 44)
+        && *(ushort*)(a + 46) == *(ushort*)(b + 46)
+        && *(ulong*)(a + 48) == *(ulong*)(b + 48)
+        && *(uint*)(a + 56) == *(uint*)(b + 56)
+        && *(ushort*)(a + 60) == *(ushort*)(b + 60)
+        && *(ushort*)(a + 62) == *(ushort*)(b + 62)
+        && *(ushort*)(a + 64) == *(ushort*)(b + 64)
+        && *(ushort*)(a + 66) == *(ushort*)(b + 66)
+        && *(ushort*)(a + 68) == *(ushort*)(b + 68)
+        && *(a + 70) == *(b + 70)
+        && *(uint*)(a + 72) == *(uint*)(b + 72)
+        && *(a + 76) == *(b + 76)
+        && (*(a + 77) != 0) == (*(b + 77) != 0);
+
+    // tip-notice-window: 56 bytes, align 8
+    internal static global::CuoModSdk.Types.TipNoticeWindow LiftTipNoticeWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.TipNoticeWindow
+        {
+            TipSerial = *(ushort*)(p + 0),
+            SpecialHeight = *(int*)(p + 4),
+            Width = *(float*)(p + 8),
+            MidEntity = *(ulong*)(p + 16),
+            BottomEntity = *(ulong*)(p + 24),
+            ExpanderEntity = *(ulong*)(p + 32),
+            PrevEntity = *(ulong*)(p + 40),
+            NextEntity = *(ulong*)(p + 48),
+        };
+        return v;
+    }
+
+    internal static void LowerTipNoticeWindow(in global::CuoModSdk.Types.TipNoticeWindow v, byte* p)
+    {
+        *(ushort*)(p + 0) = v.TipSerial;
+        *(int*)(p + 4) = v.SpecialHeight;
+        *(float*)(p + 8) = v.Width;
+        *(ulong*)(p + 16) = v.MidEntity;
+        *(ulong*)(p + 24) = v.BottomEntity;
+        *(ulong*)(p + 32) = v.ExpanderEntity;
+        *(ulong*)(p + 40) = v.PrevEntity;
+        *(ulong*)(p + 48) = v.NextEntity;
+    }
+
+    internal static bool EqTipNoticeWindow(byte* a, byte* b) =>
+        *(ushort*)(a + 0) == *(ushort*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && *(uint*)(a + 8) == *(uint*)(b + 8)
+        && *(ulong*)(a + 16) == *(ulong*)(b + 16)
+        && *(ulong*)(a + 24) == *(ulong*)(b + 24)
+        && *(ulong*)(a + 32) == *(ulong*)(b + 32)
+        && *(ulong*)(a + 40) == *(ulong*)(b + 40)
+        && *(ulong*)(a + 48) == *(ulong*)(b + 48);
+
+    // trade-window: 16 bytes, align 4
+    internal static global::CuoModSdk.Types.TradeWindow LiftTradeWindow(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.TradeWindow
+        {
+            Serial = *(uint*)(p + 0),
+            Id1 = *(uint*)(p + 4),
+            Id2 = *(uint*)(p + 8),
+            ImAccepting = *(p + 12) != 0,
+            HeIsAccepting = *(p + 13) != 0,
+            IsNew = *(p + 14) != 0,
+        };
+        return v;
+    }
+
+    internal static void LowerTradeWindow(in global::CuoModSdk.Types.TradeWindow v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Serial;
+        *(uint*)(p + 4) = v.Id1;
+        *(uint*)(p + 8) = v.Id2;
+        *(p + 12) = (byte)(v.ImAccepting ? 1 : 0);
+        *(p + 13) = (byte)(v.HeIsAccepting ? 1 : 0);
+        *(p + 14) = (byte)(v.IsNew ? 1 : 0);
+    }
+
+    internal static bool EqTradeWindow(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && *(uint*)(a + 8) == *(uint*)(b + 8)
+        && (*(a + 12) != 0) == (*(b + 12) != 0)
+        && (*(a + 13) != 0) == (*(b + 13) != 0)
+        && (*(a + 14) != 0) == (*(b + 14) != 0);
+
+    // mod-move-request: 3 bytes, align 1
+    internal static global::CuoModSdk.Types.ModMoveRequest LiftModMoveRequest(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.ModMoveRequest
+        {
+            Direction = *(p + 0),
+            Run = *(p + 1) != 0,
+            Sequence = *(p + 2),
+        };
+        return v;
+    }
+
+    internal static void LowerModMoveRequest(in global::CuoModSdk.Types.ModMoveRequest v, byte* p)
+    {
+        *(p + 0) = v.Direction;
+        *(p + 1) = (byte)(v.Run ? 1 : 0);
+        *(p + 2) = v.Sequence;
+    }
+
+    internal static bool EqModMoveRequest(byte* a, byte* b) =>
+        *(a + 0) == *(b + 0)
+        && (*(a + 1) != 0) == (*(b + 1) != 0)
+        && *(a + 2) == *(b + 2);
+
+    // party-member: 12 bytes, align 4
+    internal static global::CuoModSdk.Types.PartyMemberDto LiftPartyMember(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.PartyMemberDto
+        {
+            Serial = *(uint*)(p + 0),
+            Name = TypedCodecs.ReadString(p + 4),
+        };
+        return v;
+    }
+
+    internal static void LowerPartyMember(in global::CuoModSdk.Types.PartyMemberDto v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Serial;
+        TypedCodecs.WriteString(v.Name, p + 4);
+    }
+
+    internal static void FreePartyMember(byte* p)
+    {
+        TypedCodecs.FreeString(p + 4);
+    }
+
+    internal static bool EqPartyMember(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && TypedStrings.SameRecord(a + 4, b + 4);
+
+    // party: 16 bytes, align 4
+    internal static global::CuoModSdk.Types.PartyDto LiftParty(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.PartyDto
+        {
+            Leader = *(uint*)(p + 0),
+            Members = LiftList20(p + 4),
+            InParty = *(p + 12) != 0,
+            CanLoot = *(p + 13) != 0,
+        };
+        return v;
+    }
+
+    internal static void LowerParty(in global::CuoModSdk.Types.PartyDto v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Leader;
+        LowerList20(v.Members, p + 4);
+        *(p + 12) = (byte)(v.InParty ? 1 : 0);
+        *(p + 13) = (byte)(v.CanLoot ? 1 : 0);
+    }
+
+    internal static void FreeParty(byte* p)
+    {
+        FreeList20(p + 4);
+    }
+
+    internal static bool EqParty(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && EqList20(a + 4, b + 4)
+        && (*(a + 12) != 0) == (*(b + 12) != 0)
+        && (*(a + 13) != 0) == (*(b + 13) != 0);
+
+    // spellbook: 16 bytes, align 4
+    internal static global::CuoModSdk.Types.SpellbookDto LiftSpellbook(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.SpellbookDto
+        {
+            Serial = *(uint*)(p + 0),
+            BookType = *(p + 4),
+            Spells = LiftList21(p + 8),
+        };
+        return v;
+    }
+
+    internal static void LowerSpellbook(in global::CuoModSdk.Types.SpellbookDto v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Serial;
+        *(p + 4) = v.BookType;
+        LowerList21(v.Spells, p + 8);
+    }
+
+    internal static void FreeSpellbook(byte* p)
+    {
+        FreeList21(p + 8);
+    }
+
+    internal static bool EqSpellbook(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(a + 4) == *(b + 4)
+        && EqList21(a + 8, b + 8);
+
+    // spellbooks: 12 bytes, align 4
+    internal static global::CuoModSdk.Types.SpellbooksDto LiftSpellbooks(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.SpellbooksDto
+        {
+            Revision = *(int*)(p + 0),
+            Books = LiftList22(p + 4),
+        };
+        return v;
+    }
+
+    internal static void LowerSpellbooks(in global::CuoModSdk.Types.SpellbooksDto v, byte* p)
+    {
+        *(int*)(p + 0) = v.Revision;
+        LowerList22(v.Books, p + 4);
+    }
+
+    internal static void FreeSpellbooks(byte* p)
+    {
+        FreeList22(p + 4);
+    }
+
+    internal static bool EqSpellbooks(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && EqList22(a + 4, b + 4);
+
+    // player-step: 8 bytes, align 2
+    internal static global::CuoModSdk.Types.PlayerStepDto LiftPlayerStep(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.PlayerStepDto
+        {
+            Sequence = *(p + 0),
+            Direction = *(p + 1),
+            X = *(ushort*)(p + 2),
+            Y = *(ushort*)(p + 4),
+            Z = *(sbyte*)(p + 6),
+        };
+        return v;
+    }
+
+    internal static void LowerPlayerStep(in global::CuoModSdk.Types.PlayerStepDto v, byte* p)
+    {
+        *(p + 0) = v.Sequence;
+        *(p + 1) = v.Direction;
+        *(ushort*)(p + 2) = v.X;
+        *(ushort*)(p + 4) = v.Y;
+        *(sbyte*)(p + 6) = v.Z;
+    }
+
+    internal static bool EqPlayerStep(byte* a, byte* b) =>
+        *(a + 0) == *(b + 0)
+        && *(a + 1) == *(b + 1)
+        && *(ushort*)(a + 2) == *(ushort*)(b + 2)
+        && *(ushort*)(a + 4) == *(ushort*)(b + 4)
+        && *(a + 6) == *(b + 6);
+
+    // player-steps: 20 bytes, align 4
+    internal static global::CuoModSdk.Types.PlayerStepsDto LiftPlayerSteps(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.PlayerStepsDto
+        {
+            LastStep = *(float*)(p + 0),
+            Count = *(int*)(p + 4),
+            Sequence = *(p + 8),
+            ResyncSent = *(p + 9) != 0,
+            Steps = LiftList23(p + 12),
+        };
+        return v;
+    }
+
+    internal static void LowerPlayerSteps(in global::CuoModSdk.Types.PlayerStepsDto v, byte* p)
+    {
+        *(float*)(p + 0) = v.LastStep;
+        *(int*)(p + 4) = v.Count;
+        *(p + 8) = v.Sequence;
+        *(p + 9) = (byte)(v.ResyncSent ? 1 : 0);
+        LowerList23(v.Steps, p + 12);
+    }
+
+    internal static void FreePlayerSteps(byte* p)
+    {
+        FreeList23(p + 12);
+    }
+
+    internal static bool EqPlayerSteps(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && *(a + 8) == *(b + 8)
+        && (*(a + 9) != 0) == (*(b + 9) != 0)
+        && EqList23(a + 12, b + 12);
+
+    // char-info: 12 bytes, align 4
+    internal static global::CuoModSdk.Types.CharInfoDto LiftCharInfo(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.CharInfoDto
+        {
+            Name = TypedCodecs.ReadString(p + 0),
+            Index = *(uint*)(p + 8),
+        };
+        return v;
+    }
+
+    internal static void LowerCharInfo(in global::CuoModSdk.Types.CharInfoDto v, byte* p)
+    {
+        TypedCodecs.WriteString(v.Name, p + 0);
+        *(uint*)(p + 8) = v.Index;
+    }
+
+    internal static void FreeCharInfo(byte* p)
+    {
+        TypedCodecs.FreeString(p + 0);
+    }
+
+    internal static bool EqCharInfo(byte* a, byte* b) =>
+        TypedStrings.SameRecord(a + 0, b + 0)
+        && *(uint*)(a + 8) == *(uint*)(b + 8);
+
+    // town-info: 36 bytes, align 4
+    internal static global::CuoModSdk.Types.TownInfoDto LiftTownInfo(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.TownInfoDto
+        {
+            Index = *(p + 0),
+            Name = TypedCodecs.ReadString(p + 4),
+            Building = TypedCodecs.ReadString(p + 12),
+            X = *(ushort*)(p + 20),
+            Y = *(ushort*)(p + 22),
+            Z = *(sbyte*)(p + 24),
+            Map = *(uint*)(p + 28),
+            ClilocDescription = *(uint*)(p + 32),
+        };
+        return v;
+    }
+
+    internal static void LowerTownInfo(in global::CuoModSdk.Types.TownInfoDto v, byte* p)
+    {
+        *(p + 0) = v.Index;
+        TypedCodecs.WriteString(v.Name, p + 4);
+        TypedCodecs.WriteString(v.Building, p + 12);
+        *(ushort*)(p + 20) = v.X;
+        *(ushort*)(p + 22) = v.Y;
+        *(sbyte*)(p + 24) = v.Z;
+        *(uint*)(p + 28) = v.Map;
+        *(uint*)(p + 32) = v.ClilocDescription;
+    }
+
+    internal static void FreeTownInfo(byte* p)
+    {
+        TypedCodecs.FreeString(p + 4);
+        TypedCodecs.FreeString(p + 12);
+    }
+
+    internal static bool EqTownInfo(byte* a, byte* b) =>
+        *(a + 0) == *(b + 0)
+        && TypedStrings.SameRecord(a + 4, b + 4)
+        && TypedStrings.SameRecord(a + 12, b + 12)
+        && *(ushort*)(a + 20) == *(ushort*)(b + 20)
+        && *(ushort*)(a + 22) == *(ushort*)(b + 22)
+        && *(a + 24) == *(b + 24)
+        && *(uint*)(a + 28) == *(uint*)(b + 28)
+        && *(uint*)(a + 32) == *(uint*)(b + 32);
+
+    // character-selection: 16 bytes, align 4
+    internal static global::CuoModSdk.Types.CharacterSelectionDto LiftCharacterSelection(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.CharacterSelectionDto
+        {
+            Characters = LiftList24(p + 0),
+            Towns = LiftList25(p + 8),
+        };
+        return v;
+    }
+
+    internal static void LowerCharacterSelection(in global::CuoModSdk.Types.CharacterSelectionDto v, byte* p)
+    {
+        LowerList24(v.Characters, p + 0);
+        LowerList25(v.Towns, p + 8);
+    }
+
+    internal static void FreeCharacterSelection(byte* p)
+    {
+        FreeList24(p + 0);
+        FreeList25(p + 8);
+    }
+
+    internal static bool EqCharacterSelection(byte* a, byte* b) =>
+        EqList24(a + 0, b + 0)
+        && EqList25(a + 8, b + 8);
+
+    // login-error-info: 8 bytes, align 4
+    internal static global::CuoModSdk.Types.LoginErrorInfo LiftLoginErrorInfo(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.LoginErrorInfo
+        {
+            ErrorMessage = TypedCodecs.ReadString(p + 0),
+        };
+        return v;
+    }
+
+    internal static void LowerLoginErrorInfo(in global::CuoModSdk.Types.LoginErrorInfo v, byte* p)
+    {
+        TypedCodecs.WriteString(v.ErrorMessage, p + 0);
+    }
+
+    internal static void FreeLoginErrorInfo(byte* p)
+    {
+        TypedCodecs.FreeString(p + 0);
+    }
+
+    internal static bool EqLoginErrorInfo(byte* a, byte* b) =>
+        TypedStrings.SameRecord(a + 0, b + 0);
+
+    // login-errors-info-event: 8 bytes, align 4
+    internal static global::CuoModSdk.Types.LoginErrorsInfoEvent LiftLoginErrorsInfoEvent(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.LoginErrorsInfoEvent
+        {
+            Error = LiftLoginErrorInfo(p + 0),
+        };
+        return v;
+    }
+
+    internal static void LowerLoginErrorsInfoEvent(in global::CuoModSdk.Types.LoginErrorsInfoEvent v, byte* p)
+    {
+        LowerLoginErrorInfo(v.Error, p + 0);
+    }
+
+    internal static void FreeLoginErrorsInfoEvent(byte* p)
+    {
+        FreeLoginErrorInfo(p + 0);
+    }
+
+    internal static bool EqLoginErrorsInfoEvent(byte* a, byte* b) =>
+        EqLoginErrorInfo(a + 0, b + 0);
+
+    // on-login-request: 28 bytes, align 4
+    internal static global::CuoModSdk.Types.OnLoginRequest LiftOnLoginRequest(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.OnLoginRequest
+        {
+            Username = TypedCodecs.ReadString(p + 0),
+            Password = TypedCodecs.ReadString(p + 8),
+            Address = TypedCodecs.ReadString(p + 16),
+            Port = *(ushort*)(p + 24),
+        };
+        return v;
+    }
+
+    internal static void LowerOnLoginRequest(in global::CuoModSdk.Types.OnLoginRequest v, byte* p)
+    {
+        TypedCodecs.WriteString(v.Username, p + 0);
+        TypedCodecs.WriteString(v.Password, p + 8);
+        TypedCodecs.WriteString(v.Address, p + 16);
+        *(ushort*)(p + 24) = v.Port;
+    }
+
+    internal static void FreeOnLoginRequest(byte* p)
+    {
+        TypedCodecs.FreeString(p + 0);
+        TypedCodecs.FreeString(p + 8);
+        TypedCodecs.FreeString(p + 16);
+    }
+
+    internal static bool EqOnLoginRequest(byte* a, byte* b) =>
+        TypedStrings.SameRecord(a + 0, b + 0)
+        && TypedStrings.SameRecord(a + 8, b + 8)
+        && TypedStrings.SameRecord(a + 16, b + 16)
+        && *(ushort*)(a + 24) == *(ushort*)(b + 24);
+
+    // server-info: 20 bytes, align 4
+    internal static global::CuoModSdk.Types.ServerInfo LiftServerInfo(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.ServerInfo
+        {
+            Index = *(int*)(p + 0),
+            Name = TypedCodecs.ReadString(p + 4),
+            PercentFull = *(p + 12),
+            TimeZone = *(p + 13),
+            Ip = *(uint*)(p + 16),
+        };
+        return v;
+    }
+
+    internal static void LowerServerInfo(in global::CuoModSdk.Types.ServerInfo v, byte* p)
+    {
+        *(int*)(p + 0) = v.Index;
+        TypedCodecs.WriteString(v.Name, p + 4);
+        *(p + 12) = v.PercentFull;
+        *(p + 13) = v.TimeZone;
+        *(uint*)(p + 16) = v.Ip;
+    }
+
+    internal static void FreeServerInfo(byte* p)
+    {
+        TypedCodecs.FreeString(p + 4);
+    }
+
+    internal static bool EqServerInfo(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && TypedStrings.SameRecord(a + 4, b + 4)
+        && *(a + 12) == *(b + 12)
+        && *(a + 13) == *(b + 13)
+        && *(uint*)(a + 16) == *(uint*)(b + 16);
+
+    // server-selection-info-event: 8 bytes, align 4
+    internal static global::CuoModSdk.Types.ServerSelectionInfoEvent LiftServerSelectionInfoEvent(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.ServerSelectionInfoEvent
+        {
+            Servers = LiftList26(p + 0),
+        };
+        return v;
+    }
+
+    internal static void LowerServerSelectionInfoEvent(in global::CuoModSdk.Types.ServerSelectionInfoEvent v, byte* p)
+    {
+        LowerList26(v.Servers, p + 0);
+    }
+
+    internal static void FreeServerSelectionInfoEvent(byte* p)
+    {
+        FreeList26(p + 0);
+    }
+
+    internal static bool EqServerSelectionInfoEvent(byte* a, byte* b) =>
+        EqList26(a + 0, b + 0);
+
+    // clipboard-set: 12 bytes, align 4
+    internal static global::CuoModSdk.Types.ClipboardSetDto LiftClipboardSet(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.ClipboardSetDto
+        {
+            Seq = *(int*)(p + 0),
+            Text = TypedCodecs.ReadString(p + 4),
+        };
+        return v;
+    }
+
+    internal static void LowerClipboardSet(in global::CuoModSdk.Types.ClipboardSetDto v, byte* p)
+    {
+        *(int*)(p + 0) = v.Seq;
+        TypedCodecs.WriteString(v.Text, p + 4);
+    }
+
+    internal static void FreeClipboardSet(byte* p)
+    {
+        TypedCodecs.FreeString(p + 4);
+    }
+
+    internal static bool EqClipboardSet(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0)
+        && TypedStrings.SameRecord(a + 4, b + 4);
+
+    // focused-input: 8 bytes, align 8
+    internal static global::CuoModSdk.Types.FocusedInput LiftFocusedInput(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.FocusedInput
+        {
+            Entity = *(ulong*)(p + 0),
+        };
+        return v;
+    }
+
+    internal static void LowerFocusedInput(in global::CuoModSdk.Types.FocusedInput v, byte* p)
+    {
+        *(ulong*)(p + 0) = v.Entity;
+    }
+
+    internal static bool EqFocusedInput(byte* a, byte* b) =>
+        *(ulong*)(a + 0) == *(ulong*)(b + 0);
+
+    // masked-text: 12 bytes, align 4
+    internal static global::CuoModSdk.Types.MaskedText LiftMaskedText(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.MaskedText
+        {
+            Value = TypedCodecs.ReadString(p + 0),
+            MaskChar = (char)*(uint*)(p + 8),
+        };
+        return v;
+    }
+
+    internal static void LowerMaskedText(in global::CuoModSdk.Types.MaskedText v, byte* p)
+    {
+        TypedCodecs.WriteString(v.Value, p + 0);
+        *(uint*)(p + 8) = v.MaskChar;
+    }
+
+    internal static void FreeMaskedText(byte* p)
+    {
+        TypedCodecs.FreeString(p + 0);
+    }
+
+    internal static bool EqMaskedText(byte* a, byte* b) =>
+        TypedStrings.SameRecord(a + 0, b + 0)
+        && *(uint*)(a + 8) == *(uint*)(b + 8);
+
+    // text-clipboard-action: 16 bytes, align 8
+    internal static global::CuoModSdk.Types.TextClipboardActionDto LiftTextClipboardAction(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.TextClipboardActionDto
+        {
+            Entity = *(ulong*)(p + 0),
+            Action = *(int*)(p + 8),
+            Seq = *(int*)(p + 12),
+        };
+        return v;
+    }
+
+    internal static void LowerTextClipboardAction(in global::CuoModSdk.Types.TextClipboardActionDto v, byte* p)
+    {
+        *(ulong*)(p + 0) = v.Entity;
+        *(int*)(p + 8) = v.Action;
+        *(int*)(p + 12) = v.Seq;
+    }
+
+    internal static bool EqTextClipboardAction(byte* a, byte* b) =>
+        *(ulong*)(a + 0) == *(ulong*)(b + 0)
+        && *(uint*)(a + 8) == *(uint*)(b + 8)
+        && *(uint*)(a + 12) == *(uint*)(b + 12);
+
+    // text-completion: 24 bytes, align 8
+    internal static global::CuoModSdk.Types.TextCompletionDto LiftTextCompletion(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.TextCompletionDto
+        {
+            Entity = *(ulong*)(p + 0),
+            Prefix = TypedCodecs.ReadString(p + 8),
+            Items = LiftList27(p + 16),
+        };
+        return v;
+    }
+
+    internal static void LowerTextCompletion(in global::CuoModSdk.Types.TextCompletionDto v, byte* p)
+    {
+        *(ulong*)(p + 0) = v.Entity;
+        TypedCodecs.WriteString(v.Prefix, p + 8);
+        LowerList27(v.Items, p + 16);
+    }
+
+    internal static void FreeTextCompletion(byte* p)
+    {
+        TypedCodecs.FreeString(p + 8);
+        FreeList27(p + 16);
+    }
+
+    internal static bool EqTextCompletion(byte* a, byte* b) =>
+        *(ulong*)(a + 0) == *(ulong*)(b + 0)
+        && TypedStrings.SameRecord(a + 8, b + 8)
+        && EqList27(a + 16, b + 16);
+
+    // text-completion-pick: 16 bytes, align 8
+    internal static global::CuoModSdk.Types.TextCompletionPickDto LiftTextCompletionPick(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.TextCompletionPickDto
+        {
+            Entity = *(ulong*)(p + 0),
+            Index = *(int*)(p + 8),
+            Seq = *(int*)(p + 12),
+        };
+        return v;
+    }
+
+    internal static void LowerTextCompletionPick(in global::CuoModSdk.Types.TextCompletionPickDto v, byte* p)
+    {
+        *(ulong*)(p + 0) = v.Entity;
+        *(int*)(p + 8) = v.Index;
+        *(int*)(p + 12) = v.Seq;
+    }
+
+    internal static bool EqTextCompletionPick(byte* a, byte* b) =>
+        *(ulong*)(a + 0) == *(ulong*)(b + 0)
+        && *(uint*)(a + 8) == *(uint*)(b + 8)
+        && *(uint*)(a + 12) == *(uint*)(b + 12);
+
+    // ui-tooltip-serial: 4 bytes, align 4
+    internal static global::CuoModSdk.Types.UiTooltipSerial LiftUiTooltipSerial(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.UiTooltipSerial
+        {
+            Serial = *(uint*)(p + 0),
+        };
+        return v;
+    }
+
+    internal static void LowerUiTooltipSerial(in global::CuoModSdk.Types.UiTooltipSerial v, byte* p)
+    {
+        *(uint*)(p + 0) = v.Serial;
+    }
+
+    internal static bool EqUiTooltipSerial(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0);
 
     internal static int[] LiftList0(byte* p)
     {
@@ -3776,24 +5301,24 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.PlayerBuffDto[] LiftList15(byte* p)
+    internal static global::CuoModSdk.Types.ModOptionValueDto[] LiftList15(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.PlayerBuffDto[len];
+        var v = new global::CuoModSdk.Types.ModOptionValueDto[len];
         for (var i = 0; i < len; i++)
-            v[i] = LiftPlayerBuff(items + i * 20);
+            v[i] = LiftModOptionValue(items + i * 12);
         return v;
     }
 
-    internal static void LowerList15(global::CuoModSdk.Types.PlayerBuffDto[]? v, byte* p)
+    internal static void LowerList15(global::CuoModSdk.Types.ModOptionValueDto[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
-        var items = TypedArena.Alloc(len * 20, 4);
+        var items = TypedArena.Alloc(len * 12, 4);
         for (var i = 0; i < len; i++)
         {
             var e = v![i];
-            LowerPlayerBuff(e, items + i * 20);
+            LowerModOptionValue(e, items + i * 12);
         }
         *(int*)p = (int)(nint)items;
         *(int*)(p + 4) = len;
@@ -3806,7 +5331,7 @@ internal static unsafe class TypedGen
             return;
         var items = (byte*)(nint)(*(int*)p);
         for (var i = 0; i < len; i++)
-            FreePlayerBuff(items + i * 20);
+            FreeModOptionValue(items + i * 12);
         NativeMemory.Free(items);
     }
 
@@ -3817,29 +5342,29 @@ internal static unsafe class TypedGen
             return false;
         byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
         for (var i = 0; i < len; i++)
-            if (!(EqPlayerBuff(x + i * 20, y + i * 20)))
+            if (!(EqModOptionValue(x + i * 12, y + i * 12)))
                 return false;
         return true;
     }
 
-    internal static global::CuoModSdk.Types.PlayerSkillDto[] LiftList16(byte* p)
+    internal static global::CuoModSdk.Types.PlayerBuffDto[] LiftList16(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.PlayerSkillDto[len];
+        var v = new global::CuoModSdk.Types.PlayerBuffDto[len];
         for (var i = 0; i < len; i++)
-            v[i] = LiftPlayerSkill(items + i * 12);
+            v[i] = LiftPlayerBuff(items + i * 20);
         return v;
     }
 
-    internal static void LowerList16(global::CuoModSdk.Types.PlayerSkillDto[]? v, byte* p)
+    internal static void LowerList16(global::CuoModSdk.Types.PlayerBuffDto[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
-        var items = TypedArena.Alloc(len * 12, 4);
+        var items = TypedArena.Alloc(len * 20, 4);
         for (var i = 0; i < len; i++)
         {
             var e = v![i];
-            LowerPlayerSkill(e, items + i * 12);
+            LowerPlayerBuff(e, items + i * 20);
         }
         *(int*)p = (int)(nint)items;
         *(int*)(p + 4) = len;
@@ -3851,6 +5376,8 @@ internal static unsafe class TypedGen
         if (len <= 0)
             return;
         var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreePlayerBuff(items + i * 20);
         NativeMemory.Free(items);
     }
 
@@ -3861,29 +5388,29 @@ internal static unsafe class TypedGen
             return false;
         byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
         for (var i = 0; i < len; i++)
-            if (!(EqPlayerSkill(x + i * 12, y + i * 12)))
+            if (!(EqPlayerBuff(x + i * 20, y + i * 20)))
                 return false;
         return true;
     }
 
-    internal static global::CuoModSdk.Types.TextSpan[] LiftList17(byte* p)
+    internal static global::CuoModSdk.Types.PlayerSkillDto[] LiftList17(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.TextSpan[len];
+        var v = new global::CuoModSdk.Types.PlayerSkillDto[len];
         for (var i = 0; i < len; i++)
-            v[i] = LiftTextSpan(items + i * 24);
+            v[i] = LiftPlayerSkill(items + i * 12);
         return v;
     }
 
-    internal static void LowerList17(global::CuoModSdk.Types.TextSpan[]? v, byte* p)
+    internal static void LowerList17(global::CuoModSdk.Types.PlayerSkillDto[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
-        var items = TypedArena.Alloc(len * 24, 4);
+        var items = TypedArena.Alloc(len * 12, 4);
         for (var i = 0; i < len; i++)
         {
             var e = v![i];
-            LowerTextSpan(e, items + i * 24);
+            LowerPlayerSkill(e, items + i * 12);
         }
         *(int*)p = (int)(nint)items;
         *(int*)(p + 4) = len;
@@ -3905,7 +5432,459 @@ internal static unsafe class TypedGen
             return false;
         byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
         for (var i = 0; i < len; i++)
+            if (!(EqPlayerSkill(x + i * 12, y + i * 12)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.TextSpan[] LiftList18(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.TextSpan[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftTextSpan(items + i * 24);
+        return v;
+    }
+
+    internal static void LowerList18(global::CuoModSdk.Types.TextSpan[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 24, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerTextSpan(e, items + i * 24);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList18(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList18(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
             if (!(EqTextSpan(x + i * 24, y + i * 24)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.MobStepDto[] LiftList19(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.MobStepDto[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftMobStep(items + i * 12);
+        return v;
+    }
+
+    internal static void LowerList19(global::CuoModSdk.Types.MobStepDto[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 12, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerMobStep(e, items + i * 12);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList19(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList19(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqMobStep(x + i * 12, y + i * 12)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.PartyMemberDto[] LiftList20(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.PartyMemberDto[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftPartyMember(items + i * 12);
+        return v;
+    }
+
+    internal static void LowerList20(global::CuoModSdk.Types.PartyMemberDto[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 12, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerPartyMember(e, items + i * 12);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList20(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreePartyMember(items + i * 12);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList20(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqPartyMember(x + i * 12, y + i * 12)))
+                return false;
+        return true;
+    }
+
+    internal static int[] LiftList21(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new int[len];
+        for (var i = 0; i < len; i++)
+            v[i] = *(int*)(items + i * 4);
+        return v;
+    }
+
+    internal static void LowerList21(int[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 4, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            *(int*)(items + i * 4) = e;
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList21(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList21(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(*(uint*)(x + i * 4) == *(uint*)(y + i * 4)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.SpellbookDto[] LiftList22(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.SpellbookDto[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftSpellbook(items + i * 16);
+        return v;
+    }
+
+    internal static void LowerList22(global::CuoModSdk.Types.SpellbookDto[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 16, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerSpellbook(e, items + i * 16);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList22(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreeSpellbook(items + i * 16);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList22(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqSpellbook(x + i * 16, y + i * 16)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.PlayerStepDto[] LiftList23(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.PlayerStepDto[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftPlayerStep(items + i * 8);
+        return v;
+    }
+
+    internal static void LowerList23(global::CuoModSdk.Types.PlayerStepDto[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 8, 2);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerPlayerStep(e, items + i * 8);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList23(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList23(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqPlayerStep(x + i * 8, y + i * 8)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.CharInfoDto[] LiftList24(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.CharInfoDto[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftCharInfo(items + i * 12);
+        return v;
+    }
+
+    internal static void LowerList24(global::CuoModSdk.Types.CharInfoDto[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 12, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerCharInfo(e, items + i * 12);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList24(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreeCharInfo(items + i * 12);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList24(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqCharInfo(x + i * 12, y + i * 12)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.TownInfoDto[] LiftList25(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.TownInfoDto[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftTownInfo(items + i * 36);
+        return v;
+    }
+
+    internal static void LowerList25(global::CuoModSdk.Types.TownInfoDto[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 36, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerTownInfo(e, items + i * 36);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList25(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreeTownInfo(items + i * 36);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList25(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqTownInfo(x + i * 36, y + i * 36)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.ServerInfo[] LiftList26(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.ServerInfo[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftServerInfo(items + i * 20);
+        return v;
+    }
+
+    internal static void LowerList26(global::CuoModSdk.Types.ServerInfo[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 20, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerServerInfo(e, items + i * 20);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList26(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreeServerInfo(items + i * 20);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList26(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqServerInfo(x + i * 20, y + i * 20)))
+                return false;
+        return true;
+    }
+
+    internal static string[] LiftList27(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new string[len];
+        for (var i = 0; i < len; i++)
+            v[i] = TypedCodecs.ReadString(items + i * 8);
+        return v;
+    }
+
+    internal static void LowerList27(string[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 8, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            TypedCodecs.WriteString(e, items + i * 8);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList27(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            TypedCodecs.FreeString(items + i * 8);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList27(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(TypedStrings.SameRecord(x + i * 8, y + i * 8)))
                 return false;
         return true;
     }
@@ -4257,6 +6236,9 @@ internal static unsafe class TypedImports
     [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-schema"), WasmImportLinkage]
     internal static extern void SetRes_Schema(int a0, int f0, int f1);
 
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-values"), WasmImportLinkage]
+    internal static extern void Get_Values(int r, nint ret);
+
     [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-buffs"), WasmImportLinkage]
     internal static extern void Get_Buffs(int r, nint ret);
 
@@ -4528,6 +6510,296 @@ internal static unsafe class TypedImports
     internal static extern int B_TopbarRoot(int self);
 
     internal static int Tag_TopbarRoot(int b) => B_TopbarRoot(b);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-animation"), WasmImportLinkage]
+    internal static extern void Col_Animation(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-mob-steps"), WasmImportLinkage]
+    internal static extern void Col_MobSteps(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.buff"), WasmImportLinkage]
+    internal static extern int B_Buff(int self);
+
+    internal static int Tag_Buff(int b) => B_Buff(b);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.combat-book"), WasmImportLinkage]
+    internal static extern int B_CombatBook(int a0, int f0, int f1, int f2, int f3, int f4, int f5, long f6, long f7, long f8);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-combat-book"), WasmImportLinkage]
+    internal static extern void Col_CombatBook(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-combat-book"), WasmImportLinkage]
+    internal static extern void Set_CombatBook(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, int f5, long f6, long f7, long f8);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.house-design"), WasmImportLinkage]
+    internal static extern int B_HouseDesign(int a0, long f0, int f1);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-house-design"), WasmImportLinkage]
+    internal static extern void Col_HouseDesign(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-house-design"), WasmImportLinkage]
+    internal static extern void Set_HouseDesign(int a0, long a1, int a2, long f0, int f1);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.journal"), WasmImportLinkage]
+    internal static extern int B_Journal(nint args);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-journal"), WasmImportLinkage]
+    internal static extern void Col_Journal(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-journal"), WasmImportLinkage]
+    internal static extern void Set_Journal(nint args);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.logout"), WasmImportLinkage]
+    internal static extern int B_Logout(int self);
+
+    internal static int Tag_Logout(int b) => B_Logout(b);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.menu"), WasmImportLinkage]
+    internal static extern int B_Menu(int a0, int f0, int f1, int f2, int f3);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-menu"), WasmImportLinkage]
+    internal static extern void Col_Menu(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-menu"), WasmImportLinkage]
+    internal static extern void Set_Menu(int a0, long a1, int a2, int f0, int f1, int f2, int f3);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.message-box"), WasmImportLinkage]
+    internal static extern int B_MessageBox(int self);
+
+    internal static int Tag_MessageBox(int b) => B_MessageBox(b);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.minimap"), WasmImportLinkage]
+    internal static extern int B_Minimap(int a0, int f0);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-minimap"), WasmImportLinkage]
+    internal static extern void Col_Minimap(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-minimap"), WasmImportLinkage]
+    internal static extern void Set_Minimap(int a0, long a1, int a2, int f0);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.paperdoll"), WasmImportLinkage]
+    internal static extern int B_Paperdoll(int a0, int f0, int f1, int f2, int f3);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-paperdoll"), WasmImportLinkage]
+    internal static extern void Col_Paperdoll(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-paperdoll"), WasmImportLinkage]
+    internal static extern void Set_Paperdoll(int a0, long a1, int a2, int f0, int f1, int f2, int f3);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.party-invite"), WasmImportLinkage]
+    internal static extern int B_PartyInvite(int a0, int f0);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-party-invite"), WasmImportLinkage]
+    internal static extern void Col_PartyInvite(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-party-invite"), WasmImportLinkage]
+    internal static extern void Set_PartyInvite(int a0, long a1, int a2, int f0);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.party-manifest"), WasmImportLinkage]
+    internal static extern int B_PartyManifest(int a0, int f0);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-party-manifest"), WasmImportLinkage]
+    internal static extern void Col_PartyManifest(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-party-manifest"), WasmImportLinkage]
+    internal static extern void Set_PartyManifest(int a0, long a1, int a2, int f0);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.profile"), WasmImportLinkage]
+    internal static extern int B_Profile(int a0, int f0, int f1, float f2, long f3, long f4, long f5, long f6, int f7, int f8, long f9);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-profile"), WasmImportLinkage]
+    internal static extern void Col_Profile(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-profile"), WasmImportLinkage]
+    internal static extern void Set_Profile(int a0, long a1, int a2, int f0, int f1, float f2, long f3, long f4, long f5, long f6, int f7, int f8, long f9);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.racial-book"), WasmImportLinkage]
+    internal static extern int B_RacialBook(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6, long f7, long f8, long f9);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-racial-book"), WasmImportLinkage]
+    internal static extern void Col_RacialBook(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-racial-book"), WasmImportLinkage]
+    internal static extern void Set_RacialBook(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, int f5, int f6, long f7, long f8, long f9);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-server-closed"), WasmImportLinkage]
+    internal static extern void Send_ServerClosed(int a0, int f0, int f1);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-server-closed"), WasmImportLinkage]
+    internal static extern void Read_ServerClosed(int e, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-server-opened"), WasmImportLinkage]
+    internal static extern void Send_ServerOpened(int a0, int f0, int f1);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-server-opened"), WasmImportLinkage]
+    internal static extern void Read_ServerOpened(int e, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.gump-skills"), WasmImportLinkage]
+    internal static extern int B_GumpSkills(nint args);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-gump-skills"), WasmImportLinkage]
+    internal static extern void Col_GumpSkills(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-gump-skills"), WasmImportLinkage]
+    internal static extern void Set_GumpSkills(nint args);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.spellbook"), WasmImportLinkage]
+    internal static extern int B_Spellbook(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6, long f7, long f8, long f9, int f10);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-spellbook"), WasmImportLinkage]
+    internal static extern void Col_Spellbook(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-spellbook"), WasmImportLinkage]
+    internal static extern void Set_Spellbook(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, int f5, int f6, long f7, long f8, long f9, int f10);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.split-menu"), WasmImportLinkage]
+    internal static extern int B_SplitMenu(nint args);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-split-menu"), WasmImportLinkage]
+    internal static extern void Col_SplitMenu(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-split-menu"), WasmImportLinkage]
+    internal static extern void Set_SplitMenu(nint args);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.tip-notice"), WasmImportLinkage]
+    internal static extern int B_TipNotice(int a0, int f0, int f1, float f2, long f3, long f4, long f5, long f6, long f7);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-tip-notice"), WasmImportLinkage]
+    internal static extern void Col_TipNotice(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-tip-notice"), WasmImportLinkage]
+    internal static extern void Set_TipNotice(int a0, long a1, int a2, int f0, int f1, float f2, long f3, long f4, long f5, long f6, long f7);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.trade"), WasmImportLinkage]
+    internal static extern int B_Trade(int a0, int f0, int f1, int f2, int f3, int f4, int f5);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-trade"), WasmImportLinkage]
+    internal static extern void Col_Trade(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-trade"), WasmImportLinkage]
+    internal static extern void Set_Trade(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, int f5);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.worldmap"), WasmImportLinkage]
+    internal static extern int B_Worldmap(int self);
+
+    internal static int Tag_Worldmap(int b) => B_Worldmap(b);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-move-request"), WasmImportLinkage]
+    internal static extern void Send_MoveRequest(int a0, int f0, int f1, int f2);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-move-request"), WasmImportLinkage]
+    internal static extern void Read_MoveRequest(int e, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-party"), WasmImportLinkage]
+    internal static extern void Get_Party(int r, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-player-spellbook"), WasmImportLinkage]
+    internal static extern void Get_PlayerSpellbook(int r, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-steps"), WasmImportLinkage]
+    internal static extern void Get_Steps(int r, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.character-creation"), WasmImportLinkage]
+    internal static extern int B_CharacterCreation(int self);
+
+    internal static int Tag_CharacterCreation(int b) => B_CharacterCreation(b);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-character-list"), WasmImportLinkage]
+    internal static extern void Send_CharacterList(int a0, int f0, int f1, int f2, int f3);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-character-list"), WasmImportLinkage]
+    internal static extern void Read_CharacterList(int e, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.character-selection"), WasmImportLinkage]
+    internal static extern int B_CharacterSelection(int self);
+
+    internal static int Tag_CharacterSelection(int b) => B_CharacterSelection(b);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.game"), WasmImportLinkage]
+    internal static extern int B_Game(int self);
+
+    internal static int Tag_Game(int b) => B_Game(b);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.login"), WasmImportLinkage]
+    internal static extern int B_Login(int self);
+
+    internal static int Tag_Login(int b) => B_Login(b);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.login-error"), WasmImportLinkage]
+    internal static extern int B_LoginError(int self);
+
+    internal static int Tag_LoginError(int b) => B_LoginError(b);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-login-error-info"), WasmImportLinkage]
+    internal static extern void Send_LoginErrorInfo(int a0, int f0, int f1);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-login-error-info"), WasmImportLinkage]
+    internal static extern void Read_LoginErrorInfo(int e, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-login-request"), WasmImportLinkage]
+    internal static extern void Send_LoginRequest(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-login-request"), WasmImportLinkage]
+    internal static extern void Read_LoginRequest(int e, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-server-list"), WasmImportLinkage]
+    internal static extern void Send_ServerList(int a0, int f0, int f1);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-server-list"), WasmImportLinkage]
+    internal static extern void Read_ServerList(int e, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.server-selection"), WasmImportLinkage]
+    internal static extern int B_ServerSelection(int self);
+
+    internal static int Tag_ServerSelection(int b) => B_ServerSelection(b);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-clipboard-set"), WasmImportLinkage]
+    internal static extern void Get_ClipboardSet(int r, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-clipboard-set"), WasmImportLinkage]
+    internal static extern void SetRes_ClipboardSet(int a0, int f0, int f1, int f2);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-focused-input"), WasmImportLinkage]
+    internal static extern void Get_FocusedInput(int r, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-focused-input"), WasmImportLinkage]
+    internal static extern void SetRes_FocusedInput(int a0, long f0);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.masked-text"), WasmImportLinkage]
+    internal static extern int B_MaskedText(int a0, int f0, int f1, int f2);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-masked-text"), WasmImportLinkage]
+    internal static extern void Col_MaskedText(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-masked-text"), WasmImportLinkage]
+    internal static extern void Set_MaskedText(int a0, long a1, int a2, int f0, int f1, int f2);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-text-clipboard-action"), WasmImportLinkage]
+    internal static extern void Get_TextClipboardAction(int r, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-text-clipboard-action"), WasmImportLinkage]
+    internal static extern void SetRes_TextClipboardAction(int a0, long f0, int f1, int f2);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-text-completion"), WasmImportLinkage]
+    internal static extern void Get_TextCompletion(int r, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-text-completion"), WasmImportLinkage]
+    internal static extern void SetRes_TextCompletion(int a0, long f0, int f1, int f2, int f3, int f4);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-text-completion-pick"), WasmImportLinkage]
+    internal static extern void Get_TextCompletionPick(int r, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-text-completion-pick"), WasmImportLinkage]
+    internal static extern void SetRes_TextCompletionPick(int a0, long f0, int f1, int f2);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.tooltip-serial"), WasmImportLinkage]
+    internal static extern int B_TooltipSerial(int a0, int f0);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-tooltip-serial"), WasmImportLinkage]
+    internal static extern void Col_TooltipSerial(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-tooltip-serial"), WasmImportLinkage]
+    internal static extern void Set_TooltipSerial(int a0, long a1, int a2, int f0);
 
 }
 
@@ -6071,6 +8343,40 @@ internal sealed unsafe class CodecSchema : TypedCodec<global::CuoModSdk.Types.Mo
     }
 }
 
+/// <summary><c>cuo:options/values</c> (mod-options-values).</summary>
+internal sealed unsafe class CodecValues : TypedCodec<global::CuoModSdk.Types.ModOptionsValuesDto>
+{
+    internal override int Size => 8;
+    internal override global::CuoModSdk.Types.ModOptionsValuesDto Lift(byte* p) => TypedGen.LiftModOptionsValues(p);
+    protected override void Lower(in global::CuoModSdk.Types.ModOptionsValuesDto v, byte* p) => TypedGen.LowerModOptionsValues(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ModOptionsValuesDto now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqModOptionsValues((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeModOptionsValues(p);
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+    internal override bool HasGet => true;
+    internal override bool Get(int res, out global::CuoModSdk.Types.ModOptionsValuesDto value)
+    {
+        var ret = stackalloc ulong[2];
+        var p = (byte*)ret;
+        TypedImports.Get_Values(res, (nint)p);
+        if (p[0] == 0)
+        {
+            value = default!;
+            return false;
+        }
+        value = Lift(p + 4);
+        TypedGen.FreeModOptionsValues(p + 4);
+        return true;
+    }
+}
+
 /// <summary><c>cuo:player/buffs</c> (player-buffs).</summary>
 internal sealed unsafe class CodecBuffs : TypedCodec<global::CuoModSdk.Types.PlayerBuffsDto>
 {
@@ -6908,5 +9214,1086 @@ internal sealed unsafe class CodecTooltip : TypedCodec<global::CuoModSdk.Types.U
     internal override void Set(int q, ulong e, byte t, byte* rec)
     {
         TypedImports.Set_Tooltip(q, (long)e, t, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8));
+    }
+}
+
+/// <summary><c>cuo:ent/animation</c> (mob-animation).</summary>
+internal sealed unsafe class CodecAnimation : TypedCodec<global::CuoModSdk.Types.MobAnimation>
+{
+    internal override int Size => 36;
+    internal override global::CuoModSdk.Types.MobAnimation Lift(byte* p) => TypedGen.LiftMobAnimation(p);
+    protected override void Lower(in global::CuoModSdk.Types.MobAnimation v, byte* p) => TypedGen.LowerMobAnimation(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.MobAnimation now, byte* original)
+    {
+        var mine = stackalloc ulong[5];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqMobAnimation((byte*)mine, original);
+    }
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Animation(q, t, ret);
+    internal override bool CanSet => false;
+}
+
+/// <summary><c>cuo:ent/mob-steps</c> (mobile-steps).</summary>
+internal sealed unsafe class CodecMobSteps : TypedCodec<global::CuoModSdk.Types.MobileStepsDto>
+{
+    internal override int Size => 16;
+    internal override global::CuoModSdk.Types.MobileStepsDto Lift(byte* p) => TypedGen.LiftMobileSteps(p);
+    protected override void Lower(in global::CuoModSdk.Types.MobileStepsDto v, byte* p) => TypedGen.LowerMobileSteps(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.MobileStepsDto now, byte* original)
+    {
+        var mine = stackalloc ulong[2];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqMobileSteps((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeMobileSteps(p);
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_MobSteps(q, t, ret);
+    internal override bool CanSet => false;
+}
+
+/// <summary><c>cuo:gump/combat-book</c> (combat-book-window).</summary>
+internal sealed unsafe class CodecCombatBook : TypedCodec<global::CuoModSdk.Types.CombatBookWindow>
+{
+    internal override int Size => 48;
+    internal override global::CuoModSdk.Types.CombatBookWindow Lift(byte* p) => TypedGen.LiftCombatBookWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.CombatBookWindow v, byte* p) => TypedGen.LowerCombatBookWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.CombatBookWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[6];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqCombatBookWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_CombatBook(b, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(rec + 20), *(long*)(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_CombatBook(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_CombatBook(q, (long)e, t, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(rec + 20), *(long*)(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40));
+    }
+}
+
+/// <summary><c>cuo:gump/house-design</c> (house-design-window).</summary>
+internal sealed unsafe class CodecHouseDesign : TypedCodec<global::CuoModSdk.Types.HouseDesignWindow>
+{
+    internal override int Size => 16;
+    internal override global::CuoModSdk.Types.HouseDesignWindow Lift(byte* p) => TypedGen.LiftHouseDesignWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.HouseDesignWindow v, byte* p) => TypedGen.LowerHouseDesignWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.HouseDesignWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[2];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqHouseDesignWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_HouseDesign(b, *(long*)(rec + 0), (int)*(uint*)(rec + 8));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_HouseDesign(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_HouseDesign(q, (long)e, t, *(long*)(rec + 0), (int)*(uint*)(rec + 8));
+    }
+}
+
+/// <summary><c>cuo:gump/journal</c> (journal-window).</summary>
+internal sealed unsafe class CodecJournal : TypedCodec<global::CuoModSdk.Types.JournalWindow>
+{
+    internal override int Size => 112;
+    internal override global::CuoModSdk.Types.JournalWindow Lift(byte* p) => TypedGen.LiftJournalWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.JournalWindow v, byte* p) => TypedGen.LowerJournalWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.JournalWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[14];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqJournalWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        var area = stackalloc ulong[15];
+        var a = (byte*)area;
+        *(int*)(a + 0) = b;
+        new ReadOnlySpan<byte>(rec, 112).CopyTo(new Span<byte>(a + 8, 112));
+        return TypedImports.B_Journal((nint)a);
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Journal(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        var area = stackalloc ulong[17];
+        var a = (byte*)area;
+        *(int*)(a + 0) = q;
+        *(long*)(a + 8) = (long)e;
+        a[16] = t;
+        new ReadOnlySpan<byte>(rec, 112).CopyTo(new Span<byte>(a + 24, 112));
+        TypedImports.Set_Journal((nint)a);
+    }
+}
+
+/// <summary><c>cuo:gump/menu</c> (menu-gump-window).</summary>
+internal sealed unsafe class CodecMenu : TypedCodec<global::CuoModSdk.Types.MenuGumpWindow>
+{
+    internal override int Size => 8;
+    internal override global::CuoModSdk.Types.MenuGumpWindow Lift(byte* p) => TypedGen.LiftMenuGumpWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.MenuGumpWindow v, byte* p) => TypedGen.LowerMenuGumpWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.MenuGumpWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqMenuGumpWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_Menu(b, (int)*(uint*)(rec + 0), *(ushort*)(rec + 4), *(rec + 6), *(rec + 7));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Menu(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_Menu(q, (long)e, t, (int)*(uint*)(rec + 0), *(ushort*)(rec + 4), *(rec + 6), *(rec + 7));
+    }
+}
+
+/// <summary><c>cuo:gump/minimap</c> (mini-map-window).</summary>
+internal sealed unsafe class CodecMinimap : TypedCodec<global::CuoModSdk.Types.MiniMapWindow>
+{
+    internal override int Size => 1;
+    internal override global::CuoModSdk.Types.MiniMapWindow Lift(byte* p) => TypedGen.LiftMiniMapWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.MiniMapWindow v, byte* p) => TypedGen.LowerMiniMapWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.MiniMapWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqMiniMapWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_Minimap(b, *(rec + 0));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Minimap(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_Minimap(q, (long)e, t, *(rec + 0));
+    }
+}
+
+/// <summary><c>cuo:gump/paperdoll</c> (paperdoll-window).</summary>
+internal sealed unsafe class CodecPaperdoll : TypedCodec<global::CuoModSdk.Types.PaperdollWindow>
+{
+    internal override int Size => 8;
+    internal override global::CuoModSdk.Types.PaperdollWindow Lift(byte* p) => TypedGen.LiftPaperdollWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.PaperdollWindow v, byte* p) => TypedGen.LowerPaperdollWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.PaperdollWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqPaperdollWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_Paperdoll(b, (int)*(uint*)(rec + 0), *(rec + 4), *(rec + 5), *(rec + 6));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Paperdoll(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_Paperdoll(q, (long)e, t, (int)*(uint*)(rec + 0), *(rec + 4), *(rec + 5), *(rec + 6));
+    }
+}
+
+/// <summary><c>cuo:gump/party-invite</c> (party-invite-window).</summary>
+internal sealed unsafe class CodecPartyInvite : TypedCodec<global::CuoModSdk.Types.PartyInviteWindow>
+{
+    internal override int Size => 4;
+    internal override global::CuoModSdk.Types.PartyInviteWindow Lift(byte* p) => TypedGen.LiftPartyInviteWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.PartyInviteWindow v, byte* p) => TypedGen.LowerPartyInviteWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.PartyInviteWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqPartyInviteWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_PartyInvite(b, (int)*(uint*)(rec + 0));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_PartyInvite(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_PartyInvite(q, (long)e, t, (int)*(uint*)(rec + 0));
+    }
+}
+
+/// <summary><c>cuo:gump/party-manifest</c> (party-manifest-window).</summary>
+internal sealed unsafe class CodecPartyManifest : TypedCodec<global::CuoModSdk.Types.PartyManifestWindow>
+{
+    internal override int Size => 1;
+    internal override global::CuoModSdk.Types.PartyManifestWindow Lift(byte* p) => TypedGen.LiftPartyManifestWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.PartyManifestWindow v, byte* p) => TypedGen.LowerPartyManifestWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.PartyManifestWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqPartyManifestWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_PartyManifest(b, *(rec + 0));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_PartyManifest(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_PartyManifest(q, (long)e, t, *(rec + 0));
+    }
+}
+
+/// <summary><c>cuo:gump/profile</c> (profile-window).</summary>
+internal sealed unsafe class CodecProfile : TypedCodec<global::CuoModSdk.Types.ProfileWindow>
+{
+    internal override int Size => 64;
+    internal override global::CuoModSdk.Types.ProfileWindow Lift(byte* p) => TypedGen.LiftProfileWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.ProfileWindow v, byte* p) => TypedGen.LowerProfileWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ProfileWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[8];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqProfileWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_Profile(b, (int)*(uint*)(rec + 0), *(int*)(rec + 4), *(float*)(rec + 8), *(long*)(rec + 16), *(long*)(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40), *(int*)(rec + 48), *(rec + 52), *(long*)(rec + 56));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Profile(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_Profile(q, (long)e, t, (int)*(uint*)(rec + 0), *(int*)(rec + 4), *(float*)(rec + 8), *(long*)(rec + 16), *(long*)(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40), *(int*)(rec + 48), *(rec + 52), *(long*)(rec + 56));
+    }
+}
+
+/// <summary><c>cuo:gump/racial-book</c> (racial-book-window).</summary>
+internal sealed unsafe class CodecRacialBook : TypedCodec<global::CuoModSdk.Types.RacialBookWindow>
+{
+    internal override int Size => 48;
+    internal override global::CuoModSdk.Types.RacialBookWindow Lift(byte* p) => TypedGen.LiftRacialBookWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.RacialBookWindow v, byte* p) => TypedGen.LowerRacialBookWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.RacialBookWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[6];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqRacialBookWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_RacialBook(b, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(rec + 20), *(rec + 21), *(long*)(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_RacialBook(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_RacialBook(q, (long)e, t, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(rec + 20), *(rec + 21), *(long*)(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40));
+    }
+}
+
+/// <summary>The <c>cuo:gump/server-closed</c> event, typed.</summary>
+internal sealed unsafe class EventServerClosed : TypedEvent<global::CuoModSdk.Types.ServerGumpClosedEvent>
+{
+    internal override void Send(int c, in global::CuoModSdk.Types.ServerGumpClosedEvent v)
+    {
+        var buf = stackalloc ulong[1];
+        var rec = (byte*)buf;
+        TypedGen.LowerServerGumpClosedEvent(v, rec);
+        TypedImports.Send_ServerClosed(c, (int)*(uint*)(rec + 0), (int)*(uint*)(rec + 4));
+    }
+    internal override global::CuoModSdk.Types.ServerGumpClosedEvent[] Read(int e)
+    {
+        var ret = stackalloc int[2];
+        TypedImports.Read_ServerClosed(e, (nint)ret);
+        var list = (byte*)(nint)ret[0];
+        var n = ret[1];
+        if (n <= 0)
+            return [];
+        var v = new global::CuoModSdk.Types.ServerGumpClosedEvent[n];
+        for (var i = 0; i < n; i++)
+        {
+            v[i] = TypedGen.LiftServerGumpClosedEvent(list + i * 8);
+        }
+        NativeMemory.Free(list);
+        return v;
+    }
+}
+
+/// <summary><c>cuo:gump/server-closed</c> (server-gump-closed-event).</summary>
+internal sealed unsafe class CodecServerClosed : TypedCodec<global::CuoModSdk.Types.ServerGumpClosedEvent>
+{
+    internal override int Size => 8;
+    internal override global::CuoModSdk.Types.ServerGumpClosedEvent Lift(byte* p) => TypedGen.LiftServerGumpClosedEvent(p);
+    protected override void Lower(in global::CuoModSdk.Types.ServerGumpClosedEvent v, byte* p) => TypedGen.LowerServerGumpClosedEvent(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ServerGumpClosedEvent now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqServerGumpClosedEvent((byte*)mine, original);
+    }
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+}
+
+/// <summary>The <c>cuo:gump/server-opened</c> event, typed.</summary>
+internal sealed unsafe class EventServerOpened : TypedEvent<global::CuoModSdk.Types.ServerGumpOpenedEvent>
+{
+    internal override void Send(int c, in global::CuoModSdk.Types.ServerGumpOpenedEvent v)
+    {
+        var buf = stackalloc ulong[1];
+        var rec = (byte*)buf;
+        TypedGen.LowerServerGumpOpenedEvent(v, rec);
+        TypedImports.Send_ServerOpened(c, (int)*(uint*)(rec + 0), (int)*(uint*)(rec + 4));
+    }
+    internal override global::CuoModSdk.Types.ServerGumpOpenedEvent[] Read(int e)
+    {
+        var ret = stackalloc int[2];
+        TypedImports.Read_ServerOpened(e, (nint)ret);
+        var list = (byte*)(nint)ret[0];
+        var n = ret[1];
+        if (n <= 0)
+            return [];
+        var v = new global::CuoModSdk.Types.ServerGumpOpenedEvent[n];
+        for (var i = 0; i < n; i++)
+        {
+            v[i] = TypedGen.LiftServerGumpOpenedEvent(list + i * 8);
+        }
+        NativeMemory.Free(list);
+        return v;
+    }
+}
+
+/// <summary><c>cuo:gump/server-opened</c> (server-gump-opened-event).</summary>
+internal sealed unsafe class CodecServerOpened : TypedCodec<global::CuoModSdk.Types.ServerGumpOpenedEvent>
+{
+    internal override int Size => 8;
+    internal override global::CuoModSdk.Types.ServerGumpOpenedEvent Lift(byte* p) => TypedGen.LiftServerGumpOpenedEvent(p);
+    protected override void Lower(in global::CuoModSdk.Types.ServerGumpOpenedEvent v, byte* p) => TypedGen.LowerServerGumpOpenedEvent(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ServerGumpOpenedEvent now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqServerGumpOpenedEvent((byte*)mine, original);
+    }
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+}
+
+/// <summary><c>cuo:gump/skills</c> (skills-window).</summary>
+internal sealed unsafe class CodecGumpSkills : TypedCodec<global::CuoModSdk.Types.SkillsWindow>
+{
+    internal override int Size => 104;
+    internal override global::CuoModSdk.Types.SkillsWindow Lift(byte* p) => TypedGen.LiftSkillsWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.SkillsWindow v, byte* p) => TypedGen.LowerSkillsWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.SkillsWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[13];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqSkillsWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        var area = stackalloc ulong[14];
+        var a = (byte*)area;
+        *(int*)(a + 0) = b;
+        new ReadOnlySpan<byte>(rec, 104).CopyTo(new Span<byte>(a + 8, 104));
+        return TypedImports.B_GumpSkills((nint)a);
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_GumpSkills(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        var area = stackalloc ulong[16];
+        var a = (byte*)area;
+        *(int*)(a + 0) = q;
+        *(long*)(a + 8) = (long)e;
+        a[16] = t;
+        new ReadOnlySpan<byte>(rec, 104).CopyTo(new Span<byte>(a + 24, 104));
+        TypedImports.Set_GumpSkills((nint)a);
+    }
+}
+
+/// <summary><c>cuo:gump/spellbook</c> (spellbook-window).</summary>
+internal sealed unsafe class CodecSpellbook : TypedCodec<global::CuoModSdk.Types.SpellbookWindow>
+{
+    internal override int Size => 64;
+    internal override global::CuoModSdk.Types.SpellbookWindow Lift(byte* p) => TypedGen.LiftSpellbookWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.SpellbookWindow v, byte* p) => TypedGen.LowerSpellbookWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.SpellbookWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[8];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqSpellbookWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_Spellbook(b, (int)*(uint*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20), *(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40), *(long*)(rec + 48), *(rec + 56));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Spellbook(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_Spellbook(q, (long)e, t, (int)*(uint*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20), *(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40), *(long*)(rec + 48), *(rec + 56));
+    }
+}
+
+/// <summary><c>cuo:gump/split-menu</c> (split-menu-window).</summary>
+internal sealed unsafe class CodecSplitMenu : TypedCodec<global::CuoModSdk.Types.SplitMenuWindow>
+{
+    internal override int Size => 80;
+    internal override global::CuoModSdk.Types.SplitMenuWindow Lift(byte* p) => TypedGen.LiftSplitMenuWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.SplitMenuWindow v, byte* p) => TypedGen.LowerSplitMenuWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.SplitMenuWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[10];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqSplitMenuWindow((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeSplitMenuWindow(p);
+    internal override int Build(int b, byte* rec)
+    {
+        var area = stackalloc ulong[11];
+        var a = (byte*)area;
+        *(int*)(a + 0) = b;
+        new ReadOnlySpan<byte>(rec, 80).CopyTo(new Span<byte>(a + 8, 80));
+        return TypedImports.B_SplitMenu((nint)a);
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_SplitMenu(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        var area = stackalloc ulong[13];
+        var a = (byte*)area;
+        *(int*)(a + 0) = q;
+        *(long*)(a + 8) = (long)e;
+        a[16] = t;
+        new ReadOnlySpan<byte>(rec, 80).CopyTo(new Span<byte>(a + 24, 80));
+        TypedImports.Set_SplitMenu((nint)a);
+    }
+}
+
+/// <summary><c>cuo:gump/tip-notice</c> (tip-notice-window).</summary>
+internal sealed unsafe class CodecTipNotice : TypedCodec<global::CuoModSdk.Types.TipNoticeWindow>
+{
+    internal override int Size => 56;
+    internal override global::CuoModSdk.Types.TipNoticeWindow Lift(byte* p) => TypedGen.LiftTipNoticeWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.TipNoticeWindow v, byte* p) => TypedGen.LowerTipNoticeWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.TipNoticeWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[7];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqTipNoticeWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_TipNotice(b, *(ushort*)(rec + 0), *(int*)(rec + 4), *(float*)(rec + 8), *(long*)(rec + 16), *(long*)(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40), *(long*)(rec + 48));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_TipNotice(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_TipNotice(q, (long)e, t, *(ushort*)(rec + 0), *(int*)(rec + 4), *(float*)(rec + 8), *(long*)(rec + 16), *(long*)(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40), *(long*)(rec + 48));
+    }
+}
+
+/// <summary><c>cuo:gump/trade</c> (trade-window).</summary>
+internal sealed unsafe class CodecTrade : TypedCodec<global::CuoModSdk.Types.TradeWindow>
+{
+    internal override int Size => 16;
+    internal override global::CuoModSdk.Types.TradeWindow Lift(byte* p) => TypedGen.LiftTradeWindow(p);
+    protected override void Lower(in global::CuoModSdk.Types.TradeWindow v, byte* p) => TypedGen.LowerTradeWindow(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.TradeWindow now, byte* original)
+    {
+        var mine = stackalloc ulong[2];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqTradeWindow((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_Trade(b, (int)*(uint*)(rec + 0), (int)*(uint*)(rec + 4), (int)*(uint*)(rec + 8), *(rec + 12), *(rec + 13), *(rec + 14));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Trade(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_Trade(q, (long)e, t, (int)*(uint*)(rec + 0), (int)*(uint*)(rec + 4), (int)*(uint*)(rec + 8), *(rec + 12), *(rec + 13), *(rec + 14));
+    }
+}
+
+/// <summary>The <c>cuo:player/move-request</c> event, typed.</summary>
+internal sealed unsafe class EventMoveRequest : TypedEvent<global::CuoModSdk.Types.ModMoveRequest>
+{
+    internal override void Send(int c, in global::CuoModSdk.Types.ModMoveRequest v)
+    {
+        var buf = stackalloc ulong[1];
+        var rec = (byte*)buf;
+        TypedGen.LowerModMoveRequest(v, rec);
+        TypedImports.Send_MoveRequest(c, *(rec + 0), *(rec + 1), *(rec + 2));
+    }
+    internal override global::CuoModSdk.Types.ModMoveRequest[] Read(int e)
+    {
+        var ret = stackalloc int[2];
+        TypedImports.Read_MoveRequest(e, (nint)ret);
+        var list = (byte*)(nint)ret[0];
+        var n = ret[1];
+        if (n <= 0)
+            return [];
+        var v = new global::CuoModSdk.Types.ModMoveRequest[n];
+        for (var i = 0; i < n; i++)
+        {
+            v[i] = TypedGen.LiftModMoveRequest(list + i * 3);
+        }
+        NativeMemory.Free(list);
+        return v;
+    }
+}
+
+/// <summary><c>cuo:player/move-request</c> (mod-move-request).</summary>
+internal sealed unsafe class CodecMoveRequest : TypedCodec<global::CuoModSdk.Types.ModMoveRequest>
+{
+    internal override int Size => 3;
+    internal override global::CuoModSdk.Types.ModMoveRequest Lift(byte* p) => TypedGen.LiftModMoveRequest(p);
+    protected override void Lower(in global::CuoModSdk.Types.ModMoveRequest v, byte* p) => TypedGen.LowerModMoveRequest(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ModMoveRequest now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqModMoveRequest((byte*)mine, original);
+    }
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+}
+
+/// <summary><c>cuo:player/party</c> (party).</summary>
+internal sealed unsafe class CodecParty : TypedCodec<global::CuoModSdk.Types.PartyDto>
+{
+    internal override int Size => 16;
+    internal override global::CuoModSdk.Types.PartyDto Lift(byte* p) => TypedGen.LiftParty(p);
+    protected override void Lower(in global::CuoModSdk.Types.PartyDto v, byte* p) => TypedGen.LowerParty(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.PartyDto now, byte* original)
+    {
+        var mine = stackalloc ulong[2];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqParty((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeParty(p);
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+    internal override bool HasGet => true;
+    internal override bool Get(int res, out global::CuoModSdk.Types.PartyDto value)
+    {
+        var ret = stackalloc ulong[3];
+        var p = (byte*)ret;
+        TypedImports.Get_Party(res, (nint)p);
+        if (p[0] == 0)
+        {
+            value = default!;
+            return false;
+        }
+        value = Lift(p + 4);
+        TypedGen.FreeParty(p + 4);
+        return true;
+    }
+}
+
+/// <summary><c>cuo:player/spellbook</c> (spellbooks).</summary>
+internal sealed unsafe class CodecPlayerSpellbook : TypedCodec<global::CuoModSdk.Types.SpellbooksDto>
+{
+    internal override int Size => 12;
+    internal override global::CuoModSdk.Types.SpellbooksDto Lift(byte* p) => TypedGen.LiftSpellbooks(p);
+    protected override void Lower(in global::CuoModSdk.Types.SpellbooksDto v, byte* p) => TypedGen.LowerSpellbooks(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.SpellbooksDto now, byte* original)
+    {
+        var mine = stackalloc ulong[2];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqSpellbooks((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeSpellbooks(p);
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+    internal override bool HasGet => true;
+    internal override bool Get(int res, out global::CuoModSdk.Types.SpellbooksDto value)
+    {
+        var ret = stackalloc ulong[2];
+        var p = (byte*)ret;
+        TypedImports.Get_PlayerSpellbook(res, (nint)p);
+        if (p[0] == 0)
+        {
+            value = default!;
+            return false;
+        }
+        value = Lift(p + 4);
+        TypedGen.FreeSpellbooks(p + 4);
+        return true;
+    }
+}
+
+/// <summary><c>cuo:player/steps</c> (player-steps).</summary>
+internal sealed unsafe class CodecSteps : TypedCodec<global::CuoModSdk.Types.PlayerStepsDto>
+{
+    internal override int Size => 20;
+    internal override global::CuoModSdk.Types.PlayerStepsDto Lift(byte* p) => TypedGen.LiftPlayerSteps(p);
+    protected override void Lower(in global::CuoModSdk.Types.PlayerStepsDto v, byte* p) => TypedGen.LowerPlayerSteps(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.PlayerStepsDto now, byte* original)
+    {
+        var mine = stackalloc ulong[3];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqPlayerSteps((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreePlayerSteps(p);
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+    internal override bool HasGet => true;
+    internal override bool Get(int res, out global::CuoModSdk.Types.PlayerStepsDto value)
+    {
+        var ret = stackalloc ulong[3];
+        var p = (byte*)ret;
+        TypedImports.Get_Steps(res, (nint)p);
+        if (p[0] == 0)
+        {
+            value = default!;
+            return false;
+        }
+        value = Lift(p + 4);
+        TypedGen.FreePlayerSteps(p + 4);
+        return true;
+    }
+}
+
+/// <summary>The <c>cuo:scene/character-list</c> event, typed.</summary>
+internal sealed unsafe class EventCharacterList : TypedEvent<global::CuoModSdk.Types.CharacterSelectionDto>
+{
+    internal override void Send(int c, in global::CuoModSdk.Types.CharacterSelectionDto v)
+    {
+        var buf = stackalloc ulong[2];
+        var rec = (byte*)buf;
+        TypedGen.LowerCharacterSelection(v, rec);
+        TypedImports.Send_CharacterList(c, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12));
+    }
+    internal override global::CuoModSdk.Types.CharacterSelectionDto[] Read(int e)
+    {
+        var ret = stackalloc int[2];
+        TypedImports.Read_CharacterList(e, (nint)ret);
+        var list = (byte*)(nint)ret[0];
+        var n = ret[1];
+        if (n <= 0)
+            return [];
+        var v = new global::CuoModSdk.Types.CharacterSelectionDto[n];
+        for (var i = 0; i < n; i++)
+        {
+            v[i] = TypedGen.LiftCharacterSelection(list + i * 16);
+            TypedGen.FreeCharacterSelection(list + i * 16);
+        }
+        NativeMemory.Free(list);
+        return v;
+    }
+}
+
+/// <summary><c>cuo:scene/character-list</c> (character-selection).</summary>
+internal sealed unsafe class CodecCharacterList : TypedCodec<global::CuoModSdk.Types.CharacterSelectionDto>
+{
+    internal override int Size => 16;
+    internal override global::CuoModSdk.Types.CharacterSelectionDto Lift(byte* p) => TypedGen.LiftCharacterSelection(p);
+    protected override void Lower(in global::CuoModSdk.Types.CharacterSelectionDto v, byte* p) => TypedGen.LowerCharacterSelection(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.CharacterSelectionDto now, byte* original)
+    {
+        var mine = stackalloc ulong[2];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqCharacterSelection((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeCharacterSelection(p);
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+}
+
+/// <summary>The <c>cuo:scene/login-error-info</c> event, typed.</summary>
+internal sealed unsafe class EventLoginErrorInfo : TypedEvent<global::CuoModSdk.Types.LoginErrorsInfoEvent>
+{
+    internal override void Send(int c, in global::CuoModSdk.Types.LoginErrorsInfoEvent v)
+    {
+        var buf = stackalloc ulong[1];
+        var rec = (byte*)buf;
+        TypedGen.LowerLoginErrorsInfoEvent(v, rec);
+        TypedImports.Send_LoginErrorInfo(c, *(int*)(rec + 0), *(int*)(rec + 4));
+    }
+    internal override global::CuoModSdk.Types.LoginErrorsInfoEvent[] Read(int e)
+    {
+        var ret = stackalloc int[2];
+        TypedImports.Read_LoginErrorInfo(e, (nint)ret);
+        var list = (byte*)(nint)ret[0];
+        var n = ret[1];
+        if (n <= 0)
+            return [];
+        var v = new global::CuoModSdk.Types.LoginErrorsInfoEvent[n];
+        for (var i = 0; i < n; i++)
+        {
+            v[i] = TypedGen.LiftLoginErrorsInfoEvent(list + i * 8);
+            TypedGen.FreeLoginErrorsInfoEvent(list + i * 8);
+        }
+        NativeMemory.Free(list);
+        return v;
+    }
+}
+
+/// <summary><c>cuo:scene/login-error-info</c> (login-errors-info-event).</summary>
+internal sealed unsafe class CodecLoginErrorInfo : TypedCodec<global::CuoModSdk.Types.LoginErrorsInfoEvent>
+{
+    internal override int Size => 8;
+    internal override global::CuoModSdk.Types.LoginErrorsInfoEvent Lift(byte* p) => TypedGen.LiftLoginErrorsInfoEvent(p);
+    protected override void Lower(in global::CuoModSdk.Types.LoginErrorsInfoEvent v, byte* p) => TypedGen.LowerLoginErrorsInfoEvent(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.LoginErrorsInfoEvent now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqLoginErrorsInfoEvent((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeLoginErrorsInfoEvent(p);
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+}
+
+/// <summary>The <c>cuo:scene/login-request</c> event, typed.</summary>
+internal sealed unsafe class EventLoginRequest : TypedEvent<global::CuoModSdk.Types.OnLoginRequest>
+{
+    internal override void Send(int c, in global::CuoModSdk.Types.OnLoginRequest v)
+    {
+        var buf = stackalloc ulong[4];
+        var rec = (byte*)buf;
+        TypedGen.LowerOnLoginRequest(v, rec);
+        TypedImports.Send_LoginRequest(c, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20), *(ushort*)(rec + 24));
+    }
+    internal override global::CuoModSdk.Types.OnLoginRequest[] Read(int e)
+    {
+        var ret = stackalloc int[2];
+        TypedImports.Read_LoginRequest(e, (nint)ret);
+        var list = (byte*)(nint)ret[0];
+        var n = ret[1];
+        if (n <= 0)
+            return [];
+        var v = new global::CuoModSdk.Types.OnLoginRequest[n];
+        for (var i = 0; i < n; i++)
+        {
+            v[i] = TypedGen.LiftOnLoginRequest(list + i * 28);
+            TypedGen.FreeOnLoginRequest(list + i * 28);
+        }
+        NativeMemory.Free(list);
+        return v;
+    }
+}
+
+/// <summary><c>cuo:scene/login-request</c> (on-login-request).</summary>
+internal sealed unsafe class CodecLoginRequest : TypedCodec<global::CuoModSdk.Types.OnLoginRequest>
+{
+    internal override int Size => 28;
+    internal override global::CuoModSdk.Types.OnLoginRequest Lift(byte* p) => TypedGen.LiftOnLoginRequest(p);
+    protected override void Lower(in global::CuoModSdk.Types.OnLoginRequest v, byte* p) => TypedGen.LowerOnLoginRequest(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.OnLoginRequest now, byte* original)
+    {
+        var mine = stackalloc ulong[4];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqOnLoginRequest((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeOnLoginRequest(p);
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+}
+
+/// <summary>The <c>cuo:scene/server-list</c> event, typed.</summary>
+internal sealed unsafe class EventServerList : TypedEvent<global::CuoModSdk.Types.ServerSelectionInfoEvent>
+{
+    internal override void Send(int c, in global::CuoModSdk.Types.ServerSelectionInfoEvent v)
+    {
+        var buf = stackalloc ulong[1];
+        var rec = (byte*)buf;
+        TypedGen.LowerServerSelectionInfoEvent(v, rec);
+        TypedImports.Send_ServerList(c, *(int*)(rec + 0), *(int*)(rec + 4));
+    }
+    internal override global::CuoModSdk.Types.ServerSelectionInfoEvent[] Read(int e)
+    {
+        var ret = stackalloc int[2];
+        TypedImports.Read_ServerList(e, (nint)ret);
+        var list = (byte*)(nint)ret[0];
+        var n = ret[1];
+        if (n <= 0)
+            return [];
+        var v = new global::CuoModSdk.Types.ServerSelectionInfoEvent[n];
+        for (var i = 0; i < n; i++)
+        {
+            v[i] = TypedGen.LiftServerSelectionInfoEvent(list + i * 8);
+            TypedGen.FreeServerSelectionInfoEvent(list + i * 8);
+        }
+        NativeMemory.Free(list);
+        return v;
+    }
+}
+
+/// <summary><c>cuo:scene/server-list</c> (server-selection-info-event).</summary>
+internal sealed unsafe class CodecServerList : TypedCodec<global::CuoModSdk.Types.ServerSelectionInfoEvent>
+{
+    internal override int Size => 8;
+    internal override global::CuoModSdk.Types.ServerSelectionInfoEvent Lift(byte* p) => TypedGen.LiftServerSelectionInfoEvent(p);
+    protected override void Lower(in global::CuoModSdk.Types.ServerSelectionInfoEvent v, byte* p) => TypedGen.LowerServerSelectionInfoEvent(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ServerSelectionInfoEvent now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqServerSelectionInfoEvent((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeServerSelectionInfoEvent(p);
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+}
+
+/// <summary><c>cuo:ui/clipboard-set</c> (clipboard-set).</summary>
+internal sealed unsafe class CodecClipboardSet : TypedCodec<global::CuoModSdk.Types.ClipboardSetDto>
+{
+    internal override int Size => 12;
+    internal override global::CuoModSdk.Types.ClipboardSetDto Lift(byte* p) => TypedGen.LiftClipboardSet(p);
+    protected override void Lower(in global::CuoModSdk.Types.ClipboardSetDto v, byte* p) => TypedGen.LowerClipboardSet(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ClipboardSetDto now, byte* original)
+    {
+        var mine = stackalloc ulong[2];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqClipboardSet((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeClipboardSet(p);
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+    internal override bool HasGet => true;
+    internal override bool Get(int res, out global::CuoModSdk.Types.ClipboardSetDto value)
+    {
+        var ret = stackalloc ulong[2];
+        var p = (byte*)ret;
+        TypedImports.Get_ClipboardSet(res, (nint)p);
+        if (p[0] == 0)
+        {
+            value = default!;
+            return false;
+        }
+        value = Lift(p + 4);
+        TypedGen.FreeClipboardSet(p + 4);
+        return true;
+    }
+    internal override bool CanSetResource => true;
+    internal override void SetResource(int c, byte* rec)
+    {
+        TypedImports.SetRes_ClipboardSet(c, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8));
+    }
+}
+
+/// <summary><c>cuo:ui/focused-input</c> (focused-input).</summary>
+internal sealed unsafe class CodecFocusedInput : TypedCodec<global::CuoModSdk.Types.FocusedInput>
+{
+    internal override int Size => 8;
+    internal override global::CuoModSdk.Types.FocusedInput Lift(byte* p) => TypedGen.LiftFocusedInput(p);
+    protected override void Lower(in global::CuoModSdk.Types.FocusedInput v, byte* p) => TypedGen.LowerFocusedInput(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.FocusedInput now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqFocusedInput((byte*)mine, original);
+    }
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+    internal override bool HasGet => true;
+    internal override bool Get(int res, out global::CuoModSdk.Types.FocusedInput value)
+    {
+        var ret = stackalloc ulong[2];
+        var p = (byte*)ret;
+        TypedImports.Get_FocusedInput(res, (nint)p);
+        if (p[0] == 0)
+        {
+            value = default!;
+            return false;
+        }
+        value = Lift(p + 8);
+        return true;
+    }
+    internal override bool CanSetResource => true;
+    internal override void SetResource(int c, byte* rec)
+    {
+        TypedImports.SetRes_FocusedInput(c, *(long*)(rec + 0));
+    }
+}
+
+/// <summary><c>cuo:ui/masked-text</c> (masked-text).</summary>
+internal sealed unsafe class CodecMaskedText : TypedCodec<global::CuoModSdk.Types.MaskedText>
+{
+    internal override int Size => 12;
+    internal override global::CuoModSdk.Types.MaskedText Lift(byte* p) => TypedGen.LiftMaskedText(p);
+    protected override void Lower(in global::CuoModSdk.Types.MaskedText v, byte* p) => TypedGen.LowerMaskedText(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.MaskedText now, byte* original)
+    {
+        var mine = stackalloc ulong[2];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqMaskedText((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeMaskedText(p);
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_MaskedText(b, *(int*)(rec + 0), *(int*)(rec + 4), (int)*(uint*)(rec + 8));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_MaskedText(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_MaskedText(q, (long)e, t, *(int*)(rec + 0), *(int*)(rec + 4), (int)*(uint*)(rec + 8));
+    }
+}
+
+/// <summary><c>cuo:ui/text-clipboard-action</c> (text-clipboard-action).</summary>
+internal sealed unsafe class CodecTextClipboardAction : TypedCodec<global::CuoModSdk.Types.TextClipboardActionDto>
+{
+    internal override int Size => 16;
+    internal override global::CuoModSdk.Types.TextClipboardActionDto Lift(byte* p) => TypedGen.LiftTextClipboardAction(p);
+    protected override void Lower(in global::CuoModSdk.Types.TextClipboardActionDto v, byte* p) => TypedGen.LowerTextClipboardAction(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.TextClipboardActionDto now, byte* original)
+    {
+        var mine = stackalloc ulong[2];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqTextClipboardAction((byte*)mine, original);
+    }
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+    internal override bool HasGet => true;
+    internal override bool Get(int res, out global::CuoModSdk.Types.TextClipboardActionDto value)
+    {
+        var ret = stackalloc ulong[3];
+        var p = (byte*)ret;
+        TypedImports.Get_TextClipboardAction(res, (nint)p);
+        if (p[0] == 0)
+        {
+            value = default!;
+            return false;
+        }
+        value = Lift(p + 8);
+        return true;
+    }
+    internal override bool CanSetResource => true;
+    internal override void SetResource(int c, byte* rec)
+    {
+        TypedImports.SetRes_TextClipboardAction(c, *(long*)(rec + 0), *(int*)(rec + 8), *(int*)(rec + 12));
+    }
+}
+
+/// <summary><c>cuo:ui/text-completion</c> (text-completion).</summary>
+internal sealed unsafe class CodecTextCompletion : TypedCodec<global::CuoModSdk.Types.TextCompletionDto>
+{
+    internal override int Size => 24;
+    internal override global::CuoModSdk.Types.TextCompletionDto Lift(byte* p) => TypedGen.LiftTextCompletion(p);
+    protected override void Lower(in global::CuoModSdk.Types.TextCompletionDto v, byte* p) => TypedGen.LowerTextCompletion(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.TextCompletionDto now, byte* original)
+    {
+        var mine = stackalloc ulong[3];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqTextCompletion((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeTextCompletion(p);
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+    internal override bool HasGet => true;
+    internal override bool Get(int res, out global::CuoModSdk.Types.TextCompletionDto value)
+    {
+        var ret = stackalloc ulong[4];
+        var p = (byte*)ret;
+        TypedImports.Get_TextCompletion(res, (nint)p);
+        if (p[0] == 0)
+        {
+            value = default!;
+            return false;
+        }
+        value = Lift(p + 8);
+        TypedGen.FreeTextCompletion(p + 8);
+        return true;
+    }
+    internal override bool CanSetResource => true;
+    internal override void SetResource(int c, byte* rec)
+    {
+        TypedImports.SetRes_TextCompletion(c, *(long*)(rec + 0), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20));
+    }
+}
+
+/// <summary><c>cuo:ui/text-completion-pick</c> (text-completion-pick).</summary>
+internal sealed unsafe class CodecTextCompletionPick : TypedCodec<global::CuoModSdk.Types.TextCompletionPickDto>
+{
+    internal override int Size => 16;
+    internal override global::CuoModSdk.Types.TextCompletionPickDto Lift(byte* p) => TypedGen.LiftTextCompletionPick(p);
+    protected override void Lower(in global::CuoModSdk.Types.TextCompletionPickDto v, byte* p) => TypedGen.LowerTextCompletionPick(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.TextCompletionPickDto now, byte* original)
+    {
+        var mine = stackalloc ulong[2];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqTextCompletionPick((byte*)mine, original);
+    }
+    internal override bool CanBuild => false;
+    internal override int Build(int b, byte* rec) => throw new NotSupportedException();
+    internal override bool HasColumn => false;
+    internal override bool CanSet => false;
+    internal override bool HasGet => true;
+    internal override bool Get(int res, out global::CuoModSdk.Types.TextCompletionPickDto value)
+    {
+        var ret = stackalloc ulong[3];
+        var p = (byte*)ret;
+        TypedImports.Get_TextCompletionPick(res, (nint)p);
+        if (p[0] == 0)
+        {
+            value = default!;
+            return false;
+        }
+        value = Lift(p + 8);
+        return true;
+    }
+    internal override bool CanSetResource => true;
+    internal override void SetResource(int c, byte* rec)
+    {
+        TypedImports.SetRes_TextCompletionPick(c, *(long*)(rec + 0), *(int*)(rec + 8), *(int*)(rec + 12));
+    }
+}
+
+/// <summary><c>cuo:ui/tooltip-serial</c> (ui-tooltip-serial).</summary>
+internal sealed unsafe class CodecTooltipSerial : TypedCodec<global::CuoModSdk.Types.UiTooltipSerial>
+{
+    internal override int Size => 4;
+    internal override global::CuoModSdk.Types.UiTooltipSerial Lift(byte* p) => TypedGen.LiftUiTooltipSerial(p);
+    protected override void Lower(in global::CuoModSdk.Types.UiTooltipSerial v, byte* p) => TypedGen.LowerUiTooltipSerial(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.UiTooltipSerial now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqUiTooltipSerial((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_TooltipSerial(b, (int)*(uint*)(rec + 0));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_TooltipSerial(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_TooltipSerial(q, (long)e, t, (int)*(uint*)(rec + 0));
     }
 }

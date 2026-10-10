@@ -672,6 +672,348 @@ internal interface IComponentsImports {
 
         }
 
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Buff()
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.BuffWasmInterop.wasmImportBuff(handle);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder CombatBook(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CombatBookWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.CombatBookWasmInterop.wasmImportCombatBook(handle, v.page, v.soundedPage, v.pageCount, v.dictPages, v.abilityCount, (v.dirty ? 1 : 0), unchecked((long)(v.content)), unchecked((long)(v.left)), unchecked((long)(v.right)));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder HouseDesign(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.HouseDesignWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.HouseDesignWasmInterop.wasmImportHouseDesign(handle, unchecked((long)(v.content)), unchecked((int)(v.serial)));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Journal(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.JournalWindow v)
+        {
+
+            var retArea = stackalloc ulong[16];
+            var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 8);
+            var handle = this.Handle;
+            new global::System.Span<int>((void*)((byte*)ptr + 0), 1)[0] = handle;
+            new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0] = v.specialHeight;
+            *(byte*)(ptr + 12) = (byte)(v.minimized ? 1 : 0);
+            *(byte*)(ptr + 13) = (byte)(v.darkMode ? 1 : 0);
+            *(byte*)(ptr + 14) = (byte)(v.showSystem ? 1 : 0);
+            *(byte*)(ptr + 15) = (byte)(v.showObjects ? 1 : 0);
+            *(byte*)(ptr + 16) = (byte)(v.showClient ? 1 : 0);
+            *(byte*)(ptr + 17) = (byte)(v.showGuild ? 1 : 0);
+            new global::System.Span<int>((void*)((byte*)ptr + 20), 1)[0] = v.builtRevision;
+            new global::System.Span<int>((void*)((byte*)ptr + 24), 1)[0] = v.styleEpoch;
+            new global::System.Span<int>((void*)((byte*)ptr + 28), 1)[0] = v.builtStyleEpoch;
+            new global::System.Span<long>((void*)((byte*)ptr + 32), 1)[0] = unchecked((long)unchecked((long)(v.listEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 40), 1)[0] = unchecked((long)unchecked((long)(v.flagEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 48), 1)[0] = unchecked((long)unchecked((long)(v.topEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 56), 1)[0] = unchecked((long)unchecked((long)(v.midEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 64), 1)[0] = unchecked((long)unchecked((long)(v.bottomEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 72), 1)[0] = unchecked((long)unchecked((long)(v.titleEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 80), 1)[0] = unchecked((long)unchecked((long)(v.minimizeEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 88), 1)[0] = unchecked((long)unchecked((long)(v.darkCheckEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 96), 1)[0] = unchecked((long)unchecked((long)(v.expanderEntity)));
+            new global::System.Span<float>((void*)((byte*)ptr + 104), 1)[0] = unchecked((float)v.width);
+            new global::System.Span<float>((void*)((byte*)ptr + 108), 1)[0] = unchecked((float)v.listWidth);
+            new global::System.Span<float>((void*)((byte*)ptr + 112), 1)[0] = unchecked((float)v.contentHeight);
+            var result =  ComponentsImportsInterop.EntityBuilder.JournalWasmInterop.wasmImportJournal(ptr);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Logout()
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.LogoutWasmInterop.wasmImportLogout(handle);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Menu(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MenuGumpWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.MenuWasmInterop.wasmImportMenu(handle, unchecked((int)(v.serial)), v.serverMenuId, (v.isGray ? 1 : 0), (v.responded ? 1 : 0));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder MessageBox()
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.MessageBoxWasmInterop.wasmImportMessageBox(handle);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Minimap(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MiniMapWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.MinimapWasmInterop.wasmImportMinimap(handle, (v.useLargeMap ? 1 : 0));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Paperdoll(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PaperdollWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.PaperdollWasmInterop.wasmImportPaperdoll(handle, unchecked((int)(v.serial)), (v.isPlayer ? 1 : 0), (v.canLift ? 1 : 0), (v.minimized ? 1 : 0));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder PartyInvite(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyInviteWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.PartyInviteWasmInterop.wasmImportPartyInvite(handle, unchecked((int)(v.inviter)));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder PartyManifest(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyManifestWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.PartyManifestWasmInterop.wasmImportPartyManifest(handle, (v.canLoot ? 1 : 0));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Profile(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ProfileWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.ProfileWasmInterop.wasmImportProfile(handle, unchecked((int)(v.serial)), v.specialHeight, v.width, unchecked((long)(v.midEntity)), unchecked((long)(v.bottomEntity)), unchecked((long)(v.expanderEntity)), unchecked((long)(v.footerEntity)), v.footerOffsetFromBottom, (v.minimized ? 1 : 0), unchecked((long)(v.knobEntity)));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder RacialBook(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.RacialBookWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.RacialBookWasmInterop.wasmImportRacialBook(handle, v.page, v.soundedPage, v.pageCount, v.dictPages, v.abilityCount, v.race, (v.dirty ? 1 : 0), unchecked((long)(v.content)), unchecked((long)(v.left)), unchecked((long)(v.right)));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder GumpSkills(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SkillsWindow v)
+        {
+
+            var retArea = stackalloc ulong[15];
+            var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 8);
+            var handle = this.Handle;
+            new global::System.Span<int>((void*)((byte*)ptr + 0), 1)[0] = handle;
+            new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0] = v.specialHeight;
+            *(byte*)(ptr + 12) = (byte)(v.minimized ? 1 : 0);
+            *(byte*)(ptr + 13) = (byte)(v.showReal ? 1 : 0);
+            *(byte*)(ptr + 14) = (byte)(v.showCaps ? 1 : 0);
+            *(byte*)(ptr + 15) = (byte)(v.dirty ? 1 : 0);
+            new global::System.Span<int>((void*)((byte*)ptr + 16), 1)[0] = v.width;
+            new global::System.Span<float>((void*)((byte*)ptr + 20), 1)[0] = unchecked((float)v.listWidth);
+            new global::System.Span<float>((void*)((byte*)ptr + 24), 1)[0] = unchecked((float)v.contentHeight);
+            new global::System.Span<long>((void*)((byte*)ptr + 32), 1)[0] = unchecked((long)unchecked((long)(v.listEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 40), 1)[0] = unchecked((long)unchecked((long)(v.topEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 48), 1)[0] = unchecked((long)unchecked((long)(v.midEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 56), 1)[0] = unchecked((long)unchecked((long)(v.bottomEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 64), 1)[0] = unchecked((long)unchecked((long)(v.titleEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 72), 1)[0] = unchecked((long)unchecked((long)(v.minimizeEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 80), 1)[0] = unchecked((long)unchecked((long)(v.expanderEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 88), 1)[0] = unchecked((long)unchecked((long)(v.sumLabelEntity)));
+            new global::System.Span<long>((void*)((byte*)ptr + 96), 1)[0] = unchecked((long)unchecked((long)(v.flagEntity)));
+            new global::System.Span<float>((void*)((byte*)ptr + 104), 1)[0] = unchecked((float)v.lastSum);
+            var result =  ComponentsImportsInterop.EntityBuilder.GumpSkillsWasmInterop.wasmImportGumpSkills(ptr);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Spellbook(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SpellbookWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.SpellbookWasmInterop.wasmImportSpellbook(handle, unchecked((int)(v.serial)), v.school, v.page, v.soundedPage, v.pageCount, v.builtRevision, (v.dirty ? 1 : 0), unchecked((long)(v.contentEntity)), unchecked((long)(v.leftCorner)), unchecked((long)(v.rightCorner)), (v.minimized ? 1 : 0));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder SplitMenu(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SplitMenuWindow v)
+        {
+            var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+
+            var retArea = stackalloc ulong[12];
+            var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 8);
+            var handle = this.Handle;
+            new global::System.Span<int>((void*)((byte*)ptr + 0), 1)[0] = handle;
+            new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0] = unchecked((int)(v.serial));
+            new global::System.Span<int>((void*)((byte*)ptr + 12), 1)[0] = v.maxAmount;
+            new global::System.Span<long>((void*)((byte*)ptr + 16), 1)[0] = unchecked((long)unchecked((long)(v.slider)));
+            new global::System.Span<long>((void*)((byte*)ptr + 24), 1)[0] = unchecked((long)unchecked((long)(v.text)));
+            new global::System.Span<long>((void*)((byte*)ptr + 32), 1)[0] = unchecked((long)unchecked((long)(v.ok)));
+            new global::System.Span<int>((void*)((byte*)ptr + 40), 1)[0] = v.lastSlider;
+
+            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.lastText);
+            var length = utf8Bytes.Length;
+            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr = gcHandle.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle.Free());
+            new global::System.Span<int>((void*)((byte*)ptr + 48), 1)[0] = length;
+            new global::System.Span<nint>((void*)((byte*)ptr + 44), 1)[0] = (nint)strPtr.ToInt32();
+            new global::System.Span<short>((void*)((byte*)ptr + 52), 1)[0] = (short)v.graphic;
+            new global::System.Span<short>((void*)((byte*)ptr + 54), 1)[0] = (short)v.hue;
+            new global::System.Span<long>((void*)((byte*)ptr + 56), 1)[0] = unchecked((long)unchecked((long)(v.sourceUiEntity)));
+            new global::System.Span<int>((void*)((byte*)ptr + 64), 1)[0] = unchecked((int)(v.sourceContainer));
+            new global::System.Span<short>((void*)((byte*)ptr + 68), 1)[0] = (short)v.originalGraphic;
+            new global::System.Span<short>((void*)((byte*)ptr + 70), 1)[0] = (short)v.originalHue;
+            new global::System.Span<short>((void*)((byte*)ptr + 72), 1)[0] = (short)v.originalAmount;
+            new global::System.Span<short>((void*)((byte*)ptr + 74), 1)[0] = (short)v.originalX;
+            new global::System.Span<short>((void*)((byte*)ptr + 76), 1)[0] = (short)v.originalY;
+            *(byte*)(ptr + 78) = (byte)v.originalZ;
+            new global::System.Span<int>((void*)((byte*)ptr + 80), 1)[0] = unchecked((int)(v.originalContainer));
+            *(byte*)(ptr + 84) = (byte)v.originalGridIndex;
+            *(byte*)(ptr + 85) = (byte)(v.originalFromSlot ? 1 : 0);
+            var result =  ComponentsImportsInterop.EntityBuilder.SplitMenuWasmInterop.wasmImportSplitMenu(ptr);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+
+            foreach (var cleanup in cleanups)
+            {
+                cleanup();
+            }
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder TipNotice(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TipNoticeWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.TipNoticeWasmInterop.wasmImportTipNotice(handle, v.tipSerial, v.specialHeight, v.width, unchecked((long)(v.midEntity)), unchecked((long)(v.bottomEntity)), unchecked((long)(v.expanderEntity)), unchecked((long)(v.prevEntity)), unchecked((long)(v.nextEntity)));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Trade(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TradeWindow v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.TradeWasmInterop.wasmImportTrade(handle, unchecked((int)(v.serial)), unchecked((int)(v.id1)), unchecked((int)(v.id2)), (v.imAccepting ? 1 : 0), (v.heIsAccepting ? 1 : 0), (v.isNew ? 1 : 0));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Worldmap()
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.WorldmapWasmInterop.wasmImportWorldmap(handle);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder CharacterCreation()
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.CharacterCreationWasmInterop.wasmImportCharacterCreation(handle);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder CharacterSelection()
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.CharacterSelectionWasmInterop.wasmImportCharacterSelection(handle);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Game()
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.GameWasmInterop.wasmImportGame(handle);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Login()
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.LoginWasmInterop.wasmImportLogin(handle);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder LoginError()
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.LoginErrorWasmInterop.wasmImportLoginError(handle);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder ServerSelection()
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.ServerSelectionWasmInterop.wasmImportServerSelection(handle);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder MaskedText(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MaskedText v)
+        {
+            var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+            var handle = this.Handle;
+
+            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.value);
+            var length = utf8Bytes.Length;
+            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr = gcHandle.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle.Free());
+            var result =  ComponentsImportsInterop.EntityBuilder.MaskedTextWasmInterop.wasmImportMaskedText(handle, strPtr.ToInt32(), length, ((int)v.maskChar));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+
+            foreach (var cleanup in cleanups)
+            {
+                cleanup();
+            }
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder TooltipSerial(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiTooltipSerial v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.TooltipSerialWasmInterop.wasmImportTooltipSerial(handle, unchecked((int)(v.serial)));
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
     }
 
     internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder EntityOf(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, ulong e)
@@ -2435,6 +2777,689 @@ internal interface IComponentsImports {
 
     }
 
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MobAnimation> ColumnAnimation(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnAnimationWasmInterop.wasmImportColumnAnimation(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MobAnimation>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 36);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MobAnimation (
+            new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 16), 1)[0], (new global::System.Span<byte>((byte*)basePtr + 20, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 21, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 22, 1)[0] != 0), ((byte)new global::System.Span<byte>((byte*)basePtr + 23, 1)[0]), ((byte)new global::System.Span<byte>((byte*)basePtr + 24, 1)[0]), ((byte)new global::System.Span<byte>((byte*)basePtr + 25, 1)[0]), new global::System.Span<float>((void*)((byte*)basePtr + 28), 1)[0], (new global::System.Span<byte>((byte*)basePtr + 32, 1)[0] != 0)));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MobileSteps> ColumnMobSteps(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnMobStepsWasmInterop.wasmImportColumnMobSteps(handle, term, ptr);
+
+        var array2 = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MobileSteps>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index3 = 0; index3 < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index3) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index3 * 16);
+
+            var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MobStep>(new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0]);
+            for (int index = 0; index < new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0]; ++index) {
+                nint basePtr1 = new global::System.Span<nint>((void*)((byte*)basePtr + 8), 1)[0] + (index * 12);
+
+                array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MobStep (
+                new global::System.Span<int>((void*)((byte*)basePtr1 + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr1 + 4), 1)[0], ((sbyte)(sbyte)new global::System.Span<byte>((byte*)basePtr1 + 8, 1)[0]), ((byte)new global::System.Span<byte>((byte*)basePtr1 + 9, 1)[0]), (new global::System.Span<byte>((byte*)basePtr1 + 10, 1)[0] != 0)));
+            }
+
+            if (new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 8), 1)[0]);
+            }
+
+            array2.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MobileSteps (
+            new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 4), 1)[0], array));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array2;
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CombatBookWindow> ColumnCombatBook(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnCombatBookWasmInterop.wasmImportColumnCombatBook(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CombatBookWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 48);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CombatBookWindow (
+            new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 16), 1)[0], (new global::System.Span<byte>((byte*)basePtr + 20, 1)[0] != 0), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 24), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 32), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 40), 1)[0]))));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetCombatBook(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CombatBookWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetCombatBookWasmInterop.wasmImportSetCombatBook(handle, unchecked((long)(e)), term, v.page, v.soundedPage, v.pageCount, v.dictPages, v.abilityCount, (v.dirty ? 1 : 0), unchecked((long)(v.content)), unchecked((long)(v.left)), unchecked((long)(v.right)));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.HouseDesignWindow> ColumnHouseDesign(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnHouseDesignWasmInterop.wasmImportColumnHouseDesign(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.HouseDesignWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 16);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.HouseDesignWindow (
+            unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 0), 1)[0])), unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0]))));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetHouseDesign(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.HouseDesignWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetHouseDesignWasmInterop.wasmImportSetHouseDesign(handle, unchecked((long)(e)), term, unchecked((long)(v.content)), unchecked((int)(v.serial)));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.JournalWindow> ColumnJournal(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnJournalWasmInterop.wasmImportColumnJournal(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.JournalWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 112);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.JournalWindow (
+            new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0], (new global::System.Span<byte>((byte*)basePtr + 4, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 5, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 6, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 7, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 8, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 9, 1)[0] != 0), new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 16), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 20), 1)[0], unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 24), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 32), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 40), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 48), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 56), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 64), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 72), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 80), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 88), 1)[0])), new global::System.Span<float>((void*)((byte*)basePtr + 96), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 100), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 104), 1)[0]));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetJournal(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.JournalWindow v)
+    {
+
+        var retArea = stackalloc ulong[18];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 8);
+        var handle = q.Handle;
+        new global::System.Span<int>((void*)((byte*)ptr + 0), 1)[0] = handle;
+        new global::System.Span<long>((void*)((byte*)ptr + 8), 1)[0] = unchecked((long)unchecked((long)(e)));
+        *(byte*)(ptr + 16) = (byte)term;
+        new global::System.Span<int>((void*)((byte*)ptr + 24), 1)[0] = v.specialHeight;
+        *(byte*)(ptr + 28) = (byte)(v.minimized ? 1 : 0);
+        *(byte*)(ptr + 29) = (byte)(v.darkMode ? 1 : 0);
+        *(byte*)(ptr + 30) = (byte)(v.showSystem ? 1 : 0);
+        *(byte*)(ptr + 31) = (byte)(v.showObjects ? 1 : 0);
+        *(byte*)(ptr + 32) = (byte)(v.showClient ? 1 : 0);
+        *(byte*)(ptr + 33) = (byte)(v.showGuild ? 1 : 0);
+        new global::System.Span<int>((void*)((byte*)ptr + 36), 1)[0] = v.builtRevision;
+        new global::System.Span<int>((void*)((byte*)ptr + 40), 1)[0] = v.styleEpoch;
+        new global::System.Span<int>((void*)((byte*)ptr + 44), 1)[0] = v.builtStyleEpoch;
+        new global::System.Span<long>((void*)((byte*)ptr + 48), 1)[0] = unchecked((long)unchecked((long)(v.listEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 56), 1)[0] = unchecked((long)unchecked((long)(v.flagEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 64), 1)[0] = unchecked((long)unchecked((long)(v.topEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 72), 1)[0] = unchecked((long)unchecked((long)(v.midEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 80), 1)[0] = unchecked((long)unchecked((long)(v.bottomEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 88), 1)[0] = unchecked((long)unchecked((long)(v.titleEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 96), 1)[0] = unchecked((long)unchecked((long)(v.minimizeEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 104), 1)[0] = unchecked((long)unchecked((long)(v.darkCheckEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 112), 1)[0] = unchecked((long)unchecked((long)(v.expanderEntity)));
+        new global::System.Span<float>((void*)((byte*)ptr + 120), 1)[0] = unchecked((float)v.width);
+        new global::System.Span<float>((void*)((byte*)ptr + 124), 1)[0] = unchecked((float)v.listWidth);
+        new global::System.Span<float>((void*)((byte*)ptr + 128), 1)[0] = unchecked((float)v.contentHeight);
+        ComponentsImportsInterop.SetJournalWasmInterop.wasmImportSetJournal(ptr);
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MenuGumpWindow> ColumnMenu(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnMenuWasmInterop.wasmImportColumnMenu(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MenuGumpWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 8);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MenuGumpWindow (
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 4), 1)[0]), (new global::System.Span<byte>((byte*)basePtr + 6, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 7, 1)[0] != 0)));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetMenu(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MenuGumpWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetMenuWasmInterop.wasmImportSetMenu(handle, unchecked((long)(e)), term, unchecked((int)(v.serial)), v.serverMenuId, (v.isGray ? 1 : 0), (v.responded ? 1 : 0));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MiniMapWindow> ColumnMinimap(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnMinimapWasmInterop.wasmImportColumnMinimap(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MiniMapWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 1);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MiniMapWindow (
+            (new global::System.Span<byte>((byte*)basePtr + 0, 1)[0] != 0)));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetMinimap(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MiniMapWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetMinimapWasmInterop.wasmImportSetMinimap(handle, unchecked((long)(e)), term, (v.useLargeMap ? 1 : 0));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PaperdollWindow> ColumnPaperdoll(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnPaperdollWasmInterop.wasmImportColumnPaperdoll(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PaperdollWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 8);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PaperdollWindow (
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), (new global::System.Span<byte>((byte*)basePtr + 4, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 5, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 6, 1)[0] != 0)));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetPaperdoll(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PaperdollWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetPaperdollWasmInterop.wasmImportSetPaperdoll(handle, unchecked((long)(e)), term, unchecked((int)(v.serial)), (v.isPlayer ? 1 : 0), (v.canLift ? 1 : 0), (v.minimized ? 1 : 0));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyInviteWindow> ColumnPartyInvite(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnPartyInviteWasmInterop.wasmImportColumnPartyInvite(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyInviteWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 4);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyInviteWindow (
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0]))));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetPartyInvite(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyInviteWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetPartyInviteWasmInterop.wasmImportSetPartyInvite(handle, unchecked((long)(e)), term, unchecked((int)(v.inviter)));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyManifestWindow> ColumnPartyManifest(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnPartyManifestWasmInterop.wasmImportColumnPartyManifest(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyManifestWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 1);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyManifestWindow (
+            (new global::System.Span<byte>((byte*)basePtr + 0, 1)[0] != 0)));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetPartyManifest(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyManifestWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetPartyManifestWasmInterop.wasmImportSetPartyManifest(handle, unchecked((long)(e)), term, (v.canLoot ? 1 : 0));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ProfileWindow> ColumnProfile(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnProfileWasmInterop.wasmImportColumnProfile(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ProfileWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 64);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ProfileWindow (
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 8), 1)[0], unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 16), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 24), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 32), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 40), 1)[0])), new global::System.Span<int>((void*)((byte*)basePtr + 48), 1)[0], (new global::System.Span<byte>((byte*)basePtr + 52, 1)[0] != 0), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 56), 1)[0]))));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetProfile(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ProfileWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetProfileWasmInterop.wasmImportSetProfile(handle, unchecked((long)(e)), term, unchecked((int)(v.serial)), v.specialHeight, v.width, unchecked((long)(v.midEntity)), unchecked((long)(v.bottomEntity)), unchecked((long)(v.expanderEntity)), unchecked((long)(v.footerEntity)), v.footerOffsetFromBottom, (v.minimized ? 1 : 0), unchecked((long)(v.knobEntity)));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.RacialBookWindow> ColumnRacialBook(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnRacialBookWasmInterop.wasmImportColumnRacialBook(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.RacialBookWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 48);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.RacialBookWindow (
+            new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 16), 1)[0], ((byte)new global::System.Span<byte>((byte*)basePtr + 20, 1)[0]), (new global::System.Span<byte>((byte*)basePtr + 21, 1)[0] != 0), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 24), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 32), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 40), 1)[0]))));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetRacialBook(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.RacialBookWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetRacialBookWasmInterop.wasmImportSetRacialBook(handle, unchecked((long)(e)), term, v.page, v.soundedPage, v.pageCount, v.dictPages, v.abilityCount, v.race, (v.dirty ? 1 : 0), unchecked((long)(v.content)), unchecked((long)(v.left)), unchecked((long)(v.right)));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SkillsWindow> ColumnGumpSkills(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnGumpSkillsWasmInterop.wasmImportColumnGumpSkills(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SkillsWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 104);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SkillsWindow (
+            new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0], (new global::System.Span<byte>((byte*)basePtr + 4, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 5, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 6, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 7, 1)[0] != 0), new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 12), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 16), 1)[0], unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 24), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 32), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 40), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 48), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 56), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 64), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 72), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 80), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 88), 1)[0])), new global::System.Span<float>((void*)((byte*)basePtr + 96), 1)[0]));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetGumpSkills(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SkillsWindow v)
+    {
+
+        var retArea = stackalloc ulong[17];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 8);
+        var handle = q.Handle;
+        new global::System.Span<int>((void*)((byte*)ptr + 0), 1)[0] = handle;
+        new global::System.Span<long>((void*)((byte*)ptr + 8), 1)[0] = unchecked((long)unchecked((long)(e)));
+        *(byte*)(ptr + 16) = (byte)term;
+        new global::System.Span<int>((void*)((byte*)ptr + 24), 1)[0] = v.specialHeight;
+        *(byte*)(ptr + 28) = (byte)(v.minimized ? 1 : 0);
+        *(byte*)(ptr + 29) = (byte)(v.showReal ? 1 : 0);
+        *(byte*)(ptr + 30) = (byte)(v.showCaps ? 1 : 0);
+        *(byte*)(ptr + 31) = (byte)(v.dirty ? 1 : 0);
+        new global::System.Span<int>((void*)((byte*)ptr + 32), 1)[0] = v.width;
+        new global::System.Span<float>((void*)((byte*)ptr + 36), 1)[0] = unchecked((float)v.listWidth);
+        new global::System.Span<float>((void*)((byte*)ptr + 40), 1)[0] = unchecked((float)v.contentHeight);
+        new global::System.Span<long>((void*)((byte*)ptr + 48), 1)[0] = unchecked((long)unchecked((long)(v.listEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 56), 1)[0] = unchecked((long)unchecked((long)(v.topEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 64), 1)[0] = unchecked((long)unchecked((long)(v.midEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 72), 1)[0] = unchecked((long)unchecked((long)(v.bottomEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 80), 1)[0] = unchecked((long)unchecked((long)(v.titleEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 88), 1)[0] = unchecked((long)unchecked((long)(v.minimizeEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 96), 1)[0] = unchecked((long)unchecked((long)(v.expanderEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 104), 1)[0] = unchecked((long)unchecked((long)(v.sumLabelEntity)));
+        new global::System.Span<long>((void*)((byte*)ptr + 112), 1)[0] = unchecked((long)unchecked((long)(v.flagEntity)));
+        new global::System.Span<float>((void*)((byte*)ptr + 120), 1)[0] = unchecked((float)v.lastSum);
+        ComponentsImportsInterop.SetGumpSkillsWasmInterop.wasmImportSetGumpSkills(ptr);
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SpellbookWindow> ColumnSpellbook(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnSpellbookWasmInterop.wasmImportColumnSpellbook(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SpellbookWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 64);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SpellbookWindow (
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 16), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 20), 1)[0], (new global::System.Span<byte>((byte*)basePtr + 24, 1)[0] != 0), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 32), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 40), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 48), 1)[0])), (new global::System.Span<byte>((byte*)basePtr + 56, 1)[0] != 0)));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetSpellbook(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SpellbookWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetSpellbookWasmInterop.wasmImportSetSpellbook(handle, unchecked((long)(e)), term, unchecked((int)(v.serial)), v.school, v.page, v.soundedPage, v.pageCount, v.builtRevision, (v.dirty ? 1 : 0), unchecked((long)(v.contentEntity)), unchecked((long)(v.leftCorner)), unchecked((long)(v.rightCorner)), (v.minimized ? 1 : 0));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SplitMenuWindow> ColumnSplitMenu(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnSplitMenuWasmInterop.wasmImportColumnSplitMenu(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SplitMenuWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 80);
+
+            var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr + 36), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 40), 1)[0]);
+            if (new global::System.Span<int>((void*)((byte*)basePtr + 40), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 36), 1)[0]);
+            }
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SplitMenuWindow (
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0], unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 8), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 16), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 24), 1)[0])), new global::System.Span<int>((void*)((byte*)basePtr + 32), 1)[0], str, ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 44), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 46), 1)[0]), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 48), 1)[0])), unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 56), 1)[0])), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 60), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 62), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 64), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 66), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 68), 1)[0]), ((sbyte)(sbyte)new global::System.Span<byte>((byte*)basePtr + 70, 1)[0]), unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 72), 1)[0])), ((byte)new global::System.Span<byte>((byte*)basePtr + 76, 1)[0]), (new global::System.Span<byte>((byte*)basePtr + 77, 1)[0] != 0)));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetSplitMenu(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SplitMenuWindow v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+
+        var retArea = stackalloc ulong[14];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 8);
+        var handle = q.Handle;
+        new global::System.Span<int>((void*)((byte*)ptr + 0), 1)[0] = handle;
+        new global::System.Span<long>((void*)((byte*)ptr + 8), 1)[0] = unchecked((long)unchecked((long)(e)));
+        *(byte*)(ptr + 16) = (byte)term;
+        new global::System.Span<int>((void*)((byte*)ptr + 24), 1)[0] = unchecked((int)(v.serial));
+        new global::System.Span<int>((void*)((byte*)ptr + 28), 1)[0] = v.maxAmount;
+        new global::System.Span<long>((void*)((byte*)ptr + 32), 1)[0] = unchecked((long)unchecked((long)(v.slider)));
+        new global::System.Span<long>((void*)((byte*)ptr + 40), 1)[0] = unchecked((long)unchecked((long)(v.text)));
+        new global::System.Span<long>((void*)((byte*)ptr + 48), 1)[0] = unchecked((long)unchecked((long)(v.ok)));
+        new global::System.Span<int>((void*)((byte*)ptr + 56), 1)[0] = v.lastSlider;
+
+        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.lastText);
+        var length = utf8Bytes.Length;
+        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr = gcHandle.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle.Free());
+        new global::System.Span<int>((void*)((byte*)ptr + 64), 1)[0] = length;
+        new global::System.Span<nint>((void*)((byte*)ptr + 60), 1)[0] = (nint)strPtr.ToInt32();
+        new global::System.Span<short>((void*)((byte*)ptr + 68), 1)[0] = (short)v.graphic;
+        new global::System.Span<short>((void*)((byte*)ptr + 70), 1)[0] = (short)v.hue;
+        new global::System.Span<long>((void*)((byte*)ptr + 72), 1)[0] = unchecked((long)unchecked((long)(v.sourceUiEntity)));
+        new global::System.Span<int>((void*)((byte*)ptr + 80), 1)[0] = unchecked((int)(v.sourceContainer));
+        new global::System.Span<short>((void*)((byte*)ptr + 84), 1)[0] = (short)v.originalGraphic;
+        new global::System.Span<short>((void*)((byte*)ptr + 86), 1)[0] = (short)v.originalHue;
+        new global::System.Span<short>((void*)((byte*)ptr + 88), 1)[0] = (short)v.originalAmount;
+        new global::System.Span<short>((void*)((byte*)ptr + 90), 1)[0] = (short)v.originalX;
+        new global::System.Span<short>((void*)((byte*)ptr + 92), 1)[0] = (short)v.originalY;
+        *(byte*)(ptr + 94) = (byte)v.originalZ;
+        new global::System.Span<int>((void*)((byte*)ptr + 96), 1)[0] = unchecked((int)(v.originalContainer));
+        *(byte*)(ptr + 100) = (byte)v.originalGridIndex;
+        *(byte*)(ptr + 101) = (byte)(v.originalFromSlot ? 1 : 0);
+        ComponentsImportsInterop.SetSplitMenuWasmInterop.wasmImportSetSplitMenu(ptr);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TipNoticeWindow> ColumnTipNotice(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnTipNoticeWasmInterop.wasmImportColumnTipNotice(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TipNoticeWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 56);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TipNoticeWindow (
+            ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 0), 1)[0]), new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 8), 1)[0], unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 16), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 24), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 32), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 40), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 48), 1)[0]))));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetTipNotice(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TipNoticeWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetTipNoticeWasmInterop.wasmImportSetTipNotice(handle, unchecked((long)(e)), term, v.tipSerial, v.specialHeight, v.width, unchecked((long)(v.midEntity)), unchecked((long)(v.bottomEntity)), unchecked((long)(v.expanderEntity)), unchecked((long)(v.prevEntity)), unchecked((long)(v.nextEntity)));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TradeWindow> ColumnTrade(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnTradeWasmInterop.wasmImportColumnTrade(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TradeWindow>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 16);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TradeWindow (
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0])), unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0])), (new global::System.Span<byte>((byte*)basePtr + 12, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 13, 1)[0] != 0), (new global::System.Span<byte>((byte*)basePtr + 14, 1)[0] != 0)));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetTrade(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TradeWindow v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetTradeWasmInterop.wasmImportSetTrade(handle, unchecked((long)(e)), term, unchecked((int)(v.serial)), unchecked((int)(v.id1)), unchecked((int)(v.id2)), (v.imAccepting ? 1 : 0), (v.heIsAccepting ? 1 : 0), (v.isNew ? 1 : 0));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MaskedText> ColumnMaskedText(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnMaskedTextWasmInterop.wasmImportColumnMaskedText(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MaskedText>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 12);
+
+            var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0]);
+            if (new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0]);
+            }
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MaskedText (
+            str, unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0]))));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetMaskedText(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MaskedText v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = q.Handle;
+
+        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.value);
+        var length = utf8Bytes.Length;
+        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr = gcHandle.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle.Free());
+        ComponentsImportsInterop.SetMaskedTextWasmInterop.wasmImportSetMaskedText(handle, unchecked((long)(e)), term, strPtr.ToInt32(), length, ((int)v.maskChar));
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiTooltipSerial> ColumnTooltipSerial(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnTooltipSerialWasmInterop.wasmImportColumnTooltipSerial(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiTooltipSerial>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 4);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiTooltipSerial (
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0]))));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetTooltipSerial(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiTooltipSerial v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetTooltipSerialWasmInterop.wasmImportSetTooltipSerial(handle, unchecked((long)(e)), term, unchecked((int)(v.serial)));
+
+    }
+
     internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.MouseInput? GetMouse(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
     {
         var handle = r.Handle;
@@ -3075,6 +4100,52 @@ internal interface IComponentsImports {
 
     }
 
+    internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModOptionsValues? GetValues(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
+    {
+        var handle = r.Handle;
+
+        var retArea = stackalloc uint[4];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.GetValuesWasmInterop.wasmImportGetValues(handle, ptr);
+
+        global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModOptionsValues? lifted;
+
+        switch (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]) {
+            case 0: {
+                lifted = null;
+                break;
+            }
+
+            case 1: {
+
+                var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModOptionValue>(new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0]);
+                for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0]; ++index) {
+                    nint basePtr3 = new global::System.Span<nint>((void*)((byte*)ptr + 4), 1)[0] + (index * 12);
+
+                    var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr3 + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 4), 1)[0]);
+                    if (new global::System.Span<int>((void*)((byte*)basePtr3 + 4), 1)[0] > 0) {
+                        global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr3 + 0), 1)[0]);
+                    }
+
+                    array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModOptionValue (
+                    str, new global::System.Span<int>((void*)((byte*)basePtr3 + 8), 1)[0]));
+                }
+
+                if (new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0] > 0) {
+                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 4), 1)[0]);
+                }
+
+                lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModOptionsValues (
+                array);
+                break;
+            }
+
+            default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
+        }
+        return lifted;
+
+    }
+
     internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PlayerBuffs? GetBuffs(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
     {
         var handle = r.Handle;
@@ -3334,6 +4405,400 @@ internal interface IComponentsImports {
             default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
         }
         return lifted;
+
+    }
+
+    internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Party? GetParty(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
+    {
+        var handle = r.Handle;
+
+        var retArea = stackalloc uint[6];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.GetPartyWasmInterop.wasmImportGetParty(handle, ptr);
+
+        global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Party? lifted;
+
+        switch (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]) {
+            case 0: {
+                lifted = null;
+                break;
+            }
+
+            case 1: {
+
+                var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyMember>(new global::System.Span<int>((void*)((byte*)ptr + 12), 1)[0]);
+                for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 12), 1)[0]; ++index) {
+                    nint basePtr3 = new global::System.Span<nint>((void*)((byte*)ptr + 8), 1)[0] + (index * 12);
+
+                    var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr3 + 4), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 8), 1)[0]);
+                    if (new global::System.Span<int>((void*)((byte*)basePtr3 + 8), 1)[0] > 0) {
+                        global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr3 + 4), 1)[0]);
+                    }
+
+                    array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PartyMember (
+                    unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr3 + 0), 1)[0])), str));
+                }
+
+                if (new global::System.Span<int>((void*)((byte*)ptr + 12), 1)[0] > 0) {
+                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 8), 1)[0]);
+                }
+
+                lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Party (
+                unchecked((uint)(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0])), array, (new global::System.Span<byte>((byte*)ptr + 16, 1)[0] != 0), (new global::System.Span<byte>((byte*)ptr + 17, 1)[0] != 0));
+                break;
+            }
+
+            default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
+        }
+        return lifted;
+
+    }
+
+    internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Spellbooks? GetPlayerSpellbook(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
+    {
+        var handle = r.Handle;
+
+        var retArea = stackalloc uint[5];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.GetPlayerSpellbookWasmInterop.wasmImportGetPlayerSpellbook(handle, ptr);
+
+        global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Spellbooks? lifted;
+
+        switch (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]) {
+            case 0: {
+                lifted = null;
+                break;
+            }
+
+            case 1: {
+
+                var array4 = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Spellbook>(new global::System.Span<int>((void*)((byte*)ptr + 12), 1)[0]);
+                for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 12), 1)[0]; ++index) {
+                    nint basePtr3 = new global::System.Span<nint>((void*)((byte*)ptr + 8), 1)[0] + (index * 16);
+
+                    var array = new int[new global::System.Span<int>((void*)((byte*)basePtr3 + 12), 1)[0]];
+                    new global::System.Span<int>((void*)(new global::System.Span<nint>((void*)((byte*)basePtr3 + 8), 1)[0]), new global::System.Span<int>((void*)((byte*)basePtr3 + 12), 1)[0]).CopyTo(new global::System.Span<int>(array));
+
+                    if (new global::System.Span<int>((void*)((byte*)basePtr3 + 12), 1)[0] > 0) {
+                        global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr3 + 8), 1)[0]);
+                    }
+
+                    array4.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Spellbook (
+                    unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr3 + 0), 1)[0])), ((byte)new global::System.Span<byte>((byte*)basePtr3 + 4, 1)[0]), array));
+                }
+
+                if (new global::System.Span<int>((void*)((byte*)ptr + 12), 1)[0] > 0) {
+                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 8), 1)[0]);
+                }
+
+                lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Spellbooks (
+                new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0], array4);
+                break;
+            }
+
+            default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
+        }
+        return lifted;
+
+    }
+
+    internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PlayerSteps? GetSteps(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
+    {
+        var handle = r.Handle;
+
+        var retArea = stackalloc uint[7];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.GetStepsWasmInterop.wasmImportGetSteps(handle, ptr);
+
+        global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PlayerSteps? lifted;
+
+        switch (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]) {
+            case 0: {
+                lifted = null;
+                break;
+            }
+
+            case 1: {
+
+                var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PlayerStep>(new global::System.Span<int>((void*)((byte*)ptr + 20), 1)[0]);
+                for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 20), 1)[0]; ++index) {
+                    nint basePtr3 = new global::System.Span<nint>((void*)((byte*)ptr + 16), 1)[0] + (index * 8);
+
+                    array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PlayerStep (
+                    ((byte)new global::System.Span<byte>((byte*)basePtr3 + 0, 1)[0]), ((byte)new global::System.Span<byte>((byte*)basePtr3 + 1, 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr3 + 2), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr3 + 4), 1)[0]), ((sbyte)(sbyte)new global::System.Span<byte>((byte*)basePtr3 + 6, 1)[0])));
+                }
+
+                if (new global::System.Span<int>((void*)((byte*)ptr + 20), 1)[0] > 0) {
+                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 16), 1)[0]);
+                }
+
+                lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PlayerSteps (
+                new global::System.Span<float>((void*)((byte*)ptr + 4), 1)[0], new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0], ((byte)new global::System.Span<byte>((byte*)ptr + 12, 1)[0]), (new global::System.Span<byte>((byte*)ptr + 13, 1)[0] != 0), array);
+                break;
+            }
+
+            default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
+        }
+        return lifted;
+
+    }
+
+    internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ClipboardSet? GetClipboardSet(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
+    {
+        var handle = r.Handle;
+
+        var retArea = stackalloc uint[5];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.GetClipboardSetWasmInterop.wasmImportGetClipboardSet(handle, ptr);
+
+        global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ClipboardSet? lifted;
+
+        switch (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]) {
+            case 0: {
+                lifted = null;
+                break;
+            }
+
+            case 1: {
+
+                var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)ptr + 8), 1)[0], new global::System.Span<int>((void*)((byte*)ptr + 12), 1)[0]);
+                if (new global::System.Span<int>((void*)((byte*)ptr + 12), 1)[0] > 0) {
+                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 8), 1)[0]);
+                }
+
+                lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ClipboardSet (
+                new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0], str);
+                break;
+            }
+
+            default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
+        }
+        return lifted;
+
+    }
+
+    internal static unsafe void SetResourceClipboardSet(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ClipboardSet v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = c.Handle;
+
+        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.text);
+        var length = utf8Bytes.Length;
+        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr = gcHandle.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle.Free());
+        ComponentsImportsInterop.SetResourceClipboardSetWasmInterop.wasmImportSetResourceClipboardSet(handle, v.seq, strPtr.ToInt32(), length);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
+
+    }
+
+    internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.FocusedInput? GetFocusedInput(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
+    {
+        var handle = r.Handle;
+
+        var retArea = stackalloc ulong[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 8);
+        ComponentsImportsInterop.GetFocusedInputWasmInterop.wasmImportGetFocusedInput(handle, ptr);
+
+        global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.FocusedInput? lifted;
+
+        switch (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]) {
+            case 0: {
+                lifted = null;
+                break;
+            }
+
+            case 1: {
+
+                lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.FocusedInput (
+                unchecked((ulong)(new global::System.Span<long>((void*)((byte*)ptr + 8), 1)[0])));
+                break;
+            }
+
+            default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
+        }
+        return lifted;
+
+    }
+
+    internal static unsafe void SetResourceFocusedInput(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.FocusedInput v)
+    {
+        var handle = c.Handle;
+        ComponentsImportsInterop.SetResourceFocusedInputWasmInterop.wasmImportSetResourceFocusedInput(handle, unchecked((long)(v.entity)));
+
+    }
+
+    internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextClipboardAction? GetTextClipboardAction(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
+    {
+        var handle = r.Handle;
+
+        var retArea = stackalloc ulong[4];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 8);
+        ComponentsImportsInterop.GetTextClipboardActionWasmInterop.wasmImportGetTextClipboardAction(handle, ptr);
+
+        global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextClipboardAction? lifted;
+
+        switch (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]) {
+            case 0: {
+                lifted = null;
+                break;
+            }
+
+            case 1: {
+
+                lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextClipboardAction (
+                unchecked((ulong)(new global::System.Span<long>((void*)((byte*)ptr + 8), 1)[0])), new global::System.Span<int>((void*)((byte*)ptr + 16), 1)[0], new global::System.Span<int>((void*)((byte*)ptr + 20), 1)[0]);
+                break;
+            }
+
+            default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
+        }
+        return lifted;
+
+    }
+
+    internal static unsafe void SetResourceTextClipboardAction(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextClipboardAction v)
+    {
+        var handle = c.Handle;
+        ComponentsImportsInterop.SetResourceTextClipboardActionWasmInterop.wasmImportSetResourceTextClipboardAction(handle, unchecked((long)(v.entity)), v.action, v.seq);
+
+    }
+
+    internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextCompletion? GetTextCompletion(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
+    {
+        var handle = r.Handle;
+
+        var retArea = stackalloc ulong[5];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 8);
+        ComponentsImportsInterop.GetTextCompletionWasmInterop.wasmImportGetTextCompletion(handle, ptr);
+
+        global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextCompletion? lifted;
+
+        switch (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]) {
+            case 0: {
+                lifted = null;
+                break;
+            }
+
+            case 1: {
+
+                var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)ptr + 16), 1)[0], new global::System.Span<int>((void*)((byte*)ptr + 20), 1)[0]);
+                if (new global::System.Span<int>((void*)((byte*)ptr + 20), 1)[0] > 0) {
+                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 16), 1)[0]);
+                }
+
+                var array = new global::System.Collections.Generic.List<string>(new global::System.Span<int>((void*)((byte*)ptr + 28), 1)[0]);
+                for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 28), 1)[0]; ++index) {
+                    nint basePtr3 = new global::System.Span<nint>((void*)((byte*)ptr + 24), 1)[0] + (index * 8);
+
+                    var str4 = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr3 + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 4), 1)[0]);
+                    if (new global::System.Span<int>((void*)((byte*)basePtr3 + 4), 1)[0] > 0) {
+                        global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr3 + 0), 1)[0]);
+                    }
+
+                    array.Add(str4);
+                }
+
+                if (new global::System.Span<int>((void*)((byte*)ptr + 28), 1)[0] > 0) {
+                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 24), 1)[0]);
+                }
+
+                lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextCompletion (
+                unchecked((ulong)(new global::System.Span<long>((void*)((byte*)ptr + 8), 1)[0])), str, array);
+                break;
+            }
+
+            default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
+        }
+        return lifted;
+
+    }
+
+    internal static unsafe void SetResourceTextCompletion(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextCompletion v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = c.Handle;
+
+        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.prefix);
+        var length = utf8Bytes.Length;
+        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr = gcHandle.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle.Free());
+
+        void* address;
+        if ((8 * v.items.Count) < 1024) {
+            var retArea = stackalloc uint[2 * v.items.Count + 1];
+            address = MemoryHelper.AlignStackPtr(retArea, 4);
+        }
+        else
+        {
+            var bufferSize = 8 * (nuint)v.items.Count;
+            address = global::System.Runtime.InteropServices.NativeMemory.AlignedAlloc(bufferSize, 4);
+            cleanups.Add(() => global::System.Runtime.InteropServices.NativeMemory.AlignedFree(address));
+        }
+
+        for (int index = 0; index < v.items.Count; ++index) {
+            string element = v.items[index];
+            int basePtr = (int)address + (index * 8);
+
+            var utf8Bytes1 = global::System.Text.Encoding.UTF8.GetBytes(element);
+            var length2 = utf8Bytes1.Length;
+            var gcHandle3 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes1, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr0 = gcHandle3.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle3.Free());
+            new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] = length2;
+            new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0] = (nint)strPtr0.ToInt32();
+
+        }
+        ComponentsImportsInterop.SetResourceTextCompletionWasmInterop.wasmImportSetResourceTextCompletion(handle, unchecked((long)(v.entity)), strPtr.ToInt32(), length, (int)address, v.items.Count);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
+
+    }
+
+    internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextCompletionPick? GetTextCompletionPick(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
+    {
+        var handle = r.Handle;
+
+        var retArea = stackalloc ulong[4];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 8);
+        ComponentsImportsInterop.GetTextCompletionPickWasmInterop.wasmImportGetTextCompletionPick(handle, ptr);
+
+        global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextCompletionPick? lifted;
+
+        switch (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]) {
+            case 0: {
+                lifted = null;
+                break;
+            }
+
+            case 1: {
+
+                lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextCompletionPick (
+                unchecked((ulong)(new global::System.Span<long>((void*)((byte*)ptr + 8), 1)[0])), new global::System.Span<int>((void*)((byte*)ptr + 16), 1)[0], new global::System.Span<int>((void*)((byte*)ptr + 20), 1)[0]);
+                break;
+            }
+
+            default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
+        }
+        return lifted;
+
+    }
+
+    internal static unsafe void SetResourceTextCompletionPick(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextCompletionPick v)
+    {
+        var handle = c.Handle;
+        ComponentsImportsInterop.SetResourceTextCompletionPickWasmInterop.wasmImportSetResourceTextCompletionPick(handle, unchecked((long)(v.entity)), v.index, v.seq);
 
     }
 
@@ -3859,6 +5324,446 @@ internal interface IComponentsImports {
             global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
         }
         return array;
+
+    }
+
+    internal static unsafe void SendServerClosed(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerGumpClosedEvent v)
+    {
+        var handle = c.Handle;
+        ComponentsImportsInterop.SendServerClosedWasmInterop.wasmImportSendServerClosed(handle, unchecked((int)(v.serial)), unchecked((int)(v.gumpId)));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerGumpClosedEvent> ReadServerClosed(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Events e)
+    {
+        var handle = e.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ReadServerClosedWasmInterop.wasmImportReadServerClosed(handle, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerGumpClosedEvent>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 8);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerGumpClosedEvent (
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0]))));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SendServerOpened(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerGumpOpenedEvent v)
+    {
+        var handle = c.Handle;
+        ComponentsImportsInterop.SendServerOpenedWasmInterop.wasmImportSendServerOpened(handle, unchecked((int)(v.serial)), unchecked((int)(v.gumpId)));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerGumpOpenedEvent> ReadServerOpened(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Events e)
+    {
+        var handle = e.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ReadServerOpenedWasmInterop.wasmImportReadServerOpened(handle, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerGumpOpenedEvent>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 8);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerGumpOpenedEvent (
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0]))));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SendMoveRequest(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModMoveRequest v)
+    {
+        var handle = c.Handle;
+        ComponentsImportsInterop.SendMoveRequestWasmInterop.wasmImportSendMoveRequest(handle, v.direction, (v.run ? 1 : 0), v.sequence);
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModMoveRequest> ReadMoveRequest(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Events e)
+    {
+        var handle = e.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ReadMoveRequestWasmInterop.wasmImportReadMoveRequest(handle, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModMoveRequest>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 3);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModMoveRequest (
+            ((byte)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0]), (new global::System.Span<byte>((byte*)basePtr + 1, 1)[0] != 0), ((byte)new global::System.Span<byte>((byte*)basePtr + 2, 1)[0])));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SendCharacterList(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CharacterSelection v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = c.Handle;
+
+        void* address;
+        if ((12 * v.characters.Count) < 1024) {
+            var retArea = stackalloc uint[3 * v.characters.Count + 1];
+            address = MemoryHelper.AlignStackPtr(retArea, 4);
+        }
+        else
+        {
+            var bufferSize = 12 * (nuint)v.characters.Count;
+            address = global::System.Runtime.InteropServices.NativeMemory.AlignedAlloc(bufferSize, 4);
+            cleanups.Add(() => global::System.Runtime.InteropServices.NativeMemory.AlignedFree(address));
+        }
+
+        for (int index = 0; index < v.characters.Count; ++index) {
+            global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CharInfo element = v.characters[index];
+            int basePtr = (int)address + (index * 12);
+
+            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(element.name);
+            var length = utf8Bytes.Length;
+            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr = gcHandle.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle.Free());
+            new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] = length;
+            new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0] = (nint)strPtr.ToInt32();
+            new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0] = unchecked((int)(element.index));
+
+        }
+
+        void* address11;
+        if ((36 * v.towns.Count) < 1024) {
+            var retArea13 = stackalloc uint[9 * v.towns.Count + 1];
+            address11 = MemoryHelper.AlignStackPtr(retArea13, 4);
+        }
+        else
+        {
+            var bufferSize12 = 36 * (nuint)v.towns.Count;
+            address11 = global::System.Runtime.InteropServices.NativeMemory.AlignedAlloc(bufferSize12, 4);
+            cleanups.Add(() => global::System.Runtime.InteropServices.NativeMemory.AlignedFree(address11));
+        }
+
+        for (int index10 = 0; index10 < v.towns.Count; ++index10) {
+            global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TownInfo element0 = v.towns[index10];
+            int basePtr1 = (int)address11 + (index10 * 36);
+            *(byte*)(basePtr1 + 0) = (byte)element0.index;
+
+            var utf8Bytes3 = global::System.Text.Encoding.UTF8.GetBytes(element0.name);
+            var length4 = utf8Bytes3.Length;
+            var gcHandle5 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes3, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr2 = gcHandle5.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle5.Free());
+            new global::System.Span<int>((void*)((byte*)basePtr1 + 8), 1)[0] = length4;
+            new global::System.Span<nint>((void*)((byte*)basePtr1 + 4), 1)[0] = (nint)strPtr2.ToInt32();
+
+            var utf8Bytes7 = global::System.Text.Encoding.UTF8.GetBytes(element0.building);
+            var length8 = utf8Bytes7.Length;
+            var gcHandle9 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes7, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr6 = gcHandle9.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle9.Free());
+            new global::System.Span<int>((void*)((byte*)basePtr1 + 16), 1)[0] = length8;
+            new global::System.Span<nint>((void*)((byte*)basePtr1 + 12), 1)[0] = (nint)strPtr6.ToInt32();
+            new global::System.Span<short>((void*)((byte*)basePtr1 + 20), 1)[0] = (short)element0.x;
+            new global::System.Span<short>((void*)((byte*)basePtr1 + 22), 1)[0] = (short)element0.y;
+            *(byte*)(basePtr1 + 24) = (byte)element0.z;
+            new global::System.Span<int>((void*)((byte*)basePtr1 + 28), 1)[0] = unchecked((int)(element0.map));
+            new global::System.Span<int>((void*)((byte*)basePtr1 + 32), 1)[0] = unchecked((int)(element0.clilocDescription));
+
+        }
+        ComponentsImportsInterop.SendCharacterListWasmInterop.wasmImportSendCharacterList(handle, (int)address, v.characters.Count, (int)address11, v.towns.Count);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CharacterSelection> ReadCharacterList(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Events e)
+    {
+        var handle = e.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ReadCharacterListWasmInterop.wasmImportReadCharacterList(handle, ptr);
+
+        var array8 = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CharacterSelection>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index9 = 0; index9 < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index9) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index9 * 16);
+
+            var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CharInfo>(new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0]);
+            for (int index = 0; index < new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0]; ++index) {
+                nint basePtr1 = new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0] + (index * 12);
+
+                var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr1 + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr1 + 4), 1)[0]);
+                if (new global::System.Span<int>((void*)((byte*)basePtr1 + 4), 1)[0] > 0) {
+                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr1 + 0), 1)[0]);
+                }
+
+                array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CharInfo (
+                str, unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr1 + 8), 1)[0]))));
+            }
+
+            if (new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0]);
+            }
+
+            var array6 = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TownInfo>(new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0]);
+            for (int index7 = 0; index7 < new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0]; ++index7) {
+                nint basePtr3 = new global::System.Span<nint>((void*)((byte*)basePtr + 8), 1)[0] + (index7 * 36);
+
+                var str4 = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr3 + 4), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 8), 1)[0]);
+                if (new global::System.Span<int>((void*)((byte*)basePtr3 + 8), 1)[0] > 0) {
+                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr3 + 4), 1)[0]);
+                }
+
+                var str5 = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr3 + 12), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 16), 1)[0]);
+                if (new global::System.Span<int>((void*)((byte*)basePtr3 + 16), 1)[0] > 0) {
+                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr3 + 12), 1)[0]);
+                }
+
+                array6.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TownInfo (
+                ((byte)new global::System.Span<byte>((byte*)basePtr3 + 0, 1)[0]), str4, str5, ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr3 + 20), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr3 + 22), 1)[0]), ((sbyte)(sbyte)new global::System.Span<byte>((byte*)basePtr3 + 24, 1)[0]), unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr3 + 28), 1)[0])), unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr3 + 32), 1)[0]))));
+            }
+
+            if (new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 8), 1)[0]);
+            }
+
+            array8.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.CharacterSelection (
+            array, array6));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array8;
+
+    }
+
+    internal static unsafe void SendLoginErrorInfo(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.LoginErrorsInfoEvent v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = c.Handle;
+
+        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.error.errorMessage);
+        var length = utf8Bytes.Length;
+        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr = gcHandle.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle.Free());
+        ComponentsImportsInterop.SendLoginErrorInfoWasmInterop.wasmImportSendLoginErrorInfo(handle, strPtr.ToInt32(), length);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.LoginErrorsInfoEvent> ReadLoginErrorInfo(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Events e)
+    {
+        var handle = e.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ReadLoginErrorInfoWasmInterop.wasmImportReadLoginErrorInfo(handle, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.LoginErrorsInfoEvent>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 8);
+
+            var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0]);
+            if (new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0]);
+            }
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.LoginErrorsInfoEvent (
+            new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.LoginErrorInfo (
+            str)));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SendLoginRequest(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.OnLoginRequest v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = c.Handle;
+
+        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.username);
+        var length = utf8Bytes.Length;
+        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr = gcHandle.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle.Free());
+
+        var utf8Bytes1 = global::System.Text.Encoding.UTF8.GetBytes(v.password);
+        var length2 = utf8Bytes1.Length;
+        var gcHandle3 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes1, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr0 = gcHandle3.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle3.Free());
+
+        var utf8Bytes5 = global::System.Text.Encoding.UTF8.GetBytes(v.address);
+        var length6 = utf8Bytes5.Length;
+        var gcHandle7 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes5, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr4 = gcHandle7.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle7.Free());
+        ComponentsImportsInterop.SendLoginRequestWasmInterop.wasmImportSendLoginRequest(handle, strPtr.ToInt32(), length, strPtr0.ToInt32(), length2, strPtr4.ToInt32(), length6, v.port);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.OnLoginRequest> ReadLoginRequest(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Events e)
+    {
+        var handle = e.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ReadLoginRequestWasmInterop.wasmImportReadLoginRequest(handle, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.OnLoginRequest>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 28);
+
+            var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0]);
+            if (new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0]);
+            }
+
+            var str0 = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr + 8), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0]);
+            if (new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 8), 1)[0]);
+            }
+
+            var str1 = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr + 16), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 20), 1)[0]);
+            if (new global::System.Span<int>((void*)((byte*)basePtr + 20), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 16), 1)[0]);
+            }
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.OnLoginRequest (
+            str, str0, str1, ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 24), 1)[0])));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SendServerList(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerSelectionInfoEvent v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = c.Handle;
+
+        void* address;
+        if ((20 * v.servers.Count) < 1024) {
+            var retArea = stackalloc uint[5 * v.servers.Count + 1];
+            address = MemoryHelper.AlignStackPtr(retArea, 4);
+        }
+        else
+        {
+            var bufferSize = 20 * (nuint)v.servers.Count;
+            address = global::System.Runtime.InteropServices.NativeMemory.AlignedAlloc(bufferSize, 4);
+            cleanups.Add(() => global::System.Runtime.InteropServices.NativeMemory.AlignedFree(address));
+        }
+
+        for (int index = 0; index < v.servers.Count; ++index) {
+            global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerInfo element = v.servers[index];
+            int basePtr = (int)address + (index * 20);
+            new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0] = element.index;
+
+            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(element.name);
+            var length = utf8Bytes.Length;
+            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr = gcHandle.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle.Free());
+            new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0] = length;
+            new global::System.Span<nint>((void*)((byte*)basePtr + 4), 1)[0] = (nint)strPtr.ToInt32();
+            *(byte*)(basePtr + 12) = (byte)element.percentFull;
+            *(byte*)(basePtr + 13) = (byte)element.timeZone;
+            new global::System.Span<int>((void*)((byte*)basePtr + 16), 1)[0] = unchecked((int)(element.ip));
+
+        }
+        ComponentsImportsInterop.SendServerListWasmInterop.wasmImportSendServerList(handle, (int)address, v.servers.Count);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerSelectionInfoEvent> ReadServerList(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Events e)
+    {
+        var handle = e.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ReadServerListWasmInterop.wasmImportReadServerList(handle, ptr);
+
+        var array2 = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerSelectionInfoEvent>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index3 = 0; index3 < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index3) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index3 * 8);
+
+            var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerInfo>(new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0]);
+            for (int index = 0; index < new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0]; ++index) {
+                nint basePtr1 = new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0] + (index * 20);
+
+                var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr1 + 4), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr1 + 8), 1)[0]);
+                if (new global::System.Span<int>((void*)((byte*)basePtr1 + 8), 1)[0] > 0) {
+                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr1 + 4), 1)[0]);
+                }
+
+                array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerInfo (
+                new global::System.Span<int>((void*)((byte*)basePtr1 + 0), 1)[0], str, ((byte)new global::System.Span<byte>((byte*)basePtr1 + 12, 1)[0]), ((byte)new global::System.Span<byte>((byte*)basePtr1 + 13, 1)[0]), unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr1 + 16), 1)[0]))));
+            }
+
+            if (new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0]);
+            }
+
+            array2.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ServerSelectionInfoEvent (
+            array));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array2;
 
     }
 

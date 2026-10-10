@@ -104,6 +104,7 @@ typedef struct cuo_ModHover cuo_ModHover;
 typedef struct cuo_ModInputConsume cuo_ModInputConsume;
 typedef struct cuo_ModMoveRequest cuo_ModMoveRequest;
 typedef struct cuo_ModOptionDto cuo_ModOptionDto;
+typedef struct cuo_ModOptionValueDto cuo_ModOptionValueDto;
 typedef struct cuo_ModOptionsSchemaDto cuo_ModOptionsSchemaDto;
 typedef struct cuo_ModOptionsValuesDto cuo_ModOptionsValuesDto;
 typedef struct cuo_ModRightClick cuo_ModRightClick;
@@ -350,6 +351,7 @@ typedef struct cuo_vec_HostHotkeyDto { cuo_HostHotkeyDto *items; size_t len; } c
 typedef struct cuo_vec_MobStepDto { cuo_MobStepDto *items; size_t len; } cuo_vec_MobStepDto;
 typedef struct cuo_vec_ModHotkeyBinding { cuo_ModHotkeyBinding *items; size_t len; } cuo_vec_ModHotkeyBinding;
 typedef struct cuo_vec_ModOptionDto { cuo_ModOptionDto *items; size_t len; } cuo_vec_ModOptionDto;
+typedef struct cuo_vec_ModOptionValueDto { cuo_ModOptionValueDto *items; size_t len; } cuo_vec_ModOptionValueDto;
 typedef struct cuo_vec_OplLineDto { cuo_OplLineDto *items; size_t len; } cuo_vec_OplLineDto;
 typedef struct cuo_vec_PartyMemberDto { cuo_PartyMemberDto *items; size_t len; } cuo_vec_PartyMemberDto;
 typedef struct cuo_vec_PlayerBuffDto { cuo_PlayerBuffDto *items; size_t len; } cuo_vec_PlayerBuffDto;
@@ -1681,6 +1683,16 @@ void cuo_ModOptionDto_read(const cJSON *json, cuo_ModOptionDto *out);
 cuo_bytes cuo_ModOptionDto_json(const cuo_ModOptionDto *v);
 bool cuo_ModOptionDto_parse(cuo_bytes json, cuo_ModOptionDto *out);
 
+/* Nested payload type (`ClassicUO.Ecs.Modding.ModOptionValueDto`). */
+struct cuo_ModOptionValueDto {
+    const char *key;
+    int32_t value;
+};
+void cuo_ModOptionValueDto_write(cuo_jw *w, const cuo_ModOptionValueDto *v);
+void cuo_ModOptionValueDto_read(const cJSON *json, cuo_ModOptionValueDto *out);
+cuo_bytes cuo_ModOptionValueDto_json(const cuo_ModOptionValueDto *v);
+bool cuo_ModOptionValueDto_parse(cuo_bytes json, cuo_ModOptionValueDto *out);
+
 /* `cuo:options/schema` */
 struct cuo_ModOptionsSchemaDto {
     cuo_vec_ModOptionDto options;
@@ -1695,10 +1707,8 @@ cuo_comp cuo_ModOptionsSchemaDto_comp(const cuo_ModOptionsSchemaDto *v);
 bool cuo_ModOptionsSchemaDto_resource(cuo_ModOptionsSchemaDto *out);
 
 /* `cuo:options/values` */
-/* Zero-size tag: its payload is {} in both directions. */
-/* NOTE: dropped member `Values: unsupported CLR type Dictionary<String,Int32>` */
 struct cuo_ModOptionsValuesDto {
-    uint8_t unused_; /* C needs one member */
+    cuo_vec_ModOptionValueDto values;
 };
 void cuo_ModOptionsValuesDto_write(cuo_jw *w, const cuo_ModOptionsValuesDto *v);
 void cuo_ModOptionsValuesDto_read(const cJSON *json, cuo_ModOptionsValuesDto *out);
@@ -1706,7 +1716,7 @@ cuo_bytes cuo_ModOptionsValuesDto_json(const cuo_ModOptionsValuesDto *v);
 bool cuo_ModOptionsValuesDto_parse(cuo_bytes json, cuo_ModOptionsValuesDto *out);
 #define cuo_ModOptionsValuesDto_PATH CUO_PATH_OPTIONS_VALUES
 uint16_t cuo_ModOptionsValuesDto_id(void);
-cuo_comp cuo_ModOptionsValuesDto_comp(void);
+cuo_comp cuo_ModOptionsValuesDto_comp(const cuo_ModOptionsValuesDto *v);
 bool cuo_ModOptionsValuesDto_resource(cuo_ModOptionsValuesDto *out);
 
 /* `cuo:ui/right-click` */

@@ -1378,6 +1378,34 @@ impl Conv<w::ModOptionsSchema> for s::ModOptionsSchemaDto {
     }
 }
 
+impl Conv<w::ModOptionValue> for s::ModOptionValueDto {
+    fn to_wit(&self) -> w::ModOptionValue {
+        w::ModOptionValue {
+            key: Conv::to_wit(&self.key),
+            value: Conv::to_wit(&self.value),
+        }
+    }
+    fn from_wit(v: w::ModOptionValue) -> s::ModOptionValueDto {
+        s::ModOptionValueDto {
+            key: Conv::from_wit(v.key),
+            value: Conv::from_wit(v.value),
+        }
+    }
+}
+
+impl Conv<w::ModOptionsValues> for s::ModOptionsValuesDto {
+    fn to_wit(&self) -> w::ModOptionsValues {
+        w::ModOptionsValues {
+            values: Conv::to_wit(&self.values),
+        }
+    }
+    fn from_wit(v: w::ModOptionsValues) -> s::ModOptionsValuesDto {
+        s::ModOptionsValuesDto {
+            values: Conv::from_wit(v.values),
+        }
+    }
+}
+
 impl Conv<w::PlayerBuff> for s::PlayerBuffDto {
     fn to_wit(&self) -> w::PlayerBuff {
         w::PlayerBuff {
@@ -2031,6 +2059,898 @@ impl Conv<w::UiTooltip> for s::UiTooltip {
     }
 }
 
+impl Conv<w::MobAnimation> for s::MobAnimation {
+    fn to_wit(&self) -> w::MobAnimation {
+        w::MobAnimation {
+            index: Conv::to_wit(&self.index),
+            frames_count: Conv::to_wit(&self.frames_count),
+            interval: Conv::to_wit(&self.interval),
+            repeat_mode: Conv::to_wit(&self.repeat_mode),
+            repeat_mode_count: Conv::to_wit(&self.repeat_mode_count),
+            repeat: Conv::to_wit(&self.repeat),
+            is_from_server: Conv::to_wit(&self.is_from_server),
+            forward_direction: Conv::to_wit(&self.forward_direction),
+            action: Conv::to_wit(&self.action),
+            mount_action: Conv::to_wit(&self.mount_action),
+            direction: Conv::to_wit(&self.direction),
+            time: Conv::to_wit(&self.time),
+            run: Conv::to_wit(&self.run),
+        }
+    }
+    fn from_wit(v: w::MobAnimation) -> s::MobAnimation {
+        s::MobAnimation {
+            index: Conv::from_wit(v.index),
+            frames_count: Conv::from_wit(v.frames_count),
+            interval: Conv::from_wit(v.interval),
+            repeat_mode: Conv::from_wit(v.repeat_mode),
+            repeat_mode_count: Conv::from_wit(v.repeat_mode_count),
+            repeat: Conv::from_wit(v.repeat),
+            is_from_server: Conv::from_wit(v.is_from_server),
+            forward_direction: Conv::from_wit(v.forward_direction),
+            action: Conv::from_wit(v.action),
+            mount_action: Conv::from_wit(v.mount_action),
+            direction: Conv::from_wit(v.direction),
+            time: Conv::from_wit(v.time),
+            run: Conv::from_wit(v.run),
+        }
+    }
+}
+
+impl Conv<w::MobStep> for s::MobStepDto {
+    fn to_wit(&self) -> w::MobStep {
+        w::MobStep {
+            x: Conv::to_wit(&self.x),
+            y: Conv::to_wit(&self.y),
+            z: Conv::to_wit(&self.z),
+            direction: Conv::to_wit(&self.direction),
+            run: Conv::to_wit(&self.run),
+        }
+    }
+    fn from_wit(v: w::MobStep) -> s::MobStepDto {
+        s::MobStepDto {
+            x: Conv::from_wit(v.x),
+            y: Conv::from_wit(v.y),
+            z: Conv::from_wit(v.z),
+            direction: Conv::from_wit(v.direction),
+            run: Conv::from_wit(v.run),
+        }
+    }
+}
+
+impl Conv<w::MobileSteps> for s::MobileStepsDto {
+    fn to_wit(&self) -> w::MobileSteps {
+        w::MobileSteps {
+            index: Conv::to_wit(&self.index),
+            time: Conv::to_wit(&self.time),
+            steps: Conv::to_wit(&self.steps),
+        }
+    }
+    fn from_wit(v: w::MobileSteps) -> s::MobileStepsDto {
+        s::MobileStepsDto {
+            index: Conv::from_wit(v.index),
+            time: Conv::from_wit(v.time),
+            steps: Conv::from_wit(v.steps),
+        }
+    }
+}
+
+impl Conv<w::CombatBookWindow> for s::CombatBookWindow {
+    fn to_wit(&self) -> w::CombatBookWindow {
+        w::CombatBookWindow {
+            page: Conv::to_wit(&self.page),
+            sounded_page: Conv::to_wit(&self.sounded_page),
+            page_count: Conv::to_wit(&self.page_count),
+            dict_pages: Conv::to_wit(&self.dict_pages),
+            ability_count: Conv::to_wit(&self.ability_count),
+            dirty: Conv::to_wit(&self.dirty),
+            content: Conv::to_wit(&self.content),
+            left: Conv::to_wit(&self.left),
+            right: Conv::to_wit(&self.right),
+        }
+    }
+    fn from_wit(v: w::CombatBookWindow) -> s::CombatBookWindow {
+        s::CombatBookWindow {
+            page: Conv::from_wit(v.page),
+            sounded_page: Conv::from_wit(v.sounded_page),
+            page_count: Conv::from_wit(v.page_count),
+            dict_pages: Conv::from_wit(v.dict_pages),
+            ability_count: Conv::from_wit(v.ability_count),
+            dirty: Conv::from_wit(v.dirty),
+            content: Conv::from_wit(v.content),
+            left: Conv::from_wit(v.left),
+            right: Conv::from_wit(v.right),
+        }
+    }
+}
+
+impl Conv<w::HouseDesignWindow> for s::HouseDesignWindow {
+    fn to_wit(&self) -> w::HouseDesignWindow {
+        w::HouseDesignWindow {
+            content: Conv::to_wit(&self.content),
+            serial: Conv::to_wit(&self.serial),
+        }
+    }
+    fn from_wit(v: w::HouseDesignWindow) -> s::HouseDesignWindow {
+        s::HouseDesignWindow {
+            content: Conv::from_wit(v.content),
+            serial: Conv::from_wit(v.serial),
+        }
+    }
+}
+
+impl Conv<w::JournalWindow> for s::JournalWindow {
+    fn to_wit(&self) -> w::JournalWindow {
+        w::JournalWindow {
+            special_height: Conv::to_wit(&self.special_height),
+            minimized: Conv::to_wit(&self.minimized),
+            dark_mode: Conv::to_wit(&self.dark_mode),
+            show_system: Conv::to_wit(&self.show_system),
+            show_objects: Conv::to_wit(&self.show_objects),
+            show_client: Conv::to_wit(&self.show_client),
+            show_guild: Conv::to_wit(&self.show_guild),
+            built_revision: Conv::to_wit(&self.built_revision),
+            style_epoch: Conv::to_wit(&self.style_epoch),
+            built_style_epoch: Conv::to_wit(&self.built_style_epoch),
+            list_entity: Conv::to_wit(&self.list_entity),
+            flag_entity: Conv::to_wit(&self.flag_entity),
+            top_entity: Conv::to_wit(&self.top_entity),
+            mid_entity: Conv::to_wit(&self.mid_entity),
+            bottom_entity: Conv::to_wit(&self.bottom_entity),
+            title_entity: Conv::to_wit(&self.title_entity),
+            minimize_entity: Conv::to_wit(&self.minimize_entity),
+            dark_check_entity: Conv::to_wit(&self.dark_check_entity),
+            expander_entity: Conv::to_wit(&self.expander_entity),
+            width: Conv::to_wit(&self.width),
+            list_width: Conv::to_wit(&self.list_width),
+            content_height: Conv::to_wit(&self.content_height),
+        }
+    }
+    fn from_wit(v: w::JournalWindow) -> s::JournalWindow {
+        s::JournalWindow {
+            special_height: Conv::from_wit(v.special_height),
+            minimized: Conv::from_wit(v.minimized),
+            dark_mode: Conv::from_wit(v.dark_mode),
+            show_system: Conv::from_wit(v.show_system),
+            show_objects: Conv::from_wit(v.show_objects),
+            show_client: Conv::from_wit(v.show_client),
+            show_guild: Conv::from_wit(v.show_guild),
+            built_revision: Conv::from_wit(v.built_revision),
+            style_epoch: Conv::from_wit(v.style_epoch),
+            built_style_epoch: Conv::from_wit(v.built_style_epoch),
+            list_entity: Conv::from_wit(v.list_entity),
+            flag_entity: Conv::from_wit(v.flag_entity),
+            top_entity: Conv::from_wit(v.top_entity),
+            mid_entity: Conv::from_wit(v.mid_entity),
+            bottom_entity: Conv::from_wit(v.bottom_entity),
+            title_entity: Conv::from_wit(v.title_entity),
+            minimize_entity: Conv::from_wit(v.minimize_entity),
+            dark_check_entity: Conv::from_wit(v.dark_check_entity),
+            expander_entity: Conv::from_wit(v.expander_entity),
+            width: Conv::from_wit(v.width),
+            list_width: Conv::from_wit(v.list_width),
+            content_height: Conv::from_wit(v.content_height),
+        }
+    }
+}
+
+impl Conv<w::MenuGumpWindow> for s::MenuGumpWindow {
+    fn to_wit(&self) -> w::MenuGumpWindow {
+        w::MenuGumpWindow {
+            serial: Conv::to_wit(&self.serial),
+            server_menu_id: Conv::to_wit(&self.server_menu_id),
+            is_gray: Conv::to_wit(&self.is_gray),
+            responded: Conv::to_wit(&self.responded),
+        }
+    }
+    fn from_wit(v: w::MenuGumpWindow) -> s::MenuGumpWindow {
+        s::MenuGumpWindow {
+            serial: Conv::from_wit(v.serial),
+            server_menu_id: Conv::from_wit(v.server_menu_id),
+            is_gray: Conv::from_wit(v.is_gray),
+            responded: Conv::from_wit(v.responded),
+        }
+    }
+}
+
+impl Conv<w::MiniMapWindow> for s::MiniMapWindow {
+    fn to_wit(&self) -> w::MiniMapWindow {
+        w::MiniMapWindow {
+            use_large_map: Conv::to_wit(&self.use_large_map),
+        }
+    }
+    fn from_wit(v: w::MiniMapWindow) -> s::MiniMapWindow {
+        s::MiniMapWindow {
+            use_large_map: Conv::from_wit(v.use_large_map),
+        }
+    }
+}
+
+impl Conv<w::PaperdollWindow> for s::PaperdollWindow {
+    fn to_wit(&self) -> w::PaperdollWindow {
+        w::PaperdollWindow {
+            serial: Conv::to_wit(&self.serial),
+            is_player: Conv::to_wit(&self.is_player),
+            can_lift: Conv::to_wit(&self.can_lift),
+            minimized: Conv::to_wit(&self.minimized),
+        }
+    }
+    fn from_wit(v: w::PaperdollWindow) -> s::PaperdollWindow {
+        s::PaperdollWindow {
+            serial: Conv::from_wit(v.serial),
+            is_player: Conv::from_wit(v.is_player),
+            can_lift: Conv::from_wit(v.can_lift),
+            minimized: Conv::from_wit(v.minimized),
+        }
+    }
+}
+
+impl Conv<w::PartyInviteWindow> for s::PartyInviteWindow {
+    fn to_wit(&self) -> w::PartyInviteWindow {
+        w::PartyInviteWindow {
+            inviter: Conv::to_wit(&self.inviter),
+        }
+    }
+    fn from_wit(v: w::PartyInviteWindow) -> s::PartyInviteWindow {
+        s::PartyInviteWindow {
+            inviter: Conv::from_wit(v.inviter),
+        }
+    }
+}
+
+impl Conv<w::PartyManifestWindow> for s::PartyManifestWindow {
+    fn to_wit(&self) -> w::PartyManifestWindow {
+        w::PartyManifestWindow {
+            can_loot: Conv::to_wit(&self.can_loot),
+        }
+    }
+    fn from_wit(v: w::PartyManifestWindow) -> s::PartyManifestWindow {
+        s::PartyManifestWindow {
+            can_loot: Conv::from_wit(v.can_loot),
+        }
+    }
+}
+
+impl Conv<w::ProfileWindow> for s::ProfileWindow {
+    fn to_wit(&self) -> w::ProfileWindow {
+        w::ProfileWindow {
+            serial: Conv::to_wit(&self.serial),
+            special_height: Conv::to_wit(&self.special_height),
+            width: Conv::to_wit(&self.width),
+            mid_entity: Conv::to_wit(&self.mid_entity),
+            bottom_entity: Conv::to_wit(&self.bottom_entity),
+            expander_entity: Conv::to_wit(&self.expander_entity),
+            footer_entity: Conv::to_wit(&self.footer_entity),
+            footer_offset_from_bottom: Conv::to_wit(&self.footer_offset_from_bottom),
+            minimized: Conv::to_wit(&self.minimized),
+            knob_entity: Conv::to_wit(&self.knob_entity),
+        }
+    }
+    fn from_wit(v: w::ProfileWindow) -> s::ProfileWindow {
+        s::ProfileWindow {
+            serial: Conv::from_wit(v.serial),
+            special_height: Conv::from_wit(v.special_height),
+            width: Conv::from_wit(v.width),
+            mid_entity: Conv::from_wit(v.mid_entity),
+            bottom_entity: Conv::from_wit(v.bottom_entity),
+            expander_entity: Conv::from_wit(v.expander_entity),
+            footer_entity: Conv::from_wit(v.footer_entity),
+            footer_offset_from_bottom: Conv::from_wit(v.footer_offset_from_bottom),
+            minimized: Conv::from_wit(v.minimized),
+            knob_entity: Conv::from_wit(v.knob_entity),
+        }
+    }
+}
+
+impl Conv<w::RacialBookWindow> for s::RacialBookWindow {
+    fn to_wit(&self) -> w::RacialBookWindow {
+        w::RacialBookWindow {
+            page: Conv::to_wit(&self.page),
+            sounded_page: Conv::to_wit(&self.sounded_page),
+            page_count: Conv::to_wit(&self.page_count),
+            dict_pages: Conv::to_wit(&self.dict_pages),
+            ability_count: Conv::to_wit(&self.ability_count),
+            race: Conv::to_wit(&self.race),
+            dirty: Conv::to_wit(&self.dirty),
+            content: Conv::to_wit(&self.content),
+            left: Conv::to_wit(&self.left),
+            right: Conv::to_wit(&self.right),
+        }
+    }
+    fn from_wit(v: w::RacialBookWindow) -> s::RacialBookWindow {
+        s::RacialBookWindow {
+            page: Conv::from_wit(v.page),
+            sounded_page: Conv::from_wit(v.sounded_page),
+            page_count: Conv::from_wit(v.page_count),
+            dict_pages: Conv::from_wit(v.dict_pages),
+            ability_count: Conv::from_wit(v.ability_count),
+            race: Conv::from_wit(v.race),
+            dirty: Conv::from_wit(v.dirty),
+            content: Conv::from_wit(v.content),
+            left: Conv::from_wit(v.left),
+            right: Conv::from_wit(v.right),
+        }
+    }
+}
+
+impl Conv<w::ServerGumpClosedEvent> for s::ServerGumpClosedEvent {
+    fn to_wit(&self) -> w::ServerGumpClosedEvent {
+        w::ServerGumpClosedEvent {
+            serial: Conv::to_wit(&self.serial),
+            gump_id: Conv::to_wit(&self.gump_id),
+        }
+    }
+    fn from_wit(v: w::ServerGumpClosedEvent) -> s::ServerGumpClosedEvent {
+        s::ServerGumpClosedEvent {
+            serial: Conv::from_wit(v.serial),
+            gump_id: Conv::from_wit(v.gump_id),
+        }
+    }
+}
+
+impl Conv<w::ServerGumpOpenedEvent> for s::ServerGumpOpenedEvent {
+    fn to_wit(&self) -> w::ServerGumpOpenedEvent {
+        w::ServerGumpOpenedEvent {
+            serial: Conv::to_wit(&self.serial),
+            gump_id: Conv::to_wit(&self.gump_id),
+        }
+    }
+    fn from_wit(v: w::ServerGumpOpenedEvent) -> s::ServerGumpOpenedEvent {
+        s::ServerGumpOpenedEvent {
+            serial: Conv::from_wit(v.serial),
+            gump_id: Conv::from_wit(v.gump_id),
+        }
+    }
+}
+
+impl Conv<w::SkillsWindow> for s::SkillsWindow {
+    fn to_wit(&self) -> w::SkillsWindow {
+        w::SkillsWindow {
+            special_height: Conv::to_wit(&self.special_height),
+            minimized: Conv::to_wit(&self.minimized),
+            show_real: Conv::to_wit(&self.show_real),
+            show_caps: Conv::to_wit(&self.show_caps),
+            dirty: Conv::to_wit(&self.dirty),
+            width: Conv::to_wit(&self.width),
+            list_width: Conv::to_wit(&self.list_width),
+            content_height: Conv::to_wit(&self.content_height),
+            list_entity: Conv::to_wit(&self.list_entity),
+            top_entity: Conv::to_wit(&self.top_entity),
+            mid_entity: Conv::to_wit(&self.mid_entity),
+            bottom_entity: Conv::to_wit(&self.bottom_entity),
+            title_entity: Conv::to_wit(&self.title_entity),
+            minimize_entity: Conv::to_wit(&self.minimize_entity),
+            expander_entity: Conv::to_wit(&self.expander_entity),
+            sum_label_entity: Conv::to_wit(&self.sum_label_entity),
+            flag_entity: Conv::to_wit(&self.flag_entity),
+            last_sum: Conv::to_wit(&self.last_sum),
+        }
+    }
+    fn from_wit(v: w::SkillsWindow) -> s::SkillsWindow {
+        s::SkillsWindow {
+            special_height: Conv::from_wit(v.special_height),
+            minimized: Conv::from_wit(v.minimized),
+            show_real: Conv::from_wit(v.show_real),
+            show_caps: Conv::from_wit(v.show_caps),
+            dirty: Conv::from_wit(v.dirty),
+            width: Conv::from_wit(v.width),
+            list_width: Conv::from_wit(v.list_width),
+            content_height: Conv::from_wit(v.content_height),
+            list_entity: Conv::from_wit(v.list_entity),
+            top_entity: Conv::from_wit(v.top_entity),
+            mid_entity: Conv::from_wit(v.mid_entity),
+            bottom_entity: Conv::from_wit(v.bottom_entity),
+            title_entity: Conv::from_wit(v.title_entity),
+            minimize_entity: Conv::from_wit(v.minimize_entity),
+            expander_entity: Conv::from_wit(v.expander_entity),
+            sum_label_entity: Conv::from_wit(v.sum_label_entity),
+            flag_entity: Conv::from_wit(v.flag_entity),
+            last_sum: Conv::from_wit(v.last_sum),
+        }
+    }
+}
+
+impl Conv<w::SpellbookWindow> for s::SpellbookWindow {
+    fn to_wit(&self) -> w::SpellbookWindow {
+        w::SpellbookWindow {
+            serial: Conv::to_wit(&self.serial),
+            school: Conv::to_wit(&self.school),
+            page: Conv::to_wit(&self.page),
+            sounded_page: Conv::to_wit(&self.sounded_page),
+            page_count: Conv::to_wit(&self.page_count),
+            built_revision: Conv::to_wit(&self.built_revision),
+            dirty: Conv::to_wit(&self.dirty),
+            content_entity: Conv::to_wit(&self.content_entity),
+            left_corner: Conv::to_wit(&self.left_corner),
+            right_corner: Conv::to_wit(&self.right_corner),
+            minimized: Conv::to_wit(&self.minimized),
+        }
+    }
+    fn from_wit(v: w::SpellbookWindow) -> s::SpellbookWindow {
+        s::SpellbookWindow {
+            serial: Conv::from_wit(v.serial),
+            school: Conv::from_wit(v.school),
+            page: Conv::from_wit(v.page),
+            sounded_page: Conv::from_wit(v.sounded_page),
+            page_count: Conv::from_wit(v.page_count),
+            built_revision: Conv::from_wit(v.built_revision),
+            dirty: Conv::from_wit(v.dirty),
+            content_entity: Conv::from_wit(v.content_entity),
+            left_corner: Conv::from_wit(v.left_corner),
+            right_corner: Conv::from_wit(v.right_corner),
+            minimized: Conv::from_wit(v.minimized),
+        }
+    }
+}
+
+impl Conv<w::SplitMenuWindow> for s::SplitMenuWindow {
+    fn to_wit(&self) -> w::SplitMenuWindow {
+        w::SplitMenuWindow {
+            serial: Conv::to_wit(&self.serial),
+            max_amount: Conv::to_wit(&self.max_amount),
+            slider: Conv::to_wit(&self.slider),
+            text: Conv::to_wit(&self.text),
+            ok: Conv::to_wit(&self.ok),
+            last_slider: Conv::to_wit(&self.last_slider),
+            last_text: Conv::to_wit(&self.last_text),
+            graphic: Conv::to_wit(&self.graphic),
+            hue: Conv::to_wit(&self.hue),
+            source_ui_entity: Conv::to_wit(&self.source_ui_entity),
+            source_container: Conv::to_wit(&self.source_container),
+            original_graphic: Conv::to_wit(&self.original_graphic),
+            original_hue: Conv::to_wit(&self.original_hue),
+            original_amount: Conv::to_wit(&self.original_amount),
+            original_x: Conv::to_wit(&self.original_x),
+            original_y: Conv::to_wit(&self.original_y),
+            original_z: Conv::to_wit(&self.original_z),
+            original_container: Conv::to_wit(&self.original_container),
+            original_grid_index: Conv::to_wit(&self.original_grid_index),
+            original_from_slot: Conv::to_wit(&self.original_from_slot),
+        }
+    }
+    fn from_wit(v: w::SplitMenuWindow) -> s::SplitMenuWindow {
+        s::SplitMenuWindow {
+            serial: Conv::from_wit(v.serial),
+            max_amount: Conv::from_wit(v.max_amount),
+            slider: Conv::from_wit(v.slider),
+            text: Conv::from_wit(v.text),
+            ok: Conv::from_wit(v.ok),
+            last_slider: Conv::from_wit(v.last_slider),
+            last_text: Conv::from_wit(v.last_text),
+            graphic: Conv::from_wit(v.graphic),
+            hue: Conv::from_wit(v.hue),
+            source_ui_entity: Conv::from_wit(v.source_ui_entity),
+            source_container: Conv::from_wit(v.source_container),
+            original_graphic: Conv::from_wit(v.original_graphic),
+            original_hue: Conv::from_wit(v.original_hue),
+            original_amount: Conv::from_wit(v.original_amount),
+            original_x: Conv::from_wit(v.original_x),
+            original_y: Conv::from_wit(v.original_y),
+            original_z: Conv::from_wit(v.original_z),
+            original_container: Conv::from_wit(v.original_container),
+            original_grid_index: Conv::from_wit(v.original_grid_index),
+            original_from_slot: Conv::from_wit(v.original_from_slot),
+        }
+    }
+}
+
+impl Conv<w::TipNoticeWindow> for s::TipNoticeWindow {
+    fn to_wit(&self) -> w::TipNoticeWindow {
+        w::TipNoticeWindow {
+            tip_serial: Conv::to_wit(&self.tip_serial),
+            special_height: Conv::to_wit(&self.special_height),
+            width: Conv::to_wit(&self.width),
+            mid_entity: Conv::to_wit(&self.mid_entity),
+            bottom_entity: Conv::to_wit(&self.bottom_entity),
+            expander_entity: Conv::to_wit(&self.expander_entity),
+            prev_entity: Conv::to_wit(&self.prev_entity),
+            next_entity: Conv::to_wit(&self.next_entity),
+        }
+    }
+    fn from_wit(v: w::TipNoticeWindow) -> s::TipNoticeWindow {
+        s::TipNoticeWindow {
+            tip_serial: Conv::from_wit(v.tip_serial),
+            special_height: Conv::from_wit(v.special_height),
+            width: Conv::from_wit(v.width),
+            mid_entity: Conv::from_wit(v.mid_entity),
+            bottom_entity: Conv::from_wit(v.bottom_entity),
+            expander_entity: Conv::from_wit(v.expander_entity),
+            prev_entity: Conv::from_wit(v.prev_entity),
+            next_entity: Conv::from_wit(v.next_entity),
+        }
+    }
+}
+
+impl Conv<w::TradeWindow> for s::TradeWindow {
+    fn to_wit(&self) -> w::TradeWindow {
+        w::TradeWindow {
+            serial: Conv::to_wit(&self.serial),
+            id1: Conv::to_wit(&self.id1),
+            id2: Conv::to_wit(&self.id2),
+            im_accepting: Conv::to_wit(&self.im_accepting),
+            he_is_accepting: Conv::to_wit(&self.he_is_accepting),
+            is_new: Conv::to_wit(&self.is_new),
+        }
+    }
+    fn from_wit(v: w::TradeWindow) -> s::TradeWindow {
+        s::TradeWindow {
+            serial: Conv::from_wit(v.serial),
+            id1: Conv::from_wit(v.id1),
+            id2: Conv::from_wit(v.id2),
+            im_accepting: Conv::from_wit(v.im_accepting),
+            he_is_accepting: Conv::from_wit(v.he_is_accepting),
+            is_new: Conv::from_wit(v.is_new),
+        }
+    }
+}
+
+impl Conv<w::ModMoveRequest> for s::ModMoveRequest {
+    fn to_wit(&self) -> w::ModMoveRequest {
+        w::ModMoveRequest {
+            direction: Conv::to_wit(&self.direction),
+            run: Conv::to_wit(&self.run),
+            sequence: Conv::to_wit(&self.sequence),
+        }
+    }
+    fn from_wit(v: w::ModMoveRequest) -> s::ModMoveRequest {
+        s::ModMoveRequest {
+            direction: Conv::from_wit(v.direction),
+            run: Conv::from_wit(v.run),
+            sequence: Conv::from_wit(v.sequence),
+        }
+    }
+}
+
+impl Conv<w::PartyMember> for s::PartyMemberDto {
+    fn to_wit(&self) -> w::PartyMember {
+        w::PartyMember {
+            serial: Conv::to_wit(&self.serial),
+            name: Conv::to_wit(&self.name),
+        }
+    }
+    fn from_wit(v: w::PartyMember) -> s::PartyMemberDto {
+        s::PartyMemberDto {
+            serial: Conv::from_wit(v.serial),
+            name: Conv::from_wit(v.name),
+        }
+    }
+}
+
+impl Conv<w::Party> for s::PartyDto {
+    fn to_wit(&self) -> w::Party {
+        w::Party {
+            leader: Conv::to_wit(&self.leader),
+            members: Conv::to_wit(&self.members),
+            in_party: Conv::to_wit(&self.in_party),
+            can_loot: Conv::to_wit(&self.can_loot),
+        }
+    }
+    fn from_wit(v: w::Party) -> s::PartyDto {
+        s::PartyDto {
+            leader: Conv::from_wit(v.leader),
+            members: Conv::from_wit(v.members),
+            in_party: Conv::from_wit(v.in_party),
+            can_loot: Conv::from_wit(v.can_loot),
+        }
+    }
+}
+
+impl Conv<w::Spellbook> for s::SpellbookDto {
+    fn to_wit(&self) -> w::Spellbook {
+        w::Spellbook {
+            serial: Conv::to_wit(&self.serial),
+            book_type: Conv::to_wit(&self.book_type),
+            spells: Conv::to_wit(&self.spells),
+        }
+    }
+    fn from_wit(v: w::Spellbook) -> s::SpellbookDto {
+        s::SpellbookDto {
+            serial: Conv::from_wit(v.serial),
+            book_type: Conv::from_wit(v.book_type),
+            spells: Conv::from_wit(v.spells),
+        }
+    }
+}
+
+impl Conv<w::Spellbooks> for s::SpellbooksDto {
+    fn to_wit(&self) -> w::Spellbooks {
+        w::Spellbooks {
+            revision: Conv::to_wit(&self.revision),
+            books: Conv::to_wit(&self.books),
+        }
+    }
+    fn from_wit(v: w::Spellbooks) -> s::SpellbooksDto {
+        s::SpellbooksDto {
+            revision: Conv::from_wit(v.revision),
+            books: Conv::from_wit(v.books),
+        }
+    }
+}
+
+impl Conv<w::PlayerStep> for s::PlayerStepDto {
+    fn to_wit(&self) -> w::PlayerStep {
+        w::PlayerStep {
+            sequence: Conv::to_wit(&self.sequence),
+            direction: Conv::to_wit(&self.direction),
+            x: Conv::to_wit(&self.x),
+            y: Conv::to_wit(&self.y),
+            z: Conv::to_wit(&self.z),
+        }
+    }
+    fn from_wit(v: w::PlayerStep) -> s::PlayerStepDto {
+        s::PlayerStepDto {
+            sequence: Conv::from_wit(v.sequence),
+            direction: Conv::from_wit(v.direction),
+            x: Conv::from_wit(v.x),
+            y: Conv::from_wit(v.y),
+            z: Conv::from_wit(v.z),
+        }
+    }
+}
+
+impl Conv<w::PlayerSteps> for s::PlayerStepsDto {
+    fn to_wit(&self) -> w::PlayerSteps {
+        w::PlayerSteps {
+            last_step: Conv::to_wit(&self.last_step),
+            count: Conv::to_wit(&self.count),
+            sequence: Conv::to_wit(&self.sequence),
+            resync_sent: Conv::to_wit(&self.resync_sent),
+            steps: Conv::to_wit(&self.steps),
+        }
+    }
+    fn from_wit(v: w::PlayerSteps) -> s::PlayerStepsDto {
+        s::PlayerStepsDto {
+            last_step: Conv::from_wit(v.last_step),
+            count: Conv::from_wit(v.count),
+            sequence: Conv::from_wit(v.sequence),
+            resync_sent: Conv::from_wit(v.resync_sent),
+            steps: Conv::from_wit(v.steps),
+        }
+    }
+}
+
+impl Conv<w::CharInfo> for s::CharInfoDto {
+    fn to_wit(&self) -> w::CharInfo {
+        w::CharInfo {
+            name: Conv::to_wit(&self.name),
+            index: Conv::to_wit(&self.index),
+        }
+    }
+    fn from_wit(v: w::CharInfo) -> s::CharInfoDto {
+        s::CharInfoDto {
+            name: Conv::from_wit(v.name),
+            index: Conv::from_wit(v.index),
+        }
+    }
+}
+
+impl Conv<w::TownInfo> for s::TownInfoDto {
+    fn to_wit(&self) -> w::TownInfo {
+        w::TownInfo {
+            index: Conv::to_wit(&self.index),
+            name: Conv::to_wit(&self.name),
+            building: Conv::to_wit(&self.building),
+            x: Conv::to_wit(&self.x),
+            y: Conv::to_wit(&self.y),
+            z: Conv::to_wit(&self.z),
+            map: Conv::to_wit(&self.map),
+            cliloc_description: Conv::to_wit(&self.cliloc_description),
+        }
+    }
+    fn from_wit(v: w::TownInfo) -> s::TownInfoDto {
+        s::TownInfoDto {
+            index: Conv::from_wit(v.index),
+            name: Conv::from_wit(v.name),
+            building: Conv::from_wit(v.building),
+            x: Conv::from_wit(v.x),
+            y: Conv::from_wit(v.y),
+            z: Conv::from_wit(v.z),
+            map: Conv::from_wit(v.map),
+            cliloc_description: Conv::from_wit(v.cliloc_description),
+        }
+    }
+}
+
+impl Conv<w::CharacterSelection> for s::CharacterSelectionDto {
+    fn to_wit(&self) -> w::CharacterSelection {
+        w::CharacterSelection {
+            characters: Conv::to_wit(&self.characters),
+            towns: Conv::to_wit(&self.towns),
+        }
+    }
+    fn from_wit(v: w::CharacterSelection) -> s::CharacterSelectionDto {
+        s::CharacterSelectionDto {
+            characters: Conv::from_wit(v.characters),
+            towns: Conv::from_wit(v.towns),
+        }
+    }
+}
+
+impl Conv<w::LoginErrorInfo> for s::LoginErrorInfo {
+    fn to_wit(&self) -> w::LoginErrorInfo {
+        w::LoginErrorInfo {
+            error_message: Conv::to_wit(&self.error_message),
+        }
+    }
+    fn from_wit(v: w::LoginErrorInfo) -> s::LoginErrorInfo {
+        s::LoginErrorInfo {
+            error_message: Conv::from_wit(v.error_message),
+        }
+    }
+}
+
+impl Conv<w::LoginErrorsInfoEvent> for s::LoginErrorsInfoEvent {
+    fn to_wit(&self) -> w::LoginErrorsInfoEvent {
+        w::LoginErrorsInfoEvent {
+            error: Conv::to_wit(&self.error),
+        }
+    }
+    fn from_wit(v: w::LoginErrorsInfoEvent) -> s::LoginErrorsInfoEvent {
+        s::LoginErrorsInfoEvent {
+            error: Conv::from_wit(v.error),
+        }
+    }
+}
+
+impl Conv<w::OnLoginRequest> for s::OnLoginRequest {
+    fn to_wit(&self) -> w::OnLoginRequest {
+        w::OnLoginRequest {
+            username: Conv::to_wit(&self.username),
+            password: Conv::to_wit(&self.password),
+            address: Conv::to_wit(&self.address),
+            port: Conv::to_wit(&self.port),
+        }
+    }
+    fn from_wit(v: w::OnLoginRequest) -> s::OnLoginRequest {
+        s::OnLoginRequest {
+            username: Conv::from_wit(v.username),
+            password: Conv::from_wit(v.password),
+            address: Conv::from_wit(v.address),
+            port: Conv::from_wit(v.port),
+        }
+    }
+}
+
+impl Conv<w::ServerInfo> for s::ServerInfo {
+    fn to_wit(&self) -> w::ServerInfo {
+        w::ServerInfo {
+            index: Conv::to_wit(&self.index),
+            name: Conv::to_wit(&self.name),
+            percent_full: Conv::to_wit(&self.percent_full),
+            time_zone: Conv::to_wit(&self.time_zone),
+            ip: Conv::to_wit(&self.ip),
+        }
+    }
+    fn from_wit(v: w::ServerInfo) -> s::ServerInfo {
+        s::ServerInfo {
+            index: Conv::from_wit(v.index),
+            name: Conv::from_wit(v.name),
+            percent_full: Conv::from_wit(v.percent_full),
+            time_zone: Conv::from_wit(v.time_zone),
+            ip: Conv::from_wit(v.ip),
+        }
+    }
+}
+
+impl Conv<w::ServerSelectionInfoEvent> for s::ServerSelectionInfoEvent {
+    fn to_wit(&self) -> w::ServerSelectionInfoEvent {
+        w::ServerSelectionInfoEvent {
+            servers: Conv::to_wit(&self.servers),
+        }
+    }
+    fn from_wit(v: w::ServerSelectionInfoEvent) -> s::ServerSelectionInfoEvent {
+        s::ServerSelectionInfoEvent {
+            servers: Conv::from_wit(v.servers),
+        }
+    }
+}
+
+impl Conv<w::ClipboardSet> for s::ClipboardSetDto {
+    fn to_wit(&self) -> w::ClipboardSet {
+        w::ClipboardSet {
+            seq: Conv::to_wit(&self.seq),
+            text: Conv::to_wit(&self.text),
+        }
+    }
+    fn from_wit(v: w::ClipboardSet) -> s::ClipboardSetDto {
+        s::ClipboardSetDto {
+            seq: Conv::from_wit(v.seq),
+            text: Conv::from_wit(v.text),
+        }
+    }
+}
+
+impl Conv<w::FocusedInput> for s::FocusedInput {
+    fn to_wit(&self) -> w::FocusedInput {
+        w::FocusedInput {
+            entity: Conv::to_wit(&self.entity),
+        }
+    }
+    fn from_wit(v: w::FocusedInput) -> s::FocusedInput {
+        s::FocusedInput {
+            entity: Conv::from_wit(v.entity),
+        }
+    }
+}
+
+impl Conv<w::MaskedText> for s::MaskedText {
+    fn to_wit(&self) -> w::MaskedText {
+        w::MaskedText {
+            value: Conv::to_wit(&self.value),
+            mask_char: Conv::to_wit(&self.mask_char),
+        }
+    }
+    fn from_wit(v: w::MaskedText) -> s::MaskedText {
+        s::MaskedText {
+            value: Conv::from_wit(v.value),
+            mask_char: Conv::from_wit(v.mask_char),
+        }
+    }
+}
+
+impl Conv<w::TextClipboardAction> for s::TextClipboardActionDto {
+    fn to_wit(&self) -> w::TextClipboardAction {
+        w::TextClipboardAction {
+            entity: Conv::to_wit(&self.entity),
+            action: Conv::to_wit(&self.action),
+            seq: Conv::to_wit(&self.seq),
+        }
+    }
+    fn from_wit(v: w::TextClipboardAction) -> s::TextClipboardActionDto {
+        s::TextClipboardActionDto {
+            entity: Conv::from_wit(v.entity),
+            action: Conv::from_wit(v.action),
+            seq: Conv::from_wit(v.seq),
+        }
+    }
+}
+
+impl Conv<w::TextCompletion> for s::TextCompletionDto {
+    fn to_wit(&self) -> w::TextCompletion {
+        w::TextCompletion {
+            entity: Conv::to_wit(&self.entity),
+            prefix: Conv::to_wit(&self.prefix),
+            items: Conv::to_wit(&self.items),
+        }
+    }
+    fn from_wit(v: w::TextCompletion) -> s::TextCompletionDto {
+        s::TextCompletionDto {
+            entity: Conv::from_wit(v.entity),
+            prefix: Conv::from_wit(v.prefix),
+            items: Conv::from_wit(v.items),
+        }
+    }
+}
+
+impl Conv<w::TextCompletionPick> for s::TextCompletionPickDto {
+    fn to_wit(&self) -> w::TextCompletionPick {
+        w::TextCompletionPick {
+            entity: Conv::to_wit(&self.entity),
+            index: Conv::to_wit(&self.index),
+            seq: Conv::to_wit(&self.seq),
+        }
+    }
+    fn from_wit(v: w::TextCompletionPick) -> s::TextCompletionPickDto {
+        s::TextCompletionPickDto {
+            entity: Conv::from_wit(v.entity),
+            index: Conv::from_wit(v.index),
+            seq: Conv::from_wit(v.seq),
+        }
+    }
+}
+
+impl Conv<w::UiTooltipSerial> for s::UiTooltipSerial {
+    fn to_wit(&self) -> w::UiTooltipSerial {
+        w::UiTooltipSerial {
+            serial: Conv::to_wit(&self.serial),
+        }
+    }
+    fn from_wit(v: w::UiTooltipSerial) -> s::UiTooltipSerial {
+        s::UiTooltipSerial {
+            serial: Conv::from_wit(v.serial),
+        }
+    }
+}
+
 /// Whether `T` is read typed: a record through its column, a tag as its default.
 pub(crate) fn has_column<T: 'static>() -> bool {
     is::<T, s::Hits>()
@@ -2105,6 +3025,39 @@ pub(crate) fn has_column<T: 'static>() -> bool {
         || is::<T, s::TopBarButton>()
         || is::<T, s::TopBarFull>()
         || is::<T, s::IsTopBar>()
+        || is::<T, s::MobAnimation>()
+        || is::<T, s::IsMulti>()
+        || is::<T, s::MobileStepsDto>()
+        || is::<T, s::BookWindow>()
+        || is::<T, s::BuffGumpUI>()
+        || is::<T, s::BulletinBoardWindow>()
+        || is::<T, s::CombatBookWindow>()
+        || is::<T, s::HouseDesignWindow>()
+        || is::<T, s::JournalWindow>()
+        || is::<T, s::LogoutGumpWindow>()
+        || is::<T, s::MapWindow>()
+        || is::<T, s::MenuGumpWindow>()
+        || is::<T, s::MessageBoxWindow>()
+        || is::<T, s::MiniMapWindow>()
+        || is::<T, s::PaperdollWindow>()
+        || is::<T, s::PartyInviteWindow>()
+        || is::<T, s::PartyManifestWindow>()
+        || is::<T, s::ProfileWindow>()
+        || is::<T, s::RacialBookWindow>()
+        || is::<T, s::SkillsWindow>()
+        || is::<T, s::SpellbookWindow>()
+        || is::<T, s::SplitMenuWindow>()
+        || is::<T, s::TipNoticeWindow>()
+        || is::<T, s::TradeWindow>()
+        || is::<T, s::WorldMapWindow>()
+        || is::<T, s::CharCreationScene>()
+        || is::<T, s::CharacterSelectionScene>()
+        || is::<T, s::GameScene>()
+        || is::<T, s::LoginScene>()
+        || is::<T, s::LoginErrorScene>()
+        || is::<T, s::ServerSelectionScene>()
+        || is::<T, s::MaskedText>()
+        || is::<T, s::UiTooltipSerial>()
 }
 
 /// `T`'s column of reading term `term` (`n` rows), aligned with `query.entities`; `None`
@@ -2310,6 +3263,82 @@ pub(crate) fn column<T: 'static>(q: &c::Query, term: u8, n: usize) -> Option<Vec
         let v: Vec<s::UiTooltip> = c::column_tooltip(q, term).into_iter().map(Conv::from_wit).collect();
         return Some(cast(v));
     }
+    if is::<T, s::MobAnimation>() {
+        let v: Vec<s::MobAnimation> = c::column_animation(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::MobileStepsDto>() {
+        let v: Vec<s::MobileStepsDto> = c::column_mob_steps(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::CombatBookWindow>() {
+        let v: Vec<s::CombatBookWindow> = c::column_combat_book(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::HouseDesignWindow>() {
+        let v: Vec<s::HouseDesignWindow> = c::column_house_design(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::JournalWindow>() {
+        let v: Vec<s::JournalWindow> = c::column_journal(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::MenuGumpWindow>() {
+        let v: Vec<s::MenuGumpWindow> = c::column_menu(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::MiniMapWindow>() {
+        let v: Vec<s::MiniMapWindow> = c::column_minimap(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::PaperdollWindow>() {
+        let v: Vec<s::PaperdollWindow> = c::column_paperdoll(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::PartyInviteWindow>() {
+        let v: Vec<s::PartyInviteWindow> = c::column_party_invite(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::PartyManifestWindow>() {
+        let v: Vec<s::PartyManifestWindow> = c::column_party_manifest(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::ProfileWindow>() {
+        let v: Vec<s::ProfileWindow> = c::column_profile(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::RacialBookWindow>() {
+        let v: Vec<s::RacialBookWindow> = c::column_racial_book(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::SkillsWindow>() {
+        let v: Vec<s::SkillsWindow> = c::column_gump_skills(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::SpellbookWindow>() {
+        let v: Vec<s::SpellbookWindow> = c::column_spellbook(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::SplitMenuWindow>() {
+        let v: Vec<s::SplitMenuWindow> = c::column_split_menu(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::TipNoticeWindow>() {
+        let v: Vec<s::TipNoticeWindow> = c::column_tip_notice(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::TradeWindow>() {
+        let v: Vec<s::TradeWindow> = c::column_trade(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::MaskedText>() {
+        let v: Vec<s::MaskedText> = c::column_masked_text(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::UiTooltipSerial>() {
+        let v: Vec<s::UiTooltipSerial> = c::column_tooltip_serial(q, term).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
     if is::<T, s::UiMovable>() {
         return Some(cast((0..n).map(|_| s::UiMovable {}).collect::<Vec<_>>()));
     }
@@ -2375,6 +3404,48 @@ pub(crate) fn column<T: 'static>(q: &c::Query, term: u8, n: usize) -> Option<Vec
     }
     if is::<T, s::IsTopBar>() {
         return Some(cast((0..n).map(|_| s::IsTopBar {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::IsMulti>() {
+        return Some(cast((0..n).map(|_| s::IsMulti {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::BookWindow>() {
+        return Some(cast((0..n).map(|_| s::BookWindow {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::BuffGumpUI>() {
+        return Some(cast((0..n).map(|_| s::BuffGumpUI {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::BulletinBoardWindow>() {
+        return Some(cast((0..n).map(|_| s::BulletinBoardWindow {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::LogoutGumpWindow>() {
+        return Some(cast((0..n).map(|_| s::LogoutGumpWindow {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::MapWindow>() {
+        return Some(cast((0..n).map(|_| s::MapWindow {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::MessageBoxWindow>() {
+        return Some(cast((0..n).map(|_| s::MessageBoxWindow {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::WorldMapWindow>() {
+        return Some(cast((0..n).map(|_| s::WorldMapWindow {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::CharCreationScene>() {
+        return Some(cast((0..n).map(|_| s::CharCreationScene {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::CharacterSelectionScene>() {
+        return Some(cast((0..n).map(|_| s::CharacterSelectionScene {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::GameScene>() {
+        return Some(cast((0..n).map(|_| s::GameScene {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::LoginScene>() {
+        return Some(cast((0..n).map(|_| s::LoginScene {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::LoginErrorScene>() {
+        return Some(cast((0..n).map(|_| s::LoginErrorScene {}).collect::<Vec<_>>()));
+    }
+    if is::<T, s::ServerSelectionScene>() {
+        return Some(cast((0..n).map(|_| s::ServerSelectionScene {}).collect::<Vec<_>>()));
     }
     None
 }
@@ -2597,6 +3668,105 @@ pub(crate) fn dup<T: 'static>(v: &T) -> Option<T> {
     if is::<T, s::IsTopBar>() {
         return Some(cast(cast_ref::<T, s::IsTopBar>(v).clone()));
     }
+    if is::<T, s::MobAnimation>() {
+        return Some(cast(cast_ref::<T, s::MobAnimation>(v).clone()));
+    }
+    if is::<T, s::IsMulti>() {
+        return Some(cast(cast_ref::<T, s::IsMulti>(v).clone()));
+    }
+    if is::<T, s::MobileStepsDto>() {
+        return Some(cast(cast_ref::<T, s::MobileStepsDto>(v).clone()));
+    }
+    if is::<T, s::BookWindow>() {
+        return Some(cast(cast_ref::<T, s::BookWindow>(v).clone()));
+    }
+    if is::<T, s::BuffGumpUI>() {
+        return Some(cast(cast_ref::<T, s::BuffGumpUI>(v).clone()));
+    }
+    if is::<T, s::BulletinBoardWindow>() {
+        return Some(cast(cast_ref::<T, s::BulletinBoardWindow>(v).clone()));
+    }
+    if is::<T, s::CombatBookWindow>() {
+        return Some(cast(cast_ref::<T, s::CombatBookWindow>(v).clone()));
+    }
+    if is::<T, s::HouseDesignWindow>() {
+        return Some(cast(cast_ref::<T, s::HouseDesignWindow>(v).clone()));
+    }
+    if is::<T, s::JournalWindow>() {
+        return Some(cast(cast_ref::<T, s::JournalWindow>(v).clone()));
+    }
+    if is::<T, s::LogoutGumpWindow>() {
+        return Some(cast(cast_ref::<T, s::LogoutGumpWindow>(v).clone()));
+    }
+    if is::<T, s::MapWindow>() {
+        return Some(cast(cast_ref::<T, s::MapWindow>(v).clone()));
+    }
+    if is::<T, s::MenuGumpWindow>() {
+        return Some(cast(cast_ref::<T, s::MenuGumpWindow>(v).clone()));
+    }
+    if is::<T, s::MessageBoxWindow>() {
+        return Some(cast(cast_ref::<T, s::MessageBoxWindow>(v).clone()));
+    }
+    if is::<T, s::MiniMapWindow>() {
+        return Some(cast(cast_ref::<T, s::MiniMapWindow>(v).clone()));
+    }
+    if is::<T, s::PaperdollWindow>() {
+        return Some(cast(cast_ref::<T, s::PaperdollWindow>(v).clone()));
+    }
+    if is::<T, s::PartyInviteWindow>() {
+        return Some(cast(cast_ref::<T, s::PartyInviteWindow>(v).clone()));
+    }
+    if is::<T, s::PartyManifestWindow>() {
+        return Some(cast(cast_ref::<T, s::PartyManifestWindow>(v).clone()));
+    }
+    if is::<T, s::ProfileWindow>() {
+        return Some(cast(cast_ref::<T, s::ProfileWindow>(v).clone()));
+    }
+    if is::<T, s::RacialBookWindow>() {
+        return Some(cast(cast_ref::<T, s::RacialBookWindow>(v).clone()));
+    }
+    if is::<T, s::SkillsWindow>() {
+        return Some(cast(cast_ref::<T, s::SkillsWindow>(v).clone()));
+    }
+    if is::<T, s::SpellbookWindow>() {
+        return Some(cast(cast_ref::<T, s::SpellbookWindow>(v).clone()));
+    }
+    if is::<T, s::SplitMenuWindow>() {
+        return Some(cast(cast_ref::<T, s::SplitMenuWindow>(v).clone()));
+    }
+    if is::<T, s::TipNoticeWindow>() {
+        return Some(cast(cast_ref::<T, s::TipNoticeWindow>(v).clone()));
+    }
+    if is::<T, s::TradeWindow>() {
+        return Some(cast(cast_ref::<T, s::TradeWindow>(v).clone()));
+    }
+    if is::<T, s::WorldMapWindow>() {
+        return Some(cast(cast_ref::<T, s::WorldMapWindow>(v).clone()));
+    }
+    if is::<T, s::CharCreationScene>() {
+        return Some(cast(cast_ref::<T, s::CharCreationScene>(v).clone()));
+    }
+    if is::<T, s::CharacterSelectionScene>() {
+        return Some(cast(cast_ref::<T, s::CharacterSelectionScene>(v).clone()));
+    }
+    if is::<T, s::GameScene>() {
+        return Some(cast(cast_ref::<T, s::GameScene>(v).clone()));
+    }
+    if is::<T, s::LoginScene>() {
+        return Some(cast(cast_ref::<T, s::LoginScene>(v).clone()));
+    }
+    if is::<T, s::LoginErrorScene>() {
+        return Some(cast(cast_ref::<T, s::LoginErrorScene>(v).clone()));
+    }
+    if is::<T, s::ServerSelectionScene>() {
+        return Some(cast(cast_ref::<T, s::ServerSelectionScene>(v).clone()));
+    }
+    if is::<T, s::MaskedText>() {
+        return Some(cast(cast_ref::<T, s::MaskedText>(v).clone()));
+    }
+    if is::<T, s::UiTooltipSerial>() {
+        return Some(cast(cast_ref::<T, s::UiTooltipSerial>(v).clone()));
+    }
     None
 }
 
@@ -2802,6 +3972,82 @@ pub(crate) fn same<T: 'static>(a: &T, b: &T) -> Option<bool> {
         let (a, b) = (cast_ref::<T, s::UiTooltip>(a), cast_ref::<T, s::UiTooltip>(b));
         return Some(Conv::<w::UiTooltip>::to_wit(a) == Conv::<w::UiTooltip>::to_wit(b));
     }
+    if is::<T, s::MobAnimation>() {
+        let (a, b) = (cast_ref::<T, s::MobAnimation>(a), cast_ref::<T, s::MobAnimation>(b));
+        return Some(Conv::<w::MobAnimation>::to_wit(a) == Conv::<w::MobAnimation>::to_wit(b));
+    }
+    if is::<T, s::MobileStepsDto>() {
+        let (a, b) = (cast_ref::<T, s::MobileStepsDto>(a), cast_ref::<T, s::MobileStepsDto>(b));
+        return Some(Conv::<w::MobileSteps>::to_wit(a) == Conv::<w::MobileSteps>::to_wit(b));
+    }
+    if is::<T, s::CombatBookWindow>() {
+        let (a, b) = (cast_ref::<T, s::CombatBookWindow>(a), cast_ref::<T, s::CombatBookWindow>(b));
+        return Some(Conv::<w::CombatBookWindow>::to_wit(a) == Conv::<w::CombatBookWindow>::to_wit(b));
+    }
+    if is::<T, s::HouseDesignWindow>() {
+        let (a, b) = (cast_ref::<T, s::HouseDesignWindow>(a), cast_ref::<T, s::HouseDesignWindow>(b));
+        return Some(Conv::<w::HouseDesignWindow>::to_wit(a) == Conv::<w::HouseDesignWindow>::to_wit(b));
+    }
+    if is::<T, s::JournalWindow>() {
+        let (a, b) = (cast_ref::<T, s::JournalWindow>(a), cast_ref::<T, s::JournalWindow>(b));
+        return Some(Conv::<w::JournalWindow>::to_wit(a) == Conv::<w::JournalWindow>::to_wit(b));
+    }
+    if is::<T, s::MenuGumpWindow>() {
+        let (a, b) = (cast_ref::<T, s::MenuGumpWindow>(a), cast_ref::<T, s::MenuGumpWindow>(b));
+        return Some(Conv::<w::MenuGumpWindow>::to_wit(a) == Conv::<w::MenuGumpWindow>::to_wit(b));
+    }
+    if is::<T, s::MiniMapWindow>() {
+        let (a, b) = (cast_ref::<T, s::MiniMapWindow>(a), cast_ref::<T, s::MiniMapWindow>(b));
+        return Some(Conv::<w::MiniMapWindow>::to_wit(a) == Conv::<w::MiniMapWindow>::to_wit(b));
+    }
+    if is::<T, s::PaperdollWindow>() {
+        let (a, b) = (cast_ref::<T, s::PaperdollWindow>(a), cast_ref::<T, s::PaperdollWindow>(b));
+        return Some(Conv::<w::PaperdollWindow>::to_wit(a) == Conv::<w::PaperdollWindow>::to_wit(b));
+    }
+    if is::<T, s::PartyInviteWindow>() {
+        let (a, b) = (cast_ref::<T, s::PartyInviteWindow>(a), cast_ref::<T, s::PartyInviteWindow>(b));
+        return Some(Conv::<w::PartyInviteWindow>::to_wit(a) == Conv::<w::PartyInviteWindow>::to_wit(b));
+    }
+    if is::<T, s::PartyManifestWindow>() {
+        let (a, b) = (cast_ref::<T, s::PartyManifestWindow>(a), cast_ref::<T, s::PartyManifestWindow>(b));
+        return Some(Conv::<w::PartyManifestWindow>::to_wit(a) == Conv::<w::PartyManifestWindow>::to_wit(b));
+    }
+    if is::<T, s::ProfileWindow>() {
+        let (a, b) = (cast_ref::<T, s::ProfileWindow>(a), cast_ref::<T, s::ProfileWindow>(b));
+        return Some(Conv::<w::ProfileWindow>::to_wit(a) == Conv::<w::ProfileWindow>::to_wit(b));
+    }
+    if is::<T, s::RacialBookWindow>() {
+        let (a, b) = (cast_ref::<T, s::RacialBookWindow>(a), cast_ref::<T, s::RacialBookWindow>(b));
+        return Some(Conv::<w::RacialBookWindow>::to_wit(a) == Conv::<w::RacialBookWindow>::to_wit(b));
+    }
+    if is::<T, s::SkillsWindow>() {
+        let (a, b) = (cast_ref::<T, s::SkillsWindow>(a), cast_ref::<T, s::SkillsWindow>(b));
+        return Some(Conv::<w::SkillsWindow>::to_wit(a) == Conv::<w::SkillsWindow>::to_wit(b));
+    }
+    if is::<T, s::SpellbookWindow>() {
+        let (a, b) = (cast_ref::<T, s::SpellbookWindow>(a), cast_ref::<T, s::SpellbookWindow>(b));
+        return Some(Conv::<w::SpellbookWindow>::to_wit(a) == Conv::<w::SpellbookWindow>::to_wit(b));
+    }
+    if is::<T, s::SplitMenuWindow>() {
+        let (a, b) = (cast_ref::<T, s::SplitMenuWindow>(a), cast_ref::<T, s::SplitMenuWindow>(b));
+        return Some(Conv::<w::SplitMenuWindow>::to_wit(a) == Conv::<w::SplitMenuWindow>::to_wit(b));
+    }
+    if is::<T, s::TipNoticeWindow>() {
+        let (a, b) = (cast_ref::<T, s::TipNoticeWindow>(a), cast_ref::<T, s::TipNoticeWindow>(b));
+        return Some(Conv::<w::TipNoticeWindow>::to_wit(a) == Conv::<w::TipNoticeWindow>::to_wit(b));
+    }
+    if is::<T, s::TradeWindow>() {
+        let (a, b) = (cast_ref::<T, s::TradeWindow>(a), cast_ref::<T, s::TradeWindow>(b));
+        return Some(Conv::<w::TradeWindow>::to_wit(a) == Conv::<w::TradeWindow>::to_wit(b));
+    }
+    if is::<T, s::MaskedText>() {
+        let (a, b) = (cast_ref::<T, s::MaskedText>(a), cast_ref::<T, s::MaskedText>(b));
+        return Some(Conv::<w::MaskedText>::to_wit(a) == Conv::<w::MaskedText>::to_wit(b));
+    }
+    if is::<T, s::UiTooltipSerial>() {
+        let (a, b) = (cast_ref::<T, s::UiTooltipSerial>(a), cast_ref::<T, s::UiTooltipSerial>(b));
+        return Some(Conv::<w::UiTooltipSerial>::to_wit(a) == Conv::<w::UiTooltipSerial>::to_wit(b));
+    }
     if is::<T, s::UiMovable>() {
         return Some(true);
     }
@@ -2866,6 +4112,48 @@ pub(crate) fn same<T: 'static>(a: &T, b: &T) -> Option<bool> {
         return Some(true);
     }
     if is::<T, s::IsTopBar>() {
+        return Some(true);
+    }
+    if is::<T, s::IsMulti>() {
+        return Some(true);
+    }
+    if is::<T, s::BookWindow>() {
+        return Some(true);
+    }
+    if is::<T, s::BuffGumpUI>() {
+        return Some(true);
+    }
+    if is::<T, s::BulletinBoardWindow>() {
+        return Some(true);
+    }
+    if is::<T, s::LogoutGumpWindow>() {
+        return Some(true);
+    }
+    if is::<T, s::MapWindow>() {
+        return Some(true);
+    }
+    if is::<T, s::MessageBoxWindow>() {
+        return Some(true);
+    }
+    if is::<T, s::WorldMapWindow>() {
+        return Some(true);
+    }
+    if is::<T, s::CharCreationScene>() {
+        return Some(true);
+    }
+    if is::<T, s::CharacterSelectionScene>() {
+        return Some(true);
+    }
+    if is::<T, s::GameScene>() {
+        return Some(true);
+    }
+    if is::<T, s::LoginScene>() {
+        return Some(true);
+    }
+    if is::<T, s::LoginErrorScene>() {
+        return Some(true);
+    }
+    if is::<T, s::ServerSelectionScene>() {
         return Some(true);
     }
     None
@@ -3069,6 +4357,91 @@ pub(crate) fn set<T: 'static>(q: &c::Query, entity: u64, term: u8, v: &T) -> boo
         c::set_tooltip(q, entity, term, &rec);
         return true;
     }
+    if is::<T, s::CombatBookWindow>() {
+        let rec: w::CombatBookWindow = cast_ref::<T, s::CombatBookWindow>(v).to_wit();
+        c::set_combat_book(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::HouseDesignWindow>() {
+        let rec: w::HouseDesignWindow = cast_ref::<T, s::HouseDesignWindow>(v).to_wit();
+        c::set_house_design(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::JournalWindow>() {
+        let rec: w::JournalWindow = cast_ref::<T, s::JournalWindow>(v).to_wit();
+        c::set_journal(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::MenuGumpWindow>() {
+        let rec: w::MenuGumpWindow = cast_ref::<T, s::MenuGumpWindow>(v).to_wit();
+        c::set_menu(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::MiniMapWindow>() {
+        let rec: w::MiniMapWindow = cast_ref::<T, s::MiniMapWindow>(v).to_wit();
+        c::set_minimap(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::PaperdollWindow>() {
+        let rec: w::PaperdollWindow = cast_ref::<T, s::PaperdollWindow>(v).to_wit();
+        c::set_paperdoll(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::PartyInviteWindow>() {
+        let rec: w::PartyInviteWindow = cast_ref::<T, s::PartyInviteWindow>(v).to_wit();
+        c::set_party_invite(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::PartyManifestWindow>() {
+        let rec: w::PartyManifestWindow = cast_ref::<T, s::PartyManifestWindow>(v).to_wit();
+        c::set_party_manifest(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::ProfileWindow>() {
+        let rec: w::ProfileWindow = cast_ref::<T, s::ProfileWindow>(v).to_wit();
+        c::set_profile(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::RacialBookWindow>() {
+        let rec: w::RacialBookWindow = cast_ref::<T, s::RacialBookWindow>(v).to_wit();
+        c::set_racial_book(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::SkillsWindow>() {
+        let rec: w::SkillsWindow = cast_ref::<T, s::SkillsWindow>(v).to_wit();
+        c::set_gump_skills(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::SpellbookWindow>() {
+        let rec: w::SpellbookWindow = cast_ref::<T, s::SpellbookWindow>(v).to_wit();
+        c::set_spellbook(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::SplitMenuWindow>() {
+        let rec: w::SplitMenuWindow = cast_ref::<T, s::SplitMenuWindow>(v).to_wit();
+        c::set_split_menu(q, entity, term, &rec);
+        return true;
+    }
+    if is::<T, s::TipNoticeWindow>() {
+        let rec: w::TipNoticeWindow = cast_ref::<T, s::TipNoticeWindow>(v).to_wit();
+        c::set_tip_notice(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::TradeWindow>() {
+        let rec: w::TradeWindow = cast_ref::<T, s::TradeWindow>(v).to_wit();
+        c::set_trade(q, entity, term, rec);
+        return true;
+    }
+    if is::<T, s::MaskedText>() {
+        let rec: w::MaskedText = cast_ref::<T, s::MaskedText>(v).to_wit();
+        c::set_masked_text(q, entity, term, &rec);
+        return true;
+    }
+    if is::<T, s::UiTooltipSerial>() {
+        let rec: w::UiTooltipSerial = cast_ref::<T, s::UiTooltipSerial>(v).to_wit();
+        c::set_tooltip_serial(q, entity, term, rec);
+        return true;
+    }
     false
 }
 
@@ -3129,6 +4502,33 @@ pub enum TypedInsert {
     TopbarButton,
     TopbarFull,
     TopbarRoot,
+    Buff,
+    CombatBook(w::CombatBookWindow),
+    HouseDesign(w::HouseDesignWindow),
+    Journal(w::JournalWindow),
+    Logout,
+    Menu(w::MenuGumpWindow),
+    MessageBox,
+    Minimap(w::MiniMapWindow),
+    Paperdoll(w::PaperdollWindow),
+    PartyInvite(w::PartyInviteWindow),
+    PartyManifest(w::PartyManifestWindow),
+    Profile(w::ProfileWindow),
+    RacialBook(w::RacialBookWindow),
+    GumpSkills(w::SkillsWindow),
+    Spellbook(w::SpellbookWindow),
+    SplitMenu(w::SplitMenuWindow),
+    TipNotice(w::TipNoticeWindow),
+    Trade(w::TradeWindow),
+    Worldmap,
+    CharacterCreation,
+    CharacterSelection,
+    Game,
+    Login,
+    LoginError,
+    ServerSelection,
+    MaskedText(w::MaskedText),
+    TooltipSerial(w::UiTooltipSerial),
 }
 
 /// `v` as a typed insert; `None` when `T` is inserted as JSON.
@@ -3295,6 +4695,87 @@ pub(crate) fn insert<T: 'static>(v: &T) -> Option<TypedInsert> {
     if is::<T, s::IsTopBar>() {
         return Some(TypedInsert::TopbarRoot);
     }
+    if is::<T, s::BuffGumpUI>() {
+        return Some(TypedInsert::Buff);
+    }
+    if is::<T, s::CombatBookWindow>() {
+        return Some(TypedInsert::CombatBook(cast_ref::<T, s::CombatBookWindow>(v).to_wit()));
+    }
+    if is::<T, s::HouseDesignWindow>() {
+        return Some(TypedInsert::HouseDesign(cast_ref::<T, s::HouseDesignWindow>(v).to_wit()));
+    }
+    if is::<T, s::JournalWindow>() {
+        return Some(TypedInsert::Journal(cast_ref::<T, s::JournalWindow>(v).to_wit()));
+    }
+    if is::<T, s::LogoutGumpWindow>() {
+        return Some(TypedInsert::Logout);
+    }
+    if is::<T, s::MenuGumpWindow>() {
+        return Some(TypedInsert::Menu(cast_ref::<T, s::MenuGumpWindow>(v).to_wit()));
+    }
+    if is::<T, s::MessageBoxWindow>() {
+        return Some(TypedInsert::MessageBox);
+    }
+    if is::<T, s::MiniMapWindow>() {
+        return Some(TypedInsert::Minimap(cast_ref::<T, s::MiniMapWindow>(v).to_wit()));
+    }
+    if is::<T, s::PaperdollWindow>() {
+        return Some(TypedInsert::Paperdoll(cast_ref::<T, s::PaperdollWindow>(v).to_wit()));
+    }
+    if is::<T, s::PartyInviteWindow>() {
+        return Some(TypedInsert::PartyInvite(cast_ref::<T, s::PartyInviteWindow>(v).to_wit()));
+    }
+    if is::<T, s::PartyManifestWindow>() {
+        return Some(TypedInsert::PartyManifest(cast_ref::<T, s::PartyManifestWindow>(v).to_wit()));
+    }
+    if is::<T, s::ProfileWindow>() {
+        return Some(TypedInsert::Profile(cast_ref::<T, s::ProfileWindow>(v).to_wit()));
+    }
+    if is::<T, s::RacialBookWindow>() {
+        return Some(TypedInsert::RacialBook(cast_ref::<T, s::RacialBookWindow>(v).to_wit()));
+    }
+    if is::<T, s::SkillsWindow>() {
+        return Some(TypedInsert::GumpSkills(cast_ref::<T, s::SkillsWindow>(v).to_wit()));
+    }
+    if is::<T, s::SpellbookWindow>() {
+        return Some(TypedInsert::Spellbook(cast_ref::<T, s::SpellbookWindow>(v).to_wit()));
+    }
+    if is::<T, s::SplitMenuWindow>() {
+        return Some(TypedInsert::SplitMenu(cast_ref::<T, s::SplitMenuWindow>(v).to_wit()));
+    }
+    if is::<T, s::TipNoticeWindow>() {
+        return Some(TypedInsert::TipNotice(cast_ref::<T, s::TipNoticeWindow>(v).to_wit()));
+    }
+    if is::<T, s::TradeWindow>() {
+        return Some(TypedInsert::Trade(cast_ref::<T, s::TradeWindow>(v).to_wit()));
+    }
+    if is::<T, s::WorldMapWindow>() {
+        return Some(TypedInsert::Worldmap);
+    }
+    if is::<T, s::CharCreationScene>() {
+        return Some(TypedInsert::CharacterCreation);
+    }
+    if is::<T, s::CharacterSelectionScene>() {
+        return Some(TypedInsert::CharacterSelection);
+    }
+    if is::<T, s::GameScene>() {
+        return Some(TypedInsert::Game);
+    }
+    if is::<T, s::LoginScene>() {
+        return Some(TypedInsert::Login);
+    }
+    if is::<T, s::LoginErrorScene>() {
+        return Some(TypedInsert::LoginError);
+    }
+    if is::<T, s::ServerSelectionScene>() {
+        return Some(TypedInsert::ServerSelection);
+    }
+    if is::<T, s::MaskedText>() {
+        return Some(TypedInsert::MaskedText(cast_ref::<T, s::MaskedText>(v).to_wit()));
+    }
+    if is::<T, s::UiTooltipSerial>() {
+        return Some(TypedInsert::TooltipSerial(cast_ref::<T, s::UiTooltipSerial>(v).to_wit()));
+    }
     None
 }
 
@@ -3356,6 +4837,33 @@ impl TypedInsert {
             TypedInsert::TopbarButton => b.topbar_button(),
             TypedInsert::TopbarFull => b.topbar_full(),
             TypedInsert::TopbarRoot => b.topbar_root(),
+            TypedInsert::Buff => b.buff(),
+            TypedInsert::CombatBook(v) => b.combat_book(v),
+            TypedInsert::HouseDesign(v) => b.house_design(v),
+            TypedInsert::Journal(v) => b.journal(v),
+            TypedInsert::Logout => b.logout(),
+            TypedInsert::Menu(v) => b.menu(v),
+            TypedInsert::MessageBox => b.message_box(),
+            TypedInsert::Minimap(v) => b.minimap(v),
+            TypedInsert::Paperdoll(v) => b.paperdoll(v),
+            TypedInsert::PartyInvite(v) => b.party_invite(v),
+            TypedInsert::PartyManifest(v) => b.party_manifest(v),
+            TypedInsert::Profile(v) => b.profile(v),
+            TypedInsert::RacialBook(v) => b.racial_book(v),
+            TypedInsert::GumpSkills(v) => b.gump_skills(v),
+            TypedInsert::Spellbook(v) => b.spellbook(v),
+            TypedInsert::SplitMenu(v) => b.split_menu(&v),
+            TypedInsert::TipNotice(v) => b.tip_notice(v),
+            TypedInsert::Trade(v) => b.trade(v),
+            TypedInsert::Worldmap => b.worldmap(),
+            TypedInsert::CharacterCreation => b.character_creation(),
+            TypedInsert::CharacterSelection => b.character_selection(),
+            TypedInsert::Game => b.game(),
+            TypedInsert::Login => b.login(),
+            TypedInsert::LoginError => b.login_error(),
+            TypedInsert::ServerSelection => b.server_selection(),
+            TypedInsert::MaskedText(v) => b.masked_text(&v),
+            TypedInsert::TooltipSerial(v) => b.tooltip_serial(v),
         }
     }
 }
@@ -3395,6 +4903,9 @@ pub(crate) fn res_get<T: 'static>(r: &c::Res) -> Option<Option<T>> {
     if is::<T, s::ModOptionsSchemaDto>() {
         return Some(c::get_schema(r).map(|v| cast(s::ModOptionsSchemaDto::from_wit(v))));
     }
+    if is::<T, s::ModOptionsValuesDto>() {
+        return Some(c::get_values(r).map(|v| cast(s::ModOptionsValuesDto::from_wit(v))));
+    }
     if is::<T, s::PlayerBuffsDto>() {
         return Some(c::get_buffs(r).map(|v| cast(s::PlayerBuffsDto::from_wit(v))));
     }
@@ -3418,6 +4929,30 @@ pub(crate) fn res_get<T: 'static>(r: &c::Res) -> Option<Option<T>> {
     }
     if is::<T, s::TextCompletionStateDto>() {
         return Some(c::get_text_completion_state(r).map(|v| cast(s::TextCompletionStateDto::from_wit(v))));
+    }
+    if is::<T, s::PartyDto>() {
+        return Some(c::get_party(r).map(|v| cast(s::PartyDto::from_wit(v))));
+    }
+    if is::<T, s::SpellbooksDto>() {
+        return Some(c::get_player_spellbook(r).map(|v| cast(s::SpellbooksDto::from_wit(v))));
+    }
+    if is::<T, s::PlayerStepsDto>() {
+        return Some(c::get_steps(r).map(|v| cast(s::PlayerStepsDto::from_wit(v))));
+    }
+    if is::<T, s::ClipboardSetDto>() {
+        return Some(c::get_clipboard_set(r).map(|v| cast(s::ClipboardSetDto::from_wit(v))));
+    }
+    if is::<T, s::FocusedInput>() {
+        return Some(c::get_focused_input(r).map(|v| cast(s::FocusedInput::from_wit(v))));
+    }
+    if is::<T, s::TextClipboardActionDto>() {
+        return Some(c::get_text_clipboard_action(r).map(|v| cast(s::TextClipboardActionDto::from_wit(v))));
+    }
+    if is::<T, s::TextCompletionDto>() {
+        return Some(c::get_text_completion(r).map(|v| cast(s::TextCompletionDto::from_wit(v))));
+    }
+    if is::<T, s::TextCompletionPickDto>() {
+        return Some(c::get_text_completion_pick(r).map(|v| cast(s::TextCompletionPickDto::from_wit(v))));
     }
     None
 }
@@ -3493,6 +5028,41 @@ pub(crate) fn send<T: 'static>(cmds: &wit::Commands, v: &T) -> bool {
         c::send_right_click(cmds, rec);
         return true;
     }
+    if is::<T, s::ServerGumpClosedEvent>() {
+        let rec: w::ServerGumpClosedEvent = cast_ref::<T, s::ServerGumpClosedEvent>(v).to_wit();
+        c::send_server_closed(cmds, rec);
+        return true;
+    }
+    if is::<T, s::ServerGumpOpenedEvent>() {
+        let rec: w::ServerGumpOpenedEvent = cast_ref::<T, s::ServerGumpOpenedEvent>(v).to_wit();
+        c::send_server_opened(cmds, rec);
+        return true;
+    }
+    if is::<T, s::ModMoveRequest>() {
+        let rec: w::ModMoveRequest = cast_ref::<T, s::ModMoveRequest>(v).to_wit();
+        c::send_move_request(cmds, rec);
+        return true;
+    }
+    if is::<T, s::CharacterSelectionDto>() {
+        let rec: w::CharacterSelection = cast_ref::<T, s::CharacterSelectionDto>(v).to_wit();
+        c::send_character_list(cmds, &rec);
+        return true;
+    }
+    if is::<T, s::LoginErrorsInfoEvent>() {
+        let rec: w::LoginErrorsInfoEvent = cast_ref::<T, s::LoginErrorsInfoEvent>(v).to_wit();
+        c::send_login_error_info(cmds, &rec);
+        return true;
+    }
+    if is::<T, s::OnLoginRequest>() {
+        let rec: w::OnLoginRequest = cast_ref::<T, s::OnLoginRequest>(v).to_wit();
+        c::send_login_request(cmds, &rec);
+        return true;
+    }
+    if is::<T, s::ServerSelectionInfoEvent>() {
+        let rec: w::ServerSelectionInfoEvent = cast_ref::<T, s::ServerSelectionInfoEvent>(v).to_wit();
+        c::send_server_list(cmds, &rec);
+        return true;
+    }
     false
 }
 
@@ -3552,6 +5122,34 @@ pub(crate) fn read<T: 'static>(e: &wit::Events) -> Option<Vec<T>> {
     }
     if is::<T, s::UiRightClick>() {
         let v: Vec<s::UiRightClick> = c::read_right_click(e).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::ServerGumpClosedEvent>() {
+        let v: Vec<s::ServerGumpClosedEvent> = c::read_server_closed(e).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::ServerGumpOpenedEvent>() {
+        let v: Vec<s::ServerGumpOpenedEvent> = c::read_server_opened(e).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::ModMoveRequest>() {
+        let v: Vec<s::ModMoveRequest> = c::read_move_request(e).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::CharacterSelectionDto>() {
+        let v: Vec<s::CharacterSelectionDto> = c::read_character_list(e).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::LoginErrorsInfoEvent>() {
+        let v: Vec<s::LoginErrorsInfoEvent> = c::read_login_error_info(e).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::OnLoginRequest>() {
+        let v: Vec<s::OnLoginRequest> = c::read_login_request(e).into_iter().map(Conv::from_wit).collect();
+        return Some(cast(v));
+    }
+    if is::<T, s::ServerSelectionInfoEvent>() {
+        let v: Vec<s::ServerSelectionInfoEvent> = c::read_server_list(e).into_iter().map(Conv::from_wit).collect();
         return Some(cast(v));
     }
     None
@@ -4135,5 +5733,271 @@ impl TagTrigger for s::TopBarFull {
 impl TagTrigger for s::IsTopBar {
     fn tag() -> s::IsTopBar {
         s::IsTopBar {}
+    }
+}
+
+impl TypedTrigger for s::MobAnimation {
+    type Wit = w::MobAnimation;
+    fn lift(v: w::MobAnimation) -> s::MobAnimation {
+        Conv::from_wit(v)
+    }
+}
+
+impl TagTrigger for s::IsMulti {
+    fn tag() -> s::IsMulti {
+        s::IsMulti {}
+    }
+}
+
+impl TypedTrigger for s::MobileStepsDto {
+    type Wit = w::MobileSteps;
+    fn lift(v: w::MobileSteps) -> s::MobileStepsDto {
+        Conv::from_wit(v)
+    }
+}
+
+impl TagTrigger for s::BookWindow {
+    fn tag() -> s::BookWindow {
+        s::BookWindow {}
+    }
+}
+
+impl TagTrigger for s::BuffGumpUI {
+    fn tag() -> s::BuffGumpUI {
+        s::BuffGumpUI {}
+    }
+}
+
+impl TagTrigger for s::BulletinBoardWindow {
+    fn tag() -> s::BulletinBoardWindow {
+        s::BulletinBoardWindow {}
+    }
+}
+
+impl TypedTrigger for s::CombatBookWindow {
+    type Wit = w::CombatBookWindow;
+    fn lift(v: w::CombatBookWindow) -> s::CombatBookWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::HouseDesignWindow {
+    type Wit = w::HouseDesignWindow;
+    fn lift(v: w::HouseDesignWindow) -> s::HouseDesignWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::JournalWindow {
+    type Wit = w::JournalWindow;
+    fn lift(v: w::JournalWindow) -> s::JournalWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TagTrigger for s::LogoutGumpWindow {
+    fn tag() -> s::LogoutGumpWindow {
+        s::LogoutGumpWindow {}
+    }
+}
+
+impl TagTrigger for s::MapWindow {
+    fn tag() -> s::MapWindow {
+        s::MapWindow {}
+    }
+}
+
+impl TypedTrigger for s::MenuGumpWindow {
+    type Wit = w::MenuGumpWindow;
+    fn lift(v: w::MenuGumpWindow) -> s::MenuGumpWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TagTrigger for s::MessageBoxWindow {
+    fn tag() -> s::MessageBoxWindow {
+        s::MessageBoxWindow {}
+    }
+}
+
+impl TypedTrigger for s::MiniMapWindow {
+    type Wit = w::MiniMapWindow;
+    fn lift(v: w::MiniMapWindow) -> s::MiniMapWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::PaperdollWindow {
+    type Wit = w::PaperdollWindow;
+    fn lift(v: w::PaperdollWindow) -> s::PaperdollWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::PartyInviteWindow {
+    type Wit = w::PartyInviteWindow;
+    fn lift(v: w::PartyInviteWindow) -> s::PartyInviteWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::PartyManifestWindow {
+    type Wit = w::PartyManifestWindow;
+    fn lift(v: w::PartyManifestWindow) -> s::PartyManifestWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::ProfileWindow {
+    type Wit = w::ProfileWindow;
+    fn lift(v: w::ProfileWindow) -> s::ProfileWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::RacialBookWindow {
+    type Wit = w::RacialBookWindow;
+    fn lift(v: w::RacialBookWindow) -> s::RacialBookWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::ServerGumpClosedEvent {
+    type Wit = w::ServerGumpClosedEvent;
+    fn lift(v: w::ServerGumpClosedEvent) -> s::ServerGumpClosedEvent {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::ServerGumpOpenedEvent {
+    type Wit = w::ServerGumpOpenedEvent;
+    fn lift(v: w::ServerGumpOpenedEvent) -> s::ServerGumpOpenedEvent {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::SkillsWindow {
+    type Wit = w::SkillsWindow;
+    fn lift(v: w::SkillsWindow) -> s::SkillsWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::SpellbookWindow {
+    type Wit = w::SpellbookWindow;
+    fn lift(v: w::SpellbookWindow) -> s::SpellbookWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::SplitMenuWindow {
+    type Wit = w::SplitMenuWindow;
+    fn lift(v: w::SplitMenuWindow) -> s::SplitMenuWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::TipNoticeWindow {
+    type Wit = w::TipNoticeWindow;
+    fn lift(v: w::TipNoticeWindow) -> s::TipNoticeWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::TradeWindow {
+    type Wit = w::TradeWindow;
+    fn lift(v: w::TradeWindow) -> s::TradeWindow {
+        Conv::from_wit(v)
+    }
+}
+
+impl TagTrigger for s::WorldMapWindow {
+    fn tag() -> s::WorldMapWindow {
+        s::WorldMapWindow {}
+    }
+}
+
+impl TypedTrigger for s::ModMoveRequest {
+    type Wit = w::ModMoveRequest;
+    fn lift(v: w::ModMoveRequest) -> s::ModMoveRequest {
+        Conv::from_wit(v)
+    }
+}
+
+impl TagTrigger for s::CharCreationScene {
+    fn tag() -> s::CharCreationScene {
+        s::CharCreationScene {}
+    }
+}
+
+impl TypedTrigger for s::CharacterSelectionDto {
+    type Wit = w::CharacterSelection;
+    fn lift(v: w::CharacterSelection) -> s::CharacterSelectionDto {
+        Conv::from_wit(v)
+    }
+}
+
+impl TagTrigger for s::CharacterSelectionScene {
+    fn tag() -> s::CharacterSelectionScene {
+        s::CharacterSelectionScene {}
+    }
+}
+
+impl TagTrigger for s::GameScene {
+    fn tag() -> s::GameScene {
+        s::GameScene {}
+    }
+}
+
+impl TagTrigger for s::LoginScene {
+    fn tag() -> s::LoginScene {
+        s::LoginScene {}
+    }
+}
+
+impl TagTrigger for s::LoginErrorScene {
+    fn tag() -> s::LoginErrorScene {
+        s::LoginErrorScene {}
+    }
+}
+
+impl TypedTrigger for s::LoginErrorsInfoEvent {
+    type Wit = w::LoginErrorsInfoEvent;
+    fn lift(v: w::LoginErrorsInfoEvent) -> s::LoginErrorsInfoEvent {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::OnLoginRequest {
+    type Wit = w::OnLoginRequest;
+    fn lift(v: w::OnLoginRequest) -> s::OnLoginRequest {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::ServerSelectionInfoEvent {
+    type Wit = w::ServerSelectionInfoEvent;
+    fn lift(v: w::ServerSelectionInfoEvent) -> s::ServerSelectionInfoEvent {
+        Conv::from_wit(v)
+    }
+}
+
+impl TagTrigger for s::ServerSelectionScene {
+    fn tag() -> s::ServerSelectionScene {
+        s::ServerSelectionScene {}
+    }
+}
+
+impl TypedTrigger for s::MaskedText {
+    type Wit = w::MaskedText;
+    fn lift(v: w::MaskedText) -> s::MaskedText {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::UiTooltipSerial {
+    type Wit = w::UiTooltipSerial;
+    fn lift(v: w::UiTooltipSerial) -> s::UiTooltipSerial {
+        Conv::from_wit(v)
     }
 }
