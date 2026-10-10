@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "cuo_wit.h"
+#include "cuo/typed_kinds.h"
 
 /* An export parameter's kind, from its C type. */
 enum {
@@ -19,6 +20,7 @@ enum {
     CUO__K_DIR,     /* on-packet observer: packet-direction, first */
     CUO__K_PACKET,  /* on-packet observer: list<u8>, second */
     CUO__K_VERDICT, /* on-packet observer: the -> verdict out-pointer, last */
+    CUO__K_ENTITY,  /* typed observer: entity, first; its record (CUO__K_TYPED + n) next */
 };
 
 #define CUO__KIND(T)                                                                    \
@@ -31,12 +33,15 @@ enum {
         tinyecs_modding_ecs_packet_direction_t: CUO__K_DIR,                             \
         cuo_wit_list_u8_t *: CUO__K_PACKET,                                             \
         tinyecs_modding_ecs_verdict_t *: CUO__K_VERDICT,                                \
+        uint64_t: CUO__K_ENTITY,                                                        \
+        CUO__TYPED_KINDS                                                                \
         default: CUO__K_UNKNOWN)
 
 typedef struct cuo__arg {
     int32_t handle; /* commands / query / res / events */
-    void *ptr;      /* trigger / packet / verdict */
+    void *ptr;      /* trigger / packet / verdict / typed trigger record */
     uint8_t dir;
+    uint64_t entity; /* typed observer */
 } cuo__arg;
 
 static inline cuo__arg cuo__arg_h(int32_t h) { return (cuo__arg){ .handle = h }; }
@@ -46,6 +51,7 @@ static inline cuo__arg cuo__arg_res(tinyecs_modding_ecs_own_res_t x) { return cu
 static inline cuo__arg cuo__arg_events(tinyecs_modding_ecs_own_events_t x) { return cuo__arg_h(x.__handle); }
 static inline cuo__arg cuo__arg_ptr(void *p) { return (cuo__arg){ .ptr = p }; }
 static inline cuo__arg cuo__arg_dir(tinyecs_modding_ecs_packet_direction_t d) { return (cuo__arg){ .dir = d }; }
+static inline cuo__arg cuo__arg_entity(uint64_t e) { return (cuo__arg){ .entity = e }; }
 
 #define CUO__ARG(x)                                                                     \
     _Generic((x),                                                                       \
@@ -54,6 +60,7 @@ static inline cuo__arg cuo__arg_dir(tinyecs_modding_ecs_packet_direction_t d) { 
         tinyecs_modding_ecs_own_res_t: cuo__arg_res,                                    \
         tinyecs_modding_ecs_own_events_t: cuo__arg_events,                              \
         tinyecs_modding_ecs_packet_direction_t: cuo__arg_dir,                           \
+        uint64_t: cuo__arg_entity,                                                      \
         default: cuo__arg_ptr)(x)
 
 /* One export of the mod's world: its name (kebab-case, as the system is named) and

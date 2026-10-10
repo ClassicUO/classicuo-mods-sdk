@@ -1018,6 +1018,28 @@ internal interface IEcsImports {
 
         }
 
+        internal  unsafe global::System.Collections.Generic.List<ulong> Entities()
+        {
+            var handle = this.Handle;
+
+            var retArea = stackalloc uint[3];
+            var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+            EcsImportsInterop.Query.EntitiesWasmInterop.wasmImportEntities(handle, ptr);
+
+            var array = new global::System.Collections.Generic.List<ulong>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+            for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+                nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 8);
+
+                array.Add(unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 0), 1)[0])));
+            }
+
+            if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+            }
+            return array;
+
+        }
+
         internal  unsafe void Set(ulong entity, byte index, string value)
         {
             var cleanups = new global::System.Collections.Generic.List<global::System.Action>();

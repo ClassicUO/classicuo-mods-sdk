@@ -31,7 +31,7 @@ WITDIR   := $(dir $(OUT))wit
 CUO_WIT_SRCS := $(CUO_WIT)/cuo-mod.wit $(CUO_WIT)/deps/tinyecs-mod/tinyecs-mod.wit $(CUO_C)/wit/cuo-c-sdk.wit
 CUO_SDK_SRCS := \
 	$(CUO_C)/src/runtime.c $(CUO_C)/src/cmds.c $(CUO_C)/src/host.c \
-	$(CUO_C)/src/json.c $(CUO_C)/src/ui.c $(CUO_C)/src/types.c \
+	$(CUO_C)/src/json.c $(CUO_C)/src/ui.c $(CUO_C)/src/types.c $(CUO_C)/src/typed.c $(CUO_C)/src/typed_gen.c \
 	$(CUO_C)/third_party/cjson/cJSON.c
 CUO_SDK_HDRS := $(wildcard $(CUO_C)/include/cuo/*.h $(CUO_C)/src/*.h)
 GEN_SRCS     := $(GEN)/cuo_wit.c $(GEN)/cuo_exports.c

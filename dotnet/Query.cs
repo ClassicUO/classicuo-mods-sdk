@@ -29,7 +29,26 @@ public sealed class QueryTermSink
 {
     internal readonly List<QueryTerm> Terms = new();
 
+    // Per term: its value can be read without JSON — a curated type (typed column) or a
+    // zero-size tag (always default). See Query.Describe.
+    internal readonly List<bool> Typed = new();
+
     internal QueryTermSink() { }
+
+    void Add(QueryTerm term, bool typed)
+    {
+        Terms.Add(term);
+        Typed.Add(typed);
+    }
+
+    static bool ReadsTyped<T>() => Typed<T>.Codec is { HasColumn: true } || IsTag<T>();
+
+    // A zero-size tag (or a curated presence-only marker) reads as default(T) on either
+    // path: the JSON row carries `{}`.
+    static bool IsTag<T>() =>
+        TypedCodecs.IsTag<T>()
+        || ModRuntime.Host.Json<T>() is { Kind: System.Text.Json.Serialization.Metadata.JsonTypeInfoKind.Object } info
+        && info.Properties.Count == 0;
 
     /// <summary>A read term: the row carries <typeparamref name="T"/> (a <see cref="Mut{T}"/> declares a writable term).</summary>
     internal void Read<T>()
@@ -37,20 +56,21 @@ public sealed class QueryTermSink
         if (MutTerm<T>.Binder is { } mut)
             mut.Describe(this);
         else
-            Terms.Add(new QueryTerm(TermKind.Ref, ModHost.PathOf<T>()));
+            Add(new QueryTerm(TermKind.Ref, ModHost.PathOf<T>()), ReadsTyped<T>());
     }
 
-    internal void Mut<T>() => Terms.Add(new QueryTerm(TermKind.Mut, ModHost.PathOf<T>()));
+    internal void Mut<T>() =>
+        Add(new QueryTerm(TermKind.Mut, ModHost.PathOf<T>()), Typed<T>.Codec is { HasColumn: true, CanSet: true });
 
     /// <summary>Presence filter. Dropped when the type is already a term — a read term already implies presence.</summary>
     internal void With<T>()
     {
         var path = ModHost.PathOf<T>();
         if (Find(path) < 0)
-            Terms.Add(new QueryTerm(TermKind.With, path));
+            Add(new QueryTerm(TermKind.With, path), true);
     }
 
-    internal void Without<T>() => Terms.Add(new QueryTerm(TermKind.Without, ModHost.PathOf<T>()));
+    internal void Without<T>() => Add(new QueryTerm(TermKind.Without, ModHost.PathOf<T>()), true);
 
     internal void Changed<T>() => Reading<T>(TermKind.Changed);
 
@@ -68,7 +88,7 @@ public sealed class QueryTermSink
         if (at >= 0 && Terms[at].Kind != TermKind.Mut)
             Terms[at] = new QueryTerm(kind, path);
         else
-            Terms.Add(new QueryTerm(kind, path));
+            Add(new QueryTerm(kind, path), ReadsTyped<T>());
     }
 
     int Find(string path)
@@ -101,13 +121,15 @@ public readonly struct RowReader
         RowIndex = rowIndex;
     }
 
-    public Entity Entity => new(EcsAbi.RowEntity(Rows, RowIndex));
+    public Entity Entity => new(EcsAbi.RowEntity(Rows, RowIndex, Scope.Stride(Slot)));
 
     /// <summary>The component at read-term index <paramref name="index"/> (<c>default</c> when the slot is empty).</summary>
     public T Comp<T>(int index)
     {
         if (MutTerm<T>.Binder is { } mut)
             return mut.Bind(this, index);
+        if (Scope.IsTyped(Slot))
+            return Typed<T>.Codec is { } codec ? Scope.Column(Slot, index, codec).Get(Scope, Slot, RowIndex) : default!;
         return ReadComp<T>(Scope, Rows, RowIndex, index);
     }
 
@@ -351,8 +373,12 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
         var sink = new QueryTermSink();
         // TData first: it owns read indices 0..n-1 (see QueryTermSink).
         TData.Describe(sink);
+        // The query goes typed (query.entities + a typed column per curated term, no
+        // query.rows) when every term TData reads has no JSON to parse. A term only a
+        // filter added (Changed<X> of a type TData does not read) is never read.
+        var typed = !sink.Typed.Take(sink.Terms.Count).Contains(false);
         TFilter.Describe(sink);
-        d.Add(new ParamDecl { Kind = ParamKind.Query, Terms = sink.Terms });
+        d.Add(new ParamDecl { Kind = ParamKind.Query, Terms = sink.Terms, TypedRows = typed });
     }
 
     public static bool TryCreate(ParamContext c, out Query<TData, TFilter> value)
@@ -381,8 +407,9 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
     {
         var (rows, count) = Fetch();
         var id = entity.Id;
+        var stride = count == 0 ? 0 : _scope!.Stride(_slot);
         for (var i = 0; i < count; i++)
-            if (EcsAbi.RowEntity(rows, i) == id)
+            if (EcsAbi.RowEntity(rows, i, stride) == id)
             {
                 data = TData.Read(new RowReader(_scope, _slot, rows, i));
                 return true;

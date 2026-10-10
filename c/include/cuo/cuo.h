@@ -72,10 +72,12 @@ static inline bool cuo_entity_eq(cuo_entity a, cuo_entity b)
 }
 
 /* A component / resource payload: type id (cuo_type_id / cuo_X_id()) + utf8 JSON
- * (len 0 = marker). */
+ * (len 0 = marker), or — `typed` != 0, built by cuo_X_typed — a typed component that
+ * goes through cuo:modding/components instead (no JSON). */
 typedef struct cuo_comp {
     uint16_t type_id;
     cuo_bytes data;
+    uint8_t typed; /* internal: 0 = JSON */
 } cuo_comp;
 
 #define CUO_COUNT(T, ...) (sizeof((T[]){__VA_ARGS__}) / sizeof(T))
@@ -98,7 +100,7 @@ static inline cuo_bytes cuo_str_bytes(const char *s)
 cuo_comp cuo_comp_json(uint16_t type_id, const char *json);
 cuo_comp cuo_comp_bytes(uint16_t type_id, cuo_bytes json);
 cuo_comp cuo_comp_marker(uint16_t type_id);
-/* cuo:ecs/child-of {Parent}: put an entity under `parent` (spawn or insert it). */
+/* cuo:ecs/child-of {Parent}: put an entity under `parent` (spawn or insert it). Typed. */
 cuo_comp cuo_child_of(cuo_entity parent);
 
 /* ── registration (only inside cuo_setup) ────────────────────────────────────── */
@@ -237,7 +239,7 @@ void cuo_send_to_client(const uint8_t *data, size_t len);
 /* ── system / observer input ─────────────────────────────────────────────────── */
 
 typedef struct cuo_query {
-    const void *vec; /* internal */
+    const void *impl; /* internal */
     size_t len;
     int32_t handle; /* internal */
 } cuo_query;
@@ -260,6 +262,11 @@ cuo_events cuo_input_events(const cuo_input *in, cuo_param p);
 cuo_row cuo_query_row(cuo_query q, size_t i);
 /* Linear scan for `entity` (Contains/TryGet). out may be NULL. */
 bool cuo_query_find(cuo_query q, cuo_entity entity, cuo_row *out);
+/* The matched entities (q.len of them), in row order — the order of every typed
+ * column (cuo_X_column). */
+const cuo_entity *cuo_query_entities(cuo_query q);
+/* Linear scan for `entity`: its row / column index. index may be NULL. */
+bool cuo_query_index(cuo_query q, cuo_entity entity, size_t *index);
 /* Writes read-term slot `index` of `entity` back (query.set). Traps unless that term
  * is CUO_MUT. Lands on the host entity when the callback returns. */
 void cuo_query_set(cuo_query q, cuo_entity entity, size_t index, cuo_bytes json);
@@ -386,6 +393,44 @@ const char *cuo_json_str(const cJSON *obj, const char *key, const char *dflt);
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* ── typed components (cuo:modding/components: no JSON) ────────────────────────
+ * Every curated type path (the generated cuo/typed.h lists them: most components,
+ * resources and events the shipped mods use) also crosses the boundary as a typed WIT
+ * record. Same structs as the JSON path (cuo_Node, cuo_Hits, ...); the SDK converts
+ * struct to record. Every other type keeps the JSON path.
+ *
+ * - Insert: cuo_X_typed(&v) is the typed twin of cuo_X_comp(&v); mix both freely in
+ *   cuo_spawn / cuo_spawn_child / cuo_insert / cuo_insert1 (a tag: cuo_X_typed()). A
+ *   spawn / insert with typed components is one entity builder (components.spawn /
+ *   entity-of) plus one chained call per typed component, after one commands.insert of
+ *   its JSON ones. The value is converted (strings copied) at once.
+ * - Read: cuo_X_column(q, term) = read-term slot `term` of every matched entity, aligned
+ *   with cuo_query_entities(q) (q.len items, call-scoped; one host call — keep the
+ *   pointer, do not call it per row). Traps unless that slot is a term on X. A query
+ *   whose read terms are all typed (tags included) skips query.rows (fetched only if
+ *   you read a row).
+ * - Write: cuo_X_set(q, entity, term, &v) — the typed cuo_query_set (CUO_MUT term).
+ * - Resources: cuo_X_res(in, p, &out) / cuo_X_obs_res(ev, p, &out) read a res param;
+ *   false while the host has none.
+ * - Events: cuo_X_send(cmds, &v) sends one (the typed cuo_X_emit; a zero-size event:
+ *   cuo_X_send(cmds)); cuo_X_events(in, p, &n) / cuo_X_obs_events(ev, p, &n) read an
+ *   events param (call-scoped array; a zero-size event: the count).
+ * - Observers: an observer of a typed component / event may take its trigger typed —
+ *   declare its export `func(entity: entity, value: <record>, ...)` (a tag:
+ *   `func(entity: entity, ...)`) in wit/world.wit instead of `trigger: trigger-data`
+ *   (`use tinyecs:modding/ecs@0.1.0.{entity}` and `use cuo:modding/types@0.1.0.{<record>}`)
+ *   and read the value with cuo_X_obs_typed(ev) (cuo_obs_value is empty then):
+ *
+ *       export on-chat: func(entity: entity, value: chat-message, commands: commands);
+ *
+ *       static void on_chat(const cuo_obs *ev, cuo_cmds *c, void *u)
+ *       {
+ *           const cuo_ModChatMessage *msg = cuo_ModChatMessage_obs_typed(ev);
+ *           ...
+ *       }
+ */
+#include "cuo/typed.h"
 
 /* ── UI payload constructors (twin of ui.rs / Types.Ui.cs) ───────────────────── */
 

@@ -30,6 +30,8 @@ internal sealed class ParamDecl
     internal ParamKind Kind;
     internal string Path = "";
     internal List<QueryTerm>? Terms;
+    // A query read through query.entities + typed columns (see Query.Describe).
+    internal bool TypedRows;
 }
 
 /// <summary>
@@ -81,6 +83,8 @@ internal sealed class RunScope
     internal ulong TriggerEntity;
     internal nint TriggerValue;
     internal int TriggerValueLen;
+    // TriggerValue is a typed record (TypedTrigger), not JSON.
+    internal bool TriggerTyped;
     internal Packet Packet;
     internal Verdict Verdict;
 
@@ -90,10 +94,12 @@ internal sealed class RunScope
     // The handle Mut write-backs go through as commands.insert (0 = none: query.set).
     internal int CommandsHandle;
 
-    // query.rows() results, fetched on first use per param.
+    // query.rows() (or, for a typed query, query.entities()) results, fetched on first use per param.
     nint[] _rows = new nint[4];
     int[] _rowCounts = new int[4];
     bool[] _fetched = new bool[4];
+    // Typed columns fetched this run, freed by Release.
+    readonly List<TypedColumnBase> _columns = new();
 
     readonly List<Action> _writeBacks = new();
     // Mut<T> row storage, keyed (query param slot << 8 | term index).
@@ -130,11 +136,29 @@ internal sealed class RunScope
             return (0, 0);
         if (!_fetched[slot])
         {
-            (_rows[slot], _rowCounts[slot]) = EcsAbi.Rows(_handles[slot]);
+            (_rows[slot], _rowCounts[slot]) = IsTyped(slot) ? EcsAbi.Entities(_handles[slot]) : EcsAbi.Rows(_handles[slot]);
             _fetched[slot] = true;
         }
         return (_rows[slot], _rowCounts[slot]);
     }
+
+    /// <summary>Query param <paramref name="slot"/> reads typed columns instead of JSON rows.</summary>
+    internal bool IsTyped(int slot) => Entry!.Params[slot].TypedRows;
+
+    internal int Stride(int slot) => IsTyped(slot) ? EcsAbi.EntityStride : EcsAbi.RowStride;
+
+    /// <summary>The typed column of read term <paramref name="term"/> of query param <paramref name="slot"/> (kept on the system across runs).</summary>
+    internal TypedColumn<T> Column<T>(int slot, int term, TypedCodec<T> codec)
+    {
+        var entry = Entry!;
+        var key = (slot << 8) | term;
+        entry.Columns ??= new();
+        if (!entry.Columns.TryGetValue(key, out var column))
+            entry.Columns[key] = column = new TypedColumn<T>(codec, (byte)term);
+        return (TypedColumn<T>)column;
+    }
+
+    internal void HoldColumn(TypedColumnBase column) => _columns.Add(column);
 
     internal void AfterRun(Action writeBack) => _writeBacks.Add(writeBack);
 
@@ -165,20 +189,28 @@ internal sealed class RunScope
         for (var i = 0; i < _held.Count; i++)
             _held[i].EndRun();
         _held.Clear();
-        Entry = null;
         MutColumns.Clear();
+        for (var i = 0; i < _columns.Count; i++)
+            _columns[i].Release();
+        _columns.Clear();
+        TypedArena.Reset();
         for (var i = 0; i < _count; i++)
             if (_fetched[i])
             {
-                EcsAbi.FreeRows(_rows[i], _rowCounts[i]);
+                if (IsTyped(i))
+                    EcsAbi.FreeEntities(_rows[i], _rowCounts[i]);
+                else
+                    EcsAbi.FreeRows(_rows[i], _rowCounts[i]);
                 _fetched[i] = false;
                 _rows[i] = 0;
                 _rowCounts[i] = 0;
             }
         _count = 0;
+        Entry = null;
         Locals = null;
         TriggerValue = 0;
         TriggerValueLen = 0;
+        TriggerTyped = false;
         Packet = default;
     }
 }
@@ -256,14 +288,24 @@ internal sealed unsafe class ResCell<T> : IRunHeld
     /// <summary>Starts a run; false when the host has no value.</summary>
     internal bool Begin(RunScope scope, int handle)
     {
-        _info ??= scope.Host.Json<T>();
+        var typed = Typed<T>.Codec is { HasGet: true } codec ? codec : null;
+        if (typed == null)
+            _info ??= scope.Host.Json<T>();
         _handle = handle;
         scope.Hold(this);
         if (_known && EcsAbi.ResUnchanged(handle))
             return _present;
+        _known = true;
+        if (typed != null)
+        {
+            // get-<x>: the record, lifted at once (no JSON to keep around).
+            _present = typed.Get(handle, out var value);
+            _value = value;
+            _parsed = true;
+            return _present;
+        }
         _parsed = false;
         _value = default;
-        _known = true;
         _present = Fetch();
         return _present;
     }
@@ -489,6 +531,11 @@ public readonly struct EventReader<T> : ISystemParam<EventReader<T>>
         if (handle == 0)
         {
             value = new EventReader<T>([]);
+            return true;
+        }
+        if (Typed<T>.Event is { } typed)
+        {
+            value = new EventReader<T>(typed.Read(handle));
             return true;
         }
         var (list, count) = EcsAbi.EventsRead(handle);

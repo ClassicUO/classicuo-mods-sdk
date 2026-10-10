@@ -185,7 +185,24 @@ internal static unsafe class EcsAbi
         return (ret[0], ret[1]);
     }
 
-    internal static ulong RowEntity(nint rows, int i) => *(ulong*)(rows + i * 16);
+    /// <summary>The entity of row <paramref name="i"/>: a <c>row</c> is 16 bytes (entity @0), a <c>query.entities</c> element 8.</summary>
+    internal static ulong RowEntity(nint rows, int i, int stride) => *(ulong*)(rows + i * stride);
+
+    internal const int RowStride = 16, EntityStride = 8;
+
+    /// <summary>query.entities(): the u64 array and its count. Free with <see cref="FreeEntities"/>.</summary>
+    internal static (nint List, int Count) Entities(int query)
+    {
+        var ret = stackalloc int[2];
+        Interop.Query.EntitiesWasmInterop.wasmImportEntities(query, (nint)ret);
+        return (ret[0], ret[1]);
+    }
+
+    internal static void FreeEntities(nint list, int count)
+    {
+        if (count > 0)
+            NativeMemory.Free((void*)list);
+    }
 
     internal static int RowValueCount(nint rows, int i) => *(int*)(rows + i * 16 + 12);
 

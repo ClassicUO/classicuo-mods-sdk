@@ -157,6 +157,21 @@ the system's previous run, the SDK reuses the value it parsed then instead of fe
 and parsing it again (C# also parses `Res<T>.Value` only on first access). Treat a
 `Res` value as read-only — the same object comes back next run.
 
+### Typed components
+
+A curated set of components crosses the wasm boundary as typed WIT records instead of
+JSON: player `hits` / `mana` / `stamina` / `data`; entity `serial` / `graphic` / `hue` /
+`world-position` / `notoriety` / `name` / `amount`; UI `node` / `text` / `text-font` /
+`text-color` / `bg-color` / `border-radius` / `child-of` / `movable` / `global-z` /
+`interaction` / `no-window-drag`; resources `mouse` / `keyboard`. With an SDK nothing
+changes in your code — `Query<&Hits>`, `&mut Node`, `insert(Text{..})`, `Res<..>` use the
+typed path by themselves (a query goes typed when every component it reads is curated;
+anything else stays JSON). Without an SDK, `cuo:modding/components` gives typed columns
+aligned with `query.entities()` (`column-hits(q, term)`), typed writes (`set-node`), typed
+resource reads (`get-mouse`) and a chainable builder:
+`spawn(&cmds).node(&n).text(&t).child-of(&c).id()`. A value the game sends that an enum
+has no case for reads as case 0.
+
 ### Settings
 
 Declare your options once (`cuo:options/schema`) and they appear in the client's

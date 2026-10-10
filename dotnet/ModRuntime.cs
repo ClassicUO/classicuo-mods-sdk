@@ -87,7 +87,7 @@ public static unsafe class ModRuntime
         return entry;
     }
 
-    static Verdict Execute(Entry entry, int paramCount, ulong triggerEntity, nint value, int valueLen, Packet packet, bool ownsValue)
+    static Verdict Execute(Entry entry, int paramCount, ulong triggerEntity, nint value, int valueLen, Packet packet, bool ownsValue, bool typed = false)
     {
         var scope = _scope;
         scope.Begin(_kinds, _handles, paramCount, entry.Locals);
@@ -95,6 +95,7 @@ public static unsafe class ModRuntime
         scope.TriggerEntity = triggerEntity;
         scope.TriggerValue = value;
         scope.TriggerValueLen = valueLen;
+        scope.TriggerTyped = typed;
         scope.Packet = packet;
         try
         {
@@ -121,6 +122,29 @@ public static unsafe class ModRuntime
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public static void RunObserver(int index, long entity, nint value, int valueLen, int* handles, int count) =>
         Execute(Lift(index, handles, count), count, (ulong)entity, value, valueLen, default, true);
+
+    /// <summary>
+    /// A typed observer's export: <c>func(entity, value: &lt;record&gt;, &lt;params&gt;)</c>
+    /// (a tag: no value). <paramref name="record"/> is the record the glue stored the flat
+    /// params back into (or inside the spilled args), 0 for a tag; what it owns (strings,
+    /// lists) is the guest's and is freed here, as is a spilled args area.
+    /// </summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public static void RunObserverTyped(int index, long entity, nint record, int* handles, int count, nint spilled)
+    {
+        var entry = Lift(index, handles, count);
+        try
+        {
+            Execute(entry, count, (ulong)entity, record, 0, default, false, typed: true);
+        }
+        finally
+        {
+            if (record != 0)
+                entry.Trigger!.Typed!.Codec?.FreeElement((byte*)record);
+            if (spilled != 0)
+                NativeMemory.Free((void*)spilled);
+        }
+    }
 
     // The verdict's return area: tag u8 @0, replacement list<u8> @4/@8.
     [StructLayout(LayoutKind.Sequential)]

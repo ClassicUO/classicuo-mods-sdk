@@ -141,9 +141,9 @@ pub enum TriggerDesc {
 #[doc(hidden)]
 pub enum Fetched {
     Commands(backend::CmdSink),
-    Query(Vec<RawRow>, backend::QuerySink),
+    Query(backend::QuerySink),
     Res(ResData, backend::ResSink),
-    Events(Vec<String>),
+    Events(backend::EventsSink),
     Taken,
 }
 
@@ -153,7 +153,10 @@ pub enum ResData {
     /// Equal to what this parameter received on the system's previous run: reuse that
     /// parse (`get` was not called).
     Unchanged,
-    /// The current value; `None` when the client has none.
+    /// Changed: the parameter reads it (typed or JSON, by its type).
+    Changed,
+    /// The current value as JSON, already fetched (unit tests); `None` when the client
+    /// has none.
     Value(Option<String>),
 }
 
@@ -203,6 +206,8 @@ impl ParamCtx<'_> {
 #[doc(hidden)]
 pub enum TriggerData {
     Entity { entity: u64, value: String },
+    /// A typed observer's value, already the SDK type (`On<_, T>` downcasts it).
+    Typed { entity: u64, value: Box<dyn Any> },
     Packet(Packet),
 }
 
@@ -416,14 +421,16 @@ impl<T: Component> SystemParam for Res<T> {
         let Fetched::Res(data, sink) = ctx.take() else { return None };
         // SAFETY: see `Deref`; the cell is boxed in the entry.
         let cell = unsafe { &mut *ctx.cell::<ResCell<T>>(slot) };
-        let json = match data {
-            ResData::Unchanged if cell.known => None,
-            ResData::Unchanged => Some(backend::res_get(&sink)),
-            ResData::Value(json) => Some(json),
-        };
-        if let Some(json) = json {
-            cell.known = true;
-            cell.value = json.and_then(|j| serde_json::from_str(&j).ok());
+        match data {
+            ResData::Unchanged if cell.known => {}
+            ResData::Unchanged | ResData::Changed => {
+                cell.known = true;
+                cell.value = backend::res_value(&sink);
+            }
+            ResData::Value(json) => {
+                cell.known = true;
+                cell.value = json.and_then(|j| serde_json::from_str(&j).ok());
+            }
         }
         cell.value.as_ref().map(|v| Res(v as *const T))
     }
@@ -491,7 +498,7 @@ impl<T: Component> SystemParam for ResMut<T> {
         let cell = unsafe { &mut *cell_ptr };
         let json = match data {
             ResData::Unchanged if cell.valid => None,
-            ResData::Unchanged => Some(backend::res_get(&sink)),
+            ResData::Unchanged | ResData::Changed => Some(backend::res_get(&sink)),
             ResData::Value(json) => Some(json),
         };
         if let Some(json) = json {
@@ -529,7 +536,7 @@ impl<T: Component> SystemParam for EventReader<T> {
     }
     fn fetch(ctx: &mut ParamCtx) -> Option<Self> {
         let events = match ctx.take() {
-            Fetched::Events(v) => v.iter().filter_map(|j| serde_json::from_str(j).ok()).collect(),
+            Fetched::Events(sink) => sink.read::<T>(),
             _ => Vec::new(),
         };
         Some(EventReader(events))
@@ -570,17 +577,28 @@ impl<T: Default + 'static> SystemParam for Local<T> {
 
 // ── commands ─────────────────────────────────────────────────────────────────────
 
+/// One component of a bundle, as it crosses: a typed record (the curated types) or
+/// type path + JSON.
+#[doc(hidden)]
+pub enum BundleItem {
+    Json(&'static str, String),
+    Typed(crate::typed::TypedInsert),
+}
+
 /// Components to spawn or insert: one component, or a tuple of them.
 pub trait Bundle {
     #[doc(hidden)]
-    fn write(self, out: &mut Vec<(&'static str, String)>);
+    fn write(self, out: &mut Vec<BundleItem>);
     #[doc(hidden)]
     fn paths(out: &mut Vec<&'static str>);
 }
 
 impl<T: Component> Bundle for T {
-    fn write(self, out: &mut Vec<(&'static str, String)>) {
-        out.push((T::PATH, to_json(&self)));
+    fn write(self, out: &mut Vec<BundleItem>) {
+        out.push(match crate::typed::insert(&self) {
+            Some(t) => BundleItem::Typed(t),
+            None => BundleItem::Json(T::PATH, to_json(&self)),
+        });
     }
     fn paths(out: &mut Vec<&'static str>) {
         out.push(T::PATH);
@@ -616,21 +634,21 @@ impl RawComponent {
 /// `paths()` is empty: a raw bundle names its paths at runtime, so it can't drive
 /// `remove::<B>()`.
 impl Bundle for RawComponent {
-    fn write(self, out: &mut Vec<(&'static str, String)>) {
-        out.push((self.path, self.json));
+    fn write(self, out: &mut Vec<BundleItem>) {
+        out.push(BundleItem::Json(self.path, self.json));
     }
     fn paths(_: &mut Vec<&'static str>) {}
 }
 
 impl Bundle for Vec<RawComponent> {
-    fn write(self, out: &mut Vec<(&'static str, String)>) {
-        out.extend(self.into_iter().map(|c| (c.path, c.json)));
+    fn write(self, out: &mut Vec<BundleItem>) {
+        out.extend(self.into_iter().map(|c| BundleItem::Json(c.path, c.json)));
     }
     fn paths(_: &mut Vec<&'static str>) {}
 }
 
 impl Bundle for () {
-    fn write(self, _: &mut Vec<(&'static str, String)>) {}
+    fn write(self, _: &mut Vec<BundleItem>) {}
     fn paths(_: &mut Vec<&'static str>) {}
 }
 
@@ -638,7 +656,7 @@ macro_rules! bundle_tuple {
     ($($B:ident),*) => {
         impl<$($B: Bundle),*> Bundle for ($($B,)*) {
             #[allow(non_snake_case)]
-            fn write(self, out: &mut Vec<(&'static str, String)>) {
+            fn write(self, out: &mut Vec<BundleItem>) {
                 let ($($B,)*) = self;
                 $($B.write(out);)*
             }
@@ -683,7 +701,7 @@ impl Commands {
 
     /// Sends an event: observers of it fire, `EventReader`s see it.
     pub fn send<E: Component>(&mut self, event: E) {
-        backend::send(&self.sink, E::PATH, to_json(&event));
+        backend::send(&self.sink, &event);
     }
 
     /// Overwrites a writable resource, applied with this run's other commands. No
@@ -753,25 +771,52 @@ pub trait QueryData {
     type Owned: 'static;
     type Item<'a>;
     type ReadItem<'a>;
+    /// Typed columns being zipped into rows.
+    #[doc(hidden)]
+    type Cols;
     #[doc(hidden)]
     fn terms(out: &mut Vec<Term>);
+    /// Whether every reading term is read through a typed column (else the query reads
+    /// JSON rows).
+    #[doc(hidden)]
+    fn typed() -> bool;
+    #[doc(hidden)]
+    fn columns(sink: &backend::QuerySink, idx: &mut u8) -> Self::Cols;
+    #[doc(hidden)]
+    fn next_row(cols: &mut Self::Cols) -> Option<Self::Owned>;
     #[doc(hidden)]
     fn decode(comps: &mut std::slice::Iter<'_, String>) -> Option<Self::Owned>;
     #[doc(hidden)]
     fn item(o: &mut Self::Owned) -> Self::Item<'_>;
     #[doc(hidden)]
     fn read(o: &Self::Owned) -> Self::ReadItem<'_>;
-    /// Hands each changed `&mut` component to `out(reading index, path, json)`.
+    /// Writes each changed `&mut` component back (reading index `idx` onwards).
     #[doc(hidden)]
-    fn write_back(o: &Self::Owned, idx: &mut u8, out: &mut dyn FnMut(u8, &'static str, String));
+    fn write_back(o: &Self::Owned, idx: &mut u8, sink: &backend::QuerySink, entity: u64);
+}
+
+fn column<T: Component>(sink: &backend::QuerySink, idx: &mut u8) -> std::vec::IntoIter<T> {
+    let col = sink.column::<T>(*idx).unwrap_or_default();
+    *idx += 1;
+    col.into_iter()
 }
 
 impl<T: Component> QueryData for &T {
     type Owned = T;
     type Item<'a> = &'a T;
     type ReadItem<'a> = &'a T;
+    type Cols = std::vec::IntoIter<T>;
     fn terms(out: &mut Vec<Term>) {
         out.push(Term { kind: TermKind::Ref, path: T::PATH });
+    }
+    fn typed() -> bool {
+        crate::typed::has_column::<T>()
+    }
+    fn columns(sink: &backend::QuerySink, idx: &mut u8) -> Self::Cols {
+        column(sink, idx)
+    }
+    fn next_row(cols: &mut Self::Cols) -> Option<T> {
+        cols.next()
     }
     fn decode(comps: &mut std::slice::Iter<'_, String>) -> Option<T> {
         serde_json::from_str(comps.next()?).ok()
@@ -782,33 +827,63 @@ impl<T: Component> QueryData for &T {
     fn read(o: &T) -> &T {
         o
     }
-    fn write_back(_: &T, idx: &mut u8, _: &mut dyn FnMut(u8, &'static str, String)) {
+    fn write_back(_: &T, idx: &mut u8, _: &backend::QuerySink, _: u64) {
         *idx += 1;
     }
 }
 
+/// What a `&mut T` row value is compared against when the system returns.
+#[doc(hidden)]
+pub enum Original<T> {
+    /// Our serialization of the value read (the host formats JSON differently).
+    Json(String),
+    /// A copy of the value read.
+    Typed(T),
+}
+
 impl<T: Component> QueryData for &mut T {
-    type Owned = (T, String);
+    type Owned = (T, Original<T>);
     type Item<'a> = &'a mut T;
     type ReadItem<'a> = &'a T;
+    type Cols = std::vec::IntoIter<T>;
     fn terms(out: &mut Vec<Term>) {
         out.push(Term { kind: TermKind::Mut, path: T::PATH });
     }
-    fn decode(comps: &mut std::slice::Iter<'_, String>) -> Option<(T, String)> {
+    fn typed() -> bool {
+        crate::typed::has_column::<T>()
+    }
+    fn columns(sink: &backend::QuerySink, idx: &mut u8) -> Self::Cols {
+        column(sink, idx)
+    }
+    fn next_row(cols: &mut Self::Cols) -> Option<(T, Original<T>)> {
+        let v = cols.next()?;
+        let original = crate::typed::dup(&v).expect("typed column type");
+        Some((v, Original::Typed(original)))
+    }
+    fn decode(comps: &mut std::slice::Iter<'_, String>) -> Option<(T, Original<T>)> {
         let v: T = serde_json::from_str(comps.next()?).ok()?;
         let original = to_json(&v);
-        Some((v, original))
+        Some((v, Original::Json(original)))
     }
-    fn item(o: &mut (T, String)) -> &mut T {
+    fn item(o: &mut (T, Original<T>)) -> &mut T {
         &mut o.0
     }
-    fn read(o: &(T, String)) -> &T {
+    fn read(o: &(T, Original<T>)) -> &T {
         &o.0
     }
-    fn write_back(o: &(T, String), idx: &mut u8, out: &mut dyn FnMut(u8, &'static str, String)) {
-        let json = to_json(&o.0);
-        if json != o.1 {
-            out(*idx, T::PATH, json);
+    fn write_back(o: &(T, Original<T>), idx: &mut u8, sink: &backend::QuerySink, entity: u64) {
+        match &o.1 {
+            Original::Json(original) => {
+                let json = to_json(&o.0);
+                if json != *original {
+                    backend::row_set_json(sink, entity, *idx, json);
+                }
+            }
+            Original::Typed(original) => {
+                if !crate::typed::same(original, &o.0).unwrap_or(false) {
+                    backend::row_set(sink, entity, *idx, &o.0);
+                }
+            }
         }
         *idx += 1;
     }
@@ -821,8 +896,19 @@ macro_rules! data_tuple {
             type Owned = ($($D::Owned,)*);
             type Item<'a> = ($($D::Item<'a>,)*);
             type ReadItem<'a> = ($($D::ReadItem<'a>,)*);
+            type Cols = ($($D::Cols,)*);
             fn terms(out: &mut Vec<Term>) {
                 $($D::terms(out);)*
+            }
+            fn typed() -> bool {
+                true $(&& $D::typed())*
+            }
+            fn columns(sink: &backend::QuerySink, idx: &mut u8) -> Self::Cols {
+                ($($D::columns(sink, idx),)*)
+            }
+            fn next_row(cols: &mut Self::Cols) -> Option<Self::Owned> {
+                let ($($D,)*) = cols;
+                Some(($($D::next_row($D)?,)*))
             }
             fn decode(comps: &mut std::slice::Iter<'_, String>) -> Option<Self::Owned> {
                 Some(($($D::decode(comps)?,)*))
@@ -835,9 +921,9 @@ macro_rules! data_tuple {
                 let ($($D,)*) = o;
                 ($($D::read($D),)*)
             }
-            fn write_back(o: &Self::Owned, idx: &mut u8, out: &mut dyn FnMut(u8, &'static str, String)) {
+            fn write_back(o: &Self::Owned, idx: &mut u8, sink: &backend::QuerySink, entity: u64) {
                 let ($($D,)*) = o;
-                $($D::write_back($D, idx, out);)*
+                $($D::write_back($D, idx, sink, entity);)*
             }
         }
     };
@@ -950,6 +1036,9 @@ pub struct Query<D: QueryData, F: QueryFilter = ()> {
     sink: Option<backend::QuerySink>,
     /// Leading filter values per row (see `query_layout`): `D`'s reading index base.
     skip: u8,
+    /// Read through typed columns (else JSON rows).
+    #[cfg_attr(not(test), allow(dead_code))]
+    typed: bool,
     _f: PhantomData<F>,
 }
 
@@ -989,7 +1078,7 @@ impl<D: QueryData, F: QueryFilter> Drop for Query<D, F> {
         let Some(sink) = &self.sink else { return };
         for r in &self.rows {
             let mut idx = self.skip;
-            D::write_back(&r.data, &mut idx, &mut |i, _path, json| backend::row_set(sink, r.entity.0, i, json));
+            D::write_back(&r.data, &mut idx, sink, r.entity.0);
         }
     }
 }
@@ -1031,21 +1120,35 @@ impl<D: QueryData + 'static, F: QueryFilter + 'static> SystemParam for Query<D, 
         params.push(ParamDesc::Query(query_terms::<D, F>()));
     }
     fn fetch(ctx: &mut ParamCtx) -> Option<Self> {
-        let (raw, sink) = match ctx.take() {
-            Fetched::Query(rows, sink) => (rows, Some(sink)),
-            _ => (Vec::new(), None),
-        };
         let skip = query_layout::<D, F>().1;
-        let rows = raw
-            .into_iter()
-            .filter_map(|r| {
-                let mut comps = r.comps.iter();
-                comps.by_ref().take(skip).for_each(drop);
-                let data = D::decode(&mut comps)?;
-                Some(QRow { entity: Entity(r.entity), data })
-            })
-            .collect();
-        Some(Query { rows, sink, skip: skip as u8, _f: PhantomData })
+        let Fetched::Query(mut sink) = ctx.take() else {
+            return Some(Query { rows: Vec::new(), sink: None, skip: skip as u8, typed: false, _f: PhantomData });
+        };
+        let typed = D::typed();
+        let rows = if typed {
+            // Every value `D` reads has a typed column: the entities and one column per
+            // term, no JSON. The leading filter values are not fetched at all.
+            let entities = sink.entities();
+            sink.count = entities.len();
+            let mut idx = skip as u8;
+            let mut cols = D::columns(&sink, &mut idx);
+            entities
+                .into_iter()
+                .map_while(|e| Some(QRow { entity: Entity(e), data: D::next_row(&mut cols)? }))
+                .collect()
+        } else {
+            // One host call per query param per run: every row at once.
+            sink.rows()
+                .into_iter()
+                .filter_map(|r| {
+                    let mut comps = r.comps.iter();
+                    comps.by_ref().take(skip).for_each(drop);
+                    let data = D::decode(&mut comps)?;
+                    Some(QRow { entity: Entity(r.entity), data })
+                })
+                .collect()
+        };
+        Some(Query { rows, sink: Some(sink), skip: skip as u8, typed, _f: PhantomData })
     }
 }
 
@@ -1105,12 +1208,20 @@ impl<K, T> Deref for On<K, T> {
 }
 
 impl<K: TriggerKind, T: Component> On<K, T> {
-    fn from_trigger(t: &TriggerData) -> Option<Self> {
-        let TriggerData::Entity { entity, value } = t else { return None };
-        // Marker components cross as an empty payload.
-        let json = if value.is_empty() { "{}" } else { value.as_str() };
-        let event = serde_json::from_str(json).ok()?;
-        Some(On { entity: Entity(*entity), event, _k: PhantomData })
+    fn from_trigger(t: Option<TriggerData>) -> Option<Self> {
+        match t? {
+            TriggerData::Entity { entity, value } => {
+                // Marker components cross as an empty payload.
+                let json = if value.is_empty() { "{}" } else { value.as_str() };
+                let event = serde_json::from_str(json).ok()?;
+                Some(On { entity: Entity(entity), event, _k: PhantomData })
+            }
+            TriggerData::Typed { entity, value } => {
+                let event = *value.downcast::<T>().ok()?;
+                Some(On { entity: Entity(entity), event, _k: PhantomData })
+            }
+            TriggerData::Packet(_) => None,
+        }
     }
 }
 
@@ -1232,7 +1343,7 @@ macro_rules! fn_params {
                     before: Vec::new(),
                     run_on_change: false,
                     run: Box::new(move |ctx: &mut ParamCtx, trigger: Option<TriggerData>| {
-                        let Some(on) = trigger.as_ref().and_then(On::<K, T>::from_trigger) else { return Verdict::Pass };
+                        let Some(on) = On::<K, T>::from_trigger(trigger) else { return Verdict::Pass };
                         $(let Some($P) = $P::fetch(ctx) else { return Verdict::Pass };)*
                         self(on, $($P),*);
                         Verdict::Pass
@@ -1377,7 +1488,7 @@ systems_tuple!(S1 M1, S2 M2, S3 M3, S4 M4, S5 M5, S6 M6);
 systems_tuple!(S1 M1, S2 M2, S3 M3, S4 M4, S5 M5, S6 M6, S7 M7);
 systems_tuple!(S1 M1, S2 M2, S3 M3, S4 M4, S5 M5, S6 M6, S7 M7, S8 M8);
 
-fn to_json<T: Serialize>(v: &T) -> String {
+pub(crate) fn to_json<T: Serialize>(v: &T) -> String {
     serde_json::to_string(v).expect("component serialize")
 }
 
@@ -1525,7 +1636,7 @@ mod tests {
         app.add_systems(Schedule::Update, counted);
         let fetched = |res: Option<&str>| {
             vec![
-                Fetched::Query(vec![RawRow { entity: 9, comps: vec![r#"{"Value":3}"#.into()] }], backend::QuerySink(None)),
+                Fetched::Query(backend::QuerySink::fake(vec![RawRow { entity: 9, comps: vec![r#"{"Value":3}"#.into()] }])),
                 Fetched::Res(ResData::Value(res.map(String::from)), backend::ResSink(None)),
             ]
         };
@@ -1592,8 +1703,58 @@ mod tests {
         let mut app = App::default();
         app.add_systems(Schedule::Update, read);
         let row = RawRow { entity: 1, comps: vec![r#"{"Value":7}"#.into(), r#"{"Value":42}"#.into()] };
-        app.entries[0].run(vec![Fetched::Query(vec![row], backend::QuerySink(None))], None);
+        app.entries[0].run(vec![Fetched::Query(backend::QuerySink::fake(vec![row]))], None);
         assert_eq!(HUE.with(|h| h.get()), 42);
     }
 
+    #[test]
+    fn a_query_of_curated_types_reads_typed_columns_else_json_rows() {
+        use crate::types::{MobAnimation, Node, Serial};
+        use std::cell::Cell;
+        thread_local!(static SEEN: Cell<(bool, bool, u32)> = const { Cell::new((false, false, 0)) });
+        fn read(typed: Query<(&Serial, &mut Node), Changed<Graphic>>, json: Query<(&Serial, &MobAnimation)>) {
+            let sum = typed.iter().map(|(_, (s, _))| s.value).sum::<u32>() + json.iter().map(|(_, (s, _))| s.value).sum::<u32>();
+            SEEN.with(|c| c.set((typed.typed, json.typed, sum)));
+        }
+        let mut app = App::default();
+        app.add_systems(Schedule::Update, read);
+        let node = Node::abs(0.0, 0.0, 1.0, 1.0).to_json();
+        let typed_row = RawRow { entity: 1, comps: vec![r#"{"Value":5}"#.into(), r#"{"Value":7}"#.into(), node] };
+        let json_row = RawRow { entity: 2, comps: vec![r#"{"Value":11}"#.into(), r#"{}"#.into()] };
+        app.entries[0].run(
+            vec![
+                Fetched::Query(backend::QuerySink::fake(vec![typed_row])),
+                Fetched::Query(backend::QuerySink::fake(vec![json_row])),
+            ],
+            None,
+        );
+        // The leading `Changed<Graphic>` value is skipped on the typed path too.
+        assert_eq!(SEEN.with(|c| c.get()), (true, false, 7 + 11));
+    }
+
+    #[test]
+    fn bundles_cross_curated_components_typed_in_order() {
+        use crate::types::{Interaction, MobAnimation, Node, UiMovable};
+        let mut out = Vec::new();
+        (Node::base(), MobAnimation::default(), Interaction::NONE, UiMovable {}, RawComponent::new("cuo:ui/text", "{}"))
+            .write(&mut out);
+        let kinds: Vec<&str> = out
+            .iter()
+            .map(|i| match i {
+                BundleItem::Typed(_) => "typed",
+                BundleItem::Json(p, _) => p,
+            })
+            .collect();
+        assert_eq!(kinds, ["typed", "cuo:ent/animation", "typed", "typed", "cuo:ui/text"]);
+    }
+
+    #[test]
+    fn a_changed_res_without_a_host_has_no_value() {
+        fn read(_: Res<crate::types::MouseInputDto>) {
+            panic!("ran without a value");
+        }
+        let mut app = App::default();
+        app.add_systems(Schedule::Update, read);
+        app.entries[0].run(vec![Fetched::Res(ResData::Changed, backend::ResSink(None))], None);
+    }
 }

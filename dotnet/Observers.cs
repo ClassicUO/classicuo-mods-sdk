@@ -29,7 +29,7 @@ public readonly struct On<T> : IObserverTrigger<On<T>>
 
     public T Event { get; }
 
-    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnEvent, ModHost.PathOf<T>());
+    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnEvent, ModHost.PathOf<T>(), typed: TypedCodecs.TriggerOf<T>());
 
     public static bool TryCreate(ParamContext c, out On<T> value) => Trigger.Create<T, On<T>>(c, static (e, v) => new On<T>(e, v), out value);
 }
@@ -47,7 +47,7 @@ public readonly struct OnAdd<T> : IObserverTrigger<OnAdd<T>>
 
     public T Value { get; }
 
-    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnAdd, ModHost.PathOf<T>());
+    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnAdd, ModHost.PathOf<T>(), typed: TypedCodecs.TriggerOf<T>());
 
     public static bool TryCreate(ParamContext c, out OnAdd<T> value) => Trigger.Create<T, OnAdd<T>>(c, static (e, v) => new OnAdd<T>(e, v), out value);
 }
@@ -65,7 +65,7 @@ public readonly struct OnRemove<T> : IObserverTrigger<OnRemove<T>>
 
     public T Value { get; }
 
-    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnRemove, ModHost.PathOf<T>());
+    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnRemove, ModHost.PathOf<T>(), typed: TypedCodecs.TriggerOf<T>());
 
     public static bool TryCreate(ParamContext c, out OnRemove<T> value) => Trigger.Create<T, OnRemove<T>>(c, static (e, v) => new OnRemove<T>(e, v), out value);
 }
@@ -77,13 +77,17 @@ public sealed class ObserverTrigger
     internal readonly string Path;
     internal readonly PacketDirection Direction;
     internal readonly byte[] Ids;
+    // A curated component / event: the export takes `entity, value: <record>` (a tag:
+    // `entity` alone) instead of `trigger: trigger-data`.
+    internal readonly TypedTrigger? Typed;
 
-    internal ObserverTrigger(ObserverKind kind, string path, PacketDirection direction = default, byte[]? ids = null)
+    internal ObserverTrigger(ObserverKind kind, string path, PacketDirection direction = default, byte[]? ids = null, TypedTrigger? typed = null)
     {
         Kind = kind;
         Path = path;
         Direction = direction;
         Ids = ids ?? [];
+        Typed = typed;
     }
 }
 
@@ -97,6 +101,13 @@ static unsafe class Trigger
         value = default!;
         var scope = c.Scope;
         T parsed;
+        if (scope.TriggerTyped)
+        {
+            // The record the export's flat params were stored back into (none for a tag).
+            parsed = scope.TriggerValue != 0 && Typed<T>.Codec is { } codec ? codec.Lift((byte*)scope.TriggerValue) : default!;
+            value = make(new Entity(scope.TriggerEntity), parsed);
+            return true;
+        }
         try
         {
             var json = new ReadOnlySpan<byte>((void*)scope.TriggerValue, scope.TriggerValueLen);

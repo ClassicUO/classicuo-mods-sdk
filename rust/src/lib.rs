@@ -54,6 +54,7 @@ mod extra;
 pub mod helpers;
 pub mod paths;
 pub mod storage;
+mod typed;
 pub mod types;
 pub mod ui;
 
@@ -68,7 +69,9 @@ pub use cuo_mod_sdk_macros::system;
 pub mod __private {
     pub use crate::ecs::{wire_is, Wire};
     pub use crate::p2::bindings::tinyecs::modding::ecs;
-    pub use crate::p2::{run_observer, run_packet_observer, run_system, Param};
+    pub use crate::p2::bindings::cuo::modding::types as wtypes;
+    pub use crate::p2::{run_observer, run_observer_typed, run_packet_observer, run_system, Param};
+    pub use crate::typed::{trigger_tag, trigger_value, TagTrigger, TypedTrigger};
     pub use wit_bindgen;
 }
 

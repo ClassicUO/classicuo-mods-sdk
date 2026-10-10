@@ -329,12 +329,1165 @@ interface packets {
   send-to-client: func(packet: list<u8>);
 }
 
+interface types {
+  use tinyecs:modding/ecs@0.1.0.{entity};
+
+  record hits {
+    value: u16,
+    max-value: u16,
+  }
+
+  record mana {
+    value: u16,
+    max-value: u16,
+  }
+
+  record stamina {
+    value: u16,
+    max-value: u16,
+  }
+
+  record player-data {
+    str: u16,
+    str-max: u16,
+    dex: u16,
+    dex-max: u16,
+    int: u16,
+    int-max: u16,
+    stats-cap: s16,
+    followers: u8,
+    followers-max: u8,
+    weight: u16,
+    weight-max: u16,
+    gold: u32,
+    thithing-points: u32,
+    luck: u16,
+    damage-min: s16,
+    damage-max: s16,
+    physical-res: s16,
+    fire-res: s16,
+    cold-res: s16,
+    poison-res: s16,
+    energy-res: s16,
+    is-female: bool,
+    race: u8,
+    max-physical-res: s16,
+    max-fire-res: s16,
+    max-cold-res: s16,
+    max-poison-res: s16,
+    max-energy-res: s16,
+    defense-chance-inc: s16,
+    max-defense-chance-inc: s16,
+    hit-chance-inc: s16,
+    swing-speed-inc: s16,
+    damage-inc: s16,
+    lower-reagent-cost: s16,
+    spell-damage-inc: s16,
+    faster-cast-recovery: s16,
+    faster-casting: s16,
+    lower-mana-cost: s16,
+  }
+
+  record serial {
+    value: u32,
+  }
+
+  record graphic {
+    value: u16,
+  }
+
+  record hue {
+    value: u16,
+  }
+
+  record world-position {
+    x: u16,
+    y: u16,
+    z: s8,
+  }
+
+  enum notoriety-flag {
+    unknown,
+    innocent,
+    ally,
+    gray,
+    criminal,
+    enemy,
+    murderer,
+    invulnerable,
+  }
+
+  record notoriety {
+    value: notoriety-flag,
+  }
+
+  record entity-name {
+    value: string,
+  }
+
+  record amount {
+    value: s32,
+  }
+
+  enum display {
+    flex,
+    none,
+  }
+
+  enum position-type {
+    relative,
+    absolute,
+  }
+
+  enum overflow {
+    visible,
+    clip,
+    scroll,
+  }
+
+  enum flex-direction {
+    row,
+    column,
+  }
+
+  enum justify-content {
+    start,
+    center,
+    end,
+  }
+
+  enum align-items {
+    start,
+    center,
+    end,
+  }
+
+  enum val-type {
+    auto,
+    px,
+    percent,
+    grow,
+  }
+
+  record val {
+    %type: val-type,
+    value: f32,
+  }
+
+  record ui-rect {
+    left: val,
+    right: val,
+    top: val,
+    bottom: val,
+  }
+
+  record node {
+    display: display,
+    position-type: position-type,
+    overflow: overflow,
+    flex-direction: flex-direction,
+    justify-content: justify-content,
+    align-items: align-items,
+    width: val,
+    height: val,
+    min-width: val,
+    min-height: val,
+    max-width: val,
+    max-height: val,
+    left: val,
+    top: val,
+    right: val,
+    bottom: val,
+    padding: ui-rect,
+    border: ui-rect,
+    gap: val,
+    aspect-ratio: f32,
+  }
+
+  record text {
+    value: string,
+  }
+
+  record text-font {
+    font-id: u16,
+    size: u16,
+  }
+
+  record color {
+    r: f32,
+    g: f32,
+    b: f32,
+    a: f32,
+  }
+
+  record text-color {
+    value: color,
+  }
+
+  record background-color {
+    value: color,
+  }
+
+  record border-radius {
+    top-left: f32,
+    top-right: f32,
+    bottom-left: f32,
+    bottom-right: f32,
+  }
+
+  record child-of {
+    parent: entity,
+  }
+
+  record global-z-index {
+    value: s32,
+  }
+
+  record interaction {
+    state: u8,
+  }
+
+  record mouse-input {
+    x: f32,
+    y: f32,
+    left: bool,
+    right: bool,
+    middle: bool,
+    x1: bool,
+    x2: bool,
+    wheel: f32,
+    left-pressed: bool,
+    left-released: bool,
+    left-double: bool,
+    right-pressed: bool,
+    right-released: bool,
+    middle-pressed: bool,
+    middle-released: bool,
+    x1-pressed: bool,
+    x2-pressed: bool,
+  }
+
+  record keyboard-input {
+    pressed: list<s32>,
+    pressed-once: list<s32>,
+  }
+
+  record chat-message {
+    serial: u32,
+    text: string,
+    name: string,
+    hue: u16,
+    font: u8,
+    is-unicode: bool,
+    message-type: u8,
+    time: f32,
+    kind: u8,
+  }
+
+  record prompt-opened-event {
+    serial: u32,
+    prompt-id: u32,
+    unicode: bool,
+    text: string,
+  }
+
+  record time {
+    total: f32,
+    frame: f32,
+  }
+
+  record equipment-slots {
+    serials: list<u32>,
+  }
+
+  record facing {
+    value: u8,
+  }
+
+  record opl-line {
+    cliloc: s32,
+    args: string,
+    text: string,
+  }
+
+  record entity-properties {
+    serial: u32,
+    revision: u32,
+    name: string,
+    lines: list<opl-line>,
+  }
+
+  record server-flags {
+    value: u8,
+  }
+
+  record container-slot-position {
+    x: u16,
+    y: u16,
+    grid-index: u8,
+  }
+
+  record game-context {
+    player-serial: u32,
+    player-name: string,
+    %map: s32,
+    season: u8,
+    client-version: u32,
+    use-old-status-gump: bool,
+  }
+
+  record game-settings {
+    grid-loot-type: s32,
+    skip-empty-corpse: bool,
+    auto-open-corpses: bool,
+    auto-open-corpse-range: s32,
+    corpse-open-options: s32,
+    double-click-to-loot-inside-containers: bool,
+    hold-shift-to-split-stack: bool,
+    relative-drag-and-drop-items: bool,
+    speech-hue: u16,
+    always-run: bool,
+    highlight-game-objects: bool,
+  }
+
+  record game-state {
+    current: u8,
+  }
+
+  record container-window {
+    serial: u32,
+  }
+
+  record container-closed-event {
+    serial: u32,
+    user-initiated: bool,
+  }
+
+  record container-opened-event {
+    serial: u32,
+    graphic: u16,
+  }
+
+  record container-position {
+    serial: u32,
+    x: s32,
+    y: s32,
+  }
+
+  record container-positions {
+    saved: list<container-position>,
+  }
+
+  enum container-slot-action {
+    add,
+    remove,
+  }
+
+  record container-slot-event {
+    action: container-slot-action,
+    container-serial: u32,
+    item-serial: u32,
+    graphic: u16,
+    hue: u16,
+    x: u16,
+    y: u16,
+    amount: u16,
+  }
+
+  record container-gump-tag {
+    graphic: u16,
+    original-graphic: u16,
+    scale: f32,
+    bounds-x: s32,
+    bounds-y: s32,
+    bounds-w: s32,
+    bounds-h: s32,
+  }
+
+  record context-menu-entry {
+    index: u16,
+    cliloc: s32,
+    text: string,
+    %flags: u16,
+    hue: u16,
+  }
+
+  record context-menu-event {
+    serial: u32,
+    entries: list<context-menu-entry>,
+  }
+
+  record grid-container-window {
+    serial: u32,
+  }
+
+  record grid-loot-window {
+    corpse-serial: u32,
+    corpse-entity: u64,
+    content-sig: s32,
+  }
+
+  record health-bar-window {
+    serial: u32,
+    is-player: bool,
+    out-of-range: bool,
+    hp-requested: bool,
+    was-dead: bool,
+    in-party: bool,
+    name-editable: bool,
+  }
+
+  record server-gump-button {
+    id: s32,
+    x: f32,
+    y: f32,
+    w: f32,
+    h: f32,
+  }
+
+  record server-gump-text-entry {
+    id: u16,
+    text: string,
+  }
+
+  record server-gump-switch {
+    id: u32,
+    checked: bool,
+    is-radio: bool,
+    group: s32,
+  }
+
+  record server-gump {
+    serial: u32,
+    gump-id: u32,
+    page: s32,
+    x: s32,
+    y: s32,
+    layout: list<string>,
+    texts: list<string>,
+    buttons: list<server-gump-button>,
+    text-entries: list<server-gump-text-entry>,
+    switches: list<server-gump-switch>,
+  }
+
+  record input-consume {
+    mouse: u8,
+    key: u32,
+  }
+
+  record host-hotkey {
+    key: s32,
+    ctrl: bool,
+    shift: bool,
+    alt: bool,
+    action: string,
+  }
+
+  record host-hotkeys {
+    hotkeys: list<host-hotkey>,
+  }
+
+  record mod-hotkey-fired {
+    name: string,
+    key: s32,
+    mouse: s32,
+    ctrl: bool,
+    shift: bool,
+    alt: bool,
+    from-mod: bool,
+  }
+
+  record mod-hotkey-binding {
+    name: string,
+    key: s32,
+    mouse: s32,
+    ctrl: bool,
+    shift: bool,
+    alt: bool,
+    consume: bool,
+  }
+
+  record mod-hotkey-bindings {
+    bindings: list<mod-hotkey-binding>,
+    consume-keys: bool,
+  }
+
+  record world-single-click {
+    serial: u32,
+    at-ms: u64,
+  }
+
+  record item-drop-sent {
+    serial: u32,
+    x: u16,
+    y: u16,
+    z: s8,
+    container: u32,
+  }
+
+  record item-move-result {
+    %result: u8,
+    code: u8,
+  }
+
+  record mod-option {
+    key: string,
+    label: string,
+    group: string,
+    keywords: string,
+    kind: u8,
+    min: s32,
+    max: s32,
+    step: s32,
+    default: s32,
+    choices: list<string>,
+  }
+
+  record mod-options-schema {
+    options: list<mod-option>,
+  }
+
+  record player-buff {
+    %type: s32,
+    graphic: u16,
+    expires-at: f32,
+    text: string,
+  }
+
+  record player-buffs {
+    buffs: list<player-buff>,
+  }
+
+  enum layer {
+    invalid,
+    one-handed,
+    two-handed,
+    shoes,
+    pants,
+    shirt,
+    helmet,
+    gloves,
+    ring,
+    talisman,
+    necklace,
+    hair,
+    waist,
+    torso,
+    bracelet,
+    face,
+    beard,
+    tunic,
+    earrings,
+    arms,
+    cloak,
+    backpack,
+    robe,
+    skirt,
+    legs,
+    mount,
+    shop-buy-restock,
+    shop-buy,
+    shop-sell,
+    bank,
+  }
+
+  record vector2 {
+    x: f32,
+    y: f32,
+  }
+
+  record grabbed-item {
+    is-active: bool,
+    serial: u32,
+    graphic: u16,
+    hue: u16,
+    amount: s32,
+    source-ui-entity: u64,
+    original-graphic: u16,
+    original-hue: u16,
+    original-amount: u16,
+    original-x: u16,
+    original-y: u16,
+    original-z: s8,
+    original-container: u32,
+    original-grid-index: u8,
+    original-from-slot: bool,
+    original-layer: layer,
+    pending-drop: bool,
+    drop-target-serial: u32,
+    failed-drop: bool,
+    mouse-offset: vector2,
+  }
+
+  record player-skill {
+    index: s32,
+    value: u16,
+    base: u16,
+    cap: u16,
+    lock: u8,
+  }
+
+  record player-skills {
+    has-data: bool,
+    skills: list<player-skill>,
+  }
+
+  record stat-locks {
+    str: u8,
+    dex: u8,
+    int: u8,
+  }
+
+  record local-target-result-event {
+    entity: u64,
+    serial: u32,
+    graphic: u16,
+    x: u16,
+    y: u16,
+    z: s8,
+    cancelled: bool,
+  }
+
+  record targeting-state {
+    is-targeting: bool,
+    mode: u8,
+    local: bool,
+    cursor-id: u32,
+    cursor-type: u8,
+    just-targeted: bool,
+    multi-id: u16,
+    multi-offset-x: s16,
+    multi-offset-y: s16,
+    multi-offset-z: s16,
+    multi-hue: u16,
+    preview-built-id: u16,
+    has-local-result: bool,
+    local-serial: u32,
+    local-graphic: u16,
+    local-x: u16,
+    local-y: u16,
+    local-z: s8,
+    local-cancelled: bool,
+  }
+
+  record border-color {
+    r: f32,
+    g: f32,
+    b: f32,
+    a: f32,
+  }
+
+  record uo-button {
+    normal: u16,
+    pressed: u16,
+    over: u16,
+  }
+
+  record computed-node {
+    size: vector2,
+    position: vector2,
+    clay-id: u32,
+    paint-order: s32,
+  }
+
+  record vector3 {
+    x: f32,
+    y: f32,
+    z: f32,
+  }
+
+  record container-item-ui {
+    container: entity,
+    serial: u32,
+    original-hue: vector3,
+    hover-hue: vector3,
+  }
+
+  record ui-custom {
+    kind: u8,
+    asset-id: u32,
+    hue-x: f32,
+    hue-y: f32,
+    hue-z: f32,
+    stacked: bool,
+  }
+
+  record editable-text {
+    multiline: bool,
+  }
+
+  record ui-hover {
+    over: bool,
+  }
+
+  record ui-hover-tint {
+    normal: color,
+    hover: color,
+  }
+
+  record ui-name {
+    value: string,
+  }
+
+  record ui-pick {
+    entity: u64,
+    root: u64,
+    paint-order: s32,
+    x: f32,
+    y: f32,
+  }
+
+  record ui-resizable {
+    min-w: f32,
+    min-h: f32,
+    max-w: f32,
+    max-h: f32,
+    grip: f32,
+    grip-inset: f32,
+    whole-pixels: bool,
+  }
+
+  record ui-right-click {
+    x: f32,
+    y: f32,
+  }
+
+  record scroll-position {
+    offset-x: f32,
+    offset-y: f32,
+  }
+
+  enum scrollbar-style {
+    uo,
+    flat,
+  }
+
+  record ui-scrollbar {
+    width: f32,
+    style: scrollbar-style,
+  }
+
+  record stat-lock-button {
+    stat: u8,
+  }
+
+  record status-bar-window {
+    minimize-x: f32,
+    minimize-y: f32,
+  }
+
+  record mod-supersedes {
+    feature: string,
+  }
+
+  record ui-surface {
+    w: f32,
+    h: f32,
+  }
+
+  record text-caret {
+    entity: u64,
+    cursor: s32,
+    select-start: s32,
+    select-end: s32,
+    line: s32,
+    column: s32,
+    screen-x: f32,
+    screen-y: f32,
+    row-height: f32,
+  }
+
+  record text-completion-state {
+    selected: s32,
+  }
+
+  record text-hue {
+    value: u16,
+  }
+
+  record text-span {
+    start: s32,
+    length: s32,
+    color: color,
+  }
+
+  record text-spans {
+    spans: list<text-span>,
+  }
+
+  enum text-wrap-kind {
+    words,
+    newlines,
+    none,
+  }
+
+  record text-wrap {
+    kind: text-wrap-kind,
+  }
+
+  record ui-tooltip {
+    text: string,
+    max-width: s32,
+  }
+}
+
+interface components {
+  use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity};
+  use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip};
+
+  resource entity-builder {
+    id: func() -> entity;
+    graphic: func(v: graphic) -> entity-builder;
+    hue: func(v: hue) -> entity-builder;
+    world-position: func(v: world-position) -> entity-builder;
+    notoriety: func(v: notoriety) -> entity-builder;
+    name: func(v: entity-name) -> entity-builder;
+    amount: func(v: amount) -> entity-builder;
+    node: func(v: node) -> entity-builder;
+    text: func(v: text) -> entity-builder;
+    text-font: func(v: text-font) -> entity-builder;
+    text-color: func(v: text-color) -> entity-builder;
+    bg-color: func(v: background-color) -> entity-builder;
+    border-radius: func(v: border-radius) -> entity-builder;
+    child-of: func(v: child-of) -> entity-builder;
+    movable: func() -> entity-builder;
+    no-window-drag: func() -> entity-builder;
+    global-z: func(v: global-z-index) -> entity-builder;
+    interaction: func(v: interaction) -> entity-builder;
+    facing: func(v: facing) -> entity-builder;
+    slot-position: func(v: container-slot-position) -> entity-builder;
+    container: func(v: container-window) -> entity-builder;
+    container-tag: func(v: container-gump-tag) -> entity-builder;
+    grid-container: func(v: grid-container-window) -> entity-builder;
+    grid-loot: func(v: grid-loot-window) -> entity-builder;
+    health-bar: func(v: health-bar-window) -> entity-builder;
+    player: func() -> entity-builder;
+    border-color: func(v: border-color) -> entity-builder;
+    button: func(v: uo-button) -> entity-builder;
+    container-item: func(v: container-item-ui) -> entity-builder;
+    contains-by-bounds: func() -> entity-builder;
+    custom: func(v: ui-custom) -> entity-builder;
+    editable-text: func(v: editable-text) -> entity-builder;
+    hover-tint: func(v: ui-hover-tint) -> entity-builder;
+    movable-no-drag: func() -> entity-builder;
+    ui-name: func(v: ui-name) -> entity-builder;
+    no-blur: func() -> entity-builder;
+    no-pickup: func() -> entity-builder;
+    no-right-click-close: func() -> entity-builder;
+    options-window: func() -> entity-builder;
+    popup: func() -> entity-builder;
+    resizable: func(v: ui-resizable) -> entity-builder;
+    scroll: func(v: scroll-position) -> entity-builder;
+    scrollbar: func(v: ui-scrollbar) -> entity-builder;
+    stat-lock-button: func(v: stat-lock-button) -> entity-builder;
+    statusbar-window: func(v: status-bar-window) -> entity-builder;
+    supersedes: func(v: mod-supersedes) -> entity-builder;
+    text-hue: func(v: text-hue) -> entity-builder;
+    text-input: func() -> entity-builder;
+    text-spans: func(v: text-spans) -> entity-builder;
+    text-wrap: func(v: text-wrap) -> entity-builder;
+    tooltip: func(v: ui-tooltip) -> entity-builder;
+    topbar-bg: func() -> entity-builder;
+    topbar-button: func() -> entity-builder;
+    topbar-full: func() -> entity-builder;
+    topbar-root: func() -> entity-builder;
+  }
+
+  entity-of: func(c: borrow<commands>, e: entity) -> entity-builder;
+
+  spawn: func(c: borrow<commands>) -> entity-builder;
+
+  column-hits: func(q: borrow<query>, term: u8) -> list<hits>;
+
+  column-mana: func(q: borrow<query>, term: u8) -> list<mana>;
+
+  column-stamina: func(q: borrow<query>, term: u8) -> list<stamina>;
+
+  column-data: func(q: borrow<query>, term: u8) -> list<player-data>;
+
+  column-serial: func(q: borrow<query>, term: u8) -> list<serial>;
+
+  column-graphic: func(q: borrow<query>, term: u8) -> list<graphic>;
+
+  set-graphic: func(q: borrow<query>, e: entity, term: u8, v: graphic);
+
+  column-hue: func(q: borrow<query>, term: u8) -> list<hue>;
+
+  set-hue: func(q: borrow<query>, e: entity, term: u8, v: hue);
+
+  column-world-position: func(q: borrow<query>, term: u8) -> list<world-position>;
+
+  set-world-position: func(q: borrow<query>, e: entity, term: u8, v: world-position);
+
+  column-notoriety: func(q: borrow<query>, term: u8) -> list<notoriety>;
+
+  set-notoriety: func(q: borrow<query>, e: entity, term: u8, v: notoriety);
+
+  column-name: func(q: borrow<query>, term: u8) -> list<entity-name>;
+
+  set-name: func(q: borrow<query>, e: entity, term: u8, v: entity-name);
+
+  column-amount: func(q: borrow<query>, term: u8) -> list<amount>;
+
+  set-amount: func(q: borrow<query>, e: entity, term: u8, v: amount);
+
+  column-node: func(q: borrow<query>, term: u8) -> list<node>;
+
+  set-node: func(q: borrow<query>, e: entity, term: u8, v: node);
+
+  column-text: func(q: borrow<query>, term: u8) -> list<text>;
+
+  set-text: func(q: borrow<query>, e: entity, term: u8, v: text);
+
+  column-text-font: func(q: borrow<query>, term: u8) -> list<text-font>;
+
+  set-text-font: func(q: borrow<query>, e: entity, term: u8, v: text-font);
+
+  column-text-color: func(q: borrow<query>, term: u8) -> list<text-color>;
+
+  set-text-color: func(q: borrow<query>, e: entity, term: u8, v: text-color);
+
+  column-bg-color: func(q: borrow<query>, term: u8) -> list<background-color>;
+
+  set-bg-color: func(q: borrow<query>, e: entity, term: u8, v: background-color);
+
+  column-border-radius: func(q: borrow<query>, term: u8) -> list<border-radius>;
+
+  set-border-radius: func(q: borrow<query>, e: entity, term: u8, v: border-radius);
+
+  column-child-of: func(q: borrow<query>, term: u8) -> list<child-of>;
+
+  set-child-of: func(q: borrow<query>, e: entity, term: u8, v: child-of);
+
+  column-global-z: func(q: borrow<query>, term: u8) -> list<global-z-index>;
+
+  set-global-z: func(q: borrow<query>, e: entity, term: u8, v: global-z-index);
+
+  column-interaction: func(q: borrow<query>, term: u8) -> list<interaction>;
+
+  set-interaction: func(q: borrow<query>, e: entity, term: u8, v: interaction);
+
+  column-equipment: func(q: borrow<query>, term: u8) -> list<equipment-slots>;
+
+  column-facing: func(q: borrow<query>, term: u8) -> list<facing>;
+
+  set-facing: func(q: borrow<query>, e: entity, term: u8, v: facing);
+
+  column-properties: func(q: borrow<query>, term: u8) -> list<entity-properties>;
+
+  column-server-flags: func(q: borrow<query>, term: u8) -> list<server-flags>;
+
+  column-slot-position: func(q: borrow<query>, term: u8) -> list<container-slot-position>;
+
+  set-slot-position: func(q: borrow<query>, e: entity, term: u8, v: container-slot-position);
+
+  column-container: func(q: borrow<query>, term: u8) -> list<container-window>;
+
+  set-container: func(q: borrow<query>, e: entity, term: u8, v: container-window);
+
+  column-container-tag: func(q: borrow<query>, term: u8) -> list<container-gump-tag>;
+
+  set-container-tag: func(q: borrow<query>, e: entity, term: u8, v: container-gump-tag);
+
+  column-grid-container: func(q: borrow<query>, term: u8) -> list<grid-container-window>;
+
+  set-grid-container: func(q: borrow<query>, e: entity, term: u8, v: grid-container-window);
+
+  column-grid-loot: func(q: borrow<query>, term: u8) -> list<grid-loot-window>;
+
+  set-grid-loot: func(q: borrow<query>, e: entity, term: u8, v: grid-loot-window);
+
+  column-health-bar: func(q: borrow<query>, term: u8) -> list<health-bar-window>;
+
+  set-health-bar: func(q: borrow<query>, e: entity, term: u8, v: health-bar-window);
+
+  column-server: func(q: borrow<query>, term: u8) -> list<server-gump>;
+
+  column-stat-locks: func(q: borrow<query>, term: u8) -> list<stat-locks>;
+
+  column-border-color: func(q: borrow<query>, term: u8) -> list<border-color>;
+
+  set-border-color: func(q: borrow<query>, e: entity, term: u8, v: border-color);
+
+  column-button: func(q: borrow<query>, term: u8) -> list<uo-button>;
+
+  set-button: func(q: borrow<query>, e: entity, term: u8, v: uo-button);
+
+  column-computed: func(q: borrow<query>, term: u8) -> list<computed-node>;
+
+  column-container-item: func(q: borrow<query>, term: u8) -> list<container-item-ui>;
+
+  set-container-item: func(q: borrow<query>, e: entity, term: u8, v: container-item-ui);
+
+  column-custom: func(q: borrow<query>, term: u8) -> list<ui-custom>;
+
+  set-custom: func(q: borrow<query>, e: entity, term: u8, v: ui-custom);
+
+  column-editable-text: func(q: borrow<query>, term: u8) -> list<editable-text>;
+
+  set-editable-text: func(q: borrow<query>, e: entity, term: u8, v: editable-text);
+
+  column-hover-tint: func(q: borrow<query>, term: u8) -> list<ui-hover-tint>;
+
+  set-hover-tint: func(q: borrow<query>, e: entity, term: u8, v: ui-hover-tint);
+
+  column-ui-name: func(q: borrow<query>, term: u8) -> list<ui-name>;
+
+  set-ui-name: func(q: borrow<query>, e: entity, term: u8, v: ui-name);
+
+  column-resizable: func(q: borrow<query>, term: u8) -> list<ui-resizable>;
+
+  set-resizable: func(q: borrow<query>, e: entity, term: u8, v: ui-resizable);
+
+  column-scroll: func(q: borrow<query>, term: u8) -> list<scroll-position>;
+
+  set-scroll: func(q: borrow<query>, e: entity, term: u8, v: scroll-position);
+
+  column-scrollbar: func(q: borrow<query>, term: u8) -> list<ui-scrollbar>;
+
+  set-scrollbar: func(q: borrow<query>, e: entity, term: u8, v: ui-scrollbar);
+
+  column-stat-lock-button: func(q: borrow<query>, term: u8) -> list<stat-lock-button>;
+
+  set-stat-lock-button: func(q: borrow<query>, e: entity, term: u8, v: stat-lock-button);
+
+  column-statusbar-window: func(q: borrow<query>, term: u8) -> list<status-bar-window>;
+
+  set-statusbar-window: func(q: borrow<query>, e: entity, term: u8, v: status-bar-window);
+
+  column-supersedes: func(q: borrow<query>, term: u8) -> list<mod-supersedes>;
+
+  set-supersedes: func(q: borrow<query>, e: entity, term: u8, v: mod-supersedes);
+
+  column-text-hue: func(q: borrow<query>, term: u8) -> list<text-hue>;
+
+  set-text-hue: func(q: borrow<query>, e: entity, term: u8, v: text-hue);
+
+  column-text-spans: func(q: borrow<query>, term: u8) -> list<text-spans>;
+
+  set-text-spans: func(q: borrow<query>, e: entity, term: u8, v: text-spans);
+
+  column-text-wrap: func(q: borrow<query>, term: u8) -> list<text-wrap>;
+
+  set-text-wrap: func(q: borrow<query>, e: entity, term: u8, v: text-wrap);
+
+  column-tooltip: func(q: borrow<query>, term: u8) -> list<ui-tooltip>;
+
+  set-tooltip: func(q: borrow<query>, e: entity, term: u8, v: ui-tooltip);
+
+  get-mouse: func(r: borrow<res>) -> option<mouse-input>;
+
+  get-keyboard: func(r: borrow<res>) -> option<keyboard-input>;
+
+  get-time: func(r: borrow<res>) -> option<time>;
+
+  get-context: func(r: borrow<res>) -> option<game-context>;
+
+  set-resource-context: func(c: borrow<commands>, v: game-context);
+
+  get-settings: func(r: borrow<res>) -> option<game-settings>;
+
+  get-state: func(r: borrow<res>) -> option<game-state>;
+
+  set-resource-state: func(c: borrow<commands>, v: game-state);
+
+  get-container-positions: func(r: borrow<res>) -> option<container-positions>;
+
+  set-resource-container-positions: func(c: borrow<commands>, v: container-positions);
+
+  get-host-hotkeys: func(r: borrow<res>) -> option<host-hotkeys>;
+
+  get-mod-hotkeys: func(r: borrow<res>) -> option<mod-hotkey-bindings>;
+
+  set-resource-mod-hotkeys: func(c: borrow<commands>, v: mod-hotkey-bindings);
+
+  get-world-single-click: func(r: borrow<res>) -> option<world-single-click>;
+
+  get-schema: func(r: borrow<res>) -> option<mod-options-schema>;
+
+  set-resource-schema: func(c: borrow<commands>, v: mod-options-schema);
+
+  get-buffs: func(r: borrow<res>) -> option<player-buffs>;
+
+  get-grabbed-item: func(r: borrow<res>) -> option<grabbed-item>;
+
+  get-skills: func(r: borrow<res>) -> option<player-skills>;
+
+  get-target-state: func(r: borrow<res>) -> option<targeting-state>;
+
+  get-pick: func(r: borrow<res>) -> option<ui-pick>;
+
+  get-surface: func(r: borrow<res>) -> option<ui-surface>;
+
+  get-text-caret: func(r: borrow<res>) -> option<text-caret>;
+
+  get-text-completion-state: func(r: borrow<res>) -> option<text-completion-state>;
+
+  send-message: func(c: borrow<commands>, v: chat-message);
+
+  read-message: func(e: borrow<events>) -> list<chat-message>;
+
+  send-prompt: func(c: borrow<commands>, v: prompt-opened-event);
+
+  read-prompt: func(e: borrow<events>) -> list<prompt-opened-event>;
+
+  send-container-closed: func(c: borrow<commands>, v: container-closed-event);
+
+  read-container-closed: func(e: borrow<events>) -> list<container-closed-event>;
+
+  send-container-opened: func(c: borrow<commands>, v: container-opened-event);
+
+  read-container-opened: func(e: borrow<events>) -> list<container-opened-event>;
+
+  send-container-slot: func(c: borrow<commands>, v: container-slot-event);
+
+  read-container-slot: func(e: borrow<events>) -> list<container-slot-event>;
+
+  send-context-menu: func(c: borrow<commands>, v: context-menu-event);
+
+  read-context-menu: func(e: borrow<events>) -> list<context-menu-event>;
+
+  send-consume: func(c: borrow<commands>, v: input-consume);
+
+  read-consume: func(e: borrow<events>) -> list<input-consume>;
+
+  send-hotkey: func(c: borrow<commands>, v: mod-hotkey-fired);
+
+  read-hotkey: func(e: borrow<events>) -> list<mod-hotkey-fired>;
+
+  send-drop-sent: func(c: borrow<commands>, v: item-drop-sent);
+
+  read-drop-sent: func(e: borrow<events>) -> list<item-drop-sent>;
+
+  send-move-result: func(c: borrow<commands>, v: item-move-result);
+
+  read-move-result: func(e: borrow<events>) -> list<item-move-result>;
+
+  send-local-result: func(c: borrow<commands>, v: local-target-result-event);
+
+  read-local-result: func(e: borrow<events>) -> list<local-target-result-event>;
+
+  send-click: func(c: borrow<commands>);
+
+  read-click: func(e: borrow<events>) -> u32;
+
+  send-hover: func(c: borrow<commands>, v: ui-hover);
+
+  read-hover: func(e: borrow<events>) -> list<ui-hover>;
+
+  send-right-click: func(c: borrow<commands>, v: ui-right-click);
+
+  read-right-click: func(e: borrow<events>) -> list<ui-right-click>;
+}
+
 world mod {
   import tinyecs:modding/ecs@0.1.0;
   import host;
   import assets;
   import actions;
   import packets;
+  import types;
+  import components;
   use tinyecs:modding/ecs@0.1.0.{app};
 
   export setup: func(app: app);
@@ -423,6 +1576,7 @@ package tinyecs:modding@0.1.0 {
 
     resource query {
       rows: func() -> list<row>;
+      entities: func() -> list<entity>;
       set: func(entity: entity, index: u8, value: json);
     }
 

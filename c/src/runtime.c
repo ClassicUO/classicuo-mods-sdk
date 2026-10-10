@@ -243,9 +243,11 @@ typedef struct param_decl {
     uint16_t type_id;
     cuo_term *terms;
     size_t n;
+    /* query: every read term has a typed column, so the call starts with `entities`
+     * instead of `rows` */
+    bool typed;
     /* res: the value received on the previous call, reused while res.unchanged. */
-    bool res_known, res_has;
-    tinyecs_modding_ecs_json_t res_cache;
+    cuo__res_cache res;
 } param_decl;
 
 typedef struct param_list {
@@ -272,6 +274,9 @@ typedef struct entry {
     /* observer */
     cuo_observer_fn obs_fn;
     uint8_t obs_kind;
+    /* a typed observer export (entity first): its record kind (CUO__K_TYPED + n), 0 = a tag */
+    bool typed;
+    uint8_t typed_kind;
     uint16_t type_id;
     char *event_name;
     cuo_packet_fn packet_fn;
@@ -353,7 +358,13 @@ static cuo_param add_query(param_list *l, const cuo_term *terms, size_t n)
         }
         q[qn++] = t;
     }
-    return add_param(l, CUO__K_QUERY, false, 0, q, qn);
+    cuo_param p = add_param(l, CUO__K_QUERY, false, 0, q, qn);
+    bool typed = true;
+    for (size_t i = 0; i < qn; i++)
+        if (reads(q[i].kind) && !cuo__typed_readable(q[i].type_id))
+            typed = false;
+    l->v[p].typed = typed;
+    return p;
 }
 
 static entry *new_entry(const char *name, bool is_observer, void *user)
@@ -552,6 +563,17 @@ static void link_export(entry *e)
              x->kinds[x->n - 1] == CUO__K_VERDICT;
         first = 2;
         end = ok ? x->n - 1 : 0;
+    } else if (e->is_observer && x->n >= 1 && x->kinds[0] == CUO__K_ENTITY) {
+        /* Typed: `entity: entity, value: <record>` (a tag: entity alone). */
+        int kind = cuo__typed_trigger_kind(e->obs_kind == OBS_EVENT ? e->event_name : cuo_type_path(e->type_id));
+        if (kind < 0)
+            cuo__trap(cuo_fmt("cuo: the export '%s' takes its trigger typed (`entity: entity, ...`), but that type has "
+                              "no typed trigger: declare it `trigger: trigger-data`",
+                              e->name));
+        ok = kind == 0 || (x->n >= 2 && x->kinds[1] == kind);
+        first = kind == 0 ? 1 : 2;
+        e->typed = true;
+        e->typed_kind = (uint8_t)kind;
     } else if (e->is_observer) {
         ok = x->n >= 1 && x->kinds[0] == CUO__K_TRIGGER;
         first = 1;
@@ -684,8 +706,37 @@ void exports_cuo_wit_setup(tinyecs_modding_ecs_own_app_t own_app)
 
 /* ── dispatch: the host called an export ─────────────────────────────────── */
 
-/* One host call per query / res / events (none for a res the host reports unchanged:
- * its cached bytes are handed out again). */
+static void drop_res_typed(cuo__res_cache *r)
+{
+    if (r->typed_valid && r->typed_has)
+        cuo__typed_res_free(r->typed_kind, r->typed);
+    r->typed_valid = false;
+}
+
+static void drop_res_json(cuo__res_cache *r)
+{
+    if (r->json_valid && r->json_has)
+        tinyecs_modding_ecs_json_free(&r->json);
+    r->json_valid = false;
+}
+
+static void fetch_rows(cuo__pval *v)
+{
+    tinyecs_modding_ecs_method_query_rows((tinyecs_modding_ecs_borrow_query_t){ v->handle }, &v->rows);
+    v->has_rows = true;
+    v->len = v->rows.len;
+}
+
+static void fetch_ents(cuo__pval *v)
+{
+    tinyecs_modding_ecs_method_query_entities((tinyecs_modding_ecs_borrow_query_t){ v->handle }, &v->ents);
+    v->has_ents = true;
+    v->ent_view = v->ents.ptr;
+    v->len = v->ents.len;
+}
+
+/* One host call per query / events as the call starts; a res only asks whether its
+ * value changed (its value is fetched on first use, and reused while unchanged). */
 static void fetch(param_decl *d, cuo__pval *v, int32_t handle)
 {
     v->tag = d->kind;
@@ -694,23 +745,22 @@ static void fetch(param_decl *d, cuo__pval *v, int32_t handle)
     v->handle = handle;
     switch (d->kind) {
     case CUO__K_QUERY:
-        tinyecs_modding_ecs_method_query_rows((tinyecs_modding_ecs_borrow_query_t){ handle }, &v->rows);
+        if (d->typed)
+            fetch_ents(v);
+        else
+            fetch_rows(v);
         break;
     case CUO__K_RES: {
-        tinyecs_modding_ecs_borrow_res_t r = { handle };
-        if (!d->res_known || !tinyecs_modding_ecs_method_res_unchanged(r)) {
-            if (d->res_has)
-                tinyecs_modding_ecs_json_free(&d->res_cache);
-            d->res_known = true;
-            d->res_has = tinyecs_modding_ecs_method_res_get(r, &d->res_cache);
+        cuo__res_cache *r = &d->res;
+        if (!r->known || !tinyecs_modding_ecs_method_res_unchanged((tinyecs_modding_ecs_borrow_res_t){ handle })) {
+            drop_res_json(r);
+            drop_res_typed(r);
         }
-        /* A view: the cache owns the bytes. */
-        v->has_res = d->res_has;
-        v->res = d->res_cache;
+        r->known = true;
+        v->res = r;
         break;
     }
     case CUO__K_EVENTS:
-        tinyecs_modding_ecs_method_events_read((tinyecs_modding_ecs_borrow_events_t){ handle }, &v->events);
         break;
     }
 }
@@ -723,14 +773,18 @@ static void release(cuo__params *ps, cuo_cmds *c)
         cuo__pval *v = &ps->v[i];
         switch (v->tag) {
         case CUO__K_QUERY:
-            tinyecs_modding_ecs_list_row_free(&v->rows);
+            if (v->has_rows)
+                tinyecs_modding_ecs_list_row_free(&v->rows);
+            if (v->has_ents)
+                cuo_wit_list_entity_free(&v->ents);
             tinyecs_modding_ecs_query_drop_own((tinyecs_modding_ecs_own_query_t){ v->handle });
             break;
         case CUO__K_RES:
             tinyecs_modding_ecs_res_drop_own((tinyecs_modding_ecs_own_res_t){ v->handle });
             break;
         case CUO__K_EVENTS:
-            cuo_wit_list_json_free(&v->events);
+            if (v->has_events)
+                cuo_wit_list_json_free(&v->events);
             tinyecs_modding_ecs_events_drop_own((tinyecs_modding_ecs_own_events_t){ v->handle });
             break;
         }
@@ -772,6 +826,16 @@ void cuo__dispatch(const cuo__export *x, const cuo__arg *a)
     cuo_obs ev = { 0 };
     ev.obs_id = (uint32_t)at;
     ev.params = &ps;
+    if (e->typed) {
+        ev.entity = a[0].entity;
+        if (e->typed_kind) {
+            ev.typed = cuo__typed_trigger_value(e->typed_kind, a[1].ptr);
+            ev.typed_kind = e->typed_kind;
+        }
+        e->obs_fn(&ev, &c, e->user);
+        release(&ps, &c);
+        return;
+    }
     if (e->obs_kind != OBS_PACKET) {
         tinyecs_modding_ecs_trigger_data_t *trigger = a[0].ptr;
         ev.entity = trigger->entity;
@@ -818,8 +882,8 @@ static cuo_query query_of(const cuo__params *ps, cuo_param p)
     cuo_query q = { NULL, 0, -1 };
     const cuo__pval *v = pval(ps, p, CUO__K_QUERY);
     if (v) {
-        q.vec = v->rows.ptr;
-        q.len = v->rows.len;
+        q.impl = v;
+        q.len = v->len;
         q.handle = v->handle;
     }
     return q;
@@ -829,17 +893,54 @@ static cuo_bytes res_of(const cuo__params *ps, cuo_param p)
 {
     cuo_bytes none = { NULL, 0 };
     const cuo__pval *v = pval(ps, p, CUO__K_RES);
-    if (!v || !v->has_res)
+    if (!v)
+        return none;
+    cuo__res_cache *r = v->res;
+    if (!r->json_valid) {
+        r->json_has = tinyecs_modding_ecs_method_res_get((tinyecs_modding_ecs_borrow_res_t){ v->handle }, &r->json);
+        r->json_valid = true;
+    }
+    if (!r->json_has)
         return none;
     /* A present marker resource: report "{}", not absence. */
-    return v->res.len ? json_bytes(&v->res) : cuo_str_bytes("{}");
+    return r->json.len ? json_bytes(&r->json) : cuo_str_bytes("{}");
+}
+
+const void *cuo__res_typed(const cuo__params *ps, cuo_param p, uint16_t kind)
+{
+    const cuo__pval *v = pval(ps, p, CUO__K_RES);
+    if (!v)
+        return NULL;
+    cuo__res_cache *r = v->res;
+    if (r->typed_valid && r->typed_kind != kind)
+        drop_res_typed(r);
+    if (!r->typed_valid) {
+        if (r->typed_kind != kind) {
+            free(r->typed);
+            r->typed = xrealloc(NULL, cuo__typed_res_size(kind));
+        }
+        r->typed_kind = kind;
+        r->typed_has = cuo__typed_res_get(kind, v->handle, r->typed);
+        r->typed_valid = true;
+    }
+    return r->typed_has ? r->typed : NULL;
+}
+
+int32_t cuo__events_handle(const cuo__params *ps, cuo_param p)
+{
+    const cuo__pval *v = pval(ps, p, CUO__K_EVENTS);
+    return v ? v->handle : -1;
 }
 
 static cuo_events events_of(const cuo__params *ps, cuo_param p)
 {
     cuo_events e = { NULL, 0 };
-    const cuo__pval *v = pval(ps, p, CUO__K_EVENTS);
+    cuo__pval *v = (cuo__pval *)pval(ps, p, CUO__K_EVENTS);
     if (v) {
+        if (!v->has_events) {
+            tinyecs_modding_ecs_method_events_read((tinyecs_modding_ecs_borrow_events_t){ v->handle }, &v->events);
+            v->has_events = true;
+        }
         e.vec = v->events.ptr;
         e.len = v->events.len;
     }
@@ -854,23 +955,61 @@ cuo_events cuo_input_events(const cuo_input *in, cuo_param p) { return events_of
 
 typedef tinyecs_modding_ecs_row_t row_t;
 
+static const row_t *rows_of(cuo_query q)
+{
+    cuo__pval *v = (cuo__pval *)q.impl;
+    if (!v)
+        return NULL;
+    if (!v->has_rows)
+        fetch_rows(v);
+    return v->rows.ptr;
+}
+
+static const cuo_entity *entities_of(cuo_query q)
+{
+    cuo__pval *v = (cuo__pval *)q.impl;
+    if (!v)
+        return NULL;
+    if (!v->ent_view) {
+        cuo_entity *e = cuo_alloc((v->len ? v->len : 1) * sizeof *e);
+        for (size_t i = 0; i < v->len; i++)
+            e[i] = v->rows.ptr[i].entity;
+        v->ent_view = e;
+    }
+    return v->ent_view;
+}
+
+const cuo_entity *cuo_query_entities(cuo_query q)
+{
+    return entities_of(q);
+}
+
+bool cuo_query_index(cuo_query q, cuo_entity entity, size_t *index)
+{
+    const cuo_entity *e = entities_of(q);
+    for (size_t i = 0; i < q.len; i++)
+        if (e[i] == entity) {
+            if (index)
+                *index = i;
+            return true;
+        }
+    return false;
+}
+
 cuo_row cuo_query_row(cuo_query q, size_t i)
 {
-    cuo_row r = { i < q.len ? &((const row_t *)q.vec)[i] : NULL };
+    cuo_row r = { i < q.len ? &rows_of(q)[i] : NULL };
     return r;
 }
 
 bool cuo_query_find(cuo_query q, cuo_entity entity, cuo_row *out)
 {
-    for (size_t i = 0; i < q.len; i++) {
-        const row_t *t = &((const row_t *)q.vec)[i];
-        if (t->entity == entity) {
-            if (out)
-                out->table = t;
-            return true;
-        }
-    }
-    return false;
+    size_t i;
+    if (!cuo_query_index(q, entity, &i))
+        return false;
+    if (out)
+        *out = cuo_query_row(q, i);
+    return true;
 }
 
 void cuo_query_set(cuo_query q, cuo_entity entity, size_t index, cuo_bytes json)

@@ -18,14 +18,22 @@ static tinyecs_modding_ecs_borrow_commands_t H(cuo_cmds *c)
     return c->handle;
 }
 
-static tinyecs_modding_ecs_bundle_t bundle(const cuo_comp *comps, size_t n)
+/* The JSON comps; *typed = how many go through the entity builder instead. */
+static tinyecs_modding_ecs_bundle_t bundle(const cuo_comp *comps, size_t n, size_t *typed)
 {
     pair_t *p = cuo_alloc((n ? n : 1) * sizeof *p);
+    size_t k = 0;
+    *typed = 0;
     for (size_t i = 0; i < n; i++) {
-        p[i].f0 = cuo__wstr(cuo_type_path(comps[i].type_id));
-        p[i].f1 = cuo__wbytes(comps[i].data);
+        if (comps[i].typed) {
+            ++*typed;
+            continue;
+        }
+        p[k].f0 = cuo__wstr(cuo_type_path(comps[i].type_id));
+        p[k].f1 = cuo__wbytes(comps[i].data);
+        k++;
     }
-    tinyecs_modding_ecs_bundle_t b = { p, n };
+    tinyecs_modding_ecs_bundle_t b = { p, k };
     return b;
 }
 
@@ -54,13 +62,22 @@ cuo_comp cuo_comp_marker(uint16_t type_id)
 cuo_comp cuo_child_of(cuo_entity parent)
 {
     cuo_ChildOfDto dto = { .parent = parent };
-    return cuo_ChildOfDto_comp(&dto);
+    return cuo_ChildOfDto_typed(&dto);
 }
 
+/* Typed comps: the entity builder, after one commands.insert of the JSON ones. */
 cuo_entity cuo_spawn(cuo_cmds *c, const cuo_comp *comps, size_t n)
 {
-    tinyecs_modding_ecs_bundle_t b = bundle(comps, n);
-    return tinyecs_modding_ecs_method_commands_spawn(H(c), &b);
+    size_t typed;
+    tinyecs_modding_ecs_bundle_t b = bundle(comps, n, &typed);
+    if (!typed)
+        return tinyecs_modding_ecs_method_commands_spawn(H(c), &b);
+    cuo_entity e;
+    int32_t eb = cuo__eb_spawn(H(c), &e);
+    if (b.len)
+        tinyecs_modding_ecs_method_commands_insert(H(c), e, &b);
+    cuo__eb_push(eb, comps, n);
+    return e;
 }
 
 cuo_entity cuo_spawn_child(cuo_cmds *c, cuo_entity parent, const cuo_comp *comps, size_t n)
@@ -73,8 +90,12 @@ cuo_entity cuo_spawn_child(cuo_cmds *c, cuo_entity parent, const cuo_comp *comps
 
 void cuo_insert(cuo_cmds *c, cuo_entity e, const cuo_comp *comps, size_t n)
 {
-    tinyecs_modding_ecs_bundle_t b = bundle(comps, n);
-    tinyecs_modding_ecs_method_commands_insert(H(c), e, &b);
+    size_t typed;
+    tinyecs_modding_ecs_bundle_t b = bundle(comps, n, &typed);
+    if (b.len || !typed)
+        tinyecs_modding_ecs_method_commands_insert(H(c), e, &b);
+    if (typed)
+        cuo__eb_push(cuo__eb_of(H(c), e), comps, n);
 }
 
 void cuo_insert1(cuo_cmds *c, cuo_entity e, cuo_comp comp)
@@ -98,6 +119,8 @@ void cuo_despawn(cuo_cmds *c, cuo_entity e)
 
 void cuo_resource_set(cuo_cmds *c, cuo_comp value)
 {
+    if (value.typed)
+        cuo__trap("cuo: cuo_resource_set takes a JSON payload (cuo_X_comp), not cuo_X_typed");
     const cuo__params *ps = c->params;
     for (size_t i = 0; i < ps->n; i++) {
         const cuo__pval *v = &ps->v[i];

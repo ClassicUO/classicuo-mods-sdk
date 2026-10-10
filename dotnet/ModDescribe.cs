@@ -43,6 +43,9 @@ public static class ModDescribe
             entries = m.Entries;
             foreach (var e in entries)
             {
+                // A typed observer spills to memory past the limit (Glue reads the args area).
+                if (e.Trigger?.Typed != null)
+                    continue;
                 var flat = (e.Trigger == null ? 0 : 3) + e.Params.Count;
                 if (flat > MaxFlatParams)
                     throw new InvalidOperationException($"{e.Signature()}: {flat} canonical-ABI params, at most {MaxFlatParams} are supported — split the system");
@@ -119,11 +122,61 @@ public static class ModDescribe
                 sb.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"cabi_post_{e.Name}\")]");
                 sb.AppendLine($"    static void Post{i}(nint ret) => CuoModRuntime.PostPacket(ret);");
             }
+            else if (e.Trigger.Typed is { } typed)
+                TypedObserver(sb, i, typed, n);
             else
                 sb.AppendLine($"    static void E{i}(long entity, nint value, int valueLen{ps}) {{ {stack}CuoModRuntime.RunObserver({i}, entity, value, valueLen, {handles}); }}");
         }
         sb.AppendLine("}");
         return sb.ToString();
+    }
+
+    // A typed observer: func(entity: entity, value: <record>, p0..) — the record's flat core
+    // params are stored back into a stack record; past 16 flat params the host passes one
+    // pointer to the args tuple (entity @0, record, handles), which the guest frees.
+    static void TypedObserver(StringBuilder sb, int i, TypedTrigger typed, int n)
+    {
+        var flat = typed.Record == null ? 0 : typed.Flat.Length;
+        var handles = n == 0 ? "null, 0" : "h, " + n;
+        if (1 + flat + n <= MaxFlatParams)
+        {
+            var ps = new List<string> { "long entity" };
+            ps.AddRange(Enumerable.Range(0, flat).Select(k => $"{typed.Flat[k].Core} f{k}"));
+            ps.AddRange(Enumerable.Range(0, n).Select(k => $"int p{k}"));
+            sb.Append($"    static void E{i}({string.Join(", ", ps)}) {{ ");
+            var rec = "0";
+            if (typed.Record != null)
+            {
+                sb.Append($"var r = stackalloc ulong[{(typed.Size + 7) / 8}]; var rec = (byte*)r; ");
+                for (var k = 0; k < flat; k++)
+                    sb.Append($"*({typed.Flat[k].Store}*)(rec + {typed.Flat[k].Offset}) = ({typed.Flat[k].Store})f{k}; ");
+                rec = "(nint)rec";
+            }
+            if (n > 0)
+                sb.Append($"int* h = stackalloc int[{n}] {{ {string.Join(", ", Enumerable.Range(0, n).Select(k => "p" + k))} }}; ");
+            sb.AppendLine($"CuoModRuntime.RunObserverTyped({i}, entity, {rec}, {handles}, 0); }}");
+            return;
+        }
+        // Spilled: (entity u64 @0, record @align, handles i32...).
+        var off = 8;
+        var recOff = 0;
+        if (typed.Record != null)
+        {
+            recOff = (off + typed.Align - 1) / typed.Align * typed.Align;
+            off = recOff + typed.Size;
+        }
+        var hs = new List<string>();
+        for (var k = 0; k < n; k++)
+        {
+            off = (off + 3) / 4 * 4;
+            hs.Add($"*(int*)(a + {off})");
+            off += 4;
+        }
+        sb.Append($"    static void E{i}(nint args) {{ var a = (byte*)args; ");
+        if (n > 0)
+            sb.Append($"int* h = stackalloc int[{n}] {{ {string.Join(", ", hs)} }}; ");
+        var r = typed.Record != null ? $"(nint)(a + {recOff})" : "0";
+        sb.AppendLine($"CuoModRuntime.RunObserverTyped({i}, *(long*)a, {r}, {handles}, args); }}");
     }
 
     static string Wit(List<Entry> entries, string world, string sdkWit)
@@ -133,7 +186,10 @@ public static class ModDescribe
         sb.AppendLine($"package cuo-mod:{world};");
         sb.AppendLine();
         sb.AppendLine($"world {world} {{");
-        sb.AppendLine("    use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, trigger-data, packet-direction, verdict};");
+        sb.AppendLine("    use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity, trigger-data, packet-direction, verdict};");
+        var records = entries.Select(e => e.Trigger?.Typed?.Record).OfType<string>().Distinct().ToList();
+        if (records.Count > 0)
+            sb.AppendLine($"    use cuo:modding/types@0.1.0.{{{string.Join(", ", records)}}};");
         sb.AppendLine();
         foreach (var e in entries)
         {
@@ -142,6 +198,12 @@ public static class ModDescribe
             {
                 args.Add("direction: packet-direction");
                 args.Add("packet: list<u8>");
+            }
+            else if (e.Trigger?.Typed is { } typed)
+            {
+                args.Add("entity: entity");
+                if (typed.Record != null)
+                    args.Add("value: " + typed.Record);
             }
             else if (e.Trigger != null)
                 args.Add("trigger: trigger-data");

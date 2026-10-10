@@ -134,6 +134,12 @@ namespace ModWorld.wit.Imports.tinyecs.modding.v0_1_0
                 public static extern void wasmImportRows(int p0, nint p1);
             }
 
+            public static class EntitiesWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]query.entities"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern void wasmImportEntities(int p0, nint p1);
+            }
+
             public static class SetWasmInterop
             {
                 [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]query.set"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]

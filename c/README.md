@@ -18,6 +18,10 @@ c/
   include/cuo/types.h    GENERATED  payload structs + (de)serializers, CUO_KEY_*
   include/cuo/exports.h  internal: what the generated trampolines hand the dispatcher
   src/types.c            GENERATED  their implementation
+  include/cuo/typed.h    GENERATED  the typed API of every curated path (cuo_X_typed / _column / _set / _res / _send / _events / _obs_typed)
+  include/cuo/typed_kinds.h GENERATED typed observer record kinds (exports.h)
+  src/typed.c            typed components: the generic half (builder chain, scratch strings)
+  src/typed_gen.c        GENERATED  the per-type half: curated table, cuo_X <-> record converters
   src/*.c                runtime (scratch, setup, dispatch, commands, host wrappers, JSON, UI)
   wit/cuo-c-sdk.wit      world cuo:c-sdk/mod = cuo:modding/mod + the SDK's own export
   gen-exports.awk        per-mod trampolines from the generated header
@@ -67,11 +71,10 @@ static cuo_param hits_q, time_r;
 static void low_hp(const cuo_input *in, cuo_cmds *c, void *user)
 {
     cuo_query q = cuo_input_query(in, hits_q);
-    for (size_t i = 0; i < q.len; i++) {
-        cuo_Hits h;
-        if (cuo_Hits_parse(cuo_row_comp(cuo_query_row(q, i), 0), &h) && h.value < h.max_value / 4)
+    const cuo_Hits *hits = cuo_Hits_column(q, 0); /* typed: no JSON */
+    for (size_t i = 0; i < q.len; i++)
+        if (hits[i].value < hits[i].max_value / 4)
             cuo_chat_system(c, "Low HP!", 0x21);
-    }
 }
 
 static void on_click(const cuo_obs *ev, cuo_cmds *c, void *user)
@@ -108,6 +111,7 @@ void cuo_setup(cuo_builder *m)
   arrive in one host call (`query.rows`) when the callback starts.
 - **Writing components**: `cuo_insert` (a command), or declare the term `CUO_MUT(id)`
   and write the row back with `cuo_query_set(q, entity, slot, json)` (`query.set`).
+- **Typed components** (below): the curated types skip JSON.
   **Resources**: declare `cuo_system_res(m, s, id, true)` and `cuo_resource_set`, or
   `cuo_set_resource` (a command, no declaration).
 - **Entities**: `cuo_spawn` returns the real id at once; keep it in a static and use it
@@ -127,6 +131,67 @@ void cuo_setup(cuo_builder *m)
   from its own Startup system (`cuo-sdk-hotkeys`, exported through `cuo:c-sdk/mod`).
 - **Type ids** (`cuo_X_id()`, `cuo_type_id(path)`) are guest-local handles for type
   paths; the host checks the paths themselves when the mod declares / uses them.
+
+## Typed components
+
+The curated types — every component / resource / event the shipped mods use whose
+payload has a WIT shape (`include/cuo/typed.h` lists them) — also cross as typed
+WIT records through `cuo:modding/components` (generated in `../wit/cuo-mod.wit`; the
+world gets it through `cuo:c-sdk/mod`). You keep the same structs (`cuo_Node`,
+`cuo_Hits`, ...) and UI helpers; the SDK converts them to the records. Everything else
+stays on the JSON path, and both mix freely.
+
+| | JSON | typed |
+|---|---|---|
+| insert / spawn | `cuo_X_comp(&v)` | `cuo_X_typed(&v)` (tags: `cuo_UiMovable_typed()`, `cuo_UiNoWindowDrag_typed()`) |
+| read a query column | `cuo_X_parse(cuo_row_comp(row, slot), &v)` | `const cuo_X *col = cuo_X_column(q, slot)`, aligned with `cuo_query_entities(q)` |
+| write back (`CUO_MUT`) | `cuo_query_set(q, e, slot, json)` | `cuo_X_set(q, e, slot, &v)` (not the read-only player / serial types) |
+| resource param | `cuo_X_parse(cuo_input_res(in, p), &v)` | `cuo_X_res(in, p, &v)` (`_obs_res` in observers) |
+| send an event | `cuo_X_emit(c, 0, &v)` | `cuo_X_send(c, &v)` (zero-size event: `cuo_X_send(c)`) |
+| events param | `cuo_X_parse(cuo_events_at(cuo_input_events(in, p), i), &v)` | `const cuo_X *ev = cuo_X_events(in, p, &n)` (zero-size: the count) |
+| observer trigger | export `func(trigger: trigger-data, ...)`, `cuo_X_parse(cuo_obs_value(ev), &v)` | export `func(entity: entity, value: <record>, ...)` (a tag: `entity` alone), `const cuo_X *v = cuo_X_obs_typed(ev)` |
+
+A typed observer export names its record from `cuo:modding/types` in the mod's world:
+
+```wit
+use tinyecs:modding/ecs@0.1.0.{commands, entity};
+use cuo:modding/types@0.1.0.{item-move-result};
+export on-move: func(entity: entity, value: item-move-result, commands: commands);
+```
+
+```c
+/* spawn: node / colours / movable / z typed, the name (not curated) as JSON */
+cuo_Node n = cuo_node_abs(40, 140, 240, 120);
+cuo_entity root = cuo_spawn(c, CUO_COMPS(
+    cuo_Node_typed(&n),
+    cuo_BackgroundColor_typed(&(cuo_BackgroundColor){ .value = cuo_rgba(18, 18, 26, 235) }),
+    cuo_UiMovable_typed(),
+    cuo_GlobalZIndex_typed(&(cuo_GlobalZIndex){ .value = 100 }),
+    cuo_UiName_comp(&(cuo_UiName){ .value = "my.root" })));
+cuo_insert1(c, label, cuo_Text_typed(&(cuo_Text){ .value = cuo_fmt("clicks: %d", n) }));
+
+/* read: a column per read term, one host call each */
+cuo_query q = cuo_input_query(in, texts_q);            /* CUO_MUT(cuo_Text_id()) */
+const cuo_entity *ents = cuo_query_entities(q);
+const cuo_Text *texts = cuo_Text_column(q, 0);
+for (size_t i = 0; i < q.len; i++)
+    if (strcmp(texts[i].value, "old") == 0)
+        cuo_Text_set(q, ents[i], 0, &(cuo_Text){ .value = "new" });
+```
+
+- A spawn / insert holding typed components is the WIT entity builder
+  (`components.spawn` / `entity-of`) with one chained call per typed component, after
+  one `commands.insert` of its JSON ones — deferred and in order like every command.
+  `cuo_child_of` / `cuo_spawn_child` are typed. The value is copied (strings too).
+- A query whose read terms all have a column starts with `query.entities` instead of
+  `query.rows`; rows are fetched only if you read one (`cuo_query_row` /
+  `cuo_query_find`). Columns and `cuo_query_entities` are call-scoped scratch.
+- A res param's value is fetched on first use (JSON or typed) and reused while the host
+  reports it unchanged.
+- The generated imports are callable directly too
+  (`cuo_modding_components_column_hits`, `cuo_modding_components_spawn`, ...).
+- The curated list lives in `src/typed.c` (`CURATED` + one converter per type): a type
+  added to the generated `components` interface needs its row there.
 
 ## Build
 

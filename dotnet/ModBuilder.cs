@@ -646,7 +646,7 @@ internal sealed class Entry(Action<RunScope> run, string name, List<ParamDecl> @
 {
     // A system name may not shadow the world's own items.
     internal static readonly HashSet<string> Reserved =
-        ["setup", "host", "assets", "actions", "packets", "ecs", "app", "commands", "query", "res", "events", "trigger-data", "packet-direction", "verdict"];
+        ["setup", "host", "assets", "actions", "packets", "types", "components", "ecs", "app", "commands", "query", "res", "events", "trigger-data", "packet-direction", "verdict"];
 
     internal readonly Action<RunScope> Run = run;
     internal readonly List<object> Locals = new();
@@ -657,6 +657,8 @@ internal sealed class Entry(Action<RunScope> run, string name, List<ParamDecl> @
     internal ObserverTrigger? Trigger;
     // Per host-param slot: the Res / ResMut parse kept across runs (see ResCell).
     internal object?[] ResCells = [];
+    // Typed query columns, keyed (query param slot << 8 | term index): see RunScope.Column.
+    internal Dictionary<int, TypedColumnBase>? Columns;
     internal readonly List<Entry> After = new();
     internal readonly List<Entry> Before = new();
 
@@ -682,6 +684,12 @@ internal sealed class Entry(Action<RunScope> run, string name, List<ParamDecl> @
         {
             Arg("direction");
             Arg("packet");
+        }
+        else if (Trigger is { Typed: { } typed })
+        {
+            Arg("entity");
+            if (typed.Record != null)
+                Arg("value: " + typed.Record);
         }
         else if (Trigger != null)
             Arg("trigger");

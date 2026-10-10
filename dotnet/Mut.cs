@@ -68,12 +68,14 @@ internal static class MutTerm<T>
 /// One Mut term's values for one run: parsed lazily per row (so a TryGet and a foreach
 /// over the same row share a slot), compared and written back after the run.
 /// </summary>
-internal sealed class MutColumn<T>
+internal sealed unsafe class MutColumn<T>
 {
     readonly RunScope _scope;
     readonly int _slot;
     readonly nint _rows;
     readonly int _index;
+    // A typed query: values lift from (and compare against) the typed column; the write is set-<x>.
+    readonly TypedColumn<T>? _typed;
     readonly T[] _values;
     readonly bool[] _loaded;
     readonly bool[] _dirty;
@@ -85,6 +87,8 @@ internal sealed class MutColumn<T>
         _rows = rows;
         _index = index;
         var count = scope.Rows(slot).Count;
+        if (scope.IsTyped(slot))
+            _typed = scope.Column(slot, index, Typed<T>.Codec!);
         _values = new T[count];
         _loaded = new bool[count];
         _dirty = new bool[count];
@@ -102,10 +106,16 @@ internal sealed class MutColumn<T>
         return ref _values[row];
     }
 
-    T Parse(int row) => RowReader.ReadComp<T>(_scope, _rows, row, _index);
+    T Parse(int row) =>
+        _typed != null ? _typed.Get(_scope, _slot, row) : RowReader.ReadComp<T>(_scope, _rows, row, _index);
 
     void WriteBack()
     {
+        if (_typed != null)
+        {
+            WriteBackTyped(_typed);
+            return;
+        }
         var info = _scope.Host.Json<T>();
         string? path = null;
         for (var i = 0; i < _dirty.Length; i++)
@@ -119,7 +129,7 @@ internal sealed class MutColumn<T>
             {
                 if (!JsonScratch.Differs(_values[i], info, original.Span, out var now))
                     continue;
-                var entity = EcsAbi.RowEntity(_rows, i);
+                var entity = EcsAbi.RowEntity(_rows, i, EcsAbi.RowStride);
                 // With a Commands param in the run, write through commands.insert: it is
                 // applied after the run's own commands (query.set lands at once, so a
                 // Commands.Insert of the same component would win over the Mut).
@@ -132,6 +142,22 @@ internal sealed class MutColumn<T>
             {
                 original.Return();
             }
+        }
+    }
+
+    // query.set is deferred in order with the run's commands on every host, so the write
+    // lands after this run's own Commands.Insert of the same component either way.
+    void WriteBackTyped(TypedColumn<T> column)
+    {
+        var codec = column.Codec;
+        var handle = _scope.Handle(_slot);
+        var rec = stackalloc byte[codec.Size];
+        for (var i = 0; i < _dirty.Length; i++)
+        {
+            if (!_dirty[i] || !codec.Differs(_values[i], column.Element(_scope, _slot, i)))
+                continue;
+            codec.LowerInto(_values[i], rec);
+            codec.Set(handle, EcsAbi.RowEntity(_rows, i, EcsAbi.EntityStride), (byte)_index, rec);
         }
     }
 }
