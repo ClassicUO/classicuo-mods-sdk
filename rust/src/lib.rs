@@ -29,6 +29,12 @@
 //! (two schedules / triggers) is one export and shares its `Local`s; two fns with the
 //! same name, or a closure, panic at setup.
 //!
+//! Every value crosses typed (`cuo:modding/components`); what an SDK type may be used as
+//! is the trait it implements: [`Component`] (query / filter / observe),
+//! [`WritableComponent`] (insert, `&mut` in a query), [`Resource`] (`Res`),
+//! [`WritableResource`] (`ResMut`, `Commands::set_resource`), [`GameEvent`] (send, read,
+//! observe). Only the generated [`types`] implement them.
+//!
 //! `host`, `assets`, `actions` and `packets` are the WIT interfaces (wit-bindgen's
 //! modules). To see / block / rewrite packets, add a packet observer:
 //! `app.add_packet_observer(dir, ids, f)`.
@@ -70,7 +76,7 @@ pub mod __private {
     pub use crate::ecs::{wire_is, Wire};
     pub use crate::p2::bindings::tinyecs::modding::ecs;
     pub use crate::p2::bindings::cuo::modding::types as wtypes;
-    pub use crate::p2::{run_observer, run_observer_typed, run_packet_observer, run_system, Param};
+    pub use crate::p2::{run_observer, run_packet_observer, run_system, Param};
     pub use crate::typed::{trigger_tag, trigger_value, TagTrigger, TypedTrigger};
     pub use wit_bindgen;
 }
@@ -79,8 +85,9 @@ pub mod __private {
 /// and the host function modules.
 pub mod prelude {
     pub use crate::ecs::{
-        Add, Added, App, Bundle, Changed, Commands, Component, Entity, Event, EventReader, Local, On, Packet,
-        PacketDirection, Query, RawComponent, Remove, Res, ResMut, Schedule, SystemOrder, Verdict, With, Without,
+        Add, Added, App, Bundle, Changed, Commands, Component, Entity, Event, EventReader, GameEvent, Local, On,
+        Packet, PacketDirection, Query, Remove, Res, ResMut, Resource, Schedule, SystemOrder, Verdict, With, Without,
+        WritableComponent, WritableResource,
     };
     pub use crate::system;
     pub use crate::types::*;

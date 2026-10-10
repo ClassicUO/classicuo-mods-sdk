@@ -2,8 +2,8 @@ namespace CuoModSdk.Types;
 
 // Ergonomic constructors for the generated cuo UI payload shapes — the C# twin of
 // cuo-mod-sdk/src/ui.rs. There is exactly ONE Node / Val / UiRect / Color in this SDK:
-// the generated struct in Types.cs, which mirrors what the host writes through
-// System.Text.Json. These `partial` halves only add constructors, so a mod can never
+// the generated struct in Types.cs, which mirrors the host type its record crosses as
+// (cuo:modding/types). These `partial` halves only add constructors, so a mod can never
 // build a Node the host doesn't recognise.
 
 public partial struct Val
@@ -68,7 +68,7 @@ public partial struct Color
         G = g,
         B = b,
         A = a,
-        // IsVisible is `A > 0` on the host (a getter-only property STJ never writes
+        // IsVisible is `A > 0` on the host (host-computed, not in the record, so never written
         // back); filled only so the payload is self-consistent.
         IsVisible = a > 0,
     };

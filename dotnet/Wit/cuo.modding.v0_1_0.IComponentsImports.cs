@@ -3595,6 +3595,26 @@ internal interface IComponentsImports {
 
     }
 
+    internal static unsafe void PutContext(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.GameContext v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = r.Handle;
+
+        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.playerName);
+        var length = utf8Bytes.Length;
+        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr = gcHandle.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle.Free());
+        ComponentsImportsInterop.PutContextWasmInterop.wasmImportPutContext(handle, unchecked((int)(v.playerSerial)), strPtr.ToInt32(), length, v.map, v.season, unchecked((int)(v.clientVersion)), (v.useOldStatusGump ? 1 : 0));
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
+
+    }
+
     internal static unsafe void SetResourceContext(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.GameContext v)
     {
         var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
@@ -3673,6 +3693,13 @@ internal interface IComponentsImports {
 
     }
 
+    internal static unsafe void PutState(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.GameState v)
+    {
+        var handle = r.Handle;
+        ComponentsImportsInterop.PutStateWasmInterop.wasmImportPutState(handle, v.current);
+
+    }
+
     internal static unsafe void SetResourceState(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.GameState v)
     {
         var handle = c.Handle;
@@ -3718,6 +3745,40 @@ internal interface IComponentsImports {
             default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
         }
         return lifted;
+
+    }
+
+    internal static unsafe void PutContainerPositions(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ContainerPositions v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = r.Handle;
+
+        void* address;
+        if ((12 * v.saved.Count) < 1024) {
+            var retArea = stackalloc uint[3 * v.saved.Count + 1];
+            address = MemoryHelper.AlignStackPtr(retArea, 4);
+        }
+        else
+        {
+            var bufferSize = 12 * (nuint)v.saved.Count;
+            address = global::System.Runtime.InteropServices.NativeMemory.AlignedAlloc(bufferSize, 4);
+            cleanups.Add(() => global::System.Runtime.InteropServices.NativeMemory.AlignedFree(address));
+        }
+
+        for (int index = 0; index < v.saved.Count; ++index) {
+            global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ContainerPosition element = v.saved[index];
+            int basePtr = (int)address + (index * 12);
+            new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0] = unchecked((int)(element.serial));
+            new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] = element.x;
+            new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0] = element.y;
+
+        }
+        ComponentsImportsInterop.PutContainerPositionsWasmInterop.wasmImportPutContainerPositions(handle, (int)address, v.saved.Count);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
 
     }
 
@@ -3844,6 +3905,52 @@ internal interface IComponentsImports {
             default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
         }
         return lifted;
+
+    }
+
+    internal static unsafe void PutModHotkeys(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModHotkeyBindings v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = r.Handle;
+
+        void* address;
+        if ((20 * v.bindings.Count) < 1024) {
+            var retArea = stackalloc uint[5 * v.bindings.Count + 1];
+            address = MemoryHelper.AlignStackPtr(retArea, 4);
+        }
+        else
+        {
+            var bufferSize = 20 * (nuint)v.bindings.Count;
+            address = global::System.Runtime.InteropServices.NativeMemory.AlignedAlloc(bufferSize, 4);
+            cleanups.Add(() => global::System.Runtime.InteropServices.NativeMemory.AlignedFree(address));
+        }
+
+        for (int index = 0; index < v.bindings.Count; ++index) {
+            global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModHotkeyBinding element = v.bindings[index];
+            int basePtr = (int)address + (index * 20);
+
+            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(element.name);
+            var length = utf8Bytes.Length;
+            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr = gcHandle.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle.Free());
+            new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] = length;
+            new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0] = (nint)strPtr.ToInt32();
+            new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0] = element.key;
+            new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0] = element.mouse;
+            *(byte*)(basePtr + 16) = (byte)(element.ctrl ? 1 : 0);
+            *(byte*)(basePtr + 17) = (byte)(element.shift ? 1 : 0);
+            *(byte*)(basePtr + 18) = (byte)(element.alt ? 1 : 0);
+            *(byte*)(basePtr + 19) = (byte)(element.consume ? 1 : 0);
+
+        }
+        ComponentsImportsInterop.PutModHotkeysWasmInterop.wasmImportPutModHotkeys(handle, (int)address, v.bindings.Count, (v.consumeKeys ? 1 : 0));
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
 
     }
 
@@ -3996,6 +4103,107 @@ internal interface IComponentsImports {
             default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
         }
         return lifted;
+
+    }
+
+    internal static unsafe void PutSchema(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModOptionsSchema v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = r.Handle;
+
+        void* address19;
+        if ((60 * v.options.Count) < 1024) {
+            var retArea21 = stackalloc uint[15 * v.options.Count + 1];
+            address19 = MemoryHelper.AlignStackPtr(retArea21, 4);
+        }
+        else
+        {
+            var bufferSize20 = 60 * (nuint)v.options.Count;
+            address19 = global::System.Runtime.InteropServices.NativeMemory.AlignedAlloc(bufferSize20, 4);
+            cleanups.Add(() => global::System.Runtime.InteropServices.NativeMemory.AlignedFree(address19));
+        }
+
+        for (int index18 = 0; index18 < v.options.Count; ++index18) {
+            global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModOption element = v.options[index18];
+            int basePtr = (int)address19 + (index18 * 60);
+
+            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(element.key);
+            var length = utf8Bytes.Length;
+            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr = gcHandle.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle.Free());
+            new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] = length;
+            new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0] = (nint)strPtr.ToInt32();
+
+            var utf8Bytes1 = global::System.Text.Encoding.UTF8.GetBytes(element.label);
+            var length2 = utf8Bytes1.Length;
+            var gcHandle3 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes1, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr0 = gcHandle3.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle3.Free());
+            new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0] = length2;
+            new global::System.Span<nint>((void*)((byte*)basePtr + 8), 1)[0] = (nint)strPtr0.ToInt32();
+
+            var utf8Bytes5 = global::System.Text.Encoding.UTF8.GetBytes(element.group);
+            var length6 = utf8Bytes5.Length;
+            var gcHandle7 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes5, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr4 = gcHandle7.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle7.Free());
+            new global::System.Span<int>((void*)((byte*)basePtr + 20), 1)[0] = length6;
+            new global::System.Span<nint>((void*)((byte*)basePtr + 16), 1)[0] = (nint)strPtr4.ToInt32();
+
+            var utf8Bytes9 = global::System.Text.Encoding.UTF8.GetBytes(element.keywords);
+            var length10 = utf8Bytes9.Length;
+            var gcHandle11 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes9, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr8 = gcHandle11.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle11.Free());
+            new global::System.Span<int>((void*)((byte*)basePtr + 28), 1)[0] = length10;
+            new global::System.Span<nint>((void*)((byte*)basePtr + 24), 1)[0] = (nint)strPtr8.ToInt32();
+            *(byte*)(basePtr + 32) = (byte)element.kind;
+            new global::System.Span<int>((void*)((byte*)basePtr + 36), 1)[0] = element.min;
+            new global::System.Span<int>((void*)((byte*)basePtr + 40), 1)[0] = element.max;
+            new global::System.Span<int>((void*)((byte*)basePtr + 44), 1)[0] = element.step;
+            new global::System.Span<int>((void*)((byte*)basePtr + 48), 1)[0] = element.@default;
+
+            void* address;
+            if ((8 * element.choices.Count) < 1024) {
+                var retArea = stackalloc uint[2 * element.choices.Count + 1];
+                address = MemoryHelper.AlignStackPtr(retArea, 4);
+            }
+            else
+            {
+                var bufferSize = 8 * (nuint)element.choices.Count;
+                address = global::System.Runtime.InteropServices.NativeMemory.AlignedAlloc(bufferSize, 4);
+                cleanups.Add(() => global::System.Runtime.InteropServices.NativeMemory.AlignedFree(address));
+            }
+
+            for (int index = 0; index < element.choices.Count; ++index) {
+                string element12 = element.choices[index];
+                int basePtr13 = (int)address + (index * 8);
+
+                var utf8Bytes15 = global::System.Text.Encoding.UTF8.GetBytes(element12);
+                var length16 = utf8Bytes15.Length;
+                var gcHandle17 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes15, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+                var strPtr14 = gcHandle17.AddrOfPinnedObject();
+
+                cleanups.Add(()=> gcHandle17.Free());
+                new global::System.Span<int>((void*)((byte*)basePtr13 + 4), 1)[0] = length16;
+                new global::System.Span<nint>((void*)((byte*)basePtr13 + 0), 1)[0] = (nint)strPtr14.ToInt32();
+
+            }
+            new global::System.Span<int>((void*)((byte*)basePtr + 56), 1)[0] = element.choices.Count;
+            new global::System.Span<nint>((void*)((byte*)basePtr + 52), 1)[0] = (nint)(int)address;
+
+        }
+        ComponentsImportsInterop.PutSchemaWasmInterop.wasmImportPutSchema(handle, (int)address19, v.options.Count);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
 
     }
 
@@ -4577,6 +4785,26 @@ internal interface IComponentsImports {
 
     }
 
+    internal static unsafe void PutClipboardSet(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ClipboardSet v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = r.Handle;
+
+        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.text);
+        var length = utf8Bytes.Length;
+        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr = gcHandle.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle.Free());
+        ComponentsImportsInterop.PutClipboardSetWasmInterop.wasmImportPutClipboardSet(handle, v.seq, strPtr.ToInt32(), length);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
+
+    }
+
     internal static unsafe void SetResourceClipboardSet(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ClipboardSet v)
     {
         var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
@@ -4626,6 +4854,13 @@ internal interface IComponentsImports {
 
     }
 
+    internal static unsafe void PutFocusedInput(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.FocusedInput v)
+    {
+        var handle = r.Handle;
+        ComponentsImportsInterop.PutFocusedInputWasmInterop.wasmImportPutFocusedInput(handle, unchecked((long)(v.entity)));
+
+    }
+
     internal static unsafe void SetResourceFocusedInput(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.FocusedInput v)
     {
         var handle = c.Handle;
@@ -4659,6 +4894,13 @@ internal interface IComponentsImports {
             default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
         }
         return lifted;
+
+    }
+
+    internal static unsafe void PutTextClipboardAction(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextClipboardAction v)
+    {
+        var handle = r.Handle;
+        ComponentsImportsInterop.PutTextClipboardActionWasmInterop.wasmImportPutTextClipboardAction(handle, unchecked((long)(v.entity)), v.action, v.seq);
 
     }
 
@@ -4716,6 +4958,53 @@ internal interface IComponentsImports {
             default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
         }
         return lifted;
+
+    }
+
+    internal static unsafe void PutTextCompletion(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextCompletion v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = r.Handle;
+
+        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.prefix);
+        var length = utf8Bytes.Length;
+        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr = gcHandle.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle.Free());
+
+        void* address;
+        if ((8 * v.items.Count) < 1024) {
+            var retArea = stackalloc uint[2 * v.items.Count + 1];
+            address = MemoryHelper.AlignStackPtr(retArea, 4);
+        }
+        else
+        {
+            var bufferSize = 8 * (nuint)v.items.Count;
+            address = global::System.Runtime.InteropServices.NativeMemory.AlignedAlloc(bufferSize, 4);
+            cleanups.Add(() => global::System.Runtime.InteropServices.NativeMemory.AlignedFree(address));
+        }
+
+        for (int index = 0; index < v.items.Count; ++index) {
+            string element = v.items[index];
+            int basePtr = (int)address + (index * 8);
+
+            var utf8Bytes1 = global::System.Text.Encoding.UTF8.GetBytes(element);
+            var length2 = utf8Bytes1.Length;
+            var gcHandle3 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes1, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr0 = gcHandle3.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle3.Free());
+            new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] = length2;
+            new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0] = (nint)strPtr0.ToInt32();
+
+        }
+        ComponentsImportsInterop.PutTextCompletionWasmInterop.wasmImportPutTextCompletion(handle, unchecked((long)(v.entity)), strPtr.ToInt32(), length, (int)address, v.items.Count);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
 
     }
 
@@ -4792,6 +5081,13 @@ internal interface IComponentsImports {
             default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
         }
         return lifted;
+
+    }
+
+    internal static unsafe void PutTextCompletionPick(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TextCompletionPick v)
+    {
+        var handle = r.Handle;
+        ComponentsImportsInterop.PutTextCompletionPickWasmInterop.wasmImportPutTextCompletionPick(handle, unchecked((long)(v.entity)), v.index, v.seq);
 
     }
 

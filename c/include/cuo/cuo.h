@@ -5,9 +5,9 @@
  * function per system / observer, named like it:
  *
  *     world my-mod {
- *         use tinyecs:modding/ecs@0.1.0.{commands, query, res, trigger-data};
+ *         use tinyecs:modding/ecs@0.1.0.{commands, query, res, entity};
  *         export low-hp: func(commands: commands, hits: query, time: res);
- *         export on-click: func(trigger: trigger-data, commands: commands);
+ *         export on-click: func(entity: entity, commands: commands);
  *         include cuo:c-sdk/mod@0.1.0;
  *     }
  *
@@ -19,19 +19,21 @@
  * and the world traps at load, naming the export line the world needs.
  *
  * - The ECS: a system DECLARES its parameters (queries, resources, event readers); each
- *   run the SDK fetches their data (one host call per param), the system reads it and
- *   records commands, which the host applies AFTER the callback returns. `commands`
- *   is a parameter of the export like the others: anywhere in its signature (it is not
- *   declared in cuo_setup), or left out - then the cuo_cmds the callback gets traps on
- *   use.
+ *   run the system reads them and records commands, which the host applies AFTER the
+ *   callback returns. `commands` is a parameter of the export like the others: anywhere
+ *   in its signature (it is not declared in cuo_setup), or left out - then the cuo_cmds
+ *   the callback gets traps on use.
+ * - Values (components, resources, events) only cross as typed WIT records, through the
+ *   generated per-type functions of cuo/typed.h (cuo_X_comp / _column / _set / _res /
+ *   _put / _set_resource / _send / _events / _obs_value), over the structs of cuo/types.h.
  * - Everything else (host / assets / actions / packets) is a typed import: the typed
  *   wrappers below, or the generated functions directly (cuo_modding_actions_cast_spell,
  *   cuo_modding_assets_static_tile, ... — declared in cuo_wit.h, included here).
  *
  * Memory model (read this once):
- * - Everything the SDK hands a callback (query rows, payload bytes, parsed structs,
- *   strings from cuo_fmt / cuo_storage_get / cuo_cliloc, JSON built with cuo_jw) lives
- *   until the callback returns. Copy (strdup/malloc) anything you keep across calls.
+ * - Everything the SDK hands a callback (columns, events, observer values, payload bytes,
+ *   strings from cuo_fmt / cuo_storage_get / cuo_cliloc) lives until the callback
+ *   returns. Copy (strdup/malloc) anything you keep across calls.
  * - Strings you pass IN are only read during the call.
  * - Calling a generated import directly: results it returns are malloc'd by the
  *   canonical ABI; free them with the matching cuo_wit_* / *_free function.
@@ -43,7 +45,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "cJSON.h"
 #include "cuo_wit.h"
 
 #ifdef __cplusplus
@@ -60,24 +61,17 @@ typedef struct cuo_bytes {
 /* An entity id. cuo_spawn returns the real id right away. */
 typedef uint64_t cuo_entity;
 
-/* Kept for source compatibility: ids are always real now. */
-static inline cuo_entity cuo_resolve(cuo_entity e)
-{
-    return e;
-}
-
 static inline bool cuo_entity_eq(cuo_entity a, cuo_entity b)
 {
     return a == b;
 }
 
-/* A component / resource payload: type id (cuo_type_id / cuo_X_id()) + utf8 JSON
- * (len 0 = marker), or — `typed` != 0, built by cuo_X_typed — a typed component that
- * goes through cuo:modding/components instead (no JSON). */
+/* A component to spawn / insert: built by the generated cuo_X_comp(&v) (a tag:
+ * cuo_X_comp()), which converts the value at once (strings copied into scratch). */
 typedef struct cuo_comp {
     uint16_t type_id;
-    cuo_bytes data;
-    uint8_t typed; /* internal: 0 = JSON */
+    uint8_t kind;    /* internal: which entity-builder method inserts it */
+    const void *rec; /* internal: the WIT record (NULL for a tag) */
 } cuo_comp;
 
 #define CUO_COUNT(T, ...) (sizeof((T[]){__VA_ARGS__}) / sizeof(T))
@@ -97,10 +91,7 @@ static inline cuo_bytes cuo_str_bytes(const char *s)
     return b;
 }
 
-cuo_comp cuo_comp_json(uint16_t type_id, const char *json);
-cuo_comp cuo_comp_bytes(uint16_t type_id, cuo_bytes json);
-cuo_comp cuo_comp_marker(uint16_t type_id);
-/* cuo:ecs/child-of {Parent}: put an entity under `parent` (spawn or insert it). Typed. */
+/* cuo:ecs/child-of {Parent}: put an entity under `parent` (spawn or insert it). */
 cuo_comp cuo_child_of(cuo_entity parent);
 
 /* ── registration (only inside cuo_setup) ────────────────────────────────────── */
@@ -111,7 +102,7 @@ typedef struct cuo_obs cuo_obs;
 typedef struct cuo_cmds cuo_cmds;
 typedef uint32_t cuo_sys;
 typedef uint32_t cuo_observer;
-/* A declared parameter: what cuo_input_* / cuo_obs_* read its data by. */
+/* A declared parameter: what cuo_input_* / cuo_obs_* and the typed readers read its data by. */
 typedef uint32_t cuo_param;
 
 /* Values match the WIT `schedule` enum. */
@@ -126,12 +117,12 @@ typedef enum cuo_stage {
 
 /* Values match the WIT `term` variant. */
 typedef enum cuo_term_kind {
-    CUO_TERM_REF = 0,     /* row carries the component */
-    CUO_TERM_MUT = 1,     /* row carries it, and cuo_query_set may write it back */
+    CUO_TERM_REF = 0,     /* reads the component (a column slot) */
+    CUO_TERM_MUT = 1,     /* reads it, and cuo_X_set may write it back */
     CUO_TERM_WITH = 2,    /* filter only */
     CUO_TERM_WITHOUT = 3, /* filter only */
-    CUO_TERM_CHANGED = 4, /* row carries it AND only changed-since-last-run entities match */
-    CUO_TERM_ADDED = 5,   /* row carries it AND only entities that got it since last run */
+    CUO_TERM_CHANGED = 4, /* reads it AND only changed-since-last-run entities match */
+    CUO_TERM_ADDED = 5,   /* reads it AND only entities that got it since last run */
 } cuo_term_kind;
 
 typedef struct cuo_term {
@@ -172,33 +163,37 @@ void cuo_system_before(cuo_builder *m, cuo_sys s, cuo_sys other);
 void cuo_system_run_on_change(cuo_builder *m, cuo_sys s);
 
 /* System parameters. Each returns the handle its data is read by.
- * - query: read terms (REF/MUT/CHANGED/ADDED) fill row comp slots in declaration order.
- *   A WITH on a type already read is dropped and a CHANGED/ADDED/MUT on a type already
- *   read upgrades that term in place (one payload per type).
- * - res: a resource (`mut`: you may write it back with cuo_resource_set). Reads
- *   {NULL,0} while the host has none. The bytes stay the same pointer while the host
- *   reports the value unchanged (res.unchanged: no get, no copy), so a parse keyed on
- *   that pointer can be reused.
- * - events: the events of a type sent since this system's last run. */
+ * - query: the read terms (REF/MUT/CHANGED/ADDED) are the column slots cuo_X_column /
+ *   cuo_X_set take, numbered in declaration order. A WITH on a type already read is
+ *   dropped and a CHANGED/ADDED/MUT on a type already read upgrades that term in place
+ *   (one slot per type).
+ * - res: a resource (`mut`: cuo_X_put may write it). Its value (cuo_X_res) is fetched on
+ *   first use and reused while the host reports it unchanged (res.unchanged).
+ * - events: the events of a type sent since this system's last run (cuo_X_events). */
 cuo_param cuo_system_query(cuo_builder *m, cuo_sys s, const cuo_term *terms, size_t n);
 cuo_param cuo_system_res(cuo_builder *m, cuo_sys s, uint16_t type_id, bool mut);
 cuo_param cuo_system_events(cuo_builder *m, cuo_sys s, uint16_t type_id);
 
 /* Observers run the moment their trigger fires (no polling, no frame lag). name: as for
- * cuo_add_system; the export takes `trigger: trigger-data` first, then its params. */
+ * cuo_add_system; the export takes `entity: entity, value: <record>` first (the record of
+ * the trigger's path, e.g. `value: chat-message` for cuo:chat/message), or `entity: entity`
+ * alone for a path without a value (a tag), then its params. Read the value with
+ * cuo_X_obs_value(ev). */
 cuo_observer cuo_on_event(cuo_builder *m, const char *name, const char *event_path, cuo_observer_fn fn,
                           void *user);
 cuo_observer cuo_on_add(cuo_builder *m, const char *name, uint16_t type_id, cuo_observer_fn fn, void *user);
 cuo_observer cuo_on_remove(cuo_builder *m, const char *name, uint16_t type_id, cuo_observer_fn fn, void *user);
-/* An observer's own parameters, fetched with each trigger (read with cuo_obs_*). */
+/* An observer's own parameters, fetched with each trigger (read with cuo_obs_* and the
+ * cuo_X_obs_* readers). */
 cuo_param cuo_observer_query(cuo_builder *m, cuo_observer o, const cuo_term *terms, size_t n);
 cuo_param cuo_observer_res(cuo_builder *m, cuo_observer o, uint16_t type_id, bool mut);
 cuo_param cuo_observer_events(cuo_builder *m, cuo_observer o, uint16_t type_id);
 
 /* Hotkeys the host fires back as the cuo:input/hotkey event (observe it with
- * cuo_on_event(m, "on-hotkey", CUO_PATH_INPUT_HOTKEY, …) and parse cuo_ModHotkeyFired).
+ * cuo_on_event(m, "on-hotkey", CUO_PATH_INPUT_HOTKEY, …) and read cuo_ModHotkeyFired_obs_value).
  * All bindings are published once, as the cuo:input/mod-hotkeys resource, from a
- * Startup system the SDK adds (`cuo-sdk-hotkeys`, exported by cuo:c-sdk/mod); to rebind, cuo_resource_set a new cuo_ModHotkeyBindingsDto.
+ * Startup system the SDK adds (`cuo-sdk-hotkeys`, exported by cuo:c-sdk/mod); to rebind,
+ * cuo_ModHotkeyBindingsDto_set_resource a new set.
  * CUO_HK_CONSUME: this mod owns the combo (the host's own binding does not fire). */
 enum { CUO_HK_CONSUME = 1, CUO_HK_CTRL = 2, CUO_HK_SHIFT = 4, CUO_HK_ALT = 8 };
 void cuo_hotkey(cuo_builder *m, const char *name, uint32_t key, unsigned flags);
@@ -244,46 +239,22 @@ typedef struct cuo_query {
     int32_t handle; /* internal */
 } cuo_query;
 
-typedef struct cuo_row {
-    const void *table; /* internal */
-} cuo_row;
-
-typedef struct cuo_events {
-    const void *vec; /* internal */
-    size_t len;
-} cuo_events;
-
 uint32_t cuo_input_sys_id(const cuo_input *in);
 /* How many times this system has run, this run included (1 on the first). */
 uint64_t cuo_input_tick(const cuo_input *in);
 cuo_query cuo_input_query(const cuo_input *in, cuo_param p); /* len 0 when absent */
-cuo_bytes cuo_input_res(const cuo_input *in, cuo_param p);   /* {NULL,0}: host has none */
-cuo_events cuo_input_events(const cuo_input *in, cuo_param p);
-cuo_row cuo_query_row(cuo_query q, size_t i);
-/* Linear scan for `entity` (Contains/TryGet). out may be NULL. */
-bool cuo_query_find(cuo_query q, cuo_entity entity, cuo_row *out);
-/* The matched entities (q.len of them), in row order — the order of every typed
- * column (cuo_X_column). */
+/* How many events an events param received (cuo_X_events reads them). */
+size_t cuo_input_events_len(const cuo_input *in, cuo_param p);
+/* The matched entities (q.len of them), in row order — the order of every column
+ * (cuo_X_column). */
 const cuo_entity *cuo_query_entities(cuo_query q);
 /* Linear scan for `entity`: its row / column index. index may be NULL. */
 bool cuo_query_index(cuo_query q, cuo_entity entity, size_t *index);
-/* Writes read-term slot `index` of `entity` back (query.set). Traps unless that term
- * is CUO_MUT. Lands on the host entity when the callback returns. */
-void cuo_query_set(cuo_query q, cuo_entity entity, size_t index, cuo_bytes json);
-uint64_t cuo_row_entity(cuo_row r);
-size_t cuo_row_comp_count(cuo_row r);
-/* JSON payload of read-term slot i ({NULL,0} when absent / a marker). Parse with
- * cuo_X_parse. */
-cuo_bytes cuo_row_comp(cuo_row r, size_t i);
-cuo_bytes cuo_events_at(cuo_events ev, size_t i);
 
 uint32_t cuo_obs_id(const cuo_obs *ev);
 uint64_t cuo_obs_entity(const cuo_obs *ev); /* 0 = global event */
-/* Add/Remove: the component JSON; event: the event JSON; {NULL,0} for a marker. */
-cuo_bytes cuo_obs_value(const cuo_obs *ev);
 cuo_query cuo_obs_query(const cuo_obs *ev, cuo_param p);
-cuo_bytes cuo_obs_res(const cuo_obs *ev, cuo_param p);
-cuo_events cuo_obs_events(const cuo_obs *ev, cuo_param p);
+size_t cuo_obs_events_len(const cuo_obs *ev, cuo_param p);
 /* Packet observers: the packet (full wire bytes, id first) and its direction. */
 cuo_bytes cuo_obs_packet(const cuo_obs *ev);
 cuo_dir cuo_obs_packet_dir(const cuo_obs *ev);
@@ -297,16 +268,6 @@ void cuo_insert(cuo_cmds *c, cuo_entity e, const cuo_comp *comps, size_t n);
 void cuo_insert1(cuo_cmds *c, cuo_entity e, cuo_comp comp);
 void cuo_remove(cuo_cmds *c, cuo_entity e, const uint16_t *type_ids, size_t n);
 void cuo_despawn(cuo_cmds *c, cuo_entity e); /* the host despawns the children too */
-/* Writes a resource: through the running system's / observer's res-mut param of that
- * type when it has one, else as cuo_set_resource. */
-void cuo_resource_set(cuo_cmds *c, cuo_comp value);
-/* commands.set-resource: overwrite any writable resource by its type path, applied with
- * the other commands; no res-mut param needed. The host traps on an unknown or
- * read-only path. */
-void cuo_set_resource(cuo_cmds *c, const char *path, cuo_bytes json);
-/* Send an event (utf8 JSON payload) by its type path. `entity` is ignored (events are
- * global). Typed: cuo_X_emit. */
-void cuo_emit(cuo_cmds *c, const char *event_path, uint64_t entity, cuo_bytes json);
 size_t cuo_cmds_len(const cuo_cmds *c);
 
 /* Chat output through cuo:chat/message (font 3, unicode — how server speech arrives). */
@@ -324,20 +285,15 @@ void cuo_logf(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 uint32_t cuo_measure_text(uint16_t font, const char *text);
 bool cuo_resolve_serial(uint32_t serial, cuo_entity *out); /* false: the client doesn't know it */
 typedef enum cuo_scope { CUO_SCOPE_GLOBAL = 0, CUO_SCOPE_CHARACTER = 1 } cuo_scope;
-/* The mod's blob in `scope` ("" when nothing stored); write-through on set. */
+/* The mod's blob in `scope` ("" when nothing stored); write-through on set. The format is
+ * the mod's own (the host stores it as-is). */
 const char *cuo_storage_get(cuo_scope scope);
-void cuo_storage_set(cuo_scope scope, const char *json);
+void cuo_storage_set(cuo_scope scope, const char *blob);
 
 /* assets */
 bool cuo_gump_size(uint32_t gump_id, int *w, int *h);
 uint32_t cuo_hue_argb(uint16_t hue); /* the tint a white glyph gets: 0xAARRGGBB; 0 = white */
 const char *cuo_cliloc(uint32_t id); /* "" when unknown */
-
-/* GONE — kept only so the generated cuo_X_get / cuo_X_has / cuo_X_resource helpers
- * link; calling one traps. Read components through query params and resources through
- * cuo_system_res instead. */
-cuo_bytes cuo_component_json(uint64_t entity, uint16_t type_id);
-cuo_bytes cuo_resource_json(uint16_t type_id);
 
 /* ── call-scoped scratch ─────────────────────────────────────────────────────── */
 
@@ -346,47 +302,11 @@ char *cuo_strdup(const char *s);
 char *cuo_strndup(const char *s, size_t n);
 const char *cuo_fmt(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 
-/* ── JSON ────────────────────────────────────────────────────────────────────── */
-
-/* Streaming writer into scratch. Commas are handled for you. */
-typedef struct cuo_jw {
-    char *buf;
-    size_t len, cap;
-    uint64_t has_item; /* bit d: container at depth d already holds an item */
-    int depth;
-    bool after_key;
-} cuo_jw;
-
-void cuo_jw_init(cuo_jw *w);
-void cuo_jw_obj(cuo_jw *w);
-void cuo_jw_obj_end(cuo_jw *w);
-void cuo_jw_arr(cuo_jw *w);
-void cuo_jw_arr_end(cuo_jw *w);
-void cuo_jw_key(cuo_jw *w, const char *key);
-void cuo_jw_str(cuo_jw *w, const char *s); /* NULL writes "" */
-void cuo_jw_strn(cuo_jw *w, const char *s, size_t n);
-void cuo_jw_int(cuo_jw *w, int64_t v);
-void cuo_jw_uint(cuo_jw *w, uint64_t v);
-void cuo_jw_num(cuo_jw *w, double v);
-void cuo_jw_bool(cuo_jw *w, bool v);
-void cuo_jw_null(cuo_jw *w);
-void cuo_jw_raw(cuo_jw *w, const char *json);
-cuo_bytes cuo_jw_bytes(cuo_jw *w); /* NUL-terminated as well */
-
-/* Parse into a CALL-SCOPED cJSON tree (scratch-allocated): never cJSON_Delete it.
- * NULL on empty / malformed input. cJSON_Parse itself still allocates with malloc. */
-cJSON *cuo_json_parse(cuo_bytes json);
-int64_t cuo_json_int(const cJSON *obj, const char *key, int64_t dflt);
-double cuo_json_num(const cJSON *obj, const char *key, double dflt);
-bool cuo_json_bool(const cJSON *obj, const char *key, bool dflt);
-const char *cuo_json_str(const cJSON *obj, const char *key, const char *dflt);
-
 #ifdef __cplusplus
 }
 #endif
 
-/* Generated: CUO_PATH_* constants, payload structs + (de)serializers, typed actions,
- * key codes. */
+/* Generated: CUO_PATH_* constants, payload structs, key codes. */
 #include "cuo/paths.h"
 #include "cuo/types.h"
 
@@ -394,39 +314,36 @@ const char *cuo_json_str(const cJSON *obj, const char *key, const char *dflt);
 extern "C" {
 #endif
 
-/* ── typed components (cuo:modding/components: no JSON) ────────────────────────
- * Every curated type path (the generated cuo/typed.h lists them: most components,
- * resources and events the shipped mods use) also crosses the boundary as a typed WIT
- * record. Same structs as the JSON path (cuo_Node, cuo_Hits, ...); the SDK converts
- * struct to record. Every other type keeps the JSON path.
+/* ── components, resources, events (cuo:modding/components) ────────────────────
+ * Every registered type path crosses the boundary as a typed WIT record; the generated
+ * cuo/typed.h has its functions, over the cuo_X structs of cuo/types.h (the SDK converts
+ * struct <-> record). Read-only paths (player stats, serials, host-computed UI state, ...)
+ * have no insert / set / put / set_resource function.
  *
- * - Insert: cuo_X_typed(&v) is the typed twin of cuo_X_comp(&v); mix both freely in
- *   cuo_spawn / cuo_spawn_child / cuo_insert / cuo_insert1 (a tag: cuo_X_typed()). A
- *   spawn / insert with typed components is one entity builder (components.spawn /
- *   entity-of) plus one chained call per typed component, after one commands.insert of
- *   its JSON ones. The value is converted (strings copied) at once.
+ * - Insert: cuo_X_comp(&v) (a tag: cuo_X_comp()) in cuo_spawn / cuo_spawn_child /
+ *   cuo_insert / cuo_insert1. A spawn / insert is one entity builder (components.spawn /
+ *   entity-of) plus one chained call per component.
  * - Read: cuo_X_column(q, term) = read-term slot `term` of every matched entity, aligned
  *   with cuo_query_entities(q) (q.len items, call-scoped; one host call — keep the
- *   pointer, do not call it per row). Traps unless that slot is a term on X. A query
- *   whose read terms are all typed (tags included) skips query.rows (fetched only if
- *   you read a row).
- * - Write: cuo_X_set(q, entity, term, &v) — the typed cuo_query_set (CUO_MUT term).
- * - Resources: cuo_X_res(in, p, &out) / cuo_X_obs_res(ev, p, &out) read a res param;
- *   false while the host has none.
- * - Events: cuo_X_send(cmds, &v) sends one (the typed cuo_X_emit; a zero-size event:
- *   cuo_X_send(cmds)); cuo_X_events(in, p, &n) / cuo_X_obs_events(ev, p, &n) read an
- *   events param (call-scoped array; a zero-size event: the count).
- * - Observers: an observer of a typed component / event may take its trigger typed —
- *   declare its export `func(entity: entity, value: <record>, ...)` (a tag:
- *   `func(entity: entity, ...)`) in wit/world.wit instead of `trigger: trigger-data`
- *   (`use tinyecs:modding/ecs@0.1.0.{entity}` and `use cuo:modding/types@0.1.0.{<record>}`)
- *   and read the value with cuo_X_obs_typed(ev) (cuo_obs_value is empty then):
+ *   pointer, do not call it per row). Traps unless that slot is a term on X.
+ * - Write: cuo_X_set(q, entity, term, &v) through a CUO_MUT term.
+ * - Resources: cuo_X_res(in, p, &out) / cuo_X_obs_res(ev, p, &out) read a res param
+ *   (false while the host has none); cuo_X_put(in, p, &v) / cuo_X_obs_put writes it at
+ *   once through a `mut` res param; cuo_X_set_resource(cmds, &v) sets it as a command
+ *   (no param needed).
+ * - Events: cuo_X_send(cmds, &v) sends one (a zero-size event: cuo_X_send(cmds));
+ *   cuo_X_events(in, p, &n) / cuo_X_obs_events(ev, p, &n) read an events param
+ *   (call-scoped array; a zero-size event: the count).
+ * - Observers: the trigger's value is cuo_X_obs_value(ev) (NULL when X is not the
+ *   trigger's type). The export declares it `func(entity: entity, value: <record>, ...)`
+ *   (`use tinyecs:modding/ecs@0.1.0.{entity}` and `use cuo:modding/types@0.1.0.{<record>}`),
+ *   or `func(entity: entity, ...)` for a tag:
  *
  *       export on-chat: func(entity: entity, value: chat-message, commands: commands);
  *
  *       static void on_chat(const cuo_obs *ev, cuo_cmds *c, void *u)
  *       {
- *           const cuo_ModChatMessage *msg = cuo_ModChatMessage_obs_typed(ev);
+ *           const cuo_ModChatMessage *msg = cuo_ModChatMessage_obs_value(ev);
  *           ...
  *       }
  */

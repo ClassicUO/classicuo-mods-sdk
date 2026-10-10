@@ -43,10 +43,10 @@ public static class ModDescribe
             entries = m.Entries;
             foreach (var e in entries)
             {
-                // A typed observer spills to memory past the limit (Glue reads the args area).
+                // An observer spills to memory past the limit (Glue reads the args area).
                 if (e.Trigger?.Typed != null)
                     continue;
-                var flat = (e.Trigger == null ? 0 : 3) + e.Params.Count;
+                var flat = (e.IsPacket ? 3 : 0) + e.Params.Count;
                 if (flat > MaxFlatParams)
                     throw new InvalidOperationException($"{e.Signature()}: {flat} canonical-ABI params, at most {MaxFlatParams} are supported — split the system");
             }
@@ -122,19 +122,17 @@ public static class ModDescribe
                 sb.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"cabi_post_{e.Name}\")]");
                 sb.AppendLine($"    static void Post{i}(nint ret) => CuoModRuntime.PostPacket(ret);");
             }
-            else if (e.Trigger.Typed is { } typed)
-                TypedObserver(sb, i, typed, n);
             else
-                sb.AppendLine($"    static void E{i}(long entity, nint value, int valueLen{ps}) {{ {stack}CuoModRuntime.RunObserver({i}, entity, value, valueLen, {handles}); }}");
+                Observer(sb, i, e.Trigger.Typed!, n);
         }
         sb.AppendLine("}");
         return sb.ToString();
     }
 
-    // A typed observer: func(entity: entity, value: <record>, p0..) — the record's flat core
+    // An observer: func(entity: entity, value: <record>, p0..) — the record's flat core
     // params are stored back into a stack record; past 16 flat params the host passes one
     // pointer to the args tuple (entity @0, record, handles), which the guest frees.
-    static void TypedObserver(StringBuilder sb, int i, TypedTrigger typed, int n)
+    static void Observer(StringBuilder sb, int i, TypedTrigger typed, int n)
     {
         var flat = typed.Record == null ? 0 : typed.Flat.Length;
         var handles = n == 0 ? "null, 0" : "h, " + n;
@@ -154,7 +152,7 @@ public static class ModDescribe
             }
             if (n > 0)
                 sb.Append($"int* h = stackalloc int[{n}] {{ {string.Join(", ", Enumerable.Range(0, n).Select(k => "p" + k))} }}; ");
-            sb.AppendLine($"CuoModRuntime.RunObserverTyped({i}, entity, {rec}, {handles}, 0); }}");
+            sb.AppendLine($"CuoModRuntime.RunObserver({i}, entity, {rec}, {handles}, 0); }}");
             return;
         }
         // Spilled: (entity u64 @0, record @align, handles i32...).
@@ -176,7 +174,7 @@ public static class ModDescribe
         if (n > 0)
             sb.Append($"int* h = stackalloc int[{n}] {{ {string.Join(", ", hs)} }}; ");
         var r = typed.Record != null ? $"(nint)(a + {recOff})" : "0";
-        sb.AppendLine($"CuoModRuntime.RunObserverTyped({i}, *(long*)a, {r}, {handles}, args); }}");
+        sb.AppendLine($"CuoModRuntime.RunObserver({i}, *(long*)a, {r}, {handles}, args); }}");
     }
 
     static string Wit(List<Entry> entries, string world, string sdkWit)
@@ -186,7 +184,7 @@ public static class ModDescribe
         sb.AppendLine($"package cuo-mod:{world};");
         sb.AppendLine();
         sb.AppendLine($"world {world} {{");
-        sb.AppendLine("    use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity, trigger-data, packet-direction, verdict};");
+        sb.AppendLine("    use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity, packet-direction, verdict};");
         var records = entries.Select(e => e.Trigger?.Typed?.Record).OfType<string>().Distinct().ToList();
         if (records.Count > 0)
             sb.AppendLine($"    use cuo:modding/types@0.1.0.{{{string.Join(", ", records)}}};");
@@ -205,8 +203,6 @@ public static class ModDescribe
                 if (typed.Record != null)
                     args.Add("value: " + typed.Record);
             }
-            else if (e.Trigger != null)
-                args.Add("trigger: trigger-data");
             for (var k = 0; k < e.Params.Count; k++)
                 args.Add($"p{k}: {Entry.WitType(e.Params[k].Kind)}");
             sb.AppendLine($"    export {e.Name}: func({string.Join(", ", args)}){(e.IsPacket ? " -> verdict" : "")};");

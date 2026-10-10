@@ -3,34 +3,33 @@ using CuoModSdk.Types;
 
 namespace CuoModSdk;
 
-// The typed half of the contract (cuo:modding/components, generated into cuo-mod.wit by
-// tools/mod-typegen): the curated host types cross as canonical-ABI records instead of
-// JSON. A mod still names the generated DTOs (Hits, Node, …); each codec (generated into
-// Typed.g.cs by tools/mod-typegen) maps one DTO onto its record's canonical-ABI memory
-// layout and calls the raw imports, so a column / write / insert / event costs no JSON
-// and no per-call managed garbage beyond what the DTO itself holds (strings, arrays).
-// This file is the generic machinery; everything not in TypedCodecs keeps the JSON path.
+// The value half of the contract (cuo:modding/components, generated into cuo-mod.wit by
+// tools/mod-typegen): every host component / resource / event crosses as a canonical-ABI
+// record. A mod names the generated DTOs (Hits, Node, …); each codec (generated into
+// Typed.g.cs) maps one DTO onto its record's memory layout and calls the raw imports, so a
+// column / write / insert / event costs no per-call managed garbage beyond what the DTO
+// itself holds (strings, arrays). This file is the generic machinery.
 
-/// <summary>A curated type's record codec, untyped: what a pending spawn replays.</summary>
+/// <summary>A host type's record codec, untyped: what a pending spawn replays.</summary>
 internal abstract unsafe class TypedCodec
 {
     /// <summary>Record size (= list element stride).</summary>
     internal abstract int Size { get; }
 
-    /// <summary>The type has an <c>entity-builder</c> method (read-only types do not).</summary>
-    internal virtual bool CanBuild => true;
+    /// <summary>The type path the codec was generated for (diagnostics).</summary>
+    internal abstract string Path { get; }
 
     /// <summary><c>[method]entity-builder.&lt;x&gt;</c> with the record at <paramref name="rec"/>: the new builder handle.</summary>
-    internal abstract int Build(int builder, byte* rec);
-
-    /// <summary>A pending spawn that turned out mixed goes out as JSON: re-add this record to the JSON bundle.</summary>
-    internal abstract void AddJson(Commands commands, byte* rec);
+    internal virtual int Build(int builder, byte* rec) => throw NotWritable("inserted");
 
     /// <summary>Frees what a host-written record owns (strings, lists); the record itself is the caller's.</summary>
     internal virtual void FreeElement(byte* rec) { }
+
+    protected InvalidOperationException NotWritable(string what) =>
+        new($"{Path} can't be {what} by a mod (read-only, or not that kind of type path)");
 }
 
-/// <summary>A curated DTO's record codec.</summary>
+/// <summary>A host DTO's record codec.</summary>
 internal abstract unsafe class TypedCodec<T> : TypedCodec
 {
     internal abstract T Lift(byte* rec);
@@ -44,25 +43,34 @@ internal abstract unsafe class TypedCodec<T> : TypedCodec
         Lower(value, rec);
     }
 
-    internal virtual bool HasColumn => true;
-
     /// <summary><c>column-&lt;x&gt;(q, term)</c> into the 8-byte return area <paramref name="ret"/>.</summary>
-    internal virtual void Column(int query, byte term, nint ret) => throw new NotSupportedException();
+    internal virtual void Column(int query, byte term, nint ret) => throw new InvalidOperationException($"{Path} is not a component: it can't be a query term");
 
-    /// <summary>The type has a <c>set-&lt;x&gt;</c> (a writable component).</summary>
-    internal virtual bool CanSet => true;
+    /// <summary><c>set-&lt;x&gt;</c>: a Mut write-back.</summary>
+    internal virtual void Set(int query, ulong entity, byte term, byte* rec) => throw NotWritable("written");
 
-    internal virtual void Set(int query, ulong entity, byte term, byte* rec) => throw new NotSupportedException();
+    /// <summary><c>get-&lt;x&gt;</c> into <paramref name="rec"/> (<see cref="Size"/> bytes, owned by the caller: free with <see cref="TypedCodec.FreeElement"/>); false when the host has none.</summary>
+    internal virtual bool GetRecord(int res, byte* rec) => throw new InvalidOperationException($"{Path} is not a resource");
 
-    /// <summary>The type is a resource with a <c>get-&lt;x&gt;</c>.</summary>
-    internal virtual bool HasGet => false;
+    /// <summary><c>get-&lt;x&gt;</c>, lifted.</summary>
+    internal bool Get(int res, out T value)
+    {
+        var rec = stackalloc byte[Size];
+        if (!GetRecord(res, rec))
+        {
+            value = default!;
+            return false;
+        }
+        value = Lift(rec);
+        FreeElement(rec);
+        return true;
+    }
 
-    internal virtual bool Get(int res, out T value) => throw new NotSupportedException();
+    /// <summary><c>put-&lt;x&gt;</c>: an immediate resource write through an <c>add-res-mut</c> param.</summary>
+    internal virtual void Put(int res, byte* rec) => throw NotWritable("written as a resource");
 
-    /// <summary>The type is a writable resource with a <c>set-resource-&lt;x&gt;</c>.</summary>
-    internal virtual bool CanSetResource => false;
-
-    internal virtual void SetResource(int commands, byte* rec) => throw new NotSupportedException();
+    /// <summary><c>set-resource-&lt;x&gt;</c>: a deferred resource write through commands.</summary>
+    internal virtual void SetResource(int commands, byte* rec) => throw NotWritable("written as a resource");
 
     /// <summary>Whether <paramref name="now"/> differs from the record at <paramref name="original"/> (the host's value).</summary>
     internal virtual bool Differs(in T now, byte* original)
@@ -72,21 +80,19 @@ internal abstract unsafe class TypedCodec<T> : TypedCodec
         LowerInto(now, mine);
         return !new ReadOnlySpan<byte>(mine, n).SequenceEqual(new ReadOnlySpan<byte>(original, n));
     }
-
-    internal override void AddJson(Commands commands, byte* rec) => commands.AddToBundle(Lift(rec));
 }
 
-/// <summary>A curated zero-size tag (<c>cuo:ui/movable</c>, …): a builder method without a value.</summary>
+/// <summary>A zero-size tag (<c>cuo:ui/movable</c>, …): a builder method without a value.</summary>
 internal sealed unsafe class TagCodec(string path, delegate*<int, int> build) : TypedCodec
 {
     internal override int Size => 0;
 
-    internal override int Build(int builder, byte* rec) => build(builder);
+    internal override string Path => path;
 
-    internal override void AddJson(Commands commands, byte* rec) => EcsAbi.BundleAddMarker(path);
+    internal override int Build(int builder, byte* rec) => build(builder);
 }
 
-/// <summary>A curated event, typed: <c>send-&lt;x&gt;</c> / <c>read-&lt;x&gt;</c> (a zero-size one reads a count).</summary>
+/// <summary>An event: <c>send-&lt;x&gt;</c> / <c>read-&lt;x&gt;</c> (a zero-size one reads a count).</summary>
 internal abstract class TypedEvent<T>
 {
     internal abstract void Send(int commands, in T value);
@@ -94,14 +100,14 @@ internal abstract class TypedEvent<T>
     internal abstract T[] Read(int events);
 }
 
-/// <summary>One flat core param of a typed trigger record: its C# core type, its offset in the record, its memory type.</summary>
+/// <summary>One flat core param of a trigger record: its C# core type, its offset in the record, its memory type.</summary>
 internal readonly record struct TypedFlat(string Core, int Offset, string Store);
 
 /// <summary>
-/// A curated component / event an observer takes typed: the export's leading params are
-/// <c>entity: entity, value: &lt;Record&gt;</c> (a tag: <c>entity</c> alone) instead of
-/// <c>trigger: trigger-data</c>. <see cref="Flat"/> is the record's flattened core params
-/// (ModDescribe's glue stores them back into the record); <see cref="Codec"/> lifts / frees it.
+/// The component / event an observer reacts to: the export's leading params are
+/// <c>entity: entity, value: &lt;Record&gt;</c> (a tag: <c>entity</c> alone).
+/// <see cref="Flat"/> is the record's flattened core params (ModDescribe's glue stores them
+/// back into the record); <see cref="Codec"/> lifts / frees it (null for a tag).
 /// </summary>
 internal sealed class TypedTrigger(string? record, int size, int align, TypedFlat[] flat, TypedCodec? codec)
 {
@@ -112,14 +118,30 @@ internal sealed class TypedTrigger(string? record, int size, int align, TypedFla
     internal readonly TypedCodec? Codec = codec;
 }
 
+/// <summary>
+/// What <typeparamref name="T"/> is on the host: a record type (<see cref="Codec"/>), a tag
+/// (<see cref="Tag"/> when a mod may insert it, <see cref="IsTag"/>), an event
+/// (<see cref="Event"/>). Every host payload type is at least one of these.
+/// </summary>
 internal static class Typed<T>
 {
     internal static readonly TypedCodec<T>? Codec = TypedCodecs.Of<T>();
 
-    /// <summary>A curated tag type (inserted through its builder method).</summary>
+    /// <summary>A writable tag (inserted through its builder method).</summary>
     internal static readonly TagCodec? Tag = TypedCodecs.TagOf<T>();
 
+    /// <summary>A tag component: no record, it reads as <c>default</c>.</summary>
+    internal static readonly bool IsTag = TypedCodecs.IsTag<T>();
+
     internal static readonly TypedEvent<T>? Event = TypedCodecs.EventOf<T>();
+
+    /// <summary><see cref="Codec"/>, or the error naming why <typeparamref name="T"/> has none.</summary>
+    internal static TypedCodec<T> Record => Codec ?? throw NoRecord();
+
+    static InvalidOperationException NoRecord() =>
+        new(IsTag || Event != null
+            ? $"{ModHost.PathOf<T>()} carries no value (a tag)"
+            : $"{typeof(T).Name} is not a host payload type — only CuoModSdk.Types.* types cross to the host");
 }
 
 internal static unsafe partial class TypedCodecs
@@ -255,7 +277,7 @@ internal static unsafe class TypedAbi
 }
 
 /// <summary>
-/// One typed column of one query param, kept on its system across runs (no allocation
+/// One column of one query param, kept on its system across runs (no allocation
 /// per run): fetched on first read in a run, freed when the run ends.
 /// </summary>
 internal abstract class TypedColumnBase

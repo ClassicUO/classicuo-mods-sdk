@@ -148,29 +148,31 @@ macro / state machines stepping through `Local`s, retries. With nothing new to r
 they would never wake up. There is no periodic safety-net run.
 
 To write a resource without reading it, use `cmds.set_resource(value)` (C#:
-`cmds.SetResource(value)`; C: `cuo_set_resource(cmds, path, json)`): no `ResMut`
-parameter, applied with the run's other commands. The client refuses an unknown or
-read-only path.
+`cmds.SetResource(value)`; C: `cuo_X_set_resource(cmds, &value)`): no `ResMut`
+parameter, applied with the run's other commands. The client refuses a read-only path.
 
 Resource reads are cached for you: while the client reports a resource unchanged since
-the system's previous run, the SDK reuses the value it parsed then instead of fetching
-and parsing it again (C# also parses `Res<T>.Value` only on first access). Treat a
-`Res` value as read-only — the same object comes back next run.
+the system's previous run, the SDK reuses the value it read then instead of fetching it
+again. Treat a `Res` value as read-only — the same object comes back next run.
 
-### Typed components
+### Values are typed WIT records
 
-A curated set of components crosses the wasm boundary as typed WIT records instead of
-JSON: player `hits` / `mana` / `stamina` / `data`; entity `serial` / `graphic` / `hue` /
-`world-position` / `notoriety` / `name` / `amount`; UI `node` / `text` / `text-font` /
-`text-color` / `bg-color` / `border-radius` / `child-of` / `movable` / `global-z` /
-`interaction` / `no-window-drag`; resources `mouse` / `keyboard`. With an SDK nothing
-changes in your code — `Query<&Hits>`, `&mut Node`, `insert(Text{..})`, `Res<..>` use the
-typed path by themselves (a query goes typed when every component it reads is curated;
-anything else stays JSON). Without an SDK, `cuo:modding/components` gives typed columns
-aligned with `query.entities()` (`column-hits(q, term)`), typed writes (`set-node`), typed
-resource reads (`get-mouse`) and a chainable builder:
-`spawn(&cmds).node(&n).text(&t).child-of(&c).id()`. A value the game sends that an enum
-has no case for reads as case 0.
+Every component, resource and event a mod reads or writes crosses the wasm boundary as a
+typed WIT record (`cuo:modding/types`) — there is no JSON. With an SDK this is invisible:
+`Query<&Hits>`, `&mut Node`, `insert(Text{..})`, `Res<..>`, `ResMut<..>`, `send(..)` and
+observers all use it. Only the SDK's types can be components / resources / events (a
+mod's own struct can't be inserted into the world; keep your own state in `Local`s or
+storage). Read-only host types can be read, never written.
+
+Without an SDK, `tinyecs:modding/ecs` gives you the handles and structure only
+(`commands.spawn` / `remove` / `despawn`, `query.entities`, `res.unchanged`,
+`events.len`), and `cuo:modding/components` the values: columns aligned with
+`query.entities()` (`column-hits(q, term)`), writes through a `mut` term (`set-node`), a
+chainable builder (`spawn(&cmds).node(&n).text(&t).child-of(&c).id()`, `entity-of(&cmds,
+e)` for an existing entity), resource reads (`get-mouse`), resource writes through an
+`add-res-mut` parameter (`put-<x>`, immediate) or commands (`set-resource-<x>`, deferred),
+and events (`send-<x>` / `read-<x>`). A value the game sends that an enum has no case for
+reads as case 0.
 
 ### Settings
 
@@ -192,10 +194,12 @@ system it declares in `setup`, named like the system (wasvy-style):
 package example:hello;
 
 world hello {
-    use tinyecs:modding/ecs@0.1.0.{commands, query, trigger-data, packet-direction, verdict};
+    use tinyecs:modding/ecs@0.1.0.{commands, query, entity, packet-direction, verdict};
+    use cuo:modding/types@0.1.0.{chat-message};
 
     export show-hits: func(hits: query, commands: commands);       // a scheduled system
-    export on-click: func(trigger: trigger-data);                  // an observer
+    export on-click: func(entity: entity);                         // an observer (a tag event)
+    export on-chat: func(entity: entity, value: chat-message);     // an observer with a value
     export filter: func(direction: packet-direction, packet: list<u8>) -> verdict; // on-packet
 
     include cuo:modding/mod@0.1.0;
@@ -204,7 +208,8 @@ world hello {
 
 `setup` declares `System::new("show-hits")`, adds its params (`add-query`, then
 `add-commands`) and schedules it; the client then calls `show-hits` with those params as
-typed arguments, in the order they were added. Observers get the `trigger-data` first,
-on-packet observers the direction and the packet. A declared system without a matching
+typed arguments, in the order they were added. Observers get the entity first, then the
+trigger's value record (none for a tag); on-packet observers the direction and the
+packet. A declared system without a matching
 export fails the mod's load. A complete example: `src/Mods/ecs-hello-raw` in the client
 repo.

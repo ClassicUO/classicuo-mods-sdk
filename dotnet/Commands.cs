@@ -1,27 +1,21 @@
-using System.Text.Json;
-
 namespace CuoModSdk;
 
 /// <summary>
 /// Changes to the world — spawn, insert, remove, despawn, send events — applied by the
 /// host in order AFTER the system returns. Payload types are the generated
-/// <c>CuoModSdk.Types</c> shapes; their type paths and JSON metadata are resolved for you.
-/// A spawned entity's id is real as soon as the spawn is emitted.
+/// <c>CuoModSdk.Types</c> shapes; each crosses as its typed record. A spawned entity's id
+/// is real as soon as the spawn is emitted.
 /// </summary>
 public sealed unsafe class Commands : ISystemParam<Commands>
 {
     int _handle;
     EntityBuilder? _pending;
-    readonly Utf8JsonWriter _writer = new(EcsAbi.Json);
 
-    // The open spawn's curated components, lowered (records back to back in _recs). An
-    // all-curated spawn goes through the typed entity-builder; the first component
-    // without a record turns the whole spawn back to the JSON bundle (_jsonSpawn), so a
-    // mixed spawn still lands as one insert.
-    readonly List<(TypedCodec Codec, int Offset)> _typedOps = new();
+    // The open spawn's components, lowered (records back to back in _recs), replayed
+    // through the entity builder when the chain closes.
+    readonly List<(TypedCodec Codec, int Offset)> _ops = new();
     byte[] _recs = new byte[256];
     int _recLen;
-    bool _jsonSpawn;
 
     internal Commands() { }
 
@@ -40,14 +34,12 @@ public sealed unsafe class Commands : ISystemParam<Commands>
         _pending = null;
         _handle = 0;
         ResetSpawn();
-        EcsAbi.BundleClear();
     }
 
     void ResetSpawn()
     {
-        _typedOps.Clear();
+        _ops.Clear();
         _recLen = 0;
-        _jsonSpawn = false;
     }
 
     int Handle => _handle != 0
@@ -69,32 +61,26 @@ public sealed unsafe class Commands : ISystemParam<Commands>
         return _pending = new EntityBuilder(this);
     }
 
-    /// <summary>Insert / overwrite a component.</summary>
+    /// <summary>Insert / overwrite a component (a tag's value is ignored).</summary>
     public void Insert<T>(Entity entity, T value)
     {
         Flush();
-        if (Typed<T>.Codec is { CanBuild: true } codec)
+        if (Typed<T>.IsTag)
         {
-            var rec = stackalloc byte[codec.Size];
-            codec.LowerInto(value, rec);
-            TypedAbi.Insert(Handle, entity.Id, codec, rec);
+            TypedAbi.Insert(Handle, entity.Id, TagOf<T>(), null);
             return;
         }
-        AddToBundle(value);
-        EcsAbi.Insert(Handle, entity.Id);
+        var codec = Typed<T>.Record;
+        var rec = stackalloc byte[codec.Size];
+        codec.LowerInto(value, rec);
+        TypedAbi.Insert(Handle, entity.Id, codec, rec);
     }
 
     /// <summary>Insert a zero-size marker component.</summary>
     public void Insert<T>(Entity entity)
     {
         Flush();
-        if (Typed<T>.Tag is { } tag)
-        {
-            TypedAbi.Insert(Handle, entity.Id, tag, null);
-            return;
-        }
-        EcsAbi.BundleAddMarker(ModHost.PathOf<T>());
-        EcsAbi.Insert(Handle, entity.Id);
+        TypedAbi.Insert(Handle, entity.Id, TagOf<T>(), null);
     }
 
     public void Remove<T>(Entity entity)
@@ -114,15 +100,7 @@ public sealed unsafe class Commands : ISystemParam<Commands>
     public void Send<T>(T @event)
     {
         Flush();
-        if (Typed<T>.Event is { } typed)
-        {
-            typed.Send(Handle, @event);
-            return;
-        }
-        EcsAbi.BundleClear();
-        var start = WriteJson(@event);
-        EcsAbi.Send(Handle, ModHost.PathOf<T>(), start);
-        EcsAbi.BundleClear();
+        (Typed<T>.Event ?? throw new InvalidOperationException($"{ModHost.PathOf<T>()} is not an event")).Send(Handle, @event);
     }
 
     /// <summary>
@@ -133,57 +111,35 @@ public sealed unsafe class Commands : ISystemParam<Commands>
     public void SetResource<T>(T value)
     {
         Flush();
-        if (Typed<T>.Codec is { CanSetResource: true } codec)
-        {
-            var rec = stackalloc byte[codec.Size];
-            codec.LowerInto(value, rec);
-            codec.SetResource(Handle, rec);
-            return;
-        }
-        EcsAbi.BundleClear();
-        var start = WriteJson(value);
-        EcsAbi.SetResource(Handle, ModHost.PathOf<T>(), start);
-        EcsAbi.BundleClear();
+        var codec = Typed<T>.Record;
+        var rec = stackalloc byte[codec.Size];
+        codec.LowerInto(value, rec);
+        codec.SetResource(Handle, rec);
     }
 
-    // Serializes into EcsAbi.Json; returns where the value starts.
-    int WriteJson<T>(T value)
-    {
-        var start = EcsAbi.Json.WrittenCount;
-        _writer.Reset(EcsAbi.Json);
-        JsonSerializer.Serialize(_writer, value, ModRuntime.Host.Json<T>());
-        _writer.Flush();
-        return start;
-    }
-
-    internal void AddToBundle<T>(T value) => EcsAbi.BundleAdd(ModHost.PathOf<T>(), WriteJson(value));
+    static TagCodec TagOf<T>() =>
+        Typed<T>.Tag ?? throw new InvalidOperationException(
+            Typed<T>.IsTag
+                ? $"{ModHost.PathOf<T>()} can't be inserted by a mod (a host-owned marker)"
+                : $"{ModHost.PathOf<T>()} is not a tag: insert it with a value");
 
     /// <summary>A component of the open spawn.</summary>
     internal void AddToSpawn<T>(T value)
     {
-        if (!_jsonSpawn && Typed<T>.Codec is { CanBuild: true } codec)
+        if (Typed<T>.IsTag)
         {
-            int offset;
-            fixed (byte* rec = Reserve(codec.Size, out offset))
-                codec.LowerInto(value, rec);
-            _typedOps.Add((codec, offset));
+            _ops.Add((TagOf<T>(), 0));
             return;
         }
-        SpawnToJson();
-        AddToBundle(value);
+        var codec = Typed<T>.Record;
+        int offset;
+        fixed (byte* rec = Reserve(codec.Size, out offset))
+            codec.LowerInto(value, rec);
+        _ops.Add((codec, offset));
     }
 
     /// <summary>A zero-size marker of the open spawn.</summary>
-    internal void AddMarkerToSpawn<T>()
-    {
-        if (!_jsonSpawn && Typed<T>.Tag is { } tag)
-        {
-            _typedOps.Add((tag, 0));
-            return;
-        }
-        SpawnToJson();
-        EcsAbi.BundleAddMarker(ModHost.PathOf<T>());
-    }
+    internal void AddMarkerToSpawn<T>() => _ops.Add((TagOf<T>(), 0));
 
     Span<byte> Reserve(int size, out int offset)
     {
@@ -195,25 +151,12 @@ public sealed unsafe class Commands : ISystemParam<Commands>
         return _recs.AsSpan(offset, size);
     }
 
-    // The spawn has a component without a record: replay the lowered ones into the JSON bundle.
-    void SpawnToJson()
-    {
-        if (_jsonSpawn)
-            return;
-        _jsonSpawn = true;
-        fixed (byte* recs = _recs)
-            foreach (var (codec, offset) in _typedOps)
-                codec.AddJson(this, recs + offset);
-        _typedOps.Clear();
-        _recLen = 0;
-    }
-
-    ulong SpawnTyped()
+    ulong SpawnBuilt()
     {
         var b = TypedAbi.Spawn(Handle);
         var id = TypedAbi.Id(b);
         fixed (byte* recs = _recs)
-            foreach (var (codec, offset) in _typedOps)
+            foreach (var (codec, offset) in _ops)
             {
                 var next = codec.Build(b, recs + offset);
                 TypedAbi.Drop(b);
@@ -223,17 +166,6 @@ public sealed unsafe class Commands : ISystemParam<Commands>
         return id;
     }
 
-    /// <summary>Mut write-back: an insert, so it lands after this run's own commands.</summary>
-    internal void InsertJson(ulong entity, string path, ReadOnlySpan<byte> json)
-    {
-        Flush();
-        var start = EcsAbi.Json.WrittenCount;
-        json.CopyTo(EcsAbi.Json.GetSpan(json.Length));
-        EcsAbi.Json.Advance(json.Length);
-        EcsAbi.BundleAdd(path, start);
-        EcsAbi.Insert(Handle, entity);
-    }
-
     /// <summary>Emit the open <c>Spawn()</c> chain, if any. Every other command — and the end of the run — does this first.</summary>
     internal void Flush()
     {
@@ -241,7 +173,7 @@ public sealed unsafe class Commands : ISystemParam<Commands>
         if (pending == null)
             return;
         _pending = null;
-        var id = !_jsonSpawn && _typedOps.Count > 0 ? SpawnTyped() : EcsAbi.Spawn(Handle);
+        var id = SpawnBuilt();
         ResetSpawn();
         pending.Emit(id);
     }
@@ -252,7 +184,7 @@ public sealed unsafe class Commands : ISystemParam<Commands>
 /// <summary>
 /// An entity being spawned. The spawn is emitted when the chain ends (the next command,
 /// the end of the run, or when its <see cref="Id"/> is asked for), so its components
-/// arrive in one bundle. A <c>.With</c> after that becomes an insert.
+/// arrive together. A <c>.With</c> after that becomes an insert.
 /// </summary>
 public sealed class EntityBuilder
 {

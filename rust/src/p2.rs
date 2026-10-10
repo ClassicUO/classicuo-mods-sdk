@@ -1,13 +1,14 @@
 //! wasm32-wasip2 backend: a component implementing the `cuo:modding/mod` world
 //! (wit/cuo-mod.wit) with wit-bindgen. `setup` declares the App's systems; each system
 //! is its own export of the mod's world (`#[system]` generates it), which lands in
-//! `run_system` / `run_observer` / `run_packet_observer` with the typed handles.
+//! `run_system` / `run_observer` / `run_packet_observer` with the typed handles. Every
+//! value crosses through the typed `cuo:modding/components` functions (typed_gen.rs).
 
 #[doc(hidden)]
 #[allow(clippy::all, dead_code, unused)]
 pub mod bindings {
-    // Every type, used or not: trigger-data / verdict only appear in system exports,
-    // which `#[system]` generates against these bindings.
+    // Every type, used or not: verdict and the trigger records only appear in system
+    // exports, which `#[system]` generates against these bindings.
     wit_bindgen::generate!({
         path: "../wit",
         world: "cuo:modding/mod",
@@ -19,152 +20,139 @@ pub mod bindings {
 }
 
 use crate::ecs::{
-    App, BundleItem, Component, EntryKind, Fetched, Packet, ResData, PacketDirection, ParamDesc, RawRow, Schedule, TermKind,
-    TriggerData, TriggerDesc, Verdict,
+    App, Component, EntryKind, Fetched, Fired, GameEvent, Packet, PacketDirection, ParamDesc, ResData, Resource,
+    Schedule, TermKind, TriggerDesc, Verdict, WritableComponent, WritableResource,
 };
-use crate::typed;
-use core::ptr::addr_of_mut;
-use std::collections::HashMap;
-use bindings::tinyecs::modding::ecs as wit;
 use bindings::cuo::modding::components;
+use bindings::tinyecs::modding::ecs as wit;
+use core::ptr::addr_of_mut;
+use std::any::Any;
+use std::cell::RefCell;
+use std::collections::HashMap;
 
 pub use bindings::cuo::modding::{actions, assets, host, packets};
 
 #[doc(hidden)]
-pub struct CmdSink(wit::Commands);
+pub struct CmdSink(pub(crate) wit::Commands);
 
-/// A query parameter: the host's handle, or (unit tests) the rows it would return.
+/// A query parameter: the host's handle, or (unit tests) the columns it would return.
 #[doc(hidden)]
 pub struct QuerySink {
     pub(crate) handle: Option<wit::Query>,
-    pub(crate) fake: Vec<RawRow>,
-    /// Rows of the typed path (`entities().len()`): a tag's column is that many defaults.
+    fake_entities: Vec<u64>,
+    /// Per reading term: a `Vec<T>` column.
+    fake_cols: RefCell<Vec<Option<Box<dyn Any>>>>,
+    /// Rows (`entities().len()`): a tag's column is that many values.
     pub(crate) count: usize,
 }
 
 impl QuerySink {
-    /// A host-less query with these rows (unit tests).
+    pub(crate) fn new(q: wit::Query) -> QuerySink {
+        QuerySink { handle: Some(q), fake_entities: Vec::new(), fake_cols: RefCell::new(Vec::new()), count: 0 }
+    }
+    /// A host-less query (unit tests): these entities, and per reading term its column
+    /// (a `Vec<T>`).
     #[doc(hidden)]
-    pub fn fake(rows: Vec<RawRow>) -> QuerySink {
-        let count = rows.len();
-        QuerySink { handle: None, fake: rows, count }
+    pub fn fake(entities: Vec<u64>, cols: Vec<Box<dyn Any>>) -> QuerySink {
+        let cols = cols.into_iter().map(Some).collect();
+        QuerySink { handle: None, fake_entities: entities, fake_cols: RefCell::new(cols), count: 0 }
     }
-    /// Every row as JSON (one host call).
-    pub(crate) fn rows(&mut self) -> Vec<RawRow> {
-        match &self.handle {
-            Some(q) => q.rows().into_iter().map(|r| RawRow { entity: r.entity, comps: r.values }).collect(),
-            None => std::mem::take(&mut self.fake),
-        }
-    }
-    /// The matched entities, in row / column order.
+    /// The matched entities, in column order.
     pub(crate) fn entities(&self) -> Vec<u64> {
         match &self.handle {
             Some(q) => q.entities(),
-            None => self.fake.iter().map(|r| r.entity).collect(),
+            None => self.fake_entities.clone(),
         }
     }
-    /// Reading term `term` as `T`: typed when `T` is curated, else `None`. Without a
-    /// host, the fake rows' JSON stands in for the column.
-    pub(crate) fn column<T: Component>(&self, term: u8) -> Option<Vec<T>> {
+    /// Reading term `term`'s column.
+    pub(crate) fn column<T: Component>(&self, term: u8) -> Vec<T> {
         match &self.handle {
-            Some(q) => typed::column::<T>(q, term, self.count),
-            None if typed::has_column::<T>() => Some(
-                self.fake
-                    .iter()
-                    .map(|r| serde_json::from_str(&r.comps[term as usize]).expect("fake column"))
-                    .collect(),
-            ),
-            None => None,
+            Some(q) => T::__column(q, term, self.count),
+            None => self
+                .fake_cols
+                .borrow_mut()
+                .get_mut(term as usize)
+                .and_then(Option::take)
+                .and_then(|c| c.downcast::<Vec<T>>().ok())
+                .map(|c| *c)
+                .unwrap_or_default(),
+        }
+    }
+    /// Writes `v` back through `mut` reading term `term`.
+    pub(crate) fn set<T: WritableComponent>(&self, entity: u64, term: u8, v: &T) {
+        if let Some(q) = &self.handle {
+            v.__set(q, entity, term)
         }
     }
 }
 
-/// `None` only in unit tests (no host).
+/// A resource parameter. `None` only in unit tests (no host).
 #[doc(hidden)]
 pub struct ResSink(pub(crate) Option<wit::Res>);
 
-/// An event-reader parameter: the host's handle, or (unit tests) the events' JSON.
-#[doc(hidden)]
-pub struct EventsSink {
-    pub(crate) handle: Option<wit::Events>,
-    pub(crate) fake: Vec<String>,
+impl ResSink {
+    pub(crate) fn get<T: Resource>(&self) -> Option<T> {
+        T::__get(self.0.as_ref()?)
+    }
+    pub(crate) fn put<T: WritableResource>(&self, v: &T) {
+        if let Some(r) = &self.0 {
+            v.__put(r)
+        }
+    }
 }
+
+/// An event-reader parameter. `None` only in unit tests (no host: no events).
+#[doc(hidden)]
+pub struct EventsSink(pub(crate) Option<wit::Events>);
 
 impl EventsSink {
-    /// Host-less events (unit tests).
-    #[doc(hidden)]
-    pub fn fake(events: Vec<String>) -> EventsSink {
-        EventsSink { handle: None, fake: events }
+    pub(crate) fn read<T: GameEvent>(&self) -> Vec<T> {
+        self.0.as_ref().map(T::__read).unwrap_or_default()
     }
-    /// Every event as `T`: typed when `T` is curated, else parsed from JSON.
-    pub(crate) fn read<T: Component>(self) -> Vec<T> {
-        let json = match &self.handle {
-            Some(e) => match typed::read::<T>(e) {
-                Some(v) => return v,
-                None => e.read(),
+}
+
+/// Collects one entity's inserts into the entity builder, opened on the first one. A
+/// host-less one (unit tests) records the paths instead.
+#[doc(hidden)]
+pub struct Inserter<'a> {
+    cmds: Option<&'a wit::Commands>,
+    /// The entity to insert on; `None` = spawn one.
+    target: Option<u64>,
+    builder: Option<components::EntityBuilder>,
+    pub(crate) paths: Vec<&'static str>,
+}
+
+impl<'a> Inserter<'a> {
+    pub(crate) fn new(cmds: Option<&'a wit::Commands>, target: Option<u64>) -> Inserter<'a> {
+        Inserter { cmds, target, builder: None, paths: Vec::new() }
+    }
+
+    pub(crate) fn push<T: WritableComponent>(&mut self, v: &T) {
+        self.paths.push(T::PATH);
+        let Some(c) = self.cmds else { return };
+        let b = match self.builder.take() {
+            Some(b) => b,
+            None => match self.target {
+                Some(e) => components::entity_of(c, e),
+                None => components::spawn(c),
             },
-            None => self.fake,
         };
-        json.iter().filter_map(|j| serde_json::from_str(if j.is_empty() { "{}" } else { j }).ok()).collect()
+        self.builder = Some(v.__insert(&b));
     }
-}
 
-/// A bundle's components in order, consecutive JSON ones grouped into one call.
-fn segments(items: Vec<BundleItem>) -> impl Iterator<Item = Segment> {
-    let mut items = items.into_iter().peekable();
-    std::iter::from_fn(move || match items.next()? {
-        BundleItem::Typed(t) => Some(Segment::Typed(t)),
-        BundleItem::Json(p, j) => {
-            let mut json = vec![(p.to_string(), j)];
-            while let Some(BundleItem::Json(..)) = items.peek() {
-                let Some(BundleItem::Json(p, j)) = items.next() else { unreachable!() };
-                json.push((p.to_string(), j));
-            }
-            Some(Segment::Json(json))
+    /// The entity: a spawn with nothing inserted is a bare `commands.spawn`.
+    pub(crate) fn finish(self) -> u64 {
+        if let Some(b) = &self.builder {
+            return b.id();
         }
-    })
-}
-
-enum Segment {
-    Json(Vec<(String, String)>),
-    Typed(typed::TypedInsert),
-}
-
-/// Queues `rest` on `entity`, in order: JSON runs through `commands.insert`, typed
-/// components through the entity builder (`builder`: one already open for it).
-fn insert_segments(c: &CmdSink, entity: u64, mut builder: Option<components::EntityBuilder>, rest: impl Iterator<Item = Segment>) {
-    for seg in rest {
-        match seg {
-            Segment::Json(json) => c.0.insert(entity, &json),
-            Segment::Typed(t) => {
-                let b = builder.get_or_insert_with(|| components::entity_of(&c.0, entity));
-                *b = t.apply(b);
-            }
+        match (self.target, self.cmds) {
+            (Some(e), _) => e,
+            (None, Some(c)) => c.spawn(),
+            (None, None) => 0,
         }
     }
 }
 
-pub(crate) fn spawn(c: &CmdSink, b: Vec<BundleItem>) -> u64 {
-    let mut segs = segments(b).peekable();
-    match segs.next() {
-        Some(Segment::Typed(t)) => {
-            let b = components::spawn(&c.0);
-            let id = b.id();
-            let b = t.apply(&b);
-            insert_segments(c, id, Some(b), segs);
-            id
-        }
-        Some(Segment::Json(json)) => {
-            let id = c.0.spawn(&json);
-            insert_segments(c, id, None, segs);
-            id
-        }
-        None => c.0.spawn(&[]),
-    }
-}
-pub(crate) fn insert(c: &CmdSink, entity: u64, b: Vec<BundleItem>) {
-    insert_segments(c, entity, None, segments(b))
-}
 pub(crate) fn remove(c: &CmdSink, entity: u64, paths: &[&'static str]) {
     let paths: Vec<String> = paths.iter().map(|p| p.to_string()).collect();
     c.0.remove(entity, &paths)
@@ -172,44 +160,11 @@ pub(crate) fn remove(c: &CmdSink, entity: u64, paths: &[&'static str]) {
 pub(crate) fn despawn(c: &CmdSink, entity: u64) {
     c.0.despawn(entity)
 }
-/// Sends `event`: typed when `E` is curated, else as JSON.
-pub(crate) fn send<E: Component>(c: &CmdSink, event: &E) {
-    if !typed::send(&c.0, event) {
-        c.0.send(E::PATH, &crate::ecs::to_json(event))
-    }
+pub(crate) fn send<E: GameEvent>(c: &CmdSink, event: &E) {
+    event.__send(&c.0)
 }
-/// Writes `v` back through `mut` reading term `index`: typed when `T` is curated and
-/// writable, else as JSON.
-pub(crate) fn row_set<T: Component>(q: &QuerySink, entity: u64, index: u8, v: &T) {
-    if let Some(q) = &q.handle {
-        if !typed::set(q, entity, index, v) {
-            q.set(entity, index, &crate::ecs::to_json(v))
-        }
-    }
-}
-pub(crate) fn row_set_json(q: &QuerySink, entity: u64, index: u8, json: String) {
-    if let Some(q) = &q.handle {
-        q.set(entity, index, &json)
-    }
-}
-pub(crate) fn res_set(r: &ResSink, json: String) {
-    if let Some(r) = &r.0 {
-        r.set(&json)
-    }
-}
-pub(crate) fn res_get(r: &ResSink) -> Option<String> {
-    r.0.as_ref().and_then(|r| r.get())
-}
-/// The resource's current value: typed when `T` is curated, else parsed from JSON.
-pub(crate) fn res_value<T: Component>(r: &ResSink) -> Option<T> {
-    let h = r.0.as_ref()?;
-    match typed::res_get::<T>(h) {
-        Some(v) => v,
-        None => serde_json::from_str(&h.get()?).ok(),
-    }
-}
-pub(crate) fn set_resource(c: &CmdSink, path: &'static str, json: String) {
-    c.0.set_resource(path, &json)
+pub(crate) fn set_resource<R: WritableResource>(c: &CmdSink, value: &R) {
+    value.__set_resource(&c.0)
 }
 
 struct State {
@@ -268,18 +223,18 @@ fn fetch(params: Vec<Param>) -> Vec<Fetched> {
         .into_iter()
         .map(|p| match p {
             Param::Commands(c) => Fetched::Commands(CmdSink(c)),
-            // The query reads its rows / columns itself: which depends on its types.
-            Param::Query(q) => Fetched::Query(QuerySink { handle: Some(q), fake: Vec::new(), count: 0 }),
+            // The query reads its columns itself: which depends on its types.
+            Param::Query(q) => Fetched::Query(QuerySink::new(q)),
             Param::Res(r) => {
                 let data = if r.unchanged() { ResData::Unchanged } else { ResData::Changed };
                 Fetched::Res(data, ResSink(Some(r)))
             }
-            Param::Events(e) => Fetched::Events(EventsSink { handle: Some(e), fake: Vec::new() }),
+            Param::Events(e) => Fetched::Events(EventsSink(Some(e))),
         })
         .collect()
 }
 
-fn run(name: &str, params: Vec<Param>, trigger: Option<TriggerData>) -> Verdict {
+fn run(name: &str, params: Vec<Param>, trigger: Option<Fired>) -> Verdict {
     let st = state();
     let Some(&i) = st.by_name.get(name) else { return Verdict::Pass };
     let mut app = std::mem::take(&mut st.app);
@@ -350,7 +305,6 @@ impl bindings::Guest for Mod {
         st.app = app;
         st.by_name = by_name;
     }
-
 }
 
 /// A scheduled system's export (`#[system]` glue).
@@ -359,17 +313,11 @@ pub fn run_system(name: &str, params: Vec<Param>) {
     run(name, params, None);
 }
 
-/// An observer's export (`#[system]` glue).
+/// An observer's export (`#[system]` glue): the trigger value already lifted into the
+/// SDK type (`typed::trigger_value` / `trigger_tag`).
 #[doc(hidden)]
-pub fn run_observer(name: &str, trigger: wit::TriggerData, params: Vec<Param>) {
-    run(name, params, Some(TriggerData::Entity { entity: trigger.entity, value: trigger.value }));
-}
-
-/// A typed observer's export (`#[system]` glue): the trigger value already lifted into
-/// the SDK type (`typed::trigger_value` / `trigger_tag`).
-#[doc(hidden)]
-pub fn run_observer_typed(name: &str, entity: u64, value: Box<dyn std::any::Any>, params: Vec<Param>) {
-    run(name, params, Some(TriggerData::Typed { entity, value }));
+pub fn run_observer(name: &str, entity: u64, value: Box<dyn Any>, params: Vec<Param>) {
+    run(name, params, Some(Fired::Value { entity, value }));
 }
 
 /// A packet observer's export (`#[system]` glue).
@@ -379,7 +327,7 @@ pub fn run_packet_observer(name: &str, direction: wit::PacketDirection, packet: 
         wit::PacketDirection::Incoming => PacketDirection::Incoming,
         wit::PacketDirection::Outgoing => PacketDirection::Outgoing,
     };
-    match run(name, params, Some(TriggerData::Packet(Packet::new(direction, packet)))) {
+    match run(name, params, Some(Fired::Packet(Packet::new(direction, packet)))) {
         Verdict::Pass => wit::Verdict::Pass,
         Verdict::Block => wit::Verdict::Block,
         Verdict::Replace(bytes) => wit::Verdict::Replace(bytes),
@@ -388,21 +336,3 @@ pub fn run_packet_observer(name: &str, direction: wit::PacketDirection, packet: 
 
 #[cfg(target_family = "wasm")]
 bindings::export!(Mod with_types_in bindings);
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn consecutive_json_components_share_one_call() {
-        let json = |p: &'static str| BundleItem::Json(p, "{}".into());
-        let typed = || BundleItem::Typed(typed::TypedInsert::Movable);
-        let segs: Vec<String> = segments(vec![json("a"), json("b"), typed(), typed(), json("c")])
-            .map(|s| match s {
-                Segment::Json(v) => v.iter().map(|(p, _)| p.as_str()).collect::<Vec<_>>().join("+"),
-                Segment::Typed(_) => "typed".into(),
-            })
-            .collect();
-        assert_eq!(segs, ["a+b", "typed", "typed", "c"]);
-    }
-}

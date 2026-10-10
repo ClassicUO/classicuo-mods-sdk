@@ -3,10 +3,11 @@ namespace CuoModSdk;
 /// <summary>
 /// A writable query term: <c>Query&lt;Data&lt;Mut&lt;Node&gt;, Text&gt;&gt;</c>. The row
 /// carries a handle into SDK-owned row storage; change the component through
-/// <see cref="Value"/> and it is written back when the system (or observer) returns —
-/// after the run's own commands, so it wins over a <c>Commands.Insert</c> of the same
-/// component (<c>query.set</c>, or <c>commands.insert</c> when the run has a Commands) — and ONLY when the value actually differs from what the host returned (an
-/// unconditional write would fire <c>Changed</c> and UI relayout every frame).
+/// <see cref="Value"/> and it is written back (<c>set-&lt;x&gt;</c>) when the system (or
+/// observer) returns — after the run's own commands, so it wins over a
+/// <c>Commands.Insert</c> of the same component — and ONLY when the value actually differs
+/// from what the host returned (an unconditional write would fire <c>Changed</c> and UI
+/// relayout every frame).
 ///
 /// <para>The handle is a (storage, row) pair: copying it is fine, every copy names the
 /// same value. Touching <see cref="Value"/> marks the row for the compare; a row never
@@ -38,7 +39,7 @@ public readonly struct Mut<T> : IMutTerm
             var key = (row.Slot << 8) | index;
             var columns = row.Scope.MutColumns;
             if (!columns.TryGetValue(key, out var column))
-                columns[key] = column = new MutColumn<T>(row.Scope, row.Slot, row.Rows, index);
+                columns[key] = column = new MutColumn<T>(row.Scope, row.Slot, row.Entities, index);
             return new Mut<T>((MutColumn<T>)column, row.RowIndex);
         }
     }
@@ -65,30 +66,29 @@ internal static class MutTerm<T>
 }
 
 /// <summary>
-/// One Mut term's values for one run: parsed lazily per row (so a TryGet and a foreach
-/// over the same row share a slot), compared and written back after the run.
+/// One Mut term's values for one run: lifted lazily per row from the term's column (so a
+/// TryGet and a foreach over the same row share a slot), compared and written back after
+/// the run.
 /// </summary>
 internal sealed unsafe class MutColumn<T>
 {
     readonly RunScope _scope;
     readonly int _slot;
-    readonly nint _rows;
+    readonly nint _entities;
     readonly int _index;
-    // A typed query: values lift from (and compare against) the typed column; the write is set-<x>.
-    readonly TypedColumn<T>? _typed;
+    readonly TypedColumn<T> _column;
     readonly T[] _values;
     readonly bool[] _loaded;
     readonly bool[] _dirty;
 
-    internal MutColumn(RunScope scope, int slot, nint rows, int index)
+    internal MutColumn(RunScope scope, int slot, nint entities, int index)
     {
         _scope = scope;
         _slot = slot;
-        _rows = rows;
+        _entities = entities;
         _index = index;
-        var count = scope.Rows(slot).Count;
-        if (scope.IsTyped(slot))
-            _typed = scope.Column(slot, index, Typed<T>.Codec!);
+        var count = scope.Entities(slot).Count;
+        _column = scope.Column(slot, index, Typed<T>.Record);
         _values = new T[count];
         _loaded = new bool[count];
         _dirty = new bool[count];
@@ -100,64 +100,25 @@ internal sealed unsafe class MutColumn<T>
         if (!_loaded[row])
         {
             _loaded[row] = true;
-            _values[row] = Parse(row);
+            _values[row] = _column.Get(_scope, _slot, row);
         }
         _dirty[row] = true;
         return ref _values[row];
     }
 
-    T Parse(int row) =>
-        _typed != null ? _typed.Get(_scope, _slot, row) : RowReader.ReadComp<T>(_scope, _rows, row, _index);
-
+    // set-<x> is deferred in order with the run's commands, so the write lands after this
+    // run's own Commands.Insert of the same component.
     void WriteBack()
     {
-        if (_typed != null)
-        {
-            WriteBackTyped(_typed);
-            return;
-        }
-        var info = _scope.Host.Json<T>();
-        string? path = null;
-        for (var i = 0; i < _dirty.Length; i++)
-        {
-            if (!_dirty[i])
-                continue;
-            // Compare against our own serialization of the host's value, not the host's
-            // bytes: the two format differently, and a spurious write marks it changed.
-            var original = JsonScratch.Rent(Parse(i), info);
-            try
-            {
-                if (!JsonScratch.Differs(_values[i], info, original.Span, out var now))
-                    continue;
-                var entity = EcsAbi.RowEntity(_rows, i, EcsAbi.RowStride);
-                // With a Commands param in the run, write through commands.insert: it is
-                // applied after the run's own commands (query.set lands at once, so a
-                // Commands.Insert of the same component would win over the Mut).
-                if (_scope.CommandsHandle != 0)
-                    _scope.Commands.InsertJson(entity, path ??= ModHost.PathOf<T>(), now);
-                else
-                    EcsAbi.QuerySet(_scope.Handle(_slot), entity, (byte)_index, now);
-            }
-            finally
-            {
-                original.Return();
-            }
-        }
-    }
-
-    // query.set is deferred in order with the run's commands on every host, so the write
-    // lands after this run's own Commands.Insert of the same component either way.
-    void WriteBackTyped(TypedColumn<T> column)
-    {
-        var codec = column.Codec;
+        var codec = _column.Codec;
         var handle = _scope.Handle(_slot);
         var rec = stackalloc byte[codec.Size];
         for (var i = 0; i < _dirty.Length; i++)
         {
-            if (!_dirty[i] || !codec.Differs(_values[i], column.Element(_scope, _slot, i)))
+            if (!_dirty[i] || !codec.Differs(_values[i], _column.Element(_scope, _slot, i)))
                 continue;
             codec.LowerInto(_values[i], rec);
-            codec.Set(handle, EcsAbi.RowEntity(_rows, i, EcsAbi.EntityStride), (byte)_index, rec);
+            codec.Set(handle, EcsAbi.EntityAt(_entities, i), (byte)_index, rec);
         }
     }
 }

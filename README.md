@@ -8,7 +8,7 @@ implementing `wit/cuo-mod.wit`. Consumed as a git submodule — by the client
 |---|---|
 | `rust/` | `cuo-mod-sdk` crate (rlib) — `cuo-mod-sdk = { path = ".../rust" }` from a `cdylib` targeting `wasm32-wasip2` |
 | `dotnet/` | `CuoModSdk` classlib + `ModSdk.props` / `ModSdk.targets` — import them top/bottom of a mod csproj, publish `-r wasi-wasm` (NativeAOT-LLVM) |
-| `c/` | C11 SDK (cJSON vendored) — a mod has its own `wit/world.wit` and its Makefile includes `c/mod.mk`, which runs `wit-bindgen c` on it + wasi-sdk clang → `wasm32-wasip2` component; see `c/README.md` |
+| `c/` | C11 SDK — a mod has its own `wit/world.wit` and its Makefile includes `c/mod.mk`, which runs `wit-bindgen c` on it + wasi-sdk clang → `wasm32-wasip2` component; see `c/README.md` |
 
 `rust/src/{paths,types}.rs`, `dotnet/{Paths,Types,Actions,KeyCode}.cs`, `c/include/cuo/{paths,types}.h`
 and `c/src/types.c`

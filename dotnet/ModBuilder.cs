@@ -31,9 +31,10 @@ public sealed class ModBuilder
     internal ModBuilder(ModHost host) => _host = host;
 
     /// <summary>
-    /// Register a source-generated JSON context for the mod's OWN types (storage blobs,
-    /// custom event payloads). Host payload types need no registration. Reflection-based
-    /// STJ does not survive the wasi-wasm ILC publish, hence the context.
+    /// Register a source-generated JSON context for the types the mod keeps in
+    /// <see cref="Storage"/> (host payload types cross typed and never touch JSON; a
+    /// <c>CuoModSdk.Types</c> type stored in a blob needs a <c>[JsonSerializable]</c> too).
+    /// Reflection-based STJ does not survive the wasi-wasm ILC publish, hence the context.
     /// </summary>
     public void UseJson(JsonSerializerContext context) => _host.UseJson(context);
 
@@ -539,7 +540,7 @@ public sealed class ModBuilder
     ParamDescriber Describer() => new(_host);
 
     static ObserverTrigger PacketDecl(PacketDirection direction, ReadOnlySpan<byte> ids) =>
-        new(ObserverKind.OnPacket, "", direction, ids.ToArray());
+        new(direction, ids.ToArray());
 
     SystemHandle AddSystem(ParamDescriber d, Action<RunScope> run)
     {
@@ -646,7 +647,7 @@ internal sealed class Entry(Action<RunScope> run, string name, List<ParamDecl> @
 {
     // A system name may not shadow the world's own items.
     internal static readonly HashSet<string> Reserved =
-        ["setup", "host", "assets", "actions", "packets", "types", "components", "ecs", "app", "commands", "query", "res", "events", "trigger-data", "packet-direction", "verdict"];
+        ["setup", "host", "assets", "actions", "packets", "types", "components", "ecs", "app", "commands", "query", "res", "events", "entity", "packet-direction", "verdict"];
 
     internal readonly Action<RunScope> Run = run;
     internal readonly List<object> Locals = new();
@@ -691,8 +692,6 @@ internal sealed class Entry(Action<RunScope> run, string name, List<ParamDecl> @
             if (typed.Record != null)
                 Arg("value: " + typed.Record);
         }
-        else if (Trigger != null)
-            Arg("trigger");
         foreach (var p in Params)
             Arg(WitType(p.Kind));
         return sb.Append(')').ToString();

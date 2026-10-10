@@ -16,11 +16,10 @@ enum {
     CUO__K_QUERY,
     CUO__K_RES,
     CUO__K_EVENTS,
-    CUO__K_TRIGGER, /* observer: trigger-data, first */
     CUO__K_DIR,     /* on-packet observer: packet-direction, first */
     CUO__K_PACKET,  /* on-packet observer: list<u8>, second */
     CUO__K_VERDICT, /* on-packet observer: the -> verdict out-pointer, last */
-    CUO__K_ENTITY,  /* typed observer: entity, first; its record (CUO__K_TYPED + n) next */
+    CUO__K_ENTITY,  /* observer: entity, first; its value record (CUO__K_TYPED + n) next */
 };
 
 #define CUO__KIND(T)                                                                    \
@@ -29,7 +28,7 @@ enum {
         tinyecs_modding_ecs_own_query_t: CUO__K_QUERY,                                  \
         tinyecs_modding_ecs_own_res_t: CUO__K_RES,                                      \
         tinyecs_modding_ecs_own_events_t: CUO__K_EVENTS,                                \
-        tinyecs_modding_ecs_trigger_data_t *: CUO__K_TRIGGER,                           \
+\
         tinyecs_modding_ecs_packet_direction_t: CUO__K_DIR,                             \
         cuo_wit_list_u8_t *: CUO__K_PACKET,                                             \
         tinyecs_modding_ecs_verdict_t *: CUO__K_VERDICT,                                \
@@ -39,9 +38,9 @@ enum {
 
 typedef struct cuo__arg {
     int32_t handle; /* commands / query / res / events */
-    void *ptr;      /* trigger / packet / verdict / typed trigger record */
+    void *ptr;      /* packet / verdict / observer value record */
     uint8_t dir;
-    uint64_t entity; /* typed observer */
+    uint64_t entity; /* observer */
 } cuo__arg;
 
 static inline cuo__arg cuo__arg_h(int32_t h) { return (cuo__arg){ .handle = h }; }

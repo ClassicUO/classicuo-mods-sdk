@@ -4,7 +4,7 @@ using CuoModSdk.Types;
 
 namespace CuoModSdk;
 
-/// <summary>The per-guest state the SDK threads through every run: the JSON contexts that can resolve a payload type.</summary>
+/// <summary>The per-guest state the SDK threads through every run: the mod's JSON contexts (for <see cref="Storage"/> only).</summary>
 internal sealed class ModHost
 {
     readonly List<JsonSerializerContext> _json = new();
@@ -19,14 +19,14 @@ internal sealed class ModHost
                 "carry a registry type-path (regenerate with `make gen-mod-sdk` if the host has it)");
 
     /// <summary>
-    /// Source-gen JSON metadata for <typeparamref name="T"/>: the generated context for
-    /// host payload types, else any context the mod handed to <c>ModBuilder.UseJson</c>.
-    /// <c>GetTypeInfo(Type)</c> keeps this reflection-free under ILC.
+    /// Source-gen JSON metadata for a <see cref="Storage"/> blob type: any context the mod
+    /// handed to <c>ModBuilder.UseJson</c>. <c>GetTypeInfo(Type)</c> keeps this
+    /// reflection-free under ILC.
     /// </summary>
     internal JsonTypeInfo<T> Json<T>() => JsonOf<T>.Info ??= ResolveJson<T>();
 
-    // Resolved once per type (Json<T> runs per row per term): a component hosts one
-    // ModHost for its lifetime (a reload re-instantiates it, statics and all).
+    // Resolved once per type: a component hosts one ModHost for its lifetime (a reload
+    // re-instantiates it, statics and all).
     static class JsonOf<T>
     {
         internal static JsonTypeInfo<T>? Info;
@@ -34,8 +34,6 @@ internal sealed class ModHost
 
     JsonTypeInfo<T> ResolveJson<T>()
     {
-        if (ModTypesJsonContext.Default.GetTypeInfo(typeof(T)) is JsonTypeInfo<T> generated)
-            return generated;
         foreach (var context in _json)
             if (context.GetTypeInfo(typeof(T)) is JsonTypeInfo<T> own)
                 return own;

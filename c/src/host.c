@@ -58,9 +58,9 @@ const char *cuo_storage_get(cuo_scope scope)
     return take_string(&s);
 }
 
-void cuo_storage_set(cuo_scope scope, const char *json)
+void cuo_storage_set(cuo_scope scope, const char *blob)
 {
-    cuo_wit_string_t s = cuo__wstr(json);
+    cuo_wit_string_t s = cuo__wstr(blob);
     cuo_modding_host_storage_set((cuo_modding_host_scope_t)scope, &s);
 }
 
@@ -111,19 +111,4 @@ const char *cuo_cliloc(uint32_t id)
     cuo_wit_string_t s;
     cuo_modding_assets_cliloc(id, &args, &s);
     return take_string(&s);
-}
-
-/* ── gone ────────────────────────────────────────────────────────────────── */
-
-cuo_bytes cuo_component_json(uint64_t entity, uint16_t type_id)
-{
-    (void)entity;
-    (void)type_id;
-    cuo__trap("cuo: component_get is gone: read components through a query param");
-}
-
-cuo_bytes cuo_resource_json(uint16_t type_id)
-{
-    (void)type_id;
-    cuo__trap("cuo: resource_get is gone: declare cuo_system_res");
 }

@@ -87,15 +87,13 @@ public static unsafe class ModRuntime
         return entry;
     }
 
-    static Verdict Execute(Entry entry, int paramCount, ulong triggerEntity, nint value, int valueLen, Packet packet, bool ownsValue, bool typed = false)
+    static Verdict Execute(Entry entry, int paramCount, ulong triggerEntity, nint value, Packet packet)
     {
         var scope = _scope;
         scope.Begin(_kinds, _handles, paramCount, entry.Locals);
         scope.Entry = entry;
         scope.TriggerEntity = triggerEntity;
         scope.TriggerValue = value;
-        scope.TriggerValueLen = valueLen;
-        scope.TriggerTyped = typed;
         scope.Packet = packet;
         try
         {
@@ -106,8 +104,6 @@ public static unsafe class ModRuntime
         finally
         {
             scope.Release();
-            if (ownsValue)
-                EcsAbi.Free(value, valueLen);
             for (var i = 0; i < paramCount; i++)
                 EcsAbi.Drop(_kinds[i], _handles[i]);
         }
@@ -116,31 +112,26 @@ public static unsafe class ModRuntime
     /// <summary>A scheduled system's export: <c>func(&lt;params&gt;)</c>.</summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public static void RunSystem(int index, int* handles, int count) =>
-        Execute(Lift(index, handles, count), count, 0, 0, 0, default, false);
-
-    /// <summary>An observer's export: <c>func(trigger: trigger-data, &lt;params&gt;)</c>.</summary>
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public static void RunObserver(int index, long entity, nint value, int valueLen, int* handles, int count) =>
-        Execute(Lift(index, handles, count), count, (ulong)entity, value, valueLen, default, true);
+        Execute(Lift(index, handles, count), count, 0, 0, default);
 
     /// <summary>
-    /// A typed observer's export: <c>func(entity, value: &lt;record&gt;, &lt;params&gt;)</c>
+    /// An observer's export: <c>func(entity, value: &lt;record&gt;, &lt;params&gt;)</c>
     /// (a tag: no value). <paramref name="record"/> is the record the glue stored the flat
     /// params back into (or inside the spilled args), 0 for a tag; what it owns (strings,
     /// lists) is the guest's and is freed here, as is a spilled args area.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public static void RunObserverTyped(int index, long entity, nint record, int* handles, int count, nint spilled)
+    public static void RunObserver(int index, long entity, nint record, int* handles, int count, nint spilled)
     {
         var entry = Lift(index, handles, count);
         try
         {
-            Execute(entry, count, (ulong)entity, record, 0, default, false, typed: true);
+            Execute(entry, count, (ulong)entity, record, default);
         }
         finally
         {
             if (record != 0)
-                entry.Trigger!.Typed!.Codec?.FreeElement((byte*)record);
+                entry.Trigger!.Typed!.Codec!.FreeElement((byte*)record);
             if (spilled != 0)
                 NativeMemory.Free((void*)spilled);
         }
@@ -167,7 +158,7 @@ public static unsafe class ModRuntime
         new ReadOnlySpan<byte>((void*)packet, packetLen).CopyTo(_packet);
         EcsAbi.Free(packet, packetLen);
         var p = new Packet((PacketDirection)direction, new ArraySegment<byte>(_packet, 0, packetLen));
-        var verdict = Execute(entry, count, 0, 0, 0, p, false);
+        var verdict = Execute(entry, count, 0, 0, p);
 
         fixed (VerdictRet* ret = &_verdictRet)
         {

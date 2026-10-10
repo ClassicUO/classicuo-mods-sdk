@@ -277,36 +277,6 @@ internal interface IEcsImports {
     }
 
     /**
-    * One matching entity: the values of the reading terms (`ref` / `mut` /
-    * `changed` / `added`), in their declaration order.
-    */
-
-    internal struct Row {
-        internal ulong entity;
-        internal global::System.Collections.Generic.List<string> values;
-
-        internal Row(ulong entity, global::System.Collections.Generic.List<string> values) {
-            this.entity = entity;
-            this.values = values;
-        }
-    }
-
-    /**
-    * What woke an observer: the entity (0 for events) and the component / event
-    * value.
-    */
-
-    internal struct TriggerData {
-        internal ulong entity;
-        internal string value;
-
-        internal TriggerData(ulong entity, string value) {
-            this.entity = entity;
-            this.value = value;
-        }
-    }
-
-    /**
     * A system, declared in `setup`. Name it, list its parameters in order, then add
     * it to a schedule (or use it as an observer).
     */
@@ -750,102 +720,11 @@ internal interface IEcsImports {
             }
         }
 
-        internal  unsafe ulong Spawn(global::System.Collections.Generic.List<(string, string)> bundle)
+        internal  unsafe ulong Spawn()
         {
-            var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
             var handle = this.Handle;
-
-            void* address;
-            if ((16 * bundle.Count) < 1024) {
-                var retArea = stackalloc uint[4 * bundle.Count + 1];
-                address = MemoryHelper.AlignStackPtr(retArea, 4);
-            }
-            else
-            {
-                var bufferSize = 16 * (nuint)bundle.Count;
-                address = global::System.Runtime.InteropServices.NativeMemory.AlignedAlloc(bufferSize, 4);
-                cleanups.Add(() => global::System.Runtime.InteropServices.NativeMemory.AlignedFree(address));
-            }
-
-            for (int index = 0; index < bundle.Count; ++index) {
-                (string, string) element = bundle[index];
-                int basePtr = (int)address + (index * 16);
-
-                var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(element.Item1);
-                var length = utf8Bytes.Length;
-                var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
-                var strPtr = gcHandle.AddrOfPinnedObject();
-
-                cleanups.Add(()=> gcHandle.Free());
-                new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] = length;
-                new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0] = (nint)strPtr.ToInt32();
-
-                var utf8Bytes1 = global::System.Text.Encoding.UTF8.GetBytes(element.Item2);
-                var length2 = utf8Bytes1.Length;
-                var gcHandle3 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes1, global::System.Runtime.InteropServices.GCHandleType.Pinned);
-                var strPtr0 = gcHandle3.AddrOfPinnedObject();
-
-                cleanups.Add(()=> gcHandle3.Free());
-                new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0] = length2;
-                new global::System.Span<nint>((void*)((byte*)basePtr + 8), 1)[0] = (nint)strPtr0.ToInt32();
-
-            }
-            var result =  EcsImportsInterop.Commands.SpawnWasmInterop.wasmImportSpawn(handle, (int)address, bundle.Count);
-
-            foreach (var cleanup in cleanups)
-            {
-                cleanup();
-            }
+            var result =  EcsImportsInterop.Commands.SpawnWasmInterop.wasmImportSpawn(handle);
             return unchecked((ulong)(result));
-
-        }
-
-        internal  unsafe void Insert(ulong entity, global::System.Collections.Generic.List<(string, string)> bundle)
-        {
-            var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
-            var handle = this.Handle;
-
-            void* address;
-            if ((16 * bundle.Count) < 1024) {
-                var retArea = stackalloc uint[4 * bundle.Count + 1];
-                address = MemoryHelper.AlignStackPtr(retArea, 4);
-            }
-            else
-            {
-                var bufferSize = 16 * (nuint)bundle.Count;
-                address = global::System.Runtime.InteropServices.NativeMemory.AlignedAlloc(bufferSize, 4);
-                cleanups.Add(() => global::System.Runtime.InteropServices.NativeMemory.AlignedFree(address));
-            }
-
-            for (int index = 0; index < bundle.Count; ++index) {
-                (string, string) element = bundle[index];
-                int basePtr = (int)address + (index * 16);
-
-                var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(element.Item1);
-                var length = utf8Bytes.Length;
-                var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
-                var strPtr = gcHandle.AddrOfPinnedObject();
-
-                cleanups.Add(()=> gcHandle.Free());
-                new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] = length;
-                new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0] = (nint)strPtr.ToInt32();
-
-                var utf8Bytes1 = global::System.Text.Encoding.UTF8.GetBytes(element.Item2);
-                var length2 = utf8Bytes1.Length;
-                var gcHandle3 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes1, global::System.Runtime.InteropServices.GCHandleType.Pinned);
-                var strPtr0 = gcHandle3.AddrOfPinnedObject();
-
-                cleanups.Add(()=> gcHandle3.Free());
-                new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0] = length2;
-                new global::System.Span<nint>((void*)((byte*)basePtr + 8), 1)[0] = (nint)strPtr0.ToInt32();
-
-            }
-            EcsImportsInterop.Commands.InsertWasmInterop.wasmImportInsert(handle, unchecked((long)(entity)), (int)address, bundle.Count);
-
-            foreach (var cleanup in cleanups)
-            {
-                cleanup();
-            }
 
         }
 
@@ -896,60 +775,6 @@ internal interface IEcsImports {
 
         }
 
-        internal  unsafe void Send(string @event, string value)
-        {
-            var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
-            var handle = this.Handle;
-
-            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(@event);
-            var length = utf8Bytes.Length;
-            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
-            var strPtr = gcHandle.AddrOfPinnedObject();
-
-            cleanups.Add(()=> gcHandle.Free());
-
-            var utf8Bytes1 = global::System.Text.Encoding.UTF8.GetBytes(value);
-            var length2 = utf8Bytes1.Length;
-            var gcHandle3 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes1, global::System.Runtime.InteropServices.GCHandleType.Pinned);
-            var strPtr0 = gcHandle3.AddrOfPinnedObject();
-
-            cleanups.Add(()=> gcHandle3.Free());
-            EcsImportsInterop.Commands.SendWasmInterop.wasmImportSend(handle, strPtr.ToInt32(), length, strPtr0.ToInt32(), length2);
-
-            foreach (var cleanup in cleanups)
-            {
-                cleanup();
-            }
-
-        }
-
-        internal  unsafe void SetResource(string path, string value)
-        {
-            var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
-            var handle = this.Handle;
-
-            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(path);
-            var length = utf8Bytes.Length;
-            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
-            var strPtr = gcHandle.AddrOfPinnedObject();
-
-            cleanups.Add(()=> gcHandle.Free());
-
-            var utf8Bytes1 = global::System.Text.Encoding.UTF8.GetBytes(value);
-            var length2 = utf8Bytes1.Length;
-            var gcHandle3 = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes1, global::System.Runtime.InteropServices.GCHandleType.Pinned);
-            var strPtr0 = gcHandle3.AddrOfPinnedObject();
-
-            cleanups.Add(()=> gcHandle3.Free());
-            EcsImportsInterop.Commands.SetResourceWasmInterop.wasmImportSetResource(handle, strPtr.ToInt32(), length, strPtr0.ToInt32(), length2);
-
-            foreach (var cleanup in cleanups)
-            {
-                cleanup();
-            }
-
-        }
-
     }
 
     /**
@@ -979,45 +804,6 @@ internal interface IEcsImports {
             }
         }
 
-        internal  unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Row> Rows()
-        {
-            var handle = this.Handle;
-
-            var retArea = stackalloc uint[3];
-            var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
-            EcsImportsInterop.Query.RowsWasmInterop.wasmImportRows(handle, ptr);
-
-            var array2 = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Row>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
-            for (int index3 = 0; index3 < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index3) {
-                nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index3 * 16);
-
-                var array = new global::System.Collections.Generic.List<string>(new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0]);
-                for (int index = 0; index < new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0]; ++index) {
-                    nint basePtr1 = new global::System.Span<nint>((void*)((byte*)basePtr + 8), 1)[0] + (index * 8);
-
-                    var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr1 + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr1 + 4), 1)[0]);
-                    if (new global::System.Span<int>((void*)((byte*)basePtr1 + 4), 1)[0] > 0) {
-                        global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr1 + 0), 1)[0]);
-                    }
-
-                    array.Add(str);
-                }
-
-                if (new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0] > 0) {
-                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 8), 1)[0]);
-                }
-
-                array2.Add(new global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Row (
-                unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 0), 1)[0])), array));
-            }
-
-            if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
-                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
-            }
-            return array2;
-
-        }
-
         internal  unsafe global::System.Collections.Generic.List<ulong> Entities()
         {
             var handle = this.Handle;
@@ -1037,26 +823,6 @@ internal interface IEcsImports {
                 global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
             }
             return array;
-
-        }
-
-        internal  unsafe void Set(ulong entity, byte index, string value)
-        {
-            var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
-            var handle = this.Handle;
-
-            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(value);
-            var length = utf8Bytes.Length;
-            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
-            var strPtr = gcHandle.AddrOfPinnedObject();
-
-            cleanups.Add(()=> gcHandle.Free());
-            EcsImportsInterop.Query.SetWasmInterop.wasmImportSet(handle, unchecked((long)(entity)), index, strPtr.ToInt32(), length);
-
-            foreach (var cleanup in cleanups)
-            {
-                cleanup();
-            }
 
         }
 
@@ -1089,39 +855,6 @@ internal interface IEcsImports {
             }
         }
 
-        internal  unsafe string? Get()
-        {
-            var handle = this.Handle;
-
-            var retArea = stackalloc uint[4];
-            var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
-            EcsImportsInterop.Res.GetWasmInterop.wasmImportGet(handle, ptr);
-
-            string? lifted;
-
-            switch (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]) {
-                case 0: {
-                    lifted = null;
-                    break;
-                }
-
-                case 1: {
-
-                    var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)ptr + 4), 1)[0], new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0]);
-                    if (new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0] > 0) {
-                        global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 4), 1)[0]);
-                    }
-
-                    lifted = str;
-                    break;
-                }
-
-                default: throw new global::System.ArgumentException("invalid discriminant: " + (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]));
-            }
-            return lifted;
-
-        }
-
         internal  unsafe bool Unchanged()
         {
             var handle = this.Handle;
@@ -1130,30 +863,10 @@ internal interface IEcsImports {
 
         }
 
-        internal  unsafe void Set(string value)
-        {
-            var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
-            var handle = this.Handle;
-
-            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(value);
-            var length = utf8Bytes.Length;
-            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
-            var strPtr = gcHandle.AddrOfPinnedObject();
-
-            cleanups.Add(()=> gcHandle.Free());
-            EcsImportsInterop.Res.SetWasmInterop.wasmImportSet(handle, strPtr.ToInt32(), length);
-
-            foreach (var cleanup in cleanups)
-            {
-                cleanup();
-            }
-
-        }
-
     }
 
     /**
-    * An event reader parameter.
+    * An event reader parameter (the game's typed interface reads its events).
     */
 
     internal class Events: global::System.IDisposable {
@@ -1179,30 +892,11 @@ internal interface IEcsImports {
             }
         }
 
-        internal  unsafe global::System.Collections.Generic.List<string> Read()
+        internal  unsafe uint Len()
         {
             var handle = this.Handle;
-
-            var retArea = stackalloc uint[3];
-            var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
-            EcsImportsInterop.Events.ReadWasmInterop.wasmImportRead(handle, ptr);
-
-            var array = new global::System.Collections.Generic.List<string>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
-            for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
-                nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 8);
-
-                var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0]);
-                if (new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] > 0) {
-                    global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0]);
-                }
-
-                array.Add(str);
-            }
-
-            if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
-                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
-            }
-            return array;
+            var result =  EcsImportsInterop.Events.LenWasmInterop.wasmImportLen(handle);
+            return unchecked((uint)(result));
 
         }
 

@@ -1291,6 +1291,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
             public static extern void wasmImportGetContext(int p0, nint p1);
         }
 
+        public static class PutContextWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "put-context"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportPutContext(int p0, int p1, nint p2, int p3, int p4, int p5, int p6, int p7);
+        }
+
         public static class SetResourceContextWasmInterop
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-resource-context"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
@@ -1309,6 +1315,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
             public static extern void wasmImportGetState(int p0, nint p1);
         }
 
+        public static class PutStateWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "put-state"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportPutState(int p0, int p1);
+        }
+
         public static class SetResourceStateWasmInterop
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-resource-state"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
@@ -1319,6 +1331,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-container-positions"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
             public static extern void wasmImportGetContainerPositions(int p0, nint p1);
+        }
+
+        public static class PutContainerPositionsWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "put-container-positions"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportPutContainerPositions(int p0, nint p1, int p2);
         }
 
         public static class SetResourceContainerPositionsWasmInterop
@@ -1339,6 +1357,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
             public static extern void wasmImportGetModHotkeys(int p0, nint p1);
         }
 
+        public static class PutModHotkeysWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "put-mod-hotkeys"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportPutModHotkeys(int p0, nint p1, int p2, int p3);
+        }
+
         public static class SetResourceModHotkeysWasmInterop
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-resource-mod-hotkeys"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
@@ -1355,6 +1379,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-schema"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
             public static extern void wasmImportGetSchema(int p0, nint p1);
+        }
+
+        public static class PutSchemaWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "put-schema"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportPutSchema(int p0, nint p1, int p2);
         }
 
         public static class SetResourceSchemaWasmInterop
@@ -1441,6 +1471,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
             public static extern void wasmImportGetClipboardSet(int p0, nint p1);
         }
 
+        public static class PutClipboardSetWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "put-clipboard-set"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportPutClipboardSet(int p0, int p1, nint p2, int p3);
+        }
+
         public static class SetResourceClipboardSetWasmInterop
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-resource-clipboard-set"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
@@ -1451,6 +1487,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-focused-input"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
             public static extern void wasmImportGetFocusedInput(int p0, nint p1);
+        }
+
+        public static class PutFocusedInputWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "put-focused-input"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportPutFocusedInput(int p0, long p1);
         }
 
         public static class SetResourceFocusedInputWasmInterop
@@ -1465,6 +1507,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
             public static extern void wasmImportGetTextClipboardAction(int p0, nint p1);
         }
 
+        public static class PutTextClipboardActionWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "put-text-clipboard-action"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportPutTextClipboardAction(int p0, long p1, int p2, int p3);
+        }
+
         public static class SetResourceTextClipboardActionWasmInterop
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-resource-text-clipboard-action"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
@@ -1477,6 +1525,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
             public static extern void wasmImportGetTextCompletion(int p0, nint p1);
         }
 
+        public static class PutTextCompletionWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "put-text-completion"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportPutTextCompletion(int p0, long p1, nint p2, int p3, nint p4, int p5);
+        }
+
         public static class SetResourceTextCompletionWasmInterop
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-resource-text-completion"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
@@ -1487,6 +1541,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "get-text-completion-pick"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
             public static extern void wasmImportGetTextCompletionPick(int p0, nint p1);
+        }
+
+        public static class PutTextCompletionPickWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "put-text-completion-pick"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportPutTextCompletionPick(int p0, long p1, int p2, int p3);
         }
 
         public static class SetResourceTextCompletionPickWasmInterop

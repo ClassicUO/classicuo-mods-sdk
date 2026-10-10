@@ -71,8 +71,8 @@ cuo_Node cuo_node_abs(float left, float top, float width, float height)
 
 cuo_Color cuo_rgba(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
-    /* IsVisible is A > 0 on the host (a getter STJ never reads back); filled only so
-     * the payload is self-consistent. */
+    /* IsVisible is A > 0 on the host (host-computed, not sent); filled only so the
+     * struct is self-consistent. */
     cuo_Color c = { r, g, b, a, a > 0 };
     return c;
 }
@@ -104,7 +104,7 @@ void cuo_chat_system(cuo_cmds *c, const char *text, uint16_t hue)
     m.font = SPEECH_FONT;
     m.is_unicode = true;
     m.kind = 1;
-    cuo_ModChatMessage_emit(c, 0, &m);
+    cuo_ModChatMessage_send(c, &m);
 }
 
 void cuo_chat_overhead(cuo_cmds *c, const char *text, uint16_t hue, uint32_t serial, const char *name)
@@ -118,7 +118,7 @@ void cuo_chat_overhead(cuo_cmds *c, const char *text, uint16_t hue, uint32_t ser
     m.font = SPEECH_FONT;
     m.is_unicode = true;
     m.kind = 0;
-    cuo_ModChatMessage_emit(c, 0, &m);
+    cuo_ModChatMessage_send(c, &m);
 }
 
 /* ── hotkeys ─────────────────────────────────────────────────────────────── */
@@ -162,7 +162,7 @@ static void publish(const cuo_input *in, cuo_cmds *c, void *user)
     (void)user;
     /* ConsumeKeys stays false: consume is per binding. */
     cuo_ModHotkeyBindingsDto dto = { { bindings, nbindings }, false };
-    cuo_resource_set(c, cuo_ModHotkeyBindingsDto_comp(&dto));
+    cuo_ModHotkeyBindingsDto_set_resource(c, &dto);
 }
 
 void cuo__publish_hotkeys(cuo_builder *m)

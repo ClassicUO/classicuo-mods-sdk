@@ -29,7 +29,7 @@ public readonly struct On<T> : IObserverTrigger<On<T>>
 
     public T Event { get; }
 
-    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnEvent, ModHost.PathOf<T>(), typed: TypedCodecs.TriggerOf<T>());
+    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnEvent, ModHost.PathOf<T>(), Trigger.Of<T>());
 
     public static bool TryCreate(ParamContext c, out On<T> value) => Trigger.Create<T, On<T>>(c, static (e, v) => new On<T>(e, v), out value);
 }
@@ -47,7 +47,7 @@ public readonly struct OnAdd<T> : IObserverTrigger<OnAdd<T>>
 
     public T Value { get; }
 
-    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnAdd, ModHost.PathOf<T>(), typed: TypedCodecs.TriggerOf<T>());
+    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnAdd, ModHost.PathOf<T>(), Trigger.Of<T>());
 
     public static bool TryCreate(ParamContext c, out OnAdd<T> value) => Trigger.Create<T, OnAdd<T>>(c, static (e, v) => new OnAdd<T>(e, v), out value);
 }
@@ -65,7 +65,7 @@ public readonly struct OnRemove<T> : IObserverTrigger<OnRemove<T>>
 
     public T Value { get; }
 
-    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnRemove, ModHost.PathOf<T>(), typed: TypedCodecs.TriggerOf<T>());
+    public static ObserverTrigger Describe(ParamDescriber d) => new(ObserverKind.OnRemove, ModHost.PathOf<T>(), Trigger.Of<T>());
 
     public static bool TryCreate(ParamContext c, out OnRemove<T> value) => Trigger.Create<T, OnRemove<T>>(c, static (e, v) => new OnRemove<T>(e, v), out value);
 }
@@ -77,17 +77,24 @@ public sealed class ObserverTrigger
     internal readonly string Path;
     internal readonly PacketDirection Direction;
     internal readonly byte[] Ids;
-    // A curated component / event: the export takes `entity, value: <record>` (a tag:
-    // `entity` alone) instead of `trigger: trigger-data`.
+    // The component / event's record: the export takes `entity, value: <record>` (a tag:
+    // `entity` alone). Null for a packet observer.
     internal readonly TypedTrigger? Typed;
 
-    internal ObserverTrigger(ObserverKind kind, string path, PacketDirection direction = default, byte[]? ids = null, TypedTrigger? typed = null)
+    internal ObserverTrigger(ObserverKind kind, string path, TypedTrigger typed)
     {
         Kind = kind;
         Path = path;
-        Direction = direction;
-        Ids = ids ?? [];
+        Ids = [];
         Typed = typed;
+    }
+
+    internal ObserverTrigger(PacketDirection direction, byte[] ids)
+    {
+        Kind = ObserverKind.OnPacket;
+        Path = "";
+        Direction = direction;
+        Ids = ids;
     }
 }
 
@@ -95,28 +102,14 @@ internal enum ObserverKind : byte { OnAdd, OnRemove, OnEvent, OnPacket }
 
 static unsafe class Trigger
 {
-    // A payload that doesn't parse as T skips the run (a host/SDK shape drift, not mod logic).
+    internal static TypedTrigger Of<T>() =>
+        TypedCodecs.TriggerOf<T>() ?? throw new InvalidOperationException($"{ModHost.PathOf<T>()} is not a component or event: it can't trigger an observer");
+
     internal static bool Create<T, TTrigger>(ParamContext c, Func<Entity, T, TTrigger> make, out TTrigger value)
     {
-        value = default!;
         var scope = c.Scope;
-        T parsed;
-        if (scope.TriggerTyped)
-        {
-            // The record the export's flat params were stored back into (none for a tag).
-            parsed = scope.TriggerValue != 0 && Typed<T>.Codec is { } codec ? codec.Lift((byte*)scope.TriggerValue) : default!;
-            value = make(new Entity(scope.TriggerEntity), parsed);
-            return true;
-        }
-        try
-        {
-            var json = new ReadOnlySpan<byte>((void*)scope.TriggerValue, scope.TriggerValueLen);
-            parsed = Payload.Parse(json, c.Host.Json<T>())!;
-        }
-        catch (System.Text.Json.JsonException)
-        {
-            return false;
-        }
+        // The record the export's flat params were stored back into (none for a tag).
+        var parsed = scope.TriggerValue != 0 ? Typed<T>.Record.Lift((byte*)scope.TriggerValue) : default!;
         value = make(new Entity(scope.TriggerEntity), parsed);
         return true;
     }

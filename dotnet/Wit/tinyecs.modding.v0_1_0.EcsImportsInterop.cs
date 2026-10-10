@@ -90,13 +90,7 @@ namespace ModWorld.wit.Imports.tinyecs.modding.v0_1_0
             public static class SpawnWasmInterop
             {
                 [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]commands.spawn"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-                public static extern long wasmImportSpawn(int p0, nint p1, int p2);
-            }
-
-            public static class InsertWasmInterop
-            {
-                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]commands.insert"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-                public static extern void wasmImportInsert(int p0, long p1, nint p2, int p3);
+                public static extern long wasmImportSpawn(int p0);
             }
 
             public static class RemoveWasmInterop
@@ -111,28 +105,10 @@ namespace ModWorld.wit.Imports.tinyecs.modding.v0_1_0
                 public static extern void wasmImportDespawn(int p0, long p1);
             }
 
-            public static class SendWasmInterop
-            {
-                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]commands.send"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-                public static extern void wasmImportSend(int p0, nint p1, int p2, nint p3, int p4);
-            }
-
-            public static class SetResourceWasmInterop
-            {
-                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]commands.set-resource"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-                public static extern void wasmImportSetResource(int p0, nint p1, int p2, nint p3, int p4);
-            }
-
         }
 
         internal static class Query
         {
-
-            public static class RowsWasmInterop
-            {
-                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]query.rows"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-                public static extern void wasmImportRows(int p0, nint p1);
-            }
 
             public static class EntitiesWasmInterop
             {
@@ -140,22 +116,10 @@ namespace ModWorld.wit.Imports.tinyecs.modding.v0_1_0
                 public static extern void wasmImportEntities(int p0, nint p1);
             }
 
-            public static class SetWasmInterop
-            {
-                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]query.set"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-                public static extern void wasmImportSet(int p0, long p1, int p2, nint p3, int p4);
-            }
-
         }
 
         internal static class Res
         {
-
-            public static class GetWasmInterop
-            {
-                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]res.get"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-                public static extern void wasmImportGet(int p0, nint p1);
-            }
 
             public static class UnchangedWasmInterop
             {
@@ -163,21 +127,15 @@ namespace ModWorld.wit.Imports.tinyecs.modding.v0_1_0
                 public static extern int wasmImportUnchanged(int p0);
             }
 
-            public static class SetWasmInterop
-            {
-                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]res.set"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-                public static extern void wasmImportSet(int p0, nint p1, int p2);
-            }
-
         }
 
         internal static class Events
         {
 
-            public static class ReadWasmInterop
+            public static class LenWasmInterop
             {
-                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]events.read"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-                public static extern void wasmImportRead(int p0, nint p1);
+                [global::System.Runtime.InteropServices.DllImportAttribute("tinyecs:modding/ecs@0.1.0", EntryPoint = "[method]events.len"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportLen(int p0);
             }
 
         }

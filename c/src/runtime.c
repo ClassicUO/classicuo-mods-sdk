@@ -6,9 +6,10 @@
  *    its parameters match, then declare them to the host (app.add-systems /
  *    add-observer) in the export's parameter order.
  * 2. The host calls an export with the params as typed arguments; its generated
- *    trampoline hands them to cuo__dispatch, which fetches each param's data (one host
- *    call per param), runs the registered callback and drops the handles. Commands go
- *    straight to the host's buffer as they are recorded. */
+ *    trampoline hands them to cuo__dispatch, which fetches each query's entities, runs
+ *    the registered callback and drops the handles. Columns, resources and events are
+ *    read on demand through the typed functions; commands go straight to the host's
+ *    buffer as they are recorded. */
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,7 +57,6 @@ typedef struct block {
 } block;
 
 static block *scr_cur;
-static void *scr_last; /* most recent allocation, for in-place growth */
 
 void cuo__scratch_reset(void)
 {
@@ -77,7 +77,6 @@ void cuo__scratch_reset(void)
         keep->top = 0;
     }
     scr_cur = keep;
-    scr_last = NULL;
 }
 
 static void *scratch_raw(size_t n)
@@ -94,24 +93,12 @@ static void *scratch_raw(size_t n)
     }
     size_t start = ALIGN8(scr_cur->top);
     scr_cur->top = start + n;
-    return scr_last = scr_cur->data + start;
+    return scr_cur->data + start;
 }
 
 void *cuo_alloc(size_t n)
 {
     return memset(scratch_raw(n ? n : 1), 0, n ? n : 1);
-}
-
-void *cuo__scratch_grow(void *p, size_t old_n, size_t new_n)
-{
-    if (p && p == scr_last && (unsigned char *)p + new_n <= scr_cur->data + scr_cur->cap) {
-        scr_cur->top = (size_t)((unsigned char *)p - scr_cur->data) + new_n;
-        return p;
-    }
-    void *q = scratch_raw(new_n);
-    if (p && old_n)
-        memcpy(q, p, old_n);
-    return q;
 }
 
 char *cuo_strndup(const char *s, size_t n)
@@ -243,9 +230,6 @@ typedef struct param_decl {
     uint16_t type_id;
     cuo_term *terms;
     size_t n;
-    /* query: every read term has a typed column, so the call starts with `entities`
-     * instead of `rows` */
-    bool typed;
     /* res: the value received on the previous call, reused while res.unchanged. */
     cuo__res_cache res;
 } param_decl;
@@ -274,9 +258,8 @@ typedef struct entry {
     /* observer */
     cuo_observer_fn obs_fn;
     uint8_t obs_kind;
-    /* a typed observer export (entity first): its record kind (CUO__K_TYPED + n), 0 = a tag */
-    bool typed;
-    uint8_t typed_kind;
+    /* the trigger's value: its record kind (CUO__K_TYPED + n), 0 = a tag (no value) */
+    uint8_t value_kind;
     uint16_t type_id;
     char *event_name;
     cuo_packet_fn packet_fn;
@@ -334,8 +317,8 @@ static bool reads(uint8_t kind)
     return kind != CUO_TERM_WITH && kind != CUO_TERM_WITHOUT;
 }
 
-/* Two terms on one type would put two payloads in the row and shift every later
- * slot: fold instead (a WITH on a read type is dropped, CHANGED / ADDED / MUT upgrade). */
+/* Two terms on one type would take two column slots and shift every later one: fold
+ * instead (a WITH on a read type is dropped, CHANGED / ADDED / MUT upgrade). */
 static cuo_param add_query(param_list *l, const cuo_term *terms, size_t n)
 {
     cuo_term *q = xrealloc(NULL, (n ? n : 1) * sizeof(cuo_term));
@@ -358,13 +341,7 @@ static cuo_param add_query(param_list *l, const cuo_term *terms, size_t n)
         }
         q[qn++] = t;
     }
-    cuo_param p = add_param(l, CUO__K_QUERY, false, 0, q, qn);
-    bool typed = true;
-    for (size_t i = 0; i < qn; i++)
-        if (reads(q[i].kind) && !cuo__typed_readable(q[i].type_id))
-            typed = false;
-    l->v[p].typed = typed;
-    return p;
+    return add_param(l, CUO__K_QUERY, false, 0, q, qn);
 }
 
 static entry *new_entry(const char *name, bool is_observer, void *user)
@@ -535,13 +512,24 @@ static const char *wit_type(uint8_t kind)
     }
 }
 
+static const char *trigger_path(const entry *e)
+{
+    return e->obs_kind == OBS_EVENT ? e->event_name : cuo_type_path(e->type_id);
+}
+
 /* The export line wit/world.wit needs for this declaration. */
 static const char *expected_export(const entry *e)
 {
+    const char *head = "";
     bool packet = e->is_observer && e->obs_kind == OBS_PACKET;
-    const char *s = cuo_fmt("export %s: func(%scommands: commands", e->name,
-                            packet ? "direction: packet-direction, packet: list<u8>, "
-                                   : e->is_observer ? "trigger: trigger-data, " : "");
+    if (packet) {
+        head = "direction: packet-direction, packet: list<u8>, ";
+    } else if (e->is_observer) {
+        const char *record;
+        int kind = cuo__trigger_kind(trigger_path(e), &record);
+        head = kind > 0 ? cuo_fmt("entity: entity, value: %s, ", record) : "entity: entity, ";
+    }
+    const char *s = cuo_fmt("export %s: func(%scommands: commands", e->name, head);
     for (size_t i = 0; i < e->params.n; i++)
         s = cuo_fmt("%s, p%zu: %s", s, i, wit_type(e->params.v[i].kind));
     return cuo_fmt("%s)%s;", s, packet ? " -> verdict" : "");
@@ -551,6 +539,14 @@ static const char *expected_export(const entry *e)
  * `commands` anywhere among them (none: the callback's cuo_cmds traps on use). */
 static void link_export(entry *e)
 {
+    if (e->is_observer && e->obs_kind != OBS_PACKET) {
+        const char *record;
+        int kind = cuo__trigger_kind(trigger_path(e), &record);
+        if (kind < 0)
+            cuo__trap(cuo_fmt("cuo: '%s' observes '%s', which is not a component or event path of the contract",
+                              e->name, trigger_path(e)));
+        e->value_kind = (uint8_t)kind;
+    }
     const cuo__export *x = find_export(e->name);
     if (!x)
         cuo__trap(cuo_fmt("cuo: '%s' is declared in cuo_setup but the mod's world has no export for it: add `%s` "
@@ -563,20 +559,11 @@ static void link_export(entry *e)
              x->kinds[x->n - 1] == CUO__K_VERDICT;
         first = 2;
         end = ok ? x->n - 1 : 0;
-    } else if (e->is_observer && x->n >= 1 && x->kinds[0] == CUO__K_ENTITY) {
-        /* Typed: `entity: entity, value: <record>` (a tag: entity alone). */
-        int kind = cuo__typed_trigger_kind(e->obs_kind == OBS_EVENT ? e->event_name : cuo_type_path(e->type_id));
-        if (kind < 0)
-            cuo__trap(cuo_fmt("cuo: the export '%s' takes its trigger typed (`entity: entity, ...`), but that type has "
-                              "no typed trigger: declare it `trigger: trigger-data`",
-                              e->name));
-        ok = kind == 0 || (x->n >= 2 && x->kinds[1] == kind);
-        first = kind == 0 ? 1 : 2;
-        e->typed = true;
-        e->typed_kind = (uint8_t)kind;
     } else if (e->is_observer) {
-        ok = x->n >= 1 && x->kinds[0] == CUO__K_TRIGGER;
-        first = 1;
+        /* `entity: entity, value: <record>` (a tag: entity alone). */
+        ok = x->n >= 1 && x->kinds[0] == CUO__K_ENTITY &&
+             (e->value_kind == 0 || (x->n >= 2 && x->kinds[1] == e->value_kind));
+        first = e->value_kind == 0 ? 1 : 2;
     }
     size_t p = 0;
     bool cmds = false;
@@ -706,56 +693,28 @@ void exports_cuo_wit_setup(tinyecs_modding_ecs_own_app_t own_app)
 
 /* ── dispatch: the host called an export ─────────────────────────────────── */
 
-static void drop_res_typed(cuo__res_cache *r)
+static void drop_res(cuo__res_cache *r)
 {
-    if (r->typed_valid && r->typed_has)
-        cuo__typed_res_free(r->typed_kind, r->typed);
-    r->typed_valid = false;
+    if (r->valid && r->has)
+        cuo__typed_res_free(r->kind, r->rec);
+    r->valid = false;
 }
 
-static void drop_res_json(cuo__res_cache *r)
-{
-    if (r->json_valid && r->json_has)
-        tinyecs_modding_ecs_json_free(&r->json);
-    r->json_valid = false;
-}
-
-static void fetch_rows(cuo__pval *v)
-{
-    tinyecs_modding_ecs_method_query_rows((tinyecs_modding_ecs_borrow_query_t){ v->handle }, &v->rows);
-    v->has_rows = true;
-    v->len = v->rows.len;
-}
-
-static void fetch_ents(cuo__pval *v)
-{
-    tinyecs_modding_ecs_method_query_entities((tinyecs_modding_ecs_borrow_query_t){ v->handle }, &v->ents);
-    v->has_ents = true;
-    v->ent_view = v->ents.ptr;
-    v->len = v->ents.len;
-}
-
-/* One host call per query / events as the call starts; a res only asks whether its
+/* A query fetches its entities as the call starts (q.len); a res only asks whether its
  * value changed (its value is fetched on first use, and reused while unchanged). */
 static void fetch(param_decl *d, cuo__pval *v, int32_t handle)
 {
     v->tag = d->kind;
-    v->type_id = d->type_id;
     v->mut = d->mut;
     v->handle = handle;
     switch (d->kind) {
     case CUO__K_QUERY:
-        if (d->typed)
-            fetch_ents(v);
-        else
-            fetch_rows(v);
+        tinyecs_modding_ecs_method_query_entities((tinyecs_modding_ecs_borrow_query_t){ handle }, &v->ents);
         break;
     case CUO__K_RES: {
         cuo__res_cache *r = &d->res;
-        if (!r->known || !tinyecs_modding_ecs_method_res_unchanged((tinyecs_modding_ecs_borrow_res_t){ handle })) {
-            drop_res_json(r);
-            drop_res_typed(r);
-        }
+        if (!r->known || !tinyecs_modding_ecs_method_res_unchanged((tinyecs_modding_ecs_borrow_res_t){ handle }))
+            drop_res(r);
         r->known = true;
         v->res = r;
         break;
@@ -773,28 +732,17 @@ static void release(cuo__params *ps, cuo_cmds *c)
         cuo__pval *v = &ps->v[i];
         switch (v->tag) {
         case CUO__K_QUERY:
-            if (v->has_rows)
-                tinyecs_modding_ecs_list_row_free(&v->rows);
-            if (v->has_ents)
-                cuo_wit_list_entity_free(&v->ents);
+            cuo_wit_list_entity_free(&v->ents);
             tinyecs_modding_ecs_query_drop_own((tinyecs_modding_ecs_own_query_t){ v->handle });
             break;
         case CUO__K_RES:
             tinyecs_modding_ecs_res_drop_own((tinyecs_modding_ecs_own_res_t){ v->handle });
             break;
         case CUO__K_EVENTS:
-            if (v->has_events)
-                cuo_wit_list_json_free(&v->events);
             tinyecs_modding_ecs_events_drop_own((tinyecs_modding_ecs_own_events_t){ v->handle });
             break;
         }
     }
-}
-
-static cuo_bytes json_bytes(const cuo_wit_string_t *s)
-{
-    cuo_bytes b = { s->len ? s->ptr : NULL, s->len };
-    return b;
 }
 
 void cuo__dispatch(const cuo__export *x, const cuo__arg *a)
@@ -805,7 +753,7 @@ void cuo__dispatch(const cuo__export *x, const cuo__arg *a)
         cuo__trap(cuo_fmt("cuo: export '%s' was called but cuo_setup declared nothing by that name", x->name));
     entry *e = &entries[at];
     cuo__params ps = { cuo_alloc((e->params.n ? e->params.n : 1) * sizeof(cuo__pval)), e->params.n };
-    cuo_cmds c = { { -1 }, &ps, 0, e->name };
+    cuo_cmds c = { { -1 }, 0, e->name };
     for (size_t i = e->first, p = 0; i < e->end; i++) {
         if (x->kinds[i] == CUO__K_COMMANDS) {
             c.handle.__handle = a[i].handle;
@@ -826,23 +774,14 @@ void cuo__dispatch(const cuo__export *x, const cuo__arg *a)
     cuo_obs ev = { 0 };
     ev.obs_id = (uint32_t)at;
     ev.params = &ps;
-    if (e->typed) {
+    if (e->obs_kind != OBS_PACKET) {
         ev.entity = a[0].entity;
-        if (e->typed_kind) {
-            ev.typed = cuo__typed_trigger_value(e->typed_kind, a[1].ptr);
-            ev.typed_kind = e->typed_kind;
+        if (e->value_kind) {
+            ev.value = cuo__trigger_value(e->value_kind, a[1].ptr);
+            ev.value_kind = e->value_kind;
         }
         e->obs_fn(&ev, &c, e->user);
         release(&ps, &c);
-        return;
-    }
-    if (e->obs_kind != OBS_PACKET) {
-        tinyecs_modding_ecs_trigger_data_t *trigger = a[0].ptr;
-        ev.entity = trigger->entity;
-        ev.value = json_bytes(&trigger->value);
-        e->obs_fn(&ev, &c, e->user);
-        release(&ps, &c);
-        tinyecs_modding_ecs_trigger_data_free(trigger);
         return;
     }
 
@@ -883,27 +822,10 @@ static cuo_query query_of(const cuo__params *ps, cuo_param p)
     const cuo__pval *v = pval(ps, p, CUO__K_QUERY);
     if (v) {
         q.impl = v;
-        q.len = v->len;
+        q.len = v->ents.len;
         q.handle = v->handle;
     }
     return q;
-}
-
-static cuo_bytes res_of(const cuo__params *ps, cuo_param p)
-{
-    cuo_bytes none = { NULL, 0 };
-    const cuo__pval *v = pval(ps, p, CUO__K_RES);
-    if (!v)
-        return none;
-    cuo__res_cache *r = v->res;
-    if (!r->json_valid) {
-        r->json_has = tinyecs_modding_ecs_method_res_get((tinyecs_modding_ecs_borrow_res_t){ v->handle }, &r->json);
-        r->json_valid = true;
-    }
-    if (!r->json_has)
-        return none;
-    /* A present marker resource: report "{}", not absence. */
-    return r->json.len ? json_bytes(&r->json) : cuo_str_bytes("{}");
 }
 
 const void *cuo__res_typed(const cuo__params *ps, cuo_param p, uint16_t kind)
@@ -912,18 +834,28 @@ const void *cuo__res_typed(const cuo__params *ps, cuo_param p, uint16_t kind)
     if (!v)
         return NULL;
     cuo__res_cache *r = v->res;
-    if (r->typed_valid && r->typed_kind != kind)
-        drop_res_typed(r);
-    if (!r->typed_valid) {
-        if (r->typed_kind != kind) {
-            free(r->typed);
-            r->typed = xrealloc(NULL, cuo__typed_res_size(kind));
+    if (r->valid && r->kind != kind)
+        drop_res(r);
+    if (!r->valid) {
+        if (r->kind != kind || !r->rec) {
+            free(r->rec);
+            r->rec = xrealloc(NULL, cuo__typed_res_size(kind));
         }
-        r->typed_kind = kind;
-        r->typed_has = cuo__typed_res_get(kind, v->handle, r->typed);
-        r->typed_valid = true;
+        r->kind = kind;
+        r->has = cuo__typed_res_get(kind, v->handle, r->rec);
+        r->valid = true;
     }
-    return r->typed_has ? r->typed : NULL;
+    return r->has ? r->rec : NULL;
+}
+
+cuo_modding_components_borrow_res_t cuo__res_put(const cuo__params *ps, cuo_param p)
+{
+    const cuo__pval *v = pval(ps, p, CUO__K_RES);
+    if (!v || !v->mut)
+        cuo__trap("cuo: cuo_X_put needs a `mut` res param (cuo_system_res(m, s, id, true)); "
+                  "cuo_X_set_resource needs none");
+    drop_res(v->res);
+    return (cuo_modding_components_borrow_res_t){ v->handle };
 }
 
 int32_t cuo__events_handle(const cuo__params *ps, cuo_param p)
@@ -932,61 +864,26 @@ int32_t cuo__events_handle(const cuo__params *ps, cuo_param p)
     return v ? v->handle : -1;
 }
 
-static cuo_events events_of(const cuo__params *ps, cuo_param p)
+static size_t events_len(const cuo__params *ps, cuo_param p)
 {
-    cuo_events e = { NULL, 0 };
-    cuo__pval *v = (cuo__pval *)pval(ps, p, CUO__K_EVENTS);
-    if (v) {
-        if (!v->has_events) {
-            tinyecs_modding_ecs_method_events_read((tinyecs_modding_ecs_borrow_events_t){ v->handle }, &v->events);
-            v->has_events = true;
-        }
-        e.vec = v->events.ptr;
-        e.len = v->events.len;
-    }
-    return e;
+    int32_t h = cuo__events_handle(ps, p);
+    return h < 0 ? 0 : tinyecs_modding_ecs_method_events_len((tinyecs_modding_ecs_borrow_events_t){ h });
 }
 
 uint32_t cuo_input_sys_id(const cuo_input *in) { return in->sys_id; }
 uint64_t cuo_input_tick(const cuo_input *in) { return in->tick; }
 cuo_query cuo_input_query(const cuo_input *in, cuo_param p) { return query_of(in->params, p); }
-cuo_bytes cuo_input_res(const cuo_input *in, cuo_param p) { return res_of(in->params, p); }
-cuo_events cuo_input_events(const cuo_input *in, cuo_param p) { return events_of(in->params, p); }
-
-typedef tinyecs_modding_ecs_row_t row_t;
-
-static const row_t *rows_of(cuo_query q)
-{
-    cuo__pval *v = (cuo__pval *)q.impl;
-    if (!v)
-        return NULL;
-    if (!v->has_rows)
-        fetch_rows(v);
-    return v->rows.ptr;
-}
-
-static const cuo_entity *entities_of(cuo_query q)
-{
-    cuo__pval *v = (cuo__pval *)q.impl;
-    if (!v)
-        return NULL;
-    if (!v->ent_view) {
-        cuo_entity *e = cuo_alloc((v->len ? v->len : 1) * sizeof *e);
-        for (size_t i = 0; i < v->len; i++)
-            e[i] = v->rows.ptr[i].entity;
-        v->ent_view = e;
-    }
-    return v->ent_view;
-}
+size_t cuo_input_events_len(const cuo_input *in, cuo_param p) { return events_len(in->params, p); }
 
 const cuo_entity *cuo_query_entities(cuo_query q)
 {
-    return entities_of(q);
+    const cuo__pval *v = q.impl;
+    return v ? v->ents.ptr : NULL;
 }
 
 bool cuo_query_index(cuo_query q, cuo_entity entity, size_t *index)
 {
-    const cuo_entity *e = entities_of(q);
+    const cuo_entity *e = cuo_query_entities(q);
     for (size_t i = 0; i < q.len; i++)
         if (e[i] == entity) {
             if (index)
@@ -996,62 +893,9 @@ bool cuo_query_index(cuo_query q, cuo_entity entity, size_t *index)
     return false;
 }
 
-cuo_row cuo_query_row(cuo_query q, size_t i)
-{
-    cuo_row r = { i < q.len ? &rows_of(q)[i] : NULL };
-    return r;
-}
-
-bool cuo_query_find(cuo_query q, cuo_entity entity, cuo_row *out)
-{
-    size_t i;
-    if (!cuo_query_index(q, entity, &i))
-        return false;
-    if (out)
-        *out = cuo_query_row(q, i);
-    return true;
-}
-
-void cuo_query_set(cuo_query q, cuo_entity entity, size_t index, cuo_bytes json)
-{
-    if (q.handle < 0)
-        cuo__trap("cuo: cuo_query_set on an absent query");
-    cuo_wit_string_t v = cuo__wbytes(json);
-    tinyecs_modding_ecs_method_query_set((tinyecs_modding_ecs_borrow_query_t){ q.handle }, entity, (uint8_t)index,
-                                         &v);
-}
-
-uint64_t cuo_row_entity(cuo_row r)
-{
-    return r.table ? ((const row_t *)r.table)->entity : 0;
-}
-
-size_t cuo_row_comp_count(cuo_row r)
-{
-    return r.table ? ((const row_t *)r.table)->values.len : 0;
-}
-
-cuo_bytes cuo_row_comp(cuo_row r, size_t i)
-{
-    cuo_bytes none = { NULL, 0 };
-    if (!r.table || i >= ((const row_t *)r.table)->values.len)
-        return none;
-    return json_bytes(&((const row_t *)r.table)->values.ptr[i]);
-}
-
-cuo_bytes cuo_events_at(cuo_events ev, size_t i)
-{
-    cuo_bytes none = { NULL, 0 };
-    if (i >= ev.len)
-        return none;
-    return json_bytes(&((const tinyecs_modding_ecs_json_t *)ev.vec)[i]);
-}
-
 uint32_t cuo_obs_id(const cuo_obs *ev) { return ev->obs_id; }
 uint64_t cuo_obs_entity(const cuo_obs *ev) { return ev->entity; }
-cuo_bytes cuo_obs_value(const cuo_obs *ev) { return ev->value; }
 cuo_query cuo_obs_query(const cuo_obs *ev, cuo_param p) { return query_of(ev->params, p); }
-cuo_bytes cuo_obs_res(const cuo_obs *ev, cuo_param p) { return res_of(ev->params, p); }
-cuo_events cuo_obs_events(const cuo_obs *ev, cuo_param p) { return events_of(ev->params, p); }
+size_t cuo_obs_events_len(const cuo_obs *ev, cuo_param p) { return events_len(ev->params, p); }
 cuo_bytes cuo_obs_packet(const cuo_obs *ev) { return ev->packet; }
 cuo_dir cuo_obs_packet_dir(const cuo_obs *ev) { return ev->dir; }

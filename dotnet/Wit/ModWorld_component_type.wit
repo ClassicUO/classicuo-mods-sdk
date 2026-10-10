@@ -1,7 +1,7 @@
 package cuo:modding@0.1.0;
 
 interface host {
-  use tinyecs:modding/ecs@0.1.0.{entity, json};
+  use tinyecs:modding/ecs@0.1.0.{entity};
 
   enum scope {
     global,
@@ -1832,15 +1832,21 @@ interface components {
 
   get-context: func(r: borrow<res>) -> option<game-context>;
 
+  put-context: func(r: borrow<res>, v: game-context);
+
   set-resource-context: func(c: borrow<commands>, v: game-context);
 
   get-settings: func(r: borrow<res>) -> option<game-settings>;
 
   get-state: func(r: borrow<res>) -> option<game-state>;
 
+  put-state: func(r: borrow<res>, v: game-state);
+
   set-resource-state: func(c: borrow<commands>, v: game-state);
 
   get-container-positions: func(r: borrow<res>) -> option<container-positions>;
+
+  put-container-positions: func(r: borrow<res>, v: container-positions);
 
   set-resource-container-positions: func(c: borrow<commands>, v: container-positions);
 
@@ -1848,11 +1854,15 @@ interface components {
 
   get-mod-hotkeys: func(r: borrow<res>) -> option<mod-hotkey-bindings>;
 
+  put-mod-hotkeys: func(r: borrow<res>, v: mod-hotkey-bindings);
+
   set-resource-mod-hotkeys: func(c: borrow<commands>, v: mod-hotkey-bindings);
 
   get-world-single-click: func(r: borrow<res>) -> option<world-single-click>;
 
   get-schema: func(r: borrow<res>) -> option<mod-options-schema>;
+
+  put-schema: func(r: borrow<res>, v: mod-options-schema);
 
   set-resource-schema: func(c: borrow<commands>, v: mod-options-schema);
 
@@ -1882,21 +1892,31 @@ interface components {
 
   get-clipboard-set: func(r: borrow<res>) -> option<clipboard-set>;
 
+  put-clipboard-set: func(r: borrow<res>, v: clipboard-set);
+
   set-resource-clipboard-set: func(c: borrow<commands>, v: clipboard-set);
 
   get-focused-input: func(r: borrow<res>) -> option<focused-input>;
+
+  put-focused-input: func(r: borrow<res>, v: focused-input);
 
   set-resource-focused-input: func(c: borrow<commands>, v: focused-input);
 
   get-text-clipboard-action: func(r: borrow<res>) -> option<text-clipboard-action>;
 
+  put-text-clipboard-action: func(r: borrow<res>, v: text-clipboard-action);
+
   set-resource-text-clipboard-action: func(c: borrow<commands>, v: text-clipboard-action);
 
   get-text-completion: func(r: borrow<res>) -> option<text-completion>;
 
+  put-text-completion: func(r: borrow<res>, v: text-completion);
+
   set-resource-text-completion: func(c: borrow<commands>, v: text-completion);
 
   get-text-completion-pick: func(r: borrow<res>) -> option<text-completion-pick>;
+
+  put-text-completion-pick: func(r: borrow<res>, v: text-completion-pick);
 
   set-resource-text-completion-pick: func(c: borrow<commands>, v: text-completion-pick);
 
@@ -2001,11 +2021,7 @@ package tinyecs:modding@0.1.0 {
   interface ecs {
     type type-path = string;
 
-    type json = string;
-
     type entity = u64;
-
-    type bundle = list<tuple<type-path, json>>;
 
     enum schedule {
       startup,
@@ -2066,38 +2082,21 @@ package tinyecs:modding@0.1.0 {
     }
 
     resource commands {
-      spawn: func(bundle: bundle) -> entity;
-      insert: func(entity: entity, bundle: bundle);
+      spawn: func() -> entity;
       remove: func(entity: entity, types: list<type-path>);
       despawn: func(entity: entity);
-      send: func(event: type-path, value: json);
-      set-resource: func(path: type-path, value: json);
-    }
-
-    record row {
-      entity: entity,
-      values: list<json>,
     }
 
     resource query {
-      rows: func() -> list<row>;
       entities: func() -> list<entity>;
-      set: func(entity: entity, index: u8, value: json);
     }
 
     resource res {
-      get: func() -> option<json>;
       unchanged: func() -> bool;
-      set: func(value: json);
     }
 
     resource events {
-      read: func() -> list<json>;
-    }
-
-    record trigger-data {
-      entity: entity,
-      value: json,
+      len: func() -> u32;
     }
   }
 }

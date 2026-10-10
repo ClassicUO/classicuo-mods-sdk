@@ -1,23 +1,16 @@
-//! The typed path for the curated types (`cuo:modding/components`): query columns,
-//! `&mut` write-back, inserts, resource reads, event send / read and observer triggers
-//! as WIT records instead of JSON.
+//! How the SDK types cross: every value goes through `cuo:modding/components` as a WIT
+//! record of `cuo:modding/types`, a field-for-field copy of the SDK struct ([`Conv`]).
+//! Mods keep writing the SDK types (`types::Node`, `types::Hits`, ...).
 //!
-//! Mods keep writing the SDK types (`types::Node`, `types::Hits`, ...): the record a
-//! value crosses as is a field-for-field copy ([`Conv`]), so author code is the same on
-//! both paths, and the types keep serde for what stays JSON (`ResMut`, storage, every
-//! non-curated type). A type that is not in the generated tables (typed_gen.rs) — or a
-//! mod's own type under a curated path — keeps the JSON path.
-//!
-//! Dispatch is by `TypeId`: the generic `Query` / `Bundle` / `Res` / `EventReader` /
-//! `Commands::send` code asks the generated [`column`] / [`set`] / [`insert`] /
-//! [`res_get`] / [`read`] / [`send`] and gets `None` / `false` for a JSON type.
+//! What a type may do is the trait it implements (`Component`, `WritableComponent`,
+//! `Resource`, `WritableResource`, `GameEvent`); typed_gen.rs implements them per
+//! registered path, onto that path's functions.
 
 use crate::ecs::Entity;
-use std::any::{Any, TypeId};
+use std::any::Any;
 
 #[path = "typed_gen.rs"]
 mod gen;
-pub(crate) use gen::*;
 
 /// An SDK type <-> the WIT record (or field type) it crosses as.
 pub(crate) trait Conv<W> {
@@ -105,31 +98,12 @@ pub fn trigger_tag<T: TagTrigger>() -> Box<dyn Any> {
     Box::new(T::tag())
 }
 
-// ── dispatch helpers (used by typed_gen.rs) ──────────────────────────────────────
-
-fn is<T: 'static, U: 'static>() -> bool {
-    TypeId::of::<T>() == TypeId::of::<U>()
-}
-
-/// `A` as `B` when they are the same type (checked by the caller with [`is`]).
-fn cast<A: 'static, B: 'static>(a: A) -> B {
-    let mut slot = Some(a);
-    (&mut slot as &mut dyn Any).downcast_mut::<Option<B>>().and_then(Option::take).expect("typed cast")
-}
-
-fn cast_ref<A: 'static, B: 'static>(a: &A) -> &B {
-    (a as &dyn Any).downcast_ref::<B>().expect("typed cast")
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::ecs::{Component, WritableComponent};
     use crate::p2::bindings::cuo::modding::types as w;
-    use crate::types::{position_type, val_type, ChildOf, Color, Node, UiCustomDto, UiMovable, Val};
-
-    fn json<T: serde::Serialize>(v: &T) -> String {
-        serde_json::to_string(v).unwrap()
-    }
+    use crate::types::{position_type, val_type, ChildOf, Color, Node, UiMovable, Val};
 
     #[test]
     fn records_round_trip_and_refill_host_computed_members() {
@@ -141,7 +115,7 @@ mod tests {
         assert!(matches!(rec.display, w::Display::None));
         assert!(matches!(rec.min_width.type_, w::ValType::Auto));
         let back = Node::from_wit(rec);
-        assert_eq!(json(&back), json(&n));
+        assert!(back.__same(&n));
         assert_eq!(back.position_type, position_type::ABSOLUTE);
         assert!(back.min_width.is_auto && !back.width.is_auto);
 
@@ -162,28 +136,16 @@ mod tests {
     }
 
     #[test]
-    fn the_curated_types_are_typed_and_tags_read_as_defaults() {
-        assert!(has_column::<crate::types::Hits>() && has_column::<Node>() && has_column::<ChildOf>());
-        assert!(has_column::<UiCustomDto>() && has_column::<UiMovable>());
-        assert!(!has_column::<crate::types::MouseInputDto>());
-        assert!(matches!(insert(&Node::base()), Some(TypedInsert::Node(_))));
-        assert!(matches!(insert(&UiMovable {}), Some(TypedInsert::Movable)));
-        // Read-only on the host: no typed insert, JSON as before.
-        assert!(insert(&crate::types::Hits::default()).is_none());
-        assert_eq!(same(&UiMovable {}, &UiMovable {}), Some(true));
-    }
-
-    #[test]
     fn same_compares_the_crossing_record() {
         let a = Node::abs(1.0, 2.0, 3.0, 4.0);
-        let mut b = dup(&a).unwrap();
-        assert_eq!(same(&a, &b), Some(true));
+        let mut b = a.clone();
+        assert!(a.__same(&b));
         // A host-computed member alone is no change: it doesn't cross.
         b.width.is_auto = true;
-        assert_eq!(same(&a, &b), Some(true));
+        assert!(a.__same(&b));
         b.width = Val::px(5.0);
-        assert_eq!(same(&a, &b), Some(false));
-        assert_eq!(same(&crate::types::MouseInputDto::default(), &crate::types::MouseInputDto::default()), None);
+        assert!(!a.__same(&b));
+        assert!(UiMovable {}.__same(&UiMovable {}));
     }
 
     #[test]
@@ -191,5 +153,22 @@ mod tests {
         let v = trigger_value::<ChildOf>(w::ChildOf { parent: 7 });
         assert_eq!(v.downcast_ref::<ChildOf>().unwrap().parent, Entity::from_bits(7));
         assert!(trigger_tag::<crate::types::UiClick>().downcast_ref::<crate::types::UiClick>().is_some());
+    }
+
+    // Compile-time: what a type may do is what it implements.
+    #[allow(dead_code)]
+    fn bounds() {
+        fn component<T: Component>() {}
+        fn writable<T: WritableComponent>() {}
+        fn resource<T: crate::ecs::Resource>() {}
+        fn writable_resource<T: crate::ecs::WritableResource>() {}
+        fn event<T: crate::ecs::GameEvent>() {}
+        component::<crate::types::Hits>();
+        writable::<Node>();
+        writable::<UiMovable>();
+        resource::<crate::types::Time>();
+        writable_resource::<crate::types::GameStateDto>();
+        event::<crate::types::ChatMessage>();
+        event::<crate::types::UiClick>();
     }
 }
