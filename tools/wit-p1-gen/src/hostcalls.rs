@@ -3,8 +3,9 @@
 //! host) and, per WIT type, the codecs every wire needs:
 //!   - shared (native + wasm guest): Encoding.Typed binary (the guest relay: LE fixed ints,
 //!     strings / lists u32-length-prefixed, enum / variant case u8 (u16 past 255), option
-//!     u8 tag, records / tuples in field order) and the p1 JSON wire (the fallback);
-//!   - native only: Cm.ComponentValue lift / lower (the in-process component host).
+//!     u8 tag, records / tuples in field order);
+//!   - native only: Cm.ComponentValue lift / lower (the in-process component host);
+//!   - tests only: a JSON form (CuoHostApiTrace, CuoHostCallsJson) — no shipped wire uses it.
 //! Every function dispatches straight into the interface — no per-call JSON.
 
 use anyhow::{bail, Context, Result};
@@ -305,7 +306,7 @@ impl Model<'_> {
 
     // ── helper bodies ──
 
-    fn helpers_shared(&self, t: &T, out: &mut String) -> Result<()> {
+    fn helpers_bin(&self, t: &T, out: &mut String) -> Result<()> {
         let m = self.mangle(t);
         let cs = self.cs(t);
         match t {
@@ -317,20 +318,11 @@ impl Model<'_> {
                 writeln!(out, "    internal static void WriteBin_{m}(CuoBinWriter w, {cs} v)\n    {{")?;
                 writeln!(out, "        v ??= Array.Empty<{ec}>();\n        w.Count(v.Length);")?;
                 writeln!(out, "        foreach (var x in v)\n            {};\n    }}\n", self.bin_write(e, "x"))?;
-                writeln!(out, "    internal static {cs} ReadJson_{m}(JsonElement e)\n    {{")?;
-                writeln!(out, "        if (e.ValueKind is JsonValueKind.Null or JsonValueKind.Undefined)\n            return Array.Empty<{ec}>();")?;
-                writeln!(out, "        var a = new {};", array_new(&ec, "e.GetArrayLength()"))?;
-                writeln!(out, "        for (var i = 0; i < a.Length; i++)\n            a[i] = {};\n        return a;\n    }}\n", self.json_read(e, "e[i]"))?;
-                writeln!(out, "    internal static void WriteJson_{m}(Utf8JsonWriter w, {cs} v)\n    {{")?;
-                writeln!(out, "        w.WriteStartArray();\n        foreach (var x in v ?? Array.Empty<{ec}>())\n            {};\n        w.WriteEndArray();\n    }}\n", self.json_write(e, "x"))?;
             }
             T::Opt(e) => {
                 writeln!(out, "    internal static {cs} ReadBin_{m}(ref CuoBinReader r)\n        => r.Tag() ? {} : null;\n", self.bin_read(e))?;
                 writeln!(out, "    internal static void WriteBin_{m}(CuoBinWriter w, {cs} v)\n    {{")?;
                 writeln!(out, "        if (v is {{ }} x)\n        {{\n            w.U8(1);\n            {};\n        }}\n        else\n            w.U8(0);\n    }}\n", self.bin_write(e, "x"))?;
-                writeln!(out, "    internal static {cs} ReadJson_{m}(JsonElement e)\n        => e.ValueKind is JsonValueKind.Null or JsonValueKind.Undefined ? null : {};\n", self.json_read(e, "e"))?;
-                writeln!(out, "    internal static void WriteJson_{m}(Utf8JsonWriter w, {cs} v)\n    {{")?;
-                writeln!(out, "        if (v is {{ }} x)\n            {};\n        else\n            w.WriteNullValue();\n    }}\n", self.json_write(e, "x"))?;
             }
             T::Tuple(ts) => {
                 let reads: Vec<String> = ts.iter().map(|t| self.bin_read(t)).collect();
@@ -344,13 +336,6 @@ impl Model<'_> {
                     writeln!(out, "        {};", self.bin_write(t, &format!("v.Item{}", i + 1)))?;
                 }
                 writeln!(out, "    }}\n")?;
-                let jr: Vec<String> = ts.iter().enumerate().map(|(i, t)| self.json_read(t, &format!("e[{i}]"))).collect();
-                writeln!(out, "    internal static {cs} ReadJson_{m}(JsonElement e)\n        => ({});\n", jr.join(", "))?;
-                writeln!(out, "    internal static void WriteJson_{m}(Utf8JsonWriter w, {cs} v)\n    {{\n        w.WriteStartArray();")?;
-                for (i, t) in ts.iter().enumerate() {
-                    writeln!(out, "        {};", self.json_write(t, &format!("v.Item{}", i + 1)))?;
-                }
-                writeln!(out, "        w.WriteEndArray();\n    }}\n")?;
             }
             T::Named(k) => {
                 let n = &self.named[*k];
@@ -366,14 +351,6 @@ impl Model<'_> {
                             writeln!(out, "        {};", self.bin_write(ft, &format!("v.{}", pascal(f))))?;
                         }
                         writeln!(out, "    }}\n")?;
-                        let jr: Vec<String> =
-                            fs.iter().map(|(f, ft)| self.json_read(ft, &format!("CuoModArgs.Field(e, \"{f}\"u8)"))).collect();
-                        writeln!(out, "    internal static {cs} ReadJson_{m}(JsonElement e)\n        => new {cs}({});\n", jr.join(", "))?;
-                        writeln!(out, "    internal static void WriteJson_{m}(Utf8JsonWriter w, {cs} v)\n    {{\n        w.WriteStartObject();")?;
-                        for (f, ft) in fs {
-                            writeln!(out, "        w.WritePropertyName(\"{f}\"u8);\n        {};", self.json_write(ft, &format!("v.{}", pascal(f))))?;
-                        }
-                        writeln!(out, "        w.WriteEndObject();\n    }}\n")?;
                     }
                     Kind::Enum(cases) => {
                         let wide = cases.len() > 255;
@@ -381,9 +358,6 @@ impl Model<'_> {
                         writeln!(out, "    internal static {cs} ReadBin_{m}(ref CuoBinReader r)\n    {{")?;
                         writeln!(out, "        var k = {rd};\n        return k < {} ? ({cs})k : throw CuoBinReader.BadCase(\"{}\", k);\n    }}\n", cases.len(), n.name)?;
                         writeln!(out, "    internal static void WriteBin_{m}(CuoBinWriter w, {cs} v) => {wr};\n")?;
-                        writeln!(out, "    private static readonly string[] Cases_{m} = [{}];\n", cases.iter().map(|c| format!("\"{c}\"")).collect::<Vec<_>>().join(", "))?;
-                        writeln!(out, "    internal static {cs} ReadJson_{m}(JsonElement e) => ({cs})CuoModArgs.Enum(e, Cases_{m});\n")?;
-                        writeln!(out, "    internal static void WriteJson_{m}(Utf8JsonWriter w, {cs} v) => w.WriteStringValue(Cases_{m}[(int)v]);\n")?;
                     }
                     Kind::Variant(cases) => {
                         let wide = cases.len() > 255;
@@ -405,6 +379,60 @@ impl Model<'_> {
                             }
                         }
                         writeln!(out, "        }}\n    }}\n")?;
+                    }
+                }
+            }
+            _ => {}
+        }
+        Ok(())
+    }
+
+    fn helpers_json(&self, t: &T, out: &mut String) -> Result<()> {
+        let m = self.mangle(t);
+        let cs = self.cs(t);
+        match t {
+            T::List(e) => {
+                let ec = self.cs(e);
+                writeln!(out, "    internal static {cs} ReadJson_{m}(JsonElement e)\n    {{")?;
+                writeln!(out, "        if (e.ValueKind is JsonValueKind.Null or JsonValueKind.Undefined)\n            return Array.Empty<{ec}>();")?;
+                writeln!(out, "        var a = new {};", array_new(&ec, "e.GetArrayLength()"))?;
+                writeln!(out, "        for (var i = 0; i < a.Length; i++)\n            a[i] = {};\n        return a;\n    }}\n", self.json_read(e, "e[i]"))?;
+                writeln!(out, "    internal static void WriteJson_{m}(Utf8JsonWriter w, {cs} v)\n    {{")?;
+                writeln!(out, "        w.WriteStartArray();\n        foreach (var x in v ?? Array.Empty<{ec}>())\n            {};\n        w.WriteEndArray();\n    }}\n", self.json_write(e, "x"))?;
+            }
+            T::Opt(e) => {
+                writeln!(out, "    internal static {cs} ReadJson_{m}(JsonElement e)\n        => e.ValueKind is JsonValueKind.Null or JsonValueKind.Undefined ? null : {};\n", self.json_read(e, "e"))?;
+                writeln!(out, "    internal static void WriteJson_{m}(Utf8JsonWriter w, {cs} v)\n    {{")?;
+                writeln!(out, "        if (v is {{ }} x)\n            {};\n        else\n            w.WriteNullValue();\n    }}\n", self.json_write(e, "x"))?;
+            }
+            T::Tuple(ts) => {
+                let jr: Vec<String> = ts.iter().enumerate().map(|(i, t)| self.json_read(t, &format!("e[{i}]"))).collect();
+                writeln!(out, "    internal static {cs} ReadJson_{m}(JsonElement e)\n        => ({});\n", jr.join(", "))?;
+                writeln!(out, "    internal static void WriteJson_{m}(Utf8JsonWriter w, {cs} v)\n    {{\n        w.WriteStartArray();")?;
+                for (i, t) in ts.iter().enumerate() {
+                    writeln!(out, "        {};", self.json_write(t, &format!("v.Item{}", i + 1)))?;
+                }
+                writeln!(out, "        w.WriteEndArray();\n    }}\n")?;
+            }
+            T::Named(k) => {
+                let n = &self.named[*k];
+                match &n.kind {
+                    Kind::Record(fs) => {
+                        let jr: Vec<String> =
+                            fs.iter().map(|(f, ft)| self.json_read(ft, &format!("CuoModArgs.Field(e, \"{f}\"u8)"))).collect();
+                        writeln!(out, "    internal static {cs} ReadJson_{m}(JsonElement e)\n        => new {cs}({});\n", jr.join(", "))?;
+                        writeln!(out, "    internal static void WriteJson_{m}(Utf8JsonWriter w, {cs} v)\n    {{\n        w.WriteStartObject();")?;
+                        for (f, ft) in fs {
+                            writeln!(out, "        w.WritePropertyName(\"{f}\"u8);\n        {};", self.json_write(ft, &format!("v.{}", pascal(f))))?;
+                        }
+                        writeln!(out, "        w.WriteEndObject();\n    }}\n")?;
+                    }
+                    Kind::Enum(cases) => {
+                        writeln!(out, "    private static readonly string[] Cases_{m} = [{}];\n", cases.iter().map(|c| format!("\"{c}\"")).collect::<Vec<_>>().join(", "))?;
+                        writeln!(out, "    internal static {cs} ReadJson_{m}(JsonElement e) => ({cs})CuoModArgs.Enum(e, Cases_{m});\n")?;
+                        writeln!(out, "    internal static void WriteJson_{m}(Utf8JsonWriter w, {cs} v) => w.WriteStringValue(Cases_{m}[(int)v]);\n")?;
+                    }
+                    Kind::Variant(cases) => {
                         writeln!(out, "    internal static {cs} ReadJson_{m}(JsonElement e)\n    {{")?;
                         writeln!(out, "        var (name, p) = CuoModArgs.VariantCase(e);")?;
                         for (c, pt) in cases {
@@ -575,7 +603,7 @@ pub fn pascal(kebab: &str) -> String {
 }
 
 /// Returns (shared file, native Cm file).
-pub fn emit(resolve: &Resolve, pkg: PackageId, interfaces: &[&str]) -> Result<(String, String)> {
+pub fn emit(resolve: &Resolve, pkg: PackageId, interfaces: &[&str]) -> Result<(String, String, String)> {
     let package = &resolve.packages[pkg];
     let pkg_name = format!("{}:{}", package.name.namespace, package.name.name);
     let mut m = Model { resolve, named: Vec::new(), ids: BTreeMap::new() };
@@ -618,9 +646,9 @@ pub fn emit(resolve: &Resolve, pkg: PackageId, interfaces: &[&str]) -> Result<(S
     let mut s = String::from(HEADER);
     s.push_str(
         "// Typed host calls (host / packets / assets / actions): the interface the host implements,\n\
-         // the WIT types, and the Encoding.Typed binary + p1 JSON dispatch onto it (the native\n\
-         // component host's Cm.ComponentValue twin is CuoHostCallsCm.g.cs).\n\n\
-         #nullable enable\n\nusing System;\nusing System.Text.Json;\nusing TinyEcs.Bevy.Modding;\n\n\
+         // the WIT types, and the Encoding.Typed binary dispatch onto it (the native component\n\
+         // host's Cm.ComponentValue twin is CuoHostCallsCm.g.cs).\n\n\
+         #nullable enable\n\nusing System;\nusing TinyEcs.Bevy.Modding;\n\n\
          namespace ClassicUO.Ecs.Modding.Api;\n\n",
     );
 
@@ -673,44 +701,6 @@ pub fn emit(resolve: &Resolve, pkg: PackageId, interfaces: &[&str]) -> Result<(S
     }
     s.push_str("}\n\n");
 
-    // tracing decorator
-    s.push_str(
-        "/// Forwards every call to `inner` and reports it as p1 JSON (name, args array, result or\n\
-         /// null) — tests and diagnostics.\n\
-         internal sealed class CuoHostApiTrace(ICuoHostApi inner, Action<string, string, string?> sink) : ICuoHostApi\n{\n\
-         \x20   private readonly System.Buffers.ArrayBufferWriter<byte> _buf = new(256);\n\n\
-         \x20   private string Json(Action<Utf8JsonWriter> write)\n    {\n\
-         \x20       _buf.ResetWrittenCount();\n\
-         \x20       using (var w = new Utf8JsonWriter(_buf))\n            write(w);\n\
-         \x20       return System.Text.Encoding.UTF8.GetString(_buf.WrittenSpan);\n    }\n\n",
-    );
-    for f in &fns {
-        // p0..pn: a WIT param named `w` would shadow the JSON writer.
-        let names: Vec<String> = (0..f.params.len()).map(|i| format!("p{i}")).collect();
-        let ret = f.result.as_ref().map_or("void".to_string(), |t| m.cs(t));
-        let mut ps = vec!["ModHostContext mod".to_string()];
-        ps.extend(f.params.iter().zip(&names).map(|((_, t), n)| format!("{} {n}", m.cs(t))));
-        writeln!(s, "    public {ret} {}({})\n    {{", pascal(&f.name), ps.join(", "))?;
-        let mut fwd = vec!["mod".to_string()];
-        fwd.extend(names.iter().cloned());
-        let args_json: Vec<String> = f.params.iter().zip(&names).map(|((_, t), n)| format!("{};", qualify(&m.json_write(t, n)))).collect();
-        let lambda = format!("w => {{ w.WriteStartArray(); {} w.WriteEndArray(); }}", args_json.join(" "));
-        match &f.result {
-            Some(t) => {
-                writeln!(s, "        var result = inner.{}({});", pascal(&f.name), fwd.join(", "))?;
-                let rw = qualify(&m.json_write(t, "result"));
-                writeln!(s, "        sink(\"{}\", Json({lambda}), Json(w => {rw}));\n        return result;", f.full)?;
-            }
-            None => {
-                writeln!(s, "        inner.{}({});", pascal(&f.name), fwd.join(", "))?;
-                writeln!(s, "        sink(\"{}\", Json({lambda}), null);", f.full)?;
-            }
-        }
-        s.push_str("    }\n\n");
-    }
-    s.truncate(s.trim_end().len());
-    s.push_str("\n}\n\n");
-
     // dispatch
     s.push_str("internal static partial class CuoHostCalls\n{\n");
     s.push_str("    /// Every host function, \"<package>/<interface>#<function>\"; the index is its id here.\n");
@@ -743,62 +733,116 @@ pub fn emit(resolve: &Resolve, pkg: PackageId, interfaces: &[&str]) -> Result<(S
     }
     s.push_str("            default:\n                throw new ModCallException($\"host call: unknown function id {fn}\");\n        }\n    }\n\n");
 
-    s.push_str("    /// The p1 JSON wire (fallback): one ModHostFunctions entry per function.\n");
-    s.push_str("    public static void Register(ModHostFunctions fns, ICuoHostApi api)\n    {\n");
-    for f in &fns {
-        writeln!(s, "        fns.Add(\"{}\", (mod, a, w) =>\n        {{", f.full)?;
-        for (k, (_, t)) in f.params.iter().enumerate() {
-            writeln!(s, "            var a{k} = {};", m.json_read(t, &format!("CuoModArgs.Arg(a, {k})")))?;
-        }
-        match &f.result {
-            Some(t) => {
-                writeln!(s, "            var result = api.{}({});", pascal(&f.name), call_args(f))?;
-                writeln!(s, "            {};", m.json_write(t, "result"))?;
-            }
-            None => writeln!(s, "            api.{}({});", pascal(&f.name), call_args(f))?,
-        }
-        s.push_str("        });\n");
-    }
-    s.push_str("    }\n\n");
-
-    // test transcoders
-    s.push_str("    /// Encoding.Typed args -> the p1 JSON args array (tests: the decoder side of the golden bytes).\n");
-    s.push_str("    public static void ArgsBinToJson(int fn, ref CuoBinReader r, Utf8JsonWriter w)\n    {\n        w.WriteStartArray();\n        switch (fn)\n        {\n");
-    for (i, f) in fns.iter().enumerate() {
-        writeln!(s, "            case {i}:")?;
-        for (_, t) in &f.params {
-            writeln!(s, "                {};", m.json_write(t, &m.bin_read(t)))?;
-        }
-        writeln!(s, "                break;")?;
-    }
-    s.push_str("            default:\n                throw new ModCallException($\"host call: unknown function id {fn}\");\n        }\n        r.End();\n        w.WriteEndArray();\n    }\n\n");
-
-    s.push_str("    /// p1 JSON args array -> Encoding.Typed args.\n");
-    s.push_str("    public static void ArgsJsonToBin(int fn, JsonElement a, CuoBinWriter w)\n    {\n        switch (fn)\n        {\n");
-    for (i, f) in fns.iter().enumerate() {
-        writeln!(s, "            case {i}:")?;
-        for (k, (_, t)) in f.params.iter().enumerate() {
-            writeln!(s, "                {};", m.bin_write(t, &m.json_read(t, &format!("CuoModArgs.Arg(a, {k})"))))?;
-        }
-        writeln!(s, "                break;")?;
-    }
-    s.push_str("            default:\n                throw new ModCallException($\"host call: unknown function id {fn}\");\n        }\n    }\n\n");
-
-    s.push_str("    /// p1 JSON result -> Encoding.Typed result (false: the function has none).\n");
-    s.push_str("    public static bool ResultJsonToBin(int fn, JsonElement e, CuoBinWriter w)\n    {\n        switch (fn)\n        {\n");
-    for (i, f) in fns.iter().enumerate() {
-        match &f.result {
-            Some(t) => writeln!(s, "            case {i}: {}; return true;", m.bin_write(t, &m.json_read(t, "e")))?,
-            None => writeln!(s, "            case {i}: return false;")?,
-        }
-    }
-    s.push_str("            default:\n                throw new ModCallException($\"host call: unknown function id {fn}\");\n        }\n    }\n\n");
-
     for t in &order {
-        m.helpers_shared(t, &mut s)?;
+        m.helpers_bin(t, &mut s)?;
     }
     s.truncate(s.trim_end().len());
     s.push_str("\n}\n");
+
+    // ── JSON (tests only — compiled into tests/ClassicUO.Ecs.Tests, never shipped) ──
+    let mut j = String::from(HEADER);
+    j.push_str(
+        "// The host calls as JSON, for tests only: CuoHostApiTrace reports each call readably and\n\
+         // CuoHostCallsJson.Register drives the API through ModHostFunctions. Every shipped wire\n\
+         // is typed (CuoHostCalls.InvokeBin / InvokeCm).\n\n\
+         #nullable enable\n\nusing System;\nusing System.Text.Json;\nusing ClassicUO.Ecs.Modding.Api;\nusing TinyEcs.Bevy.Modding;\n\n\
+         namespace ClassicUO.Ecs.Tests;\n\n",
+    );
+    // tracing decorator
+    j.push_str(
+        "/// Forwards every call to `inner` and reports it as JSON (name, args array, result or\n\
+         /// null) — tests and diagnostics.\n\
+         internal sealed class CuoHostApiTrace(ICuoHostApi inner, Action<string, string, string?> sink) : ICuoHostApi\n{\n\
+         \x20   private readonly System.Buffers.ArrayBufferWriter<byte> _buf = new(256);\n\n\
+         \x20   private string Json(Action<Utf8JsonWriter> write)\n    {\n\
+         \x20       _buf.ResetWrittenCount();\n\
+         \x20       using (var w = new Utf8JsonWriter(_buf))\n            write(w);\n\
+         \x20       return System.Text.Encoding.UTF8.GetString(_buf.WrittenSpan);\n    }\n\n",
+    );
+    for f in &fns {
+        // p0..pn: a WIT param named `w` would shadow the JSON writer.
+        let names: Vec<String> = (0..f.params.len()).map(|i| format!("p{i}")).collect();
+        let ret = f.result.as_ref().map_or("void".to_string(), |t| m.cs(t));
+        let mut ps = vec!["ModHostContext mod".to_string()];
+        ps.extend(f.params.iter().zip(&names).map(|((_, t), n)| format!("{} {n}", m.cs(t))));
+        writeln!(j, "    public {ret} {}({})\n    {{", pascal(&f.name), ps.join(", "))?;
+        let mut fwd = vec!["mod".to_string()];
+        fwd.extend(names.iter().cloned());
+        let args_json: Vec<String> = f.params.iter().zip(&names).map(|((_, t), n)| format!("{};", qualify(&m.json_write(t, n)))).collect();
+        let lambda = format!("w => {{ w.WriteStartArray(); {} w.WriteEndArray(); }}", args_json.join(" "));
+        match &f.result {
+            Some(t) => {
+                writeln!(j, "        var result = inner.{}({});", pascal(&f.name), fwd.join(", "))?;
+                let rw = qualify(&m.json_write(t, "result"));
+                writeln!(j, "        sink(\"{}\", Json({lambda}), Json(w => {rw}));\n        return result;", f.full)?;
+            }
+            None => {
+                writeln!(j, "        inner.{}({});", pascal(&f.name), fwd.join(", "))?;
+                writeln!(j, "        sink(\"{}\", Json({lambda}), null);", f.full)?;
+            }
+        }
+        j.push_str("    }\n\n");
+    }
+    j.truncate(j.trim_end().len());
+    j.push_str("\n}\n\n");
+
+    j.push_str("internal static class CuoHostCallsJson\n{\n");
+    j.push_str("    /// One JSON ModHostFunctions entry per function (tests drive the API through it).\n");
+    j.push_str("    public static void Register(ModHostFunctions fns, ICuoHostApi api)\n    {\n");
+    for f in &fns {
+        writeln!(j, "        fns.Add(\"{}\", (mod, a, w) =>\n        {{", f.full)?;
+        for (k, (_, t)) in f.params.iter().enumerate() {
+            writeln!(j, "            var a{k} = {};", m.json_read(t, &format!("CuoModArgs.Arg(a, {k})")))?;
+        }
+        match &f.result {
+            Some(t) => {
+                writeln!(j, "            var result = api.{}({});", pascal(&f.name), call_args(f))?;
+                writeln!(j, "            {};", m.json_write(t, "result"))?;
+            }
+            None => writeln!(j, "            api.{}({});", pascal(&f.name), call_args(f))?,
+        }
+        j.push_str("        });\n");
+    }
+    j.push_str("    }\n\n");
+
+    // test transcoders
+    j.push_str("    /// Encoding.Typed args -> the JSON args array (tests: the decoder side of the golden bytes).\n");
+    j.push_str("    public static void ArgsBinToJson(int fn, ref CuoBinReader r, Utf8JsonWriter w)\n    {\n        w.WriteStartArray();\n        switch (fn)\n        {\n");
+    for (i, f) in fns.iter().enumerate() {
+        writeln!(j, "            case {i}:")?;
+        for (_, t) in &f.params {
+            writeln!(j, "                {};", m.json_write(t, &qualify_bin(&m.bin_read(t))))?;
+        }
+        writeln!(j, "                break;")?;
+    }
+    j.push_str("            default:\n                throw new ModCallException($\"host call: unknown function id {fn}\");\n        }\n        r.End();\n        w.WriteEndArray();\n    }\n\n");
+
+    j.push_str("    /// JSON args array -> Encoding.Typed args.\n");
+    j.push_str("    public static void ArgsJsonToBin(int fn, JsonElement a, CuoBinWriter w)\n    {\n        switch (fn)\n        {\n");
+    for (i, f) in fns.iter().enumerate() {
+        writeln!(j, "            case {i}:")?;
+        for (k, (_, t)) in f.params.iter().enumerate() {
+            writeln!(j, "                {};", qualify_bin(&m.bin_write(t, &m.json_read(t, &format!("CuoModArgs.Arg(a, {k})")))))?;
+        }
+        writeln!(j, "                break;")?;
+    }
+    j.push_str("            default:\n                throw new ModCallException($\"host call: unknown function id {fn}\");\n        }\n    }\n\n");
+
+    j.push_str("    /// JSON result -> Encoding.Typed result (false: the function has none).\n");
+    j.push_str("    public static bool ResultJsonToBin(int fn, JsonElement e, CuoBinWriter w)\n    {\n        switch (fn)\n        {\n");
+    for (i, f) in fns.iter().enumerate() {
+        match &f.result {
+            Some(t) => writeln!(j, "            case {i}: {}; return true;", qualify_bin(&m.bin_write(t, &m.json_read(t, "e"))))?,
+            None => writeln!(j, "            case {i}: return false;")?,
+        }
+    }
+    j.push_str("            default:\n                throw new ModCallException($\"host call: unknown function id {fn}\");\n        }\n    }\n\n");
+
+    for t in &order {
+        m.helpers_json(t, &mut j)?;
+    }
+    j.truncate(j.trim_end().len());
+    j.push_str("\n}\n");
 
     // ── native Cm ──
     let mut c = String::from(HEADER);
@@ -834,12 +878,21 @@ pub fn emit(resolve: &Resolve, pkg: PackageId, interfaces: &[&str]) -> Result<(S
     }
     c.truncate(c.trim_end().len());
     c.push_str("\n}\n");
-    Ok((s, c))
+    Ok((s, c, j))
 }
 
-// A codec helper call from outside CuoHostCalls.
+// A JSON codec helper call from the trace decorator (outside CuoHostCallsJson).
 fn qualify(expr: &str) -> String {
     if expr.starts_with("WriteJson_") {
+        format!("CuoHostCallsJson.{expr}")
+    } else {
+        expr.to_string()
+    }
+}
+
+// A binary codec helper call from CuoHostCallsJson (the helpers live in CuoHostCalls).
+fn qualify_bin(expr: &str) -> String {
+    if expr.starts_with("ReadBin_") || expr.starts_with("WriteBin_") {
         format!("CuoHostCalls.{expr}")
     } else {
         expr.to_string()
