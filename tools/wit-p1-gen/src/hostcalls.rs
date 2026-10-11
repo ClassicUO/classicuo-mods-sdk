@@ -742,9 +742,9 @@ pub fn emit(resolve: &Resolve, pkg: PackageId, interfaces: &[&str]) -> Result<(S
     // ── JSON (tests only — compiled into tests/ClassicUO.Ecs.Tests, never shipped) ──
     let mut j = String::from(HEADER);
     j.push_str(
-        "// The host calls as JSON, for tests only: CuoHostApiTrace reports each call readably and\n\
-         // CuoHostCallsJson.Register drives the API through ModHostFunctions. Every shipped wire\n\
-         // is typed (CuoHostCalls.InvokeBin / InvokeCm).\n\n\
+        "// Host-call test helpers: CuoHostApiTrace reports each call readably (name, args, result)\n\
+         // and CuoHostCallsJson transcodes Encoding.Typed args/results <-> JSON for the golden\n\
+         // fixtures. Every shipped wire is typed (CuoHostCalls.InvokeBin / InvokeCm); no JSON.\n\n\
          #nullable enable\n\nusing System;\nusing System.Text.Json;\nusing ClassicUO.Ecs.Modding.Api;\nusing TinyEcs.Bevy.Modding;\n\n\
          namespace ClassicUO.Ecs.Tests;\n\n",
     );
@@ -787,23 +787,6 @@ pub fn emit(resolve: &Resolve, pkg: PackageId, interfaces: &[&str]) -> Result<(S
     j.push_str("\n}\n\n");
 
     j.push_str("internal static class CuoHostCallsJson\n{\n");
-    j.push_str("    /// One JSON ModHostFunctions entry per function (tests drive the API through it).\n");
-    j.push_str("    public static void Register(ModHostFunctions fns, ICuoHostApi api)\n    {\n");
-    for f in &fns {
-        writeln!(j, "        fns.Add(\"{}\", (mod, a, w) =>\n        {{", f.full)?;
-        for (k, (_, t)) in f.params.iter().enumerate() {
-            writeln!(j, "            var a{k} = {};", m.json_read(t, &format!("CuoModArgs.Arg(a, {k})")))?;
-        }
-        match &f.result {
-            Some(t) => {
-                writeln!(j, "            var result = api.{}({});", pascal(&f.name), call_args(f))?;
-                writeln!(j, "            {};", m.json_write(t, "result"))?;
-            }
-            None => writeln!(j, "            api.{}({});", pascal(&f.name), call_args(f))?,
-        }
-        j.push_str("        });\n");
-    }
-    j.push_str("    }\n\n");
 
     // test transcoders
     j.push_str("    /// Encoding.Typed args -> the JSON args array (tests: the decoder side of the golden bytes).\n");
