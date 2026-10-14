@@ -1,0 +1,8 @@
+[
+  {
+    "name": "grid-containers",
+    "description": "Grid container windows: search, sort, pins, free placement, quick move and multi-move.",
+    "repo": "https://github.com/andreakarasho/grid-containers-mod",
+    "language": "rust"
+  }
+]

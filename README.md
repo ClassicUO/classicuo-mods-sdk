@@ -27,3 +27,8 @@ own world, named like the system (`.Label("x.y")` -> `x-y`, default `systemN` / 
 build runs the mod's `Setup` on the build machine to generate the exports and the world WIT
 (`dotnet/ModDescribe.cs`), so `Setup` must only register, deterministically. Restore needs the `dotnet-experimental`
 NuGet feed for `Microsoft.DotNet.ILCompiler.LLVM` (see the client's `src/Mods/nuget.config`).
+
+## Mod registry
+
+`mods.json` lists published mods (`name`, `description`, `repo`, `language`). To add one, open a
+PR appending an entry.
