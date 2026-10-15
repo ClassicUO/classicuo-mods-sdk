@@ -1005,11 +1005,42 @@ internal interface IComponentsImports {
 
         }
 
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder ReadOnlyText()
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.ReadOnlyTextWasmInterop.wasmImportReadOnlyText(handle);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
         internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder TooltipSerial(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiTooltipSerial v)
         {
             var handle = this.Handle;
             var result =  ComponentsImportsInterop.EntityBuilder.TooltipSerialWasmInterop.wasmImportTooltipSerial(handle, unchecked((int)(v.serial)));
             var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Marker(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.WorldMapMarker v)
+        {
+            var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+            var handle = this.Handle;
+
+            var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.name);
+            var length = utf8Bytes.Length;
+            var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+            var strPtr = gcHandle.AddrOfPinnedObject();
+
+            cleanups.Add(()=> gcHandle.Free());
+            var result =  ComponentsImportsInterop.EntityBuilder.MarkerWasmInterop.wasmImportMarker(handle, strPtr.ToInt32(), length, v.x, v.y, v.map, v.color.r, v.color.g, v.color.b, v.color.a, v.nameHue);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+
+            foreach (var cleanup in cleanups)
+            {
+                cleanup();
+            }
             return resource;
 
         }
@@ -3457,6 +3488,55 @@ internal interface IComponentsImports {
     {
         var handle = q.Handle;
         ComponentsImportsInterop.SetTooltipSerialWasmInterop.wasmImportSetTooltipSerial(handle, unchecked((long)(e)), term, unchecked((int)(v.serial)));
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.WorldMapMarker> ColumnMarker(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnMarkerWasmInterop.wasmImportColumnMarker(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.WorldMapMarker>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 40);
+
+            var str = global::System.Text.Encoding.UTF8.GetString((byte*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0]);
+            if (new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0] > 0) {
+                global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)basePtr + 0), 1)[0]);
+            }
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.WorldMapMarker (
+            str, new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 16), 1)[0], new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Color (
+            new global::System.Span<float>((void*)((byte*)basePtr + 20), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 24), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 28), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 32), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 36), 1)[0])));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetMarker(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.WorldMapMarker v)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+        var handle = q.Handle;
+
+        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(v.name);
+        var length = utf8Bytes.Length;
+        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr = gcHandle.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle.Free());
+        ComponentsImportsInterop.SetMarkerWasmInterop.wasmImportSetMarker(handle, unchecked((long)(e)), term, strPtr.ToInt32(), length, v.x, v.y, v.map, v.color.r, v.color.g, v.color.b, v.color.a, v.nameHue);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
 
     }
 

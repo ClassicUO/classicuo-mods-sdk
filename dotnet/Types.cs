@@ -1457,6 +1457,15 @@ public partial struct RacialBookWindow
     public ulong Right;
 }
 
+/// <summary><c>cuo:ui/read-only-text</c>
+/// <para>Zero-size tag: no value crosses, only its presence.</para>
+/// </summary>
+public partial struct ReadOnlyText
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/read-only-text";
+}
+
 /// <summary><c>cuo:ui/scroll</c></summary>
 public partial struct ScrollPosition
 {
@@ -2196,6 +2205,20 @@ public partial struct VendorWindow
     public const string Path = "cuo:gump/vendor";
 }
 
+/// <summary><c>cuo:worldmap/marker</c></summary>
+public partial struct WorldMapMarker
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:worldmap/marker";
+
+    public string Name;
+    public int X;
+    public int Y;
+    public int Map;
+    public Color Color;
+    public ushort NameHue;
+}
+
 /// <summary><c>cuo:gump/worldmap</c>
 /// <para>Zero-size tag: no value crosses, only its presence.</para>
 /// </summary>
@@ -2331,6 +2354,7 @@ public static class TypePaths
         [typeof(ProfileWindow)] = "cuo:gump/profile",
         [typeof(PromptOpenedEvent)] = "cuo:chat/prompt",
         [typeof(RacialBookWindow)] = "cuo:gump/racial-book",
+        [typeof(ReadOnlyText)] = "cuo:ui/read-only-text",
         [typeof(ScrollPosition)] = "cuo:ui/scroll",
         [typeof(ServerFlags)] = "cuo:ent/server-flags",
         [typeof(ServerGumpClosedEvent)] = "cuo:gump/server-closed",
@@ -2383,6 +2407,7 @@ public static class TypePaths
         [typeof(UiTooltip)] = "cuo:ui/tooltip",
         [typeof(UiTooltipSerial)] = "cuo:ui/tooltip-serial",
         [typeof(VendorWindow)] = "cuo:gump/vendor",
+        [typeof(WorldMapMarker)] = "cuo:worldmap/marker",
         [typeof(WorldMapWindow)] = "cuo:gump/worldmap",
         [typeof(WorldPosition)] = "cuo:ent/world-position",
         [typeof(WorldSingleClickDto)] = "cuo:input/world-single-click",

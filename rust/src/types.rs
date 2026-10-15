@@ -1564,6 +1564,15 @@ impl HasPath for RacialBookWindow {
     const PATH: &'static str = paths::gump::RACIAL_BOOK;
 }
 
+/// `cuo:ui/read-only-text`
+/// Zero-size tag: no value crosses, only its presence.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct ReadOnlyText {}
+impl HasPath for ReadOnlyText {
+    const PATH: &'static str = paths::ui::READ_ONLY_TEXT;
+}
+
 /// `cuo:ui/scroll`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -2351,6 +2360,21 @@ pub struct Vector3 {
 pub struct VendorWindow {}
 impl HasPath for VendorWindow {
     const PATH: &'static str = paths::gump::VENDOR;
+}
+
+/// `cuo:worldmap/marker`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct WorldMapMarker {
+    pub name: String,
+    pub x: i32,
+    pub y: i32,
+    pub map: i32,
+    pub color: Color,
+    pub name_hue: u16,
+}
+impl HasPath for WorldMapMarker {
+    const PATH: &'static str = paths::worldmap::MARKER;
 }
 
 /// `cuo:gump/worldmap`

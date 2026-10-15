@@ -497,10 +497,22 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
                 public static extern int wasmImportMaskedText(int p0, nint p1, int p2, int p3);
             }
 
+            public static class ReadOnlyTextWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.read-only-text"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportReadOnlyText(int p0);
+            }
+
             public static class TooltipSerialWasmInterop
             {
                 [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.tooltip-serial"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
                 public static extern int wasmImportTooltipSerial(int p0, int p1);
+            }
+
+            public static class MarkerWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.marker"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportMarker(int p0, nint p1, int p2, int p3, int p4, int p5, float p6, float p7, float p8, float p9, int p10);
             }
 
         }
@@ -1265,6 +1277,18 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-tooltip-serial"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
             public static extern void wasmImportSetTooltipSerial(int p0, long p1, int p2, int p3);
+        }
+
+        public static class ColumnMarkerWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-marker"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnMarker(int p0, int p1, nint p2);
+        }
+
+        public static class SetMarkerWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-marker"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetMarker(int p0, long p1, int p2, nint p3, int p4, int p5, int p6, int p7, float p8, float p9, float p10, float p11, int p12);
         }
 
         public static class GetMouseWasmInterop

@@ -126,6 +126,7 @@ typedef struct cuo_PlayerStepsDto cuo_PlayerStepsDto;
 typedef struct cuo_ProfileWindow cuo_ProfileWindow;
 typedef struct cuo_PromptOpenedEvent cuo_PromptOpenedEvent;
 typedef struct cuo_RacialBookWindow cuo_RacialBookWindow;
+typedef struct cuo_ReadOnlyText cuo_ReadOnlyText;
 typedef struct cuo_ScrollPosition cuo_ScrollPosition;
 typedef struct cuo_ServerFlags cuo_ServerFlags;
 typedef struct cuo_ServerGumpButtonDto cuo_ServerGumpButtonDto;
@@ -189,6 +190,7 @@ typedef struct cuo_Val cuo_Val;
 typedef struct cuo_Vector2 cuo_Vector2;
 typedef struct cuo_Vector3 cuo_Vector3;
 typedef struct cuo_VendorWindow cuo_VendorWindow;
+typedef struct cuo_WorldMapMarker cuo_WorldMapMarker;
 typedef struct cuo_WorldMapWindow cuo_WorldMapWindow;
 typedef struct cuo_WorldPosition cuo_WorldPosition;
 typedef struct cuo_WorldSingleClickDto cuo_WorldSingleClickDto;
@@ -1495,6 +1497,14 @@ struct cuo_RacialBookWindow {
 #define cuo_RacialBookWindow_PATH CUO_PATH_GUMP_RACIAL_BOOK
 uint16_t cuo_RacialBookWindow_id(void);
 
+/* `cuo:ui/read-only-text` */
+/* Zero-size tag: crosses as no value (the typed functions take none). */
+struct cuo_ReadOnlyText {
+    uint8_t unused_; /* C needs one member */
+};
+#define cuo_ReadOnlyText_PATH CUO_PATH_UI_READ_ONLY_TEXT
+uint16_t cuo_ReadOnlyText_id(void);
+
 /* `cuo:ui/scroll` */
 struct cuo_ScrollPosition {
     float offset_x;
@@ -2059,6 +2069,18 @@ struct cuo_VendorWindow {
 };
 #define cuo_VendorWindow_PATH CUO_PATH_GUMP_VENDOR
 uint16_t cuo_VendorWindow_id(void);
+
+/* `cuo:worldmap/marker` */
+struct cuo_WorldMapMarker {
+    const char *name;
+    int32_t x;
+    int32_t y;
+    int32_t map;
+    cuo_Color color;
+    uint16_t name_hue;
+};
+#define cuo_WorldMapMarker_PATH CUO_PATH_WORLDMAP_MARKER
+uint16_t cuo_WorldMapMarker_id(void);
 
 /* `cuo:gump/worldmap` */
 /* Zero-size tag: crosses as no value (the typed functions take none). */

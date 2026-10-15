@@ -733,6 +733,9 @@ const cuo_MaskedText *cuo_MaskedText_column(cuo_query q, size_t term);
 void cuo_MaskedText_set(cuo_query q, cuo_entity e, size_t term, const cuo_MaskedText *v);
 const cuo_MaskedText *cuo_MaskedText_obs_value(const cuo_obs *ev);
 
+/* `cuo:ui/read-only-text` */
+cuo_comp cuo_ReadOnlyText_comp(void);
+
 /* `cuo:ui/text-clipboard-action` */
 bool cuo_TextClipboardActionDto_res(const cuo_input *in, cuo_param p, cuo_TextClipboardActionDto *out);
 bool cuo_TextClipboardActionDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextClipboardActionDto *out);
@@ -759,6 +762,12 @@ cuo_comp cuo_UiTooltipSerial_comp(const cuo_UiTooltipSerial *v);
 const cuo_UiTooltipSerial *cuo_UiTooltipSerial_column(cuo_query q, size_t term);
 void cuo_UiTooltipSerial_set(cuo_query q, cuo_entity e, size_t term, const cuo_UiTooltipSerial *v);
 const cuo_UiTooltipSerial *cuo_UiTooltipSerial_obs_value(const cuo_obs *ev);
+
+/* `cuo:worldmap/marker` */
+cuo_comp cuo_WorldMapMarker_comp(const cuo_WorldMapMarker *v);
+const cuo_WorldMapMarker *cuo_WorldMapMarker_column(cuo_query q, size_t term);
+void cuo_WorldMapMarker_set(cuo_query q, cuo_entity e, size_t term, const cuo_WorldMapMarker *v);
+const cuo_WorldMapMarker *cuo_WorldMapMarker_obs_value(const cuo_obs *ev);
 
 #ifdef __cplusplus
 }

@@ -2953,6 +2953,29 @@ impl Conv<w::UiTooltipSerial> for s::UiTooltipSerial {
     }
 }
 
+impl Conv<w::WorldMapMarker> for s::WorldMapMarker {
+    fn to_wit(&self) -> w::WorldMapMarker {
+        w::WorldMapMarker {
+            name: Conv::to_wit(&self.name),
+            x: Conv::to_wit(&self.x),
+            y: Conv::to_wit(&self.y),
+            map: Conv::to_wit(&self.map),
+            color: Conv::to_wit(&self.color),
+            name_hue: Conv::to_wit(&self.name_hue),
+        }
+    }
+    fn from_wit(v: w::WorldMapMarker) -> s::WorldMapMarker {
+        s::WorldMapMarker {
+            name: Conv::from_wit(v.name),
+            x: Conv::from_wit(v.x),
+            y: Conv::from_wit(v.y),
+            map: Conv::from_wit(v.map),
+            color: Conv::from_wit(v.color),
+            name_hue: Conv::from_wit(v.name_hue),
+        }
+    }
+}
+
 // `cuo:player/hits`
 impl Component for s::Hits {
     fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
@@ -5142,6 +5165,23 @@ impl WritableComponent for s::MaskedText {
     }
 }
 
+// `cuo:ui/read-only-text`
+impl Component for s::ReadOnlyText {
+    fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
+        (0..n).map(|_| s::ReadOnlyText {}).collect()
+    }
+}
+impl WritableComponent for s::ReadOnlyText {
+    fn __same(&self, other: &Self) -> bool {
+        true
+    }
+    fn __set(&self, q: &wit::Query, entity: u64, term: u8) {
+    }
+    fn __insert(&self, b: &c::EntityBuilder) -> c::EntityBuilder {
+        b.read_only_text()
+    }
+}
+
 // `cuo:ui/text-clipboard-action`
 impl Resource for s::TextClipboardActionDto {
     fn __get(r: &wit::Res) -> Option<Self> {
@@ -5219,6 +5259,26 @@ impl WritableComponent for s::UiTooltipSerial {
     fn __insert(&self, b: &c::EntityBuilder) -> c::EntityBuilder {
         let v: w::UiTooltipSerial = self.to_wit();
         b.tooltip_serial(v)
+    }
+}
+
+// `cuo:worldmap/marker`
+impl Component for s::WorldMapMarker {
+    fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
+        c::column_marker(q, term).into_iter().map(Conv::from_wit).collect()
+    }
+}
+impl WritableComponent for s::WorldMapMarker {
+    fn __same(&self, other: &Self) -> bool {
+        Conv::<w::WorldMapMarker>::to_wit(self) == Conv::<w::WorldMapMarker>::to_wit(other)
+    }
+    fn __set(&self, q: &wit::Query, entity: u64, term: u8) {
+        let v: w::WorldMapMarker = self.to_wit();
+        c::set_marker(q, entity, term, &v);
+    }
+    fn __insert(&self, b: &c::EntityBuilder) -> c::EntityBuilder {
+        let v: w::WorldMapMarker = self.to_wit();
+        b.marker(&v)
     }
 }
 
@@ -6062,9 +6122,22 @@ impl TypedTrigger for s::MaskedText {
     }
 }
 
+impl TagTrigger for s::ReadOnlyText {
+    fn tag() -> s::ReadOnlyText {
+        s::ReadOnlyText {}
+    }
+}
+
 impl TypedTrigger for s::UiTooltipSerial {
     type Wit = w::UiTooltipSerial;
     fn lift(v: w::UiTooltipSerial) -> s::UiTooltipSerial {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::WorldMapMarker {
+    type Wit = w::WorldMapMarker;
+    fn lift(v: w::WorldMapMarker) -> s::WorldMapMarker {
         Conv::from_wit(v)
     }
 }

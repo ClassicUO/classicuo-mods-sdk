@@ -91,6 +91,7 @@ pub(crate) const TYPED_TRIGGERS: &[TypedTrigger] = &[
     TypedTrigger { sdk: "ProfileWindow", wit: "profile-window", rust: "ProfileWindow", flat: &["i32", "i32", "f32", "i64", "i64", "i64", "i64", "i32", "i32", "i64"] },
     TypedTrigger { sdk: "PromptOpenedEvent", wit: "prompt-opened-event", rust: "PromptOpenedEvent", flat: &["i32", "i32", "i32", "*mut u8", "usize"] },
     TypedTrigger { sdk: "RacialBookWindow", wit: "racial-book-window", rust: "RacialBookWindow", flat: &["i32", "i32", "i32", "i32", "i32", "i32", "i32", "i64", "i64", "i64"] },
+    TypedTrigger { sdk: "ReadOnlyText", wit: "", rust: "", flat: &[] },
     TypedTrigger { sdk: "ScrollPosition", wit: "scroll-position", rust: "ScrollPosition", flat: &["f32", "f32"] },
     TypedTrigger { sdk: "Serial", wit: "serial", rust: "Serial", flat: &["i32"] },
     TypedTrigger { sdk: "ServerFlags", wit: "server-flags", rust: "ServerFlags", flat: &["i32"] },
@@ -137,6 +138,7 @@ pub(crate) const TYPED_TRIGGERS: &[TypedTrigger] = &[
     TypedTrigger { sdk: "UiTooltip", wit: "ui-tooltip", rust: "UiTooltip", flat: &["*mut u8", "usize", "i32"] },
     TypedTrigger { sdk: "UiTooltipSerial", wit: "ui-tooltip-serial", rust: "UiTooltipSerial", flat: &["i32"] },
     TypedTrigger { sdk: "VendorWindow", wit: "", rust: "", flat: &[] },
+    TypedTrigger { sdk: "WorldMapMarker", wit: "world-map-marker", rust: "WorldMapMarker", flat: &["*mut u8", "usize", "i32", "i32", "i32", "f32", "f32", "f32", "f32", "i32"] },
     TypedTrigger { sdk: "WorldMapWindow", wit: "", rust: "", flat: &[] },
     TypedTrigger { sdk: "WorldPosition", wit: "world-position", rust: "WorldPosition", flat: &["i32", "i32", "i32"] },
 ];

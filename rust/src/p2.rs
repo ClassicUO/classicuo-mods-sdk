@@ -30,7 +30,7 @@ use std::any::Any;
 use std::cell::RefCell;
 use std::collections::HashMap;
 
-pub use bindings::cuo::modding::{actions, assets, host, packets};
+pub use bindings::cuo::modding::{actions, assets, host, net, packets};
 
 #[doc(hidden)]
 pub struct CmdSink(pub(crate) wit::Commands);

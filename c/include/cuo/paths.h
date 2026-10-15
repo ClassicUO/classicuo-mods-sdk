@@ -133,6 +133,7 @@
 #define CUO_PATH_UI_OPTIONS_WINDOW "cuo:ui/options-window" /* component */
 #define CUO_PATH_UI_PICK "cuo:ui/pick" /* resource */
 #define CUO_PATH_UI_POPUP "cuo:ui/popup" /* component */
+#define CUO_PATH_UI_READ_ONLY_TEXT "cuo:ui/read-only-text" /* component */
 #define CUO_PATH_UI_RESIZABLE "cuo:ui/resizable" /* component */
 #define CUO_PATH_UI_RIGHT_CLICK "cuo:ui/right-click" /* event */
 #define CUO_PATH_UI_SCROLL "cuo:ui/scroll" /* component */
@@ -159,5 +160,6 @@
 #define CUO_PATH_UI_TOPBAR_BUTTON "cuo:ui/topbar-button" /* component */
 #define CUO_PATH_UI_TOPBAR_FULL "cuo:ui/topbar-full" /* component */
 #define CUO_PATH_UI_TOPBAR_ROOT "cuo:ui/topbar-root" /* component */
+#define CUO_PATH_WORLDMAP_MARKER "cuo:worldmap/marker" /* component */
 
 #endif

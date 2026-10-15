@@ -2770,4 +2770,26 @@ internal interface ITypesImports {
         }
     }
 
+    /**
+    * `cuo:worldmap/marker`
+    */
+
+    internal struct WorldMapMarker {
+        internal string name;
+        internal int x;
+        internal int y;
+        internal int map;
+        internal Color color;
+        internal ushort nameHue;
+
+        internal WorldMapMarker(string name, int x, int y, int map, Color color, ushort nameHue) {
+            this.name = name;
+            this.x = x;
+            this.y = y;
+            this.map = map;
+            this.color = color;
+            this.nameHue = nameHue;
+        }
+    }
+
 }

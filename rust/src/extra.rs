@@ -44,6 +44,8 @@ impl ChatMessage {
             hue: 0x03B2,
             font: 3,
             is_unicode: true,
+            // 1 = the system log (0 would be overhead speech on serial 0).
+            kind: 1,
             ..Default::default()
         }
     }

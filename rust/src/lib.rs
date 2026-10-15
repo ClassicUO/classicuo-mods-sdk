@@ -48,7 +48,7 @@ extern crate self as cuo_mod_sdk;
 #[doc(hidden)]
 pub mod p2;
 pub(crate) use p2 as backend;
-pub use p2::{actions, assets, host, packets};
+pub use p2::{actions, assets, host, net, packets};
 
 // Every ```rust block of the user guide compiles (`cargo test`).
 #[cfg(doctest)]
@@ -92,7 +92,7 @@ pub mod prelude {
     pub use crate::system;
     pub use crate::types::*;
     pub use crate::ui::{Color, Val, UiRect};
-    pub use crate::{actions, assets, export_mod, helpers, host, packets, storage};
+    pub use crate::{actions, assets, export_mod, helpers, host, net, packets, storage};
 }
 
 /// Registers the mod: `export_mod!(setup)`, where `setup: fn(&mut App)`.

@@ -302,6 +302,8 @@ pub mod ui {
     pub const PICK: &str = "cuo:ui/pick";
     /// `cuo:ui/popup` — component.
     pub const POPUP: &str = "cuo:ui/popup";
+    /// `cuo:ui/read-only-text` — component.
+    pub const READ_ONLY_TEXT: &str = "cuo:ui/read-only-text";
     /// `cuo:ui/resizable` — component.
     pub const RESIZABLE: &str = "cuo:ui/resizable";
     /// `cuo:ui/right-click` — event.
@@ -354,5 +356,10 @@ pub mod ui {
     pub const TOPBAR_FULL: &str = "cuo:ui/topbar-full";
     /// `cuo:ui/topbar-root` — component.
     pub const TOPBAR_ROOT: &str = "cuo:ui/topbar-root";
+}
+
+pub mod worldmap {
+    /// `cuo:worldmap/marker` — component.
+    pub const MARKER: &str = "cuo:worldmap/marker";
 }
 

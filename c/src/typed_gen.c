@@ -294,6 +294,8 @@ static void to_TextCompletionPick(cuo_modding_types_text_completion_pick_t *w, c
 static void from_TextCompletionPick(cuo_TextCompletionPickDto *o, const cuo_modding_types_text_completion_pick_t *w);
 static void to_UiTooltipSerial(cuo_modding_types_ui_tooltip_serial_t *w, const cuo_UiTooltipSerial *v);
 static void from_UiTooltipSerial(cuo_UiTooltipSerial *o, const cuo_modding_types_ui_tooltip_serial_t *w);
+static void to_WorldMapMarker(cuo_modding_types_world_map_marker_t *w, const cuo_WorldMapMarker *v);
+static void from_WorldMapMarker(cuo_WorldMapMarker *o, const cuo_modding_types_world_map_marker_t *w);
 
 static void to_Hits(cuo_modding_types_hits_t *w, const cuo_Hits *v)
 {
@@ -2903,6 +2905,26 @@ static void from_UiTooltipSerial(cuo_UiTooltipSerial *o, const cuo_modding_types
     o->serial = w->serial;
 }
 
+static void to_WorldMapMarker(cuo_modding_types_world_map_marker_t *w, const cuo_WorldMapMarker *v)
+{
+    w->name = cuo__wstr_copy(v->name);
+    w->x = v->x;
+    w->y = v->y;
+    w->map = v->map;
+    to_Color(&w->color, &v->color);
+    w->name_hue = v->name_hue;
+}
+
+static void from_WorldMapMarker(cuo_WorldMapMarker *o, const cuo_modding_types_world_map_marker_t *w)
+{
+    o->name = cuo_strndup((const char *)w->name.ptr, w->name.len);
+    o->x = w->x;
+    o->y = w->y;
+    o->map = w->map;
+    from_Color(&o->color, &w->color);
+    o->name_hue = w->name_hue;
+}
+
 /* ── inserts ── */
 
 cuo_comp cuo_Graphic_comp(const cuo_Graphic *v)
@@ -3260,11 +3282,18 @@ cuo_comp cuo_MaskedText_comp(const cuo_MaskedText *v)
     to_MaskedText(w, v);
     return cuo__comp(cuo_MaskedText_id(), 80, w);
 }
+cuo_comp cuo_ReadOnlyText_comp(void) { return cuo__comp(cuo_ReadOnlyText_id(), 81, NULL); }
 cuo_comp cuo_UiTooltipSerial_comp(const cuo_UiTooltipSerial *v)
 {
     cuo_modding_types_ui_tooltip_serial_t *w = cuo_alloc(sizeof *w);
     to_UiTooltipSerial(w, v);
-    return cuo__comp(cuo_UiTooltipSerial_id(), 81, w);
+    return cuo__comp(cuo_UiTooltipSerial_id(), 82, w);
+}
+cuo_comp cuo_WorldMapMarker_comp(const cuo_WorldMapMarker *v)
+{
+    cuo_modding_types_world_map_marker_t *w = cuo_alloc(sizeof *w);
+    to_WorldMapMarker(w, v);
+    return cuo__comp(cuo_WorldMapMarker_id(), 83, w);
 }
 
 cuo__own_eb cuo__typed_push(cuo__borrow_eb b, const cuo_comp *comp)
@@ -3351,7 +3380,9 @@ cuo__own_eb cuo__typed_push(cuo__borrow_eb b, const cuo_comp *comp)
     case 78: return cuo_modding_components_method_entity_builder_login_error(b);
     case 79: return cuo_modding_components_method_entity_builder_server_selection(b);
     case 80: return cuo_modding_components_method_entity_builder_masked_text(b, w);
-    case 81: return cuo_modding_components_method_entity_builder_tooltip_serial(b, w);
+    case 81: return cuo_modding_components_method_entity_builder_read_only_text(b);
+    case 82: return cuo_modding_components_method_entity_builder_tooltip_serial(b, w);
+    case 83: return cuo_modding_components_method_entity_builder_marker(b, w);
     default: cuo__trap("cuo: unknown typed component");
     }
 }
@@ -4647,6 +4678,26 @@ void cuo_UiTooltipSerial_set(cuo_query q, cuo_entity e, size_t term, const cuo_U
     cuo_modding_components_set_tooltip_serial(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
+const cuo_WorldMapMarker *cuo_WorldMapMarker_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_world_map_marker_t l;
+    cuo_modding_components_column_marker(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_WorldMapMarker *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_WorldMapMarker(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_world_map_marker_free(&l);
+    return out;
+}
+
+void cuo_WorldMapMarker_set(cuo_query q, cuo_entity e, size_t term, const cuo_WorldMapMarker *v)
+{
+    cuo_modding_types_world_map_marker_t w;
+    to_WorldMapMarker(&w, v);
+    cuo_modding_components_set_marker(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
 /* ── resources (kind = cuo__res_cache.kind) ── */
 
 size_t cuo__typed_res_size(uint16_t kind)
@@ -5782,7 +5833,9 @@ int cuo__trigger_kind(const char *path, const char **record)
     if (strcmp(path, "cuo:scene/server-list") == 0) return *record = "server-selection-info-event", 102;
     if (strcmp(path, "cuo:scene/server-selection") == 0) return 0;
     if (strcmp(path, "cuo:ui/masked-text") == 0) return *record = "masked-text", 103;
+    if (strcmp(path, "cuo:ui/read-only-text") == 0) return 0;
     if (strcmp(path, "cuo:ui/tooltip-serial") == 0) return *record = "ui-tooltip-serial", 104;
+    if (strcmp(path, "cuo:worldmap/marker") == 0) return *record = "world-map-marker", 105;
     return -1;
 }
 
@@ -6254,6 +6307,12 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         from_UiTooltipSerial(o, rec);
         return o;
     }
+    case 105: {
+        cuo_WorldMapMarker *o = cuo_alloc(sizeof *o);
+        from_WorldMapMarker(o, rec);
+        cuo_modding_types_world_map_marker_free(rec);
+        return o;
+    }
     default: cuo__trap("cuo: unknown typed trigger");
     }
 }
@@ -6347,3 +6406,4 @@ const cuo_OnLoginRequest *cuo_OnLoginRequest_obs_value(const cuo_obs *ev) { retu
 const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 102 ? ev->value : NULL; }
 const cuo_MaskedText *cuo_MaskedText_obs_value(const cuo_obs *ev) { return ev->value_kind == 103 ? ev->value : NULL; }
 const cuo_UiTooltipSerial *cuo_UiTooltipSerial_obs_value(const cuo_obs *ev) { return ev->value_kind == 104 ? ev->value : NULL; }
+const cuo_WorldMapMarker *cuo_WorldMapMarker_obs_value(const cuo_obs *ev) { return ev->value_kind == 105 ? ev->value : NULL; }

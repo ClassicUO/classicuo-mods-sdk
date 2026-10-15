@@ -103,6 +103,7 @@ uint16_t cuo_PlayerStepsDto_id(void) { TYPE_ID(cuo_PlayerStepsDto_PATH); }
 uint16_t cuo_ProfileWindow_id(void) { TYPE_ID(cuo_ProfileWindow_PATH); }
 uint16_t cuo_PromptOpenedEvent_id(void) { TYPE_ID(cuo_PromptOpenedEvent_PATH); }
 uint16_t cuo_RacialBookWindow_id(void) { TYPE_ID(cuo_RacialBookWindow_PATH); }
+uint16_t cuo_ReadOnlyText_id(void) { TYPE_ID(cuo_ReadOnlyText_PATH); }
 uint16_t cuo_ScrollPosition_id(void) { TYPE_ID(cuo_ScrollPosition_PATH); }
 uint16_t cuo_ServerFlags_id(void) { TYPE_ID(cuo_ServerFlags_PATH); }
 uint16_t cuo_ServerGumpClosedEvent_id(void) { TYPE_ID(cuo_ServerGumpClosedEvent_PATH); }
@@ -155,6 +156,7 @@ uint16_t cuo_UiSurfaceDto_id(void) { TYPE_ID(cuo_UiSurfaceDto_PATH); }
 uint16_t cuo_UiTooltip_id(void) { TYPE_ID(cuo_UiTooltip_PATH); }
 uint16_t cuo_UiTooltipSerial_id(void) { TYPE_ID(cuo_UiTooltipSerial_PATH); }
 uint16_t cuo_VendorWindow_id(void) { TYPE_ID(cuo_VendorWindow_PATH); }
+uint16_t cuo_WorldMapMarker_id(void) { TYPE_ID(cuo_WorldMapMarker_PATH); }
 uint16_t cuo_WorldMapWindow_id(void) { TYPE_ID(cuo_WorldMapWindow_PATH); }
 uint16_t cuo_WorldPosition_id(void) { TYPE_ID(cuo_WorldPosition_PATH); }
 uint16_t cuo_WorldSingleClickDto_id(void) { TYPE_ID(cuo_WorldSingleClickDto_PATH); }

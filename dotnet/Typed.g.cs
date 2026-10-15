@@ -129,6 +129,7 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.TextCompletionDto) ? new CodecTextCompletion() :
             typeof(T) == typeof(global::CuoModSdk.Types.TextCompletionPickDto) ? new CodecTextCompletionPick() :
             typeof(T) == typeof(global::CuoModSdk.Types.UiTooltipSerial) ? new CodecTooltipSerial() :
+            typeof(T) == typeof(global::CuoModSdk.Types.WorldMapMarker) ? new CodecMarker() :
             null;
         return (TypedCodec<T>?)c;
     }
@@ -160,6 +161,7 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.LoginScene) ? new TagCodec("cuo:scene/login", &TypedImports.Tag_Login) :
         typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorScene) ? new TagCodec("cuo:scene/login-error", &TypedImports.Tag_LoginError) :
         typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionScene) ? new TagCodec("cuo:scene/server-selection", &TypedImports.Tag_ServerSelection) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ReadOnlyText) ? new TagCodec("cuo:ui/read-only-text", &TypedImports.Tag_ReadOnlyText) :
         null;
 
     /// <summary>A curated tag component (zero-size or presence-only): it reads as default, with no host call.</summary>
@@ -199,7 +201,8 @@ internal static unsafe partial class TypedCodecs
         || typeof(T) == typeof(global::CuoModSdk.Types.GameScene)
         || typeof(T) == typeof(global::CuoModSdk.Types.LoginScene)
         || typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorScene)
-        || typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionScene);
+        || typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionScene)
+        || typeof(T) == typeof(global::CuoModSdk.Types.ReadOnlyText);
 
     internal static TypedEvent<T>? EventOf<T>()
     {
@@ -356,7 +359,9 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new TypedTrigger("server-selection-info-event", 8, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int")], new CodecServerList()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionScene) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.MaskedText) ? new TypedTrigger("masked-text", 12, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "uint")], new CodecMaskedText()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ReadOnlyText) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.UiTooltipSerial) ? new TypedTrigger("ui-tooltip-serial", 4, 4, [new TypedFlat("int", 0, "uint")], new CodecTooltipSerial()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.WorldMapMarker) ? new TypedTrigger("world-map-marker", 40, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("float", 20, "float"), new TypedFlat("float", 24, "float"), new TypedFlat("float", 28, "float"), new TypedFlat("float", 32, "float"), new TypedFlat("int", 36, "ushort")], new CodecMarker()) :
         null;
 }
 
@@ -4623,6 +4628,44 @@ internal static unsafe class TypedGen
     internal static bool EqUiTooltipSerial(byte* a, byte* b) =>
         *(uint*)(a + 0) == *(uint*)(b + 0);
 
+    // world-map-marker: 40 bytes, align 4
+    internal static global::CuoModSdk.Types.WorldMapMarker LiftWorldMapMarker(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.WorldMapMarker
+        {
+            Name = TypedCodecs.ReadString(p + 0),
+            X = *(int*)(p + 8),
+            Y = *(int*)(p + 12),
+            Map = *(int*)(p + 16),
+            Color = LiftColor(p + 20),
+            NameHue = *(ushort*)(p + 36),
+        };
+        return v;
+    }
+
+    internal static void LowerWorldMapMarker(in global::CuoModSdk.Types.WorldMapMarker v, byte* p)
+    {
+        TypedCodecs.WriteString(v.Name, p + 0);
+        *(int*)(p + 8) = v.X;
+        *(int*)(p + 12) = v.Y;
+        *(int*)(p + 16) = v.Map;
+        LowerColor(v.Color, p + 20);
+        *(ushort*)(p + 36) = v.NameHue;
+    }
+
+    internal static void FreeWorldMapMarker(byte* p)
+    {
+        TypedCodecs.FreeString(p + 0);
+    }
+
+    internal static bool EqWorldMapMarker(byte* a, byte* b) =>
+        TypedStrings.SameRecord(a + 0, b + 0)
+        && *(uint*)(a + 8) == *(uint*)(b + 8)
+        && *(uint*)(a + 12) == *(uint*)(b + 12)
+        && *(uint*)(a + 16) == *(uint*)(b + 16)
+        && EqColor(a + 20, b + 20)
+        && *(ushort*)(a + 36) == *(ushort*)(b + 36);
+
     internal static int[] LiftList0(byte* p)
     {
         var len = *(int*)(p + 4);
@@ -6795,6 +6838,11 @@ internal static unsafe class TypedImports
     [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-masked-text"), WasmImportLinkage]
     internal static extern void Set_MaskedText(int a0, long a1, int a2, int f0, int f1, int f2);
 
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.read-only-text"), WasmImportLinkage]
+    internal static extern int B_ReadOnlyText(int self);
+
+    internal static int Tag_ReadOnlyText(int b) => B_ReadOnlyText(b);
+
     [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-text-clipboard-action"), WasmImportLinkage]
     internal static extern void Get_TextClipboardAction(int r, nint ret);
 
@@ -6830,6 +6878,15 @@ internal static unsafe class TypedImports
 
     [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-tooltip-serial"), WasmImportLinkage]
     internal static extern void Set_TooltipSerial(int a0, long a1, int a2, int f0);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.marker"), WasmImportLinkage]
+    internal static extern int B_Marker(int a0, int f0, int f1, int f2, int f3, int f4, float f5, float f6, float f7, float f8, int f9);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-marker"), WasmImportLinkage]
+    internal static extern void Col_Marker(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-marker"), WasmImportLinkage]
+    internal static extern void Set_Marker(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, float f5, float f6, float f7, float f8, int f9);
 
 }
 
@@ -10115,5 +10172,30 @@ internal sealed unsafe class CodecTooltipSerial : TypedCodec<global::CuoModSdk.T
     internal override void Set(int q, ulong e, byte t, byte* rec)
     {
         TypedImports.Set_TooltipSerial(q, (long)e, t, (int)*(uint*)(rec + 0));
+    }
+}
+
+/// <summary><c>cuo:worldmap/marker</c> (world-map-marker).</summary>
+internal sealed unsafe class CodecMarker : TypedCodec<global::CuoModSdk.Types.WorldMapMarker>
+{
+    internal override int Size => 40;
+    internal override string Path => "cuo:worldmap/marker";
+    internal override global::CuoModSdk.Types.WorldMapMarker Lift(byte* p) => TypedGen.LiftWorldMapMarker(p);
+    protected override void Lower(in global::CuoModSdk.Types.WorldMapMarker v, byte* p) => TypedGen.LowerWorldMapMarker(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.WorldMapMarker now, byte* original)
+    {
+        var mine = stackalloc ulong[5];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqWorldMapMarker((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeWorldMapMarker(p);
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_Marker(b, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(float*)(rec + 20), *(float*)(rec + 24), *(float*)(rec + 28), *(float*)(rec + 32), *(ushort*)(rec + 36));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Marker(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_Marker(q, (long)e, t, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(float*)(rec + 20), *(float*)(rec + 24), *(float*)(rec + 28), *(float*)(rec + 32), *(ushort*)(rec + 36));
     }
 }

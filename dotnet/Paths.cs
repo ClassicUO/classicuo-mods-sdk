@@ -321,6 +321,8 @@ public static class Paths
         public const string Pick = "cuo:ui/pick";
         /// <summary><c>cuo:ui/popup</c> — component.</summary>
         public const string Popup = "cuo:ui/popup";
+        /// <summary><c>cuo:ui/read-only-text</c> — component.</summary>
+        public const string ReadOnlyText = "cuo:ui/read-only-text";
         /// <summary><c>cuo:ui/resizable</c> — component.</summary>
         public const string Resizable = "cuo:ui/resizable";
         /// <summary><c>cuo:ui/right-click</c> — event.</summary>
@@ -373,5 +375,11 @@ public static class Paths
         public const string TopbarFull = "cuo:ui/topbar-full";
         /// <summary><c>cuo:ui/topbar-root</c> — component.</summary>
         public const string TopbarRoot = "cuo:ui/topbar-root";
+    }
+
+    public static class Worldmap
+    {
+        /// <summary><c>cuo:worldmap/marker</c> — component.</summary>
+        public const string Marker = "cuo:worldmap/marker";
     }
 }

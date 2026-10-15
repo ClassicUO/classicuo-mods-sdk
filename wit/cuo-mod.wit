@@ -48,6 +48,26 @@ interface packets {
     send-to-client: func(packet: list<u8>);
 }
 
+/// Outbound WebSocket connections (ws:// or wss://), the same on desktop and in the
+/// browser. Binary messages only. Everything is non-blocking: `ws-open` returns at once
+/// and connects in the background, messages sent before the connection is up are
+/// queued, and a failed connect shows up as `ws-recv` returning none.
+interface net {
+    /// Opens a connection to `url`. Returns its handle (never 0).
+    ws-open: func(url: string) -> u32;
+
+    /// Sends one binary message. False when the connection is closed / unknown.
+    ws-send: func(socket: u32, data: list<u8>) -> bool;
+
+    /// The binary messages received since the last call, concatenated in order (empty =
+    /// nothing yet); none once the connection is closed (by the peer, a failed connect,
+    /// or `ws-close`).
+    ws-recv: func(socket: u32) -> option<list<u8>>;
+
+    /// Closes the connection. Unknown handles are ignored.
+    ws-close: func(socket: u32);
+}
+
 /// The client's UO data files, read-only. Images come back decoded from the files
 /// (not from the GPU), so they work before anything was drawn.
 ///
@@ -1516,6 +1536,16 @@ interface types {
     record ui-tooltip-serial {
         serial: u32,
     }
+
+    /// `cuo:worldmap/marker`
+    record world-map-marker {
+        name: string,
+        x: s32,
+        y: s32,
+        %map: s32,
+        color: color,
+        name-hue: u16,
+    }
 }
 
 /// Reads and writes of the `types` records. Everything here except `put-*` is deferred
@@ -1527,7 +1557,7 @@ interface types {
 /// signature when it binds it.
 interface components {
     use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity};
-    use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, on-login-request, server-selection-info-event, clipboard-set, focused-input, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial};
+    use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, on-login-request, server-selection-info-event, clipboard-set, focused-input, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial, world-map-marker};
 
     /// Inserts components on one entity, chained: each method queues one insert and
     /// returns a new builder for the same entity.
@@ -1694,8 +1724,12 @@ interface components {
         server-selection: func() -> entity-builder;
         /// Inserts `cuo:ui/masked-text`.
         masked-text: func(v: masked-text) -> entity-builder;
+        /// Inserts `cuo:ui/read-only-text`.
+        read-only-text: func() -> entity-builder;
         /// Inserts `cuo:ui/tooltip-serial`.
         tooltip-serial: func(v: ui-tooltip-serial) -> entity-builder;
+        /// Inserts `cuo:worldmap/marker`.
+        marker: func(v: world-map-marker) -> entity-builder;
     }
 
     /// A builder for an existing entity.
@@ -2091,6 +2125,12 @@ interface components {
     /// Writes `cuo:ui/tooltip-serial` back through the `mut` reading term `term`.
     set-tooltip-serial: func(q: borrow<query>, e: entity, term: u8, v: ui-tooltip-serial);
 
+    /// `cuo:worldmap/marker` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:worldmap/marker`.
+    column-marker: func(q: borrow<query>, term: u8) -> list<world-map-marker>;
+    /// Writes `cuo:worldmap/marker` back through the `mut` reading term `term`.
+    set-marker: func(q: borrow<query>, e: entity, term: u8, v: world-map-marker);
+
     /// The `cuo:input/mouse` resource parameter's value; none when the host has none.
     get-mouse: func(r: borrow<res>) -> option<mouse-input>;
 
@@ -2340,5 +2380,6 @@ world mod {
     import assets;
     import actions;
     import packets;
+    import net;
     import components;
 }
