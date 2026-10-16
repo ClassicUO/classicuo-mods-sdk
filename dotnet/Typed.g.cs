@@ -120,7 +120,6 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.PlayerStepsDto) ? new CodecSteps() :
             typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionDto) ? new CodecCharacterList() :
             typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorsInfoEvent) ? new CodecLoginErrorInfo() :
-            typeof(T) == typeof(global::CuoModSdk.Types.OnLoginRequest) ? new CodecLoginRequest() :
             typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new CodecServerList() :
             typeof(T) == typeof(global::CuoModSdk.Types.ClipboardSetDto) ? new CodecClipboardSet() :
             typeof(T) == typeof(global::CuoModSdk.Types.FocusedInput) ? new CodecFocusedInput() :
@@ -226,7 +225,6 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.ModMoveRequest) ? new EventMoveRequest() :
             typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionDto) ? new EventCharacterList() :
             typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorsInfoEvent) ? new EventLoginErrorInfo() :
-            typeof(T) == typeof(global::CuoModSdk.Types.OnLoginRequest) ? new EventLoginRequest() :
             typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new EventServerList() :
             null;
         return (TypedEvent<T>?)e;
@@ -355,7 +353,6 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.LoginScene) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorScene) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorsInfoEvent) ? new TypedTrigger("login-errors-info-event", 8, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int")], new CodecLoginErrorInfo()) :
-        typeof(T) == typeof(global::CuoModSdk.Types.OnLoginRequest) ? new TypedTrigger("on-login-request", 28, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int"), new TypedFlat("int", 24, "ushort")], new CodecLoginRequest()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new TypedTrigger("server-selection-info-event", 8, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int")], new CodecServerList()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionScene) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.MaskedText) ? new TypedTrigger("masked-text", 12, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "uint")], new CodecMaskedText()) :
@@ -4370,40 +4367,6 @@ internal static unsafe class TypedGen
     internal static bool EqLoginErrorsInfoEvent(byte* a, byte* b) =>
         EqLoginErrorInfo(a + 0, b + 0);
 
-    // on-login-request: 28 bytes, align 4
-    internal static global::CuoModSdk.Types.OnLoginRequest LiftOnLoginRequest(byte* p)
-    {
-        var v = new global::CuoModSdk.Types.OnLoginRequest
-        {
-            Username = TypedCodecs.ReadString(p + 0),
-            Password = TypedCodecs.ReadString(p + 8),
-            Address = TypedCodecs.ReadString(p + 16),
-            Port = *(ushort*)(p + 24),
-        };
-        return v;
-    }
-
-    internal static void LowerOnLoginRequest(in global::CuoModSdk.Types.OnLoginRequest v, byte* p)
-    {
-        TypedCodecs.WriteString(v.Username, p + 0);
-        TypedCodecs.WriteString(v.Password, p + 8);
-        TypedCodecs.WriteString(v.Address, p + 16);
-        *(ushort*)(p + 24) = v.Port;
-    }
-
-    internal static void FreeOnLoginRequest(byte* p)
-    {
-        TypedCodecs.FreeString(p + 0);
-        TypedCodecs.FreeString(p + 8);
-        TypedCodecs.FreeString(p + 16);
-    }
-
-    internal static bool EqOnLoginRequest(byte* a, byte* b) =>
-        TypedStrings.SameRecord(a + 0, b + 0)
-        && TypedStrings.SameRecord(a + 8, b + 8)
-        && TypedStrings.SameRecord(a + 16, b + 16)
-        && *(ushort*)(a + 24) == *(ushort*)(b + 24);
-
     // server-info: 20 bytes, align 4
     internal static global::CuoModSdk.Types.ServerInfo LiftServerInfo(byte* p)
     {
@@ -6793,12 +6756,6 @@ internal static unsafe class TypedImports
 
     [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-login-error-info"), WasmImportLinkage]
     internal static extern void Read_LoginErrorInfo(int e, nint ret);
-
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-login-request"), WasmImportLinkage]
-    internal static extern void Send_LoginRequest(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6);
-
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-login-request"), WasmImportLinkage]
-    internal static extern void Read_LoginRequest(int e, nint ret);
 
     [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-server-list"), WasmImportLinkage]
     internal static extern void Send_ServerList(int a0, int f0, int f1);
@@ -9867,51 +9824,6 @@ internal sealed unsafe class CodecLoginErrorInfo : TypedCodec<global::CuoModSdk.
         return !TypedGen.EqLoginErrorsInfoEvent((byte*)mine, original);
     }
     internal override void FreeElement(byte* p) => TypedGen.FreeLoginErrorsInfoEvent(p);
-}
-
-/// <summary>The <c>cuo:scene/login-request</c> event, typed.</summary>
-internal sealed unsafe class EventLoginRequest : TypedEvent<global::CuoModSdk.Types.OnLoginRequest>
-{
-    internal override void Send(int c, in global::CuoModSdk.Types.OnLoginRequest v)
-    {
-        var buf = stackalloc ulong[4];
-        var rec = (byte*)buf;
-        TypedGen.LowerOnLoginRequest(v, rec);
-        TypedImports.Send_LoginRequest(c, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20), *(ushort*)(rec + 24));
-    }
-    internal override global::CuoModSdk.Types.OnLoginRequest[] Read(int e)
-    {
-        var ret = stackalloc int[2];
-        TypedImports.Read_LoginRequest(e, (nint)ret);
-        var list = (byte*)(nint)ret[0];
-        var n = ret[1];
-        if (n <= 0)
-            return [];
-        var v = new global::CuoModSdk.Types.OnLoginRequest[n];
-        for (var i = 0; i < n; i++)
-        {
-            v[i] = TypedGen.LiftOnLoginRequest(list + i * 28);
-            TypedGen.FreeOnLoginRequest(list + i * 28);
-        }
-        NativeMemory.Free(list);
-        return v;
-    }
-}
-
-/// <summary><c>cuo:scene/login-request</c> (on-login-request).</summary>
-internal sealed unsafe class CodecLoginRequest : TypedCodec<global::CuoModSdk.Types.OnLoginRequest>
-{
-    internal override int Size => 28;
-    internal override string Path => "cuo:scene/login-request";
-    internal override global::CuoModSdk.Types.OnLoginRequest Lift(byte* p) => TypedGen.LiftOnLoginRequest(p);
-    protected override void Lower(in global::CuoModSdk.Types.OnLoginRequest v, byte* p) => TypedGen.LowerOnLoginRequest(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.OnLoginRequest now, byte* original)
-    {
-        var mine = stackalloc ulong[4];
-        LowerInto(now, (byte*)mine);
-        return !TypedGen.EqOnLoginRequest((byte*)mine, original);
-    }
-    internal override void FreeElement(byte* p) => TypedGen.FreeOnLoginRequest(p);
 }
 
 /// <summary>The <c>cuo:scene/server-list</c> event, typed.</summary>

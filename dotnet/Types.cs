@@ -1190,18 +1190,6 @@ public enum NotorietyFlag : byte
     Invulnerable = 7,
 }
 
-/// <summary><c>cuo:scene/login-request</c></summary>
-public partial struct OnLoginRequest
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:scene/login-request";
-
-    public string Username;
-    public string Password;
-    public string Address;
-    public ushort Port;
-}
-
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.OplLineDto</c>).</summary>
 public partial struct OplLineDto
 {
@@ -2340,7 +2328,6 @@ public static class TypePaths
         [typeof(NetworkSerial)] = "cuo:ent/serial",
         [typeof(Node)] = "cuo:ui/node",
         [typeof(Notoriety)] = "cuo:ent/notoriety",
-        [typeof(OnLoginRequest)] = "cuo:scene/login-request",
         [typeof(OptionsWindow)] = "cuo:ui/options-window",
         [typeof(PaperdollWindow)] = "cuo:gump/paperdoll",
         [typeof(PartyDto)] = "cuo:player/party",

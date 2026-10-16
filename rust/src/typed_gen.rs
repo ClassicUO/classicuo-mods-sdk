@@ -2793,25 +2793,6 @@ impl Conv<w::LoginErrorsInfoEvent> for s::LoginErrorsInfoEvent {
     }
 }
 
-impl Conv<w::OnLoginRequest> for s::OnLoginRequest {
-    fn to_wit(&self) -> w::OnLoginRequest {
-        w::OnLoginRequest {
-            username: Conv::to_wit(&self.username),
-            password: Conv::to_wit(&self.password),
-            address: Conv::to_wit(&self.address),
-            port: Conv::to_wit(&self.port),
-        }
-    }
-    fn from_wit(v: w::OnLoginRequest) -> s::OnLoginRequest {
-        s::OnLoginRequest {
-            username: Conv::from_wit(v.username),
-            password: Conv::from_wit(v.password),
-            address: Conv::from_wit(v.address),
-            port: Conv::from_wit(v.port),
-        }
-    }
-}
-
 impl Conv<w::ServerInfo> for s::ServerInfo {
     fn to_wit(&self) -> w::ServerInfo {
         w::ServerInfo {
@@ -5066,17 +5047,6 @@ impl GameEvent for s::LoginErrorsInfoEvent {
     }
 }
 
-// `cuo:scene/login-request`
-impl GameEvent for s::OnLoginRequest {
-    fn __send(&self, cmds: &wit::Commands) {
-        let v: w::OnLoginRequest = self.to_wit();
-        c::send_login_request(cmds, &v);
-    }
-    fn __read(e: &wit::Events) -> Vec<Self> {
-        c::read_login_request(e).into_iter().map(Conv::from_wit).collect()
-    }
-}
-
 // `cuo:scene/server-list`
 impl GameEvent for s::ServerSelectionInfoEvent {
     fn __send(&self, cmds: &wit::Commands) {
@@ -6091,13 +6061,6 @@ impl TagTrigger for s::LoginErrorScene {
 impl TypedTrigger for s::LoginErrorsInfoEvent {
     type Wit = w::LoginErrorsInfoEvent;
     fn lift(v: w::LoginErrorsInfoEvent) -> s::LoginErrorsInfoEvent {
-        Conv::from_wit(v)
-    }
-}
-
-impl TypedTrigger for s::OnLoginRequest {
-    type Wit = w::OnLoginRequest;
-    fn lift(v: w::OnLoginRequest) -> s::OnLoginRequest {
         Conv::from_wit(v)
     }
 }

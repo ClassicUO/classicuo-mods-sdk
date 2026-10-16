@@ -100,7 +100,6 @@
 #define CUO_PATH_SCENE_LOGIN "cuo:scene/login" /* component */
 #define CUO_PATH_SCENE_LOGIN_ERROR "cuo:scene/login-error" /* component */
 #define CUO_PATH_SCENE_LOGIN_ERROR_INFO "cuo:scene/login-error-info" /* event */
-#define CUO_PATH_SCENE_LOGIN_REQUEST "cuo:scene/login-request" /* event */
 #define CUO_PATH_SCENE_SERVER_LIST "cuo:scene/server-list" /* event */
 #define CUO_PATH_SCENE_SERVER_SELECTION "cuo:scene/server-selection" /* component */
 #define CUO_PATH_TARGET_LOCAL_RESULT "cuo:target/local-result" /* event */

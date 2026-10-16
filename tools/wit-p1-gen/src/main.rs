@@ -14,7 +14,7 @@ mod hostcalls;
 use anyhow::{bail, Context, Result};
 use wit_parser::Resolve;
 
-const INTERFACES: &[&str] = &["host", "packets", "assets", "actions", "net"];
+const INTERFACES: &[&str] = &["host", "packets", "assets", "actions", "net", "legacy-plugins"];
 
 fn main() -> Result<()> {
     let args: Vec<String> = std::env::args().collect();

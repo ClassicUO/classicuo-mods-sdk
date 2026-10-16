@@ -2621,24 +2621,6 @@ internal interface ITypesImports {
     }
 
     /**
-    * `cuo:scene/login-request`
-    */
-
-    internal struct OnLoginRequest {
-        internal string username;
-        internal string password;
-        internal string address;
-        internal ushort port;
-
-        internal OnLoginRequest(string username, string password, string address, ushort port) {
-            this.username = username;
-            this.password = password;
-            this.address = address;
-            this.port = port;
-        }
-    }
-
-    /**
     * `ServerInfo`
     */
 

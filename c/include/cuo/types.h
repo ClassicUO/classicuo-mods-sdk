@@ -107,7 +107,6 @@ typedef struct cuo_MouseInputDto cuo_MouseInputDto;
 typedef struct cuo_NetworkSerial cuo_NetworkSerial;
 typedef struct cuo_Node cuo_Node;
 typedef struct cuo_Notoriety cuo_Notoriety;
-typedef struct cuo_OnLoginRequest cuo_OnLoginRequest;
 typedef struct cuo_OplLineDto cuo_OplLineDto;
 typedef struct cuo_OptionsWindow cuo_OptionsWindow;
 typedef struct cuo_PaperdollWindow cuo_PaperdollWindow;
@@ -1285,16 +1284,6 @@ struct cuo_Notoriety {
 };
 #define cuo_Notoriety_PATH CUO_PATH_ENT_NOTORIETY
 uint16_t cuo_Notoriety_id(void);
-
-/* `cuo:scene/login-request` */
-struct cuo_OnLoginRequest {
-    const char *username;
-    const char *password;
-    const char *address;
-    uint16_t port;
-};
-#define cuo_OnLoginRequest_PATH CUO_PATH_SCENE_LOGIN_REQUEST
-uint16_t cuo_OnLoginRequest_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.OplLineDto`). */
 struct cuo_OplLineDto {

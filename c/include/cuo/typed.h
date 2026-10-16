@@ -698,12 +698,6 @@ const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_events(const cuo_input 
 const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_events(const cuo_obs *ev, cuo_param p, size_t *count);
 const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_value(const cuo_obs *ev);
 
-/* `cuo:scene/login-request` */
-void cuo_OnLoginRequest_send(cuo_cmds *c, const cuo_OnLoginRequest *v);
-const cuo_OnLoginRequest *cuo_OnLoginRequest_events(const cuo_input *in, cuo_param p, size_t *count);
-const cuo_OnLoginRequest *cuo_OnLoginRequest_obs_events(const cuo_obs *ev, cuo_param p, size_t *count);
-const cuo_OnLoginRequest *cuo_OnLoginRequest_obs_value(const cuo_obs *ev);
-
 /* `cuo:scene/server-list` */
 void cuo_ServerSelectionInfoEvent_send(cuo_cmds *c, const cuo_ServerSelectionInfoEvent *v);
 const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_events(const cuo_input *in, cuo_param p, size_t *count);

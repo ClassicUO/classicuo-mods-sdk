@@ -109,7 +109,6 @@ Read-only data is marked *(ro)*; writing it is ignored, and a `&mut` / `Mut<T>` 
 | Path | Kind | Change |
 |---|---|---|
 | `cuo:scene/login` · `server-selection` · `character-selection` · `character-creation` · `login-error` · `game` | C (markers) | keep |
-| `cuo:scene/login-request` | A | keep |
 | `cuo:scene/server-list` · `login-error-info` · `character-list` | E | keep |
 
 ## Gone without replacement

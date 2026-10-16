@@ -226,6 +226,8 @@ interface actions {
 
   walk-to: func(at: point);
 
+  walk-to-within: func(at: point, distance: u32);
+
   cancel-walk-to: func();
 
   open-door: func();
@@ -321,6 +323,8 @@ interface actions {
   set-view-range: func(range: u8);
 
   logout: func();
+
+  set-window-title: func(title: string);
 }
 
 interface packets {
@@ -337,6 +341,28 @@ interface net {
   ws-recv: func(socket: u32) -> option<list<u8>>;
 
   ws-close: func(socket: u32);
+}
+
+interface legacy-plugins {
+  active: func() -> bool;
+
+  packet-lengths: func() -> list<u8>;
+
+  load: func(paths: list<string>, client-version: u32, packet-lengths: list<u8>) -> u32;
+
+  packet: func(incoming: bool, data: list<u8>) -> list<u8>;
+
+  poll: func() -> list<u8>;
+
+  hotkey: func(key: s32, mods: s32, pressed: bool) -> bool;
+
+  mouse: func(button: s32, wheel: s32);
+
+  notify: func(ev: u32);
+
+  player-position: func(has: bool, x: s32, y: s32, z: s32);
+
+  autowalking: func(on: bool);
 }
 
 interface types {
@@ -1435,13 +1461,6 @@ interface types {
     error: login-error-info,
   }
 
-  record on-login-request {
-    username: string,
-    password: string,
-    address: string,
-    port: u16,
-  }
-
   record server-info {
     index: s32,
     name: string,
@@ -1502,7 +1521,7 @@ interface types {
 
 interface components {
   use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity};
-  use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, on-login-request, server-selection-info-event, clipboard-set, focused-input, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial, world-map-marker};
+  use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, server-selection-info-event, clipboard-set, focused-input, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial, world-map-marker};
 
   resource entity-builder {
     id: func() -> entity;
@@ -2021,10 +2040,6 @@ interface components {
 
   read-login-error-info: func(e: borrow<events>) -> list<login-errors-info-event>;
 
-  send-login-request: func(c: borrow<commands>, v: on-login-request);
-
-  read-login-request: func(e: borrow<events>) -> list<on-login-request>;
-
   send-server-list: func(c: borrow<commands>, v: server-selection-info-event);
 
   read-server-list: func(e: borrow<events>) -> list<server-selection-info-event>;
@@ -2037,6 +2052,7 @@ world mod {
   import actions;
   import packets;
   import net;
+  import legacy-plugins;
   import types;
   import components;
   use tinyecs:modding/ecs@0.1.0.{app};

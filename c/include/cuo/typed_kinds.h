@@ -92,10 +92,9 @@
         cuo_modding_types_mod_move_request_t *: 98, \
         cuo_modding_types_character_selection_t *: 99, \
         cuo_modding_types_login_errors_info_event_t *: 100, \
-        cuo_modding_types_on_login_request_t *: 101, \
-        cuo_modding_types_server_selection_info_event_t *: 102, \
-        cuo_modding_types_masked_text_t *: 103, \
-        cuo_modding_types_ui_tooltip_serial_t *: 104, \
-        cuo_modding_types_world_map_marker_t *: 105,
+        cuo_modding_types_server_selection_info_event_t *: 101, \
+        cuo_modding_types_masked_text_t *: 102, \
+        cuo_modding_types_ui_tooltip_serial_t *: 103, \
+        cuo_modding_types_world_map_marker_t *: 104,
 
 #endif

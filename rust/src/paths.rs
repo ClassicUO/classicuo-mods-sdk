@@ -230,8 +230,6 @@ pub mod scene {
     pub const LOGIN_ERROR: &str = "cuo:scene/login-error";
     /// `cuo:scene/login-error-info` — event.
     pub const LOGIN_ERROR_INFO: &str = "cuo:scene/login-error-info";
-    /// `cuo:scene/login-request` — event.
-    pub const LOGIN_REQUEST: &str = "cuo:scene/login-request";
     /// `cuo:scene/server-list` — event.
     pub const SERVER_LIST: &str = "cuo:scene/server-list";
     /// `cuo:scene/server-selection` — component.

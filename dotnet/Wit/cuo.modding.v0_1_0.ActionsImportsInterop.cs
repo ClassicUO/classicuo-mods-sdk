@@ -92,6 +92,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
             public static extern void wasmImportWalkTo(int p0, int p1, int p2);
         }
 
+        public static class WalkToWithinWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/actions@0.1.0", EntryPoint = "walk-to-within"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportWalkToWithin(int p0, int p1, int p2, int p3);
+        }
+
         public static class CancelWalkToWasmInterop
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/actions@0.1.0", EntryPoint = "cancel-walk-to"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
@@ -378,6 +384,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/actions@0.1.0", EntryPoint = "logout"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
             public static extern void wasmImportLogout();
+        }
+
+        public static class SetWindowTitleWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/actions@0.1.0", EntryPoint = "set-window-title"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetWindowTitle(nint p0, int p1);
         }
 
     }

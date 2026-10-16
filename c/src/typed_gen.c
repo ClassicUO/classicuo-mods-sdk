@@ -274,8 +274,6 @@ static void to_LoginErrorInfo(cuo_modding_types_login_error_info_t *w, const cuo
 static void from_LoginErrorInfo(cuo_LoginErrorInfo *o, const cuo_modding_types_login_error_info_t *w);
 static void to_LoginErrorsInfoEvent(cuo_modding_types_login_errors_info_event_t *w, const cuo_LoginErrorsInfoEvent *v);
 static void from_LoginErrorsInfoEvent(cuo_LoginErrorsInfoEvent *o, const cuo_modding_types_login_errors_info_event_t *w);
-static void to_OnLoginRequest(cuo_modding_types_on_login_request_t *w, const cuo_OnLoginRequest *v);
-static void from_OnLoginRequest(cuo_OnLoginRequest *o, const cuo_modding_types_on_login_request_t *w);
 static void to_ServerInfo(cuo_modding_types_server_info_t *w, const cuo_ServerInfo *v);
 static void from_ServerInfo(cuo_ServerInfo *o, const cuo_modding_types_server_info_t *w);
 static void to_ServerSelectionInfoEvent(cuo_modding_types_server_selection_info_event_t *w, const cuo_ServerSelectionInfoEvent *v);
@@ -2757,22 +2755,6 @@ static void to_LoginErrorsInfoEvent(cuo_modding_types_login_errors_info_event_t 
 static void from_LoginErrorsInfoEvent(cuo_LoginErrorsInfoEvent *o, const cuo_modding_types_login_errors_info_event_t *w)
 {
     from_LoginErrorInfo(&o->error, &w->error);
-}
-
-static void to_OnLoginRequest(cuo_modding_types_on_login_request_t *w, const cuo_OnLoginRequest *v)
-{
-    w->username = cuo__wstr_copy(v->username);
-    w->password = cuo__wstr_copy(v->password);
-    w->address = cuo__wstr_copy(v->address);
-    w->port = v->port;
-}
-
-static void from_OnLoginRequest(cuo_OnLoginRequest *o, const cuo_modding_types_on_login_request_t *w)
-{
-    o->username = cuo_strndup((const char *)w->username.ptr, w->username.len);
-    o->password = cuo_strndup((const char *)w->password.ptr, w->password.len);
-    o->address = cuo_strndup((const char *)w->address.ptr, w->address.len);
-    o->port = w->port;
 }
 
 static void to_ServerInfo(cuo_modding_types_server_info_t *w, const cuo_ServerInfo *v)
@@ -5655,30 +5637,6 @@ static const cuo_LoginErrorsInfoEvent *events_login_error_info(const cuo__params
 const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_events(const cuo_input *in, cuo_param p, size_t *count) { return events_login_error_info(in->params, p, count); }
 const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_login_error_info(ev->params, p, count); }
 
-void cuo_OnLoginRequest_send(cuo_cmds *c, const cuo_OnLoginRequest *v)
-{
-    cuo_modding_types_on_login_request_t w;
-    to_OnLoginRequest(&w, v);
-    cuo_modding_components_send_login_request(cuo__typed_cmds(c), &w);
-}
-static const cuo_OnLoginRequest *events_login_request(const cuo__params *ps, cuo_param p, size_t *count)
-{
-    int32_t h = cuo__events_handle(ps, p);
-    *count = 0;
-    if (h < 0)
-        return NULL;
-    cuo_modding_components_list_on_login_request_t l;
-    cuo_modding_components_read_login_request((cuo_modding_components_borrow_events_t){ h }, &l);
-    cuo_OnLoginRequest *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
-    for (size_t i = 0; i < l.len; i++)
-        from_OnLoginRequest(&out[i], &l.ptr[i]);
-    *count = l.len;
-    cuo_modding_components_list_on_login_request_free(&l);
-    return out;
-}
-const cuo_OnLoginRequest *cuo_OnLoginRequest_events(const cuo_input *in, cuo_param p, size_t *count) { return events_login_request(in->params, p, count); }
-const cuo_OnLoginRequest *cuo_OnLoginRequest_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_login_request(ev->params, p, count); }
-
 void cuo_ServerSelectionInfoEvent_send(cuo_cmds *c, const cuo_ServerSelectionInfoEvent *v)
 {
     cuo_modding_types_server_selection_info_event_t w;
@@ -5829,13 +5787,12 @@ int cuo__trigger_kind(const char *path, const char **record)
     if (strcmp(path, "cuo:scene/login") == 0) return 0;
     if (strcmp(path, "cuo:scene/login-error") == 0) return 0;
     if (strcmp(path, "cuo:scene/login-error-info") == 0) return *record = "login-errors-info-event", 100;
-    if (strcmp(path, "cuo:scene/login-request") == 0) return *record = "on-login-request", 101;
-    if (strcmp(path, "cuo:scene/server-list") == 0) return *record = "server-selection-info-event", 102;
+    if (strcmp(path, "cuo:scene/server-list") == 0) return *record = "server-selection-info-event", 101;
     if (strcmp(path, "cuo:scene/server-selection") == 0) return 0;
-    if (strcmp(path, "cuo:ui/masked-text") == 0) return *record = "masked-text", 103;
+    if (strcmp(path, "cuo:ui/masked-text") == 0) return *record = "masked-text", 102;
     if (strcmp(path, "cuo:ui/read-only-text") == 0) return 0;
-    if (strcmp(path, "cuo:ui/tooltip-serial") == 0) return *record = "ui-tooltip-serial", 104;
-    if (strcmp(path, "cuo:worldmap/marker") == 0) return *record = "world-map-marker", 105;
+    if (strcmp(path, "cuo:ui/tooltip-serial") == 0) return *record = "ui-tooltip-serial", 103;
+    if (strcmp(path, "cuo:worldmap/marker") == 0) return *record = "world-map-marker", 104;
     return -1;
 }
 
@@ -6285,29 +6242,23 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 101: {
-        cuo_OnLoginRequest *o = cuo_alloc(sizeof *o);
-        from_OnLoginRequest(o, rec);
-        cuo_modding_types_on_login_request_free(rec);
-        return o;
-    }
-    case 102: {
         cuo_ServerSelectionInfoEvent *o = cuo_alloc(sizeof *o);
         from_ServerSelectionInfoEvent(o, rec);
         cuo_modding_types_server_selection_info_event_free(rec);
         return o;
     }
-    case 103: {
+    case 102: {
         cuo_MaskedText *o = cuo_alloc(sizeof *o);
         from_MaskedText(o, rec);
         cuo_modding_types_masked_text_free(rec);
         return o;
     }
-    case 104: {
+    case 103: {
         cuo_UiTooltipSerial *o = cuo_alloc(sizeof *o);
         from_UiTooltipSerial(o, rec);
         return o;
     }
-    case 105: {
+    case 104: {
         cuo_WorldMapMarker *o = cuo_alloc(sizeof *o);
         from_WorldMapMarker(o, rec);
         cuo_modding_types_world_map_marker_free(rec);
@@ -6402,8 +6353,7 @@ const cuo_TradeWindow *cuo_TradeWindow_obs_value(const cuo_obs *ev) { return ev-
 const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_value(const cuo_obs *ev) { return ev->value_kind == 98 ? ev->value : NULL; }
 const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 99 ? ev->value : NULL; }
 const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 100 ? ev->value : NULL; }
-const cuo_OnLoginRequest *cuo_OnLoginRequest_obs_value(const cuo_obs *ev) { return ev->value_kind == 101 ? ev->value : NULL; }
-const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 102 ? ev->value : NULL; }
-const cuo_MaskedText *cuo_MaskedText_obs_value(const cuo_obs *ev) { return ev->value_kind == 103 ? ev->value : NULL; }
-const cuo_UiTooltipSerial *cuo_UiTooltipSerial_obs_value(const cuo_obs *ev) { return ev->value_kind == 104 ? ev->value : NULL; }
-const cuo_WorldMapMarker *cuo_WorldMapMarker_obs_value(const cuo_obs *ev) { return ev->value_kind == 105 ? ev->value : NULL; }
+const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 101 ? ev->value : NULL; }
+const cuo_MaskedText *cuo_MaskedText_obs_value(const cuo_obs *ev) { return ev->value_kind == 102 ? ev->value : NULL; }
+const cuo_UiTooltipSerial *cuo_UiTooltipSerial_obs_value(const cuo_obs *ev) { return ev->value_kind == 103 ? ev->value : NULL; }
+const cuo_WorldMapMarker *cuo_WorldMapMarker_obs_value(const cuo_obs *ev) { return ev->value_kind == 104 ? ev->value : NULL; }

@@ -81,7 +81,6 @@ pub(crate) const TYPED_TRIGGERS: &[TypedTrigger] = &[
     TypedTrigger { sdk: "NoPickup", wit: "", rust: "", flat: &[] },
     TypedTrigger { sdk: "Node", wit: "node", rust: "Node", flat: &["i32", "i32", "i32", "i32", "i32", "i32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "i32", "f32", "f32"] },
     TypedTrigger { sdk: "Notoriety", wit: "notoriety", rust: "Notoriety", flat: &["i32"] },
-    TypedTrigger { sdk: "OnLoginRequest", wit: "on-login-request", rust: "OnLoginRequest", flat: &["*mut u8", "usize", "*mut u8", "usize", "*mut u8", "usize", "i32"] },
     TypedTrigger { sdk: "OptionsWindow", wit: "", rust: "", flat: &[] },
     TypedTrigger { sdk: "PaperdollWindow", wit: "paperdoll-window", rust: "PaperdollWindow", flat: &["i32", "i32", "i32", "i32"] },
     TypedTrigger { sdk: "PartyInviteWindow", wit: "party-invite-window", rust: "PartyInviteWindow", flat: &["i32"] },

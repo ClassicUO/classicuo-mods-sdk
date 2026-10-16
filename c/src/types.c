@@ -89,7 +89,6 @@ uint16_t cuo_MouseInputDto_id(void) { TYPE_ID(cuo_MouseInputDto_PATH); }
 uint16_t cuo_NetworkSerial_id(void) { TYPE_ID(cuo_NetworkSerial_PATH); }
 uint16_t cuo_Node_id(void) { TYPE_ID(cuo_Node_PATH); }
 uint16_t cuo_Notoriety_id(void) { TYPE_ID(cuo_Notoriety_PATH); }
-uint16_t cuo_OnLoginRequest_id(void) { TYPE_ID(cuo_OnLoginRequest_PATH); }
 uint16_t cuo_OptionsWindow_id(void) { TYPE_ID(cuo_OptionsWindow_PATH); }
 uint16_t cuo_PaperdollWindow_id(void) { TYPE_ID(cuo_PaperdollWindow_PATH); }
 uint16_t cuo_PartyDto_id(void) { TYPE_ID(cuo_PartyDto_PATH); }

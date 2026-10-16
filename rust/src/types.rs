@@ -1280,19 +1280,6 @@ pub mod notoriety_flag {
     pub const INVULNERABLE: super::NotorietyFlag = 7;
 }
 
-/// `cuo:scene/login-request`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct OnLoginRequest {
-    pub username: String,
-    pub password: String,
-    pub address: String,
-    pub port: u16,
-}
-impl HasPath for OnLoginRequest {
-    const PATH: &'static str = paths::scene::LOGIN_REQUEST;
-}
-
 /// Nested payload type (`ClassicUO.Ecs.Modding.OplLineDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]

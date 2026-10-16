@@ -1807,18 +1807,6 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
             public static extern void wasmImportReadLoginErrorInfo(int p0, nint p1);
         }
 
-        public static class SendLoginRequestWasmInterop
-        {
-            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "send-login-request"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-            public static extern void wasmImportSendLoginRequest(int p0, nint p1, int p2, nint p3, int p4, nint p5, int p6, int p7);
-        }
-
-        public static class ReadLoginRequestWasmInterop
-        {
-            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "read-login-request"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-            public static extern void wasmImportReadLoginRequest(int p0, nint p1);
-        }
-
         public static class SendServerListWasmInterop
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "send-server-list"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]

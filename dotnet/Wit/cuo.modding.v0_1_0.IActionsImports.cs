@@ -284,6 +284,12 @@ internal interface IActionsImports {
 
     }
 
+    internal static unsafe void WalkToWithin(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IActionsImports.Point at, uint distance)
+    {
+        ActionsImportsInterop.WalkToWithinWasmInterop.wasmImportWalkToWithin(at.x, at.y, at.z, unchecked((int)(distance)));
+
+    }
+
     internal static unsafe void CancelWalkTo()
     {
         ActionsImportsInterop.CancelWalkToWasmInterop.wasmImportCancelWalkTo();
@@ -919,6 +925,25 @@ internal interface IActionsImports {
     internal static unsafe void Logout()
     {
         ActionsImportsInterop.LogoutWasmInterop.wasmImportLogout();
+
+    }
+
+    internal static unsafe void SetWindowTitle(string title)
+    {
+        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
+
+        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(title);
+        var length = utf8Bytes.Length;
+        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
+        var strPtr = gcHandle.AddrOfPinnedObject();
+
+        cleanups.Add(()=> gcHandle.Free());
+        ActionsImportsInterop.SetWindowTitleWasmInterop.wasmImportSetWindowTitle(strPtr.ToInt32(), length);
+
+        foreach (var cleanup in cleanups)
+        {
+            cleanup();
+        }
 
     }
 

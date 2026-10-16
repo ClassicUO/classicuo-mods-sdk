@@ -247,8 +247,6 @@ public static class Paths
         public const string LoginError = "cuo:scene/login-error";
         /// <summary><c>cuo:scene/login-error-info</c> — event.</summary>
         public const string LoginErrorInfo = "cuo:scene/login-error-info";
-        /// <summary><c>cuo:scene/login-request</c> — event.</summary>
-        public const string LoginRequest = "cuo:scene/login-request";
         /// <summary><c>cuo:scene/server-list</c> — event.</summary>
         public const string ServerList = "cuo:scene/server-list";
         /// <summary><c>cuo:scene/server-selection</c> — component.</summary>
