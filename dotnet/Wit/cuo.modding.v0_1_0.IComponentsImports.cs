@@ -342,6 +342,15 @@ internal interface IComponentsImports {
 
         }
 
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Anchorable(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Anchorable v)
+        {
+            var handle = this.Handle;
+            var result =  ComponentsImportsInterop.EntityBuilder.AnchorableWasmInterop.wasmImportAnchorable(handle, (int)v.kind);
+            var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
+            return resource;
+
+        }
+
         internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder BorderColor(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.BorderColor v)
         {
             var handle = this.Handle;
@@ -2169,6 +2178,36 @@ internal interface IComponentsImports {
             global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
         }
         return array;
+
+    }
+
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Anchorable> ColumnAnchorable(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    {
+        var handle = q.Handle;
+
+        var retArea = stackalloc uint[3];
+        var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
+        ComponentsImportsInterop.ColumnAnchorableWasmInterop.wasmImportColumnAnchorable(handle, term, ptr);
+
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Anchorable>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 1);
+
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Anchorable (
+            (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.AnchorKind)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0]));
+        }
+
+        if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
+            global::System.Runtime.InteropServices.NativeMemory.Free((void*)new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0]);
+        }
+        return array;
+
+    }
+
+    internal static unsafe void SetAnchorable(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Anchorable v)
+    {
+        var handle = q.Handle;
+        ComponentsImportsInterop.SetAnchorableWasmInterop.wasmImportSetAnchorable(handle, unchecked((long)(e)), term, (int)v.kind);
 
     }
 

@@ -104,6 +104,7 @@
 #define CUO_PATH_SCENE_SERVER_SELECTION "cuo:scene/server-selection" /* component */
 #define CUO_PATH_TARGET_LOCAL_RESULT "cuo:target/local-result" /* event */
 #define CUO_PATH_TARGET_STATE "cuo:target/state" /* resource */
+#define CUO_PATH_UI_ANCHORABLE "cuo:ui/anchorable" /* component */
 #define CUO_PATH_UI_BG_COLOR "cuo:ui/bg-color" /* component */
 #define CUO_PATH_UI_BORDER_COLOR "cuo:ui/border-color" /* component */
 #define CUO_PATH_UI_BORDER_RADIUS "cuo:ui/border-radius" /* component */

@@ -1023,6 +1023,14 @@ interface types {
         local-cancelled: bool,
     }
 
+    /// `AnchorKind`
+    enum anchor-kind { spell, healthbar }
+
+    /// `cuo:ui/anchorable`
+    record anchorable {
+        kind: anchor-kind,
+    }
+
     /// `cuo:ui/border-color`
     record border-color {
         r: f32,
@@ -1602,7 +1610,7 @@ interface types {
 /// signature when it binds it.
 interface components {
     use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity};
-    use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, server-selection-info-event, clipboard-set, focused-input, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial, world-map-marker};
+    use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, anchorable, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, server-selection-info-event, clipboard-set, focused-input, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial, world-map-marker};
 
     /// Inserts components on one entity, chained: each method queues one insert and
     /// returns a new builder for the same entity.
@@ -1659,6 +1667,8 @@ interface components {
         health-bar: func(v: health-bar-window) -> entity-builder;
         /// Inserts `cuo:player/player`.
         player: func() -> entity-builder;
+        /// Inserts `cuo:ui/anchorable`.
+        anchorable: func(v: anchorable) -> entity-builder;
         /// Inserts `cuo:ui/border-color`.
         border-color: func(v: border-color) -> entity-builder;
         /// Inserts `cuo:ui/button`.
@@ -1953,6 +1963,12 @@ interface components {
     /// `cuo:player/stat-locks` of every matched entity, aligned with `query.entities`. Traps unless
     /// reading term `term` is `cuo:player/stat-locks`.
     column-stat-locks: func(q: borrow<query>, term: u8) -> list<stat-locks>;
+
+    /// `cuo:ui/anchorable` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:ui/anchorable`.
+    column-anchorable: func(q: borrow<query>, term: u8) -> list<anchorable>;
+    /// Writes `cuo:ui/anchorable` back through the `mut` reading term `term`.
+    set-anchorable: func(q: borrow<query>, e: entity, term: u8, v: anchorable);
 
     /// `cuo:ui/border-color` of every matched entity, aligned with `query.entities`. Traps unless
     /// reading term `term` is `cuo:ui/border-color`.

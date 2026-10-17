@@ -19,6 +19,10 @@ impl Val {
     pub fn percent(v: f32) -> Val {
         Val { type_: crate::types::val_type::PERCENT, value: v, is_auto: false }
     }
+    /// Takes the free space left on the parent's main axis (flex-grow).
+    pub fn grow() -> Val {
+        Val { type_: crate::types::val_type::GROW, value: 0.0, is_auto: false }
+    }
 }
 
 impl UiRect {

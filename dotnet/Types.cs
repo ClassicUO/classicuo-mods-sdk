@@ -26,6 +26,23 @@ public partial struct Amount
     public int Value;
 }
 
+/// <remarks><c>ClassicUO.Ecs.AnchorKind</c> — crosses the boundary as a number.</remarks>
+public enum AnchorKind : byte
+{
+    Spell = 0,
+    Healthbar = 1,
+}
+
+/// <summary><c>cuo:ui/anchorable</c></summary>
+public partial struct Anchorable
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/anchorable";
+
+    /// <summary>enum AnchorKind (0=Spell, 1=Healthbar)</summary>
+    public AnchorKind Kind;
+}
+
 /// <summary><c>cuo:ent/auto-opened-corpse</c>
 /// <para>Zero-size tag: no value crosses, only its presence.</para>
 /// </summary>
@@ -2244,6 +2261,7 @@ public static class TypePaths
     private static readonly System.Collections.Generic.Dictionary<System.Type, string> Map = new()
     {
         [typeof(Amount)] = "cuo:ent/amount",
+        [typeof(Anchorable)] = "cuo:ui/anchorable",
         [typeof(AutoOpenedCorpse)] = "cuo:ent/auto-opened-corpse",
         [typeof(BackgroundColor)] = "cuo:ui/bg-color",
         [typeof(BookWindow)] = "cuo:gump/book",

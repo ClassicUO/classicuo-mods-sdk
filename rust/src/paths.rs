@@ -244,6 +244,8 @@ pub mod target {
 }
 
 pub mod ui {
+    /// `cuo:ui/anchorable` — component.
+    pub const ANCHORABLE: &str = "cuo:ui/anchorable";
     /// `cuo:ui/bg-color` — component.
     pub const BG_COLOR: &str = "cuo:ui/bg-color";
     /// `cuo:ui/border-color` — component.

@@ -158,6 +158,8 @@ static void to_LocalTargetResultEvent(cuo_modding_types_local_target_result_even
 static void from_LocalTargetResultEvent(cuo_LocalTargetResultEvent *o, const cuo_modding_types_local_target_result_event_t *w);
 static void to_TargetingState(cuo_modding_types_targeting_state_t *w, const cuo_TargetingState *v);
 static void from_TargetingState(cuo_TargetingState *o, const cuo_modding_types_targeting_state_t *w);
+static void to_Anchorable(cuo_modding_types_anchorable_t *w, const cuo_Anchorable *v);
+static void from_Anchorable(cuo_Anchorable *o, const cuo_modding_types_anchorable_t *w);
 static void to_BorderColor(cuo_modding_types_border_color_t *w, const cuo_BorderColorDto *v);
 static void from_BorderColor(cuo_BorderColorDto *o, const cuo_modding_types_border_color_t *w);
 static void to_UoButton(cuo_modding_types_uo_button_t *w, const cuo_UOButton *v);
@@ -1707,6 +1709,16 @@ static void from_TargetingState(cuo_TargetingState *o, const cuo_modding_types_t
     o->local_cancelled = w->local_cancelled;
 }
 
+static void to_Anchorable(cuo_modding_types_anchorable_t *w, const cuo_Anchorable *v)
+{
+    w->kind = (uint32_t)(v->kind) < 2u ? (v->kind) : 0;
+}
+
+static void from_Anchorable(cuo_Anchorable *o, const cuo_modding_types_anchorable_t *w)
+{
+    o->kind = w->kind;
+}
+
 static void to_BorderColor(cuo_modding_types_border_color_t *w, const cuo_BorderColorDto *v)
 {
     w->r = v->r;
@@ -3044,238 +3056,244 @@ cuo_comp cuo_HealthBarWindow_comp(const cuo_HealthBarWindow *v)
     return cuo__comp(cuo_HealthBarWindow_id(), 24, w);
 }
 cuo_comp cuo_Player_comp(void) { return cuo__comp(cuo_Player_id(), 25, NULL); }
+cuo_comp cuo_Anchorable_comp(const cuo_Anchorable *v)
+{
+    cuo_modding_types_anchorable_t *w = cuo_alloc(sizeof *w);
+    to_Anchorable(w, v);
+    return cuo__comp(cuo_Anchorable_id(), 26, w);
+}
 cuo_comp cuo_BorderColorDto_comp(const cuo_BorderColorDto *v)
 {
     cuo_modding_types_border_color_t *w = cuo_alloc(sizeof *w);
     to_BorderColor(w, v);
-    return cuo__comp(cuo_BorderColorDto_id(), 26, w);
+    return cuo__comp(cuo_BorderColorDto_id(), 27, w);
 }
 cuo_comp cuo_UOButton_comp(const cuo_UOButton *v)
 {
     cuo_modding_types_uo_button_t *w = cuo_alloc(sizeof *w);
     to_UoButton(w, v);
-    return cuo__comp(cuo_UOButton_id(), 27, w);
+    return cuo__comp(cuo_UOButton_id(), 28, w);
 }
 cuo_comp cuo_ContainerItemUI_comp(const cuo_ContainerItemUI *v)
 {
     cuo_modding_types_container_item_ui_t *w = cuo_alloc(sizeof *w);
     to_ContainerItemUi(w, v);
-    return cuo__comp(cuo_ContainerItemUI_id(), 28, w);
+    return cuo__comp(cuo_ContainerItemUI_id(), 29, w);
 }
-cuo_comp cuo_UiContainsByBounds_comp(void) { return cuo__comp(cuo_UiContainsByBounds_id(), 29, NULL); }
+cuo_comp cuo_UiContainsByBounds_comp(void) { return cuo__comp(cuo_UiContainsByBounds_id(), 30, NULL); }
 cuo_comp cuo_UiCustomDto_comp(const cuo_UiCustomDto *v)
 {
     cuo_modding_types_ui_custom_t *w = cuo_alloc(sizeof *w);
     to_UiCustom(w, v);
-    return cuo__comp(cuo_UiCustomDto_id(), 30, w);
+    return cuo__comp(cuo_UiCustomDto_id(), 31, w);
 }
 cuo_comp cuo_EditableText_comp(const cuo_EditableText *v)
 {
     cuo_modding_types_editable_text_t *w = cuo_alloc(sizeof *w);
     to_EditableText(w, v);
-    return cuo__comp(cuo_EditableText_id(), 31, w);
+    return cuo__comp(cuo_EditableText_id(), 32, w);
 }
 cuo_comp cuo_UiHoverTint_comp(const cuo_UiHoverTint *v)
 {
     cuo_modding_types_ui_hover_tint_t *w = cuo_alloc(sizeof *w);
     to_UiHoverTint(w, v);
-    return cuo__comp(cuo_UiHoverTint_id(), 32, w);
+    return cuo__comp(cuo_UiHoverTint_id(), 33, w);
 }
-cuo_comp cuo_UiMovableNoDrag_comp(void) { return cuo__comp(cuo_UiMovableNoDrag_id(), 33, NULL); }
+cuo_comp cuo_UiMovableNoDrag_comp(void) { return cuo__comp(cuo_UiMovableNoDrag_id(), 34, NULL); }
 cuo_comp cuo_UiName_comp(const cuo_UiName *v)
 {
     cuo_modding_types_ui_name_t *w = cuo_alloc(sizeof *w);
     to_UiName(w, v);
-    return cuo__comp(cuo_UiName_id(), 34, w);
+    return cuo__comp(cuo_UiName_id(), 35, w);
 }
-cuo_comp cuo_UiNoBlur_comp(void) { return cuo__comp(cuo_UiNoBlur_id(), 35, NULL); }
-cuo_comp cuo_GridPinnedCell_comp(void) { return cuo__comp(cuo_GridPinnedCell_id(), 36, NULL); }
-cuo_comp cuo_UiNoRightClickClose_comp(void) { return cuo__comp(cuo_UiNoRightClickClose_id(), 37, NULL); }
-cuo_comp cuo_OptionsWindow_comp(void) { return cuo__comp(cuo_OptionsWindow_id(), 38, NULL); }
-cuo_comp cuo_UiPopup_comp(void) { return cuo__comp(cuo_UiPopup_id(), 39, NULL); }
+cuo_comp cuo_UiNoBlur_comp(void) { return cuo__comp(cuo_UiNoBlur_id(), 36, NULL); }
+cuo_comp cuo_GridPinnedCell_comp(void) { return cuo__comp(cuo_GridPinnedCell_id(), 37, NULL); }
+cuo_comp cuo_UiNoRightClickClose_comp(void) { return cuo__comp(cuo_UiNoRightClickClose_id(), 38, NULL); }
+cuo_comp cuo_OptionsWindow_comp(void) { return cuo__comp(cuo_OptionsWindow_id(), 39, NULL); }
+cuo_comp cuo_UiPopup_comp(void) { return cuo__comp(cuo_UiPopup_id(), 40, NULL); }
 cuo_comp cuo_UiResizable_comp(const cuo_UiResizable *v)
 {
     cuo_modding_types_ui_resizable_t *w = cuo_alloc(sizeof *w);
     to_UiResizable(w, v);
-    return cuo__comp(cuo_UiResizable_id(), 40, w);
+    return cuo__comp(cuo_UiResizable_id(), 41, w);
 }
 cuo_comp cuo_ScrollPosition_comp(const cuo_ScrollPosition *v)
 {
     cuo_modding_types_scroll_position_t *w = cuo_alloc(sizeof *w);
     to_ScrollPosition(w, v);
-    return cuo__comp(cuo_ScrollPosition_id(), 41, w);
+    return cuo__comp(cuo_ScrollPosition_id(), 42, w);
 }
 cuo_comp cuo_UiScrollbar_comp(const cuo_UiScrollbar *v)
 {
     cuo_modding_types_ui_scrollbar_t *w = cuo_alloc(sizeof *w);
     to_UiScrollbar(w, v);
-    return cuo__comp(cuo_UiScrollbar_id(), 42, w);
+    return cuo__comp(cuo_UiScrollbar_id(), 43, w);
 }
 cuo_comp cuo_StatLockButton_comp(const cuo_StatLockButton *v)
 {
     cuo_modding_types_stat_lock_button_t *w = cuo_alloc(sizeof *w);
     to_StatLockButton(w, v);
-    return cuo__comp(cuo_StatLockButton_id(), 43, w);
+    return cuo__comp(cuo_StatLockButton_id(), 44, w);
 }
 cuo_comp cuo_StatusBarWindow_comp(const cuo_StatusBarWindow *v)
 {
     cuo_modding_types_status_bar_window_t *w = cuo_alloc(sizeof *w);
     to_StatusBarWindow(w, v);
-    return cuo__comp(cuo_StatusBarWindow_id(), 44, w);
+    return cuo__comp(cuo_StatusBarWindow_id(), 45, w);
 }
 cuo_comp cuo_ModSupersedes_comp(const cuo_ModSupersedes *v)
 {
     cuo_modding_types_mod_supersedes_t *w = cuo_alloc(sizeof *w);
     to_ModSupersedes(w, v);
-    return cuo__comp(cuo_ModSupersedes_id(), 45, w);
+    return cuo__comp(cuo_ModSupersedes_id(), 46, w);
 }
 cuo_comp cuo_TextHue_comp(const cuo_TextHue *v)
 {
     cuo_modding_types_text_hue_t *w = cuo_alloc(sizeof *w);
     to_TextHue(w, v);
-    return cuo__comp(cuo_TextHue_id(), 46, w);
+    return cuo__comp(cuo_TextHue_id(), 47, w);
 }
-cuo_comp cuo_TextInput_comp(void) { return cuo__comp(cuo_TextInput_id(), 47, NULL); }
+cuo_comp cuo_TextInput_comp(void) { return cuo__comp(cuo_TextInput_id(), 48, NULL); }
 cuo_comp cuo_TextSpans_comp(const cuo_TextSpans *v)
 {
     cuo_modding_types_text_spans_t *w = cuo_alloc(sizeof *w);
     to_TextSpans(w, v);
-    return cuo__comp(cuo_TextSpans_id(), 48, w);
+    return cuo__comp(cuo_TextSpans_id(), 49, w);
 }
 cuo_comp cuo_TextWrap_comp(const cuo_TextWrap *v)
 {
     cuo_modding_types_text_wrap_t *w = cuo_alloc(sizeof *w);
     to_TextWrap(w, v);
-    return cuo__comp(cuo_TextWrap_id(), 49, w);
+    return cuo__comp(cuo_TextWrap_id(), 50, w);
 }
 cuo_comp cuo_UiTooltip_comp(const cuo_UiTooltip *v)
 {
     cuo_modding_types_ui_tooltip_t *w = cuo_alloc(sizeof *w);
     to_UiTooltip(w, v);
-    return cuo__comp(cuo_UiTooltip_id(), 50, w);
+    return cuo__comp(cuo_UiTooltip_id(), 51, w);
 }
-cuo_comp cuo_TopBarDragHandle_comp(void) { return cuo__comp(cuo_TopBarDragHandle_id(), 51, NULL); }
-cuo_comp cuo_TopBarButton_comp(void) { return cuo__comp(cuo_TopBarButton_id(), 52, NULL); }
-cuo_comp cuo_TopBarFull_comp(void) { return cuo__comp(cuo_TopBarFull_id(), 53, NULL); }
-cuo_comp cuo_IsTopBar_comp(void) { return cuo__comp(cuo_IsTopBar_id(), 54, NULL); }
-cuo_comp cuo_BuffGumpUI_comp(void) { return cuo__comp(cuo_BuffGumpUI_id(), 55, NULL); }
+cuo_comp cuo_TopBarDragHandle_comp(void) { return cuo__comp(cuo_TopBarDragHandle_id(), 52, NULL); }
+cuo_comp cuo_TopBarButton_comp(void) { return cuo__comp(cuo_TopBarButton_id(), 53, NULL); }
+cuo_comp cuo_TopBarFull_comp(void) { return cuo__comp(cuo_TopBarFull_id(), 54, NULL); }
+cuo_comp cuo_IsTopBar_comp(void) { return cuo__comp(cuo_IsTopBar_id(), 55, NULL); }
+cuo_comp cuo_BuffGumpUI_comp(void) { return cuo__comp(cuo_BuffGumpUI_id(), 56, NULL); }
 cuo_comp cuo_CombatBookWindow_comp(const cuo_CombatBookWindow *v)
 {
     cuo_modding_types_combat_book_window_t *w = cuo_alloc(sizeof *w);
     to_CombatBookWindow(w, v);
-    return cuo__comp(cuo_CombatBookWindow_id(), 56, w);
+    return cuo__comp(cuo_CombatBookWindow_id(), 57, w);
 }
 cuo_comp cuo_HouseDesignWindow_comp(const cuo_HouseDesignWindow *v)
 {
     cuo_modding_types_house_design_window_t *w = cuo_alloc(sizeof *w);
     to_HouseDesignWindow(w, v);
-    return cuo__comp(cuo_HouseDesignWindow_id(), 57, w);
+    return cuo__comp(cuo_HouseDesignWindow_id(), 58, w);
 }
 cuo_comp cuo_JournalWindow_comp(const cuo_JournalWindow *v)
 {
     cuo_modding_types_journal_window_t *w = cuo_alloc(sizeof *w);
     to_JournalWindow(w, v);
-    return cuo__comp(cuo_JournalWindow_id(), 58, w);
+    return cuo__comp(cuo_JournalWindow_id(), 59, w);
 }
-cuo_comp cuo_LogoutGumpWindow_comp(void) { return cuo__comp(cuo_LogoutGumpWindow_id(), 59, NULL); }
+cuo_comp cuo_LogoutGumpWindow_comp(void) { return cuo__comp(cuo_LogoutGumpWindow_id(), 60, NULL); }
 cuo_comp cuo_MenuGumpWindow_comp(const cuo_MenuGumpWindow *v)
 {
     cuo_modding_types_menu_gump_window_t *w = cuo_alloc(sizeof *w);
     to_MenuGumpWindow(w, v);
-    return cuo__comp(cuo_MenuGumpWindow_id(), 60, w);
+    return cuo__comp(cuo_MenuGumpWindow_id(), 61, w);
 }
-cuo_comp cuo_MessageBoxWindow_comp(void) { return cuo__comp(cuo_MessageBoxWindow_id(), 61, NULL); }
+cuo_comp cuo_MessageBoxWindow_comp(void) { return cuo__comp(cuo_MessageBoxWindow_id(), 62, NULL); }
 cuo_comp cuo_MiniMapWindow_comp(const cuo_MiniMapWindow *v)
 {
     cuo_modding_types_mini_map_window_t *w = cuo_alloc(sizeof *w);
     to_MiniMapWindow(w, v);
-    return cuo__comp(cuo_MiniMapWindow_id(), 62, w);
+    return cuo__comp(cuo_MiniMapWindow_id(), 63, w);
 }
 cuo_comp cuo_PaperdollWindow_comp(const cuo_PaperdollWindow *v)
 {
     cuo_modding_types_paperdoll_window_t *w = cuo_alloc(sizeof *w);
     to_PaperdollWindow(w, v);
-    return cuo__comp(cuo_PaperdollWindow_id(), 63, w);
+    return cuo__comp(cuo_PaperdollWindow_id(), 64, w);
 }
 cuo_comp cuo_PartyInviteWindow_comp(const cuo_PartyInviteWindow *v)
 {
     cuo_modding_types_party_invite_window_t *w = cuo_alloc(sizeof *w);
     to_PartyInviteWindow(w, v);
-    return cuo__comp(cuo_PartyInviteWindow_id(), 64, w);
+    return cuo__comp(cuo_PartyInviteWindow_id(), 65, w);
 }
 cuo_comp cuo_PartyManifestWindow_comp(const cuo_PartyManifestWindow *v)
 {
     cuo_modding_types_party_manifest_window_t *w = cuo_alloc(sizeof *w);
     to_PartyManifestWindow(w, v);
-    return cuo__comp(cuo_PartyManifestWindow_id(), 65, w);
+    return cuo__comp(cuo_PartyManifestWindow_id(), 66, w);
 }
 cuo_comp cuo_ProfileWindow_comp(const cuo_ProfileWindow *v)
 {
     cuo_modding_types_profile_window_t *w = cuo_alloc(sizeof *w);
     to_ProfileWindow(w, v);
-    return cuo__comp(cuo_ProfileWindow_id(), 66, w);
+    return cuo__comp(cuo_ProfileWindow_id(), 67, w);
 }
 cuo_comp cuo_RacialBookWindow_comp(const cuo_RacialBookWindow *v)
 {
     cuo_modding_types_racial_book_window_t *w = cuo_alloc(sizeof *w);
     to_RacialBookWindow(w, v);
-    return cuo__comp(cuo_RacialBookWindow_id(), 67, w);
+    return cuo__comp(cuo_RacialBookWindow_id(), 68, w);
 }
 cuo_comp cuo_SkillsWindow_comp(const cuo_SkillsWindow *v)
 {
     cuo_modding_types_skills_window_t *w = cuo_alloc(sizeof *w);
     to_SkillsWindow(w, v);
-    return cuo__comp(cuo_SkillsWindow_id(), 68, w);
+    return cuo__comp(cuo_SkillsWindow_id(), 69, w);
 }
 cuo_comp cuo_SpellbookWindow_comp(const cuo_SpellbookWindow *v)
 {
     cuo_modding_types_spellbook_window_t *w = cuo_alloc(sizeof *w);
     to_SpellbookWindow(w, v);
-    return cuo__comp(cuo_SpellbookWindow_id(), 69, w);
+    return cuo__comp(cuo_SpellbookWindow_id(), 70, w);
 }
 cuo_comp cuo_SplitMenuWindow_comp(const cuo_SplitMenuWindow *v)
 {
     cuo_modding_types_split_menu_window_t *w = cuo_alloc(sizeof *w);
     to_SplitMenuWindow(w, v);
-    return cuo__comp(cuo_SplitMenuWindow_id(), 70, w);
+    return cuo__comp(cuo_SplitMenuWindow_id(), 71, w);
 }
 cuo_comp cuo_TipNoticeWindow_comp(const cuo_TipNoticeWindow *v)
 {
     cuo_modding_types_tip_notice_window_t *w = cuo_alloc(sizeof *w);
     to_TipNoticeWindow(w, v);
-    return cuo__comp(cuo_TipNoticeWindow_id(), 71, w);
+    return cuo__comp(cuo_TipNoticeWindow_id(), 72, w);
 }
 cuo_comp cuo_TradeWindow_comp(const cuo_TradeWindow *v)
 {
     cuo_modding_types_trade_window_t *w = cuo_alloc(sizeof *w);
     to_TradeWindow(w, v);
-    return cuo__comp(cuo_TradeWindow_id(), 72, w);
+    return cuo__comp(cuo_TradeWindow_id(), 73, w);
 }
-cuo_comp cuo_WorldMapWindow_comp(void) { return cuo__comp(cuo_WorldMapWindow_id(), 73, NULL); }
-cuo_comp cuo_CharCreationScene_comp(void) { return cuo__comp(cuo_CharCreationScene_id(), 74, NULL); }
-cuo_comp cuo_CharacterSelectionScene_comp(void) { return cuo__comp(cuo_CharacterSelectionScene_id(), 75, NULL); }
-cuo_comp cuo_GameScene_comp(void) { return cuo__comp(cuo_GameScene_id(), 76, NULL); }
-cuo_comp cuo_LoginScene_comp(void) { return cuo__comp(cuo_LoginScene_id(), 77, NULL); }
-cuo_comp cuo_LoginErrorScene_comp(void) { return cuo__comp(cuo_LoginErrorScene_id(), 78, NULL); }
-cuo_comp cuo_ServerSelectionScene_comp(void) { return cuo__comp(cuo_ServerSelectionScene_id(), 79, NULL); }
+cuo_comp cuo_WorldMapWindow_comp(void) { return cuo__comp(cuo_WorldMapWindow_id(), 74, NULL); }
+cuo_comp cuo_CharCreationScene_comp(void) { return cuo__comp(cuo_CharCreationScene_id(), 75, NULL); }
+cuo_comp cuo_CharacterSelectionScene_comp(void) { return cuo__comp(cuo_CharacterSelectionScene_id(), 76, NULL); }
+cuo_comp cuo_GameScene_comp(void) { return cuo__comp(cuo_GameScene_id(), 77, NULL); }
+cuo_comp cuo_LoginScene_comp(void) { return cuo__comp(cuo_LoginScene_id(), 78, NULL); }
+cuo_comp cuo_LoginErrorScene_comp(void) { return cuo__comp(cuo_LoginErrorScene_id(), 79, NULL); }
+cuo_comp cuo_ServerSelectionScene_comp(void) { return cuo__comp(cuo_ServerSelectionScene_id(), 80, NULL); }
 cuo_comp cuo_MaskedText_comp(const cuo_MaskedText *v)
 {
     cuo_modding_types_masked_text_t *w = cuo_alloc(sizeof *w);
     to_MaskedText(w, v);
-    return cuo__comp(cuo_MaskedText_id(), 80, w);
+    return cuo__comp(cuo_MaskedText_id(), 81, w);
 }
-cuo_comp cuo_ReadOnlyText_comp(void) { return cuo__comp(cuo_ReadOnlyText_id(), 81, NULL); }
+cuo_comp cuo_ReadOnlyText_comp(void) { return cuo__comp(cuo_ReadOnlyText_id(), 82, NULL); }
 cuo_comp cuo_UiTooltipSerial_comp(const cuo_UiTooltipSerial *v)
 {
     cuo_modding_types_ui_tooltip_serial_t *w = cuo_alloc(sizeof *w);
     to_UiTooltipSerial(w, v);
-    return cuo__comp(cuo_UiTooltipSerial_id(), 82, w);
+    return cuo__comp(cuo_UiTooltipSerial_id(), 83, w);
 }
 cuo_comp cuo_WorldMapMarker_comp(const cuo_WorldMapMarker *v)
 {
     cuo_modding_types_world_map_marker_t *w = cuo_alloc(sizeof *w);
     to_WorldMapMarker(w, v);
-    return cuo__comp(cuo_WorldMapMarker_id(), 83, w);
+    return cuo__comp(cuo_WorldMapMarker_id(), 84, w);
 }
 
 cuo__own_eb cuo__typed_push(cuo__borrow_eb b, const cuo_comp *comp)
@@ -3307,64 +3325,65 @@ cuo__own_eb cuo__typed_push(cuo__borrow_eb b, const cuo_comp *comp)
     case 23: return cuo_modding_components_method_entity_builder_grid_loot(b, w);
     case 24: return cuo_modding_components_method_entity_builder_health_bar(b, w);
     case 25: return cuo_modding_components_method_entity_builder_player(b);
-    case 26: return cuo_modding_components_method_entity_builder_border_color(b, w);
-    case 27: return cuo_modding_components_method_entity_builder_button(b, w);
-    case 28: return cuo_modding_components_method_entity_builder_container_item(b, w);
-    case 29: return cuo_modding_components_method_entity_builder_contains_by_bounds(b);
-    case 30: return cuo_modding_components_method_entity_builder_custom(b, w);
-    case 31: return cuo_modding_components_method_entity_builder_editable_text(b, w);
-    case 32: return cuo_modding_components_method_entity_builder_hover_tint(b, w);
-    case 33: return cuo_modding_components_method_entity_builder_movable_no_drag(b);
-    case 34: return cuo_modding_components_method_entity_builder_ui_name(b, w);
-    case 35: return cuo_modding_components_method_entity_builder_no_blur(b);
-    case 36: return cuo_modding_components_method_entity_builder_no_pickup(b);
-    case 37: return cuo_modding_components_method_entity_builder_no_right_click_close(b);
-    case 38: return cuo_modding_components_method_entity_builder_options_window(b);
-    case 39: return cuo_modding_components_method_entity_builder_popup(b);
-    case 40: return cuo_modding_components_method_entity_builder_resizable(b, w);
-    case 41: return cuo_modding_components_method_entity_builder_scroll(b, w);
-    case 42: return cuo_modding_components_method_entity_builder_scrollbar(b, w);
-    case 43: return cuo_modding_components_method_entity_builder_stat_lock_button(b, w);
-    case 44: return cuo_modding_components_method_entity_builder_statusbar_window(b, w);
-    case 45: return cuo_modding_components_method_entity_builder_supersedes(b, w);
-    case 46: return cuo_modding_components_method_entity_builder_text_hue(b, w);
-    case 47: return cuo_modding_components_method_entity_builder_text_input(b);
-    case 48: return cuo_modding_components_method_entity_builder_text_spans(b, w);
-    case 49: return cuo_modding_components_method_entity_builder_text_wrap(b, w);
-    case 50: return cuo_modding_components_method_entity_builder_tooltip(b, w);
-    case 51: return cuo_modding_components_method_entity_builder_topbar_bg(b);
-    case 52: return cuo_modding_components_method_entity_builder_topbar_button(b);
-    case 53: return cuo_modding_components_method_entity_builder_topbar_full(b);
-    case 54: return cuo_modding_components_method_entity_builder_topbar_root(b);
-    case 55: return cuo_modding_components_method_entity_builder_buff(b);
-    case 56: return cuo_modding_components_method_entity_builder_combat_book(b, w);
-    case 57: return cuo_modding_components_method_entity_builder_house_design(b, w);
-    case 58: return cuo_modding_components_method_entity_builder_journal(b, w);
-    case 59: return cuo_modding_components_method_entity_builder_logout(b);
-    case 60: return cuo_modding_components_method_entity_builder_menu(b, w);
-    case 61: return cuo_modding_components_method_entity_builder_message_box(b);
-    case 62: return cuo_modding_components_method_entity_builder_minimap(b, w);
-    case 63: return cuo_modding_components_method_entity_builder_paperdoll(b, w);
-    case 64: return cuo_modding_components_method_entity_builder_party_invite(b, w);
-    case 65: return cuo_modding_components_method_entity_builder_party_manifest(b, w);
-    case 66: return cuo_modding_components_method_entity_builder_profile(b, w);
-    case 67: return cuo_modding_components_method_entity_builder_racial_book(b, w);
-    case 68: return cuo_modding_components_method_entity_builder_gump_skills(b, w);
-    case 69: return cuo_modding_components_method_entity_builder_spellbook(b, w);
-    case 70: return cuo_modding_components_method_entity_builder_split_menu(b, w);
-    case 71: return cuo_modding_components_method_entity_builder_tip_notice(b, w);
-    case 72: return cuo_modding_components_method_entity_builder_trade(b, w);
-    case 73: return cuo_modding_components_method_entity_builder_worldmap(b);
-    case 74: return cuo_modding_components_method_entity_builder_character_creation(b);
-    case 75: return cuo_modding_components_method_entity_builder_character_selection(b);
-    case 76: return cuo_modding_components_method_entity_builder_game(b);
-    case 77: return cuo_modding_components_method_entity_builder_login(b);
-    case 78: return cuo_modding_components_method_entity_builder_login_error(b);
-    case 79: return cuo_modding_components_method_entity_builder_server_selection(b);
-    case 80: return cuo_modding_components_method_entity_builder_masked_text(b, w);
-    case 81: return cuo_modding_components_method_entity_builder_read_only_text(b);
-    case 82: return cuo_modding_components_method_entity_builder_tooltip_serial(b, w);
-    case 83: return cuo_modding_components_method_entity_builder_marker(b, w);
+    case 26: return cuo_modding_components_method_entity_builder_anchorable(b, w);
+    case 27: return cuo_modding_components_method_entity_builder_border_color(b, w);
+    case 28: return cuo_modding_components_method_entity_builder_button(b, w);
+    case 29: return cuo_modding_components_method_entity_builder_container_item(b, w);
+    case 30: return cuo_modding_components_method_entity_builder_contains_by_bounds(b);
+    case 31: return cuo_modding_components_method_entity_builder_custom(b, w);
+    case 32: return cuo_modding_components_method_entity_builder_editable_text(b, w);
+    case 33: return cuo_modding_components_method_entity_builder_hover_tint(b, w);
+    case 34: return cuo_modding_components_method_entity_builder_movable_no_drag(b);
+    case 35: return cuo_modding_components_method_entity_builder_ui_name(b, w);
+    case 36: return cuo_modding_components_method_entity_builder_no_blur(b);
+    case 37: return cuo_modding_components_method_entity_builder_no_pickup(b);
+    case 38: return cuo_modding_components_method_entity_builder_no_right_click_close(b);
+    case 39: return cuo_modding_components_method_entity_builder_options_window(b);
+    case 40: return cuo_modding_components_method_entity_builder_popup(b);
+    case 41: return cuo_modding_components_method_entity_builder_resizable(b, w);
+    case 42: return cuo_modding_components_method_entity_builder_scroll(b, w);
+    case 43: return cuo_modding_components_method_entity_builder_scrollbar(b, w);
+    case 44: return cuo_modding_components_method_entity_builder_stat_lock_button(b, w);
+    case 45: return cuo_modding_components_method_entity_builder_statusbar_window(b, w);
+    case 46: return cuo_modding_components_method_entity_builder_supersedes(b, w);
+    case 47: return cuo_modding_components_method_entity_builder_text_hue(b, w);
+    case 48: return cuo_modding_components_method_entity_builder_text_input(b);
+    case 49: return cuo_modding_components_method_entity_builder_text_spans(b, w);
+    case 50: return cuo_modding_components_method_entity_builder_text_wrap(b, w);
+    case 51: return cuo_modding_components_method_entity_builder_tooltip(b, w);
+    case 52: return cuo_modding_components_method_entity_builder_topbar_bg(b);
+    case 53: return cuo_modding_components_method_entity_builder_topbar_button(b);
+    case 54: return cuo_modding_components_method_entity_builder_topbar_full(b);
+    case 55: return cuo_modding_components_method_entity_builder_topbar_root(b);
+    case 56: return cuo_modding_components_method_entity_builder_buff(b);
+    case 57: return cuo_modding_components_method_entity_builder_combat_book(b, w);
+    case 58: return cuo_modding_components_method_entity_builder_house_design(b, w);
+    case 59: return cuo_modding_components_method_entity_builder_journal(b, w);
+    case 60: return cuo_modding_components_method_entity_builder_logout(b);
+    case 61: return cuo_modding_components_method_entity_builder_menu(b, w);
+    case 62: return cuo_modding_components_method_entity_builder_message_box(b);
+    case 63: return cuo_modding_components_method_entity_builder_minimap(b, w);
+    case 64: return cuo_modding_components_method_entity_builder_paperdoll(b, w);
+    case 65: return cuo_modding_components_method_entity_builder_party_invite(b, w);
+    case 66: return cuo_modding_components_method_entity_builder_party_manifest(b, w);
+    case 67: return cuo_modding_components_method_entity_builder_profile(b, w);
+    case 68: return cuo_modding_components_method_entity_builder_racial_book(b, w);
+    case 69: return cuo_modding_components_method_entity_builder_gump_skills(b, w);
+    case 70: return cuo_modding_components_method_entity_builder_spellbook(b, w);
+    case 71: return cuo_modding_components_method_entity_builder_split_menu(b, w);
+    case 72: return cuo_modding_components_method_entity_builder_tip_notice(b, w);
+    case 73: return cuo_modding_components_method_entity_builder_trade(b, w);
+    case 74: return cuo_modding_components_method_entity_builder_worldmap(b);
+    case 75: return cuo_modding_components_method_entity_builder_character_creation(b);
+    case 76: return cuo_modding_components_method_entity_builder_character_selection(b);
+    case 77: return cuo_modding_components_method_entity_builder_game(b);
+    case 78: return cuo_modding_components_method_entity_builder_login(b);
+    case 79: return cuo_modding_components_method_entity_builder_login_error(b);
+    case 80: return cuo_modding_components_method_entity_builder_server_selection(b);
+    case 81: return cuo_modding_components_method_entity_builder_masked_text(b, w);
+    case 82: return cuo_modding_components_method_entity_builder_read_only_text(b);
+    case 83: return cuo_modding_components_method_entity_builder_tooltip_serial(b, w);
+    case 84: return cuo_modding_components_method_entity_builder_marker(b, w);
     default: cuo__trap("cuo: unknown typed component");
     }
 }
@@ -3939,6 +3958,26 @@ const cuo_StatLocks *cuo_StatLocks_column(cuo_query q, size_t term)
         from_StatLocks(&out[i], &l.ptr[i]);
     cuo_modding_components_list_stat_locks_free(&l);
     return out;
+}
+
+const cuo_Anchorable *cuo_Anchorable_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_anchorable_t l;
+    cuo_modding_components_column_anchorable(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_Anchorable *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_Anchorable(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_anchorable_free(&l);
+    return out;
+}
+
+void cuo_Anchorable_set(cuo_query q, cuo_entity e, size_t term, const cuo_Anchorable *v)
+{
+    cuo_modding_types_anchorable_t w;
+    to_Anchorable(&w, v);
+    cuo_modding_components_set_anchorable(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
 const cuo_BorderColorDto *cuo_BorderColorDto_column(cuo_query q, size_t term)
@@ -5719,80 +5758,81 @@ int cuo__trigger_kind(const char *path, const char **record)
     if (strcmp(path, "cuo:player/player") == 0) return 0;
     if (strcmp(path, "cuo:player/stat-locks") == 0) return *record = "stat-locks", 57;
     if (strcmp(path, "cuo:target/local-result") == 0) return *record = "local-target-result-event", 58;
-    if (strcmp(path, "cuo:ui/border-color") == 0) return *record = "border-color", 59;
-    if (strcmp(path, "cuo:ui/button") == 0) return *record = "uo-button", 60;
+    if (strcmp(path, "cuo:ui/anchorable") == 0) return *record = "anchorable", 59;
+    if (strcmp(path, "cuo:ui/border-color") == 0) return *record = "border-color", 60;
+    if (strcmp(path, "cuo:ui/button") == 0) return *record = "uo-button", 61;
     if (strcmp(path, "cuo:ui/click") == 0) return 0;
-    if (strcmp(path, "cuo:ui/computed") == 0) return *record = "computed-node", 61;
-    if (strcmp(path, "cuo:ui/container-item") == 0) return *record = "container-item-ui", 62;
+    if (strcmp(path, "cuo:ui/computed") == 0) return *record = "computed-node", 62;
+    if (strcmp(path, "cuo:ui/container-item") == 0) return *record = "container-item-ui", 63;
     if (strcmp(path, "cuo:ui/contains-by-bounds") == 0) return 0;
-    if (strcmp(path, "cuo:ui/custom") == 0) return *record = "ui-custom", 63;
-    if (strcmp(path, "cuo:ui/editable-text") == 0) return *record = "editable-text", 64;
-    if (strcmp(path, "cuo:ui/hover") == 0) return *record = "ui-hover", 65;
-    if (strcmp(path, "cuo:ui/hover-tint") == 0) return *record = "ui-hover-tint", 66;
+    if (strcmp(path, "cuo:ui/custom") == 0) return *record = "ui-custom", 64;
+    if (strcmp(path, "cuo:ui/editable-text") == 0) return *record = "editable-text", 65;
+    if (strcmp(path, "cuo:ui/hover") == 0) return *record = "ui-hover", 66;
+    if (strcmp(path, "cuo:ui/hover-tint") == 0) return *record = "ui-hover-tint", 67;
     if (strcmp(path, "cuo:ui/movable-no-drag") == 0) return 0;
-    if (strcmp(path, "cuo:ui/name") == 0) return *record = "ui-name", 67;
+    if (strcmp(path, "cuo:ui/name") == 0) return *record = "ui-name", 68;
     if (strcmp(path, "cuo:ui/no-blur") == 0) return 0;
     if (strcmp(path, "cuo:ui/no-pickup") == 0) return 0;
     if (strcmp(path, "cuo:ui/no-right-click-close") == 0) return 0;
     if (strcmp(path, "cuo:ui/options-window") == 0) return 0;
     if (strcmp(path, "cuo:ui/popup") == 0) return 0;
-    if (strcmp(path, "cuo:ui/resizable") == 0) return *record = "ui-resizable", 68;
-    if (strcmp(path, "cuo:ui/right-click") == 0) return *record = "ui-right-click", 69;
-    if (strcmp(path, "cuo:ui/scroll") == 0) return *record = "scroll-position", 70;
-    if (strcmp(path, "cuo:ui/scrollbar") == 0) return *record = "ui-scrollbar", 71;
-    if (strcmp(path, "cuo:ui/stat-lock-button") == 0) return *record = "stat-lock-button", 72;
-    if (strcmp(path, "cuo:ui/statusbar-window") == 0) return *record = "status-bar-window", 73;
-    if (strcmp(path, "cuo:ui/supersedes") == 0) return *record = "mod-supersedes", 74;
-    if (strcmp(path, "cuo:ui/text-hue") == 0) return *record = "text-hue", 75;
+    if (strcmp(path, "cuo:ui/resizable") == 0) return *record = "ui-resizable", 69;
+    if (strcmp(path, "cuo:ui/right-click") == 0) return *record = "ui-right-click", 70;
+    if (strcmp(path, "cuo:ui/scroll") == 0) return *record = "scroll-position", 71;
+    if (strcmp(path, "cuo:ui/scrollbar") == 0) return *record = "ui-scrollbar", 72;
+    if (strcmp(path, "cuo:ui/stat-lock-button") == 0) return *record = "stat-lock-button", 73;
+    if (strcmp(path, "cuo:ui/statusbar-window") == 0) return *record = "status-bar-window", 74;
+    if (strcmp(path, "cuo:ui/supersedes") == 0) return *record = "mod-supersedes", 75;
+    if (strcmp(path, "cuo:ui/text-hue") == 0) return *record = "text-hue", 76;
     if (strcmp(path, "cuo:ui/text-input") == 0) return 0;
-    if (strcmp(path, "cuo:ui/text-spans") == 0) return *record = "text-spans", 76;
-    if (strcmp(path, "cuo:ui/text-wrap") == 0) return *record = "text-wrap", 77;
-    if (strcmp(path, "cuo:ui/tooltip") == 0) return *record = "ui-tooltip", 78;
+    if (strcmp(path, "cuo:ui/text-spans") == 0) return *record = "text-spans", 77;
+    if (strcmp(path, "cuo:ui/text-wrap") == 0) return *record = "text-wrap", 78;
+    if (strcmp(path, "cuo:ui/tooltip") == 0) return *record = "ui-tooltip", 79;
     if (strcmp(path, "cuo:ui/topbar-bg") == 0) return 0;
     if (strcmp(path, "cuo:ui/topbar-button") == 0) return 0;
     if (strcmp(path, "cuo:ui/topbar-full") == 0) return 0;
     if (strcmp(path, "cuo:ui/topbar-root") == 0) return 0;
-    if (strcmp(path, "cuo:ent/animation") == 0) return *record = "mob-animation", 79;
+    if (strcmp(path, "cuo:ent/animation") == 0) return *record = "mob-animation", 80;
     if (strcmp(path, "cuo:ent/is-multi") == 0) return 0;
-    if (strcmp(path, "cuo:ent/mob-steps") == 0) return *record = "mobile-steps", 80;
+    if (strcmp(path, "cuo:ent/mob-steps") == 0) return *record = "mobile-steps", 81;
     if (strcmp(path, "cuo:gump/book") == 0) return 0;
     if (strcmp(path, "cuo:gump/buff") == 0) return 0;
     if (strcmp(path, "cuo:gump/bulletin-board") == 0) return 0;
-    if (strcmp(path, "cuo:gump/combat-book") == 0) return *record = "combat-book-window", 81;
-    if (strcmp(path, "cuo:gump/house-design") == 0) return *record = "house-design-window", 82;
-    if (strcmp(path, "cuo:gump/journal") == 0) return *record = "journal-window", 83;
+    if (strcmp(path, "cuo:gump/combat-book") == 0) return *record = "combat-book-window", 82;
+    if (strcmp(path, "cuo:gump/house-design") == 0) return *record = "house-design-window", 83;
+    if (strcmp(path, "cuo:gump/journal") == 0) return *record = "journal-window", 84;
     if (strcmp(path, "cuo:gump/logout") == 0) return 0;
     if (strcmp(path, "cuo:gump/map") == 0) return 0;
-    if (strcmp(path, "cuo:gump/menu") == 0) return *record = "menu-gump-window", 84;
+    if (strcmp(path, "cuo:gump/menu") == 0) return *record = "menu-gump-window", 85;
     if (strcmp(path, "cuo:gump/message-box") == 0) return 0;
-    if (strcmp(path, "cuo:gump/minimap") == 0) return *record = "mini-map-window", 85;
-    if (strcmp(path, "cuo:gump/paperdoll") == 0) return *record = "paperdoll-window", 86;
-    if (strcmp(path, "cuo:gump/party-invite") == 0) return *record = "party-invite-window", 87;
-    if (strcmp(path, "cuo:gump/party-manifest") == 0) return *record = "party-manifest-window", 88;
-    if (strcmp(path, "cuo:gump/profile") == 0) return *record = "profile-window", 89;
-    if (strcmp(path, "cuo:gump/racial-book") == 0) return *record = "racial-book-window", 90;
-    if (strcmp(path, "cuo:gump/server-closed") == 0) return *record = "server-gump-closed-event", 91;
-    if (strcmp(path, "cuo:gump/server-opened") == 0) return *record = "server-gump-opened-event", 92;
-    if (strcmp(path, "cuo:gump/skills") == 0) return *record = "skills-window", 93;
-    if (strcmp(path, "cuo:gump/spellbook") == 0) return *record = "spellbook-window", 94;
-    if (strcmp(path, "cuo:gump/split-menu") == 0) return *record = "split-menu-window", 95;
-    if (strcmp(path, "cuo:gump/tip-notice") == 0) return *record = "tip-notice-window", 96;
-    if (strcmp(path, "cuo:gump/trade") == 0) return *record = "trade-window", 97;
+    if (strcmp(path, "cuo:gump/minimap") == 0) return *record = "mini-map-window", 86;
+    if (strcmp(path, "cuo:gump/paperdoll") == 0) return *record = "paperdoll-window", 87;
+    if (strcmp(path, "cuo:gump/party-invite") == 0) return *record = "party-invite-window", 88;
+    if (strcmp(path, "cuo:gump/party-manifest") == 0) return *record = "party-manifest-window", 89;
+    if (strcmp(path, "cuo:gump/profile") == 0) return *record = "profile-window", 90;
+    if (strcmp(path, "cuo:gump/racial-book") == 0) return *record = "racial-book-window", 91;
+    if (strcmp(path, "cuo:gump/server-closed") == 0) return *record = "server-gump-closed-event", 92;
+    if (strcmp(path, "cuo:gump/server-opened") == 0) return *record = "server-gump-opened-event", 93;
+    if (strcmp(path, "cuo:gump/skills") == 0) return *record = "skills-window", 94;
+    if (strcmp(path, "cuo:gump/spellbook") == 0) return *record = "spellbook-window", 95;
+    if (strcmp(path, "cuo:gump/split-menu") == 0) return *record = "split-menu-window", 96;
+    if (strcmp(path, "cuo:gump/tip-notice") == 0) return *record = "tip-notice-window", 97;
+    if (strcmp(path, "cuo:gump/trade") == 0) return *record = "trade-window", 98;
     if (strcmp(path, "cuo:gump/worldmap") == 0) return 0;
-    if (strcmp(path, "cuo:player/move-request") == 0) return *record = "mod-move-request", 98;
+    if (strcmp(path, "cuo:player/move-request") == 0) return *record = "mod-move-request", 99;
     if (strcmp(path, "cuo:scene/character-creation") == 0) return 0;
-    if (strcmp(path, "cuo:scene/character-list") == 0) return *record = "character-selection", 99;
+    if (strcmp(path, "cuo:scene/character-list") == 0) return *record = "character-selection", 100;
     if (strcmp(path, "cuo:scene/character-selection") == 0) return 0;
     if (strcmp(path, "cuo:scene/game") == 0) return 0;
     if (strcmp(path, "cuo:scene/login") == 0) return 0;
     if (strcmp(path, "cuo:scene/login-error") == 0) return 0;
-    if (strcmp(path, "cuo:scene/login-error-info") == 0) return *record = "login-errors-info-event", 100;
-    if (strcmp(path, "cuo:scene/server-list") == 0) return *record = "server-selection-info-event", 101;
+    if (strcmp(path, "cuo:scene/login-error-info") == 0) return *record = "login-errors-info-event", 101;
+    if (strcmp(path, "cuo:scene/server-list") == 0) return *record = "server-selection-info-event", 102;
     if (strcmp(path, "cuo:scene/server-selection") == 0) return 0;
-    if (strcmp(path, "cuo:ui/masked-text") == 0) return *record = "masked-text", 102;
+    if (strcmp(path, "cuo:ui/masked-text") == 0) return *record = "masked-text", 103;
     if (strcmp(path, "cuo:ui/read-only-text") == 0) return 0;
-    if (strcmp(path, "cuo:ui/tooltip-serial") == 0) return *record = "ui-tooltip-serial", 103;
-    if (strcmp(path, "cuo:worldmap/marker") == 0) return *record = "world-map-marker", 104;
+    if (strcmp(path, "cuo:ui/tooltip-serial") == 0) return *record = "ui-tooltip-serial", 104;
+    if (strcmp(path, "cuo:worldmap/marker") == 0) return *record = "world-map-marker", 105;
     return -1;
 }
 
@@ -6024,241 +6064,246 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 59: {
+        cuo_Anchorable *o = cuo_alloc(sizeof *o);
+        from_Anchorable(o, rec);
+        return o;
+    }
+    case 60: {
         cuo_BorderColorDto *o = cuo_alloc(sizeof *o);
         from_BorderColor(o, rec);
         return o;
     }
-    case 60: {
+    case 61: {
         cuo_UOButton *o = cuo_alloc(sizeof *o);
         from_UoButton(o, rec);
         return o;
     }
-    case 61: {
+    case 62: {
         cuo_ComputedNode *o = cuo_alloc(sizeof *o);
         from_ComputedNode(o, rec);
         return o;
     }
-    case 62: {
+    case 63: {
         cuo_ContainerItemUI *o = cuo_alloc(sizeof *o);
         from_ContainerItemUi(o, rec);
         return o;
     }
-    case 63: {
+    case 64: {
         cuo_UiCustomDto *o = cuo_alloc(sizeof *o);
         from_UiCustom(o, rec);
         return o;
     }
-    case 64: {
+    case 65: {
         cuo_EditableText *o = cuo_alloc(sizeof *o);
         from_EditableText(o, rec);
         return o;
     }
-    case 65: {
+    case 66: {
         cuo_ModHover *o = cuo_alloc(sizeof *o);
         from_UiHover(o, rec);
         return o;
     }
-    case 66: {
+    case 67: {
         cuo_UiHoverTint *o = cuo_alloc(sizeof *o);
         from_UiHoverTint(o, rec);
         return o;
     }
-    case 67: {
+    case 68: {
         cuo_UiName *o = cuo_alloc(sizeof *o);
         from_UiName(o, rec);
         cuo_modding_types_ui_name_free(rec);
         return o;
     }
-    case 68: {
+    case 69: {
         cuo_UiResizable *o = cuo_alloc(sizeof *o);
         from_UiResizable(o, rec);
         return o;
     }
-    case 69: {
+    case 70: {
         cuo_ModRightClick *o = cuo_alloc(sizeof *o);
         from_UiRightClick(o, rec);
         return o;
     }
-    case 70: {
+    case 71: {
         cuo_ScrollPosition *o = cuo_alloc(sizeof *o);
         from_ScrollPosition(o, rec);
         return o;
     }
-    case 71: {
+    case 72: {
         cuo_UiScrollbar *o = cuo_alloc(sizeof *o);
         from_UiScrollbar(o, rec);
         return o;
     }
-    case 72: {
+    case 73: {
         cuo_StatLockButton *o = cuo_alloc(sizeof *o);
         from_StatLockButton(o, rec);
         return o;
     }
-    case 73: {
+    case 74: {
         cuo_StatusBarWindow *o = cuo_alloc(sizeof *o);
         from_StatusBarWindow(o, rec);
         return o;
     }
-    case 74: {
+    case 75: {
         cuo_ModSupersedes *o = cuo_alloc(sizeof *o);
         from_ModSupersedes(o, rec);
         cuo_modding_types_mod_supersedes_free(rec);
         return o;
     }
-    case 75: {
+    case 76: {
         cuo_TextHue *o = cuo_alloc(sizeof *o);
         from_TextHue(o, rec);
         return o;
     }
-    case 76: {
+    case 77: {
         cuo_TextSpans *o = cuo_alloc(sizeof *o);
         from_TextSpans(o, rec);
         cuo_modding_types_text_spans_free(rec);
         return o;
     }
-    case 77: {
+    case 78: {
         cuo_TextWrap *o = cuo_alloc(sizeof *o);
         from_TextWrap(o, rec);
         return o;
     }
-    case 78: {
+    case 79: {
         cuo_UiTooltip *o = cuo_alloc(sizeof *o);
         from_UiTooltip(o, rec);
         cuo_modding_types_ui_tooltip_free(rec);
         return o;
     }
-    case 79: {
+    case 80: {
         cuo_MobAnimation *o = cuo_alloc(sizeof *o);
         from_MobAnimation(o, rec);
         return o;
     }
-    case 80: {
+    case 81: {
         cuo_MobileStepsDto *o = cuo_alloc(sizeof *o);
         from_MobileSteps(o, rec);
         cuo_modding_types_mobile_steps_free(rec);
         return o;
     }
-    case 81: {
+    case 82: {
         cuo_CombatBookWindow *o = cuo_alloc(sizeof *o);
         from_CombatBookWindow(o, rec);
         return o;
     }
-    case 82: {
+    case 83: {
         cuo_HouseDesignWindow *o = cuo_alloc(sizeof *o);
         from_HouseDesignWindow(o, rec);
         return o;
     }
-    case 83: {
+    case 84: {
         cuo_JournalWindow *o = cuo_alloc(sizeof *o);
         from_JournalWindow(o, rec);
         return o;
     }
-    case 84: {
+    case 85: {
         cuo_MenuGumpWindow *o = cuo_alloc(sizeof *o);
         from_MenuGumpWindow(o, rec);
         return o;
     }
-    case 85: {
+    case 86: {
         cuo_MiniMapWindow *o = cuo_alloc(sizeof *o);
         from_MiniMapWindow(o, rec);
         return o;
     }
-    case 86: {
+    case 87: {
         cuo_PaperdollWindow *o = cuo_alloc(sizeof *o);
         from_PaperdollWindow(o, rec);
         return o;
     }
-    case 87: {
+    case 88: {
         cuo_PartyInviteWindow *o = cuo_alloc(sizeof *o);
         from_PartyInviteWindow(o, rec);
         return o;
     }
-    case 88: {
+    case 89: {
         cuo_PartyManifestWindow *o = cuo_alloc(sizeof *o);
         from_PartyManifestWindow(o, rec);
         return o;
     }
-    case 89: {
+    case 90: {
         cuo_ProfileWindow *o = cuo_alloc(sizeof *o);
         from_ProfileWindow(o, rec);
         return o;
     }
-    case 90: {
+    case 91: {
         cuo_RacialBookWindow *o = cuo_alloc(sizeof *o);
         from_RacialBookWindow(o, rec);
         return o;
     }
-    case 91: {
+    case 92: {
         cuo_ServerGumpClosedEvent *o = cuo_alloc(sizeof *o);
         from_ServerGumpClosedEvent(o, rec);
         return o;
     }
-    case 92: {
+    case 93: {
         cuo_ServerGumpOpenedEvent *o = cuo_alloc(sizeof *o);
         from_ServerGumpOpenedEvent(o, rec);
         return o;
     }
-    case 93: {
+    case 94: {
         cuo_SkillsWindow *o = cuo_alloc(sizeof *o);
         from_SkillsWindow(o, rec);
         return o;
     }
-    case 94: {
+    case 95: {
         cuo_SpellbookWindow *o = cuo_alloc(sizeof *o);
         from_SpellbookWindow(o, rec);
         return o;
     }
-    case 95: {
+    case 96: {
         cuo_SplitMenuWindow *o = cuo_alloc(sizeof *o);
         from_SplitMenuWindow(o, rec);
         cuo_modding_types_split_menu_window_free(rec);
         return o;
     }
-    case 96: {
+    case 97: {
         cuo_TipNoticeWindow *o = cuo_alloc(sizeof *o);
         from_TipNoticeWindow(o, rec);
         return o;
     }
-    case 97: {
+    case 98: {
         cuo_TradeWindow *o = cuo_alloc(sizeof *o);
         from_TradeWindow(o, rec);
         return o;
     }
-    case 98: {
+    case 99: {
         cuo_ModMoveRequest *o = cuo_alloc(sizeof *o);
         from_ModMoveRequest(o, rec);
         return o;
     }
-    case 99: {
+    case 100: {
         cuo_CharacterSelectionDto *o = cuo_alloc(sizeof *o);
         from_CharacterSelection(o, rec);
         cuo_modding_types_character_selection_free(rec);
         return o;
     }
-    case 100: {
+    case 101: {
         cuo_LoginErrorsInfoEvent *o = cuo_alloc(sizeof *o);
         from_LoginErrorsInfoEvent(o, rec);
         cuo_modding_types_login_errors_info_event_free(rec);
         return o;
     }
-    case 101: {
+    case 102: {
         cuo_ServerSelectionInfoEvent *o = cuo_alloc(sizeof *o);
         from_ServerSelectionInfoEvent(o, rec);
         cuo_modding_types_server_selection_info_event_free(rec);
         return o;
     }
-    case 102: {
+    case 103: {
         cuo_MaskedText *o = cuo_alloc(sizeof *o);
         from_MaskedText(o, rec);
         cuo_modding_types_masked_text_free(rec);
         return o;
     }
-    case 103: {
+    case 104: {
         cuo_UiTooltipSerial *o = cuo_alloc(sizeof *o);
         from_UiTooltipSerial(o, rec);
         return o;
     }
-    case 104: {
+    case 105: {
         cuo_WorldMapMarker *o = cuo_alloc(sizeof *o);
         from_WorldMapMarker(o, rec);
         cuo_modding_types_world_map_marker_free(rec);
@@ -6311,49 +6356,50 @@ const cuo_ItemDropSent *cuo_ItemDropSent_obs_value(const cuo_obs *ev) { return e
 const cuo_ItemMoveResult *cuo_ItemMoveResult_obs_value(const cuo_obs *ev) { return ev->value_kind == 56 ? ev->value : NULL; }
 const cuo_StatLocks *cuo_StatLocks_obs_value(const cuo_obs *ev) { return ev->value_kind == 57 ? ev->value : NULL; }
 const cuo_LocalTargetResultEvent *cuo_LocalTargetResultEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 58 ? ev->value : NULL; }
-const cuo_BorderColorDto *cuo_BorderColorDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 59 ? ev->value : NULL; }
-const cuo_UOButton *cuo_UOButton_obs_value(const cuo_obs *ev) { return ev->value_kind == 60 ? ev->value : NULL; }
-const cuo_ComputedNode *cuo_ComputedNode_obs_value(const cuo_obs *ev) { return ev->value_kind == 61 ? ev->value : NULL; }
-const cuo_ContainerItemUI *cuo_ContainerItemUI_obs_value(const cuo_obs *ev) { return ev->value_kind == 62 ? ev->value : NULL; }
-const cuo_UiCustomDto *cuo_UiCustomDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 63 ? ev->value : NULL; }
-const cuo_EditableText *cuo_EditableText_obs_value(const cuo_obs *ev) { return ev->value_kind == 64 ? ev->value : NULL; }
-const cuo_ModHover *cuo_ModHover_obs_value(const cuo_obs *ev) { return ev->value_kind == 65 ? ev->value : NULL; }
-const cuo_UiHoverTint *cuo_UiHoverTint_obs_value(const cuo_obs *ev) { return ev->value_kind == 66 ? ev->value : NULL; }
-const cuo_UiName *cuo_UiName_obs_value(const cuo_obs *ev) { return ev->value_kind == 67 ? ev->value : NULL; }
-const cuo_UiResizable *cuo_UiResizable_obs_value(const cuo_obs *ev) { return ev->value_kind == 68 ? ev->value : NULL; }
-const cuo_ModRightClick *cuo_ModRightClick_obs_value(const cuo_obs *ev) { return ev->value_kind == 69 ? ev->value : NULL; }
-const cuo_ScrollPosition *cuo_ScrollPosition_obs_value(const cuo_obs *ev) { return ev->value_kind == 70 ? ev->value : NULL; }
-const cuo_UiScrollbar *cuo_UiScrollbar_obs_value(const cuo_obs *ev) { return ev->value_kind == 71 ? ev->value : NULL; }
-const cuo_StatLockButton *cuo_StatLockButton_obs_value(const cuo_obs *ev) { return ev->value_kind == 72 ? ev->value : NULL; }
-const cuo_StatusBarWindow *cuo_StatusBarWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 73 ? ev->value : NULL; }
-const cuo_ModSupersedes *cuo_ModSupersedes_obs_value(const cuo_obs *ev) { return ev->value_kind == 74 ? ev->value : NULL; }
-const cuo_TextHue *cuo_TextHue_obs_value(const cuo_obs *ev) { return ev->value_kind == 75 ? ev->value : NULL; }
-const cuo_TextSpans *cuo_TextSpans_obs_value(const cuo_obs *ev) { return ev->value_kind == 76 ? ev->value : NULL; }
-const cuo_TextWrap *cuo_TextWrap_obs_value(const cuo_obs *ev) { return ev->value_kind == 77 ? ev->value : NULL; }
-const cuo_UiTooltip *cuo_UiTooltip_obs_value(const cuo_obs *ev) { return ev->value_kind == 78 ? ev->value : NULL; }
-const cuo_MobAnimation *cuo_MobAnimation_obs_value(const cuo_obs *ev) { return ev->value_kind == 79 ? ev->value : NULL; }
-const cuo_MobileStepsDto *cuo_MobileStepsDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 80 ? ev->value : NULL; }
-const cuo_CombatBookWindow *cuo_CombatBookWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 81 ? ev->value : NULL; }
-const cuo_HouseDesignWindow *cuo_HouseDesignWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 82 ? ev->value : NULL; }
-const cuo_JournalWindow *cuo_JournalWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 83 ? ev->value : NULL; }
-const cuo_MenuGumpWindow *cuo_MenuGumpWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 84 ? ev->value : NULL; }
-const cuo_MiniMapWindow *cuo_MiniMapWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 85 ? ev->value : NULL; }
-const cuo_PaperdollWindow *cuo_PaperdollWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 86 ? ev->value : NULL; }
-const cuo_PartyInviteWindow *cuo_PartyInviteWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 87 ? ev->value : NULL; }
-const cuo_PartyManifestWindow *cuo_PartyManifestWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 88 ? ev->value : NULL; }
-const cuo_ProfileWindow *cuo_ProfileWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 89 ? ev->value : NULL; }
-const cuo_RacialBookWindow *cuo_RacialBookWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 90 ? ev->value : NULL; }
-const cuo_ServerGumpClosedEvent *cuo_ServerGumpClosedEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 91 ? ev->value : NULL; }
-const cuo_ServerGumpOpenedEvent *cuo_ServerGumpOpenedEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 92 ? ev->value : NULL; }
-const cuo_SkillsWindow *cuo_SkillsWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 93 ? ev->value : NULL; }
-const cuo_SpellbookWindow *cuo_SpellbookWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 94 ? ev->value : NULL; }
-const cuo_SplitMenuWindow *cuo_SplitMenuWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 95 ? ev->value : NULL; }
-const cuo_TipNoticeWindow *cuo_TipNoticeWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 96 ? ev->value : NULL; }
-const cuo_TradeWindow *cuo_TradeWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 97 ? ev->value : NULL; }
-const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_value(const cuo_obs *ev) { return ev->value_kind == 98 ? ev->value : NULL; }
-const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 99 ? ev->value : NULL; }
-const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 100 ? ev->value : NULL; }
-const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 101 ? ev->value : NULL; }
-const cuo_MaskedText *cuo_MaskedText_obs_value(const cuo_obs *ev) { return ev->value_kind == 102 ? ev->value : NULL; }
-const cuo_UiTooltipSerial *cuo_UiTooltipSerial_obs_value(const cuo_obs *ev) { return ev->value_kind == 103 ? ev->value : NULL; }
-const cuo_WorldMapMarker *cuo_WorldMapMarker_obs_value(const cuo_obs *ev) { return ev->value_kind == 104 ? ev->value : NULL; }
+const cuo_Anchorable *cuo_Anchorable_obs_value(const cuo_obs *ev) { return ev->value_kind == 59 ? ev->value : NULL; }
+const cuo_BorderColorDto *cuo_BorderColorDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 60 ? ev->value : NULL; }
+const cuo_UOButton *cuo_UOButton_obs_value(const cuo_obs *ev) { return ev->value_kind == 61 ? ev->value : NULL; }
+const cuo_ComputedNode *cuo_ComputedNode_obs_value(const cuo_obs *ev) { return ev->value_kind == 62 ? ev->value : NULL; }
+const cuo_ContainerItemUI *cuo_ContainerItemUI_obs_value(const cuo_obs *ev) { return ev->value_kind == 63 ? ev->value : NULL; }
+const cuo_UiCustomDto *cuo_UiCustomDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 64 ? ev->value : NULL; }
+const cuo_EditableText *cuo_EditableText_obs_value(const cuo_obs *ev) { return ev->value_kind == 65 ? ev->value : NULL; }
+const cuo_ModHover *cuo_ModHover_obs_value(const cuo_obs *ev) { return ev->value_kind == 66 ? ev->value : NULL; }
+const cuo_UiHoverTint *cuo_UiHoverTint_obs_value(const cuo_obs *ev) { return ev->value_kind == 67 ? ev->value : NULL; }
+const cuo_UiName *cuo_UiName_obs_value(const cuo_obs *ev) { return ev->value_kind == 68 ? ev->value : NULL; }
+const cuo_UiResizable *cuo_UiResizable_obs_value(const cuo_obs *ev) { return ev->value_kind == 69 ? ev->value : NULL; }
+const cuo_ModRightClick *cuo_ModRightClick_obs_value(const cuo_obs *ev) { return ev->value_kind == 70 ? ev->value : NULL; }
+const cuo_ScrollPosition *cuo_ScrollPosition_obs_value(const cuo_obs *ev) { return ev->value_kind == 71 ? ev->value : NULL; }
+const cuo_UiScrollbar *cuo_UiScrollbar_obs_value(const cuo_obs *ev) { return ev->value_kind == 72 ? ev->value : NULL; }
+const cuo_StatLockButton *cuo_StatLockButton_obs_value(const cuo_obs *ev) { return ev->value_kind == 73 ? ev->value : NULL; }
+const cuo_StatusBarWindow *cuo_StatusBarWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 74 ? ev->value : NULL; }
+const cuo_ModSupersedes *cuo_ModSupersedes_obs_value(const cuo_obs *ev) { return ev->value_kind == 75 ? ev->value : NULL; }
+const cuo_TextHue *cuo_TextHue_obs_value(const cuo_obs *ev) { return ev->value_kind == 76 ? ev->value : NULL; }
+const cuo_TextSpans *cuo_TextSpans_obs_value(const cuo_obs *ev) { return ev->value_kind == 77 ? ev->value : NULL; }
+const cuo_TextWrap *cuo_TextWrap_obs_value(const cuo_obs *ev) { return ev->value_kind == 78 ? ev->value : NULL; }
+const cuo_UiTooltip *cuo_UiTooltip_obs_value(const cuo_obs *ev) { return ev->value_kind == 79 ? ev->value : NULL; }
+const cuo_MobAnimation *cuo_MobAnimation_obs_value(const cuo_obs *ev) { return ev->value_kind == 80 ? ev->value : NULL; }
+const cuo_MobileStepsDto *cuo_MobileStepsDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 81 ? ev->value : NULL; }
+const cuo_CombatBookWindow *cuo_CombatBookWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 82 ? ev->value : NULL; }
+const cuo_HouseDesignWindow *cuo_HouseDesignWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 83 ? ev->value : NULL; }
+const cuo_JournalWindow *cuo_JournalWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 84 ? ev->value : NULL; }
+const cuo_MenuGumpWindow *cuo_MenuGumpWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 85 ? ev->value : NULL; }
+const cuo_MiniMapWindow *cuo_MiniMapWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 86 ? ev->value : NULL; }
+const cuo_PaperdollWindow *cuo_PaperdollWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 87 ? ev->value : NULL; }
+const cuo_PartyInviteWindow *cuo_PartyInviteWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 88 ? ev->value : NULL; }
+const cuo_PartyManifestWindow *cuo_PartyManifestWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 89 ? ev->value : NULL; }
+const cuo_ProfileWindow *cuo_ProfileWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 90 ? ev->value : NULL; }
+const cuo_RacialBookWindow *cuo_RacialBookWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 91 ? ev->value : NULL; }
+const cuo_ServerGumpClosedEvent *cuo_ServerGumpClosedEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 92 ? ev->value : NULL; }
+const cuo_ServerGumpOpenedEvent *cuo_ServerGumpOpenedEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 93 ? ev->value : NULL; }
+const cuo_SkillsWindow *cuo_SkillsWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 94 ? ev->value : NULL; }
+const cuo_SpellbookWindow *cuo_SpellbookWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 95 ? ev->value : NULL; }
+const cuo_SplitMenuWindow *cuo_SplitMenuWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 96 ? ev->value : NULL; }
+const cuo_TipNoticeWindow *cuo_TipNoticeWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 97 ? ev->value : NULL; }
+const cuo_TradeWindow *cuo_TradeWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 98 ? ev->value : NULL; }
+const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_value(const cuo_obs *ev) { return ev->value_kind == 99 ? ev->value : NULL; }
+const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 100 ? ev->value : NULL; }
+const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 101 ? ev->value : NULL; }
+const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 102 ? ev->value : NULL; }
+const cuo_MaskedText *cuo_MaskedText_obs_value(const cuo_obs *ev) { return ev->value_kind == 103 ? ev->value : NULL; }
+const cuo_UiTooltipSerial *cuo_UiTooltipSerial_obs_value(const cuo_obs *ev) { return ev->value_kind == 104 ? ev->value : NULL; }
+const cuo_WorldMapMarker *cuo_WorldMapMarker_obs_value(const cuo_obs *ev) { return ev->value_kind == 105 ? ev->value : NULL; }

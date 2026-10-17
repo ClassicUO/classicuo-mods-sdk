@@ -43,6 +43,24 @@ impl HasPath for Amount {
     const PATH: &'static str = paths::ent::AMOUNT;
 }
 
+/// `ClassicUO.Ecs.AnchorKind` — crosses as `u8`.
+pub type AnchorKind = u8;
+pub mod anchor_kind {
+    pub const SPELL: super::AnchorKind = 0;
+    pub const HEALTHBAR: super::AnchorKind = 1;
+}
+
+/// `cuo:ui/anchorable`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct Anchorable {
+    /// enum AnchorKind (0=Spell, 1=Healthbar)
+    pub kind: u8,
+}
+impl HasPath for Anchorable {
+    const PATH: &'static str = paths::ui::ANCHORABLE;
+}
+
 /// `cuo:ent/auto-opened-corpse`
 /// Zero-size tag: no value crosses, only its presence.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

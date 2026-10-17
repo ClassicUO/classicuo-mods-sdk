@@ -348,6 +348,12 @@ const cuo_LocalTargetResultEvent *cuo_LocalTargetResultEvent_obs_value(const cuo
 bool cuo_TargetingState_res(const cuo_input *in, cuo_param p, cuo_TargetingState *out);
 bool cuo_TargetingState_obs_res(const cuo_obs *ev, cuo_param p, cuo_TargetingState *out);
 
+/* `cuo:ui/anchorable` */
+cuo_comp cuo_Anchorable_comp(const cuo_Anchorable *v);
+const cuo_Anchorable *cuo_Anchorable_column(cuo_query q, size_t term);
+void cuo_Anchorable_set(cuo_query q, cuo_entity e, size_t term, const cuo_Anchorable *v);
+const cuo_Anchorable *cuo_Anchorable_obs_value(const cuo_obs *ev);
+
 /* `cuo:ui/border-color` */
 cuo_comp cuo_BorderColorDto_comp(const cuo_BorderColorDto *v);
 const cuo_BorderColorDto *cuo_BorderColorDto_column(cuo_query q, size_t term);

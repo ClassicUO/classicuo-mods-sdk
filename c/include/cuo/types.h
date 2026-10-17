@@ -13,6 +13,7 @@ extern "C" {
 #endif
 
 typedef struct cuo_Amount cuo_Amount;
+typedef struct cuo_Anchorable cuo_Anchorable;
 typedef struct cuo_AutoOpenedCorpse cuo_AutoOpenedCorpse;
 typedef struct cuo_BackgroundColor cuo_BackgroundColor;
 typedef struct cuo_BookWindow cuo_BookWindow;
@@ -200,6 +201,11 @@ typedef uint8_t cuo_AlignItems;
 #define CUO_ALIGN_ITEMS_CENTER ((cuo_AlignItems)1)
 #define CUO_ALIGN_ITEMS_END ((cuo_AlignItems)2)
 
+/* `ClassicUO.Ecs.AnchorKind` */
+typedef uint8_t cuo_AnchorKind;
+#define CUO_ANCHOR_KIND_SPELL ((cuo_AnchorKind)0)
+#define CUO_ANCHOR_KIND_HEALTHBAR ((cuo_AnchorKind)1)
+
 /* `ClassicUO.Ecs.ContainerSlotAction` */
 typedef uint8_t cuo_ContainerSlotAction;
 #define CUO_CONTAINER_SLOT_ACTION_ADD ((cuo_ContainerSlotAction)0)
@@ -369,6 +375,13 @@ struct cuo_Amount {
 };
 #define cuo_Amount_PATH CUO_PATH_ENT_AMOUNT
 uint16_t cuo_Amount_id(void);
+
+/* `cuo:ui/anchorable` */
+struct cuo_Anchorable {
+    uint8_t kind; /* enum AnchorKind (0=Spell, 1=Healthbar) */
+};
+#define cuo_Anchorable_PATH CUO_PATH_UI_ANCHORABLE
+uint16_t cuo_Anchorable_id(void);
 
 /* `cuo:ent/auto-opened-corpse` */
 /* Zero-size tag: crosses as no value (the typed functions take none). */

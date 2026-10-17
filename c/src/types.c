@@ -5,6 +5,7 @@
 #define TYPE_ID(path) do { static uint16_t id_; static bool ok_; if (!ok_) { id_ = cuo_type_id(path); ok_ = true; } return id_; } while (0)
 
 uint16_t cuo_Amount_id(void) { TYPE_ID(cuo_Amount_PATH); }
+uint16_t cuo_Anchorable_id(void) { TYPE_ID(cuo_Anchorable_PATH); }
 uint16_t cuo_AutoOpenedCorpse_id(void) { TYPE_ID(cuo_AutoOpenedCorpse_PATH); }
 uint16_t cuo_BackgroundColor_id(void) { TYPE_ID(cuo_BackgroundColor_PATH); }
 uint16_t cuo_BookWindow_id(void) { TYPE_ID(cuo_BookWindow_PATH); }

@@ -114,6 +114,16 @@ impl Conv<w::Layer> for u8 {
     }
 }
 
+impl Conv<w::AnchorKind> for u8 {
+    fn to_wit(&self) -> w::AnchorKind {
+        const CASES: &[w::AnchorKind] = &[w::AnchorKind::Spell, w::AnchorKind::Healthbar];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::AnchorKind) -> u8 {
+        v as u8
+    }
+}
+
 impl Conv<w::ScrollbarStyle> for u8 {
     fn to_wit(&self) -> w::ScrollbarStyle {
         const CASES: &[w::ScrollbarStyle] = &[w::ScrollbarStyle::Uo, w::ScrollbarStyle::Flat];
@@ -1629,6 +1639,19 @@ impl Conv<w::TargetingState> for s::TargetingState {
             local_y: Conv::from_wit(v.local_y),
             local_z: Conv::from_wit(v.local_z),
             local_cancelled: Conv::from_wit(v.local_cancelled),
+        }
+    }
+}
+
+impl Conv<w::Anchorable> for s::Anchorable {
+    fn to_wit(&self) -> w::Anchorable {
+        w::Anchorable {
+            kind: Conv::to_wit(&self.kind),
+        }
+    }
+    fn from_wit(v: w::Anchorable) -> s::Anchorable {
+        s::Anchorable {
+            kind: Conv::from_wit(v.kind),
         }
     }
 }
@@ -3865,6 +3888,26 @@ impl Resource for s::TargetingState {
     }
 }
 
+// `cuo:ui/anchorable`
+impl Component for s::Anchorable {
+    fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
+        c::column_anchorable(q, term).into_iter().map(Conv::from_wit).collect()
+    }
+}
+impl WritableComponent for s::Anchorable {
+    fn __same(&self, other: &Self) -> bool {
+        Conv::<w::Anchorable>::to_wit(self) == Conv::<w::Anchorable>::to_wit(other)
+    }
+    fn __set(&self, q: &wit::Query, entity: u64, term: u8) {
+        let v: w::Anchorable = self.to_wit();
+        c::set_anchorable(q, entity, term, v);
+    }
+    fn __insert(&self, b: &c::EntityBuilder) -> c::EntityBuilder {
+        let v: w::Anchorable = self.to_wit();
+        b.anchorable(v)
+    }
+}
+
 // `cuo:ui/border-color`
 impl Component for s::BorderColorDto {
     fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
@@ -5611,6 +5654,13 @@ impl TypedTrigger for s::StatLocks {
 impl TypedTrigger for s::LocalTargetResultEvent {
     type Wit = w::LocalTargetResultEvent;
     fn lift(v: w::LocalTargetResultEvent) -> s::LocalTargetResultEvent {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::Anchorable {
+    type Wit = w::Anchorable;
+    fn lift(v: w::Anchorable) -> s::Anchorable {
         Conv::from_wit(v)
     }
 }

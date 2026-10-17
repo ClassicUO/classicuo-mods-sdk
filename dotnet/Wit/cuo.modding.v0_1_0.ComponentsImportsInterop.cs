@@ -167,6 +167,12 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
                 public static extern int wasmImportPlayer(int p0);
             }
 
+            public static class AnchorableWasmInterop
+            {
+                [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.anchorable"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+                public static extern int wasmImportAnchorable(int p0, int p1);
+            }
+
             public static class BorderColorWasmInterop
             {
                 [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.border-color"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
@@ -851,6 +857,18 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-stat-locks"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
             public static extern void wasmImportColumnStatLocks(int p0, int p1, nint p2);
+        }
+
+        public static class ColumnAnchorableWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "column-anchorable"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportColumnAnchorable(int p0, int p1, nint p2);
+        }
+
+        public static class SetAnchorableWasmInterop
+        {
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/components@0.1.0", EntryPoint = "set-anchorable"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            public static extern void wasmImportSetAnchorable(int p0, long p1, int p2, int p3);
         }
 
         public static class ColumnBorderColorWasmInterop

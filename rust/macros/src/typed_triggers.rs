@@ -14,6 +14,7 @@ pub(crate) struct TypedTrigger {
 
 pub(crate) const TYPED_TRIGGERS: &[TypedTrigger] = &[
     TypedTrigger { sdk: "Amount", wit: "amount", rust: "Amount", flat: &["i32"] },
+    TypedTrigger { sdk: "Anchorable", wit: "anchorable", rust: "Anchorable", flat: &["i32"] },
     TypedTrigger { sdk: "AutoOpenedCorpse", wit: "", rust: "", flat: &[] },
     TypedTrigger { sdk: "BackgroundColor", wit: "background-color", rust: "BackgroundColor", flat: &["f32", "f32", "f32", "f32"] },
     TypedTrigger { sdk: "BookWindow", wit: "", rust: "", flat: &[] },

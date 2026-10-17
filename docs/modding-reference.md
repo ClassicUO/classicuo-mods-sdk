@@ -98,7 +98,7 @@ Read-only data is marked *(ro)*; writing it is ignored, and a `&mut` / `Mut<T>` 
 | `cuo:ui/bg-color` · `border-color` · `border-radius` · `hover-tint` · `custom` · `global-z` | C | keep |
 | `cuo:ui/interaction` · `name` · `tooltip` · `tooltip-serial` · `button` · `stat-lock-button` | C | keep |
 | `cuo:ui/scroll` · `scrollbar` · `computed` *(ro)* | C | keep |
-| `cuo:ui/movable` · `resizable` · `movable-no-drag` · `no-window-drag` · `no-right-click-close` · `popup` · `no-blur` · `contains-by-bounds` · `supersedes` | C (markers) | keep |
+| `cuo:ui/movable` · `resizable` · `movable-no-drag` · `no-window-drag` · `no-right-click-close` · `anchorable` · `popup` · `no-blur` · `contains-by-bounds` · `supersedes` | C (markers) | keep |
 | `cuo:ui/text-input` · `editable-text` · `masked-text` | C | keep |
 | `cuo:ui/focused-input` · `surface` *(ro)* · `pick` *(ro)* · `text-caret` *(ro)* · `text-completion` · `text-completion-state` *(ro)* · `text-completion-pick` · `text-clipboard-action` · `clipboard-set` | R | keep |
 | `cuo:ui/topbar-*` · `options-window` · `statusbar-window` | C (markers) | keep |

@@ -1503,6 +1503,26 @@ internal interface ITypesImports {
     }
 
     /**
+    * `AnchorKind`
+    */
+
+    internal enum AnchorKind {
+        SPELL, HEALTHBAR
+    }
+
+    /**
+    * `cuo:ui/anchorable`
+    */
+
+    internal struct Anchorable {
+        internal AnchorKind kind;
+
+        internal Anchorable(AnchorKind kind) {
+            this.kind = kind;
+        }
+    }
+
+    /**
     * `cuo:ui/border-color`
     */
 

@@ -71,6 +71,7 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.StatLocks) ? new CodecStatLocks() :
             typeof(T) == typeof(global::CuoModSdk.Types.LocalTargetResultEvent) ? new CodecLocalResult() :
             typeof(T) == typeof(global::CuoModSdk.Types.TargetingState) ? new CodecTargetState() :
+            typeof(T) == typeof(global::CuoModSdk.Types.Anchorable) ? new CodecAnchorable() :
             typeof(T) == typeof(global::CuoModSdk.Types.BorderColorDto) ? new CodecBorderColor() :
             typeof(T) == typeof(global::CuoModSdk.Types.UOButton) ? new CodecButton() :
             typeof(T) == typeof(global::CuoModSdk.Types.ComputedNode) ? new CodecComputed() :
@@ -285,6 +286,7 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.Player) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.StatLocks) ? new TypedTrigger("stat-locks", 3, 1, [new TypedFlat("int", 0, "byte"), new TypedFlat("int", 1, "byte"), new TypedFlat("int", 2, "byte")], new CodecStatLocks()) :
         typeof(T) == typeof(global::CuoModSdk.Types.LocalTargetResultEvent) ? new TypedTrigger("local-target-result-event", 24, 8, [new TypedFlat("long", 0, "ulong"), new TypedFlat("int", 8, "uint"), new TypedFlat("int", 12, "ushort"), new TypedFlat("int", 14, "ushort"), new TypedFlat("int", 16, "ushort"), new TypedFlat("int", 18, "sbyte"), new TypedFlat("int", 19, "byte")], new CodecLocalResult()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.Anchorable) ? new TypedTrigger("anchorable", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecAnchorable()) :
         typeof(T) == typeof(global::CuoModSdk.Types.BorderColorDto) ? new TypedTrigger("border-color", 16, 4, [new TypedFlat("float", 0, "float"), new TypedFlat("float", 4, "float"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float")], new CodecBorderColor()) :
         typeof(T) == typeof(global::CuoModSdk.Types.UOButton) ? new TypedTrigger("uo-button", 6, 2, [new TypedFlat("int", 0, "ushort"), new TypedFlat("int", 2, "ushort"), new TypedFlat("int", 4, "ushort")], new CodecButton()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ModClick) ? new TypedTrigger(null, 0, 1, [], null) :
@@ -2631,6 +2633,24 @@ internal static unsafe class TypedGen
         && *(ushort*)(a + 32) == *(ushort*)(b + 32)
         && *(a + 34) == *(b + 34)
         && (*(a + 35) != 0) == (*(b + 35) != 0);
+
+    // anchorable: 1 bytes, align 1
+    internal static global::CuoModSdk.Types.Anchorable LiftAnchorable(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.Anchorable
+        {
+            Kind = (global::CuoModSdk.Types.AnchorKind)(*(byte*)(p + 0)),
+        };
+        return v;
+    }
+
+    internal static void LowerAnchorable(in global::CuoModSdk.Types.Anchorable v, byte* p)
+    {
+        *(byte*)(p + 0) = (byte)v.Kind;
+    }
+
+    internal static bool EqAnchorable(byte* a, byte* b) =>
+        *(a + 0) == *(b + 0);
 
     // border-color: 16 bytes, align 4
     internal static global::CuoModSdk.Types.BorderColorDto LiftBorderColor(byte* p)
@@ -6286,6 +6306,15 @@ internal static unsafe class TypedImports
     [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-target-state"), WasmImportLinkage]
     internal static extern void Get_TargetState(int r, nint ret);
 
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.anchorable"), WasmImportLinkage]
+    internal static extern int B_Anchorable(int a0, int f0);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-anchorable"), WasmImportLinkage]
+    internal static extern void Col_Anchorable(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-anchorable"), WasmImportLinkage]
+    internal static extern void Set_Anchorable(int a0, long a1, int a2, int f0);
+
     [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.border-color"), WasmImportLinkage]
     internal static extern int B_BorderColor(int a0, float f0, float f1, float f2, float f3);
 
@@ -8477,6 +8506,30 @@ internal sealed unsafe class CodecTargetState : TypedCodec<global::CuoModSdk.Typ
             return false;
         new ReadOnlySpan<byte>(p + 4, 36).CopyTo(new Span<byte>(rec, 36));
         return true;
+    }
+}
+
+/// <summary><c>cuo:ui/anchorable</c> (anchorable).</summary>
+internal sealed unsafe class CodecAnchorable : TypedCodec<global::CuoModSdk.Types.Anchorable>
+{
+    internal override int Size => 1;
+    internal override string Path => "cuo:ui/anchorable";
+    internal override global::CuoModSdk.Types.Anchorable Lift(byte* p) => TypedGen.LiftAnchorable(p);
+    protected override void Lower(in global::CuoModSdk.Types.Anchorable v, byte* p) => TypedGen.LowerAnchorable(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.Anchorable now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqAnchorable((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_Anchorable(b, *(rec + 0));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Anchorable(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_Anchorable(q, (long)e, t, *(rec + 0));
     }
 }
 

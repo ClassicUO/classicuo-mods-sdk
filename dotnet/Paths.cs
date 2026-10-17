@@ -263,6 +263,8 @@ public static class Paths
 
     public static class Ui
     {
+        /// <summary><c>cuo:ui/anchorable</c> — component.</summary>
+        public const string Anchorable = "cuo:ui/anchorable";
         /// <summary><c>cuo:ui/bg-color</c> — component.</summary>
         public const string BgColor = "cuo:ui/bg-color";
         /// <summary><c>cuo:ui/border-color</c> — component.</summary>
