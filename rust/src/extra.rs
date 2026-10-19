@@ -2,7 +2,7 @@
 //! data shapes themselves all come from `tools/mod-typegen` (types.rs).
 
 use crate::ecs::Entity;
-use crate::types::{ChatMessage, ChildOf, InputConsume, Interaction};
+use crate::types::{chat_kind, interaction_state, ChatMessage, ChildOf, InputConsume, Interaction};
 
 impl ChildOf {
     pub fn new(parent: Entity) -> ChildOf {
@@ -12,24 +12,24 @@ impl ChildOf {
 
 impl Interaction {
     /// Clickable, idle. Insert this to make a node receive `UiClick` / `UiHover`.
-    pub const NONE: Interaction = Interaction { state: 0 };
-    pub const HOVERED: Interaction = Interaction { state: 1 };
-    pub const PRESSED: Interaction = Interaction { state: 2 };
+    pub const NONE: Interaction = Interaction { state: interaction_state::NONE };
+    pub const HOVERED: Interaction = Interaction { state: interaction_state::HOVERED };
+    pub const PRESSED: Interaction = Interaction { state: interaction_state::PRESSED };
 
     pub fn is_hovered(&self) -> bool {
-        self.state == 1
+        self.state == interaction_state::HOVERED
     }
     pub fn is_pressed(&self) -> bool {
-        self.state == 2
+        self.state == interaction_state::PRESSED
     }
 }
 
 impl InputConsume {
-    /// Eat this frame's `button` (`MouseButtonType`; 1 left, 2 middle, 3 right, ...).
+    /// Eat this frame's `button` (a `mouse_button` constant).
     pub fn mouse(button: u8) -> InputConsume {
         InputConsume { mouse: button, key: 0 }
     }
-    /// Eat this frame's `key` (`KeyCode`).
+    /// Eat this frame's `key` (a `key_code` constant).
     pub fn key(key: u32) -> InputConsume {
         InputConsume { mouse: 0, key }
     }
@@ -44,8 +44,8 @@ impl ChatMessage {
             hue: 0x03B2,
             font: 3,
             is_unicode: true,
-            // 1 = the system log (0 would be overhead speech on serial 0).
-            kind: 1,
+            // Overhead would be speech on serial 0.
+            kind: chat_kind::SYSTEM,
             ..Default::default()
         }
     }

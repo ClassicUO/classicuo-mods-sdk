@@ -168,3 +168,18 @@ public enum KeyCode : int
     Pa1 = 253,
     OemClear = 254,
 }
+
+/// <summary>Mouse buttons, mirrored from the host's <c>MouseButtonType</c>, plus the wheel
+/// pseudo-buttons (one fire per notch). Pass one to <c>ModBuilder.HotkeyMouse</c> or put it in
+/// <c>InputConsume.Mouse</c> — the wire carries the number.</summary>
+public enum MouseButton : int
+{
+    None = 0,
+    Left = 1,
+    Middle = 2,
+    Right = 3,
+    XButton1 = 4,
+    XButton2 = 5,
+    WheelUp = 8,
+    WheelDown = 9,
+}

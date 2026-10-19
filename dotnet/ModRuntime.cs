@@ -61,29 +61,24 @@ public static unsafe class ModRuntime
 
     // ── per-run state (runs never nest: the host drives the exports serially) ──
     static readonly RunScope _scope = new();
-    static byte[] _kinds = new byte[8];
+    static byte[] _kinds = [];
     static int[] _handles = new int[8];
     static byte[] _packet = new byte[512];
 
     static Entry Lift(int index, int* handles, int count)
     {
         var entry = _entries[index];
-        if (_kinds.Length < count)
+        _kinds = entry.Kinds ??= entry.Params.Select(p => p.Kind switch
         {
-            _kinds = new byte[count];
+            ParamKind.Commands => EcsAbi.ParamCommands,
+            ParamKind.Query => EcsAbi.ParamQuery,
+            ParamKind.Events => EcsAbi.ParamEvents,
+            _ => EcsAbi.ParamRes,
+        }).ToArray();
+        if (_handles.Length < count)
             _handles = new int[count];
-        }
         for (var i = 0; i < count; i++)
-        {
-            _kinds[i] = entry.Params[i].Kind switch
-            {
-                ParamKind.Commands => EcsAbi.ParamCommands,
-                ParamKind.Query => EcsAbi.ParamQuery,
-                ParamKind.Events => EcsAbi.ParamEvents,
-                _ => EcsAbi.ParamRes,
-            };
             _handles[i] = handles[i];
-        }
         return entry;
     }
 

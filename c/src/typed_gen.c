@@ -48,54 +48,54 @@ static void to_BackgroundColor(cuo_modding_types_background_color_t *w, const cu
 static void from_BackgroundColor(cuo_BackgroundColor *o, const cuo_modding_types_background_color_t *w);
 static void to_BorderRadius(cuo_modding_types_border_radius_t *w, const cuo_BorderRadius *v);
 static void from_BorderRadius(cuo_BorderRadius *o, const cuo_modding_types_border_radius_t *w);
-static void to_ChildOf(cuo_modding_types_child_of_t *w, const cuo_ChildOfDto *v);
-static void from_ChildOf(cuo_ChildOfDto *o, const cuo_modding_types_child_of_t *w);
+static void to_ChildOf(cuo_modding_types_child_of_t *w, const cuo_ChildOf *v);
+static void from_ChildOf(cuo_ChildOf *o, const cuo_modding_types_child_of_t *w);
 static void to_GlobalZIndex(cuo_modding_types_global_z_index_t *w, const cuo_GlobalZIndex *v);
 static void from_GlobalZIndex(cuo_GlobalZIndex *o, const cuo_modding_types_global_z_index_t *w);
-static void to_Interaction(cuo_modding_types_interaction_t *w, const cuo_InteractionDto *v);
-static void from_Interaction(cuo_InteractionDto *o, const cuo_modding_types_interaction_t *w);
-static void to_MouseInput(cuo_modding_types_mouse_input_t *w, const cuo_MouseInputDto *v);
-static void from_MouseInput(cuo_MouseInputDto *o, const cuo_modding_types_mouse_input_t *w);
-static void to_KeyboardInput(cuo_modding_types_keyboard_input_t *w, const cuo_KeyboardInputDto *v);
-static void from_KeyboardInput(cuo_KeyboardInputDto *o, const cuo_modding_types_keyboard_input_t *w);
+static void to_Interaction(cuo_modding_types_interaction_t *w, const cuo_Interaction *v);
+static void from_Interaction(cuo_Interaction *o, const cuo_modding_types_interaction_t *w);
+static void to_MouseInput(cuo_modding_types_mouse_input_t *w, const cuo_MouseInput *v);
+static void from_MouseInput(cuo_MouseInput *o, const cuo_modding_types_mouse_input_t *w);
+static void to_KeyboardInput(cuo_modding_types_keyboard_input_t *w, const cuo_KeyboardInput *v);
+static void from_KeyboardInput(cuo_KeyboardInput *o, const cuo_modding_types_keyboard_input_t *w);
 static void to_ChatMessage(cuo_modding_types_chat_message_t *w, const cuo_ModChatMessage *v);
 static void from_ChatMessage(cuo_ModChatMessage *o, const cuo_modding_types_chat_message_t *w);
 static void to_PromptOpenedEvent(cuo_modding_types_prompt_opened_event_t *w, const cuo_PromptOpenedEvent *v);
 static void from_PromptOpenedEvent(cuo_PromptOpenedEvent *o, const cuo_modding_types_prompt_opened_event_t *w);
 static void to_Time(cuo_modding_types_time_t *w, const cuo_Time *v);
 static void from_Time(cuo_Time *o, const cuo_modding_types_time_t *w);
-static void to_EquipmentSlots(cuo_modding_types_equipment_slots_t *w, const cuo_EquipmentSlotsDto *v);
-static void from_EquipmentSlots(cuo_EquipmentSlotsDto *o, const cuo_modding_types_equipment_slots_t *w);
+static void to_EquipmentSlots(cuo_modding_types_equipment_slots_t *w, const cuo_EquipmentSlots *v);
+static void from_EquipmentSlots(cuo_EquipmentSlots *o, const cuo_modding_types_equipment_slots_t *w);
 static void to_Facing(cuo_modding_types_facing_t *w, const cuo_Facing *v);
 static void from_Facing(cuo_Facing *o, const cuo_modding_types_facing_t *w);
-static void to_OplLine(cuo_modding_types_opl_line_t *w, const cuo_OplLineDto *v);
-static void from_OplLine(cuo_OplLineDto *o, const cuo_modding_types_opl_line_t *w);
-static void to_EntityProperties(cuo_modding_types_entity_properties_t *w, const cuo_EntityPropertiesDto *v);
-static void from_EntityProperties(cuo_EntityPropertiesDto *o, const cuo_modding_types_entity_properties_t *w);
+static void to_OplLine(cuo_modding_types_opl_line_t *w, const cuo_OplLine *v);
+static void from_OplLine(cuo_OplLine *o, const cuo_modding_types_opl_line_t *w);
+static void to_EntityProperties(cuo_modding_types_entity_properties_t *w, const cuo_EntityProperties *v);
+static void from_EntityProperties(cuo_EntityProperties *o, const cuo_modding_types_entity_properties_t *w);
 static void to_ServerFlags(cuo_modding_types_server_flags_t *w, const cuo_ServerFlags *v);
 static void from_ServerFlags(cuo_ServerFlags *o, const cuo_modding_types_server_flags_t *w);
 static void to_ContainerSlotPosition(cuo_modding_types_container_slot_position_t *w, const cuo_ContainerSlotPosition *v);
 static void from_ContainerSlotPosition(cuo_ContainerSlotPosition *o, const cuo_modding_types_container_slot_position_t *w);
-static void to_GameContext(cuo_modding_types_game_context_t *w, const cuo_GameContextDto *v);
-static void from_GameContext(cuo_GameContextDto *o, const cuo_modding_types_game_context_t *w);
-static void to_GameSettings(cuo_modding_types_game_settings_t *w, const cuo_GameSettingsDto *v);
-static void from_GameSettings(cuo_GameSettingsDto *o, const cuo_modding_types_game_settings_t *w);
-static void to_GameState(cuo_modding_types_game_state_t *w, const cuo_GameStateDto *v);
-static void from_GameState(cuo_GameStateDto *o, const cuo_modding_types_game_state_t *w);
+static void to_GameContext(cuo_modding_types_game_context_t *w, const cuo_GameContext *v);
+static void from_GameContext(cuo_GameContext *o, const cuo_modding_types_game_context_t *w);
+static void to_GameSettings(cuo_modding_types_game_settings_t *w, const cuo_GameSettings *v);
+static void from_GameSettings(cuo_GameSettings *o, const cuo_modding_types_game_settings_t *w);
+static void to_GameState(cuo_modding_types_game_state_t *w, const cuo_GameState *v);
+static void from_GameState(cuo_GameState *o, const cuo_modding_types_game_state_t *w);
 static void to_ContainerWindow(cuo_modding_types_container_window_t *w, const cuo_ContainerWindow *v);
 static void from_ContainerWindow(cuo_ContainerWindow *o, const cuo_modding_types_container_window_t *w);
 static void to_ContainerClosedEvent(cuo_modding_types_container_closed_event_t *w, const cuo_ContainerClosedEvent *v);
 static void from_ContainerClosedEvent(cuo_ContainerClosedEvent *o, const cuo_modding_types_container_closed_event_t *w);
 static void to_ContainerOpenedEvent(cuo_modding_types_container_opened_event_t *w, const cuo_ContainerOpenedEvent *v);
 static void from_ContainerOpenedEvent(cuo_ContainerOpenedEvent *o, const cuo_modding_types_container_opened_event_t *w);
-static void to_ContainerPosition(cuo_modding_types_container_position_t *w, const cuo_ContainerPositionDto *v);
-static void from_ContainerPosition(cuo_ContainerPositionDto *o, const cuo_modding_types_container_position_t *w);
-static void to_ContainerPositions(cuo_modding_types_container_positions_t *w, const cuo_ContainerPositionsDto *v);
-static void from_ContainerPositions(cuo_ContainerPositionsDto *o, const cuo_modding_types_container_positions_t *w);
+static void to_ContainerPosition(cuo_modding_types_container_position_t *w, const cuo_ContainerPosition *v);
+static void from_ContainerPosition(cuo_ContainerPosition *o, const cuo_modding_types_container_position_t *w);
+static void to_ContainerPositions(cuo_modding_types_container_positions_t *w, const cuo_ContainerPositions *v);
+static void from_ContainerPositions(cuo_ContainerPositions *o, const cuo_modding_types_container_positions_t *w);
 static void to_ContainerSlotEvent(cuo_modding_types_container_slot_event_t *w, const cuo_ContainerSlotEvent *v);
 static void from_ContainerSlotEvent(cuo_ContainerSlotEvent *o, const cuo_modding_types_container_slot_event_t *w);
-static void to_ContainerGumpTag(cuo_modding_types_container_gump_tag_t *w, const cuo_ContainerGumpTagDto *v);
-static void from_ContainerGumpTag(cuo_ContainerGumpTagDto *o, const cuo_modding_types_container_gump_tag_t *w);
+static void to_ContainerGumpTag(cuo_modding_types_container_gump_tag_t *w, const cuo_ContainerGumpTag *v);
+static void from_ContainerGumpTag(cuo_ContainerGumpTag *o, const cuo_modding_types_container_gump_tag_t *w);
 static void to_ContextMenuEntry(cuo_modding_types_context_menu_entry_t *w, const cuo_ContextMenuEntry *v);
 static void from_ContextMenuEntry(cuo_ContextMenuEntry *o, const cuo_modding_types_context_menu_entry_t *w);
 static void to_ContextMenuEvent(cuo_modding_types_context_menu_event_t *w, const cuo_ContextMenuEvent *v);
@@ -106,52 +106,52 @@ static void to_GridLootWindow(cuo_modding_types_grid_loot_window_t *w, const cuo
 static void from_GridLootWindow(cuo_GridLootWindow *o, const cuo_modding_types_grid_loot_window_t *w);
 static void to_HealthBarWindow(cuo_modding_types_health_bar_window_t *w, const cuo_HealthBarWindow *v);
 static void from_HealthBarWindow(cuo_HealthBarWindow *o, const cuo_modding_types_health_bar_window_t *w);
-static void to_ServerGumpButton(cuo_modding_types_server_gump_button_t *w, const cuo_ServerGumpButtonDto *v);
-static void from_ServerGumpButton(cuo_ServerGumpButtonDto *o, const cuo_modding_types_server_gump_button_t *w);
-static void to_ServerGumpTextEntry(cuo_modding_types_server_gump_text_entry_t *w, const cuo_ServerGumpTextEntryDto *v);
-static void from_ServerGumpTextEntry(cuo_ServerGumpTextEntryDto *o, const cuo_modding_types_server_gump_text_entry_t *w);
-static void to_ServerGumpSwitch(cuo_modding_types_server_gump_switch_t *w, const cuo_ServerGumpSwitchDto *v);
-static void from_ServerGumpSwitch(cuo_ServerGumpSwitchDto *o, const cuo_modding_types_server_gump_switch_t *w);
-static void to_ServerGump(cuo_modding_types_server_gump_t *w, const cuo_ServerGumpDto *v);
-static void from_ServerGump(cuo_ServerGumpDto *o, const cuo_modding_types_server_gump_t *w);
+static void to_ServerGumpButton(cuo_modding_types_server_gump_button_t *w, const cuo_ServerGumpButton *v);
+static void from_ServerGumpButton(cuo_ServerGumpButton *o, const cuo_modding_types_server_gump_button_t *w);
+static void to_ServerGumpTextEntry(cuo_modding_types_server_gump_text_entry_t *w, const cuo_ServerGumpTextEntry *v);
+static void from_ServerGumpTextEntry(cuo_ServerGumpTextEntry *o, const cuo_modding_types_server_gump_text_entry_t *w);
+static void to_ServerGumpSwitch(cuo_modding_types_server_gump_switch_t *w, const cuo_ServerGumpSwitch *v);
+static void from_ServerGumpSwitch(cuo_ServerGumpSwitch *o, const cuo_modding_types_server_gump_switch_t *w);
+static void to_ServerGump(cuo_modding_types_server_gump_t *w, const cuo_ServerGump *v);
+static void from_ServerGump(cuo_ServerGump *o, const cuo_modding_types_server_gump_t *w);
 static void to_InputConsume(cuo_modding_types_input_consume_t *w, const cuo_ModInputConsume *v);
 static void from_InputConsume(cuo_ModInputConsume *o, const cuo_modding_types_input_consume_t *w);
-static void to_HostHotkey(cuo_modding_types_host_hotkey_t *w, const cuo_HostHotkeyDto *v);
-static void from_HostHotkey(cuo_HostHotkeyDto *o, const cuo_modding_types_host_hotkey_t *w);
-static void to_HostHotkeys(cuo_modding_types_host_hotkeys_t *w, const cuo_HostHotkeysDto *v);
-static void from_HostHotkeys(cuo_HostHotkeysDto *o, const cuo_modding_types_host_hotkeys_t *w);
+static void to_HostHotkey(cuo_modding_types_host_hotkey_t *w, const cuo_HostHotkey *v);
+static void from_HostHotkey(cuo_HostHotkey *o, const cuo_modding_types_host_hotkey_t *w);
+static void to_HostHotkeys(cuo_modding_types_host_hotkeys_t *w, const cuo_HostHotkeys *v);
+static void from_HostHotkeys(cuo_HostHotkeys *o, const cuo_modding_types_host_hotkeys_t *w);
 static void to_ModHotkeyFired(cuo_modding_types_mod_hotkey_fired_t *w, const cuo_ModHotkeyFired *v);
 static void from_ModHotkeyFired(cuo_ModHotkeyFired *o, const cuo_modding_types_mod_hotkey_fired_t *w);
 static void to_ModHotkeyBinding(cuo_modding_types_mod_hotkey_binding_t *w, const cuo_ModHotkeyBinding *v);
 static void from_ModHotkeyBinding(cuo_ModHotkeyBinding *o, const cuo_modding_types_mod_hotkey_binding_t *w);
-static void to_ModHotkeyBindings(cuo_modding_types_mod_hotkey_bindings_t *w, const cuo_ModHotkeyBindingsDto *v);
-static void from_ModHotkeyBindings(cuo_ModHotkeyBindingsDto *o, const cuo_modding_types_mod_hotkey_bindings_t *w);
-static void to_WorldSingleClick(cuo_modding_types_world_single_click_t *w, const cuo_WorldSingleClickDto *v);
-static void from_WorldSingleClick(cuo_WorldSingleClickDto *o, const cuo_modding_types_world_single_click_t *w);
+static void to_ModHotkeyBindings(cuo_modding_types_mod_hotkey_bindings_t *w, const cuo_ModHotkeyBindings *v);
+static void from_ModHotkeyBindings(cuo_ModHotkeyBindings *o, const cuo_modding_types_mod_hotkey_bindings_t *w);
+static void to_WorldSingleClick(cuo_modding_types_world_single_click_t *w, const cuo_WorldSingleClick *v);
+static void from_WorldSingleClick(cuo_WorldSingleClick *o, const cuo_modding_types_world_single_click_t *w);
 static void to_ItemDropSent(cuo_modding_types_item_drop_sent_t *w, const cuo_ItemDropSent *v);
 static void from_ItemDropSent(cuo_ItemDropSent *o, const cuo_modding_types_item_drop_sent_t *w);
 static void to_ItemMoveResult(cuo_modding_types_item_move_result_t *w, const cuo_ItemMoveResult *v);
 static void from_ItemMoveResult(cuo_ItemMoveResult *o, const cuo_modding_types_item_move_result_t *w);
-static void to_ModOption(cuo_modding_types_mod_option_t *w, const cuo_ModOptionDto *v);
-static void from_ModOption(cuo_ModOptionDto *o, const cuo_modding_types_mod_option_t *w);
-static void to_ModOptionsSchema(cuo_modding_types_mod_options_schema_t *w, const cuo_ModOptionsSchemaDto *v);
-static void from_ModOptionsSchema(cuo_ModOptionsSchemaDto *o, const cuo_modding_types_mod_options_schema_t *w);
-static void to_ModOptionValue(cuo_modding_types_mod_option_value_t *w, const cuo_ModOptionValueDto *v);
-static void from_ModOptionValue(cuo_ModOptionValueDto *o, const cuo_modding_types_mod_option_value_t *w);
-static void to_ModOptionsValues(cuo_modding_types_mod_options_values_t *w, const cuo_ModOptionsValuesDto *v);
-static void from_ModOptionsValues(cuo_ModOptionsValuesDto *o, const cuo_modding_types_mod_options_values_t *w);
-static void to_PlayerBuff(cuo_modding_types_player_buff_t *w, const cuo_PlayerBuffDto *v);
-static void from_PlayerBuff(cuo_PlayerBuffDto *o, const cuo_modding_types_player_buff_t *w);
-static void to_PlayerBuffs(cuo_modding_types_player_buffs_t *w, const cuo_PlayerBuffsDto *v);
-static void from_PlayerBuffs(cuo_PlayerBuffsDto *o, const cuo_modding_types_player_buffs_t *w);
+static void to_ModOption(cuo_modding_types_mod_option_t *w, const cuo_ModOption *v);
+static void from_ModOption(cuo_ModOption *o, const cuo_modding_types_mod_option_t *w);
+static void to_ModOptionsSchema(cuo_modding_types_mod_options_schema_t *w, const cuo_ModOptionsSchema *v);
+static void from_ModOptionsSchema(cuo_ModOptionsSchema *o, const cuo_modding_types_mod_options_schema_t *w);
+static void to_ModOptionValue(cuo_modding_types_mod_option_value_t *w, const cuo_ModOptionValue *v);
+static void from_ModOptionValue(cuo_ModOptionValue *o, const cuo_modding_types_mod_option_value_t *w);
+static void to_ModOptionsValues(cuo_modding_types_mod_options_values_t *w, const cuo_ModOptionsValues *v);
+static void from_ModOptionsValues(cuo_ModOptionsValues *o, const cuo_modding_types_mod_options_values_t *w);
+static void to_PlayerBuff(cuo_modding_types_player_buff_t *w, const cuo_PlayerBuff *v);
+static void from_PlayerBuff(cuo_PlayerBuff *o, const cuo_modding_types_player_buff_t *w);
+static void to_PlayerBuffs(cuo_modding_types_player_buffs_t *w, const cuo_PlayerBuffs *v);
+static void from_PlayerBuffs(cuo_PlayerBuffs *o, const cuo_modding_types_player_buffs_t *w);
 static void to_Vector2(cuo_modding_types_vector2_t *w, const cuo_Vector2 *v);
 static void from_Vector2(cuo_Vector2 *o, const cuo_modding_types_vector2_t *w);
 static void to_GrabbedItem(cuo_modding_types_grabbed_item_t *w, const cuo_GrabbedItem *v);
 static void from_GrabbedItem(cuo_GrabbedItem *o, const cuo_modding_types_grabbed_item_t *w);
-static void to_PlayerSkill(cuo_modding_types_player_skill_t *w, const cuo_PlayerSkillDto *v);
-static void from_PlayerSkill(cuo_PlayerSkillDto *o, const cuo_modding_types_player_skill_t *w);
-static void to_PlayerSkills(cuo_modding_types_player_skills_t *w, const cuo_PlayerSkillsDto *v);
-static void from_PlayerSkills(cuo_PlayerSkillsDto *o, const cuo_modding_types_player_skills_t *w);
+static void to_PlayerSkill(cuo_modding_types_player_skill_t *w, const cuo_PlayerSkill *v);
+static void from_PlayerSkill(cuo_PlayerSkill *o, const cuo_modding_types_player_skill_t *w);
+static void to_PlayerSkills(cuo_modding_types_player_skills_t *w, const cuo_PlayerSkills *v);
+static void from_PlayerSkills(cuo_PlayerSkills *o, const cuo_modding_types_player_skills_t *w);
 static void to_StatLocks(cuo_modding_types_stat_locks_t *w, const cuo_StatLocks *v);
 static void from_StatLocks(cuo_StatLocks *o, const cuo_modding_types_stat_locks_t *w);
 static void to_LocalTargetResultEvent(cuo_modding_types_local_target_result_event_t *w, const cuo_LocalTargetResultEvent *v);
@@ -160,8 +160,8 @@ static void to_TargetingState(cuo_modding_types_targeting_state_t *w, const cuo_
 static void from_TargetingState(cuo_TargetingState *o, const cuo_modding_types_targeting_state_t *w);
 static void to_Anchorable(cuo_modding_types_anchorable_t *w, const cuo_Anchorable *v);
 static void from_Anchorable(cuo_Anchorable *o, const cuo_modding_types_anchorable_t *w);
-static void to_BorderColor(cuo_modding_types_border_color_t *w, const cuo_BorderColorDto *v);
-static void from_BorderColor(cuo_BorderColorDto *o, const cuo_modding_types_border_color_t *w);
+static void to_BorderColor(cuo_modding_types_border_color_t *w, const cuo_BorderColor *v);
+static void from_BorderColor(cuo_BorderColor *o, const cuo_modding_types_border_color_t *w);
 static void to_UoButton(cuo_modding_types_uo_button_t *w, const cuo_UOButton *v);
 static void from_UoButton(cuo_UOButton *o, const cuo_modding_types_uo_button_t *w);
 static void to_ComputedNode(cuo_modding_types_computed_node_t *w, const cuo_ComputedNode *v);
@@ -170,8 +170,8 @@ static void to_Vector3(cuo_modding_types_vector3_t *w, const cuo_Vector3 *v);
 static void from_Vector3(cuo_Vector3 *o, const cuo_modding_types_vector3_t *w);
 static void to_ContainerItemUi(cuo_modding_types_container_item_ui_t *w, const cuo_ContainerItemUI *v);
 static void from_ContainerItemUi(cuo_ContainerItemUI *o, const cuo_modding_types_container_item_ui_t *w);
-static void to_UiCustom(cuo_modding_types_ui_custom_t *w, const cuo_UiCustomDto *v);
-static void from_UiCustom(cuo_UiCustomDto *o, const cuo_modding_types_ui_custom_t *w);
+static void to_UiCustom(cuo_modding_types_ui_custom_t *w, const cuo_UiCustom *v);
+static void from_UiCustom(cuo_UiCustom *o, const cuo_modding_types_ui_custom_t *w);
 static void to_EditableText(cuo_modding_types_editable_text_t *w, const cuo_EditableText *v);
 static void from_EditableText(cuo_EditableText *o, const cuo_modding_types_editable_text_t *w);
 static void to_UiHover(cuo_modding_types_ui_hover_t *w, const cuo_ModHover *v);
@@ -180,8 +180,8 @@ static void to_UiHoverTint(cuo_modding_types_ui_hover_tint_t *w, const cuo_UiHov
 static void from_UiHoverTint(cuo_UiHoverTint *o, const cuo_modding_types_ui_hover_tint_t *w);
 static void to_UiName(cuo_modding_types_ui_name_t *w, const cuo_UiName *v);
 static void from_UiName(cuo_UiName *o, const cuo_modding_types_ui_name_t *w);
-static void to_UiPick(cuo_modding_types_ui_pick_t *w, const cuo_UiPickDto *v);
-static void from_UiPick(cuo_UiPickDto *o, const cuo_modding_types_ui_pick_t *w);
+static void to_UiPick(cuo_modding_types_ui_pick_t *w, const cuo_UiPick *v);
+static void from_UiPick(cuo_UiPick *o, const cuo_modding_types_ui_pick_t *w);
 static void to_UiResizable(cuo_modding_types_ui_resizable_t *w, const cuo_UiResizable *v);
 static void from_UiResizable(cuo_UiResizable *o, const cuo_modding_types_ui_resizable_t *w);
 static void to_UiRightClick(cuo_modding_types_ui_right_click_t *w, const cuo_ModRightClick *v);
@@ -196,12 +196,12 @@ static void to_StatusBarWindow(cuo_modding_types_status_bar_window_t *w, const c
 static void from_StatusBarWindow(cuo_StatusBarWindow *o, const cuo_modding_types_status_bar_window_t *w);
 static void to_ModSupersedes(cuo_modding_types_mod_supersedes_t *w, const cuo_ModSupersedes *v);
 static void from_ModSupersedes(cuo_ModSupersedes *o, const cuo_modding_types_mod_supersedes_t *w);
-static void to_UiSurface(cuo_modding_types_ui_surface_t *w, const cuo_UiSurfaceDto *v);
-static void from_UiSurface(cuo_UiSurfaceDto *o, const cuo_modding_types_ui_surface_t *w);
-static void to_TextCaret(cuo_modding_types_text_caret_t *w, const cuo_TextCaretDto *v);
-static void from_TextCaret(cuo_TextCaretDto *o, const cuo_modding_types_text_caret_t *w);
-static void to_TextCompletionState(cuo_modding_types_text_completion_state_t *w, const cuo_TextCompletionStateDto *v);
-static void from_TextCompletionState(cuo_TextCompletionStateDto *o, const cuo_modding_types_text_completion_state_t *w);
+static void to_UiSurface(cuo_modding_types_ui_surface_t *w, const cuo_UiSurface *v);
+static void from_UiSurface(cuo_UiSurface *o, const cuo_modding_types_ui_surface_t *w);
+static void to_TextCaret(cuo_modding_types_text_caret_t *w, const cuo_TextCaret *v);
+static void from_TextCaret(cuo_TextCaret *o, const cuo_modding_types_text_caret_t *w);
+static void to_TextCompletionState(cuo_modding_types_text_completion_state_t *w, const cuo_TextCompletionState *v);
+static void from_TextCompletionState(cuo_TextCompletionState *o, const cuo_modding_types_text_completion_state_t *w);
 static void to_TextHue(cuo_modding_types_text_hue_t *w, const cuo_TextHue *v);
 static void from_TextHue(cuo_TextHue *o, const cuo_modding_types_text_hue_t *w);
 static void to_TextSpan(cuo_modding_types_text_span_t *w, const cuo_TextSpan *v);
@@ -214,10 +214,10 @@ static void to_UiTooltip(cuo_modding_types_ui_tooltip_t *w, const cuo_UiTooltip 
 static void from_UiTooltip(cuo_UiTooltip *o, const cuo_modding_types_ui_tooltip_t *w);
 static void to_MobAnimation(cuo_modding_types_mob_animation_t *w, const cuo_MobAnimation *v);
 static void from_MobAnimation(cuo_MobAnimation *o, const cuo_modding_types_mob_animation_t *w);
-static void to_MobStep(cuo_modding_types_mob_step_t *w, const cuo_MobStepDto *v);
-static void from_MobStep(cuo_MobStepDto *o, const cuo_modding_types_mob_step_t *w);
-static void to_MobileSteps(cuo_modding_types_mobile_steps_t *w, const cuo_MobileStepsDto *v);
-static void from_MobileSteps(cuo_MobileStepsDto *o, const cuo_modding_types_mobile_steps_t *w);
+static void to_MobStep(cuo_modding_types_mob_step_t *w, const cuo_MobStep *v);
+static void from_MobStep(cuo_MobStep *o, const cuo_modding_types_mob_step_t *w);
+static void to_MobileSteps(cuo_modding_types_mobile_steps_t *w, const cuo_MobileSteps *v);
+static void from_MobileSteps(cuo_MobileSteps *o, const cuo_modding_types_mobile_steps_t *w);
 static void to_CombatBookWindow(cuo_modding_types_combat_book_window_t *w, const cuo_CombatBookWindow *v);
 static void from_CombatBookWindow(cuo_CombatBookWindow *o, const cuo_modding_types_combat_book_window_t *w);
 static void to_HouseDesignWindow(cuo_modding_types_house_design_window_t *w, const cuo_HouseDesignWindow *v);
@@ -254,24 +254,24 @@ static void to_TradeWindow(cuo_modding_types_trade_window_t *w, const cuo_TradeW
 static void from_TradeWindow(cuo_TradeWindow *o, const cuo_modding_types_trade_window_t *w);
 static void to_ModMoveRequest(cuo_modding_types_mod_move_request_t *w, const cuo_ModMoveRequest *v);
 static void from_ModMoveRequest(cuo_ModMoveRequest *o, const cuo_modding_types_mod_move_request_t *w);
-static void to_PartyMember(cuo_modding_types_party_member_t *w, const cuo_PartyMemberDto *v);
-static void from_PartyMember(cuo_PartyMemberDto *o, const cuo_modding_types_party_member_t *w);
-static void to_Party(cuo_modding_types_party_t *w, const cuo_PartyDto *v);
-static void from_Party(cuo_PartyDto *o, const cuo_modding_types_party_t *w);
-static void to_Spellbook(cuo_modding_types_spellbook_t *w, const cuo_SpellbookDto *v);
-static void from_Spellbook(cuo_SpellbookDto *o, const cuo_modding_types_spellbook_t *w);
-static void to_Spellbooks(cuo_modding_types_spellbooks_t *w, const cuo_SpellbooksDto *v);
-static void from_Spellbooks(cuo_SpellbooksDto *o, const cuo_modding_types_spellbooks_t *w);
-static void to_PlayerStep(cuo_modding_types_player_step_t *w, const cuo_PlayerStepDto *v);
-static void from_PlayerStep(cuo_PlayerStepDto *o, const cuo_modding_types_player_step_t *w);
-static void to_PlayerSteps(cuo_modding_types_player_steps_t *w, const cuo_PlayerStepsDto *v);
-static void from_PlayerSteps(cuo_PlayerStepsDto *o, const cuo_modding_types_player_steps_t *w);
-static void to_CharInfo(cuo_modding_types_char_info_t *w, const cuo_CharInfoDto *v);
-static void from_CharInfo(cuo_CharInfoDto *o, const cuo_modding_types_char_info_t *w);
-static void to_TownInfo(cuo_modding_types_town_info_t *w, const cuo_TownInfoDto *v);
-static void from_TownInfo(cuo_TownInfoDto *o, const cuo_modding_types_town_info_t *w);
-static void to_CharacterSelection(cuo_modding_types_character_selection_t *w, const cuo_CharacterSelectionDto *v);
-static void from_CharacterSelection(cuo_CharacterSelectionDto *o, const cuo_modding_types_character_selection_t *w);
+static void to_PartyMember(cuo_modding_types_party_member_t *w, const cuo_PartyMember *v);
+static void from_PartyMember(cuo_PartyMember *o, const cuo_modding_types_party_member_t *w);
+static void to_Party(cuo_modding_types_party_t *w, const cuo_Party *v);
+static void from_Party(cuo_Party *o, const cuo_modding_types_party_t *w);
+static void to_Spellbook(cuo_modding_types_spellbook_t *w, const cuo_Spellbook *v);
+static void from_Spellbook(cuo_Spellbook *o, const cuo_modding_types_spellbook_t *w);
+static void to_Spellbooks(cuo_modding_types_spellbooks_t *w, const cuo_Spellbooks *v);
+static void from_Spellbooks(cuo_Spellbooks *o, const cuo_modding_types_spellbooks_t *w);
+static void to_PlayerStep(cuo_modding_types_player_step_t *w, const cuo_PlayerStep *v);
+static void from_PlayerStep(cuo_PlayerStep *o, const cuo_modding_types_player_step_t *w);
+static void to_PlayerSteps(cuo_modding_types_player_steps_t *w, const cuo_PlayerSteps *v);
+static void from_PlayerSteps(cuo_PlayerSteps *o, const cuo_modding_types_player_steps_t *w);
+static void to_CharInfo(cuo_modding_types_char_info_t *w, const cuo_CharInfo *v);
+static void from_CharInfo(cuo_CharInfo *o, const cuo_modding_types_char_info_t *w);
+static void to_TownInfo(cuo_modding_types_town_info_t *w, const cuo_TownInfo *v);
+static void from_TownInfo(cuo_TownInfo *o, const cuo_modding_types_town_info_t *w);
+static void to_CharacterSelection(cuo_modding_types_character_selection_t *w, const cuo_CharacterSelection *v);
+static void from_CharacterSelection(cuo_CharacterSelection *o, const cuo_modding_types_character_selection_t *w);
 static void to_LoginErrorInfo(cuo_modding_types_login_error_info_t *w, const cuo_LoginErrorInfo *v);
 static void from_LoginErrorInfo(cuo_LoginErrorInfo *o, const cuo_modding_types_login_error_info_t *w);
 static void to_LoginErrorsInfoEvent(cuo_modding_types_login_errors_info_event_t *w, const cuo_LoginErrorsInfoEvent *v);
@@ -280,18 +280,18 @@ static void to_ServerInfo(cuo_modding_types_server_info_t *w, const cuo_ServerIn
 static void from_ServerInfo(cuo_ServerInfo *o, const cuo_modding_types_server_info_t *w);
 static void to_ServerSelectionInfoEvent(cuo_modding_types_server_selection_info_event_t *w, const cuo_ServerSelectionInfoEvent *v);
 static void from_ServerSelectionInfoEvent(cuo_ServerSelectionInfoEvent *o, const cuo_modding_types_server_selection_info_event_t *w);
-static void to_ClipboardSet(cuo_modding_types_clipboard_set_t *w, const cuo_ClipboardSetDto *v);
-static void from_ClipboardSet(cuo_ClipboardSetDto *o, const cuo_modding_types_clipboard_set_t *w);
+static void to_ClipboardSet(cuo_modding_types_clipboard_set_t *w, const cuo_ClipboardSet *v);
+static void from_ClipboardSet(cuo_ClipboardSet *o, const cuo_modding_types_clipboard_set_t *w);
 static void to_FocusedInput(cuo_modding_types_focused_input_t *w, const cuo_FocusedInput *v);
 static void from_FocusedInput(cuo_FocusedInput *o, const cuo_modding_types_focused_input_t *w);
 static void to_MaskedText(cuo_modding_types_masked_text_t *w, const cuo_MaskedText *v);
 static void from_MaskedText(cuo_MaskedText *o, const cuo_modding_types_masked_text_t *w);
-static void to_TextClipboardAction(cuo_modding_types_text_clipboard_action_t *w, const cuo_TextClipboardActionDto *v);
-static void from_TextClipboardAction(cuo_TextClipboardActionDto *o, const cuo_modding_types_text_clipboard_action_t *w);
-static void to_TextCompletion(cuo_modding_types_text_completion_t *w, const cuo_TextCompletionDto *v);
-static void from_TextCompletion(cuo_TextCompletionDto *o, const cuo_modding_types_text_completion_t *w);
-static void to_TextCompletionPick(cuo_modding_types_text_completion_pick_t *w, const cuo_TextCompletionPickDto *v);
-static void from_TextCompletionPick(cuo_TextCompletionPickDto *o, const cuo_modding_types_text_completion_pick_t *w);
+static void to_TextClipboardAction(cuo_modding_types_text_clipboard_action_t *w, const cuo_TextClipboardAction *v);
+static void from_TextClipboardAction(cuo_TextClipboardAction *o, const cuo_modding_types_text_clipboard_action_t *w);
+static void to_TextCompletion(cuo_modding_types_text_completion_t *w, const cuo_TextCompletion *v);
+static void from_TextCompletion(cuo_TextCompletion *o, const cuo_modding_types_text_completion_t *w);
+static void to_TextCompletionPick(cuo_modding_types_text_completion_pick_t *w, const cuo_TextCompletionPick *v);
+static void from_TextCompletionPick(cuo_TextCompletionPick *o, const cuo_modding_types_text_completion_pick_t *w);
 static void to_UiTooltipSerial(cuo_modding_types_ui_tooltip_serial_t *w, const cuo_UiTooltipSerial *v);
 static void from_UiTooltipSerial(cuo_UiTooltipSerial *o, const cuo_modding_types_ui_tooltip_serial_t *w);
 static void to_WorldMapMarker(cuo_modding_types_world_map_marker_t *w, const cuo_WorldMapMarker *v);
@@ -643,12 +643,12 @@ static void from_BorderRadius(cuo_BorderRadius *o, const cuo_modding_types_borde
     o->bottom_right = w->bottom_right;
 }
 
-static void to_ChildOf(cuo_modding_types_child_of_t *w, const cuo_ChildOfDto *v)
+static void to_ChildOf(cuo_modding_types_child_of_t *w, const cuo_ChildOf *v)
 {
     w->parent = v->parent;
 }
 
-static void from_ChildOf(cuo_ChildOfDto *o, const cuo_modding_types_child_of_t *w)
+static void from_ChildOf(cuo_ChildOf *o, const cuo_modding_types_child_of_t *w)
 {
     o->parent = w->parent;
 }
@@ -663,17 +663,17 @@ static void from_GlobalZIndex(cuo_GlobalZIndex *o, const cuo_modding_types_globa
     o->value = w->value;
 }
 
-static void to_Interaction(cuo_modding_types_interaction_t *w, const cuo_InteractionDto *v)
+static void to_Interaction(cuo_modding_types_interaction_t *w, const cuo_Interaction *v)
 {
-    w->state = v->state;
+    w->state = (uint32_t)(v->state) < 3u ? (v->state) : 0;
 }
 
-static void from_Interaction(cuo_InteractionDto *o, const cuo_modding_types_interaction_t *w)
+static void from_Interaction(cuo_Interaction *o, const cuo_modding_types_interaction_t *w)
 {
     o->state = w->state;
 }
 
-static void to_MouseInput(cuo_modding_types_mouse_input_t *w, const cuo_MouseInputDto *v)
+static void to_MouseInput(cuo_modding_types_mouse_input_t *w, const cuo_MouseInput *v)
 {
     w->x = v->x;
     w->y = v->y;
@@ -694,7 +694,7 @@ static void to_MouseInput(cuo_modding_types_mouse_input_t *w, const cuo_MouseInp
     w->x2_pressed = v->x2_pressed;
 }
 
-static void from_MouseInput(cuo_MouseInputDto *o, const cuo_modding_types_mouse_input_t *w)
+static void from_MouseInput(cuo_MouseInput *o, const cuo_modding_types_mouse_input_t *w)
 {
     o->x = w->x;
     o->y = w->y;
@@ -715,7 +715,7 @@ static void from_MouseInput(cuo_MouseInputDto *o, const cuo_modding_types_mouse_
     o->x2_pressed = w->x2_pressed;
 }
 
-static void to_KeyboardInput(cuo_modding_types_keyboard_input_t *w, const cuo_KeyboardInputDto *v)
+static void to_KeyboardInput(cuo_modding_types_keyboard_input_t *w, const cuo_KeyboardInput *v)
 {
     w->pressed.len = v->pressed.len;
     w->pressed.ptr = cuo_alloc((v->pressed.len ? v->pressed.len : 1) * sizeof *w->pressed.ptr);
@@ -729,7 +729,7 @@ static void to_KeyboardInput(cuo_modding_types_keyboard_input_t *w, const cuo_Ke
     }
 }
 
-static void from_KeyboardInput(cuo_KeyboardInputDto *o, const cuo_modding_types_keyboard_input_t *w)
+static void from_KeyboardInput(cuo_KeyboardInput *o, const cuo_modding_types_keyboard_input_t *w)
 {
     o->pressed.len = w->pressed.len;
     o->pressed.items = cuo_alloc((w->pressed.len ? w->pressed.len : 1) * sizeof *o->pressed.items);
@@ -753,7 +753,7 @@ static void to_ChatMessage(cuo_modding_types_chat_message_t *w, const cuo_ModCha
     w->is_unicode = v->is_unicode;
     w->message_type = v->message_type;
     w->time = v->time;
-    w->kind = v->kind;
+    w->kind = (uint32_t)(v->kind) < 2u ? (v->kind) : 0;
 }
 
 static void from_ChatMessage(cuo_ModChatMessage *o, const cuo_modding_types_chat_message_t *w)
@@ -797,7 +797,7 @@ static void from_Time(cuo_Time *o, const cuo_modding_types_time_t *w)
     o->frame = w->frame;
 }
 
-static void to_EquipmentSlots(cuo_modding_types_equipment_slots_t *w, const cuo_EquipmentSlotsDto *v)
+static void to_EquipmentSlots(cuo_modding_types_equipment_slots_t *w, const cuo_EquipmentSlots *v)
 {
     w->serials.len = v->serials.len;
     w->serials.ptr = cuo_alloc((v->serials.len ? v->serials.len : 1) * sizeof *w->serials.ptr);
@@ -806,7 +806,7 @@ static void to_EquipmentSlots(cuo_modding_types_equipment_slots_t *w, const cuo_
     }
 }
 
-static void from_EquipmentSlots(cuo_EquipmentSlotsDto *o, const cuo_modding_types_equipment_slots_t *w)
+static void from_EquipmentSlots(cuo_EquipmentSlots *o, const cuo_modding_types_equipment_slots_t *w)
 {
     o->serials.len = w->serials.len;
     o->serials.items = cuo_alloc((w->serials.len ? w->serials.len : 1) * sizeof *o->serials.items);
@@ -825,21 +825,21 @@ static void from_Facing(cuo_Facing *o, const cuo_modding_types_facing_t *w)
     o->value = w->value;
 }
 
-static void to_OplLine(cuo_modding_types_opl_line_t *w, const cuo_OplLineDto *v)
+static void to_OplLine(cuo_modding_types_opl_line_t *w, const cuo_OplLine *v)
 {
     w->cliloc = v->cliloc;
     w->args = cuo__wstr_copy(v->args);
     w->text = cuo__wstr_copy(v->text);
 }
 
-static void from_OplLine(cuo_OplLineDto *o, const cuo_modding_types_opl_line_t *w)
+static void from_OplLine(cuo_OplLine *o, const cuo_modding_types_opl_line_t *w)
 {
     o->cliloc = w->cliloc;
     o->args = cuo_strndup((const char *)w->args.ptr, w->args.len);
     o->text = cuo_strndup((const char *)w->text.ptr, w->text.len);
 }
 
-static void to_EntityProperties(cuo_modding_types_entity_properties_t *w, const cuo_EntityPropertiesDto *v)
+static void to_EntityProperties(cuo_modding_types_entity_properties_t *w, const cuo_EntityProperties *v)
 {
     w->serial = v->serial;
     w->revision = v->revision;
@@ -851,7 +851,7 @@ static void to_EntityProperties(cuo_modding_types_entity_properties_t *w, const 
     }
 }
 
-static void from_EntityProperties(cuo_EntityPropertiesDto *o, const cuo_modding_types_entity_properties_t *w)
+static void from_EntityProperties(cuo_EntityProperties *o, const cuo_modding_types_entity_properties_t *w)
 {
     o->serial = w->serial;
     o->revision = w->revision;
@@ -887,7 +887,7 @@ static void from_ContainerSlotPosition(cuo_ContainerSlotPosition *o, const cuo_m
     o->grid_index = w->grid_index;
 }
 
-static void to_GameContext(cuo_modding_types_game_context_t *w, const cuo_GameContextDto *v)
+static void to_GameContext(cuo_modding_types_game_context_t *w, const cuo_GameContext *v)
 {
     w->player_serial = v->player_serial;
     w->player_name = cuo__wstr_copy(v->player_name);
@@ -897,7 +897,7 @@ static void to_GameContext(cuo_modding_types_game_context_t *w, const cuo_GameCo
     w->use_old_status_gump = v->use_old_status_gump;
 }
 
-static void from_GameContext(cuo_GameContextDto *o, const cuo_modding_types_game_context_t *w)
+static void from_GameContext(cuo_GameContext *o, const cuo_modding_types_game_context_t *w)
 {
     o->player_serial = w->player_serial;
     o->player_name = cuo_strndup((const char *)w->player_name.ptr, w->player_name.len);
@@ -907,7 +907,7 @@ static void from_GameContext(cuo_GameContextDto *o, const cuo_modding_types_game
     o->use_old_status_gump = w->use_old_status_gump;
 }
 
-static void to_GameSettings(cuo_modding_types_game_settings_t *w, const cuo_GameSettingsDto *v)
+static void to_GameSettings(cuo_modding_types_game_settings_t *w, const cuo_GameSettings *v)
 {
     w->grid_loot_type = v->grid_loot_type;
     w->skip_empty_corpse = v->skip_empty_corpse;
@@ -922,7 +922,7 @@ static void to_GameSettings(cuo_modding_types_game_settings_t *w, const cuo_Game
     w->highlight_game_objects = v->highlight_game_objects;
 }
 
-static void from_GameSettings(cuo_GameSettingsDto *o, const cuo_modding_types_game_settings_t *w)
+static void from_GameSettings(cuo_GameSettings *o, const cuo_modding_types_game_settings_t *w)
 {
     o->grid_loot_type = w->grid_loot_type;
     o->skip_empty_corpse = w->skip_empty_corpse;
@@ -937,12 +937,12 @@ static void from_GameSettings(cuo_GameSettingsDto *o, const cuo_modding_types_ga
     o->highlight_game_objects = w->highlight_game_objects;
 }
 
-static void to_GameState(cuo_modding_types_game_state_t *w, const cuo_GameStateDto *v)
+static void to_GameState(cuo_modding_types_game_state_t *w, const cuo_GameState *v)
 {
-    w->current = v->current;
+    w->current = (uint32_t)(v->current) < 7u ? (v->current) : 0;
 }
 
-static void from_GameState(cuo_GameStateDto *o, const cuo_modding_types_game_state_t *w)
+static void from_GameState(cuo_GameState *o, const cuo_modding_types_game_state_t *w)
 {
     o->current = w->current;
 }
@@ -981,21 +981,21 @@ static void from_ContainerOpenedEvent(cuo_ContainerOpenedEvent *o, const cuo_mod
     o->graphic = w->graphic;
 }
 
-static void to_ContainerPosition(cuo_modding_types_container_position_t *w, const cuo_ContainerPositionDto *v)
+static void to_ContainerPosition(cuo_modding_types_container_position_t *w, const cuo_ContainerPosition *v)
 {
     w->serial = v->serial;
     w->x = v->x;
     w->y = v->y;
 }
 
-static void from_ContainerPosition(cuo_ContainerPositionDto *o, const cuo_modding_types_container_position_t *w)
+static void from_ContainerPosition(cuo_ContainerPosition *o, const cuo_modding_types_container_position_t *w)
 {
     o->serial = w->serial;
     o->x = w->x;
     o->y = w->y;
 }
 
-static void to_ContainerPositions(cuo_modding_types_container_positions_t *w, const cuo_ContainerPositionsDto *v)
+static void to_ContainerPositions(cuo_modding_types_container_positions_t *w, const cuo_ContainerPositions *v)
 {
     w->saved.len = v->saved.len;
     w->saved.ptr = cuo_alloc((v->saved.len ? v->saved.len : 1) * sizeof *w->saved.ptr);
@@ -1004,7 +1004,7 @@ static void to_ContainerPositions(cuo_modding_types_container_positions_t *w, co
     }
 }
 
-static void from_ContainerPositions(cuo_ContainerPositionsDto *o, const cuo_modding_types_container_positions_t *w)
+static void from_ContainerPositions(cuo_ContainerPositions *o, const cuo_modding_types_container_positions_t *w)
 {
     o->saved.len = w->saved.len;
     o->saved.items = cuo_alloc((w->saved.len ? w->saved.len : 1) * sizeof *o->saved.items);
@@ -1037,7 +1037,7 @@ static void from_ContainerSlotEvent(cuo_ContainerSlotEvent *o, const cuo_modding
     o->amount = w->amount;
 }
 
-static void to_ContainerGumpTag(cuo_modding_types_container_gump_tag_t *w, const cuo_ContainerGumpTagDto *v)
+static void to_ContainerGumpTag(cuo_modding_types_container_gump_tag_t *w, const cuo_ContainerGumpTag *v)
 {
     w->graphic = v->graphic;
     w->original_graphic = v->original_graphic;
@@ -1048,7 +1048,7 @@ static void to_ContainerGumpTag(cuo_modding_types_container_gump_tag_t *w, const
     w->bounds_h = v->bounds_h;
 }
 
-static void from_ContainerGumpTag(cuo_ContainerGumpTagDto *o, const cuo_modding_types_container_gump_tag_t *w)
+static void from_ContainerGumpTag(cuo_ContainerGumpTag *o, const cuo_modding_types_container_gump_tag_t *w)
 {
     o->graphic = w->graphic;
     o->original_graphic = w->original_graphic;
@@ -1143,7 +1143,7 @@ static void from_HealthBarWindow(cuo_HealthBarWindow *o, const cuo_modding_types
     o->name_editable = w->name_editable;
 }
 
-static void to_ServerGumpButton(cuo_modding_types_server_gump_button_t *w, const cuo_ServerGumpButtonDto *v)
+static void to_ServerGumpButton(cuo_modding_types_server_gump_button_t *w, const cuo_ServerGumpButton *v)
 {
     w->id = v->id;
     w->x = v->x;
@@ -1152,7 +1152,7 @@ static void to_ServerGumpButton(cuo_modding_types_server_gump_button_t *w, const
     w->h = v->h;
 }
 
-static void from_ServerGumpButton(cuo_ServerGumpButtonDto *o, const cuo_modding_types_server_gump_button_t *w)
+static void from_ServerGumpButton(cuo_ServerGumpButton *o, const cuo_modding_types_server_gump_button_t *w)
 {
     o->id = w->id;
     o->x = w->x;
@@ -1161,19 +1161,19 @@ static void from_ServerGumpButton(cuo_ServerGumpButtonDto *o, const cuo_modding_
     o->h = w->h;
 }
 
-static void to_ServerGumpTextEntry(cuo_modding_types_server_gump_text_entry_t *w, const cuo_ServerGumpTextEntryDto *v)
+static void to_ServerGumpTextEntry(cuo_modding_types_server_gump_text_entry_t *w, const cuo_ServerGumpTextEntry *v)
 {
     w->id = v->id;
     w->text = cuo__wstr_copy(v->text);
 }
 
-static void from_ServerGumpTextEntry(cuo_ServerGumpTextEntryDto *o, const cuo_modding_types_server_gump_text_entry_t *w)
+static void from_ServerGumpTextEntry(cuo_ServerGumpTextEntry *o, const cuo_modding_types_server_gump_text_entry_t *w)
 {
     o->id = w->id;
     o->text = cuo_strndup((const char *)w->text.ptr, w->text.len);
 }
 
-static void to_ServerGumpSwitch(cuo_modding_types_server_gump_switch_t *w, const cuo_ServerGumpSwitchDto *v)
+static void to_ServerGumpSwitch(cuo_modding_types_server_gump_switch_t *w, const cuo_ServerGumpSwitch *v)
 {
     w->id = v->id;
     w->checked = v->checked;
@@ -1181,7 +1181,7 @@ static void to_ServerGumpSwitch(cuo_modding_types_server_gump_switch_t *w, const
     w->group = v->group;
 }
 
-static void from_ServerGumpSwitch(cuo_ServerGumpSwitchDto *o, const cuo_modding_types_server_gump_switch_t *w)
+static void from_ServerGumpSwitch(cuo_ServerGumpSwitch *o, const cuo_modding_types_server_gump_switch_t *w)
 {
     o->id = w->id;
     o->checked = w->checked;
@@ -1189,7 +1189,7 @@ static void from_ServerGumpSwitch(cuo_ServerGumpSwitchDto *o, const cuo_modding_
     o->group = w->group;
 }
 
-static void to_ServerGump(cuo_modding_types_server_gump_t *w, const cuo_ServerGumpDto *v)
+static void to_ServerGump(cuo_modding_types_server_gump_t *w, const cuo_ServerGump *v)
 {
     w->serial = v->serial;
     w->gump_id = v->gump_id;
@@ -1223,7 +1223,7 @@ static void to_ServerGump(cuo_modding_types_server_gump_t *w, const cuo_ServerGu
     }
 }
 
-static void from_ServerGump(cuo_ServerGumpDto *o, const cuo_modding_types_server_gump_t *w)
+static void from_ServerGump(cuo_ServerGump *o, const cuo_modding_types_server_gump_t *w)
 {
     o->serial = w->serial;
     o->gump_id = w->gump_id;
@@ -1269,7 +1269,7 @@ static void from_InputConsume(cuo_ModInputConsume *o, const cuo_modding_types_in
     o->key = w->key;
 }
 
-static void to_HostHotkey(cuo_modding_types_host_hotkey_t *w, const cuo_HostHotkeyDto *v)
+static void to_HostHotkey(cuo_modding_types_host_hotkey_t *w, const cuo_HostHotkey *v)
 {
     w->key = v->key;
     w->ctrl = v->ctrl;
@@ -1278,7 +1278,7 @@ static void to_HostHotkey(cuo_modding_types_host_hotkey_t *w, const cuo_HostHotk
     w->action = cuo__wstr_copy(v->action);
 }
 
-static void from_HostHotkey(cuo_HostHotkeyDto *o, const cuo_modding_types_host_hotkey_t *w)
+static void from_HostHotkey(cuo_HostHotkey *o, const cuo_modding_types_host_hotkey_t *w)
 {
     o->key = w->key;
     o->ctrl = w->ctrl;
@@ -1287,7 +1287,7 @@ static void from_HostHotkey(cuo_HostHotkeyDto *o, const cuo_modding_types_host_h
     o->action = cuo_strndup((const char *)w->action.ptr, w->action.len);
 }
 
-static void to_HostHotkeys(cuo_modding_types_host_hotkeys_t *w, const cuo_HostHotkeysDto *v)
+static void to_HostHotkeys(cuo_modding_types_host_hotkeys_t *w, const cuo_HostHotkeys *v)
 {
     w->hotkeys.len = v->hotkeys.len;
     w->hotkeys.ptr = cuo_alloc((v->hotkeys.len ? v->hotkeys.len : 1) * sizeof *w->hotkeys.ptr);
@@ -1296,7 +1296,7 @@ static void to_HostHotkeys(cuo_modding_types_host_hotkeys_t *w, const cuo_HostHo
     }
 }
 
-static void from_HostHotkeys(cuo_HostHotkeysDto *o, const cuo_modding_types_host_hotkeys_t *w)
+static void from_HostHotkeys(cuo_HostHotkeys *o, const cuo_modding_types_host_hotkeys_t *w)
 {
     o->hotkeys.len = w->hotkeys.len;
     o->hotkeys.items = cuo_alloc((w->hotkeys.len ? w->hotkeys.len : 1) * sizeof *o->hotkeys.items);
@@ -1349,7 +1349,7 @@ static void from_ModHotkeyBinding(cuo_ModHotkeyBinding *o, const cuo_modding_typ
     o->consume = w->consume;
 }
 
-static void to_ModHotkeyBindings(cuo_modding_types_mod_hotkey_bindings_t *w, const cuo_ModHotkeyBindingsDto *v)
+static void to_ModHotkeyBindings(cuo_modding_types_mod_hotkey_bindings_t *w, const cuo_ModHotkeyBindings *v)
 {
     w->bindings.len = v->bindings.len;
     w->bindings.ptr = cuo_alloc((v->bindings.len ? v->bindings.len : 1) * sizeof *w->bindings.ptr);
@@ -1359,7 +1359,7 @@ static void to_ModHotkeyBindings(cuo_modding_types_mod_hotkey_bindings_t *w, con
     w->consume_keys = v->consume_keys;
 }
 
-static void from_ModHotkeyBindings(cuo_ModHotkeyBindingsDto *o, const cuo_modding_types_mod_hotkey_bindings_t *w)
+static void from_ModHotkeyBindings(cuo_ModHotkeyBindings *o, const cuo_modding_types_mod_hotkey_bindings_t *w)
 {
     o->bindings.len = w->bindings.len;
     o->bindings.items = cuo_alloc((w->bindings.len ? w->bindings.len : 1) * sizeof *o->bindings.items);
@@ -1369,13 +1369,13 @@ static void from_ModHotkeyBindings(cuo_ModHotkeyBindingsDto *o, const cuo_moddin
     o->consume_keys = w->consume_keys;
 }
 
-static void to_WorldSingleClick(cuo_modding_types_world_single_click_t *w, const cuo_WorldSingleClickDto *v)
+static void to_WorldSingleClick(cuo_modding_types_world_single_click_t *w, const cuo_WorldSingleClick *v)
 {
     w->serial = v->serial;
     w->at_ms = v->at_ms;
 }
 
-static void from_WorldSingleClick(cuo_WorldSingleClickDto *o, const cuo_modding_types_world_single_click_t *w)
+static void from_WorldSingleClick(cuo_WorldSingleClick *o, const cuo_modding_types_world_single_click_t *w)
 {
     o->serial = w->serial;
     o->at_ms = w->at_ms;
@@ -1401,7 +1401,7 @@ static void from_ItemDropSent(cuo_ItemDropSent *o, const cuo_modding_types_item_
 
 static void to_ItemMoveResult(cuo_modding_types_item_move_result_t *w, const cuo_ItemMoveResult *v)
 {
-    w->result = v->result;
+    w->result = (uint32_t)(v->result) < 3u ? (v->result) : 0;
     w->code = v->code;
 }
 
@@ -1411,13 +1411,13 @@ static void from_ItemMoveResult(cuo_ItemMoveResult *o, const cuo_modding_types_i
     o->code = w->code;
 }
 
-static void to_ModOption(cuo_modding_types_mod_option_t *w, const cuo_ModOptionDto *v)
+static void to_ModOption(cuo_modding_types_mod_option_t *w, const cuo_ModOption *v)
 {
     w->key = cuo__wstr_copy(v->key);
     w->label = cuo__wstr_copy(v->label);
     w->group = cuo__wstr_copy(v->group);
     w->keywords = cuo__wstr_copy(v->keywords);
-    w->kind = v->kind;
+    w->kind = (uint32_t)(v->kind) < 4u ? (v->kind) : 0;
     w->min = v->min;
     w->max = v->max;
     w->step = v->step;
@@ -1429,7 +1429,7 @@ static void to_ModOption(cuo_modding_types_mod_option_t *w, const cuo_ModOptionD
     }
 }
 
-static void from_ModOption(cuo_ModOptionDto *o, const cuo_modding_types_mod_option_t *w)
+static void from_ModOption(cuo_ModOption *o, const cuo_modding_types_mod_option_t *w)
 {
     o->key = cuo_strndup((const char *)w->key.ptr, w->key.len);
     o->label = cuo_strndup((const char *)w->label.ptr, w->label.len);
@@ -1447,7 +1447,7 @@ static void from_ModOption(cuo_ModOptionDto *o, const cuo_modding_types_mod_opti
     }
 }
 
-static void to_ModOptionsSchema(cuo_modding_types_mod_options_schema_t *w, const cuo_ModOptionsSchemaDto *v)
+static void to_ModOptionsSchema(cuo_modding_types_mod_options_schema_t *w, const cuo_ModOptionsSchema *v)
 {
     w->options.len = v->options.len;
     w->options.ptr = cuo_alloc((v->options.len ? v->options.len : 1) * sizeof *w->options.ptr);
@@ -1456,7 +1456,7 @@ static void to_ModOptionsSchema(cuo_modding_types_mod_options_schema_t *w, const
     }
 }
 
-static void from_ModOptionsSchema(cuo_ModOptionsSchemaDto *o, const cuo_modding_types_mod_options_schema_t *w)
+static void from_ModOptionsSchema(cuo_ModOptionsSchema *o, const cuo_modding_types_mod_options_schema_t *w)
 {
     o->options.len = w->options.len;
     o->options.items = cuo_alloc((w->options.len ? w->options.len : 1) * sizeof *o->options.items);
@@ -1465,19 +1465,19 @@ static void from_ModOptionsSchema(cuo_ModOptionsSchemaDto *o, const cuo_modding_
     }
 }
 
-static void to_ModOptionValue(cuo_modding_types_mod_option_value_t *w, const cuo_ModOptionValueDto *v)
+static void to_ModOptionValue(cuo_modding_types_mod_option_value_t *w, const cuo_ModOptionValue *v)
 {
     w->key = cuo__wstr_copy(v->key);
     w->value = v->value;
 }
 
-static void from_ModOptionValue(cuo_ModOptionValueDto *o, const cuo_modding_types_mod_option_value_t *w)
+static void from_ModOptionValue(cuo_ModOptionValue *o, const cuo_modding_types_mod_option_value_t *w)
 {
     o->key = cuo_strndup((const char *)w->key.ptr, w->key.len);
     o->value = w->value;
 }
 
-static void to_ModOptionsValues(cuo_modding_types_mod_options_values_t *w, const cuo_ModOptionsValuesDto *v)
+static void to_ModOptionsValues(cuo_modding_types_mod_options_values_t *w, const cuo_ModOptionsValues *v)
 {
     w->values.len = v->values.len;
     w->values.ptr = cuo_alloc((v->values.len ? v->values.len : 1) * sizeof *w->values.ptr);
@@ -1486,7 +1486,7 @@ static void to_ModOptionsValues(cuo_modding_types_mod_options_values_t *w, const
     }
 }
 
-static void from_ModOptionsValues(cuo_ModOptionsValuesDto *o, const cuo_modding_types_mod_options_values_t *w)
+static void from_ModOptionsValues(cuo_ModOptionsValues *o, const cuo_modding_types_mod_options_values_t *w)
 {
     o->values.len = w->values.len;
     o->values.items = cuo_alloc((w->values.len ? w->values.len : 1) * sizeof *o->values.items);
@@ -1495,7 +1495,7 @@ static void from_ModOptionsValues(cuo_ModOptionsValuesDto *o, const cuo_modding_
     }
 }
 
-static void to_PlayerBuff(cuo_modding_types_player_buff_t *w, const cuo_PlayerBuffDto *v)
+static void to_PlayerBuff(cuo_modding_types_player_buff_t *w, const cuo_PlayerBuff *v)
 {
     w->type = v->type;
     w->graphic = v->graphic;
@@ -1503,7 +1503,7 @@ static void to_PlayerBuff(cuo_modding_types_player_buff_t *w, const cuo_PlayerBu
     w->text = cuo__wstr_copy(v->text);
 }
 
-static void from_PlayerBuff(cuo_PlayerBuffDto *o, const cuo_modding_types_player_buff_t *w)
+static void from_PlayerBuff(cuo_PlayerBuff *o, const cuo_modding_types_player_buff_t *w)
 {
     o->type = w->type;
     o->graphic = w->graphic;
@@ -1511,7 +1511,7 @@ static void from_PlayerBuff(cuo_PlayerBuffDto *o, const cuo_modding_types_player
     o->text = cuo_strndup((const char *)w->text.ptr, w->text.len);
 }
 
-static void to_PlayerBuffs(cuo_modding_types_player_buffs_t *w, const cuo_PlayerBuffsDto *v)
+static void to_PlayerBuffs(cuo_modding_types_player_buffs_t *w, const cuo_PlayerBuffs *v)
 {
     w->buffs.len = v->buffs.len;
     w->buffs.ptr = cuo_alloc((v->buffs.len ? v->buffs.len : 1) * sizeof *w->buffs.ptr);
@@ -1520,7 +1520,7 @@ static void to_PlayerBuffs(cuo_modding_types_player_buffs_t *w, const cuo_Player
     }
 }
 
-static void from_PlayerBuffs(cuo_PlayerBuffsDto *o, const cuo_modding_types_player_buffs_t *w)
+static void from_PlayerBuffs(cuo_PlayerBuffs *o, const cuo_modding_types_player_buffs_t *w)
 {
     o->buffs.len = w->buffs.len;
     o->buffs.items = cuo_alloc((w->buffs.len ? w->buffs.len : 1) * sizeof *o->buffs.items);
@@ -1589,16 +1589,16 @@ static void from_GrabbedItem(cuo_GrabbedItem *o, const cuo_modding_types_grabbed
     from_Vector2(&o->mouse_offset, &w->mouse_offset);
 }
 
-static void to_PlayerSkill(cuo_modding_types_player_skill_t *w, const cuo_PlayerSkillDto *v)
+static void to_PlayerSkill(cuo_modding_types_player_skill_t *w, const cuo_PlayerSkill *v)
 {
     w->index = v->index;
     w->value = v->value;
     w->base = v->base;
     w->cap = v->cap;
-    w->lock = v->lock;
+    w->lock = (uint32_t)(v->lock) < 3u ? (v->lock) : 0;
 }
 
-static void from_PlayerSkill(cuo_PlayerSkillDto *o, const cuo_modding_types_player_skill_t *w)
+static void from_PlayerSkill(cuo_PlayerSkill *o, const cuo_modding_types_player_skill_t *w)
 {
     o->index = w->index;
     o->value = w->value;
@@ -1607,7 +1607,7 @@ static void from_PlayerSkill(cuo_PlayerSkillDto *o, const cuo_modding_types_play
     o->lock = w->lock;
 }
 
-static void to_PlayerSkills(cuo_modding_types_player_skills_t *w, const cuo_PlayerSkillsDto *v)
+static void to_PlayerSkills(cuo_modding_types_player_skills_t *w, const cuo_PlayerSkills *v)
 {
     w->has_data = v->has_data;
     w->skills.len = v->skills.len;
@@ -1617,7 +1617,7 @@ static void to_PlayerSkills(cuo_modding_types_player_skills_t *w, const cuo_Play
     }
 }
 
-static void from_PlayerSkills(cuo_PlayerSkillsDto *o, const cuo_modding_types_player_skills_t *w)
+static void from_PlayerSkills(cuo_PlayerSkills *o, const cuo_modding_types_player_skills_t *w)
 {
     o->has_data = w->has_data;
     o->skills.len = w->skills.len;
@@ -1629,9 +1629,9 @@ static void from_PlayerSkills(cuo_PlayerSkillsDto *o, const cuo_modding_types_pl
 
 static void to_StatLocks(cuo_modding_types_stat_locks_t *w, const cuo_StatLocks *v)
 {
-    w->str = v->str;
-    w->dex = v->dex;
-    w->int_ = v->int_;
+    w->str = (uint32_t)(v->str) < 3u ? (v->str) : 0;
+    w->dex = (uint32_t)(v->dex) < 3u ? (v->dex) : 0;
+    w->int_ = (uint32_t)(v->int_) < 3u ? (v->int_) : 0;
 }
 
 static void from_StatLocks(cuo_StatLocks *o, const cuo_modding_types_stat_locks_t *w)
@@ -1666,10 +1666,10 @@ static void from_LocalTargetResultEvent(cuo_LocalTargetResultEvent *o, const cuo
 static void to_TargetingState(cuo_modding_types_targeting_state_t *w, const cuo_TargetingState *v)
 {
     w->is_targeting = v->is_targeting;
-    w->mode = v->mode;
+    w->mode = (uint32_t)(v->mode) < 3u ? (v->mode) : 0;
     w->local = v->local;
     w->cursor_id = v->cursor_id;
-    w->cursor_type = v->cursor_type;
+    w->cursor_type = (uint32_t)(v->cursor_type) < 4u ? (v->cursor_type) : 0;
     w->just_targeted = v->just_targeted;
     w->multi_id = v->multi_id;
     w->multi_offset_x = v->multi_offset_x;
@@ -1719,7 +1719,7 @@ static void from_Anchorable(cuo_Anchorable *o, const cuo_modding_types_anchorabl
     o->kind = w->kind;
 }
 
-static void to_BorderColor(cuo_modding_types_border_color_t *w, const cuo_BorderColorDto *v)
+static void to_BorderColor(cuo_modding_types_border_color_t *w, const cuo_BorderColor *v)
 {
     w->r = v->r;
     w->g = v->g;
@@ -1727,7 +1727,7 @@ static void to_BorderColor(cuo_modding_types_border_color_t *w, const cuo_Border
     w->a = v->a;
 }
 
-static void from_BorderColor(cuo_BorderColorDto *o, const cuo_modding_types_border_color_t *w)
+static void from_BorderColor(cuo_BorderColor *o, const cuo_modding_types_border_color_t *w)
 {
     o->r = w->r;
     o->g = w->g;
@@ -1795,9 +1795,9 @@ static void from_ContainerItemUi(cuo_ContainerItemUI *o, const cuo_modding_types
     from_Vector3(&o->hover_hue, &w->hover_hue);
 }
 
-static void to_UiCustom(cuo_modding_types_ui_custom_t *w, const cuo_UiCustomDto *v)
+static void to_UiCustom(cuo_modding_types_ui_custom_t *w, const cuo_UiCustom *v)
 {
-    w->kind = v->kind;
+    w->kind = (uint32_t)(v->kind) < 13u ? (v->kind) : 0;
     w->asset_id = v->asset_id;
     w->hue_x = v->hue_x;
     w->hue_y = v->hue_y;
@@ -1805,7 +1805,7 @@ static void to_UiCustom(cuo_modding_types_ui_custom_t *w, const cuo_UiCustomDto 
     w->stacked = v->stacked;
 }
 
-static void from_UiCustom(cuo_UiCustomDto *o, const cuo_modding_types_ui_custom_t *w)
+static void from_UiCustom(cuo_UiCustom *o, const cuo_modding_types_ui_custom_t *w)
 {
     o->kind = w->kind;
     o->asset_id = w->asset_id;
@@ -1857,7 +1857,7 @@ static void from_UiName(cuo_UiName *o, const cuo_modding_types_ui_name_t *w)
     o->value = cuo_strndup((const char *)w->value.ptr, w->value.len);
 }
 
-static void to_UiPick(cuo_modding_types_ui_pick_t *w, const cuo_UiPickDto *v)
+static void to_UiPick(cuo_modding_types_ui_pick_t *w, const cuo_UiPick *v)
 {
     w->entity = v->entity;
     w->root = v->root;
@@ -1866,7 +1866,7 @@ static void to_UiPick(cuo_modding_types_ui_pick_t *w, const cuo_UiPickDto *v)
     w->y = v->y;
 }
 
-static void from_UiPick(cuo_UiPickDto *o, const cuo_modding_types_ui_pick_t *w)
+static void from_UiPick(cuo_UiPick *o, const cuo_modding_types_ui_pick_t *w)
 {
     o->entity = w->entity;
     o->root = w->root;
@@ -1935,7 +1935,7 @@ static void from_UiScrollbar(cuo_UiScrollbar *o, const cuo_modding_types_ui_scro
 
 static void to_StatLockButton(cuo_modding_types_stat_lock_button_t *w, const cuo_StatLockButton *v)
 {
-    w->stat = v->stat;
+    w->stat = (uint32_t)(v->stat) < 3u ? (v->stat) : 0;
 }
 
 static void from_StatLockButton(cuo_StatLockButton *o, const cuo_modding_types_stat_lock_button_t *w)
@@ -1965,19 +1965,19 @@ static void from_ModSupersedes(cuo_ModSupersedes *o, const cuo_modding_types_mod
     o->feature = cuo_strndup((const char *)w->feature.ptr, w->feature.len);
 }
 
-static void to_UiSurface(cuo_modding_types_ui_surface_t *w, const cuo_UiSurfaceDto *v)
+static void to_UiSurface(cuo_modding_types_ui_surface_t *w, const cuo_UiSurface *v)
 {
     w->w = v->w;
     w->h = v->h;
 }
 
-static void from_UiSurface(cuo_UiSurfaceDto *o, const cuo_modding_types_ui_surface_t *w)
+static void from_UiSurface(cuo_UiSurface *o, const cuo_modding_types_ui_surface_t *w)
 {
     o->w = w->w;
     o->h = w->h;
 }
 
-static void to_TextCaret(cuo_modding_types_text_caret_t *w, const cuo_TextCaretDto *v)
+static void to_TextCaret(cuo_modding_types_text_caret_t *w, const cuo_TextCaret *v)
 {
     w->entity = v->entity;
     w->cursor = v->cursor;
@@ -1990,7 +1990,7 @@ static void to_TextCaret(cuo_modding_types_text_caret_t *w, const cuo_TextCaretD
     w->row_height = v->row_height;
 }
 
-static void from_TextCaret(cuo_TextCaretDto *o, const cuo_modding_types_text_caret_t *w)
+static void from_TextCaret(cuo_TextCaret *o, const cuo_modding_types_text_caret_t *w)
 {
     o->entity = w->entity;
     o->cursor = w->cursor;
@@ -2003,12 +2003,12 @@ static void from_TextCaret(cuo_TextCaretDto *o, const cuo_modding_types_text_car
     o->row_height = w->row_height;
 }
 
-static void to_TextCompletionState(cuo_modding_types_text_completion_state_t *w, const cuo_TextCompletionStateDto *v)
+static void to_TextCompletionState(cuo_modding_types_text_completion_state_t *w, const cuo_TextCompletionState *v)
 {
     w->selected = v->selected;
 }
 
-static void from_TextCompletionState(cuo_TextCompletionStateDto *o, const cuo_modding_types_text_completion_state_t *w)
+static void from_TextCompletionState(cuo_TextCompletionState *o, const cuo_modding_types_text_completion_state_t *w)
 {
     o->selected = w->selected;
 }
@@ -2111,7 +2111,7 @@ static void from_MobAnimation(cuo_MobAnimation *o, const cuo_modding_types_mob_a
     o->run = w->run;
 }
 
-static void to_MobStep(cuo_modding_types_mob_step_t *w, const cuo_MobStepDto *v)
+static void to_MobStep(cuo_modding_types_mob_step_t *w, const cuo_MobStep *v)
 {
     w->x = v->x;
     w->y = v->y;
@@ -2120,7 +2120,7 @@ static void to_MobStep(cuo_modding_types_mob_step_t *w, const cuo_MobStepDto *v)
     w->run = v->run;
 }
 
-static void from_MobStep(cuo_MobStepDto *o, const cuo_modding_types_mob_step_t *w)
+static void from_MobStep(cuo_MobStep *o, const cuo_modding_types_mob_step_t *w)
 {
     o->x = w->x;
     o->y = w->y;
@@ -2129,7 +2129,7 @@ static void from_MobStep(cuo_MobStepDto *o, const cuo_modding_types_mob_step_t *
     o->run = w->run;
 }
 
-static void to_MobileSteps(cuo_modding_types_mobile_steps_t *w, const cuo_MobileStepsDto *v)
+static void to_MobileSteps(cuo_modding_types_mobile_steps_t *w, const cuo_MobileSteps *v)
 {
     w->index = v->index;
     w->time = v->time;
@@ -2140,7 +2140,7 @@ static void to_MobileSteps(cuo_modding_types_mobile_steps_t *w, const cuo_Mobile
     }
 }
 
-static void from_MobileSteps(cuo_MobileStepsDto *o, const cuo_modding_types_mobile_steps_t *w)
+static void from_MobileSteps(cuo_MobileSteps *o, const cuo_modding_types_mobile_steps_t *w)
 {
     o->index = w->index;
     o->time = w->time;
@@ -2563,19 +2563,19 @@ static void from_ModMoveRequest(cuo_ModMoveRequest *o, const cuo_modding_types_m
     o->sequence = w->sequence;
 }
 
-static void to_PartyMember(cuo_modding_types_party_member_t *w, const cuo_PartyMemberDto *v)
+static void to_PartyMember(cuo_modding_types_party_member_t *w, const cuo_PartyMember *v)
 {
     w->serial = v->serial;
     w->name = cuo__wstr_copy(v->name);
 }
 
-static void from_PartyMember(cuo_PartyMemberDto *o, const cuo_modding_types_party_member_t *w)
+static void from_PartyMember(cuo_PartyMember *o, const cuo_modding_types_party_member_t *w)
 {
     o->serial = w->serial;
     o->name = cuo_strndup((const char *)w->name.ptr, w->name.len);
 }
 
-static void to_Party(cuo_modding_types_party_t *w, const cuo_PartyDto *v)
+static void to_Party(cuo_modding_types_party_t *w, const cuo_Party *v)
 {
     w->leader = v->leader;
     w->members.len = v->members.len;
@@ -2587,7 +2587,7 @@ static void to_Party(cuo_modding_types_party_t *w, const cuo_PartyDto *v)
     w->can_loot = v->can_loot;
 }
 
-static void from_Party(cuo_PartyDto *o, const cuo_modding_types_party_t *w)
+static void from_Party(cuo_Party *o, const cuo_modding_types_party_t *w)
 {
     o->leader = w->leader;
     o->members.len = w->members.len;
@@ -2599,7 +2599,7 @@ static void from_Party(cuo_PartyDto *o, const cuo_modding_types_party_t *w)
     o->can_loot = w->can_loot;
 }
 
-static void to_Spellbook(cuo_modding_types_spellbook_t *w, const cuo_SpellbookDto *v)
+static void to_Spellbook(cuo_modding_types_spellbook_t *w, const cuo_Spellbook *v)
 {
     w->serial = v->serial;
     w->book_type = v->book_type;
@@ -2610,7 +2610,7 @@ static void to_Spellbook(cuo_modding_types_spellbook_t *w, const cuo_SpellbookDt
     }
 }
 
-static void from_Spellbook(cuo_SpellbookDto *o, const cuo_modding_types_spellbook_t *w)
+static void from_Spellbook(cuo_Spellbook *o, const cuo_modding_types_spellbook_t *w)
 {
     o->serial = w->serial;
     o->book_type = w->book_type;
@@ -2621,7 +2621,7 @@ static void from_Spellbook(cuo_SpellbookDto *o, const cuo_modding_types_spellboo
     }
 }
 
-static void to_Spellbooks(cuo_modding_types_spellbooks_t *w, const cuo_SpellbooksDto *v)
+static void to_Spellbooks(cuo_modding_types_spellbooks_t *w, const cuo_Spellbooks *v)
 {
     w->revision = v->revision;
     w->books.len = v->books.len;
@@ -2631,7 +2631,7 @@ static void to_Spellbooks(cuo_modding_types_spellbooks_t *w, const cuo_Spellbook
     }
 }
 
-static void from_Spellbooks(cuo_SpellbooksDto *o, const cuo_modding_types_spellbooks_t *w)
+static void from_Spellbooks(cuo_Spellbooks *o, const cuo_modding_types_spellbooks_t *w)
 {
     o->revision = w->revision;
     o->books.len = w->books.len;
@@ -2641,7 +2641,7 @@ static void from_Spellbooks(cuo_SpellbooksDto *o, const cuo_modding_types_spellb
     }
 }
 
-static void to_PlayerStep(cuo_modding_types_player_step_t *w, const cuo_PlayerStepDto *v)
+static void to_PlayerStep(cuo_modding_types_player_step_t *w, const cuo_PlayerStep *v)
 {
     w->sequence = v->sequence;
     w->direction = v->direction;
@@ -2650,7 +2650,7 @@ static void to_PlayerStep(cuo_modding_types_player_step_t *w, const cuo_PlayerSt
     w->z = v->z;
 }
 
-static void from_PlayerStep(cuo_PlayerStepDto *o, const cuo_modding_types_player_step_t *w)
+static void from_PlayerStep(cuo_PlayerStep *o, const cuo_modding_types_player_step_t *w)
 {
     o->sequence = w->sequence;
     o->direction = w->direction;
@@ -2659,7 +2659,7 @@ static void from_PlayerStep(cuo_PlayerStepDto *o, const cuo_modding_types_player
     o->z = w->z;
 }
 
-static void to_PlayerSteps(cuo_modding_types_player_steps_t *w, const cuo_PlayerStepsDto *v)
+static void to_PlayerSteps(cuo_modding_types_player_steps_t *w, const cuo_PlayerSteps *v)
 {
     w->last_step = v->last_step;
     w->count = v->count;
@@ -2672,7 +2672,7 @@ static void to_PlayerSteps(cuo_modding_types_player_steps_t *w, const cuo_Player
     }
 }
 
-static void from_PlayerSteps(cuo_PlayerStepsDto *o, const cuo_modding_types_player_steps_t *w)
+static void from_PlayerSteps(cuo_PlayerSteps *o, const cuo_modding_types_player_steps_t *w)
 {
     o->last_step = w->last_step;
     o->count = w->count;
@@ -2685,19 +2685,19 @@ static void from_PlayerSteps(cuo_PlayerStepsDto *o, const cuo_modding_types_play
     }
 }
 
-static void to_CharInfo(cuo_modding_types_char_info_t *w, const cuo_CharInfoDto *v)
+static void to_CharInfo(cuo_modding_types_char_info_t *w, const cuo_CharInfo *v)
 {
     w->name = cuo__wstr_copy(v->name);
     w->index = v->index;
 }
 
-static void from_CharInfo(cuo_CharInfoDto *o, const cuo_modding_types_char_info_t *w)
+static void from_CharInfo(cuo_CharInfo *o, const cuo_modding_types_char_info_t *w)
 {
     o->name = cuo_strndup((const char *)w->name.ptr, w->name.len);
     o->index = w->index;
 }
 
-static void to_TownInfo(cuo_modding_types_town_info_t *w, const cuo_TownInfoDto *v)
+static void to_TownInfo(cuo_modding_types_town_info_t *w, const cuo_TownInfo *v)
 {
     w->index = v->index;
     w->name = cuo__wstr_copy(v->name);
@@ -2709,7 +2709,7 @@ static void to_TownInfo(cuo_modding_types_town_info_t *w, const cuo_TownInfoDto 
     w->cliloc_description = v->cliloc_description;
 }
 
-static void from_TownInfo(cuo_TownInfoDto *o, const cuo_modding_types_town_info_t *w)
+static void from_TownInfo(cuo_TownInfo *o, const cuo_modding_types_town_info_t *w)
 {
     o->index = w->index;
     o->name = cuo_strndup((const char *)w->name.ptr, w->name.len);
@@ -2721,7 +2721,7 @@ static void from_TownInfo(cuo_TownInfoDto *o, const cuo_modding_types_town_info_
     o->cliloc_description = w->cliloc_description;
 }
 
-static void to_CharacterSelection(cuo_modding_types_character_selection_t *w, const cuo_CharacterSelectionDto *v)
+static void to_CharacterSelection(cuo_modding_types_character_selection_t *w, const cuo_CharacterSelection *v)
 {
     w->characters.len = v->characters.len;
     w->characters.ptr = cuo_alloc((v->characters.len ? v->characters.len : 1) * sizeof *w->characters.ptr);
@@ -2735,7 +2735,7 @@ static void to_CharacterSelection(cuo_modding_types_character_selection_t *w, co
     }
 }
 
-static void from_CharacterSelection(cuo_CharacterSelectionDto *o, const cuo_modding_types_character_selection_t *w)
+static void from_CharacterSelection(cuo_CharacterSelection *o, const cuo_modding_types_character_selection_t *w)
 {
     o->characters.len = w->characters.len;
     o->characters.items = cuo_alloc((w->characters.len ? w->characters.len : 1) * sizeof *o->characters.items);
@@ -2805,13 +2805,13 @@ static void from_ServerSelectionInfoEvent(cuo_ServerSelectionInfoEvent *o, const
     }
 }
 
-static void to_ClipboardSet(cuo_modding_types_clipboard_set_t *w, const cuo_ClipboardSetDto *v)
+static void to_ClipboardSet(cuo_modding_types_clipboard_set_t *w, const cuo_ClipboardSet *v)
 {
     w->seq = v->seq;
     w->text = cuo__wstr_copy(v->text);
 }
 
-static void from_ClipboardSet(cuo_ClipboardSetDto *o, const cuo_modding_types_clipboard_set_t *w)
+static void from_ClipboardSet(cuo_ClipboardSet *o, const cuo_modding_types_clipboard_set_t *w)
 {
     o->seq = w->seq;
     o->text = cuo_strndup((const char *)w->text.ptr, w->text.len);
@@ -2839,21 +2839,21 @@ static void from_MaskedText(cuo_MaskedText *o, const cuo_modding_types_masked_te
     o->mask_char = cuo__char_str(w->mask_char);
 }
 
-static void to_TextClipboardAction(cuo_modding_types_text_clipboard_action_t *w, const cuo_TextClipboardActionDto *v)
+static void to_TextClipboardAction(cuo_modding_types_text_clipboard_action_t *w, const cuo_TextClipboardAction *v)
 {
     w->entity = v->entity;
     w->action = v->action;
     w->seq = v->seq;
 }
 
-static void from_TextClipboardAction(cuo_TextClipboardActionDto *o, const cuo_modding_types_text_clipboard_action_t *w)
+static void from_TextClipboardAction(cuo_TextClipboardAction *o, const cuo_modding_types_text_clipboard_action_t *w)
 {
     o->entity = w->entity;
     o->action = w->action;
     o->seq = w->seq;
 }
 
-static void to_TextCompletion(cuo_modding_types_text_completion_t *w, const cuo_TextCompletionDto *v)
+static void to_TextCompletion(cuo_modding_types_text_completion_t *w, const cuo_TextCompletion *v)
 {
     w->entity = v->entity;
     w->prefix = cuo__wstr_copy(v->prefix);
@@ -2864,7 +2864,7 @@ static void to_TextCompletion(cuo_modding_types_text_completion_t *w, const cuo_
     }
 }
 
-static void from_TextCompletion(cuo_TextCompletionDto *o, const cuo_modding_types_text_completion_t *w)
+static void from_TextCompletion(cuo_TextCompletion *o, const cuo_modding_types_text_completion_t *w)
 {
     o->entity = w->entity;
     o->prefix = cuo_strndup((const char *)w->prefix.ptr, w->prefix.len);
@@ -2875,14 +2875,14 @@ static void from_TextCompletion(cuo_TextCompletionDto *o, const cuo_modding_type
     }
 }
 
-static void to_TextCompletionPick(cuo_modding_types_text_completion_pick_t *w, const cuo_TextCompletionPickDto *v)
+static void to_TextCompletionPick(cuo_modding_types_text_completion_pick_t *w, const cuo_TextCompletionPick *v)
 {
     w->entity = v->entity;
     w->index = v->index;
     w->seq = v->seq;
 }
 
-static void from_TextCompletionPick(cuo_TextCompletionPickDto *o, const cuo_modding_types_text_completion_pick_t *w)
+static void from_TextCompletionPick(cuo_TextCompletionPick *o, const cuo_modding_types_text_completion_pick_t *w)
 {
     o->entity = w->entity;
     o->index = w->index;
@@ -2993,11 +2993,11 @@ cuo_comp cuo_BorderRadius_comp(const cuo_BorderRadius *v)
     to_BorderRadius(w, v);
     return cuo__comp(cuo_BorderRadius_id(), 12, w);
 }
-cuo_comp cuo_ChildOfDto_comp(const cuo_ChildOfDto *v)
+cuo_comp cuo_ChildOf_comp(const cuo_ChildOf *v)
 {
     cuo_modding_types_child_of_t *w = cuo_alloc(sizeof *w);
     to_ChildOf(w, v);
-    return cuo__comp(cuo_ChildOfDto_id(), 13, w);
+    return cuo__comp(cuo_ChildOf_id(), 13, w);
 }
 cuo_comp cuo_UiMovable_comp(void) { return cuo__comp(cuo_UiMovable_id(), 14, NULL); }
 cuo_comp cuo_UiNoWindowDrag_comp(void) { return cuo__comp(cuo_UiNoWindowDrag_id(), 15, NULL); }
@@ -3007,11 +3007,11 @@ cuo_comp cuo_GlobalZIndex_comp(const cuo_GlobalZIndex *v)
     to_GlobalZIndex(w, v);
     return cuo__comp(cuo_GlobalZIndex_id(), 16, w);
 }
-cuo_comp cuo_InteractionDto_comp(const cuo_InteractionDto *v)
+cuo_comp cuo_Interaction_comp(const cuo_Interaction *v)
 {
     cuo_modding_types_interaction_t *w = cuo_alloc(sizeof *w);
     to_Interaction(w, v);
-    return cuo__comp(cuo_InteractionDto_id(), 17, w);
+    return cuo__comp(cuo_Interaction_id(), 17, w);
 }
 cuo_comp cuo_Facing_comp(const cuo_Facing *v)
 {
@@ -3031,11 +3031,11 @@ cuo_comp cuo_ContainerWindow_comp(const cuo_ContainerWindow *v)
     to_ContainerWindow(w, v);
     return cuo__comp(cuo_ContainerWindow_id(), 20, w);
 }
-cuo_comp cuo_ContainerGumpTagDto_comp(const cuo_ContainerGumpTagDto *v)
+cuo_comp cuo_ContainerGumpTag_comp(const cuo_ContainerGumpTag *v)
 {
     cuo_modding_types_container_gump_tag_t *w = cuo_alloc(sizeof *w);
     to_ContainerGumpTag(w, v);
-    return cuo__comp(cuo_ContainerGumpTagDto_id(), 21, w);
+    return cuo__comp(cuo_ContainerGumpTag_id(), 21, w);
 }
 cuo_comp cuo_GridContainerWindow_comp(const cuo_GridContainerWindow *v)
 {
@@ -3062,11 +3062,11 @@ cuo_comp cuo_Anchorable_comp(const cuo_Anchorable *v)
     to_Anchorable(w, v);
     return cuo__comp(cuo_Anchorable_id(), 26, w);
 }
-cuo_comp cuo_BorderColorDto_comp(const cuo_BorderColorDto *v)
+cuo_comp cuo_BorderColor_comp(const cuo_BorderColor *v)
 {
     cuo_modding_types_border_color_t *w = cuo_alloc(sizeof *w);
     to_BorderColor(w, v);
-    return cuo__comp(cuo_BorderColorDto_id(), 27, w);
+    return cuo__comp(cuo_BorderColor_id(), 27, w);
 }
 cuo_comp cuo_UOButton_comp(const cuo_UOButton *v)
 {
@@ -3081,11 +3081,11 @@ cuo_comp cuo_ContainerItemUI_comp(const cuo_ContainerItemUI *v)
     return cuo__comp(cuo_ContainerItemUI_id(), 29, w);
 }
 cuo_comp cuo_UiContainsByBounds_comp(void) { return cuo__comp(cuo_UiContainsByBounds_id(), 30, NULL); }
-cuo_comp cuo_UiCustomDto_comp(const cuo_UiCustomDto *v)
+cuo_comp cuo_UiCustom_comp(const cuo_UiCustom *v)
 {
     cuo_modding_types_ui_custom_t *w = cuo_alloc(sizeof *w);
     to_UiCustom(w, v);
-    return cuo__comp(cuo_UiCustomDto_id(), 31, w);
+    return cuo__comp(cuo_UiCustom_id(), 31, w);
 }
 cuo_comp cuo_EditableText_comp(const cuo_EditableText *v)
 {
@@ -3695,20 +3695,20 @@ void cuo_BorderRadius_set(cuo_query q, cuo_entity e, size_t term, const cuo_Bord
     cuo_modding_components_set_border_radius(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
-const cuo_ChildOfDto *cuo_ChildOfDto_column(cuo_query q, size_t term)
+const cuo_ChildOf *cuo_ChildOf_column(cuo_query q, size_t term)
 {
     if (!q.len)
         return NULL;
     cuo_modding_components_list_child_of_t l;
     cuo_modding_components_column_child_of(cuo__typed_query(q), (uint8_t)term, &l);
-    cuo_ChildOfDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    cuo_ChildOf *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
     for (size_t i = 0; i < l.len; i++)
         from_ChildOf(&out[i], &l.ptr[i]);
     cuo_modding_components_list_child_of_free(&l);
     return out;
 }
 
-void cuo_ChildOfDto_set(cuo_query q, cuo_entity e, size_t term, const cuo_ChildOfDto *v)
+void cuo_ChildOf_set(cuo_query q, cuo_entity e, size_t term, const cuo_ChildOf *v)
 {
     cuo_modding_types_child_of_t w;
     to_ChildOf(&w, v);
@@ -3735,33 +3735,33 @@ void cuo_GlobalZIndex_set(cuo_query q, cuo_entity e, size_t term, const cuo_Glob
     cuo_modding_components_set_global_z(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
-const cuo_InteractionDto *cuo_InteractionDto_column(cuo_query q, size_t term)
+const cuo_Interaction *cuo_Interaction_column(cuo_query q, size_t term)
 {
     if (!q.len)
         return NULL;
     cuo_modding_components_list_interaction_t l;
     cuo_modding_components_column_interaction(cuo__typed_query(q), (uint8_t)term, &l);
-    cuo_InteractionDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    cuo_Interaction *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
     for (size_t i = 0; i < l.len; i++)
         from_Interaction(&out[i], &l.ptr[i]);
     cuo_modding_components_list_interaction_free(&l);
     return out;
 }
 
-void cuo_InteractionDto_set(cuo_query q, cuo_entity e, size_t term, const cuo_InteractionDto *v)
+void cuo_Interaction_set(cuo_query q, cuo_entity e, size_t term, const cuo_Interaction *v)
 {
     cuo_modding_types_interaction_t w;
     to_Interaction(&w, v);
     cuo_modding_components_set_interaction(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
-const cuo_EquipmentSlotsDto *cuo_EquipmentSlotsDto_column(cuo_query q, size_t term)
+const cuo_EquipmentSlots *cuo_EquipmentSlots_column(cuo_query q, size_t term)
 {
     if (!q.len)
         return NULL;
     cuo_modding_components_list_equipment_slots_t l;
     cuo_modding_components_column_equipment(cuo__typed_query(q), (uint8_t)term, &l);
-    cuo_EquipmentSlotsDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    cuo_EquipmentSlots *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
     for (size_t i = 0; i < l.len; i++)
         from_EquipmentSlots(&out[i], &l.ptr[i]);
     cuo_modding_components_list_equipment_slots_free(&l);
@@ -3788,13 +3788,13 @@ void cuo_Facing_set(cuo_query q, cuo_entity e, size_t term, const cuo_Facing *v)
     cuo_modding_components_set_facing(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
-const cuo_EntityPropertiesDto *cuo_EntityPropertiesDto_column(cuo_query q, size_t term)
+const cuo_EntityProperties *cuo_EntityProperties_column(cuo_query q, size_t term)
 {
     if (!q.len)
         return NULL;
     cuo_modding_components_list_entity_properties_t l;
     cuo_modding_components_column_properties(cuo__typed_query(q), (uint8_t)term, &l);
-    cuo_EntityPropertiesDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    cuo_EntityProperties *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
     for (size_t i = 0; i < l.len; i++)
         from_EntityProperties(&out[i], &l.ptr[i]);
     cuo_modding_components_list_entity_properties_free(&l);
@@ -3854,20 +3854,20 @@ void cuo_ContainerWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_C
     cuo_modding_components_set_container(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
-const cuo_ContainerGumpTagDto *cuo_ContainerGumpTagDto_column(cuo_query q, size_t term)
+const cuo_ContainerGumpTag *cuo_ContainerGumpTag_column(cuo_query q, size_t term)
 {
     if (!q.len)
         return NULL;
     cuo_modding_components_list_container_gump_tag_t l;
     cuo_modding_components_column_container_tag(cuo__typed_query(q), (uint8_t)term, &l);
-    cuo_ContainerGumpTagDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    cuo_ContainerGumpTag *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
     for (size_t i = 0; i < l.len; i++)
         from_ContainerGumpTag(&out[i], &l.ptr[i]);
     cuo_modding_components_list_container_gump_tag_free(&l);
     return out;
 }
 
-void cuo_ContainerGumpTagDto_set(cuo_query q, cuo_entity e, size_t term, const cuo_ContainerGumpTagDto *v)
+void cuo_ContainerGumpTag_set(cuo_query q, cuo_entity e, size_t term, const cuo_ContainerGumpTag *v)
 {
     cuo_modding_types_container_gump_tag_t w;
     to_ContainerGumpTag(&w, v);
@@ -3934,13 +3934,13 @@ void cuo_HealthBarWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_H
     cuo_modding_components_set_health_bar(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
-const cuo_ServerGumpDto *cuo_ServerGumpDto_column(cuo_query q, size_t term)
+const cuo_ServerGump *cuo_ServerGump_column(cuo_query q, size_t term)
 {
     if (!q.len)
         return NULL;
     cuo_modding_components_list_server_gump_t l;
     cuo_modding_components_column_server(cuo__typed_query(q), (uint8_t)term, &l);
-    cuo_ServerGumpDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    cuo_ServerGump *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
     for (size_t i = 0; i < l.len; i++)
         from_ServerGump(&out[i], &l.ptr[i]);
     cuo_modding_components_list_server_gump_free(&l);
@@ -3980,20 +3980,20 @@ void cuo_Anchorable_set(cuo_query q, cuo_entity e, size_t term, const cuo_Anchor
     cuo_modding_components_set_anchorable(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
-const cuo_BorderColorDto *cuo_BorderColorDto_column(cuo_query q, size_t term)
+const cuo_BorderColor *cuo_BorderColor_column(cuo_query q, size_t term)
 {
     if (!q.len)
         return NULL;
     cuo_modding_components_list_border_color_t l;
     cuo_modding_components_column_border_color(cuo__typed_query(q), (uint8_t)term, &l);
-    cuo_BorderColorDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    cuo_BorderColor *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
     for (size_t i = 0; i < l.len; i++)
         from_BorderColor(&out[i], &l.ptr[i]);
     cuo_modding_components_list_border_color_free(&l);
     return out;
 }
 
-void cuo_BorderColorDto_set(cuo_query q, cuo_entity e, size_t term, const cuo_BorderColorDto *v)
+void cuo_BorderColor_set(cuo_query q, cuo_entity e, size_t term, const cuo_BorderColor *v)
 {
     cuo_modding_types_border_color_t w;
     to_BorderColor(&w, v);
@@ -4053,20 +4053,20 @@ void cuo_ContainerItemUI_set(cuo_query q, cuo_entity e, size_t term, const cuo_C
     cuo_modding_components_set_container_item(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
-const cuo_UiCustomDto *cuo_UiCustomDto_column(cuo_query q, size_t term)
+const cuo_UiCustom *cuo_UiCustom_column(cuo_query q, size_t term)
 {
     if (!q.len)
         return NULL;
     cuo_modding_components_list_ui_custom_t l;
     cuo_modding_components_column_custom(cuo__typed_query(q), (uint8_t)term, &l);
-    cuo_UiCustomDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    cuo_UiCustom *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
     for (size_t i = 0; i < l.len; i++)
         from_UiCustom(&out[i], &l.ptr[i]);
     cuo_modding_components_list_ui_custom_free(&l);
     return out;
 }
 
-void cuo_UiCustomDto_set(cuo_query q, cuo_entity e, size_t term, const cuo_UiCustomDto *v)
+void cuo_UiCustom_set(cuo_query q, cuo_entity e, size_t term, const cuo_UiCustom *v)
 {
     cuo_modding_types_ui_custom_t w;
     to_UiCustom(&w, v);
@@ -4346,13 +4346,13 @@ const cuo_MobAnimation *cuo_MobAnimation_column(cuo_query q, size_t term)
     return out;
 }
 
-const cuo_MobileStepsDto *cuo_MobileStepsDto_column(cuo_query q, size_t term)
+const cuo_MobileSteps *cuo_MobileSteps_column(cuo_query q, size_t term)
 {
     if (!q.len)
         return NULL;
     cuo_modding_components_list_mobile_steps_t l;
     cuo_modding_components_column_mob_steps(cuo__typed_query(q), (uint8_t)term, &l);
-    cuo_MobileStepsDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    cuo_MobileSteps *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
     for (size_t i = 0; i < l.len; i++)
         from_MobileSteps(&out[i], &l.ptr[i]);
     cuo_modding_components_list_mobile_steps_free(&l);
@@ -4813,25 +4813,25 @@ void cuo__typed_res_free(uint16_t kind, void *rec)
     }
 }
 
-static bool res_MouseInput(const cuo__params *ps, cuo_param p, cuo_MouseInputDto *out)
+static bool res_MouseInput(const cuo__params *ps, cuo_param p, cuo_MouseInput *out)
 {
     const cuo_modding_types_mouse_input_t *w = cuo__res_typed(ps, p, 1);
     if (w)
         from_MouseInput(out, w);
     return w != NULL;
 }
-bool cuo_MouseInputDto_res(const cuo_input *in, cuo_param p, cuo_MouseInputDto *out) { return res_MouseInput(in->params, p, out); }
-bool cuo_MouseInputDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_MouseInputDto *out) { return res_MouseInput(ev->params, p, out); }
+bool cuo_MouseInput_res(const cuo_input *in, cuo_param p, cuo_MouseInput *out) { return res_MouseInput(in->params, p, out); }
+bool cuo_MouseInput_obs_res(const cuo_obs *ev, cuo_param p, cuo_MouseInput *out) { return res_MouseInput(ev->params, p, out); }
 
-static bool res_KeyboardInput(const cuo__params *ps, cuo_param p, cuo_KeyboardInputDto *out)
+static bool res_KeyboardInput(const cuo__params *ps, cuo_param p, cuo_KeyboardInput *out)
 {
     const cuo_modding_types_keyboard_input_t *w = cuo__res_typed(ps, p, 2);
     if (w)
         from_KeyboardInput(out, w);
     return w != NULL;
 }
-bool cuo_KeyboardInputDto_res(const cuo_input *in, cuo_param p, cuo_KeyboardInputDto *out) { return res_KeyboardInput(in->params, p, out); }
-bool cuo_KeyboardInputDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_KeyboardInputDto *out) { return res_KeyboardInput(ev->params, p, out); }
+bool cuo_KeyboardInput_res(const cuo_input *in, cuo_param p, cuo_KeyboardInput *out) { return res_KeyboardInput(in->params, p, out); }
+bool cuo_KeyboardInput_obs_res(const cuo_obs *ev, cuo_param p, cuo_KeyboardInput *out) { return res_KeyboardInput(ev->params, p, out); }
 
 static bool res_Time(const cuo__params *ps, cuo_param p, cuo_Time *out)
 {
@@ -4843,175 +4843,175 @@ static bool res_Time(const cuo__params *ps, cuo_param p, cuo_Time *out)
 bool cuo_Time_res(const cuo_input *in, cuo_param p, cuo_Time *out) { return res_Time(in->params, p, out); }
 bool cuo_Time_obs_res(const cuo_obs *ev, cuo_param p, cuo_Time *out) { return res_Time(ev->params, p, out); }
 
-static bool res_GameContext(const cuo__params *ps, cuo_param p, cuo_GameContextDto *out)
+static bool res_GameContext(const cuo__params *ps, cuo_param p, cuo_GameContext *out)
 {
     const cuo_modding_types_game_context_t *w = cuo__res_typed(ps, p, 4);
     if (w)
         from_GameContext(out, w);
     return w != NULL;
 }
-bool cuo_GameContextDto_res(const cuo_input *in, cuo_param p, cuo_GameContextDto *out) { return res_GameContext(in->params, p, out); }
-bool cuo_GameContextDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameContextDto *out) { return res_GameContext(ev->params, p, out); }
-static void put_GameContext(const cuo__params *ps, cuo_param p, const cuo_GameContextDto *v)
+bool cuo_GameContext_res(const cuo_input *in, cuo_param p, cuo_GameContext *out) { return res_GameContext(in->params, p, out); }
+bool cuo_GameContext_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameContext *out) { return res_GameContext(ev->params, p, out); }
+static void put_GameContext(const cuo__params *ps, cuo_param p, const cuo_GameContext *v)
 {
     cuo_modding_types_game_context_t w;
     to_GameContext(&w, v);
     cuo_modding_components_put_context(cuo__res_put(ps, p), &w);
 }
-void cuo_GameContextDto_put(const cuo_input *in, cuo_param p, const cuo_GameContextDto *v) { put_GameContext(in->params, p, v); }
-void cuo_GameContextDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_GameContextDto *v) { put_GameContext(ev->params, p, v); }
-void cuo_GameContextDto_set_resource(cuo_cmds *c, const cuo_GameContextDto *v)
+void cuo_GameContext_put(const cuo_input *in, cuo_param p, const cuo_GameContext *v) { put_GameContext(in->params, p, v); }
+void cuo_GameContext_obs_put(const cuo_obs *ev, cuo_param p, const cuo_GameContext *v) { put_GameContext(ev->params, p, v); }
+void cuo_GameContext_set_resource(cuo_cmds *c, const cuo_GameContext *v)
 {
     cuo_modding_types_game_context_t w;
     to_GameContext(&w, v);
     cuo_modding_components_set_resource_context(cuo__typed_cmds(c), &w);
 }
 
-static bool res_GameSettings(const cuo__params *ps, cuo_param p, cuo_GameSettingsDto *out)
+static bool res_GameSettings(const cuo__params *ps, cuo_param p, cuo_GameSettings *out)
 {
     const cuo_modding_types_game_settings_t *w = cuo__res_typed(ps, p, 5);
     if (w)
         from_GameSettings(out, w);
     return w != NULL;
 }
-bool cuo_GameSettingsDto_res(const cuo_input *in, cuo_param p, cuo_GameSettingsDto *out) { return res_GameSettings(in->params, p, out); }
-bool cuo_GameSettingsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameSettingsDto *out) { return res_GameSettings(ev->params, p, out); }
+bool cuo_GameSettings_res(const cuo_input *in, cuo_param p, cuo_GameSettings *out) { return res_GameSettings(in->params, p, out); }
+bool cuo_GameSettings_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameSettings *out) { return res_GameSettings(ev->params, p, out); }
 
-static bool res_GameState(const cuo__params *ps, cuo_param p, cuo_GameStateDto *out)
+static bool res_GameState(const cuo__params *ps, cuo_param p, cuo_GameState *out)
 {
     const cuo_modding_types_game_state_t *w = cuo__res_typed(ps, p, 6);
     if (w)
         from_GameState(out, w);
     return w != NULL;
 }
-bool cuo_GameStateDto_res(const cuo_input *in, cuo_param p, cuo_GameStateDto *out) { return res_GameState(in->params, p, out); }
-bool cuo_GameStateDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameStateDto *out) { return res_GameState(ev->params, p, out); }
-static void put_GameState(const cuo__params *ps, cuo_param p, const cuo_GameStateDto *v)
+bool cuo_GameState_res(const cuo_input *in, cuo_param p, cuo_GameState *out) { return res_GameState(in->params, p, out); }
+bool cuo_GameState_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameState *out) { return res_GameState(ev->params, p, out); }
+static void put_GameState(const cuo__params *ps, cuo_param p, const cuo_GameState *v)
 {
     cuo_modding_types_game_state_t w;
     to_GameState(&w, v);
     cuo_modding_components_put_state(cuo__res_put(ps, p), &w);
 }
-void cuo_GameStateDto_put(const cuo_input *in, cuo_param p, const cuo_GameStateDto *v) { put_GameState(in->params, p, v); }
-void cuo_GameStateDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_GameStateDto *v) { put_GameState(ev->params, p, v); }
-void cuo_GameStateDto_set_resource(cuo_cmds *c, const cuo_GameStateDto *v)
+void cuo_GameState_put(const cuo_input *in, cuo_param p, const cuo_GameState *v) { put_GameState(in->params, p, v); }
+void cuo_GameState_obs_put(const cuo_obs *ev, cuo_param p, const cuo_GameState *v) { put_GameState(ev->params, p, v); }
+void cuo_GameState_set_resource(cuo_cmds *c, const cuo_GameState *v)
 {
     cuo_modding_types_game_state_t w;
     to_GameState(&w, v);
     cuo_modding_components_set_resource_state(cuo__typed_cmds(c), &w);
 }
 
-static bool res_ContainerPositions(const cuo__params *ps, cuo_param p, cuo_ContainerPositionsDto *out)
+static bool res_ContainerPositions(const cuo__params *ps, cuo_param p, cuo_ContainerPositions *out)
 {
     const cuo_modding_types_container_positions_t *w = cuo__res_typed(ps, p, 7);
     if (w)
         from_ContainerPositions(out, w);
     return w != NULL;
 }
-bool cuo_ContainerPositionsDto_res(const cuo_input *in, cuo_param p, cuo_ContainerPositionsDto *out) { return res_ContainerPositions(in->params, p, out); }
-bool cuo_ContainerPositionsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ContainerPositionsDto *out) { return res_ContainerPositions(ev->params, p, out); }
-static void put_ContainerPositions(const cuo__params *ps, cuo_param p, const cuo_ContainerPositionsDto *v)
+bool cuo_ContainerPositions_res(const cuo_input *in, cuo_param p, cuo_ContainerPositions *out) { return res_ContainerPositions(in->params, p, out); }
+bool cuo_ContainerPositions_obs_res(const cuo_obs *ev, cuo_param p, cuo_ContainerPositions *out) { return res_ContainerPositions(ev->params, p, out); }
+static void put_ContainerPositions(const cuo__params *ps, cuo_param p, const cuo_ContainerPositions *v)
 {
     cuo_modding_types_container_positions_t w;
     to_ContainerPositions(&w, v);
     cuo_modding_components_put_container_positions(cuo__res_put(ps, p), &w);
 }
-void cuo_ContainerPositionsDto_put(const cuo_input *in, cuo_param p, const cuo_ContainerPositionsDto *v) { put_ContainerPositions(in->params, p, v); }
-void cuo_ContainerPositionsDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ContainerPositionsDto *v) { put_ContainerPositions(ev->params, p, v); }
-void cuo_ContainerPositionsDto_set_resource(cuo_cmds *c, const cuo_ContainerPositionsDto *v)
+void cuo_ContainerPositions_put(const cuo_input *in, cuo_param p, const cuo_ContainerPositions *v) { put_ContainerPositions(in->params, p, v); }
+void cuo_ContainerPositions_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ContainerPositions *v) { put_ContainerPositions(ev->params, p, v); }
+void cuo_ContainerPositions_set_resource(cuo_cmds *c, const cuo_ContainerPositions *v)
 {
     cuo_modding_types_container_positions_t w;
     to_ContainerPositions(&w, v);
     cuo_modding_components_set_resource_container_positions(cuo__typed_cmds(c), &w);
 }
 
-static bool res_HostHotkeys(const cuo__params *ps, cuo_param p, cuo_HostHotkeysDto *out)
+static bool res_HostHotkeys(const cuo__params *ps, cuo_param p, cuo_HostHotkeys *out)
 {
     const cuo_modding_types_host_hotkeys_t *w = cuo__res_typed(ps, p, 8);
     if (w)
         from_HostHotkeys(out, w);
     return w != NULL;
 }
-bool cuo_HostHotkeysDto_res(const cuo_input *in, cuo_param p, cuo_HostHotkeysDto *out) { return res_HostHotkeys(in->params, p, out); }
-bool cuo_HostHotkeysDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_HostHotkeysDto *out) { return res_HostHotkeys(ev->params, p, out); }
+bool cuo_HostHotkeys_res(const cuo_input *in, cuo_param p, cuo_HostHotkeys *out) { return res_HostHotkeys(in->params, p, out); }
+bool cuo_HostHotkeys_obs_res(const cuo_obs *ev, cuo_param p, cuo_HostHotkeys *out) { return res_HostHotkeys(ev->params, p, out); }
 
-static bool res_ModHotkeyBindings(const cuo__params *ps, cuo_param p, cuo_ModHotkeyBindingsDto *out)
+static bool res_ModHotkeyBindings(const cuo__params *ps, cuo_param p, cuo_ModHotkeyBindings *out)
 {
     const cuo_modding_types_mod_hotkey_bindings_t *w = cuo__res_typed(ps, p, 9);
     if (w)
         from_ModHotkeyBindings(out, w);
     return w != NULL;
 }
-bool cuo_ModHotkeyBindingsDto_res(const cuo_input *in, cuo_param p, cuo_ModHotkeyBindingsDto *out) { return res_ModHotkeyBindings(in->params, p, out); }
-bool cuo_ModHotkeyBindingsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModHotkeyBindingsDto *out) { return res_ModHotkeyBindings(ev->params, p, out); }
-static void put_ModHotkeyBindings(const cuo__params *ps, cuo_param p, const cuo_ModHotkeyBindingsDto *v)
+bool cuo_ModHotkeyBindings_res(const cuo_input *in, cuo_param p, cuo_ModHotkeyBindings *out) { return res_ModHotkeyBindings(in->params, p, out); }
+bool cuo_ModHotkeyBindings_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModHotkeyBindings *out) { return res_ModHotkeyBindings(ev->params, p, out); }
+static void put_ModHotkeyBindings(const cuo__params *ps, cuo_param p, const cuo_ModHotkeyBindings *v)
 {
     cuo_modding_types_mod_hotkey_bindings_t w;
     to_ModHotkeyBindings(&w, v);
     cuo_modding_components_put_mod_hotkeys(cuo__res_put(ps, p), &w);
 }
-void cuo_ModHotkeyBindingsDto_put(const cuo_input *in, cuo_param p, const cuo_ModHotkeyBindingsDto *v) { put_ModHotkeyBindings(in->params, p, v); }
-void cuo_ModHotkeyBindingsDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ModHotkeyBindingsDto *v) { put_ModHotkeyBindings(ev->params, p, v); }
-void cuo_ModHotkeyBindingsDto_set_resource(cuo_cmds *c, const cuo_ModHotkeyBindingsDto *v)
+void cuo_ModHotkeyBindings_put(const cuo_input *in, cuo_param p, const cuo_ModHotkeyBindings *v) { put_ModHotkeyBindings(in->params, p, v); }
+void cuo_ModHotkeyBindings_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ModHotkeyBindings *v) { put_ModHotkeyBindings(ev->params, p, v); }
+void cuo_ModHotkeyBindings_set_resource(cuo_cmds *c, const cuo_ModHotkeyBindings *v)
 {
     cuo_modding_types_mod_hotkey_bindings_t w;
     to_ModHotkeyBindings(&w, v);
     cuo_modding_components_set_resource_mod_hotkeys(cuo__typed_cmds(c), &w);
 }
 
-static bool res_WorldSingleClick(const cuo__params *ps, cuo_param p, cuo_WorldSingleClickDto *out)
+static bool res_WorldSingleClick(const cuo__params *ps, cuo_param p, cuo_WorldSingleClick *out)
 {
     const cuo_modding_types_world_single_click_t *w = cuo__res_typed(ps, p, 10);
     if (w)
         from_WorldSingleClick(out, w);
     return w != NULL;
 }
-bool cuo_WorldSingleClickDto_res(const cuo_input *in, cuo_param p, cuo_WorldSingleClickDto *out) { return res_WorldSingleClick(in->params, p, out); }
-bool cuo_WorldSingleClickDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_WorldSingleClickDto *out) { return res_WorldSingleClick(ev->params, p, out); }
+bool cuo_WorldSingleClick_res(const cuo_input *in, cuo_param p, cuo_WorldSingleClick *out) { return res_WorldSingleClick(in->params, p, out); }
+bool cuo_WorldSingleClick_obs_res(const cuo_obs *ev, cuo_param p, cuo_WorldSingleClick *out) { return res_WorldSingleClick(ev->params, p, out); }
 
-static bool res_ModOptionsSchema(const cuo__params *ps, cuo_param p, cuo_ModOptionsSchemaDto *out)
+static bool res_ModOptionsSchema(const cuo__params *ps, cuo_param p, cuo_ModOptionsSchema *out)
 {
     const cuo_modding_types_mod_options_schema_t *w = cuo__res_typed(ps, p, 11);
     if (w)
         from_ModOptionsSchema(out, w);
     return w != NULL;
 }
-bool cuo_ModOptionsSchemaDto_res(const cuo_input *in, cuo_param p, cuo_ModOptionsSchemaDto *out) { return res_ModOptionsSchema(in->params, p, out); }
-bool cuo_ModOptionsSchemaDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsSchemaDto *out) { return res_ModOptionsSchema(ev->params, p, out); }
-static void put_ModOptionsSchema(const cuo__params *ps, cuo_param p, const cuo_ModOptionsSchemaDto *v)
+bool cuo_ModOptionsSchema_res(const cuo_input *in, cuo_param p, cuo_ModOptionsSchema *out) { return res_ModOptionsSchema(in->params, p, out); }
+bool cuo_ModOptionsSchema_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsSchema *out) { return res_ModOptionsSchema(ev->params, p, out); }
+static void put_ModOptionsSchema(const cuo__params *ps, cuo_param p, const cuo_ModOptionsSchema *v)
 {
     cuo_modding_types_mod_options_schema_t w;
     to_ModOptionsSchema(&w, v);
     cuo_modding_components_put_schema(cuo__res_put(ps, p), &w);
 }
-void cuo_ModOptionsSchemaDto_put(const cuo_input *in, cuo_param p, const cuo_ModOptionsSchemaDto *v) { put_ModOptionsSchema(in->params, p, v); }
-void cuo_ModOptionsSchemaDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ModOptionsSchemaDto *v) { put_ModOptionsSchema(ev->params, p, v); }
-void cuo_ModOptionsSchemaDto_set_resource(cuo_cmds *c, const cuo_ModOptionsSchemaDto *v)
+void cuo_ModOptionsSchema_put(const cuo_input *in, cuo_param p, const cuo_ModOptionsSchema *v) { put_ModOptionsSchema(in->params, p, v); }
+void cuo_ModOptionsSchema_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ModOptionsSchema *v) { put_ModOptionsSchema(ev->params, p, v); }
+void cuo_ModOptionsSchema_set_resource(cuo_cmds *c, const cuo_ModOptionsSchema *v)
 {
     cuo_modding_types_mod_options_schema_t w;
     to_ModOptionsSchema(&w, v);
     cuo_modding_components_set_resource_schema(cuo__typed_cmds(c), &w);
 }
 
-static bool res_ModOptionsValues(const cuo__params *ps, cuo_param p, cuo_ModOptionsValuesDto *out)
+static bool res_ModOptionsValues(const cuo__params *ps, cuo_param p, cuo_ModOptionsValues *out)
 {
     const cuo_modding_types_mod_options_values_t *w = cuo__res_typed(ps, p, 12);
     if (w)
         from_ModOptionsValues(out, w);
     return w != NULL;
 }
-bool cuo_ModOptionsValuesDto_res(const cuo_input *in, cuo_param p, cuo_ModOptionsValuesDto *out) { return res_ModOptionsValues(in->params, p, out); }
-bool cuo_ModOptionsValuesDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsValuesDto *out) { return res_ModOptionsValues(ev->params, p, out); }
+bool cuo_ModOptionsValues_res(const cuo_input *in, cuo_param p, cuo_ModOptionsValues *out) { return res_ModOptionsValues(in->params, p, out); }
+bool cuo_ModOptionsValues_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsValues *out) { return res_ModOptionsValues(ev->params, p, out); }
 
-static bool res_PlayerBuffs(const cuo__params *ps, cuo_param p, cuo_PlayerBuffsDto *out)
+static bool res_PlayerBuffs(const cuo__params *ps, cuo_param p, cuo_PlayerBuffs *out)
 {
     const cuo_modding_types_player_buffs_t *w = cuo__res_typed(ps, p, 13);
     if (w)
         from_PlayerBuffs(out, w);
     return w != NULL;
 }
-bool cuo_PlayerBuffsDto_res(const cuo_input *in, cuo_param p, cuo_PlayerBuffsDto *out) { return res_PlayerBuffs(in->params, p, out); }
-bool cuo_PlayerBuffsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerBuffsDto *out) { return res_PlayerBuffs(ev->params, p, out); }
+bool cuo_PlayerBuffs_res(const cuo_input *in, cuo_param p, cuo_PlayerBuffs *out) { return res_PlayerBuffs(in->params, p, out); }
+bool cuo_PlayerBuffs_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerBuffs *out) { return res_PlayerBuffs(ev->params, p, out); }
 
 static bool res_GrabbedItem(const cuo__params *ps, cuo_param p, cuo_GrabbedItem *out)
 {
@@ -5023,15 +5023,15 @@ static bool res_GrabbedItem(const cuo__params *ps, cuo_param p, cuo_GrabbedItem 
 bool cuo_GrabbedItem_res(const cuo_input *in, cuo_param p, cuo_GrabbedItem *out) { return res_GrabbedItem(in->params, p, out); }
 bool cuo_GrabbedItem_obs_res(const cuo_obs *ev, cuo_param p, cuo_GrabbedItem *out) { return res_GrabbedItem(ev->params, p, out); }
 
-static bool res_PlayerSkills(const cuo__params *ps, cuo_param p, cuo_PlayerSkillsDto *out)
+static bool res_PlayerSkills(const cuo__params *ps, cuo_param p, cuo_PlayerSkills *out)
 {
     const cuo_modding_types_player_skills_t *w = cuo__res_typed(ps, p, 15);
     if (w)
         from_PlayerSkills(out, w);
     return w != NULL;
 }
-bool cuo_PlayerSkillsDto_res(const cuo_input *in, cuo_param p, cuo_PlayerSkillsDto *out) { return res_PlayerSkills(in->params, p, out); }
-bool cuo_PlayerSkillsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerSkillsDto *out) { return res_PlayerSkills(ev->params, p, out); }
+bool cuo_PlayerSkills_res(const cuo_input *in, cuo_param p, cuo_PlayerSkills *out) { return res_PlayerSkills(in->params, p, out); }
+bool cuo_PlayerSkills_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerSkills *out) { return res_PlayerSkills(ev->params, p, out); }
 
 static bool res_TargetingState(const cuo__params *ps, cuo_param p, cuo_TargetingState *out)
 {
@@ -5043,94 +5043,94 @@ static bool res_TargetingState(const cuo__params *ps, cuo_param p, cuo_Targeting
 bool cuo_TargetingState_res(const cuo_input *in, cuo_param p, cuo_TargetingState *out) { return res_TargetingState(in->params, p, out); }
 bool cuo_TargetingState_obs_res(const cuo_obs *ev, cuo_param p, cuo_TargetingState *out) { return res_TargetingState(ev->params, p, out); }
 
-static bool res_UiPick(const cuo__params *ps, cuo_param p, cuo_UiPickDto *out)
+static bool res_UiPick(const cuo__params *ps, cuo_param p, cuo_UiPick *out)
 {
     const cuo_modding_types_ui_pick_t *w = cuo__res_typed(ps, p, 17);
     if (w)
         from_UiPick(out, w);
     return w != NULL;
 }
-bool cuo_UiPickDto_res(const cuo_input *in, cuo_param p, cuo_UiPickDto *out) { return res_UiPick(in->params, p, out); }
-bool cuo_UiPickDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_UiPickDto *out) { return res_UiPick(ev->params, p, out); }
+bool cuo_UiPick_res(const cuo_input *in, cuo_param p, cuo_UiPick *out) { return res_UiPick(in->params, p, out); }
+bool cuo_UiPick_obs_res(const cuo_obs *ev, cuo_param p, cuo_UiPick *out) { return res_UiPick(ev->params, p, out); }
 
-static bool res_UiSurface(const cuo__params *ps, cuo_param p, cuo_UiSurfaceDto *out)
+static bool res_UiSurface(const cuo__params *ps, cuo_param p, cuo_UiSurface *out)
 {
     const cuo_modding_types_ui_surface_t *w = cuo__res_typed(ps, p, 18);
     if (w)
         from_UiSurface(out, w);
     return w != NULL;
 }
-bool cuo_UiSurfaceDto_res(const cuo_input *in, cuo_param p, cuo_UiSurfaceDto *out) { return res_UiSurface(in->params, p, out); }
-bool cuo_UiSurfaceDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_UiSurfaceDto *out) { return res_UiSurface(ev->params, p, out); }
+bool cuo_UiSurface_res(const cuo_input *in, cuo_param p, cuo_UiSurface *out) { return res_UiSurface(in->params, p, out); }
+bool cuo_UiSurface_obs_res(const cuo_obs *ev, cuo_param p, cuo_UiSurface *out) { return res_UiSurface(ev->params, p, out); }
 
-static bool res_TextCaret(const cuo__params *ps, cuo_param p, cuo_TextCaretDto *out)
+static bool res_TextCaret(const cuo__params *ps, cuo_param p, cuo_TextCaret *out)
 {
     const cuo_modding_types_text_caret_t *w = cuo__res_typed(ps, p, 19);
     if (w)
         from_TextCaret(out, w);
     return w != NULL;
 }
-bool cuo_TextCaretDto_res(const cuo_input *in, cuo_param p, cuo_TextCaretDto *out) { return res_TextCaret(in->params, p, out); }
-bool cuo_TextCaretDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCaretDto *out) { return res_TextCaret(ev->params, p, out); }
+bool cuo_TextCaret_res(const cuo_input *in, cuo_param p, cuo_TextCaret *out) { return res_TextCaret(in->params, p, out); }
+bool cuo_TextCaret_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCaret *out) { return res_TextCaret(ev->params, p, out); }
 
-static bool res_TextCompletionState(const cuo__params *ps, cuo_param p, cuo_TextCompletionStateDto *out)
+static bool res_TextCompletionState(const cuo__params *ps, cuo_param p, cuo_TextCompletionState *out)
 {
     const cuo_modding_types_text_completion_state_t *w = cuo__res_typed(ps, p, 20);
     if (w)
         from_TextCompletionState(out, w);
     return w != NULL;
 }
-bool cuo_TextCompletionStateDto_res(const cuo_input *in, cuo_param p, cuo_TextCompletionStateDto *out) { return res_TextCompletionState(in->params, p, out); }
-bool cuo_TextCompletionStateDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionStateDto *out) { return res_TextCompletionState(ev->params, p, out); }
+bool cuo_TextCompletionState_res(const cuo_input *in, cuo_param p, cuo_TextCompletionState *out) { return res_TextCompletionState(in->params, p, out); }
+bool cuo_TextCompletionState_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionState *out) { return res_TextCompletionState(ev->params, p, out); }
 
-static bool res_Party(const cuo__params *ps, cuo_param p, cuo_PartyDto *out)
+static bool res_Party(const cuo__params *ps, cuo_param p, cuo_Party *out)
 {
     const cuo_modding_types_party_t *w = cuo__res_typed(ps, p, 21);
     if (w)
         from_Party(out, w);
     return w != NULL;
 }
-bool cuo_PartyDto_res(const cuo_input *in, cuo_param p, cuo_PartyDto *out) { return res_Party(in->params, p, out); }
-bool cuo_PartyDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PartyDto *out) { return res_Party(ev->params, p, out); }
+bool cuo_Party_res(const cuo_input *in, cuo_param p, cuo_Party *out) { return res_Party(in->params, p, out); }
+bool cuo_Party_obs_res(const cuo_obs *ev, cuo_param p, cuo_Party *out) { return res_Party(ev->params, p, out); }
 
-static bool res_Spellbooks(const cuo__params *ps, cuo_param p, cuo_SpellbooksDto *out)
+static bool res_Spellbooks(const cuo__params *ps, cuo_param p, cuo_Spellbooks *out)
 {
     const cuo_modding_types_spellbooks_t *w = cuo__res_typed(ps, p, 22);
     if (w)
         from_Spellbooks(out, w);
     return w != NULL;
 }
-bool cuo_SpellbooksDto_res(const cuo_input *in, cuo_param p, cuo_SpellbooksDto *out) { return res_Spellbooks(in->params, p, out); }
-bool cuo_SpellbooksDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_SpellbooksDto *out) { return res_Spellbooks(ev->params, p, out); }
+bool cuo_Spellbooks_res(const cuo_input *in, cuo_param p, cuo_Spellbooks *out) { return res_Spellbooks(in->params, p, out); }
+bool cuo_Spellbooks_obs_res(const cuo_obs *ev, cuo_param p, cuo_Spellbooks *out) { return res_Spellbooks(ev->params, p, out); }
 
-static bool res_PlayerSteps(const cuo__params *ps, cuo_param p, cuo_PlayerStepsDto *out)
+static bool res_PlayerSteps(const cuo__params *ps, cuo_param p, cuo_PlayerSteps *out)
 {
     const cuo_modding_types_player_steps_t *w = cuo__res_typed(ps, p, 23);
     if (w)
         from_PlayerSteps(out, w);
     return w != NULL;
 }
-bool cuo_PlayerStepsDto_res(const cuo_input *in, cuo_param p, cuo_PlayerStepsDto *out) { return res_PlayerSteps(in->params, p, out); }
-bool cuo_PlayerStepsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerStepsDto *out) { return res_PlayerSteps(ev->params, p, out); }
+bool cuo_PlayerSteps_res(const cuo_input *in, cuo_param p, cuo_PlayerSteps *out) { return res_PlayerSteps(in->params, p, out); }
+bool cuo_PlayerSteps_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerSteps *out) { return res_PlayerSteps(ev->params, p, out); }
 
-static bool res_ClipboardSet(const cuo__params *ps, cuo_param p, cuo_ClipboardSetDto *out)
+static bool res_ClipboardSet(const cuo__params *ps, cuo_param p, cuo_ClipboardSet *out)
 {
     const cuo_modding_types_clipboard_set_t *w = cuo__res_typed(ps, p, 24);
     if (w)
         from_ClipboardSet(out, w);
     return w != NULL;
 }
-bool cuo_ClipboardSetDto_res(const cuo_input *in, cuo_param p, cuo_ClipboardSetDto *out) { return res_ClipboardSet(in->params, p, out); }
-bool cuo_ClipboardSetDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ClipboardSetDto *out) { return res_ClipboardSet(ev->params, p, out); }
-static void put_ClipboardSet(const cuo__params *ps, cuo_param p, const cuo_ClipboardSetDto *v)
+bool cuo_ClipboardSet_res(const cuo_input *in, cuo_param p, cuo_ClipboardSet *out) { return res_ClipboardSet(in->params, p, out); }
+bool cuo_ClipboardSet_obs_res(const cuo_obs *ev, cuo_param p, cuo_ClipboardSet *out) { return res_ClipboardSet(ev->params, p, out); }
+static void put_ClipboardSet(const cuo__params *ps, cuo_param p, const cuo_ClipboardSet *v)
 {
     cuo_modding_types_clipboard_set_t w;
     to_ClipboardSet(&w, v);
     cuo_modding_components_put_clipboard_set(cuo__res_put(ps, p), &w);
 }
-void cuo_ClipboardSetDto_put(const cuo_input *in, cuo_param p, const cuo_ClipboardSetDto *v) { put_ClipboardSet(in->params, p, v); }
-void cuo_ClipboardSetDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ClipboardSetDto *v) { put_ClipboardSet(ev->params, p, v); }
-void cuo_ClipboardSetDto_set_resource(cuo_cmds *c, const cuo_ClipboardSetDto *v)
+void cuo_ClipboardSet_put(const cuo_input *in, cuo_param p, const cuo_ClipboardSet *v) { put_ClipboardSet(in->params, p, v); }
+void cuo_ClipboardSet_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ClipboardSet *v) { put_ClipboardSet(ev->params, p, v); }
+void cuo_ClipboardSet_set_resource(cuo_cmds *c, const cuo_ClipboardSet *v)
 {
     cuo_modding_types_clipboard_set_t w;
     to_ClipboardSet(&w, v);
@@ -5161,72 +5161,72 @@ void cuo_FocusedInput_set_resource(cuo_cmds *c, const cuo_FocusedInput *v)
     cuo_modding_components_set_resource_focused_input(cuo__typed_cmds(c), &w);
 }
 
-static bool res_TextClipboardAction(const cuo__params *ps, cuo_param p, cuo_TextClipboardActionDto *out)
+static bool res_TextClipboardAction(const cuo__params *ps, cuo_param p, cuo_TextClipboardAction *out)
 {
     const cuo_modding_types_text_clipboard_action_t *w = cuo__res_typed(ps, p, 26);
     if (w)
         from_TextClipboardAction(out, w);
     return w != NULL;
 }
-bool cuo_TextClipboardActionDto_res(const cuo_input *in, cuo_param p, cuo_TextClipboardActionDto *out) { return res_TextClipboardAction(in->params, p, out); }
-bool cuo_TextClipboardActionDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextClipboardActionDto *out) { return res_TextClipboardAction(ev->params, p, out); }
-static void put_TextClipboardAction(const cuo__params *ps, cuo_param p, const cuo_TextClipboardActionDto *v)
+bool cuo_TextClipboardAction_res(const cuo_input *in, cuo_param p, cuo_TextClipboardAction *out) { return res_TextClipboardAction(in->params, p, out); }
+bool cuo_TextClipboardAction_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextClipboardAction *out) { return res_TextClipboardAction(ev->params, p, out); }
+static void put_TextClipboardAction(const cuo__params *ps, cuo_param p, const cuo_TextClipboardAction *v)
 {
     cuo_modding_types_text_clipboard_action_t w;
     to_TextClipboardAction(&w, v);
     cuo_modding_components_put_text_clipboard_action(cuo__res_put(ps, p), &w);
 }
-void cuo_TextClipboardActionDto_put(const cuo_input *in, cuo_param p, const cuo_TextClipboardActionDto *v) { put_TextClipboardAction(in->params, p, v); }
-void cuo_TextClipboardActionDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextClipboardActionDto *v) { put_TextClipboardAction(ev->params, p, v); }
-void cuo_TextClipboardActionDto_set_resource(cuo_cmds *c, const cuo_TextClipboardActionDto *v)
+void cuo_TextClipboardAction_put(const cuo_input *in, cuo_param p, const cuo_TextClipboardAction *v) { put_TextClipboardAction(in->params, p, v); }
+void cuo_TextClipboardAction_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextClipboardAction *v) { put_TextClipboardAction(ev->params, p, v); }
+void cuo_TextClipboardAction_set_resource(cuo_cmds *c, const cuo_TextClipboardAction *v)
 {
     cuo_modding_types_text_clipboard_action_t w;
     to_TextClipboardAction(&w, v);
     cuo_modding_components_set_resource_text_clipboard_action(cuo__typed_cmds(c), &w);
 }
 
-static bool res_TextCompletion(const cuo__params *ps, cuo_param p, cuo_TextCompletionDto *out)
+static bool res_TextCompletion(const cuo__params *ps, cuo_param p, cuo_TextCompletion *out)
 {
     const cuo_modding_types_text_completion_t *w = cuo__res_typed(ps, p, 27);
     if (w)
         from_TextCompletion(out, w);
     return w != NULL;
 }
-bool cuo_TextCompletionDto_res(const cuo_input *in, cuo_param p, cuo_TextCompletionDto *out) { return res_TextCompletion(in->params, p, out); }
-bool cuo_TextCompletionDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionDto *out) { return res_TextCompletion(ev->params, p, out); }
-static void put_TextCompletion(const cuo__params *ps, cuo_param p, const cuo_TextCompletionDto *v)
+bool cuo_TextCompletion_res(const cuo_input *in, cuo_param p, cuo_TextCompletion *out) { return res_TextCompletion(in->params, p, out); }
+bool cuo_TextCompletion_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletion *out) { return res_TextCompletion(ev->params, p, out); }
+static void put_TextCompletion(const cuo__params *ps, cuo_param p, const cuo_TextCompletion *v)
 {
     cuo_modding_types_text_completion_t w;
     to_TextCompletion(&w, v);
     cuo_modding_components_put_text_completion(cuo__res_put(ps, p), &w);
 }
-void cuo_TextCompletionDto_put(const cuo_input *in, cuo_param p, const cuo_TextCompletionDto *v) { put_TextCompletion(in->params, p, v); }
-void cuo_TextCompletionDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextCompletionDto *v) { put_TextCompletion(ev->params, p, v); }
-void cuo_TextCompletionDto_set_resource(cuo_cmds *c, const cuo_TextCompletionDto *v)
+void cuo_TextCompletion_put(const cuo_input *in, cuo_param p, const cuo_TextCompletion *v) { put_TextCompletion(in->params, p, v); }
+void cuo_TextCompletion_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextCompletion *v) { put_TextCompletion(ev->params, p, v); }
+void cuo_TextCompletion_set_resource(cuo_cmds *c, const cuo_TextCompletion *v)
 {
     cuo_modding_types_text_completion_t w;
     to_TextCompletion(&w, v);
     cuo_modding_components_set_resource_text_completion(cuo__typed_cmds(c), &w);
 }
 
-static bool res_TextCompletionPick(const cuo__params *ps, cuo_param p, cuo_TextCompletionPickDto *out)
+static bool res_TextCompletionPick(const cuo__params *ps, cuo_param p, cuo_TextCompletionPick *out)
 {
     const cuo_modding_types_text_completion_pick_t *w = cuo__res_typed(ps, p, 28);
     if (w)
         from_TextCompletionPick(out, w);
     return w != NULL;
 }
-bool cuo_TextCompletionPickDto_res(const cuo_input *in, cuo_param p, cuo_TextCompletionPickDto *out) { return res_TextCompletionPick(in->params, p, out); }
-bool cuo_TextCompletionPickDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionPickDto *out) { return res_TextCompletionPick(ev->params, p, out); }
-static void put_TextCompletionPick(const cuo__params *ps, cuo_param p, const cuo_TextCompletionPickDto *v)
+bool cuo_TextCompletionPick_res(const cuo_input *in, cuo_param p, cuo_TextCompletionPick *out) { return res_TextCompletionPick(in->params, p, out); }
+bool cuo_TextCompletionPick_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionPick *out) { return res_TextCompletionPick(ev->params, p, out); }
+static void put_TextCompletionPick(const cuo__params *ps, cuo_param p, const cuo_TextCompletionPick *v)
 {
     cuo_modding_types_text_completion_pick_t w;
     to_TextCompletionPick(&w, v);
     cuo_modding_components_put_text_completion_pick(cuo__res_put(ps, p), &w);
 }
-void cuo_TextCompletionPickDto_put(const cuo_input *in, cuo_param p, const cuo_TextCompletionPickDto *v) { put_TextCompletionPick(in->params, p, v); }
-void cuo_TextCompletionPickDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextCompletionPickDto *v) { put_TextCompletionPick(ev->params, p, v); }
-void cuo_TextCompletionPickDto_set_resource(cuo_cmds *c, const cuo_TextCompletionPickDto *v)
+void cuo_TextCompletionPick_put(const cuo_input *in, cuo_param p, const cuo_TextCompletionPick *v) { put_TextCompletionPick(in->params, p, v); }
+void cuo_TextCompletionPick_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextCompletionPick *v) { put_TextCompletionPick(ev->params, p, v); }
+void cuo_TextCompletionPick_set_resource(cuo_cmds *c, const cuo_TextCompletionPick *v)
 {
     cuo_modding_types_text_completion_pick_t w;
     to_TextCompletionPick(&w, v);
@@ -5628,13 +5628,13 @@ static const cuo_ModMoveRequest *events_move_request(const cuo__params *ps, cuo_
 const cuo_ModMoveRequest *cuo_ModMoveRequest_events(const cuo_input *in, cuo_param p, size_t *count) { return events_move_request(in->params, p, count); }
 const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_move_request(ev->params, p, count); }
 
-void cuo_CharacterSelectionDto_send(cuo_cmds *c, const cuo_CharacterSelectionDto *v)
+void cuo_CharacterSelection_send(cuo_cmds *c, const cuo_CharacterSelection *v)
 {
     cuo_modding_types_character_selection_t w;
     to_CharacterSelection(&w, v);
     cuo_modding_components_send_character_list(cuo__typed_cmds(c), &w);
 }
-static const cuo_CharacterSelectionDto *events_character_list(const cuo__params *ps, cuo_param p, size_t *count)
+static const cuo_CharacterSelection *events_character_list(const cuo__params *ps, cuo_param p, size_t *count)
 {
     int32_t h = cuo__events_handle(ps, p);
     *count = 0;
@@ -5642,15 +5642,15 @@ static const cuo_CharacterSelectionDto *events_character_list(const cuo__params 
         return NULL;
     cuo_modding_components_list_character_selection_t l;
     cuo_modding_components_read_character_list((cuo_modding_components_borrow_events_t){ h }, &l);
-    cuo_CharacterSelectionDto *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    cuo_CharacterSelection *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
     for (size_t i = 0; i < l.len; i++)
         from_CharacterSelection(&out[i], &l.ptr[i]);
     *count = l.len;
     cuo_modding_components_list_character_selection_free(&l);
     return out;
 }
-const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_events(const cuo_input *in, cuo_param p, size_t *count) { return events_character_list(in->params, p, count); }
-const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_character_list(ev->params, p, count); }
+const cuo_CharacterSelection *cuo_CharacterSelection_events(const cuo_input *in, cuo_param p, size_t *count) { return events_character_list(in->params, p, count); }
+const cuo_CharacterSelection *cuo_CharacterSelection_obs_events(const cuo_obs *ev, cuo_param p, size_t *count) { return events_character_list(ev->params, p, count); }
 
 void cuo_LoginErrorsInfoEvent_send(cuo_cmds *c, const cuo_LoginErrorsInfoEvent *v)
 {
@@ -5927,7 +5927,7 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 33: {
-        cuo_ChildOfDto *o = cuo_alloc(sizeof *o);
+        cuo_ChildOf *o = cuo_alloc(sizeof *o);
         from_ChildOf(o, rec);
         return o;
     }
@@ -5937,7 +5937,7 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 35: {
-        cuo_InteractionDto *o = cuo_alloc(sizeof *o);
+        cuo_Interaction *o = cuo_alloc(sizeof *o);
         from_Interaction(o, rec);
         return o;
     }
@@ -5954,7 +5954,7 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 38: {
-        cuo_EquipmentSlotsDto *o = cuo_alloc(sizeof *o);
+        cuo_EquipmentSlots *o = cuo_alloc(sizeof *o);
         from_EquipmentSlots(o, rec);
         cuo_modding_types_equipment_slots_free(rec);
         return o;
@@ -5965,7 +5965,7 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 40: {
-        cuo_EntityPropertiesDto *o = cuo_alloc(sizeof *o);
+        cuo_EntityProperties *o = cuo_alloc(sizeof *o);
         from_EntityProperties(o, rec);
         cuo_modding_types_entity_properties_free(rec);
         return o;
@@ -6001,7 +6001,7 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 47: {
-        cuo_ContainerGumpTagDto *o = cuo_alloc(sizeof *o);
+        cuo_ContainerGumpTag *o = cuo_alloc(sizeof *o);
         from_ContainerGumpTag(o, rec);
         return o;
     }
@@ -6027,7 +6027,7 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 52: {
-        cuo_ServerGumpDto *o = cuo_alloc(sizeof *o);
+        cuo_ServerGump *o = cuo_alloc(sizeof *o);
         from_ServerGump(o, rec);
         cuo_modding_types_server_gump_free(rec);
         return o;
@@ -6069,7 +6069,7 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 60: {
-        cuo_BorderColorDto *o = cuo_alloc(sizeof *o);
+        cuo_BorderColor *o = cuo_alloc(sizeof *o);
         from_BorderColor(o, rec);
         return o;
     }
@@ -6089,7 +6089,7 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 64: {
-        cuo_UiCustomDto *o = cuo_alloc(sizeof *o);
+        cuo_UiCustom *o = cuo_alloc(sizeof *o);
         from_UiCustom(o, rec);
         return o;
     }
@@ -6178,7 +6178,7 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 81: {
-        cuo_MobileStepsDto *o = cuo_alloc(sizeof *o);
+        cuo_MobileSteps *o = cuo_alloc(sizeof *o);
         from_MobileSteps(o, rec);
         cuo_modding_types_mobile_steps_free(rec);
         return o;
@@ -6275,7 +6275,7 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 100: {
-        cuo_CharacterSelectionDto *o = cuo_alloc(sizeof *o);
+        cuo_CharacterSelection *o = cuo_alloc(sizeof *o);
         from_CharacterSelection(o, rec);
         cuo_modding_types_character_selection_free(rec);
         return o;
@@ -6330,26 +6330,26 @@ const cuo_TextFont *cuo_TextFont_obs_value(const cuo_obs *ev) { return ev->value
 const cuo_TextColor *cuo_TextColor_obs_value(const cuo_obs *ev) { return ev->value_kind == 30 ? ev->value : NULL; }
 const cuo_BackgroundColor *cuo_BackgroundColor_obs_value(const cuo_obs *ev) { return ev->value_kind == 31 ? ev->value : NULL; }
 const cuo_BorderRadius *cuo_BorderRadius_obs_value(const cuo_obs *ev) { return ev->value_kind == 32 ? ev->value : NULL; }
-const cuo_ChildOfDto *cuo_ChildOfDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 33 ? ev->value : NULL; }
+const cuo_ChildOf *cuo_ChildOf_obs_value(const cuo_obs *ev) { return ev->value_kind == 33 ? ev->value : NULL; }
 const cuo_GlobalZIndex *cuo_GlobalZIndex_obs_value(const cuo_obs *ev) { return ev->value_kind == 34 ? ev->value : NULL; }
-const cuo_InteractionDto *cuo_InteractionDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 35 ? ev->value : NULL; }
+const cuo_Interaction *cuo_Interaction_obs_value(const cuo_obs *ev) { return ev->value_kind == 35 ? ev->value : NULL; }
 const cuo_ModChatMessage *cuo_ModChatMessage_obs_value(const cuo_obs *ev) { return ev->value_kind == 36 ? ev->value : NULL; }
 const cuo_PromptOpenedEvent *cuo_PromptOpenedEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 37 ? ev->value : NULL; }
-const cuo_EquipmentSlotsDto *cuo_EquipmentSlotsDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 38 ? ev->value : NULL; }
+const cuo_EquipmentSlots *cuo_EquipmentSlots_obs_value(const cuo_obs *ev) { return ev->value_kind == 38 ? ev->value : NULL; }
 const cuo_Facing *cuo_Facing_obs_value(const cuo_obs *ev) { return ev->value_kind == 39 ? ev->value : NULL; }
-const cuo_EntityPropertiesDto *cuo_EntityPropertiesDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 40 ? ev->value : NULL; }
+const cuo_EntityProperties *cuo_EntityProperties_obs_value(const cuo_obs *ev) { return ev->value_kind == 40 ? ev->value : NULL; }
 const cuo_ServerFlags *cuo_ServerFlags_obs_value(const cuo_obs *ev) { return ev->value_kind == 41 ? ev->value : NULL; }
 const cuo_ContainerSlotPosition *cuo_ContainerSlotPosition_obs_value(const cuo_obs *ev) { return ev->value_kind == 42 ? ev->value : NULL; }
 const cuo_ContainerWindow *cuo_ContainerWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 43 ? ev->value : NULL; }
 const cuo_ContainerClosedEvent *cuo_ContainerClosedEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 44 ? ev->value : NULL; }
 const cuo_ContainerOpenedEvent *cuo_ContainerOpenedEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 45 ? ev->value : NULL; }
 const cuo_ContainerSlotEvent *cuo_ContainerSlotEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 46 ? ev->value : NULL; }
-const cuo_ContainerGumpTagDto *cuo_ContainerGumpTagDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 47 ? ev->value : NULL; }
+const cuo_ContainerGumpTag *cuo_ContainerGumpTag_obs_value(const cuo_obs *ev) { return ev->value_kind == 47 ? ev->value : NULL; }
 const cuo_ContextMenuEvent *cuo_ContextMenuEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 48 ? ev->value : NULL; }
 const cuo_GridContainerWindow *cuo_GridContainerWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 49 ? ev->value : NULL; }
 const cuo_GridLootWindow *cuo_GridLootWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 50 ? ev->value : NULL; }
 const cuo_HealthBarWindow *cuo_HealthBarWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 51 ? ev->value : NULL; }
-const cuo_ServerGumpDto *cuo_ServerGumpDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 52 ? ev->value : NULL; }
+const cuo_ServerGump *cuo_ServerGump_obs_value(const cuo_obs *ev) { return ev->value_kind == 52 ? ev->value : NULL; }
 const cuo_ModInputConsume *cuo_ModInputConsume_obs_value(const cuo_obs *ev) { return ev->value_kind == 53 ? ev->value : NULL; }
 const cuo_ModHotkeyFired *cuo_ModHotkeyFired_obs_value(const cuo_obs *ev) { return ev->value_kind == 54 ? ev->value : NULL; }
 const cuo_ItemDropSent *cuo_ItemDropSent_obs_value(const cuo_obs *ev) { return ev->value_kind == 55 ? ev->value : NULL; }
@@ -6357,11 +6357,11 @@ const cuo_ItemMoveResult *cuo_ItemMoveResult_obs_value(const cuo_obs *ev) { retu
 const cuo_StatLocks *cuo_StatLocks_obs_value(const cuo_obs *ev) { return ev->value_kind == 57 ? ev->value : NULL; }
 const cuo_LocalTargetResultEvent *cuo_LocalTargetResultEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 58 ? ev->value : NULL; }
 const cuo_Anchorable *cuo_Anchorable_obs_value(const cuo_obs *ev) { return ev->value_kind == 59 ? ev->value : NULL; }
-const cuo_BorderColorDto *cuo_BorderColorDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 60 ? ev->value : NULL; }
+const cuo_BorderColor *cuo_BorderColor_obs_value(const cuo_obs *ev) { return ev->value_kind == 60 ? ev->value : NULL; }
 const cuo_UOButton *cuo_UOButton_obs_value(const cuo_obs *ev) { return ev->value_kind == 61 ? ev->value : NULL; }
 const cuo_ComputedNode *cuo_ComputedNode_obs_value(const cuo_obs *ev) { return ev->value_kind == 62 ? ev->value : NULL; }
 const cuo_ContainerItemUI *cuo_ContainerItemUI_obs_value(const cuo_obs *ev) { return ev->value_kind == 63 ? ev->value : NULL; }
-const cuo_UiCustomDto *cuo_UiCustomDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 64 ? ev->value : NULL; }
+const cuo_UiCustom *cuo_UiCustom_obs_value(const cuo_obs *ev) { return ev->value_kind == 64 ? ev->value : NULL; }
 const cuo_EditableText *cuo_EditableText_obs_value(const cuo_obs *ev) { return ev->value_kind == 65 ? ev->value : NULL; }
 const cuo_ModHover *cuo_ModHover_obs_value(const cuo_obs *ev) { return ev->value_kind == 66 ? ev->value : NULL; }
 const cuo_UiHoverTint *cuo_UiHoverTint_obs_value(const cuo_obs *ev) { return ev->value_kind == 67 ? ev->value : NULL; }
@@ -6378,7 +6378,7 @@ const cuo_TextSpans *cuo_TextSpans_obs_value(const cuo_obs *ev) { return ev->val
 const cuo_TextWrap *cuo_TextWrap_obs_value(const cuo_obs *ev) { return ev->value_kind == 78 ? ev->value : NULL; }
 const cuo_UiTooltip *cuo_UiTooltip_obs_value(const cuo_obs *ev) { return ev->value_kind == 79 ? ev->value : NULL; }
 const cuo_MobAnimation *cuo_MobAnimation_obs_value(const cuo_obs *ev) { return ev->value_kind == 80 ? ev->value : NULL; }
-const cuo_MobileStepsDto *cuo_MobileStepsDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 81 ? ev->value : NULL; }
+const cuo_MobileSteps *cuo_MobileSteps_obs_value(const cuo_obs *ev) { return ev->value_kind == 81 ? ev->value : NULL; }
 const cuo_CombatBookWindow *cuo_CombatBookWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 82 ? ev->value : NULL; }
 const cuo_HouseDesignWindow *cuo_HouseDesignWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 83 ? ev->value : NULL; }
 const cuo_JournalWindow *cuo_JournalWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 84 ? ev->value : NULL; }
@@ -6397,7 +6397,7 @@ const cuo_SplitMenuWindow *cuo_SplitMenuWindow_obs_value(const cuo_obs *ev) { re
 const cuo_TipNoticeWindow *cuo_TipNoticeWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 97 ? ev->value : NULL; }
 const cuo_TradeWindow *cuo_TradeWindow_obs_value(const cuo_obs *ev) { return ev->value_kind == 98 ? ev->value : NULL; }
 const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_value(const cuo_obs *ev) { return ev->value_kind == 99 ? ev->value : NULL; }
-const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_obs_value(const cuo_obs *ev) { return ev->value_kind == 100 ? ev->value : NULL; }
+const cuo_CharacterSelection *cuo_CharacterSelection_obs_value(const cuo_obs *ev) { return ev->value_kind == 100 ? ev->value : NULL; }
 const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 101 ? ev->value : NULL; }
 const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 102 ? ev->value : NULL; }
 const cuo_MaskedText *cuo_MaskedText_obs_value(const cuo_obs *ev) { return ev->value_kind == 103 ? ev->value : NULL; }

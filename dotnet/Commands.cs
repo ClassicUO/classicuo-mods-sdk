@@ -225,7 +225,7 @@ public sealed class EntityBuilder
     }
 
     /// <summary>Put this entity under <paramref name="parent"/> (<c>cuo:ecs/child-of</c>).</summary>
-    public EntityBuilder ChildOf(Entity parent) => With(new Types.ChildOfDto { Parent = parent.Id });
+    public EntityBuilder ChildOf(Entity parent) => With(new Types.ChildOf { Parent = parent.Id });
 
     public static implicit operator Entity(EntityBuilder builder) => builder.Id;
 
@@ -247,7 +247,7 @@ public readonly struct ChatApi
     public void System(string text, ushort hue = 0x5B, byte font = SpeechFont, bool unicode = true) =>
         _commands.Send(new Types.ModChatMessage
         {
-            Text = text, Name = "", Hue = hue, Font = font, IsUnicode = unicode, Kind = 1,
+            Text = text, Name = "", Hue = hue, Font = font, IsUnicode = unicode, Kind = Types.ChatKind.System,
         });
 
     /// <summary>Text over a live entity the client knows (0 shows nothing; pass the player's own serial for a self line).</summary>
@@ -255,6 +255,6 @@ public readonly struct ChatApi
         byte font = SpeechFont, bool unicode = true) =>
         _commands.Send(new Types.ModChatMessage
         {
-            Text = text, Name = name, Hue = hue, Serial = serial, Font = font, IsUnicode = unicode, Kind = 0,
+            Text = text, Name = name, Hue = hue, Serial = serial, Font = font, IsUnicode = unicode, Kind = Types.ChatKind.Overhead,
         });
 }

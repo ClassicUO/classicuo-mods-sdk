@@ -167,7 +167,7 @@ mod tests {
         writable::<Node>();
         writable::<UiMovable>();
         resource::<crate::types::Time>();
-        writable_resource::<crate::types::GameStateDto>();
+        writable_resource::<crate::types::GameState>();
         event::<crate::types::ChatMessage>();
         event::<crate::types::UiClick>();
     }

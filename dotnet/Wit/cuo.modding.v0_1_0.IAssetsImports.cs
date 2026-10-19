@@ -33,8 +33,9 @@ internal interface IAssetsImports {
     }
 
     /**
-    * Which mobile animation to read. `direction` is 0..7 (the host mirrors the
-    * ones UO stores flipped); `action` is the UO action group.
+    * Which mobile animation to read. `direction` is a `direction` number 0..7 (north
+    * .. up; the host mirrors the ones UO stores flipped); `action` is the UO action
+    * group.
     */
 
     internal struct AnimKey {
@@ -67,14 +68,14 @@ internal interface IAssetsImports {
         internal string name;
         internal ulong flags;
         internal byte weight;
-        internal byte layer;
+        internal global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Layer layer;
         internal int count;
         internal ushort animId;
         internal ushort hue;
         internal ushort lightIndex;
         internal byte height;
 
-        internal StaticInfo(string name, ulong flags, byte weight, byte layer, int count, ushort animId, ushort hue, ushort lightIndex, byte height) {
+        internal StaticInfo(string name, ulong flags, byte weight, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Layer layer, int count, ushort animId, ushort hue, ushort lightIndex, byte height) {
             this.name = name;
             this.flags = flags;
             this.weight = weight;
@@ -332,7 +333,7 @@ internal interface IAssetsImports {
                 }
 
                 lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IAssetsImports.StaticInfo (
-                str, unchecked((ulong)(new global::System.Span<long>((void*)((byte*)ptr + 16), 1)[0])), ((byte)new global::System.Span<byte>((byte*)ptr + 24, 1)[0]), ((byte)new global::System.Span<byte>((byte*)ptr + 25, 1)[0]), new global::System.Span<int>((void*)((byte*)ptr + 28), 1)[0], ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 32), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 34), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 36), 1)[0]), ((byte)new global::System.Span<byte>((byte*)ptr + 38, 1)[0]));
+                str, unchecked((ulong)(new global::System.Span<long>((void*)((byte*)ptr + 16), 1)[0])), ((byte)new global::System.Span<byte>((byte*)ptr + 24, 1)[0]), (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Layer)new global::System.Span<byte>((byte*)ptr + 25, 1)[0], new global::System.Span<int>((void*)((byte*)ptr + 28), 1)[0], ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 32), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 34), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 36), 1)[0]), ((byte)new global::System.Span<byte>((byte*)ptr + 38, 1)[0]));
                 break;
             }
 

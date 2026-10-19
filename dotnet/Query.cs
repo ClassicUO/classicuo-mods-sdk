@@ -380,15 +380,14 @@ public readonly struct Query<TData, TFilter> : ISystemParam<Query<TData, TFilter
     public bool TryGet(Entity entity, out TData data)
     {
         var (rows, count) = Fetch();
-        var id = entity.Id;
-        for (var i = 0; i < count; i++)
-            if (EcsAbi.EntityAt(rows, i) == id)
-            {
-                data = TData.Read(new RowReader(_scope, _slot, rows, i));
-                return true;
-            }
-        data = default;
-        return false;
+        var i = count == 0 ? -1 : _scope.RowOf(_slot, rows, count, entity.Id);
+        if (i < 0)
+        {
+            data = default;
+            return false;
+        }
+        data = TData.Read(new RowReader(_scope, _slot, rows, i));
+        return true;
     }
 
     /// <summary>The only row; false when there are none or several.</summary>

@@ -55,7 +55,7 @@ pub mod anchor_kind {
 #[serde(default, rename_all = "PascalCase")]
 pub struct Anchorable {
     /// enum AnchorKind (0=Spell, 1=Healthbar)
-    pub kind: u8,
+    pub kind: AnchorKind,
 }
 impl HasPath for Anchorable {
     const PATH: &'static str = paths::ui::ANCHORABLE;
@@ -92,13 +92,13 @@ impl HasPath for BookWindow {
 /// `cuo:ui/border-color`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct BorderColorDto {
+pub struct BorderColor {
     pub r: f32,
     pub g: f32,
     pub b: f32,
     pub a: f32,
 }
-impl HasPath for BorderColorDto {
+impl HasPath for BorderColor {
     const PATH: &'static str = paths::ui::BORDER_COLOR;
 }
 
@@ -145,7 +145,7 @@ impl HasPath for CharCreationScene {
 /// Nested payload type (`ClassicUO.Ecs.Modding.CharInfoDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct CharInfoDto {
+pub struct CharInfo {
     pub name: String,
     pub index: u32,
 }
@@ -153,11 +153,11 @@ pub struct CharInfoDto {
 /// `cuo:scene/character-list`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct CharacterSelectionDto {
-    pub characters: Vec<CharInfoDto>,
-    pub towns: Vec<TownInfoDto>,
+pub struct CharacterSelection {
+    pub characters: Vec<CharInfo>,
+    pub towns: Vec<TownInfo>,
 }
-impl HasPath for CharacterSelectionDto {
+impl HasPath for CharacterSelection {
     const PATH: &'static str = paths::scene::CHARACTER_LIST;
 }
 
@@ -168,6 +168,13 @@ impl HasPath for CharacterSelectionDto {
 pub struct CharacterSelectionScene {}
 impl HasPath for CharacterSelectionScene {
     const PATH: &'static str = paths::scene::CHARACTER_SELECTION;
+}
+
+/// `ClassicUO.Ecs.Modding.ChatKind` — crosses as `u8`.
+pub type ChatKind = u8;
+pub mod chat_kind {
+    pub const OVERHEAD: super::ChatKind = 0;
+    pub const SYSTEM: super::ChatKind = 1;
 }
 
 /// `cuo:ecs/child-of`
@@ -183,11 +190,11 @@ impl HasPath for ChildOf {
 /// `cuo:ui/clipboard-set`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ClipboardSetDto {
+pub struct ClipboardSet {
     pub seq: i32,
     pub text: String,
 }
-impl HasPath for ClipboardSetDto {
+impl HasPath for ClipboardSet {
     const PATH: &'static str = paths::ui::CLIPBOARD_SET;
 }
 
@@ -257,7 +264,7 @@ impl HasPath for ContainerClosedEvent {
 /// `cuo:gump/container-tag`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ContainerGumpTagDto {
+pub struct ContainerGumpTag {
     pub graphic: u16,
     pub original_graphic: u16,
     pub scale: f32,
@@ -266,7 +273,7 @@ pub struct ContainerGumpTagDto {
     pub bounds_w: i32,
     pub bounds_h: i32,
 }
-impl HasPath for ContainerGumpTagDto {
+impl HasPath for ContainerGumpTag {
     const PATH: &'static str = paths::gump::CONTAINER_TAG;
 }
 
@@ -297,7 +304,7 @@ impl HasPath for ContainerOpenedEvent {
 /// Nested payload type (`ClassicUO.Ecs.Modding.ContainerPositionDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ContainerPositionDto {
+pub struct ContainerPosition {
     pub serial: u32,
     pub x: i32,
     pub y: i32,
@@ -306,10 +313,10 @@ pub struct ContainerPositionDto {
 /// `cuo:gump/container-positions`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ContainerPositionsDto {
-    pub saved: Vec<ContainerPositionDto>,
+pub struct ContainerPositions {
+    pub saved: Vec<ContainerPosition>,
 }
-impl HasPath for ContainerPositionsDto {
+impl HasPath for ContainerPositions {
     const PATH: &'static str = paths::gump::CONTAINER_POSITIONS;
 }
 
@@ -325,7 +332,7 @@ pub mod container_slot_action {
 #[serde(default, rename_all = "PascalCase")]
 pub struct ContainerSlotEvent {
     /// enum ContainerSlotAction (0=Add, 1=Remove)
-    pub action: u8,
+    pub action: ContainerSlotAction,
     pub container_serial: u32,
     pub item_serial: u32,
     pub graphic: u16,
@@ -367,7 +374,8 @@ pub struct ContextMenuEntry {
     pub index: u16,
     pub cliloc: i32,
     pub text: String,
-    pub flags: u16,
+    /// enum ContextMenuFlags (0=None, 1=Disabled, 2=Arrow, 32=Hued)
+    pub flags: ContextMenuFlags,
     pub hue: u16,
 }
 
@@ -380,6 +388,15 @@ pub struct ContextMenuEvent {
 }
 impl HasPath for ContextMenuEvent {
     const PATH: &'static str = paths::gump::CONTEXT_MENU;
+}
+
+/// `ClassicUO.Ecs.ContextMenuFlags` — crosses as `u16`.
+pub type ContextMenuFlags = u16;
+pub mod context_menu_flags {
+    pub const NONE: super::ContextMenuFlags = 0;
+    pub const DISABLED: super::ContextMenuFlags = 1;
+    pub const ARROW: super::ContextMenuFlags = 2;
+    pub const HUED: super::ContextMenuFlags = 32;
 }
 
 /// `ClassicUO.Game.Data.Direction` — crosses as `u8`.
@@ -428,23 +445,23 @@ impl HasPath for EntityName {
 /// `cuo:ent/properties`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct EntityPropertiesDto {
+pub struct EntityProperties {
     pub serial: u32,
     pub revision: u32,
     pub name: String,
-    pub lines: Vec<OplLineDto>,
+    pub lines: Vec<OplLine>,
 }
-impl HasPath for EntityPropertiesDto {
+impl HasPath for EntityProperties {
     const PATH: &'static str = paths::ent::PROPERTIES;
 }
 
 /// `cuo:ent/equipment`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct EquipmentSlotsDto {
+pub struct EquipmentSlots {
     pub serials: Vec<u32>,
 }
-impl HasPath for EquipmentSlotsDto {
+impl HasPath for EquipmentSlots {
     const PATH: &'static str = paths::ent::EQUIPMENT;
 }
 
@@ -453,7 +470,7 @@ impl HasPath for EquipmentSlotsDto {
 #[serde(default, rename_all = "PascalCase")]
 pub struct Facing {
     /// enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)
-    pub value: u8,
+    pub value: Direction,
 }
 impl HasPath for Facing {
     const PATH: &'static str = paths::ent::FACING;
@@ -494,7 +511,7 @@ impl HasPath for FocusedInput {
 /// `cuo:game/context`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct GameContextDto {
+pub struct GameContext {
     pub player_serial: u32,
     pub player_name: String,
     pub map: i32,
@@ -502,7 +519,7 @@ pub struct GameContextDto {
     pub client_version: u32,
     pub use_old_status_gump: bool,
 }
-impl HasPath for GameContextDto {
+impl HasPath for GameContext {
     const PATH: &'static str = paths::game::CONTEXT;
 }
 
@@ -518,7 +535,7 @@ impl HasPath for GameScene {
 /// `cuo:game/settings`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct GameSettingsDto {
+pub struct GameSettings {
     pub grid_loot_type: i32,
     pub skip_empty_corpse: bool,
     pub auto_open_corpses: bool,
@@ -531,18 +548,31 @@ pub struct GameSettingsDto {
     pub always_run: bool,
     pub highlight_game_objects: bool,
 }
-impl HasPath for GameSettingsDto {
+impl HasPath for GameSettings {
     const PATH: &'static str = paths::game::SETTINGS;
 }
 
 /// `cuo:game/state`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct GameStateDto {
-    pub current: u8,
+pub struct GameState {
+    /// enum GameStateKind (0=Loading, 1=LoginScreen, 2=ServerSelection, 3=CharacterSelection, 4=CharacterCreation, 5=LoginError, 6=GameScreen)
+    pub current: GameStateKind,
 }
-impl HasPath for GameStateDto {
+impl HasPath for GameState {
     const PATH: &'static str = paths::game::STATE;
+}
+
+/// `ClassicUO.Ecs.Modding.GameStateKind` — crosses as `u8`.
+pub type GameStateKind = u8;
+pub mod game_state_kind {
+    pub const LOADING: super::GameStateKind = 0;
+    pub const LOGIN_SCREEN: super::GameStateKind = 1;
+    pub const SERVER_SELECTION: super::GameStateKind = 2;
+    pub const CHARACTER_SELECTION: super::GameStateKind = 3;
+    pub const CHARACTER_CREATION: super::GameStateKind = 4;
+    pub const LOGIN_ERROR: super::GameStateKind = 5;
+    pub const GAME_SCREEN: super::GameStateKind = 6;
 }
 
 /// `cuo:ui/global-z`
@@ -575,7 +605,7 @@ pub struct GrabbedItem {
     pub original_grid_index: u8,
     pub original_from_slot: bool,
     /// enum Layer (0=Invalid, 1=OneHanded, 2=TwoHanded, 3=Shoes, 4=Pants, 5=Shirt, 6=Helmet, 7=Gloves, 8=Ring, 9=Talisman, 10=Necklace, 11=Hair, 12=Waist, 13=Torso, 14=Bracelet, 15=Face, 16=Beard, 17=Tunic, 18=Earrings, 19=Arms, 20=Cloak, 21=Backpack, 22=Robe, 23=Skirt, 24=Legs, 25=Mount, 26=ShopBuyRestock, 27=ShopBuy, 28=ShopSell, 29=Bank)
-    pub original_layer: u8,
+    pub original_layer: Layer,
     pub pending_drop: bool,
     pub drop_target_serial: u32,
     pub failed_drop: bool,
@@ -656,7 +686,7 @@ impl HasPath for Hits {
 /// Nested payload type (`ClassicUO.Ecs.Modding.HostHotkeyDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct HostHotkeyDto {
+pub struct HostHotkey {
     pub key: i32,
     pub ctrl: bool,
     pub shift: bool,
@@ -667,10 +697,10 @@ pub struct HostHotkeyDto {
 /// `cuo:input/host-hotkeys`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct HostHotkeysDto {
-    pub hotkeys: Vec<HostHotkeyDto>,
+pub struct HostHotkeys {
+    pub hotkeys: Vec<HostHotkey>,
 }
-impl HasPath for HostHotkeysDto {
+impl HasPath for HostHotkeys {
     const PATH: &'static str = paths::input::HOST_HOTKEYS;
 }
 
@@ -699,10 +729,19 @@ impl HasPath for Hue {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct Interaction {
-    pub state: u8,
+    /// enum InteractionState (0=None, 1=Hovered, 2=Pressed)
+    pub state: InteractionState,
 }
 impl HasPath for Interaction {
     const PATH: &'static str = paths::ui::INTERACTION;
+}
+
+/// `ClassicUO.Ecs.Modding.InteractionState` — crosses as `u8`.
+pub type InteractionState = u8;
+pub mod interaction_state {
+    pub const NONE: super::InteractionState = 0;
+    pub const HOVERED: super::InteractionState = 1;
+    pub const PRESSED: super::InteractionState = 2;
 }
 
 /// `cuo:ent/is-container`
@@ -746,11 +785,20 @@ impl HasPath for ItemDropSent {
     const PATH: &'static str = paths::item::DROP_SENT;
 }
 
+/// `ClassicUO.Ecs.Modding.ItemMoveOutcome` — crosses as `u8`.
+pub type ItemMoveOutcome = u8;
+pub mod item_move_outcome {
+    pub const ACCEPTED: super::ItemMoveOutcome = 0;
+    pub const DENIED: super::ItemMoveOutcome = 1;
+    pub const END_DRAGGING: super::ItemMoveOutcome = 2;
+}
+
 /// `cuo:item/move-result`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct ItemMoveResult {
-    pub result: u8,
+    /// enum ItemMoveOutcome (0=Accepted, 1=Denied, 2=EndDragging)
+    pub result: ItemMoveOutcome,
     pub code: u8,
 }
 impl HasPath for ItemMoveResult {
@@ -808,11 +856,11 @@ pub mod justify_content {
 /// `cuo:input/keyboard`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct KeyboardInputDto {
+pub struct KeyboardInput {
     pub pressed: Vec<i32>,
     pub pressed_once: Vec<i32>,
 }
-impl HasPath for KeyboardInputDto {
+impl HasPath for KeyboardInput {
     const PATH: &'static str = paths::input::KEYBOARD;
 }
 
@@ -865,6 +913,14 @@ pub struct LocalTargetResultEvent {
 }
 impl HasPath for LocalTargetResultEvent {
     const PATH: &'static str = paths::target::LOCAL_RESULT;
+}
+
+/// `ClassicUO.Game.Data.Lock` — crosses as `u8`.
+pub type Lock = u8;
+pub mod lock {
+    pub const UP: super::Lock = 0;
+    pub const DOWN: super::Lock = 1;
+    pub const LOCKED: super::Lock = 2;
 }
 
 /// Nested payload type (`ClassicUO.Ecs.LoginErrorInfo`).
@@ -973,6 +1029,26 @@ impl HasPath for MessageBoxWindow {
     const PATH: &'static str = paths::gump::MESSAGE_BOX;
 }
 
+/// `ClassicUO.Game.Data.MessageType` — crosses as `u8`.
+pub type MessageType = u8;
+pub mod message_type {
+    pub const REGULAR: super::MessageType = 0;
+    pub const SYSTEM: super::MessageType = 1;
+    pub const EMOTE: super::MessageType = 2;
+    pub const LIMIT3_SPELL: super::MessageType = 3;
+    pub const LABEL: super::MessageType = 6;
+    pub const FOCUS: super::MessageType = 7;
+    pub const WHISPER: super::MessageType = 8;
+    pub const YELL: super::MessageType = 9;
+    pub const SPELL: super::MessageType = 10;
+    pub const GUILD: super::MessageType = 13;
+    pub const ALLIANCE: super::MessageType = 14;
+    pub const COMMAND: super::MessageType = 15;
+    pub const GM_CHAT: super::MessageType = 16;
+    pub const ENCODED: super::MessageType = 192;
+    pub const PARTY: super::MessageType = 255;
+}
+
 /// `cuo:gump/minimap`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -998,7 +1074,7 @@ pub struct MobAnimation {
     pub action: u8,
     pub mount_action: u8,
     /// enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)
-    pub direction: u8,
+    pub direction: Direction,
     pub time: f32,
     pub run: bool,
 }
@@ -1009,23 +1085,24 @@ impl HasPath for MobAnimation {
 /// Nested payload type (`ClassicUO.Ecs.Modding.MobStepDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct MobStepDto {
+pub struct MobStep {
     pub x: i32,
     pub y: i32,
     pub z: i8,
-    pub direction: u8,
+    /// enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)
+    pub direction: Direction,
     pub run: bool,
 }
 
 /// `cuo:ent/mob-steps`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct MobileStepsDto {
+pub struct MobileSteps {
     pub index: i32,
     pub time: f32,
-    pub steps: Vec<MobStepDto>,
+    pub steps: Vec<MobStep>,
 }
-impl HasPath for MobileStepsDto {
+impl HasPath for MobileSteps {
     const PATH: &'static str = paths::ent::MOB_STEPS;
 }
 
@@ -1048,9 +1125,11 @@ pub struct ChatMessage {
     pub hue: u16,
     pub font: u8,
     pub is_unicode: bool,
-    pub message_type: u8,
+    /// enum MessageType (0=Regular, 1=System, 2=Emote, 3=Limit3Spell, 6=Label, 7=Focus, 8=Whisper, 9=Yell, 10=Spell, 13=Guild, 14=Alliance, 15=Command, 16=GmChat, 192=Encoded, 255=Party)
+    pub message_type: MessageType,
     pub time: f32,
-    pub kind: u8,
+    /// enum ChatKind (0=Overhead, 1=System)
+    pub kind: ChatKind,
 }
 impl HasPath for ChatMessage {
     const PATH: &'static str = paths::chat::MESSAGE;
@@ -1081,11 +1160,11 @@ pub struct ModHotkeyBinding {
 /// `cuo:input/mod-hotkeys`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ModHotkeyBindingsDto {
+pub struct ModHotkeyBindings {
     pub bindings: Vec<ModHotkeyBinding>,
     pub consume_keys: bool,
 }
-impl HasPath for ModHotkeyBindingsDto {
+impl HasPath for ModHotkeyBindings {
     const PATH: &'static str = paths::input::MOD_HOTKEYS;
 }
 
@@ -1130,7 +1209,8 @@ impl HasPath for InputConsume {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct ModMoveRequest {
-    pub direction: u8,
+    /// enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)
+    pub direction: Direction,
     pub run: bool,
     pub sequence: u8,
 }
@@ -1141,12 +1221,13 @@ impl HasPath for ModMoveRequest {
 /// Nested payload type (`ClassicUO.Ecs.Modding.ModOptionDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ModOptionDto {
+pub struct ModOption {
     pub key: String,
     pub label: String,
     pub group: String,
     pub keywords: String,
-    pub kind: u8,
+    /// enum ModOptionKind (0=Toggle, 1=Slider, 2=Stepper, 3=Cycle)
+    pub kind: ModOptionKind,
     pub min: i32,
     pub max: i32,
     pub step: i32,
@@ -1154,10 +1235,19 @@ pub struct ModOptionDto {
     pub choices: Vec<String>,
 }
 
+/// `ClassicUO.Ecs.Modding.ModOptionKind` — crosses as `u8`.
+pub type ModOptionKind = u8;
+pub mod mod_option_kind {
+    pub const TOGGLE: super::ModOptionKind = 0;
+    pub const SLIDER: super::ModOptionKind = 1;
+    pub const STEPPER: super::ModOptionKind = 2;
+    pub const CYCLE: super::ModOptionKind = 3;
+}
+
 /// Nested payload type (`ClassicUO.Ecs.Modding.ModOptionValueDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ModOptionValueDto {
+pub struct ModOptionValue {
     pub key: String,
     pub value: i32,
 }
@@ -1165,20 +1255,20 @@ pub struct ModOptionValueDto {
 /// `cuo:options/schema`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ModOptionsSchemaDto {
-    pub options: Vec<ModOptionDto>,
+pub struct ModOptionsSchema {
+    pub options: Vec<ModOption>,
 }
-impl HasPath for ModOptionsSchemaDto {
+impl HasPath for ModOptionsSchema {
     const PATH: &'static str = paths::options::SCHEMA;
 }
 
 /// `cuo:options/values`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ModOptionsValuesDto {
-    pub values: Vec<ModOptionValueDto>,
+pub struct ModOptionsValues {
+    pub values: Vec<ModOptionValue>,
 }
-impl HasPath for ModOptionsValuesDto {
+impl HasPath for ModOptionsValues {
     const PATH: &'static str = paths::options::VALUES;
 }
 
@@ -1206,7 +1296,7 @@ impl HasPath for ModSupersedes {
 /// `cuo:input/mouse`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct MouseInputDto {
+pub struct MouseInput {
     pub x: f32,
     pub y: f32,
     pub left: bool,
@@ -1225,7 +1315,7 @@ pub struct MouseInputDto {
     pub x1_pressed: bool,
     pub x2_pressed: bool,
 }
-impl HasPath for MouseInputDto {
+impl HasPath for MouseInput {
     const PATH: &'static str = paths::input::MOUSE;
 }
 
@@ -1244,17 +1334,17 @@ impl HasPath for Serial {
 #[serde(default, rename_all = "PascalCase")]
 pub struct Node {
     /// enum Display (0=Flex, 1=None)
-    pub display: u8,
+    pub display: Display,
     /// enum PositionType (0=Relative, 1=Absolute)
-    pub position_type: u8,
+    pub position_type: PositionType,
     /// enum Overflow (0=Visible, 1=Clip, 2=Scroll)
-    pub overflow: u8,
+    pub overflow: Overflow,
     /// enum FlexDirection (0=Row, 1=Column)
-    pub flex_direction: u8,
+    pub flex_direction: FlexDirection,
     /// enum JustifyContent (0=Start, 1=Center, 2=End)
-    pub justify_content: u8,
+    pub justify_content: JustifyContent,
     /// enum AlignItems (0=Start, 1=Center, 2=End)
-    pub align_items: u8,
+    pub align_items: AlignItems,
     pub width: Val,
     pub height: Val,
     pub min_width: Val,
@@ -1279,7 +1369,7 @@ impl HasPath for Node {
 #[serde(default, rename_all = "PascalCase")]
 pub struct Notoriety {
     /// enum NotorietyFlag (0=Unknown, 1=Innocent, 2=Ally, 3=Gray, 4=Criminal, 5=Enemy, 6=Murderer, 7=Invulnerable)
-    pub value: u8,
+    pub value: NotorietyFlag,
 }
 impl HasPath for Notoriety {
     const PATH: &'static str = paths::ent::NOTORIETY;
@@ -1301,7 +1391,7 @@ pub mod notoriety_flag {
 /// Nested payload type (`ClassicUO.Ecs.Modding.OplLineDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct OplLineDto {
+pub struct OplLine {
     pub cliloc: i32,
     pub args: String,
     pub text: String,
@@ -1340,13 +1430,13 @@ impl HasPath for PaperdollWindow {
 /// `cuo:player/party`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct PartyDto {
+pub struct Party {
     pub leader: u32,
-    pub members: Vec<PartyMemberDto>,
+    pub members: Vec<PartyMember>,
     pub in_party: bool,
     pub can_loot: bool,
 }
-impl HasPath for PartyDto {
+impl HasPath for Party {
     const PATH: &'static str = paths::player::PARTY;
 }
 
@@ -1373,7 +1463,7 @@ impl HasPath for PartyManifestWindow {
 /// Nested payload type (`ClassicUO.Ecs.Modding.PartyMemberDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct PartyMemberDto {
+pub struct PartyMember {
     pub serial: u32,
     pub name: String,
 }
@@ -1390,7 +1480,7 @@ impl HasPath for Player {
 /// Nested payload type (`ClassicUO.Ecs.Modding.PlayerBuffDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct PlayerBuffDto {
+pub struct PlayerBuff {
     pub type_: i32,
     pub graphic: u16,
     pub expires_at: f32,
@@ -1400,10 +1490,10 @@ pub struct PlayerBuffDto {
 /// `cuo:player/buffs`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct PlayerBuffsDto {
-    pub buffs: Vec<PlayerBuffDto>,
+pub struct PlayerBuffs {
+    pub buffs: Vec<PlayerBuff>,
 }
-impl HasPath for PlayerBuffsDto {
+impl HasPath for PlayerBuffs {
     const PATH: &'static str = paths::player::BUFFS;
 }
 
@@ -1434,7 +1524,7 @@ pub struct PlayerData {
     pub energy_res: i16,
     pub is_female: bool,
     /// enum RaceType (1=HUMAN, 2=ELF, 3=GARGOYLE)
-    pub race: u8,
+    pub race: RaceType,
     pub max_physical_res: i16,
     pub max_fire_res: i16,
     pub max_cold_res: i16,
@@ -1458,31 +1548,33 @@ impl HasPath for PlayerData {
 /// Nested payload type (`ClassicUO.Ecs.Modding.PlayerSkillDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct PlayerSkillDto {
+pub struct PlayerSkill {
     pub index: i32,
     pub value: u16,
     pub base: u16,
     pub cap: u16,
-    pub lock: u8,
+    /// enum Lock (0=Up, 1=Down, 2=Locked)
+    pub lock: Lock,
 }
 
 /// `cuo:player/skills`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct PlayerSkillsDto {
+pub struct PlayerSkills {
     pub has_data: bool,
-    pub skills: Vec<PlayerSkillDto>,
+    pub skills: Vec<PlayerSkill>,
 }
-impl HasPath for PlayerSkillsDto {
+impl HasPath for PlayerSkills {
     const PATH: &'static str = paths::player::SKILLS;
 }
 
 /// Nested payload type (`ClassicUO.Ecs.Modding.PlayerStepDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct PlayerStepDto {
+pub struct PlayerStep {
     pub sequence: u8,
-    pub direction: u8,
+    /// enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)
+    pub direction: Direction,
     pub x: u16,
     pub y: u16,
     pub z: i8,
@@ -1491,14 +1583,14 @@ pub struct PlayerStepDto {
 /// `cuo:player/steps`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct PlayerStepsDto {
+pub struct PlayerSteps {
     pub last_step: f32,
     pub count: i32,
     pub sequence: u8,
     pub resync_sent: bool,
-    pub steps: Vec<PlayerStepDto>,
+    pub steps: Vec<PlayerStep>,
 }
-impl HasPath for PlayerStepsDto {
+impl HasPath for PlayerSteps {
     const PATH: &'static str = paths::player::STEPS;
 }
 
@@ -1559,7 +1651,7 @@ pub struct RacialBookWindow {
     pub dict_pages: i32,
     pub ability_count: i32,
     /// enum RaceType (1=HUMAN, 2=ELF, 3=GARGOYLE)
-    pub race: u8,
+    pub race: RaceType,
     pub dirty: bool,
     pub content: u64,
     pub left: u64,
@@ -1601,16 +1693,35 @@ pub mod scrollbar_style {
 #[serde(default, rename_all = "PascalCase")]
 pub struct ServerFlags {
     /// enum Flags (0=None, 1=Frozen, 2=Female, 4=Poisoned, 4=Flying, 8=YellowBar, 16=IgnoreMobiles, 32=Movable, 64=WarMode, 128=Hidden)
-    pub value: u8,
+    pub value: Flags,
 }
 impl HasPath for ServerFlags {
     const PATH: &'static str = paths::ent::SERVER_FLAGS;
 }
 
+/// `cuo:gump/server`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct ServerGump {
+    pub serial: u32,
+    pub gump_id: u32,
+    pub page: i32,
+    pub x: i32,
+    pub y: i32,
+    pub layout: Vec<String>,
+    pub texts: Vec<String>,
+    pub buttons: Vec<ServerGumpButton>,
+    pub text_entries: Vec<ServerGumpTextEntry>,
+    pub switches: Vec<ServerGumpSwitch>,
+}
+impl HasPath for ServerGump {
+    const PATH: &'static str = paths::gump::SERVER;
+}
+
 /// Nested payload type (`ClassicUO.Ecs.Modding.ServerGumpButtonDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ServerGumpButtonDto {
+pub struct ServerGumpButton {
     pub id: i32,
     pub x: f32,
     pub y: f32,
@@ -1629,25 +1740,6 @@ impl HasPath for ServerGumpClosedEvent {
     const PATH: &'static str = paths::gump::SERVER_CLOSED;
 }
 
-/// `cuo:gump/server`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct ServerGumpDto {
-    pub serial: u32,
-    pub gump_id: u32,
-    pub page: i32,
-    pub x: i32,
-    pub y: i32,
-    pub layout: Vec<String>,
-    pub texts: Vec<String>,
-    pub buttons: Vec<ServerGumpButtonDto>,
-    pub text_entries: Vec<ServerGumpTextEntryDto>,
-    pub switches: Vec<ServerGumpSwitchDto>,
-}
-impl HasPath for ServerGumpDto {
-    const PATH: &'static str = paths::gump::SERVER;
-}
-
 /// `cuo:gump/server-opened`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -1662,7 +1754,7 @@ impl HasPath for ServerGumpOpenedEvent {
 /// Nested payload type (`ClassicUO.Ecs.Modding.ServerGumpSwitchDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ServerGumpSwitchDto {
+pub struct ServerGumpSwitch {
     pub id: u32,
     pub checked: bool,
     pub is_radio: bool,
@@ -1672,7 +1764,7 @@ pub struct ServerGumpSwitchDto {
 /// Nested payload type (`ClassicUO.Ecs.Modding.ServerGumpTextEntryDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct ServerGumpTextEntryDto {
+pub struct ServerGumpTextEntry {
     pub id: u16,
     pub text: String,
 }
@@ -1734,8 +1826,8 @@ impl HasPath for SkillsWindow {
     const PATH: &'static str = paths::gump::SKILLS;
 }
 
-/// `ClassicUO.Ecs.SpellBookType` — crosses as `i32`.
-pub type SpellBookType = i32;
+/// `ClassicUO.Ecs.SpellBookType` — crosses as `u8`.
+pub type SpellBookType = u8;
 pub mod spell_book_type {
     pub const MAGERY: super::SpellBookType = 0;
     pub const NECROMANCY: super::SpellBookType = 1;
@@ -1751,9 +1843,10 @@ pub mod spell_book_type {
 /// Nested payload type (`ClassicUO.Ecs.Modding.SpellbookDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct SpellbookDto {
+pub struct Spellbook {
     pub serial: u32,
-    pub book_type: u8,
+    /// enum SpellBookType (0=Magery, 1=Necromancy, 2=Chivalry, 4=Bushido, 5=Ninjitsu, 6=Spellweaving, 7=Mysticism, 8=Mastery, 255=Unknown)
+    pub book_type: SpellBookType,
     pub spells: Vec<i32>,
 }
 
@@ -1763,7 +1856,7 @@ pub struct SpellbookDto {
 pub struct SpellbookWindow {
     pub serial: u32,
     /// enum SpellBookType (0=Magery, 1=Necromancy, 2=Chivalry, 4=Bushido, 5=Ninjitsu, 6=Spellweaving, 7=Mysticism, 8=Mastery, 255=Unknown)
-    pub school: i32,
+    pub school: SpellBookType,
     pub page: i32,
     pub sounded_page: i32,
     pub page_count: i32,
@@ -1781,11 +1874,11 @@ impl HasPath for SpellbookWindow {
 /// `cuo:player/spellbook`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct SpellbooksDto {
+pub struct Spellbooks {
     pub revision: i32,
-    pub books: Vec<SpellbookDto>,
+    pub books: Vec<Spellbook>,
 }
-impl HasPath for SpellbooksDto {
+impl HasPath for Spellbooks {
     const PATH: &'static str = paths::player::SPELLBOOK;
 }
 
@@ -1829,11 +1922,20 @@ impl HasPath for Stamina {
     const PATH: &'static str = paths::player::STAMINA;
 }
 
+/// `ClassicUO.Ecs.Stat` — crosses as `u8`.
+pub type Stat = u8;
+pub mod stat {
+    pub const STR: super::Stat = 0;
+    pub const DEX: super::Stat = 1;
+    pub const INT: super::Stat = 2;
+}
+
 /// `cuo:ui/stat-lock-button`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct StatLockButton {
-    pub stat: u8,
+    /// enum Stat (0=Str, 1=Dex, 2=Int)
+    pub stat: Stat,
 }
 impl HasPath for StatLockButton {
     const PATH: &'static str = paths::ui::STAT_LOCK_BUTTON;
@@ -1843,9 +1945,12 @@ impl HasPath for StatLockButton {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct StatLocks {
-    pub str: u8,
-    pub dex: u8,
-    pub int: u8,
+    /// enum Lock (0=Up, 1=Down, 2=Locked)
+    pub str: Lock,
+    /// enum Lock (0=Up, 1=Down, 2=Locked)
+    pub dex: Lock,
+    /// enum Lock (0=Up, 1=Down, 2=Locked)
+    pub int: Lock,
 }
 impl HasPath for StatLocks {
     const PATH: &'static str = paths::player::STAT_LOCKS;
@@ -1862,15 +1967,34 @@ impl HasPath for StatusBarWindow {
     const PATH: &'static str = paths::ui::STATUSBAR_WINDOW;
 }
 
+/// `ClassicUO.Ecs.TargetMode` — crosses as `u8`.
+pub type TargetMode = u8;
+pub mod target_mode {
+    pub const OBJECT: super::TargetMode = 0;
+    pub const POSITION: super::TargetMode = 1;
+    pub const MULTI: super::TargetMode = 2;
+}
+
+/// `ClassicUO.Ecs.TargetType` — crosses as `u8`.
+pub type TargetType = u8;
+pub mod target_type {
+    pub const NEUTRAL: super::TargetType = 0;
+    pub const HARMFUL: super::TargetType = 1;
+    pub const BENEFICIAL: super::TargetType = 2;
+    pub const CANCEL: super::TargetType = 3;
+}
+
 /// `cuo:target/state`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct TargetingState {
     pub is_targeting: bool,
-    pub mode: u8,
+    /// enum TargetMode (0=Object, 1=Position, 2=Multi)
+    pub mode: TargetMode,
     pub local: bool,
     pub cursor_id: u32,
-    pub cursor_type: u8,
+    /// enum TargetType (0=Neutral, 1=Harmful, 2=Beneficial, 3=Cancel)
+    pub cursor_type: TargetType,
     pub just_targeted: bool,
     pub multi_id: u16,
     pub multi_offset_x: i16,
@@ -1903,7 +2027,7 @@ impl HasPath for Text {
 /// `cuo:ui/text-caret`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct TextCaretDto {
+pub struct TextCaret {
     pub entity: u64,
     pub cursor: i32,
     pub select_start: i32,
@@ -1914,19 +2038,19 @@ pub struct TextCaretDto {
     pub screen_y: f32,
     pub row_height: f32,
 }
-impl HasPath for TextCaretDto {
+impl HasPath for TextCaret {
     const PATH: &'static str = paths::ui::TEXT_CARET;
 }
 
 /// `cuo:ui/text-clipboard-action`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct TextClipboardActionDto {
+pub struct TextClipboardAction {
     pub entity: u64,
     pub action: i32,
     pub seq: i32,
 }
-impl HasPath for TextClipboardActionDto {
+impl HasPath for TextClipboardAction {
     const PATH: &'static str = paths::ui::TEXT_CLIPBOARD_ACTION;
 }
 
@@ -1943,34 +2067,34 @@ impl HasPath for TextColor {
 /// `cuo:ui/text-completion`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct TextCompletionDto {
+pub struct TextCompletion {
     pub entity: u64,
     pub prefix: String,
     pub items: Vec<String>,
 }
-impl HasPath for TextCompletionDto {
+impl HasPath for TextCompletion {
     const PATH: &'static str = paths::ui::TEXT_COMPLETION;
 }
 
 /// `cuo:ui/text-completion-pick`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct TextCompletionPickDto {
+pub struct TextCompletionPick {
     pub entity: u64,
     pub index: i32,
     pub seq: i32,
 }
-impl HasPath for TextCompletionPickDto {
+impl HasPath for TextCompletionPick {
     const PATH: &'static str = paths::ui::TEXT_COMPLETION_PICK;
 }
 
 /// `cuo:ui/text-completion-state`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct TextCompletionStateDto {
+pub struct TextCompletionState {
     pub selected: i32,
 }
-impl HasPath for TextCompletionStateDto {
+impl HasPath for TextCompletionState {
     const PATH: &'static str = paths::ui::TEXT_COMPLETION_STATE;
 }
 
@@ -2028,7 +2152,7 @@ impl HasPath for TextSpans {
 #[serde(default, rename_all = "PascalCase")]
 pub struct TextWrap {
     /// enum TextWrapKind (0=Words, 1=Newlines, 2=None)
-    pub kind: u8,
+    pub kind: TextWrapKind,
 }
 impl HasPath for TextWrap {
     const PATH: &'static str = paths::ui::TEXT_WRAP;
@@ -2100,7 +2224,7 @@ impl HasPath for TopBarFull {
 /// Nested payload type (`ClassicUO.Ecs.Modding.TownInfoDto`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct TownInfoDto {
+pub struct TownInfo {
     pub index: u8,
     pub name: String,
     pub building: String,
@@ -2138,6 +2262,24 @@ impl HasPath for UOButton {
     const PATH: &'static str = paths::ui::BUTTON;
 }
 
+/// `ClassicUO.Ecs.UOCustomKind` — crosses as `u8`.
+pub type UOCustomKind = u8;
+pub mod uo_custom_kind {
+    pub const GUMP: super::UOCustomKind = 0;
+    pub const GUMP_NINE_PATCH: super::UOCustomKind = 1;
+    pub const GUMP_TILED: super::UOCustomKind = 2;
+    pub const ART: super::UOCustomKind = 3;
+    pub const LAND: super::UOCustomKind = 4;
+    pub const ANIMATION: super::UOCustomKind = 5;
+    pub const MINI_MAP: super::UOCustomKind = 6;
+    pub const NONE: super::UOCustomKind = 7;
+    pub const WRAPPED_TEXT: super::UOCustomKind = 8;
+    pub const GUMP_SLICE: super::UOCustomKind = 9;
+    pub const HUE_GRID: super::UOCustomKind = 10;
+    pub const DYN_TEXTURE: super::UOCustomKind = 11;
+    pub const WORLD_MAP: super::UOCustomKind = 12;
+}
+
 /// `cuo:ui/contains-by-bounds`
 /// Zero-size tag: no value crosses, only its presence.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -2150,15 +2292,16 @@ impl HasPath for UiContainsByBounds {
 /// `cuo:ui/custom`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct UiCustomDto {
-    pub kind: u8,
+pub struct UiCustom {
+    /// enum UOCustomKind (0=Gump, 1=GumpNinePatch, 2=GumpTiled, 3=Art, 4=Land, 5=Animation, 6=MiniMap, 7=None, 8=WrappedText, 9=GumpSlice, 10=HueGrid, 11=DynTexture, 12=WorldMap)
+    pub kind: UOCustomKind,
     pub asset_id: u32,
     pub hue_x: f32,
     pub hue_y: f32,
     pub hue_z: f32,
     pub stacked: bool,
 }
-impl HasPath for UiCustomDto {
+impl HasPath for UiCustom {
     const PATH: &'static str = paths::ui::CUSTOM;
 }
 
@@ -2231,14 +2374,14 @@ impl HasPath for UiNoWindowDrag {
 /// `cuo:ui/pick`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct UiPickDto {
+pub struct UiPick {
     pub entity: u64,
     pub root: u64,
     pub paint_order: i32,
     pub x: f32,
     pub y: f32,
 }
-impl HasPath for UiPickDto {
+impl HasPath for UiPick {
     const PATH: &'static str = paths::ui::PICK;
 }
 
@@ -2283,7 +2426,7 @@ impl HasPath for UiResizable {
 pub struct UiScrollbar {
     pub width: f32,
     /// enum ScrollbarStyle (0=Uo, 1=Flat)
-    pub style: u8,
+    pub style: ScrollbarStyle,
 }
 impl HasPath for UiScrollbar {
     const PATH: &'static str = paths::ui::SCROLLBAR;
@@ -2292,11 +2435,11 @@ impl HasPath for UiScrollbar {
 /// `cuo:ui/surface`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct UiSurfaceDto {
+pub struct UiSurface {
     pub w: f32,
     pub h: f32,
 }
-impl HasPath for UiSurfaceDto {
+impl HasPath for UiSurface {
     const PATH: &'static str = paths::ui::SURFACE;
 }
 
@@ -2326,7 +2469,7 @@ impl HasPath for UiTooltipSerial {
 #[serde(default, rename_all = "PascalCase")]
 pub struct Val {
     /// enum ValType (0=Auto, 1=Px, 2=Percent, 3=Grow)
-    pub type_: u8,
+    pub type_: ValType,
     pub value: f32,
     /// Host-computed: written by the host, ignored when a mod sets it.
     pub is_auto: bool,
@@ -2406,11 +2549,189 @@ impl HasPath for WorldPosition {
 /// `cuo:input/world-single-click`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
-pub struct WorldSingleClickDto {
+pub struct WorldSingleClick {
     pub serial: u32,
     pub at_ms: u64,
 }
-impl HasPath for WorldSingleClickDto {
+impl HasPath for WorldSingleClick {
     const PATH: &'static str = paths::input::WORLD_SINGLE_CLICK;
+}
+
+/// Keyboard keys, mirrored from `TinyEcs.Bevy.Input.KeyCode` (Win32 virtual-key codes): `ModHotkeyBinding::key`, `InputConsume::key`.
+pub type KeyCode = i32;
+pub mod key_code {
+    pub const NONE: super::KeyCode = 0;
+    pub const BACK: super::KeyCode = 8;
+    pub const TAB: super::KeyCode = 9;
+    pub const ENTER: super::KeyCode = 13;
+    pub const PAUSE: super::KeyCode = 19;
+    pub const CAPS_LOCK: super::KeyCode = 20;
+    pub const KANA: super::KeyCode = 21;
+    pub const KANJI: super::KeyCode = 25;
+    pub const ESCAPE: super::KeyCode = 27;
+    pub const IME_CONVERT: super::KeyCode = 28;
+    pub const IME_NO_CONVERT: super::KeyCode = 29;
+    pub const SPACE: super::KeyCode = 32;
+    pub const PAGE_UP: super::KeyCode = 33;
+    pub const PAGE_DOWN: super::KeyCode = 34;
+    pub const END: super::KeyCode = 35;
+    pub const HOME: super::KeyCode = 36;
+    pub const LEFT: super::KeyCode = 37;
+    pub const UP: super::KeyCode = 38;
+    pub const RIGHT: super::KeyCode = 39;
+    pub const DOWN: super::KeyCode = 40;
+    pub const SELECT: super::KeyCode = 41;
+    pub const PRINT: super::KeyCode = 42;
+    pub const EXECUTE: super::KeyCode = 43;
+    pub const PRINT_SCREEN: super::KeyCode = 44;
+    pub const INSERT: super::KeyCode = 45;
+    pub const DELETE: super::KeyCode = 46;
+    pub const HELP: super::KeyCode = 47;
+    pub const D0: super::KeyCode = 48;
+    pub const D1: super::KeyCode = 49;
+    pub const D2: super::KeyCode = 50;
+    pub const D3: super::KeyCode = 51;
+    pub const D4: super::KeyCode = 52;
+    pub const D5: super::KeyCode = 53;
+    pub const D6: super::KeyCode = 54;
+    pub const D7: super::KeyCode = 55;
+    pub const D8: super::KeyCode = 56;
+    pub const D9: super::KeyCode = 57;
+    pub const A: super::KeyCode = 65;
+    pub const B: super::KeyCode = 66;
+    pub const C: super::KeyCode = 67;
+    pub const D: super::KeyCode = 68;
+    pub const E: super::KeyCode = 69;
+    pub const F: super::KeyCode = 70;
+    pub const G: super::KeyCode = 71;
+    pub const H: super::KeyCode = 72;
+    pub const I: super::KeyCode = 73;
+    pub const J: super::KeyCode = 74;
+    pub const K: super::KeyCode = 75;
+    pub const L: super::KeyCode = 76;
+    pub const M: super::KeyCode = 77;
+    pub const N: super::KeyCode = 78;
+    pub const O: super::KeyCode = 79;
+    pub const P: super::KeyCode = 80;
+    pub const Q: super::KeyCode = 81;
+    pub const R: super::KeyCode = 82;
+    pub const S: super::KeyCode = 83;
+    pub const T: super::KeyCode = 84;
+    pub const U: super::KeyCode = 85;
+    pub const V: super::KeyCode = 86;
+    pub const W: super::KeyCode = 87;
+    pub const X: super::KeyCode = 88;
+    pub const Y: super::KeyCode = 89;
+    pub const Z: super::KeyCode = 90;
+    pub const LEFT_WINDOWS: super::KeyCode = 91;
+    pub const RIGHT_WINDOWS: super::KeyCode = 92;
+    pub const APPS: super::KeyCode = 93;
+    pub const SLEEP: super::KeyCode = 95;
+    pub const NUM_PAD0: super::KeyCode = 96;
+    pub const NUM_PAD1: super::KeyCode = 97;
+    pub const NUM_PAD2: super::KeyCode = 98;
+    pub const NUM_PAD3: super::KeyCode = 99;
+    pub const NUM_PAD4: super::KeyCode = 100;
+    pub const NUM_PAD5: super::KeyCode = 101;
+    pub const NUM_PAD6: super::KeyCode = 102;
+    pub const NUM_PAD7: super::KeyCode = 103;
+    pub const NUM_PAD8: super::KeyCode = 104;
+    pub const NUM_PAD9: super::KeyCode = 105;
+    pub const MULTIPLY: super::KeyCode = 106;
+    pub const ADD: super::KeyCode = 107;
+    pub const SEPARATOR: super::KeyCode = 108;
+    pub const SUBTRACT: super::KeyCode = 109;
+    pub const DECIMAL: super::KeyCode = 110;
+    pub const DIVIDE: super::KeyCode = 111;
+    pub const F1: super::KeyCode = 112;
+    pub const F2: super::KeyCode = 113;
+    pub const F3: super::KeyCode = 114;
+    pub const F4: super::KeyCode = 115;
+    pub const F5: super::KeyCode = 116;
+    pub const F6: super::KeyCode = 117;
+    pub const F7: super::KeyCode = 118;
+    pub const F8: super::KeyCode = 119;
+    pub const F9: super::KeyCode = 120;
+    pub const F10: super::KeyCode = 121;
+    pub const F11: super::KeyCode = 122;
+    pub const F12: super::KeyCode = 123;
+    pub const F13: super::KeyCode = 124;
+    pub const F14: super::KeyCode = 125;
+    pub const F15: super::KeyCode = 126;
+    pub const F16: super::KeyCode = 127;
+    pub const F17: super::KeyCode = 128;
+    pub const F18: super::KeyCode = 129;
+    pub const F19: super::KeyCode = 130;
+    pub const F20: super::KeyCode = 131;
+    pub const F21: super::KeyCode = 132;
+    pub const F22: super::KeyCode = 133;
+    pub const F23: super::KeyCode = 134;
+    pub const F24: super::KeyCode = 135;
+    pub const NUM_LOCK: super::KeyCode = 144;
+    pub const SCROLL: super::KeyCode = 145;
+    pub const LEFT_SHIFT: super::KeyCode = 160;
+    pub const RIGHT_SHIFT: super::KeyCode = 161;
+    pub const LEFT_CONTROL: super::KeyCode = 162;
+    pub const RIGHT_CONTROL: super::KeyCode = 163;
+    pub const LEFT_ALT: super::KeyCode = 164;
+    pub const RIGHT_ALT: super::KeyCode = 165;
+    pub const BROWSER_BACK: super::KeyCode = 166;
+    pub const BROWSER_FORWARD: super::KeyCode = 167;
+    pub const BROWSER_REFRESH: super::KeyCode = 168;
+    pub const BROWSER_STOP: super::KeyCode = 169;
+    pub const BROWSER_SEARCH: super::KeyCode = 170;
+    pub const BROWSER_FAVORITES: super::KeyCode = 171;
+    pub const BROWSER_HOME: super::KeyCode = 172;
+    pub const VOLUME_MUTE: super::KeyCode = 173;
+    pub const VOLUME_DOWN: super::KeyCode = 174;
+    pub const VOLUME_UP: super::KeyCode = 175;
+    pub const MEDIA_NEXT_TRACK: super::KeyCode = 176;
+    pub const MEDIA_PREVIOUS_TRACK: super::KeyCode = 177;
+    pub const MEDIA_STOP: super::KeyCode = 178;
+    pub const MEDIA_PLAY_PAUSE: super::KeyCode = 179;
+    pub const LAUNCH_MAIL: super::KeyCode = 180;
+    pub const SELECT_MEDIA: super::KeyCode = 181;
+    pub const LAUNCH_APPLICATION1: super::KeyCode = 182;
+    pub const LAUNCH_APPLICATION2: super::KeyCode = 183;
+    pub const OEM_SEMICOLON: super::KeyCode = 186;
+    pub const OEM_PLUS: super::KeyCode = 187;
+    pub const OEM_COMMA: super::KeyCode = 188;
+    pub const OEM_MINUS: super::KeyCode = 189;
+    pub const OEM_PERIOD: super::KeyCode = 190;
+    pub const OEM_QUESTION: super::KeyCode = 191;
+    pub const OEM_TILDE: super::KeyCode = 192;
+    pub const CHAT_PAD_GREEN: super::KeyCode = 202;
+    pub const CHAT_PAD_ORANGE: super::KeyCode = 203;
+    pub const OEM_OPEN_BRACKETS: super::KeyCode = 219;
+    pub const OEM_PIPE: super::KeyCode = 220;
+    pub const OEM_CLOSE_BRACKETS: super::KeyCode = 221;
+    pub const OEM_QUOTES: super::KeyCode = 222;
+    pub const OEM8: super::KeyCode = 223;
+    pub const OEM_BACKSLASH: super::KeyCode = 226;
+    pub const PROCESS_KEY: super::KeyCode = 229;
+    pub const OEM_COPY: super::KeyCode = 242;
+    pub const OEM_AUTO: super::KeyCode = 243;
+    pub const OEM_ENL_W: super::KeyCode = 244;
+    pub const ATTN: super::KeyCode = 246;
+    pub const CRSEL: super::KeyCode = 247;
+    pub const EXSEL: super::KeyCode = 248;
+    pub const ERASE_EOF: super::KeyCode = 249;
+    pub const PLAY: super::KeyCode = 250;
+    pub const ZOOM: super::KeyCode = 251;
+    pub const PA1: super::KeyCode = 253;
+    pub const OEM_CLEAR: super::KeyCode = 254;
+}
+
+/// Mouse buttons, mirrored from the host's `MouseButtonType`, plus the wheel pseudo-buttons (one fire per notch): `ModHotkeyBinding::mouse`, `InputConsume::mouse`.
+pub type MouseButton = i32;
+pub mod mouse_button {
+    pub const NONE: super::MouseButton = 0;
+    pub const LEFT: super::MouseButton = 1;
+    pub const MIDDLE: super::MouseButton = 2;
+    pub const RIGHT: super::MouseButton = 3;
+    pub const X_BUTTON1: super::MouseButton = 4;
+    pub const X_BUTTON2: super::MouseButton = 5;
+    pub const WHEEL_UP: super::MouseButton = 8;
+    pub const WHEEL_DOWN: super::MouseButton = 9;
 }
 

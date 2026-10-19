@@ -977,8 +977,17 @@ pub struct Query<D: QueryData, F: QueryFilter = ()> {
     sink: Option<backend::QuerySink>,
     /// Leading filter values per row (see `query_layout`): `D`'s reading index base.
     skip: u8,
+    /// entity -> row, built by the first lookup of a run with enough rows to need it.
+    index: std::cell::OnceCell<std::collections::HashMap<Entity, usize>>,
     _f: PhantomData<F>,
 }
+
+/// Below this many rows a lookup scans: cheaper than building the index.
+const QUERY_INDEX_MIN: usize = 16;
+
+/// `Query::fetch`'s `skip`, worked out once per system (it only depends on `D` / `F`).
+#[derive(Default)]
+struct QuerySkip(Option<u8>);
 
 impl<D: QueryData, F: QueryFilter> Query<D, F> {
     pub fn iter(&self) -> Iter<'_, D> {
@@ -987,14 +996,28 @@ impl<D: QueryData, F: QueryFilter> Query<D, F> {
     pub fn iter_mut(&mut self) -> IterMut<'_, D> {
         IterMut(self.rows.iter_mut())
     }
+    fn row(&self, entity: Entity) -> Option<usize> {
+        if self.rows.len() < QUERY_INDEX_MIN {
+            return self.rows.iter().position(|r| r.entity == entity);
+        }
+        let index = self.index.get_or_init(|| {
+            let mut map = std::collections::HashMap::with_capacity(self.rows.len());
+            for (i, r) in self.rows.iter().enumerate() {
+                map.entry(r.entity).or_insert(i);
+            }
+            map
+        });
+        index.get(&entity).copied()
+    }
     pub fn get(&self, entity: Entity) -> Option<D::ReadItem<'_>> {
-        self.rows.iter().find(|r| r.entity == entity).map(|r| D::read(&r.data))
+        self.row(entity).map(|i| D::read(&self.rows[i].data))
     }
     pub fn get_mut(&mut self, entity: Entity) -> Option<D::Item<'_>> {
-        self.rows.iter_mut().find(|r| r.entity == entity).map(|r| D::item(&mut r.data))
+        let i = self.row(entity)?;
+        Some(D::item(&mut self.rows[i].data))
     }
     pub fn contains(&self, entity: Entity) -> bool {
-        self.rows.iter().any(|r| r.entity == entity)
+        self.row(entity).is_some()
     }
     /// The only match; `None` when there are none or several.
     pub fn single(&self) -> Option<(Entity, D::ReadItem<'_>)> {
@@ -1058,21 +1081,23 @@ impl<D: QueryData + 'static, F: QueryFilter + 'static> SystemParam for Query<D, 
         params.push(ParamDesc::Query(query_terms::<D, F>()));
     }
     fn fetch(ctx: &mut ParamCtx) -> Option<Self> {
-        let skip = query_layout::<D, F>().1;
+        // SAFETY: the cell is boxed in the entry and not otherwise borrowed here.
+        let cached = unsafe { &mut *ctx.cell::<QuerySkip>(ctx.next) };
+        let skip = *cached.0.get_or_insert_with(|| query_layout::<D, F>().1 as u8);
         let Fetched::Query(mut sink) = ctx.take() else {
-            return Some(Query { rows: Vec::new(), sink: None, skip: skip as u8, _f: PhantomData });
+            return Some(Query { rows: Vec::new(), sink: None, skip, index: Default::default(), _f: PhantomData });
         };
         // The entities and one column per term `D` reads; the leading filter values are
         // not fetched at all.
         let entities = sink.entities();
         sink.count = entities.len();
-        let mut idx = skip as u8;
+        let mut idx = skip;
         let mut cols = D::columns(&sink, &mut idx);
         let rows = entities
             .into_iter()
             .map_while(|e| Some(QRow { entity: Entity(e), data: D::next_row(&mut cols)? }))
             .collect();
-        Some(Query { rows, sink: Some(sink), skip: skip as u8, _f: PhantomData })
+        Some(Query { rows, sink: Some(sink), skip, index: Default::default(), _f: PhantomData })
     }
 }
 
@@ -1411,12 +1436,12 @@ systems_tuple!(S1 M1, S2 M2, S3 M3, S4 M4, S5 M5, S6 M6, S7 M7, S8 M8);
 mod tests {
     use super::*;
     use crate::types::{ChatMessage, ChildOf, Item, UiClick};
-    use crate::types::{GameStateDto, Graphic, Hue, Time};
+    use crate::types::{GameState, Graphic, Hue, Time};
 
     fn sys(
         _q: Query<(&Graphic, &mut Hue), (With<Item>, Changed<Graphic>)>,
         _r: Res<Time>,
-        _rm: Option<ResMut<GameStateDto>>,
+        _rm: Option<ResMut<GameState>>,
         _e: EventReader<ChatMessage>,
         _l: Local<u32>,
         _c: Commands,
@@ -1583,6 +1608,25 @@ mod tests {
     }
 
     #[test]
+    fn get_finds_rows_scanned_and_indexed() {
+        use std::cell::Cell;
+        thread_local!(static FOUND: Cell<(u16, u16, bool)> = const { Cell::new((0, 0, true)) });
+        fn look(q: Query<&Graphic>) {
+            let first = q.get(Entity(100)).map_or(0, |g| g.value);
+            let last = q.get(Entity(100 + q.len() as u64 - 1)).map_or(0, |g| g.value);
+            FOUND.with(|f| f.set((first, last, q.contains(Entity(1)))));
+        }
+        let mut app = App::default();
+        app.add_systems(Schedule::Update, look);
+        for n in [3u16, 40] {
+            let ents = (0..n as u64).map(|i| 100 + i).collect();
+            let vals: Vec<Graphic> = (0..n).map(|i| Graphic { value: i + 1 }).collect();
+            app.entries[0].run(vec![Fetched::Query(backend::QuerySink::fake(ents, vec![Box::new(vals)]))], None);
+            assert_eq!(FOUND.with(|f| f.get()), (1, n, false));
+        }
+    }
+
+    #[test]
     fn unchanged_res_reuses_the_previous_read() {
         use std::cell::Cell;
         thread_local!(static TOTAL: Cell<(f32, u32)> = const { Cell::new((0.0, 0)) });
@@ -1608,7 +1652,7 @@ mod tests {
     fn unchanged_res_mut_reuses_until_written() {
         use std::cell::Cell;
         thread_local!(static SEEN: Cell<u8> = const { Cell::new(0) });
-        fn bump(mut state: ResMut<GameStateDto>) {
+        fn bump(mut state: ResMut<GameState>) {
             SEEN.with(|s| s.set(state.current));
             if state.current < 2 {
                 state.current += 1;
@@ -1618,7 +1662,7 @@ mod tests {
         app.add_systems(Schedule::Update, bump);
         let e = &mut app.entries[0];
         let res = |d: ResData| vec![Fetched::Res(d, backend::ResSink(None))];
-        let state = |current| -> Option<Box<dyn Any>> { Some(Box::new(GameStateDto { current, ..Default::default() })) };
+        let state = |current| -> Option<Box<dyn Any>> { Some(Box::new(GameState { current, ..Default::default() })) };
         e.run(res(ResData::Value(state(5))), None);
         e.run(res(ResData::Unchanged), None);
         assert_eq!(SEEN.with(|s| s.get()), 5);
@@ -1674,7 +1718,7 @@ mod tests {
 
     #[test]
     fn a_changed_res_without_a_host_has_no_value() {
-        fn read(_: Res<crate::types::MouseInputDto>) {
+        fn read(_: Res<crate::types::MouseInput>) {
             panic!("ran without a value");
         }
         let mut app = App::default();

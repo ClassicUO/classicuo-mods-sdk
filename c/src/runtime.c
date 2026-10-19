@@ -881,13 +881,46 @@ const cuo_entity *cuo_query_entities(cuo_query q)
     return v ? v->ents.ptr : NULL;
 }
 
+/* Below this many rows a lookup scans: cheaper than building the index. */
+#define QUERY_INDEX_MIN 16
+
+static size_t entity_slot(cuo_entity e, size_t mask)
+{
+    return (size_t)((e * 0x9E3779B97F4A7C15ull) >> 32) & mask;
+}
+
 bool cuo_query_index(cuo_query q, cuo_entity entity, size_t *index)
 {
     const cuo_entity *e = cuo_query_entities(q);
-    for (size_t i = 0; i < q.len; i++)
-        if (e[i] == entity) {
+    if (q.len < QUERY_INDEX_MIN) {
+        for (size_t i = 0; i < q.len; i++)
+            if (e[i] == entity) {
+                if (index)
+                    *index = i;
+                return true;
+            }
+        return false;
+    }
+    /* The pval lives in the call's scratch params: the table is per call. */
+    cuo__pval *v = (cuo__pval *)q.impl;
+    if (!v->index) {
+        size_t cap = 32;
+        while (cap < q.len * 2)
+            cap *= 2;
+        v->index = cuo_alloc(cap * sizeof *v->index);
+        v->index_mask = cap - 1;
+        for (size_t i = 0; i < q.len; i++) {
+            size_t s = entity_slot(e[i], v->index_mask);
+            while (v->index[s] && e[v->index[s] - 1] != e[i])
+                s = (s + 1) & v->index_mask;
+            if (!v->index[s])
+                v->index[s] = (uint32_t)i + 1;
+        }
+    }
+    for (size_t s = entity_slot(entity, v->index_mask); v->index[s]; s = (s + 1) & v->index_mask)
+        if (e[v->index[s] - 1] == entity) {
             if (index)
-                *index = i;
+                *index = v->index[s] - 1;
             return true;
         }
     return false;

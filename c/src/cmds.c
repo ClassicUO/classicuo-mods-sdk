@@ -19,8 +19,8 @@ size_t cuo_cmds_len(const cuo_cmds *c)
 
 cuo_comp cuo_child_of(cuo_entity parent)
 {
-    cuo_ChildOfDto dto = { .parent = parent };
-    return cuo_ChildOfDto_comp(&dto);
+    cuo_ChildOf dto = { .parent = parent };
+    return cuo_ChildOf_comp(&dto);
 }
 
 cuo_entity cuo_spawn(cuo_cmds *c, const cuo_comp *comps, size_t n)

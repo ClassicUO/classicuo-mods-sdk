@@ -264,7 +264,7 @@ internal interface IComponentsImports {
         internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Interaction(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Interaction v)
         {
             var handle = this.Handle;
-            var result =  ComponentsImportsInterop.EntityBuilder.InteractionWasmInterop.wasmImportInteraction(handle, v.state);
+            var result =  ComponentsImportsInterop.EntityBuilder.InteractionWasmInterop.wasmImportInteraction(handle, (int)v.state);
             var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
             return resource;
 
@@ -390,7 +390,7 @@ internal interface IComponentsImports {
         internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Custom(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiCustom v)
         {
             var handle = this.Handle;
-            var result =  ComponentsImportsInterop.EntityBuilder.CustomWasmInterop.wasmImportCustom(handle, v.kind, unchecked((int)(v.assetId)), v.hueX, v.hueY, v.hueZ, (v.stacked ? 1 : 0));
+            var result =  ComponentsImportsInterop.EntityBuilder.CustomWasmInterop.wasmImportCustom(handle, (int)v.kind, unchecked((int)(v.assetId)), v.hueX, v.hueY, v.hueZ, (v.stacked ? 1 : 0));
             var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
             return resource;
 
@@ -520,7 +520,7 @@ internal interface IComponentsImports {
         internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder StatLockButton(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.StatLockButton v)
         {
             var handle = this.Handle;
-            var result =  ComponentsImportsInterop.EntityBuilder.StatLockButtonWasmInterop.wasmImportStatLockButton(handle, v.stat);
+            var result =  ComponentsImportsInterop.EntityBuilder.StatLockButtonWasmInterop.wasmImportStatLockButton(handle, (int)v.stat);
             var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
             return resource;
 
@@ -1732,7 +1732,7 @@ internal interface IComponentsImports {
             nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 1);
 
             array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Interaction (
-            ((byte)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0])));
+            (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.InteractionState)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0]));
         }
 
         if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
@@ -1745,7 +1745,7 @@ internal interface IComponentsImports {
     internal static unsafe void SetInteraction(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Interaction v)
     {
         var handle = q.Handle;
-        ComponentsImportsInterop.SetInteractionWasmInterop.wasmImportSetInteraction(handle, unchecked((long)(e)), term, v.state);
+        ComponentsImportsInterop.SetInteractionWasmInterop.wasmImportSetInteraction(handle, unchecked((long)(e)), term, (int)v.state);
 
     }
 
@@ -2171,7 +2171,7 @@ internal interface IComponentsImports {
             nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 3);
 
             array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.StatLocks (
-            ((byte)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0]), ((byte)new global::System.Span<byte>((byte*)basePtr + 1, 1)[0]), ((byte)new global::System.Span<byte>((byte*)basePtr + 2, 1)[0])));
+            (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Lock)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0], (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Lock)new global::System.Span<byte>((byte*)basePtr + 1, 1)[0], (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Lock)new global::System.Span<byte>((byte*)basePtr + 2, 1)[0]));
         }
 
         if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
@@ -2341,7 +2341,7 @@ internal interface IComponentsImports {
             nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 24);
 
             array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiCustom (
-            ((byte)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0]), unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0])), new global::System.Span<float>((void*)((byte*)basePtr + 8), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 12), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 16), 1)[0], (new global::System.Span<byte>((byte*)basePtr + 20, 1)[0] != 0)));
+            (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UoCustomKind)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0], unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0])), new global::System.Span<float>((void*)((byte*)basePtr + 8), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 12), 1)[0], new global::System.Span<float>((void*)((byte*)basePtr + 16), 1)[0], (new global::System.Span<byte>((byte*)basePtr + 20, 1)[0] != 0)));
         }
 
         if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
@@ -2354,7 +2354,7 @@ internal interface IComponentsImports {
     internal static unsafe void SetCustom(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiCustom v)
     {
         var handle = q.Handle;
-        ComponentsImportsInterop.SetCustomWasmInterop.wasmImportSetCustom(handle, unchecked((long)(e)), term, v.kind, unchecked((int)(v.assetId)), v.hueX, v.hueY, v.hueZ, (v.stacked ? 1 : 0));
+        ComponentsImportsInterop.SetCustomWasmInterop.wasmImportSetCustom(handle, unchecked((long)(e)), term, (int)v.kind, unchecked((int)(v.assetId)), v.hueX, v.hueY, v.hueZ, (v.stacked ? 1 : 0));
 
     }
 
@@ -2571,7 +2571,7 @@ internal interface IComponentsImports {
             nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 1);
 
             array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.StatLockButton (
-            ((byte)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0])));
+            (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Stat)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0]));
         }
 
         if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
@@ -2584,7 +2584,7 @@ internal interface IComponentsImports {
     internal static unsafe void SetStatLockButton(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.StatLockButton v)
     {
         var handle = q.Handle;
-        ComponentsImportsInterop.SetStatLockButtonWasmInterop.wasmImportSetStatLockButton(handle, unchecked((long)(e)), term, v.stat);
+        ComponentsImportsInterop.SetStatLockButtonWasmInterop.wasmImportSetStatLockButton(handle, unchecked((long)(e)), term, (int)v.stat);
 
     }
 
@@ -3300,7 +3300,7 @@ internal interface IComponentsImports {
             nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 64);
 
             array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.SpellbookWindow (
-            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), new global::System.Span<int>((void*)((byte*)basePtr + 4), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 16), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 20), 1)[0], (new global::System.Span<byte>((byte*)basePtr + 24, 1)[0] != 0), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 32), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 40), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 48), 1)[0])), (new global::System.Span<byte>((byte*)basePtr + 56, 1)[0] != 0)));
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), ((byte)new global::System.Span<byte>((byte*)basePtr + 4, 1)[0]), new global::System.Span<int>((void*)((byte*)basePtr + 8), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 12), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 16), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr + 20), 1)[0], (new global::System.Span<byte>((byte*)basePtr + 24, 1)[0] != 0), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 32), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 40), 1)[0])), unchecked((ulong)(new global::System.Span<long>((void*)((byte*)basePtr + 48), 1)[0])), (new global::System.Span<byte>((byte*)basePtr + 56, 1)[0] != 0)));
         }
 
         if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
@@ -3802,7 +3802,7 @@ internal interface IComponentsImports {
             case 1: {
 
                 lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.GameState (
-                ((byte)new global::System.Span<byte>((byte*)ptr + 1, 1)[0]));
+                (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.GameStateKind)new global::System.Span<byte>((byte*)ptr + 1, 1)[0]);
                 break;
             }
 
@@ -3815,14 +3815,14 @@ internal interface IComponentsImports {
     internal static unsafe void PutState(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.GameState v)
     {
         var handle = r.Handle;
-        ComponentsImportsInterop.PutStateWasmInterop.wasmImportPutState(handle, v.current);
+        ComponentsImportsInterop.PutStateWasmInterop.wasmImportPutState(handle, (int)v.current);
 
     }
 
     internal static unsafe void SetResourceState(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.GameState v)
     {
         var handle = c.Handle;
-        ComponentsImportsInterop.SetResourceStateWasmInterop.wasmImportSetResourceState(handle, v.current);
+        ComponentsImportsInterop.SetResourceStateWasmInterop.wasmImportSetResourceState(handle, (int)v.current);
 
     }
 
@@ -4207,7 +4207,7 @@ internal interface IComponentsImports {
                     }
 
                     array10.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModOption (
-                    str, str4, str5, str6, ((byte)new global::System.Span<byte>((byte*)basePtr3 + 32, 1)[0]), new global::System.Span<int>((void*)((byte*)basePtr3 + 36), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 40), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 44), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 48), 1)[0], array));
+                    str, str4, str5, str6, (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ModOptionKind)new global::System.Span<byte>((byte*)basePtr3 + 32, 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 36), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 40), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 44), 1)[0], new global::System.Span<int>((void*)((byte*)basePtr3 + 48), 1)[0], array));
                 }
 
                 if (new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0] > 0) {
@@ -4281,7 +4281,7 @@ internal interface IComponentsImports {
             cleanups.Add(()=> gcHandle11.Free());
             new global::System.Span<int>((void*)((byte*)basePtr + 28), 1)[0] = length10;
             new global::System.Span<nint>((void*)((byte*)basePtr + 24), 1)[0] = (nint)strPtr8.ToInt32();
-            *(byte*)(basePtr + 32) = (byte)element.kind;
+            *(byte*)(basePtr + 32) = (byte)(int)element.kind;
             new global::System.Span<int>((void*)((byte*)basePtr + 36), 1)[0] = element.min;
             new global::System.Span<int>((void*)((byte*)basePtr + 40), 1)[0] = element.max;
             new global::System.Span<int>((void*)((byte*)basePtr + 44), 1)[0] = element.step;
@@ -4382,7 +4382,7 @@ internal interface IComponentsImports {
             cleanups.Add(()=> gcHandle11.Free());
             new global::System.Span<int>((void*)((byte*)basePtr + 28), 1)[0] = length10;
             new global::System.Span<nint>((void*)((byte*)basePtr + 24), 1)[0] = (nint)strPtr8.ToInt32();
-            *(byte*)(basePtr + 32) = (byte)element.kind;
+            *(byte*)(basePtr + 32) = (byte)(int)element.kind;
             new global::System.Span<int>((void*)((byte*)basePtr + 36), 1)[0] = element.min;
             new global::System.Span<int>((void*)((byte*)basePtr + 40), 1)[0] = element.max;
             new global::System.Span<int>((void*)((byte*)basePtr + 44), 1)[0] = element.step;
@@ -4572,7 +4572,7 @@ internal interface IComponentsImports {
                     nint basePtr3 = new global::System.Span<nint>((void*)((byte*)ptr + 8), 1)[0] + (index * 12);
 
                     array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.PlayerSkill (
-                    new global::System.Span<int>((void*)((byte*)basePtr3 + 0), 1)[0], ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr3 + 4), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr3 + 6), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr3 + 8), 1)[0]), ((byte)new global::System.Span<byte>((byte*)basePtr3 + 10, 1)[0])));
+                    new global::System.Span<int>((void*)((byte*)basePtr3 + 0), 1)[0], ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr3 + 4), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr3 + 6), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr3 + 8), 1)[0]), (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Lock)new global::System.Span<byte>((byte*)basePtr3 + 10, 1)[0]));
                 }
 
                 if (new global::System.Span<int>((void*)((byte*)ptr + 12), 1)[0] > 0) {
@@ -4609,7 +4609,7 @@ internal interface IComponentsImports {
             case 1: {
 
                 lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TargetingState (
-                (new global::System.Span<byte>((byte*)ptr + 4, 1)[0] != 0), ((byte)new global::System.Span<byte>((byte*)ptr + 5, 1)[0]), (new global::System.Span<byte>((byte*)ptr + 6, 1)[0] != 0), unchecked((uint)(new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0])), ((byte)new global::System.Span<byte>((byte*)ptr + 12, 1)[0]), (new global::System.Span<byte>((byte*)ptr + 13, 1)[0] != 0), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 14), 1)[0]), ((short)new global::System.Span<short>((void*)((byte*)ptr + 16), 1)[0]), ((short)new global::System.Span<short>((void*)((byte*)ptr + 18), 1)[0]), ((short)new global::System.Span<short>((void*)((byte*)ptr + 20), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 22), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 24), 1)[0]), (new global::System.Span<byte>((byte*)ptr + 26, 1)[0] != 0), unchecked((uint)(new global::System.Span<int>((void*)((byte*)ptr + 28), 1)[0])), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 32), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 34), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 36), 1)[0]), ((sbyte)(sbyte)new global::System.Span<byte>((byte*)ptr + 38, 1)[0]), (new global::System.Span<byte>((byte*)ptr + 39, 1)[0] != 0));
+                (new global::System.Span<byte>((byte*)ptr + 4, 1)[0] != 0), (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TargetMode)new global::System.Span<byte>((byte*)ptr + 5, 1)[0], (new global::System.Span<byte>((byte*)ptr + 6, 1)[0] != 0), unchecked((uint)(new global::System.Span<int>((void*)((byte*)ptr + 8), 1)[0])), (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.TargetType)new global::System.Span<byte>((byte*)ptr + 12, 1)[0], (new global::System.Span<byte>((byte*)ptr + 13, 1)[0] != 0), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 14), 1)[0]), ((short)new global::System.Span<short>((void*)((byte*)ptr + 16), 1)[0]), ((short)new global::System.Span<short>((void*)((byte*)ptr + 18), 1)[0]), ((short)new global::System.Span<short>((void*)((byte*)ptr + 20), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 22), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 24), 1)[0]), (new global::System.Span<byte>((byte*)ptr + 26, 1)[0] != 0), unchecked((uint)(new global::System.Span<int>((void*)((byte*)ptr + 28), 1)[0])), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 32), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 34), 1)[0]), ((ushort)new global::System.Span<ushort>((void*)((byte*)ptr + 36), 1)[0]), ((sbyte)(sbyte)new global::System.Span<byte>((byte*)ptr + 38, 1)[0]), (new global::System.Span<byte>((byte*)ptr + 39, 1)[0] != 0));
                 break;
             }
 
@@ -5235,7 +5235,7 @@ internal interface IComponentsImports {
         var strPtr0 = gcHandle3.AddrOfPinnedObject();
 
         cleanups.Add(()=> gcHandle3.Free());
-        ComponentsImportsInterop.SendMessageWasmInterop.wasmImportSendMessage(handle, unchecked((int)(v.serial)), strPtr.ToInt32(), length, strPtr0.ToInt32(), length2, v.hue, v.font, (v.isUnicode ? 1 : 0), v.messageType, v.time, v.kind);
+        ComponentsImportsInterop.SendMessageWasmInterop.wasmImportSendMessage(handle, unchecked((int)(v.serial)), strPtr.ToInt32(), length, strPtr0.ToInt32(), length2, v.hue, v.font, (v.isUnicode ? 1 : 0), v.messageType, v.time, (int)v.kind);
 
         foreach (var cleanup in cleanups)
         {
@@ -5267,7 +5267,7 @@ internal interface IComponentsImports {
             }
 
             array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ChatMessage (
-            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), str, str0, ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 20), 1)[0]), ((byte)new global::System.Span<byte>((byte*)basePtr + 22, 1)[0]), (new global::System.Span<byte>((byte*)basePtr + 23, 1)[0] != 0), ((byte)new global::System.Span<byte>((byte*)basePtr + 24, 1)[0]), new global::System.Span<float>((void*)((byte*)basePtr + 28), 1)[0], ((byte)new global::System.Span<byte>((byte*)basePtr + 32, 1)[0])));
+            unchecked((uint)(new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0])), str, str0, ((ushort)new global::System.Span<ushort>((void*)((byte*)basePtr + 20), 1)[0]), ((byte)new global::System.Span<byte>((byte*)basePtr + 22, 1)[0]), (new global::System.Span<byte>((byte*)basePtr + 23, 1)[0] != 0), ((byte)new global::System.Span<byte>((byte*)basePtr + 24, 1)[0]), new global::System.Span<float>((void*)((byte*)basePtr + 28), 1)[0], (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ChatKind)new global::System.Span<byte>((byte*)basePtr + 32, 1)[0]));
         }
 
         if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
@@ -5610,7 +5610,7 @@ internal interface IComponentsImports {
     internal static unsafe void SendMoveResult(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ItemMoveResult v)
     {
         var handle = c.Handle;
-        ComponentsImportsInterop.SendMoveResultWasmInterop.wasmImportSendMoveResult(handle, v.result, v.code);
+        ComponentsImportsInterop.SendMoveResultWasmInterop.wasmImportSendMoveResult(handle, (int)v.result, v.code);
 
     }
 
@@ -5627,7 +5627,7 @@ internal interface IComponentsImports {
             nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 2);
 
             array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ItemMoveResult (
-            ((byte)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0]), ((byte)new global::System.Span<byte>((byte*)basePtr + 1, 1)[0])));
+            (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ItemMoveOutcome)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0], ((byte)new global::System.Span<byte>((byte*)basePtr + 1, 1)[0])));
         }
 
         if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {

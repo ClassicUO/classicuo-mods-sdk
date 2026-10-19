@@ -123,6 +123,8 @@ interface legacy-plugins {
 /// bytes. Colours are u32 0xAARRGGBB. A `hue` argument is the wire value: 0 = none,
 /// 0x8000 bit = partial hue (only grey pixels recoloured).
 interface assets {
+    use types.{layer};
+
     enum image-kind {
         /// Land tile art, id 0..0x3FFF (44x44 diamond).
         land,
@@ -146,8 +148,9 @@ interface assets {
     /// Decoded pixels with `hue` applied; none when the id is missing.
     image-pixels: func(kind: image-kind, id: u32, hue: u16) -> option<image>;
 
-    /// Which mobile animation to read. `direction` is 0..7 (the host mirrors the
-    /// ones UO stores flipped); `action` is the UO action group.
+    /// Which mobile animation to read. `direction` is a `direction` number 0..7 (north
+    /// .. up; the host mirrors the ones UO stores flipped); `action` is the UO action
+    /// group.
     record anim-key { body: u16, action: u8, direction: u8 }
 
     record frame-info {
@@ -171,7 +174,7 @@ interface assets {
         name: string,
         %flags: u64,
         weight: u8,
-        layer: u8,
+        layer: layer,
         count: s32,
         anim-id: u16,
         hue: u16,
@@ -219,13 +222,14 @@ interface assets {
 /// Only primitives are here. Combinations (move every item of a type, target self,
 /// bandage self, ...) are SDK helpers built on these.
 interface actions {
+    use types.{layer, lock as lock-state, stat};
+
     /// A UO serial (items have the 0x40000000 bit).
     type serial = u32;
 
     enum direction { north, north-east, east, south-east, south, south-west, west, north-west }
     enum speech-kind { regular, emote, whisper, yell, guild, alliance }
-    enum lock-state { up, down, locked }
-    enum stat { str, dex, int }
+    enum emote { bow, salute }
     enum virtue { honor, sacrifice, valor }
     enum ability { primary, secondary }
     enum window {
@@ -252,11 +256,11 @@ interface actions {
     /// Drops the item held on the cursor.
     drop: func(to: destination);
     /// Equips the item held on the cursor.
-    equip: func(layer: u8, mobile: serial);
+    equip: func(layer: layer, mobile: serial);
     /// Pick up + drop in one step, without touching the cursor.
     move-item: func(item: serial, amount: u16, to: destination);
     /// Pick up + equip in one step.
-    wear: func(item: serial, layer: u8, mobile: serial);
+    wear: func(item: serial, layer: layer, mobile: serial);
     /// Uses `item` on `target` (bandages, keys, ...).
     use-item-on: func(item: serial, target: serial);
     equip-last-weapon: func();
@@ -293,13 +297,13 @@ interface actions {
 
     // ── spells, skills, virtues ──
     cast-spell: func(id: u16);
+    /// `kind` is a `spell-book-type` number (0 magery, 1 necromancy, ...).
     open-spellbook: func(kind: u8);
     use-skill: func(index: u16);
     set-skill-lock: func(index: u16, state: lock-state);
     set-stat-lock: func(which: stat, state: lock-state);
     invoke-virtue: func(which: virtue);
-    /// "bow" or "salute".
-    emote-action: func(name: string);
+    emote-action: func(which: emote);
 
     // ── speech ──
     say: func(text: string, kind: speech-kind, hue: option<u16>);
@@ -564,9 +568,12 @@ interface types {
         value: s32,
     }
 
+    /// `InteractionState`
+    enum interaction-state { none, hovered, pressed }
+
     /// `cuo:ui/interaction`
     record interaction {
-        state: u8,
+        state: interaction-state,
     }
 
     /// `cuo:input/mouse`
@@ -596,6 +603,9 @@ interface types {
         pressed-once: list<s32>,
     }
 
+    /// `ChatKind`
+    enum chat-kind { overhead, system }
+
     /// `cuo:chat/message`
     record chat-message {
         serial: u32,
@@ -604,9 +614,10 @@ interface types {
         hue: u16,
         font: u8,
         is-unicode: bool,
+        /// enum MessageType (0=Regular, 1=System, 2=Emote, 3=Limit3Spell, 6=Label, 7=Focus, 8=Whisper, 9=Yell, 10=Spell, 13=Guild, 14=Alliance, 15=Command, 16=GmChat, 192=Encoded, 255=Party)
         message-type: u8,
         time: f32,
-        kind: u8,
+        kind: chat-kind,
     }
 
     /// `cuo:chat/prompt`
@@ -634,7 +645,7 @@ interface types {
         value: u8,
     }
 
-    /// `OplLineDto`
+    /// `OplLine`
     record opl-line {
         cliloc: s32,
         args: string,
@@ -687,9 +698,12 @@ interface types {
         highlight-game-objects: bool,
     }
 
+    /// `GameStateKind`
+    enum game-state-kind { loading, login-screen, server-selection, character-selection, character-creation, login-error, game-screen }
+
     /// `cuo:game/state`
     record game-state {
-        current: u8,
+        current: game-state-kind,
     }
 
     /// `cuo:gump/container`
@@ -709,7 +723,7 @@ interface types {
         graphic: u16,
     }
 
-    /// `ContainerPositionDto`
+    /// `ContainerPosition`
     record container-position {
         serial: u32,
         x: s32,
@@ -752,6 +766,7 @@ interface types {
         index: u16,
         cliloc: s32,
         text: string,
+        /// enum ContextMenuFlags (0=None, 1=Disabled, 2=Arrow, 32=Hued)
         %flags: u16,
         hue: u16,
     }
@@ -785,7 +800,7 @@ interface types {
         name-editable: bool,
     }
 
-    /// `ServerGumpButtonDto`
+    /// `ServerGumpButton`
     record server-gump-button {
         id: s32,
         x: f32,
@@ -794,13 +809,13 @@ interface types {
         h: f32,
     }
 
-    /// `ServerGumpTextEntryDto`
+    /// `ServerGumpTextEntry`
     record server-gump-text-entry {
         id: u16,
         text: string,
     }
 
-    /// `ServerGumpSwitchDto`
+    /// `ServerGumpSwitch`
     record server-gump-switch {
         id: u32,
         checked: bool,
@@ -828,7 +843,7 @@ interface types {
         key: u32,
     }
 
-    /// `HostHotkeyDto`
+    /// `HostHotkey`
     record host-hotkey {
         key: s32,
         ctrl: bool,
@@ -885,19 +900,25 @@ interface types {
         container: u32,
     }
 
+    /// `ItemMoveOutcome`
+    enum item-move-outcome { accepted, denied, end-dragging }
+
     /// `cuo:item/move-result`
     record item-move-result {
-        %result: u8,
+        %result: item-move-outcome,
         code: u8,
     }
 
-    /// `ModOptionDto`
+    /// `ModOptionKind`
+    enum mod-option-kind { toggle, slider, stepper, cycle }
+
+    /// `ModOption`
     record mod-option {
         key: string,
         label: string,
         group: string,
         keywords: string,
-        kind: u8,
+        kind: mod-option-kind,
         min: s32,
         max: s32,
         step: s32,
@@ -910,7 +931,7 @@ interface types {
         options: list<mod-option>,
     }
 
-    /// `ModOptionValueDto`
+    /// `ModOptionValue`
     record mod-option-value {
         key: string,
         value: s32,
@@ -921,7 +942,7 @@ interface types {
         values: list<mod-option-value>,
     }
 
-    /// `PlayerBuffDto`
+    /// `PlayerBuff`
     record player-buff {
         %type: s32,
         graphic: u16,
@@ -967,13 +988,16 @@ interface types {
         mouse-offset: vector2,
     }
 
-    /// `PlayerSkillDto`
+    /// `Lock`
+    enum lock { up, down, locked }
+
+    /// `PlayerSkill`
     record player-skill {
         index: s32,
         value: u16,
         base: u16,
         cap: u16,
-        lock: u8,
+        lock: lock,
     }
 
     /// `cuo:player/skills`
@@ -984,9 +1008,9 @@ interface types {
 
     /// `cuo:player/stat-locks`
     record stat-locks {
-        str: u8,
-        dex: u8,
-        int: u8,
+        str: lock,
+        dex: lock,
+        int: lock,
     }
 
     /// `cuo:target/local-result`
@@ -1000,13 +1024,19 @@ interface types {
         cancelled: bool,
     }
 
+    /// `TargetMode`
+    enum target-mode { object, position, multi }
+
+    /// `TargetType`
+    enum target-type { neutral, harmful, beneficial, cancel }
+
     /// `cuo:target/state`
     record targeting-state {
         is-targeting: bool,
-        mode: u8,
+        mode: target-mode,
         local: bool,
         cursor-id: u32,
-        cursor-type: u8,
+        cursor-type: target-type,
         just-targeted: bool,
         multi-id: u16,
         multi-offset-x: s16,
@@ -1069,9 +1099,12 @@ interface types {
         hover-hue: vector3,
     }
 
+    /// `UOCustomKind`
+    enum uo-custom-kind { gump, gump-nine-patch, gump-tiled, art, land, animation, mini-map, none, wrapped-text, gump-slice, hue-grid, dyn-texture, world-map }
+
     /// `cuo:ui/custom`
     record ui-custom {
-        kind: u8,
+        kind: uo-custom-kind,
         asset-id: u32,
         hue-x: f32,
         hue-y: f32,
@@ -1141,9 +1174,12 @@ interface types {
         style: scrollbar-style,
     }
 
+    /// `Stat`
+    enum stat { str, dex, int }
+
     /// `cuo:ui/stat-lock-button`
     record stat-lock-button {
-        stat: u8,
+        stat: stat,
     }
 
     /// `cuo:ui/statusbar-window`
@@ -1230,11 +1266,12 @@ interface types {
         run: bool,
     }
 
-    /// `MobStepDto`
+    /// `MobStep`
     record mob-step {
         x: s32,
         y: s32,
         z: s8,
+        /// enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)
         direction: u8,
         run: bool,
     }
@@ -1389,7 +1426,7 @@ interface types {
     record spellbook-window {
         serial: u32,
         /// enum SpellBookType (0=Magery, 1=Necromancy, 2=Chivalry, 4=Bushido, 5=Ninjitsu, 6=Spellweaving, 7=Mysticism, 8=Mastery, 255=Unknown)
-        school: s32,
+        school: u8,
         page: s32,
         sounded-page: s32,
         page-count: s32,
@@ -1449,12 +1486,13 @@ interface types {
 
     /// `cuo:player/move-request`
     record mod-move-request {
+        /// enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)
         direction: u8,
         run: bool,
         sequence: u8,
     }
 
-    /// `PartyMemberDto`
+    /// `PartyMember`
     record party-member {
         serial: u32,
         name: string,
@@ -1468,9 +1506,10 @@ interface types {
         can-loot: bool,
     }
 
-    /// `SpellbookDto`
+    /// `Spellbook`
     record spellbook {
         serial: u32,
+        /// enum SpellBookType (0=Magery, 1=Necromancy, 2=Chivalry, 4=Bushido, 5=Ninjitsu, 6=Spellweaving, 7=Mysticism, 8=Mastery, 255=Unknown)
         book-type: u8,
         spells: list<s32>,
     }
@@ -1481,9 +1520,10 @@ interface types {
         books: list<spellbook>,
     }
 
-    /// `PlayerStepDto`
+    /// `PlayerStep`
     record player-step {
         sequence: u8,
+        /// enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)
         direction: u8,
         x: u16,
         y: u16,
@@ -1499,13 +1539,13 @@ interface types {
         steps: list<player-step>,
     }
 
-    /// `CharInfoDto`
+    /// `CharInfo`
     record char-info {
         name: string,
         index: u32,
     }
 
-    /// `TownInfoDto`
+    /// `TownInfo`
     record town-info {
         index: u8,
         name: string,

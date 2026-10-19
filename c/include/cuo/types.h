@@ -17,26 +17,26 @@ typedef struct cuo_Anchorable cuo_Anchorable;
 typedef struct cuo_AutoOpenedCorpse cuo_AutoOpenedCorpse;
 typedef struct cuo_BackgroundColor cuo_BackgroundColor;
 typedef struct cuo_BookWindow cuo_BookWindow;
-typedef struct cuo_BorderColorDto cuo_BorderColorDto;
+typedef struct cuo_BorderColor cuo_BorderColor;
 typedef struct cuo_BorderRadius cuo_BorderRadius;
 typedef struct cuo_BuffGumpUI cuo_BuffGumpUI;
 typedef struct cuo_BulletinBoardWindow cuo_BulletinBoardWindow;
 typedef struct cuo_CharCreationScene cuo_CharCreationScene;
-typedef struct cuo_CharInfoDto cuo_CharInfoDto;
-typedef struct cuo_CharacterSelectionDto cuo_CharacterSelectionDto;
+typedef struct cuo_CharInfo cuo_CharInfo;
+typedef struct cuo_CharacterSelection cuo_CharacterSelection;
 typedef struct cuo_CharacterSelectionScene cuo_CharacterSelectionScene;
-typedef struct cuo_ChildOfDto cuo_ChildOfDto;
-typedef struct cuo_ClipboardSetDto cuo_ClipboardSetDto;
+typedef struct cuo_ChildOf cuo_ChildOf;
+typedef struct cuo_ClipboardSet cuo_ClipboardSet;
 typedef struct cuo_Color cuo_Color;
 typedef struct cuo_CombatBookWindow cuo_CombatBookWindow;
 typedef struct cuo_ComputedNode cuo_ComputedNode;
 typedef struct cuo_ContainedInto cuo_ContainedInto;
 typedef struct cuo_ContainerClosedEvent cuo_ContainerClosedEvent;
-typedef struct cuo_ContainerGumpTagDto cuo_ContainerGumpTagDto;
+typedef struct cuo_ContainerGumpTag cuo_ContainerGumpTag;
 typedef struct cuo_ContainerItemUI cuo_ContainerItemUI;
 typedef struct cuo_ContainerOpenedEvent cuo_ContainerOpenedEvent;
-typedef struct cuo_ContainerPositionDto cuo_ContainerPositionDto;
-typedef struct cuo_ContainerPositionsDto cuo_ContainerPositionsDto;
+typedef struct cuo_ContainerPosition cuo_ContainerPosition;
+typedef struct cuo_ContainerPositions cuo_ContainerPositions;
 typedef struct cuo_ContainerSlotEvent cuo_ContainerSlotEvent;
 typedef struct cuo_ContainerSlotPosition cuo_ContainerSlotPosition;
 typedef struct cuo_ContainerWindow cuo_ContainerWindow;
@@ -44,14 +44,14 @@ typedef struct cuo_ContextMenuEntry cuo_ContextMenuEntry;
 typedef struct cuo_ContextMenuEvent cuo_ContextMenuEvent;
 typedef struct cuo_EditableText cuo_EditableText;
 typedef struct cuo_EntityName cuo_EntityName;
-typedef struct cuo_EntityPropertiesDto cuo_EntityPropertiesDto;
-typedef struct cuo_EquipmentSlotsDto cuo_EquipmentSlotsDto;
+typedef struct cuo_EntityProperties cuo_EntityProperties;
+typedef struct cuo_EquipmentSlots cuo_EquipmentSlots;
 typedef struct cuo_Facing cuo_Facing;
 typedef struct cuo_FocusedInput cuo_FocusedInput;
-typedef struct cuo_GameContextDto cuo_GameContextDto;
+typedef struct cuo_GameContext cuo_GameContext;
 typedef struct cuo_GameScene cuo_GameScene;
-typedef struct cuo_GameSettingsDto cuo_GameSettingsDto;
-typedef struct cuo_GameStateDto cuo_GameStateDto;
+typedef struct cuo_GameSettings cuo_GameSettings;
+typedef struct cuo_GameState cuo_GameState;
 typedef struct cuo_GlobalZIndex cuo_GlobalZIndex;
 typedef struct cuo_GrabbedItem cuo_GrabbedItem;
 typedef struct cuo_Graphic cuo_Graphic;
@@ -60,11 +60,11 @@ typedef struct cuo_GridLootWindow cuo_GridLootWindow;
 typedef struct cuo_GridPinnedCell cuo_GridPinnedCell;
 typedef struct cuo_HealthBarWindow cuo_HealthBarWindow;
 typedef struct cuo_Hits cuo_Hits;
-typedef struct cuo_HostHotkeyDto cuo_HostHotkeyDto;
-typedef struct cuo_HostHotkeysDto cuo_HostHotkeysDto;
+typedef struct cuo_HostHotkey cuo_HostHotkey;
+typedef struct cuo_HostHotkeys cuo_HostHotkeys;
 typedef struct cuo_HouseDesignWindow cuo_HouseDesignWindow;
 typedef struct cuo_Hue cuo_Hue;
-typedef struct cuo_InteractionDto cuo_InteractionDto;
+typedef struct cuo_Interaction cuo_Interaction;
 typedef struct cuo_IsContainer cuo_IsContainer;
 typedef struct cuo_IsMulti cuo_IsMulti;
 typedef struct cuo_IsTopBar cuo_IsTopBar;
@@ -72,7 +72,7 @@ typedef struct cuo_ItemDropSent cuo_ItemDropSent;
 typedef struct cuo_ItemMoveResult cuo_ItemMoveResult;
 typedef struct cuo_Items cuo_Items;
 typedef struct cuo_JournalWindow cuo_JournalWindow;
-typedef struct cuo_KeyboardInputDto cuo_KeyboardInputDto;
+typedef struct cuo_KeyboardInput cuo_KeyboardInput;
 typedef struct cuo_LocalTargetResultEvent cuo_LocalTargetResultEvent;
 typedef struct cuo_LoginErrorInfo cuo_LoginErrorInfo;
 typedef struct cuo_LoginErrorScene cuo_LoginErrorScene;
@@ -87,61 +87,61 @@ typedef struct cuo_MenuGumpWindow cuo_MenuGumpWindow;
 typedef struct cuo_MessageBoxWindow cuo_MessageBoxWindow;
 typedef struct cuo_MiniMapWindow cuo_MiniMapWindow;
 typedef struct cuo_MobAnimation cuo_MobAnimation;
-typedef struct cuo_MobStepDto cuo_MobStepDto;
-typedef struct cuo_MobileStepsDto cuo_MobileStepsDto;
+typedef struct cuo_MobStep cuo_MobStep;
+typedef struct cuo_MobileSteps cuo_MobileSteps;
 typedef struct cuo_Mobiles cuo_Mobiles;
 typedef struct cuo_ModChatMessage cuo_ModChatMessage;
 typedef struct cuo_ModClick cuo_ModClick;
 typedef struct cuo_ModHotkeyBinding cuo_ModHotkeyBinding;
-typedef struct cuo_ModHotkeyBindingsDto cuo_ModHotkeyBindingsDto;
+typedef struct cuo_ModHotkeyBindings cuo_ModHotkeyBindings;
 typedef struct cuo_ModHotkeyFired cuo_ModHotkeyFired;
 typedef struct cuo_ModHover cuo_ModHover;
 typedef struct cuo_ModInputConsume cuo_ModInputConsume;
 typedef struct cuo_ModMoveRequest cuo_ModMoveRequest;
-typedef struct cuo_ModOptionDto cuo_ModOptionDto;
-typedef struct cuo_ModOptionValueDto cuo_ModOptionValueDto;
-typedef struct cuo_ModOptionsSchemaDto cuo_ModOptionsSchemaDto;
-typedef struct cuo_ModOptionsValuesDto cuo_ModOptionsValuesDto;
+typedef struct cuo_ModOption cuo_ModOption;
+typedef struct cuo_ModOptionValue cuo_ModOptionValue;
+typedef struct cuo_ModOptionsSchema cuo_ModOptionsSchema;
+typedef struct cuo_ModOptionsValues cuo_ModOptionsValues;
 typedef struct cuo_ModRightClick cuo_ModRightClick;
 typedef struct cuo_ModSupersedes cuo_ModSupersedes;
-typedef struct cuo_MouseInputDto cuo_MouseInputDto;
+typedef struct cuo_MouseInput cuo_MouseInput;
 typedef struct cuo_NetworkSerial cuo_NetworkSerial;
 typedef struct cuo_Node cuo_Node;
 typedef struct cuo_Notoriety cuo_Notoriety;
-typedef struct cuo_OplLineDto cuo_OplLineDto;
+typedef struct cuo_OplLine cuo_OplLine;
 typedef struct cuo_OptionsWindow cuo_OptionsWindow;
 typedef struct cuo_PaperdollWindow cuo_PaperdollWindow;
-typedef struct cuo_PartyDto cuo_PartyDto;
+typedef struct cuo_Party cuo_Party;
 typedef struct cuo_PartyInviteWindow cuo_PartyInviteWindow;
 typedef struct cuo_PartyManifestWindow cuo_PartyManifestWindow;
-typedef struct cuo_PartyMemberDto cuo_PartyMemberDto;
+typedef struct cuo_PartyMember cuo_PartyMember;
 typedef struct cuo_Player cuo_Player;
-typedef struct cuo_PlayerBuffDto cuo_PlayerBuffDto;
-typedef struct cuo_PlayerBuffsDto cuo_PlayerBuffsDto;
+typedef struct cuo_PlayerBuff cuo_PlayerBuff;
+typedef struct cuo_PlayerBuffs cuo_PlayerBuffs;
 typedef struct cuo_PlayerData cuo_PlayerData;
-typedef struct cuo_PlayerSkillDto cuo_PlayerSkillDto;
-typedef struct cuo_PlayerSkillsDto cuo_PlayerSkillsDto;
-typedef struct cuo_PlayerStepDto cuo_PlayerStepDto;
-typedef struct cuo_PlayerStepsDto cuo_PlayerStepsDto;
+typedef struct cuo_PlayerSkill cuo_PlayerSkill;
+typedef struct cuo_PlayerSkills cuo_PlayerSkills;
+typedef struct cuo_PlayerStep cuo_PlayerStep;
+typedef struct cuo_PlayerSteps cuo_PlayerSteps;
 typedef struct cuo_ProfileWindow cuo_ProfileWindow;
 typedef struct cuo_PromptOpenedEvent cuo_PromptOpenedEvent;
 typedef struct cuo_RacialBookWindow cuo_RacialBookWindow;
 typedef struct cuo_ReadOnlyText cuo_ReadOnlyText;
 typedef struct cuo_ScrollPosition cuo_ScrollPosition;
 typedef struct cuo_ServerFlags cuo_ServerFlags;
-typedef struct cuo_ServerGumpButtonDto cuo_ServerGumpButtonDto;
+typedef struct cuo_ServerGump cuo_ServerGump;
+typedef struct cuo_ServerGumpButton cuo_ServerGumpButton;
 typedef struct cuo_ServerGumpClosedEvent cuo_ServerGumpClosedEvent;
-typedef struct cuo_ServerGumpDto cuo_ServerGumpDto;
 typedef struct cuo_ServerGumpOpenedEvent cuo_ServerGumpOpenedEvent;
-typedef struct cuo_ServerGumpSwitchDto cuo_ServerGumpSwitchDto;
-typedef struct cuo_ServerGumpTextEntryDto cuo_ServerGumpTextEntryDto;
+typedef struct cuo_ServerGumpSwitch cuo_ServerGumpSwitch;
+typedef struct cuo_ServerGumpTextEntry cuo_ServerGumpTextEntry;
 typedef struct cuo_ServerInfo cuo_ServerInfo;
 typedef struct cuo_ServerSelectionInfoEvent cuo_ServerSelectionInfoEvent;
 typedef struct cuo_ServerSelectionScene cuo_ServerSelectionScene;
 typedef struct cuo_SkillsWindow cuo_SkillsWindow;
-typedef struct cuo_SpellbookDto cuo_SpellbookDto;
+typedef struct cuo_Spellbook cuo_Spellbook;
 typedef struct cuo_SpellbookWindow cuo_SpellbookWindow;
-typedef struct cuo_SpellbooksDto cuo_SpellbooksDto;
+typedef struct cuo_Spellbooks cuo_Spellbooks;
 typedef struct cuo_SplitMenuWindow cuo_SplitMenuWindow;
 typedef struct cuo_Stamina cuo_Stamina;
 typedef struct cuo_StatLockButton cuo_StatLockButton;
@@ -149,12 +149,12 @@ typedef struct cuo_StatLocks cuo_StatLocks;
 typedef struct cuo_StatusBarWindow cuo_StatusBarWindow;
 typedef struct cuo_TargetingState cuo_TargetingState;
 typedef struct cuo_Text cuo_Text;
-typedef struct cuo_TextCaretDto cuo_TextCaretDto;
-typedef struct cuo_TextClipboardActionDto cuo_TextClipboardActionDto;
+typedef struct cuo_TextCaret cuo_TextCaret;
+typedef struct cuo_TextClipboardAction cuo_TextClipboardAction;
 typedef struct cuo_TextColor cuo_TextColor;
-typedef struct cuo_TextCompletionDto cuo_TextCompletionDto;
-typedef struct cuo_TextCompletionPickDto cuo_TextCompletionPickDto;
-typedef struct cuo_TextCompletionStateDto cuo_TextCompletionStateDto;
+typedef struct cuo_TextCompletion cuo_TextCompletion;
+typedef struct cuo_TextCompletionPick cuo_TextCompletionPick;
+typedef struct cuo_TextCompletionState cuo_TextCompletionState;
 typedef struct cuo_TextFont cuo_TextFont;
 typedef struct cuo_TextHue cuo_TextHue;
 typedef struct cuo_TextInput cuo_TextInput;
@@ -166,11 +166,11 @@ typedef struct cuo_TipNoticeWindow cuo_TipNoticeWindow;
 typedef struct cuo_TopBarButton cuo_TopBarButton;
 typedef struct cuo_TopBarDragHandle cuo_TopBarDragHandle;
 typedef struct cuo_TopBarFull cuo_TopBarFull;
-typedef struct cuo_TownInfoDto cuo_TownInfoDto;
+typedef struct cuo_TownInfo cuo_TownInfo;
 typedef struct cuo_TradeWindow cuo_TradeWindow;
 typedef struct cuo_UOButton cuo_UOButton;
 typedef struct cuo_UiContainsByBounds cuo_UiContainsByBounds;
-typedef struct cuo_UiCustomDto cuo_UiCustomDto;
+typedef struct cuo_UiCustom cuo_UiCustom;
 typedef struct cuo_UiHoverTint cuo_UiHoverTint;
 typedef struct cuo_UiMovable cuo_UiMovable;
 typedef struct cuo_UiMovableNoDrag cuo_UiMovableNoDrag;
@@ -178,12 +178,12 @@ typedef struct cuo_UiName cuo_UiName;
 typedef struct cuo_UiNoBlur cuo_UiNoBlur;
 typedef struct cuo_UiNoRightClickClose cuo_UiNoRightClickClose;
 typedef struct cuo_UiNoWindowDrag cuo_UiNoWindowDrag;
-typedef struct cuo_UiPickDto cuo_UiPickDto;
+typedef struct cuo_UiPick cuo_UiPick;
 typedef struct cuo_UiPopup cuo_UiPopup;
 typedef struct cuo_UiRect cuo_UiRect;
 typedef struct cuo_UiResizable cuo_UiResizable;
 typedef struct cuo_UiScrollbar cuo_UiScrollbar;
-typedef struct cuo_UiSurfaceDto cuo_UiSurfaceDto;
+typedef struct cuo_UiSurface cuo_UiSurface;
 typedef struct cuo_UiTooltip cuo_UiTooltip;
 typedef struct cuo_UiTooltipSerial cuo_UiTooltipSerial;
 typedef struct cuo_Val cuo_Val;
@@ -193,7 +193,7 @@ typedef struct cuo_VendorWindow cuo_VendorWindow;
 typedef struct cuo_WorldMapMarker cuo_WorldMapMarker;
 typedef struct cuo_WorldMapWindow cuo_WorldMapWindow;
 typedef struct cuo_WorldPosition cuo_WorldPosition;
-typedef struct cuo_WorldSingleClickDto cuo_WorldSingleClickDto;
+typedef struct cuo_WorldSingleClick cuo_WorldSingleClick;
 
 /* `TinyEcs.Bevy.UI.AlignItems` */
 typedef uint8_t cuo_AlignItems;
@@ -206,10 +206,22 @@ typedef uint8_t cuo_AnchorKind;
 #define CUO_ANCHOR_KIND_SPELL ((cuo_AnchorKind)0)
 #define CUO_ANCHOR_KIND_HEALTHBAR ((cuo_AnchorKind)1)
 
+/* `ClassicUO.Ecs.Modding.ChatKind` */
+typedef uint8_t cuo_ChatKind;
+#define CUO_CHAT_KIND_OVERHEAD ((cuo_ChatKind)0)
+#define CUO_CHAT_KIND_SYSTEM ((cuo_ChatKind)1)
+
 /* `ClassicUO.Ecs.ContainerSlotAction` */
 typedef uint8_t cuo_ContainerSlotAction;
 #define CUO_CONTAINER_SLOT_ACTION_ADD ((cuo_ContainerSlotAction)0)
 #define CUO_CONTAINER_SLOT_ACTION_REMOVE ((cuo_ContainerSlotAction)1)
+
+/* `ClassicUO.Ecs.ContextMenuFlags` */
+typedef uint16_t cuo_ContextMenuFlags;
+#define CUO_CONTEXT_MENU_FLAGS_NONE ((cuo_ContextMenuFlags)0)
+#define CUO_CONTEXT_MENU_FLAGS_DISABLED ((cuo_ContextMenuFlags)1)
+#define CUO_CONTEXT_MENU_FLAGS_ARROW ((cuo_ContextMenuFlags)2)
+#define CUO_CONTEXT_MENU_FLAGS_HUED ((cuo_ContextMenuFlags)32)
 
 /* `ClassicUO.Game.Data.Direction` */
 typedef uint8_t cuo_Direction;
@@ -247,6 +259,28 @@ typedef uint8_t cuo_Flags;
 typedef uint8_t cuo_FlexDirection;
 #define CUO_FLEX_DIRECTION_ROW ((cuo_FlexDirection)0)
 #define CUO_FLEX_DIRECTION_COLUMN ((cuo_FlexDirection)1)
+
+/* `ClassicUO.Ecs.Modding.GameStateKind` */
+typedef uint8_t cuo_GameStateKind;
+#define CUO_GAME_STATE_KIND_LOADING ((cuo_GameStateKind)0)
+#define CUO_GAME_STATE_KIND_LOGIN_SCREEN ((cuo_GameStateKind)1)
+#define CUO_GAME_STATE_KIND_SERVER_SELECTION ((cuo_GameStateKind)2)
+#define CUO_GAME_STATE_KIND_CHARACTER_SELECTION ((cuo_GameStateKind)3)
+#define CUO_GAME_STATE_KIND_CHARACTER_CREATION ((cuo_GameStateKind)4)
+#define CUO_GAME_STATE_KIND_LOGIN_ERROR ((cuo_GameStateKind)5)
+#define CUO_GAME_STATE_KIND_GAME_SCREEN ((cuo_GameStateKind)6)
+
+/* `ClassicUO.Ecs.Modding.InteractionState` */
+typedef uint8_t cuo_InteractionState;
+#define CUO_INTERACTION_STATE_NONE ((cuo_InteractionState)0)
+#define CUO_INTERACTION_STATE_HOVERED ((cuo_InteractionState)1)
+#define CUO_INTERACTION_STATE_PRESSED ((cuo_InteractionState)2)
+
+/* `ClassicUO.Ecs.Modding.ItemMoveOutcome` */
+typedef uint8_t cuo_ItemMoveOutcome;
+#define CUO_ITEM_MOVE_OUTCOME_ACCEPTED ((cuo_ItemMoveOutcome)0)
+#define CUO_ITEM_MOVE_OUTCOME_DENIED ((cuo_ItemMoveOutcome)1)
+#define CUO_ITEM_MOVE_OUTCOME_END_DRAGGING ((cuo_ItemMoveOutcome)2)
 
 /* `TinyEcs.Bevy.UI.JustifyContent` */
 typedef uint8_t cuo_JustifyContent;
@@ -287,6 +321,37 @@ typedef uint8_t cuo_Layer;
 #define CUO_LAYER_SHOP_SELL ((cuo_Layer)28)
 #define CUO_LAYER_BANK ((cuo_Layer)29)
 
+/* `ClassicUO.Game.Data.Lock` */
+typedef uint8_t cuo_Lock;
+#define CUO_LOCK_UP ((cuo_Lock)0)
+#define CUO_LOCK_DOWN ((cuo_Lock)1)
+#define CUO_LOCK_LOCKED ((cuo_Lock)2)
+
+/* `ClassicUO.Game.Data.MessageType` */
+typedef uint8_t cuo_MessageType;
+#define CUO_MESSAGE_TYPE_REGULAR ((cuo_MessageType)0)
+#define CUO_MESSAGE_TYPE_SYSTEM ((cuo_MessageType)1)
+#define CUO_MESSAGE_TYPE_EMOTE ((cuo_MessageType)2)
+#define CUO_MESSAGE_TYPE_LIMIT3_SPELL ((cuo_MessageType)3)
+#define CUO_MESSAGE_TYPE_LABEL ((cuo_MessageType)6)
+#define CUO_MESSAGE_TYPE_FOCUS ((cuo_MessageType)7)
+#define CUO_MESSAGE_TYPE_WHISPER ((cuo_MessageType)8)
+#define CUO_MESSAGE_TYPE_YELL ((cuo_MessageType)9)
+#define CUO_MESSAGE_TYPE_SPELL ((cuo_MessageType)10)
+#define CUO_MESSAGE_TYPE_GUILD ((cuo_MessageType)13)
+#define CUO_MESSAGE_TYPE_ALLIANCE ((cuo_MessageType)14)
+#define CUO_MESSAGE_TYPE_COMMAND ((cuo_MessageType)15)
+#define CUO_MESSAGE_TYPE_GM_CHAT ((cuo_MessageType)16)
+#define CUO_MESSAGE_TYPE_ENCODED ((cuo_MessageType)192)
+#define CUO_MESSAGE_TYPE_PARTY ((cuo_MessageType)255)
+
+/* `ClassicUO.Ecs.Modding.ModOptionKind` */
+typedef uint8_t cuo_ModOptionKind;
+#define CUO_MOD_OPTION_KIND_TOGGLE ((cuo_ModOptionKind)0)
+#define CUO_MOD_OPTION_KIND_SLIDER ((cuo_ModOptionKind)1)
+#define CUO_MOD_OPTION_KIND_STEPPER ((cuo_ModOptionKind)2)
+#define CUO_MOD_OPTION_KIND_CYCLE ((cuo_ModOptionKind)3)
+
 /* `ClassicUO.Game.Data.NotorietyFlag` */
 typedef uint8_t cuo_NotorietyFlag;
 #define CUO_NOTORIETY_FLAG_UNKNOWN ((cuo_NotorietyFlag)0)
@@ -321,7 +386,7 @@ typedef uint8_t cuo_ScrollbarStyle;
 #define CUO_SCROLLBAR_STYLE_FLAT ((cuo_ScrollbarStyle)1)
 
 /* `ClassicUO.Ecs.SpellBookType` */
-typedef int32_t cuo_SpellBookType;
+typedef uint8_t cuo_SpellBookType;
 #define CUO_SPELL_BOOK_TYPE_MAGERY ((cuo_SpellBookType)0)
 #define CUO_SPELL_BOOK_TYPE_NECROMANCY ((cuo_SpellBookType)1)
 #define CUO_SPELL_BOOK_TYPE_CHIVALRY ((cuo_SpellBookType)2)
@@ -332,11 +397,46 @@ typedef int32_t cuo_SpellBookType;
 #define CUO_SPELL_BOOK_TYPE_MASTERY ((cuo_SpellBookType)8)
 #define CUO_SPELL_BOOK_TYPE_UNKNOWN ((cuo_SpellBookType)255)
 
+/* `ClassicUO.Ecs.Stat` */
+typedef uint8_t cuo_Stat;
+#define CUO_STAT_STR ((cuo_Stat)0)
+#define CUO_STAT_DEX ((cuo_Stat)1)
+#define CUO_STAT_INT ((cuo_Stat)2)
+
+/* `ClassicUO.Ecs.TargetMode` */
+typedef uint8_t cuo_TargetMode;
+#define CUO_TARGET_MODE_OBJECT ((cuo_TargetMode)0)
+#define CUO_TARGET_MODE_POSITION ((cuo_TargetMode)1)
+#define CUO_TARGET_MODE_MULTI ((cuo_TargetMode)2)
+
+/* `ClassicUO.Ecs.TargetType` */
+typedef uint8_t cuo_TargetType;
+#define CUO_TARGET_TYPE_NEUTRAL ((cuo_TargetType)0)
+#define CUO_TARGET_TYPE_HARMFUL ((cuo_TargetType)1)
+#define CUO_TARGET_TYPE_BENEFICIAL ((cuo_TargetType)2)
+#define CUO_TARGET_TYPE_CANCEL ((cuo_TargetType)3)
+
 /* `TinyEcs.Bevy.UI.TextWrapKind` */
 typedef uint8_t cuo_TextWrapKind;
 #define CUO_TEXT_WRAP_KIND_WORDS ((cuo_TextWrapKind)0)
 #define CUO_TEXT_WRAP_KIND_NEWLINES ((cuo_TextWrapKind)1)
 #define CUO_TEXT_WRAP_KIND_NONE ((cuo_TextWrapKind)2)
+
+/* `ClassicUO.Ecs.UOCustomKind` */
+typedef uint8_t cuo_UOCustomKind;
+#define CUO_UO_CUSTOM_KIND_GUMP ((cuo_UOCustomKind)0)
+#define CUO_UO_CUSTOM_KIND_GUMP_NINE_PATCH ((cuo_UOCustomKind)1)
+#define CUO_UO_CUSTOM_KIND_GUMP_TILED ((cuo_UOCustomKind)2)
+#define CUO_UO_CUSTOM_KIND_ART ((cuo_UOCustomKind)3)
+#define CUO_UO_CUSTOM_KIND_LAND ((cuo_UOCustomKind)4)
+#define CUO_UO_CUSTOM_KIND_ANIMATION ((cuo_UOCustomKind)5)
+#define CUO_UO_CUSTOM_KIND_MINI_MAP ((cuo_UOCustomKind)6)
+#define CUO_UO_CUSTOM_KIND_NONE ((cuo_UOCustomKind)7)
+#define CUO_UO_CUSTOM_KIND_WRAPPED_TEXT ((cuo_UOCustomKind)8)
+#define CUO_UO_CUSTOM_KIND_GUMP_SLICE ((cuo_UOCustomKind)9)
+#define CUO_UO_CUSTOM_KIND_HUE_GRID ((cuo_UOCustomKind)10)
+#define CUO_UO_CUSTOM_KIND_DYN_TEXTURE ((cuo_UOCustomKind)11)
+#define CUO_UO_CUSTOM_KIND_WORLD_MAP ((cuo_UOCustomKind)12)
 
 /* `TinyEcs.Bevy.UI.ValType` */
 typedef uint8_t cuo_ValType;
@@ -345,26 +445,26 @@ typedef uint8_t cuo_ValType;
 #define CUO_VAL_TYPE_PERCENT ((cuo_ValType)2)
 #define CUO_VAL_TYPE_GROW ((cuo_ValType)3)
 
-typedef struct cuo_vec_CharInfoDto { cuo_CharInfoDto *items; size_t len; } cuo_vec_CharInfoDto;
-typedef struct cuo_vec_ContainerPositionDto { cuo_ContainerPositionDto *items; size_t len; } cuo_vec_ContainerPositionDto;
+typedef struct cuo_vec_CharInfo { cuo_CharInfo *items; size_t len; } cuo_vec_CharInfo;
+typedef struct cuo_vec_ContainerPosition { cuo_ContainerPosition *items; size_t len; } cuo_vec_ContainerPosition;
 typedef struct cuo_vec_ContextMenuEntry { cuo_ContextMenuEntry *items; size_t len; } cuo_vec_ContextMenuEntry;
-typedef struct cuo_vec_HostHotkeyDto { cuo_HostHotkeyDto *items; size_t len; } cuo_vec_HostHotkeyDto;
-typedef struct cuo_vec_MobStepDto { cuo_MobStepDto *items; size_t len; } cuo_vec_MobStepDto;
+typedef struct cuo_vec_HostHotkey { cuo_HostHotkey *items; size_t len; } cuo_vec_HostHotkey;
+typedef struct cuo_vec_MobStep { cuo_MobStep *items; size_t len; } cuo_vec_MobStep;
 typedef struct cuo_vec_ModHotkeyBinding { cuo_ModHotkeyBinding *items; size_t len; } cuo_vec_ModHotkeyBinding;
-typedef struct cuo_vec_ModOptionDto { cuo_ModOptionDto *items; size_t len; } cuo_vec_ModOptionDto;
-typedef struct cuo_vec_ModOptionValueDto { cuo_ModOptionValueDto *items; size_t len; } cuo_vec_ModOptionValueDto;
-typedef struct cuo_vec_OplLineDto { cuo_OplLineDto *items; size_t len; } cuo_vec_OplLineDto;
-typedef struct cuo_vec_PartyMemberDto { cuo_PartyMemberDto *items; size_t len; } cuo_vec_PartyMemberDto;
-typedef struct cuo_vec_PlayerBuffDto { cuo_PlayerBuffDto *items; size_t len; } cuo_vec_PlayerBuffDto;
-typedef struct cuo_vec_PlayerSkillDto { cuo_PlayerSkillDto *items; size_t len; } cuo_vec_PlayerSkillDto;
-typedef struct cuo_vec_PlayerStepDto { cuo_PlayerStepDto *items; size_t len; } cuo_vec_PlayerStepDto;
-typedef struct cuo_vec_ServerGumpButtonDto { cuo_ServerGumpButtonDto *items; size_t len; } cuo_vec_ServerGumpButtonDto;
-typedef struct cuo_vec_ServerGumpSwitchDto { cuo_ServerGumpSwitchDto *items; size_t len; } cuo_vec_ServerGumpSwitchDto;
-typedef struct cuo_vec_ServerGumpTextEntryDto { cuo_ServerGumpTextEntryDto *items; size_t len; } cuo_vec_ServerGumpTextEntryDto;
+typedef struct cuo_vec_ModOption { cuo_ModOption *items; size_t len; } cuo_vec_ModOption;
+typedef struct cuo_vec_ModOptionValue { cuo_ModOptionValue *items; size_t len; } cuo_vec_ModOptionValue;
+typedef struct cuo_vec_OplLine { cuo_OplLine *items; size_t len; } cuo_vec_OplLine;
+typedef struct cuo_vec_PartyMember { cuo_PartyMember *items; size_t len; } cuo_vec_PartyMember;
+typedef struct cuo_vec_PlayerBuff { cuo_PlayerBuff *items; size_t len; } cuo_vec_PlayerBuff;
+typedef struct cuo_vec_PlayerSkill { cuo_PlayerSkill *items; size_t len; } cuo_vec_PlayerSkill;
+typedef struct cuo_vec_PlayerStep { cuo_PlayerStep *items; size_t len; } cuo_vec_PlayerStep;
+typedef struct cuo_vec_ServerGumpButton { cuo_ServerGumpButton *items; size_t len; } cuo_vec_ServerGumpButton;
+typedef struct cuo_vec_ServerGumpSwitch { cuo_ServerGumpSwitch *items; size_t len; } cuo_vec_ServerGumpSwitch;
+typedef struct cuo_vec_ServerGumpTextEntry { cuo_ServerGumpTextEntry *items; size_t len; } cuo_vec_ServerGumpTextEntry;
 typedef struct cuo_vec_ServerInfo { cuo_ServerInfo *items; size_t len; } cuo_vec_ServerInfo;
-typedef struct cuo_vec_SpellbookDto { cuo_SpellbookDto *items; size_t len; } cuo_vec_SpellbookDto;
+typedef struct cuo_vec_Spellbook { cuo_Spellbook *items; size_t len; } cuo_vec_Spellbook;
 typedef struct cuo_vec_TextSpan { cuo_TextSpan *items; size_t len; } cuo_vec_TextSpan;
-typedef struct cuo_vec_TownInfoDto { cuo_TownInfoDto *items; size_t len; } cuo_vec_TownInfoDto;
+typedef struct cuo_vec_TownInfo { cuo_TownInfo *items; size_t len; } cuo_vec_TownInfo;
 typedef struct cuo_vec_i32 { int32_t *items; size_t len; } cuo_vec_i32;
 typedef struct cuo_vec_str { const char **items; size_t len; } cuo_vec_str;
 typedef struct cuo_vec_u32 { uint32_t *items; size_t len; } cuo_vec_u32;
@@ -416,14 +516,14 @@ struct cuo_BookWindow {
 uint16_t cuo_BookWindow_id(void);
 
 /* `cuo:ui/border-color` */
-struct cuo_BorderColorDto {
+struct cuo_BorderColor {
     float r;
     float g;
     float b;
     float a;
 };
-#define cuo_BorderColorDto_PATH CUO_PATH_UI_BORDER_COLOR
-uint16_t cuo_BorderColorDto_id(void);
+#define cuo_BorderColor_PATH CUO_PATH_UI_BORDER_COLOR
+uint16_t cuo_BorderColor_id(void);
 
 /* `cuo:ui/border-radius` */
 struct cuo_BorderRadius {
@@ -460,18 +560,18 @@ struct cuo_CharCreationScene {
 uint16_t cuo_CharCreationScene_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.CharInfoDto`). */
-struct cuo_CharInfoDto {
+struct cuo_CharInfo {
     const char *name;
     uint32_t index;
 };
 
 /* `cuo:scene/character-list` */
-struct cuo_CharacterSelectionDto {
-    cuo_vec_CharInfoDto characters;
-    cuo_vec_TownInfoDto towns;
+struct cuo_CharacterSelection {
+    cuo_vec_CharInfo characters;
+    cuo_vec_TownInfo towns;
 };
-#define cuo_CharacterSelectionDto_PATH CUO_PATH_SCENE_CHARACTER_LIST
-uint16_t cuo_CharacterSelectionDto_id(void);
+#define cuo_CharacterSelection_PATH CUO_PATH_SCENE_CHARACTER_LIST
+uint16_t cuo_CharacterSelection_id(void);
 
 /* `cuo:scene/character-selection` */
 /* Zero-size tag: crosses as no value (the typed functions take none). */
@@ -482,19 +582,19 @@ struct cuo_CharacterSelectionScene {
 uint16_t cuo_CharacterSelectionScene_id(void);
 
 /* `cuo:ecs/child-of` */
-struct cuo_ChildOfDto {
+struct cuo_ChildOf {
     uint64_t parent;
 };
-#define cuo_ChildOfDto_PATH CUO_PATH_ECS_CHILD_OF
-uint16_t cuo_ChildOfDto_id(void);
+#define cuo_ChildOf_PATH CUO_PATH_ECS_CHILD_OF
+uint16_t cuo_ChildOf_id(void);
 
 /* `cuo:ui/clipboard-set` */
-struct cuo_ClipboardSetDto {
+struct cuo_ClipboardSet {
     int32_t seq;
     const char *text;
 };
-#define cuo_ClipboardSetDto_PATH CUO_PATH_UI_CLIPBOARD_SET
-uint16_t cuo_ClipboardSetDto_id(void);
+#define cuo_ClipboardSet_PATH CUO_PATH_UI_CLIPBOARD_SET
+uint16_t cuo_ClipboardSet_id(void);
 
 /* `cuo:gump/combat-book` */
 struct cuo_CombatBookWindow {
@@ -544,7 +644,7 @@ struct cuo_ContainerClosedEvent {
 uint16_t cuo_ContainerClosedEvent_id(void);
 
 /* `cuo:gump/container-tag` */
-struct cuo_ContainerGumpTagDto {
+struct cuo_ContainerGumpTag {
     uint16_t graphic;
     uint16_t original_graphic;
     float scale;
@@ -553,8 +653,8 @@ struct cuo_ContainerGumpTagDto {
     int32_t bounds_w;
     int32_t bounds_h;
 };
-#define cuo_ContainerGumpTagDto_PATH CUO_PATH_GUMP_CONTAINER_TAG
-uint16_t cuo_ContainerGumpTagDto_id(void);
+#define cuo_ContainerGumpTag_PATH CUO_PATH_GUMP_CONTAINER_TAG
+uint16_t cuo_ContainerGumpTag_id(void);
 
 /* Nested payload type (`System.Numerics.Vector3`). */
 struct cuo_Vector3 {
@@ -582,18 +682,18 @@ struct cuo_ContainerOpenedEvent {
 uint16_t cuo_ContainerOpenedEvent_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.ContainerPositionDto`). */
-struct cuo_ContainerPositionDto {
+struct cuo_ContainerPosition {
     uint32_t serial;
     int32_t x;
     int32_t y;
 };
 
 /* `cuo:gump/container-positions` */
-struct cuo_ContainerPositionsDto {
-    cuo_vec_ContainerPositionDto saved;
+struct cuo_ContainerPositions {
+    cuo_vec_ContainerPosition saved;
 };
-#define cuo_ContainerPositionsDto_PATH CUO_PATH_GUMP_CONTAINER_POSITIONS
-uint16_t cuo_ContainerPositionsDto_id(void);
+#define cuo_ContainerPositions_PATH CUO_PATH_GUMP_CONTAINER_POSITIONS
+uint16_t cuo_ContainerPositions_id(void);
 
 /* `cuo:gump/container-slot` */
 struct cuo_ContainerSlotEvent {
@@ -630,7 +730,7 @@ struct cuo_ContextMenuEntry {
     uint16_t index;
     int32_t cliloc;
     const char *text;
-    uint16_t flags;
+    uint16_t flags; /* enum ContextMenuFlags (0=None, 1=Disabled, 2=Arrow, 32=Hued) */
     uint16_t hue;
 };
 
@@ -657,21 +757,21 @@ struct cuo_EntityName {
 uint16_t cuo_EntityName_id(void);
 
 /* `cuo:ent/properties` */
-struct cuo_EntityPropertiesDto {
+struct cuo_EntityProperties {
     uint32_t serial;
     uint32_t revision;
     const char *name;
-    cuo_vec_OplLineDto lines;
+    cuo_vec_OplLine lines;
 };
-#define cuo_EntityPropertiesDto_PATH CUO_PATH_ENT_PROPERTIES
-uint16_t cuo_EntityPropertiesDto_id(void);
+#define cuo_EntityProperties_PATH CUO_PATH_ENT_PROPERTIES
+uint16_t cuo_EntityProperties_id(void);
 
 /* `cuo:ent/equipment` */
-struct cuo_EquipmentSlotsDto {
+struct cuo_EquipmentSlots {
     cuo_vec_u32 serials;
 };
-#define cuo_EquipmentSlotsDto_PATH CUO_PATH_ENT_EQUIPMENT
-uint16_t cuo_EquipmentSlotsDto_id(void);
+#define cuo_EquipmentSlots_PATH CUO_PATH_ENT_EQUIPMENT
+uint16_t cuo_EquipmentSlots_id(void);
 
 /* `cuo:ent/facing` */
 struct cuo_Facing {
@@ -688,7 +788,7 @@ struct cuo_FocusedInput {
 uint16_t cuo_FocusedInput_id(void);
 
 /* `cuo:game/context` */
-struct cuo_GameContextDto {
+struct cuo_GameContext {
     uint32_t player_serial;
     const char *player_name;
     int32_t map;
@@ -696,8 +796,8 @@ struct cuo_GameContextDto {
     uint32_t client_version;
     bool use_old_status_gump;
 };
-#define cuo_GameContextDto_PATH CUO_PATH_GAME_CONTEXT
-uint16_t cuo_GameContextDto_id(void);
+#define cuo_GameContext_PATH CUO_PATH_GAME_CONTEXT
+uint16_t cuo_GameContext_id(void);
 
 /* `cuo:scene/game` */
 /* Zero-size tag: crosses as no value (the typed functions take none). */
@@ -708,7 +808,7 @@ struct cuo_GameScene {
 uint16_t cuo_GameScene_id(void);
 
 /* `cuo:game/settings` */
-struct cuo_GameSettingsDto {
+struct cuo_GameSettings {
     int32_t grid_loot_type;
     bool skip_empty_corpse;
     bool auto_open_corpses;
@@ -721,15 +821,15 @@ struct cuo_GameSettingsDto {
     bool always_run;
     bool highlight_game_objects;
 };
-#define cuo_GameSettingsDto_PATH CUO_PATH_GAME_SETTINGS
-uint16_t cuo_GameSettingsDto_id(void);
+#define cuo_GameSettings_PATH CUO_PATH_GAME_SETTINGS
+uint16_t cuo_GameSettings_id(void);
 
 /* `cuo:game/state` */
-struct cuo_GameStateDto {
-    uint8_t current;
+struct cuo_GameState {
+    uint8_t current; /* enum GameStateKind (0=Loading, 1=LoginScreen, 2=ServerSelection, 3=CharacterSelection, 4=CharacterCreation, 5=LoginError, 6=GameScreen) */
 };
-#define cuo_GameStateDto_PATH CUO_PATH_GAME_STATE
-uint16_t cuo_GameStateDto_id(void);
+#define cuo_GameState_PATH CUO_PATH_GAME_STATE
+uint16_t cuo_GameState_id(void);
 
 /* `cuo:ui/global-z` */
 struct cuo_GlobalZIndex {
@@ -817,7 +917,7 @@ struct cuo_Hits {
 uint16_t cuo_Hits_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.HostHotkeyDto`). */
-struct cuo_HostHotkeyDto {
+struct cuo_HostHotkey {
     int32_t key;
     bool ctrl;
     bool shift;
@@ -826,11 +926,11 @@ struct cuo_HostHotkeyDto {
 };
 
 /* `cuo:input/host-hotkeys` */
-struct cuo_HostHotkeysDto {
-    cuo_vec_HostHotkeyDto hotkeys;
+struct cuo_HostHotkeys {
+    cuo_vec_HostHotkey hotkeys;
 };
-#define cuo_HostHotkeysDto_PATH CUO_PATH_INPUT_HOST_HOTKEYS
-uint16_t cuo_HostHotkeysDto_id(void);
+#define cuo_HostHotkeys_PATH CUO_PATH_INPUT_HOST_HOTKEYS
+uint16_t cuo_HostHotkeys_id(void);
 
 /* `cuo:gump/house-design` */
 struct cuo_HouseDesignWindow {
@@ -848,11 +948,11 @@ struct cuo_Hue {
 uint16_t cuo_Hue_id(void);
 
 /* `cuo:ui/interaction` */
-struct cuo_InteractionDto {
-    uint8_t state;
+struct cuo_Interaction {
+    uint8_t state; /* enum InteractionState (0=None, 1=Hovered, 2=Pressed) */
 };
-#define cuo_InteractionDto_PATH CUO_PATH_UI_INTERACTION
-uint16_t cuo_InteractionDto_id(void);
+#define cuo_Interaction_PATH CUO_PATH_UI_INTERACTION
+uint16_t cuo_Interaction_id(void);
 
 /* `cuo:ent/is-container` */
 /* Zero-size tag: crosses as no value (the typed functions take none). */
@@ -891,7 +991,7 @@ uint16_t cuo_ItemDropSent_id(void);
 
 /* `cuo:item/move-result` */
 struct cuo_ItemMoveResult {
-    uint8_t result;
+    uint8_t result; /* enum ItemMoveOutcome (0=Accepted, 1=Denied, 2=EndDragging) */
     uint8_t code;
 };
 #define cuo_ItemMoveResult_PATH CUO_PATH_ITEM_MOVE_RESULT
@@ -934,12 +1034,12 @@ struct cuo_JournalWindow {
 uint16_t cuo_JournalWindow_id(void);
 
 /* `cuo:input/keyboard` */
-struct cuo_KeyboardInputDto {
+struct cuo_KeyboardInput {
     cuo_vec_i32 pressed;
     cuo_vec_i32 pressed_once;
 };
-#define cuo_KeyboardInputDto_PATH CUO_PATH_INPUT_KEYBOARD
-uint16_t cuo_KeyboardInputDto_id(void);
+#define cuo_KeyboardInput_PATH CUO_PATH_INPUT_KEYBOARD
+uint16_t cuo_KeyboardInput_id(void);
 
 /* `cuo:target/local-result` */
 struct cuo_LocalTargetResultEvent {
@@ -1067,22 +1167,22 @@ struct cuo_MobAnimation {
 uint16_t cuo_MobAnimation_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.MobStepDto`). */
-struct cuo_MobStepDto {
+struct cuo_MobStep {
     int32_t x;
     int32_t y;
     int8_t z;
-    uint8_t direction;
+    uint8_t direction; /* enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE) */
     bool run;
 };
 
 /* `cuo:ent/mob-steps` */
-struct cuo_MobileStepsDto {
+struct cuo_MobileSteps {
     int32_t index;
     float time;
-    cuo_vec_MobStepDto steps;
+    cuo_vec_MobStep steps;
 };
-#define cuo_MobileStepsDto_PATH CUO_PATH_ENT_MOB_STEPS
-uint16_t cuo_MobileStepsDto_id(void);
+#define cuo_MobileSteps_PATH CUO_PATH_ENT_MOB_STEPS
+uint16_t cuo_MobileSteps_id(void);
 
 /* `cuo:ent/is-mobile` */
 /* Zero-size tag: crosses as no value (the typed functions take none). */
@@ -1100,9 +1200,9 @@ struct cuo_ModChatMessage {
     uint16_t hue;
     uint8_t font;
     bool is_unicode;
-    uint8_t message_type;
+    uint8_t message_type; /* enum MessageType (0=Regular, 1=System, 2=Emote, 3=Limit3Spell, 6=Label, 7=Focus, 8=Whisper, 9=Yell, 10=Spell, 13=Guild, 14=Alliance, 15=Command, 16=GmChat, 192=Encoded, 255=Party) */
     float time;
-    uint8_t kind;
+    uint8_t kind; /* enum ChatKind (0=Overhead, 1=System) */
 };
 #define cuo_ModChatMessage_PATH CUO_PATH_CHAT_MESSAGE
 uint16_t cuo_ModChatMessage_id(void);
@@ -1127,12 +1227,12 @@ struct cuo_ModHotkeyBinding {
 };
 
 /* `cuo:input/mod-hotkeys` */
-struct cuo_ModHotkeyBindingsDto {
+struct cuo_ModHotkeyBindings {
     cuo_vec_ModHotkeyBinding bindings;
     bool consume_keys;
 };
-#define cuo_ModHotkeyBindingsDto_PATH CUO_PATH_INPUT_MOD_HOTKEYS
-uint16_t cuo_ModHotkeyBindingsDto_id(void);
+#define cuo_ModHotkeyBindings_PATH CUO_PATH_INPUT_MOD_HOTKEYS
+uint16_t cuo_ModHotkeyBindings_id(void);
 
 /* `cuo:input/hotkey` */
 struct cuo_ModHotkeyFired {
@@ -1164,7 +1264,7 @@ uint16_t cuo_ModInputConsume_id(void);
 
 /* `cuo:player/move-request` */
 struct cuo_ModMoveRequest {
-    uint8_t direction;
+    uint8_t direction; /* enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE) */
     bool run;
     uint8_t sequence;
 };
@@ -1172,12 +1272,12 @@ struct cuo_ModMoveRequest {
 uint16_t cuo_ModMoveRequest_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.ModOptionDto`). */
-struct cuo_ModOptionDto {
+struct cuo_ModOption {
     const char *key;
     const char *label;
     const char *group;
     const char *keywords;
-    uint8_t kind;
+    uint8_t kind; /* enum ModOptionKind (0=Toggle, 1=Slider, 2=Stepper, 3=Cycle) */
     int32_t min;
     int32_t max;
     int32_t step;
@@ -1186,24 +1286,24 @@ struct cuo_ModOptionDto {
 };
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.ModOptionValueDto`). */
-struct cuo_ModOptionValueDto {
+struct cuo_ModOptionValue {
     const char *key;
     int32_t value;
 };
 
 /* `cuo:options/schema` */
-struct cuo_ModOptionsSchemaDto {
-    cuo_vec_ModOptionDto options;
+struct cuo_ModOptionsSchema {
+    cuo_vec_ModOption options;
 };
-#define cuo_ModOptionsSchemaDto_PATH CUO_PATH_OPTIONS_SCHEMA
-uint16_t cuo_ModOptionsSchemaDto_id(void);
+#define cuo_ModOptionsSchema_PATH CUO_PATH_OPTIONS_SCHEMA
+uint16_t cuo_ModOptionsSchema_id(void);
 
 /* `cuo:options/values` */
-struct cuo_ModOptionsValuesDto {
-    cuo_vec_ModOptionValueDto values;
+struct cuo_ModOptionsValues {
+    cuo_vec_ModOptionValue values;
 };
-#define cuo_ModOptionsValuesDto_PATH CUO_PATH_OPTIONS_VALUES
-uint16_t cuo_ModOptionsValuesDto_id(void);
+#define cuo_ModOptionsValues_PATH CUO_PATH_OPTIONS_VALUES
+uint16_t cuo_ModOptionsValues_id(void);
 
 /* `cuo:ui/right-click` */
 struct cuo_ModRightClick {
@@ -1221,7 +1321,7 @@ struct cuo_ModSupersedes {
 uint16_t cuo_ModSupersedes_id(void);
 
 /* `cuo:input/mouse` */
-struct cuo_MouseInputDto {
+struct cuo_MouseInput {
     float x;
     float y;
     bool left;
@@ -1240,8 +1340,8 @@ struct cuo_MouseInputDto {
     bool x1_pressed;
     bool x2_pressed;
 };
-#define cuo_MouseInputDto_PATH CUO_PATH_INPUT_MOUSE
-uint16_t cuo_MouseInputDto_id(void);
+#define cuo_MouseInput_PATH CUO_PATH_INPUT_MOUSE
+uint16_t cuo_MouseInput_id(void);
 
 /* `cuo:ent/serial` */
 struct cuo_NetworkSerial {
@@ -1299,7 +1399,7 @@ struct cuo_Notoriety {
 uint16_t cuo_Notoriety_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.OplLineDto`). */
-struct cuo_OplLineDto {
+struct cuo_OplLine {
     int32_t cliloc;
     const char *args;
     const char *text;
@@ -1324,14 +1424,14 @@ struct cuo_PaperdollWindow {
 uint16_t cuo_PaperdollWindow_id(void);
 
 /* `cuo:player/party` */
-struct cuo_PartyDto {
+struct cuo_Party {
     uint32_t leader;
-    cuo_vec_PartyMemberDto members;
+    cuo_vec_PartyMember members;
     bool in_party;
     bool can_loot;
 };
-#define cuo_PartyDto_PATH CUO_PATH_PLAYER_PARTY
-uint16_t cuo_PartyDto_id(void);
+#define cuo_Party_PATH CUO_PATH_PLAYER_PARTY
+uint16_t cuo_Party_id(void);
 
 /* `cuo:gump/party-invite` */
 struct cuo_PartyInviteWindow {
@@ -1348,7 +1448,7 @@ struct cuo_PartyManifestWindow {
 uint16_t cuo_PartyManifestWindow_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.PartyMemberDto`). */
-struct cuo_PartyMemberDto {
+struct cuo_PartyMember {
     uint32_t serial;
     const char *name;
 };
@@ -1362,7 +1462,7 @@ struct cuo_Player {
 uint16_t cuo_Player_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.PlayerBuffDto`). */
-struct cuo_PlayerBuffDto {
+struct cuo_PlayerBuff {
     int32_t type;
     uint16_t graphic;
     float expires_at;
@@ -1370,11 +1470,11 @@ struct cuo_PlayerBuffDto {
 };
 
 /* `cuo:player/buffs` */
-struct cuo_PlayerBuffsDto {
-    cuo_vec_PlayerBuffDto buffs;
+struct cuo_PlayerBuffs {
+    cuo_vec_PlayerBuff buffs;
 };
-#define cuo_PlayerBuffsDto_PATH CUO_PATH_PLAYER_BUFFS
-uint16_t cuo_PlayerBuffsDto_id(void);
+#define cuo_PlayerBuffs_PATH CUO_PATH_PLAYER_BUFFS
+uint16_t cuo_PlayerBuffs_id(void);
 
 /* `cuo:player/data` */
 struct cuo_PlayerData {
@@ -1421,41 +1521,41 @@ struct cuo_PlayerData {
 uint16_t cuo_PlayerData_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.PlayerSkillDto`). */
-struct cuo_PlayerSkillDto {
+struct cuo_PlayerSkill {
     int32_t index;
     uint16_t value;
     uint16_t base;
     uint16_t cap;
-    uint8_t lock;
+    uint8_t lock; /* enum Lock (0=Up, 1=Down, 2=Locked) */
 };
 
 /* `cuo:player/skills` */
-struct cuo_PlayerSkillsDto {
+struct cuo_PlayerSkills {
     bool has_data;
-    cuo_vec_PlayerSkillDto skills;
+    cuo_vec_PlayerSkill skills;
 };
-#define cuo_PlayerSkillsDto_PATH CUO_PATH_PLAYER_SKILLS
-uint16_t cuo_PlayerSkillsDto_id(void);
+#define cuo_PlayerSkills_PATH CUO_PATH_PLAYER_SKILLS
+uint16_t cuo_PlayerSkills_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.PlayerStepDto`). */
-struct cuo_PlayerStepDto {
+struct cuo_PlayerStep {
     uint8_t sequence;
-    uint8_t direction;
+    uint8_t direction; /* enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE) */
     uint16_t x;
     uint16_t y;
     int8_t z;
 };
 
 /* `cuo:player/steps` */
-struct cuo_PlayerStepsDto {
+struct cuo_PlayerSteps {
     float last_step;
     int32_t count;
     uint8_t sequence;
     bool resync_sent;
-    cuo_vec_PlayerStepDto steps;
+    cuo_vec_PlayerStep steps;
 };
-#define cuo_PlayerStepsDto_PATH CUO_PATH_PLAYER_STEPS
-uint16_t cuo_PlayerStepsDto_id(void);
+#define cuo_PlayerSteps_PATH CUO_PATH_PLAYER_STEPS
+uint16_t cuo_PlayerSteps_id(void);
 
 /* `cuo:gump/profile` */
 struct cuo_ProfileWindow {
@@ -1522,8 +1622,24 @@ struct cuo_ServerFlags {
 #define cuo_ServerFlags_PATH CUO_PATH_ENT_SERVER_FLAGS
 uint16_t cuo_ServerFlags_id(void);
 
+/* `cuo:gump/server` */
+struct cuo_ServerGump {
+    uint32_t serial;
+    uint32_t gump_id;
+    int32_t page;
+    int32_t x;
+    int32_t y;
+    cuo_vec_str layout;
+    cuo_vec_str texts;
+    cuo_vec_ServerGumpButton buttons;
+    cuo_vec_ServerGumpTextEntry text_entries;
+    cuo_vec_ServerGumpSwitch switches;
+};
+#define cuo_ServerGump_PATH CUO_PATH_GUMP_SERVER
+uint16_t cuo_ServerGump_id(void);
+
 /* Nested payload type (`ClassicUO.Ecs.Modding.ServerGumpButtonDto`). */
-struct cuo_ServerGumpButtonDto {
+struct cuo_ServerGumpButton {
     int32_t id;
     float x;
     float y;
@@ -1539,22 +1655,6 @@ struct cuo_ServerGumpClosedEvent {
 #define cuo_ServerGumpClosedEvent_PATH CUO_PATH_GUMP_SERVER_CLOSED
 uint16_t cuo_ServerGumpClosedEvent_id(void);
 
-/* `cuo:gump/server` */
-struct cuo_ServerGumpDto {
-    uint32_t serial;
-    uint32_t gump_id;
-    int32_t page;
-    int32_t x;
-    int32_t y;
-    cuo_vec_str layout;
-    cuo_vec_str texts;
-    cuo_vec_ServerGumpButtonDto buttons;
-    cuo_vec_ServerGumpTextEntryDto text_entries;
-    cuo_vec_ServerGumpSwitchDto switches;
-};
-#define cuo_ServerGumpDto_PATH CUO_PATH_GUMP_SERVER
-uint16_t cuo_ServerGumpDto_id(void);
-
 /* `cuo:gump/server-opened` */
 struct cuo_ServerGumpOpenedEvent {
     uint32_t serial;
@@ -1564,7 +1664,7 @@ struct cuo_ServerGumpOpenedEvent {
 uint16_t cuo_ServerGumpOpenedEvent_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.ServerGumpSwitchDto`). */
-struct cuo_ServerGumpSwitchDto {
+struct cuo_ServerGumpSwitch {
     uint32_t id;
     bool checked;
     bool is_radio;
@@ -1572,7 +1672,7 @@ struct cuo_ServerGumpSwitchDto {
 };
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.ServerGumpTextEntryDto`). */
-struct cuo_ServerGumpTextEntryDto {
+struct cuo_ServerGumpTextEntry {
     uint16_t id;
     const char *text;
 };
@@ -1626,16 +1726,16 @@ struct cuo_SkillsWindow {
 uint16_t cuo_SkillsWindow_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.SpellbookDto`). */
-struct cuo_SpellbookDto {
+struct cuo_Spellbook {
     uint32_t serial;
-    uint8_t book_type;
+    uint8_t book_type; /* enum SpellBookType (0=Magery, 1=Necromancy, 2=Chivalry, 4=Bushido, 5=Ninjitsu, 6=Spellweaving, 7=Mysticism, 8=Mastery, 255=Unknown) */
     cuo_vec_i32 spells;
 };
 
 /* `cuo:gump/spellbook` */
 struct cuo_SpellbookWindow {
     uint32_t serial;
-    int32_t school; /* enum SpellBookType (0=Magery, 1=Necromancy, 2=Chivalry, 4=Bushido, 5=Ninjitsu, 6=Spellweaving, 7=Mysticism, 8=Mastery, 255=Unknown) */
+    uint8_t school; /* enum SpellBookType (0=Magery, 1=Necromancy, 2=Chivalry, 4=Bushido, 5=Ninjitsu, 6=Spellweaving, 7=Mysticism, 8=Mastery, 255=Unknown) */
     int32_t page;
     int32_t sounded_page;
     int32_t page_count;
@@ -1650,12 +1750,12 @@ struct cuo_SpellbookWindow {
 uint16_t cuo_SpellbookWindow_id(void);
 
 /* `cuo:player/spellbook` */
-struct cuo_SpellbooksDto {
+struct cuo_Spellbooks {
     int32_t revision;
-    cuo_vec_SpellbookDto books;
+    cuo_vec_Spellbook books;
 };
-#define cuo_SpellbooksDto_PATH CUO_PATH_PLAYER_SPELLBOOK
-uint16_t cuo_SpellbooksDto_id(void);
+#define cuo_Spellbooks_PATH CUO_PATH_PLAYER_SPELLBOOK
+uint16_t cuo_Spellbooks_id(void);
 
 /* `cuo:gump/split-menu` */
 struct cuo_SplitMenuWindow {
@@ -1693,16 +1793,16 @@ uint16_t cuo_Stamina_id(void);
 
 /* `cuo:ui/stat-lock-button` */
 struct cuo_StatLockButton {
-    uint8_t stat;
+    uint8_t stat; /* enum Stat (0=Str, 1=Dex, 2=Int) */
 };
 #define cuo_StatLockButton_PATH CUO_PATH_UI_STAT_LOCK_BUTTON
 uint16_t cuo_StatLockButton_id(void);
 
 /* `cuo:player/stat-locks` */
 struct cuo_StatLocks {
-    uint8_t str;
-    uint8_t dex;
-    uint8_t int_;
+    uint8_t str; /* enum Lock (0=Up, 1=Down, 2=Locked) */
+    uint8_t dex; /* enum Lock (0=Up, 1=Down, 2=Locked) */
+    uint8_t int_; /* enum Lock (0=Up, 1=Down, 2=Locked) */
 };
 #define cuo_StatLocks_PATH CUO_PATH_PLAYER_STAT_LOCKS
 uint16_t cuo_StatLocks_id(void);
@@ -1718,10 +1818,10 @@ uint16_t cuo_StatusBarWindow_id(void);
 /* `cuo:target/state` */
 struct cuo_TargetingState {
     bool is_targeting;
-    uint8_t mode;
+    uint8_t mode; /* enum TargetMode (0=Object, 1=Position, 2=Multi) */
     bool local;
     uint32_t cursor_id;
-    uint8_t cursor_type;
+    uint8_t cursor_type; /* enum TargetType (0=Neutral, 1=Harmful, 2=Beneficial, 3=Cancel) */
     bool just_targeted;
     uint16_t multi_id;
     int16_t multi_offset_x;
@@ -1748,7 +1848,7 @@ struct cuo_Text {
 uint16_t cuo_Text_id(void);
 
 /* `cuo:ui/text-caret` */
-struct cuo_TextCaretDto {
+struct cuo_TextCaret {
     uint64_t entity;
     int32_t cursor;
     int32_t select_start;
@@ -1759,17 +1859,17 @@ struct cuo_TextCaretDto {
     float screen_y;
     float row_height;
 };
-#define cuo_TextCaretDto_PATH CUO_PATH_UI_TEXT_CARET
-uint16_t cuo_TextCaretDto_id(void);
+#define cuo_TextCaret_PATH CUO_PATH_UI_TEXT_CARET
+uint16_t cuo_TextCaret_id(void);
 
 /* `cuo:ui/text-clipboard-action` */
-struct cuo_TextClipboardActionDto {
+struct cuo_TextClipboardAction {
     uint64_t entity;
     int32_t action;
     int32_t seq;
 };
-#define cuo_TextClipboardActionDto_PATH CUO_PATH_UI_TEXT_CLIPBOARD_ACTION
-uint16_t cuo_TextClipboardActionDto_id(void);
+#define cuo_TextClipboardAction_PATH CUO_PATH_UI_TEXT_CLIPBOARD_ACTION
+uint16_t cuo_TextClipboardAction_id(void);
 
 /* `cuo:ui/text-color` */
 struct cuo_TextColor {
@@ -1779,29 +1879,29 @@ struct cuo_TextColor {
 uint16_t cuo_TextColor_id(void);
 
 /* `cuo:ui/text-completion` */
-struct cuo_TextCompletionDto {
+struct cuo_TextCompletion {
     uint64_t entity;
     const char *prefix;
     cuo_vec_str items;
 };
-#define cuo_TextCompletionDto_PATH CUO_PATH_UI_TEXT_COMPLETION
-uint16_t cuo_TextCompletionDto_id(void);
+#define cuo_TextCompletion_PATH CUO_PATH_UI_TEXT_COMPLETION
+uint16_t cuo_TextCompletion_id(void);
 
 /* `cuo:ui/text-completion-pick` */
-struct cuo_TextCompletionPickDto {
+struct cuo_TextCompletionPick {
     uint64_t entity;
     int32_t index;
     int32_t seq;
 };
-#define cuo_TextCompletionPickDto_PATH CUO_PATH_UI_TEXT_COMPLETION_PICK
-uint16_t cuo_TextCompletionPickDto_id(void);
+#define cuo_TextCompletionPick_PATH CUO_PATH_UI_TEXT_COMPLETION_PICK
+uint16_t cuo_TextCompletionPick_id(void);
 
 /* `cuo:ui/text-completion-state` */
-struct cuo_TextCompletionStateDto {
+struct cuo_TextCompletionState {
     int32_t selected;
 };
-#define cuo_TextCompletionStateDto_PATH CUO_PATH_UI_TEXT_COMPLETION_STATE
-uint16_t cuo_TextCompletionStateDto_id(void);
+#define cuo_TextCompletionState_PATH CUO_PATH_UI_TEXT_COMPLETION_STATE
+uint16_t cuo_TextCompletionState_id(void);
 
 /* `cuo:ui/text-font` */
 struct cuo_TextFont {
@@ -1894,7 +1994,7 @@ struct cuo_TopBarFull {
 uint16_t cuo_TopBarFull_id(void);
 
 /* Nested payload type (`ClassicUO.Ecs.Modding.TownInfoDto`). */
-struct cuo_TownInfoDto {
+struct cuo_TownInfo {
     uint8_t index;
     const char *name;
     const char *building;
@@ -1935,16 +2035,16 @@ struct cuo_UiContainsByBounds {
 uint16_t cuo_UiContainsByBounds_id(void);
 
 /* `cuo:ui/custom` */
-struct cuo_UiCustomDto {
-    uint8_t kind;
+struct cuo_UiCustom {
+    uint8_t kind; /* enum UOCustomKind (0=Gump, 1=GumpNinePatch, 2=GumpTiled, 3=Art, 4=Land, 5=Animation, 6=MiniMap, 7=None, 8=WrappedText, 9=GumpSlice, 10=HueGrid, 11=DynTexture, 12=WorldMap) */
     uint32_t asset_id;
     float hue_x;
     float hue_y;
     float hue_z;
     bool stacked;
 };
-#define cuo_UiCustomDto_PATH CUO_PATH_UI_CUSTOM
-uint16_t cuo_UiCustomDto_id(void);
+#define cuo_UiCustom_PATH CUO_PATH_UI_CUSTOM
+uint16_t cuo_UiCustom_id(void);
 
 /* `cuo:ui/hover-tint` */
 struct cuo_UiHoverTint {
@@ -2002,15 +2102,15 @@ struct cuo_UiNoWindowDrag {
 uint16_t cuo_UiNoWindowDrag_id(void);
 
 /* `cuo:ui/pick` */
-struct cuo_UiPickDto {
+struct cuo_UiPick {
     uint64_t entity;
     uint64_t root;
     int32_t paint_order;
     float x;
     float y;
 };
-#define cuo_UiPickDto_PATH CUO_PATH_UI_PICK
-uint16_t cuo_UiPickDto_id(void);
+#define cuo_UiPick_PATH CUO_PATH_UI_PICK
+uint16_t cuo_UiPick_id(void);
 
 /* `cuo:ui/popup` */
 /* Zero-size tag: crosses as no value (the typed functions take none). */
@@ -2042,12 +2142,12 @@ struct cuo_UiScrollbar {
 uint16_t cuo_UiScrollbar_id(void);
 
 /* `cuo:ui/surface` */
-struct cuo_UiSurfaceDto {
+struct cuo_UiSurface {
     float w;
     float h;
 };
-#define cuo_UiSurfaceDto_PATH CUO_PATH_UI_SURFACE
-uint16_t cuo_UiSurfaceDto_id(void);
+#define cuo_UiSurface_PATH CUO_PATH_UI_SURFACE
+uint16_t cuo_UiSurface_id(void);
 
 /* `cuo:ui/tooltip` */
 struct cuo_UiTooltip {
@@ -2102,12 +2202,12 @@ struct cuo_WorldPosition {
 uint16_t cuo_WorldPosition_id(void);
 
 /* `cuo:input/world-single-click` */
-struct cuo_WorldSingleClickDto {
+struct cuo_WorldSingleClick {
     uint32_t serial;
     uint64_t at_ms;
 };
-#define cuo_WorldSingleClickDto_PATH CUO_PATH_INPUT_WORLD_SINGLE_CLICK
-uint16_t cuo_WorldSingleClickDto_id(void);
+#define cuo_WorldSingleClick_PATH CUO_PATH_INPUT_WORLD_SINGLE_CLICK
+uint16_t cuo_WorldSingleClick_id(void);
 
 /* Keyboard keys, mirrored from TinyEcs.Bevy.Input.KeyCode (Win32 virtual-key codes). */
 #define CUO_KEY_NONE 0u
@@ -2270,6 +2370,16 @@ uint16_t cuo_WorldSingleClickDto_id(void);
 #define CUO_KEY_ZOOM 251u
 #define CUO_KEY_PA1 253u
 #define CUO_KEY_OEM_CLEAR 254u
+
+/* Mouse buttons, mirrored from the host's MouseButtonType, plus the wheel pseudo-buttons. */
+#define CUO_MOUSE_NONE 0
+#define CUO_MOUSE_LEFT 1
+#define CUO_MOUSE_MIDDLE 2
+#define CUO_MOUSE_RIGHT 3
+#define CUO_MOUSE_X_BUTTON1 4
+#define CUO_MOUSE_X_BUTTON2 5
+#define CUO_MOUSE_WHEEL_UP 8
+#define CUO_MOUSE_WHEEL_DOWN 9
 
 #ifdef __cplusplus
 }

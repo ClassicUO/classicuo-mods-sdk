@@ -101,10 +101,10 @@ void cuo_BorderRadius_set(cuo_query q, cuo_entity e, size_t term, const cuo_Bord
 const cuo_BorderRadius *cuo_BorderRadius_obs_value(const cuo_obs *ev);
 
 /* `cuo:ecs/child-of` */
-cuo_comp cuo_ChildOfDto_comp(const cuo_ChildOfDto *v);
-const cuo_ChildOfDto *cuo_ChildOfDto_column(cuo_query q, size_t term);
-void cuo_ChildOfDto_set(cuo_query q, cuo_entity e, size_t term, const cuo_ChildOfDto *v);
-const cuo_ChildOfDto *cuo_ChildOfDto_obs_value(const cuo_obs *ev);
+cuo_comp cuo_ChildOf_comp(const cuo_ChildOf *v);
+const cuo_ChildOf *cuo_ChildOf_column(cuo_query q, size_t term);
+void cuo_ChildOf_set(cuo_query q, cuo_entity e, size_t term, const cuo_ChildOf *v);
+const cuo_ChildOf *cuo_ChildOf_obs_value(const cuo_obs *ev);
 
 /* `cuo:ui/movable` */
 cuo_comp cuo_UiMovable_comp(void);
@@ -119,18 +119,18 @@ void cuo_GlobalZIndex_set(cuo_query q, cuo_entity e, size_t term, const cuo_Glob
 const cuo_GlobalZIndex *cuo_GlobalZIndex_obs_value(const cuo_obs *ev);
 
 /* `cuo:ui/interaction` */
-cuo_comp cuo_InteractionDto_comp(const cuo_InteractionDto *v);
-const cuo_InteractionDto *cuo_InteractionDto_column(cuo_query q, size_t term);
-void cuo_InteractionDto_set(cuo_query q, cuo_entity e, size_t term, const cuo_InteractionDto *v);
-const cuo_InteractionDto *cuo_InteractionDto_obs_value(const cuo_obs *ev);
+cuo_comp cuo_Interaction_comp(const cuo_Interaction *v);
+const cuo_Interaction *cuo_Interaction_column(cuo_query q, size_t term);
+void cuo_Interaction_set(cuo_query q, cuo_entity e, size_t term, const cuo_Interaction *v);
+const cuo_Interaction *cuo_Interaction_obs_value(const cuo_obs *ev);
 
 /* `cuo:input/mouse` */
-bool cuo_MouseInputDto_res(const cuo_input *in, cuo_param p, cuo_MouseInputDto *out);
-bool cuo_MouseInputDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_MouseInputDto *out);
+bool cuo_MouseInput_res(const cuo_input *in, cuo_param p, cuo_MouseInput *out);
+bool cuo_MouseInput_obs_res(const cuo_obs *ev, cuo_param p, cuo_MouseInput *out);
 
 /* `cuo:input/keyboard` */
-bool cuo_KeyboardInputDto_res(const cuo_input *in, cuo_param p, cuo_KeyboardInputDto *out);
-bool cuo_KeyboardInputDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_KeyboardInputDto *out);
+bool cuo_KeyboardInput_res(const cuo_input *in, cuo_param p, cuo_KeyboardInput *out);
+bool cuo_KeyboardInput_obs_res(const cuo_obs *ev, cuo_param p, cuo_KeyboardInput *out);
 
 /* `cuo:chat/message` */
 void cuo_ModChatMessage_send(cuo_cmds *c, const cuo_ModChatMessage *v);
@@ -153,8 +153,8 @@ bool cuo_Time_obs_res(const cuo_obs *ev, cuo_param p, cuo_Time *out);
 /* `cuo:ent/contained-into` */
 
 /* `cuo:ent/equipment` */
-const cuo_EquipmentSlotsDto *cuo_EquipmentSlotsDto_column(cuo_query q, size_t term);
-const cuo_EquipmentSlotsDto *cuo_EquipmentSlotsDto_obs_value(const cuo_obs *ev);
+const cuo_EquipmentSlots *cuo_EquipmentSlots_column(cuo_query q, size_t term);
+const cuo_EquipmentSlots *cuo_EquipmentSlots_obs_value(const cuo_obs *ev);
 
 /* `cuo:ent/facing` */
 cuo_comp cuo_Facing_comp(const cuo_Facing *v);
@@ -171,8 +171,8 @@ const cuo_Facing *cuo_Facing_obs_value(const cuo_obs *ev);
 /* `cuo:ent/manual-opened-corpse` */
 
 /* `cuo:ent/properties` */
-const cuo_EntityPropertiesDto *cuo_EntityPropertiesDto_column(cuo_query q, size_t term);
-const cuo_EntityPropertiesDto *cuo_EntityPropertiesDto_obs_value(const cuo_obs *ev);
+const cuo_EntityProperties *cuo_EntityProperties_column(cuo_query q, size_t term);
+const cuo_EntityProperties *cuo_EntityProperties_obs_value(const cuo_obs *ev);
 
 /* `cuo:ent/server-flags` */
 const cuo_ServerFlags *cuo_ServerFlags_column(cuo_query q, size_t term);
@@ -185,22 +185,22 @@ void cuo_ContainerSlotPosition_set(cuo_query q, cuo_entity e, size_t term, const
 const cuo_ContainerSlotPosition *cuo_ContainerSlotPosition_obs_value(const cuo_obs *ev);
 
 /* `cuo:game/context` */
-bool cuo_GameContextDto_res(const cuo_input *in, cuo_param p, cuo_GameContextDto *out);
-bool cuo_GameContextDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameContextDto *out);
-void cuo_GameContextDto_put(const cuo_input *in, cuo_param p, const cuo_GameContextDto *v);
-void cuo_GameContextDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_GameContextDto *v);
-void cuo_GameContextDto_set_resource(cuo_cmds *c, const cuo_GameContextDto *v);
+bool cuo_GameContext_res(const cuo_input *in, cuo_param p, cuo_GameContext *out);
+bool cuo_GameContext_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameContext *out);
+void cuo_GameContext_put(const cuo_input *in, cuo_param p, const cuo_GameContext *v);
+void cuo_GameContext_obs_put(const cuo_obs *ev, cuo_param p, const cuo_GameContext *v);
+void cuo_GameContext_set_resource(cuo_cmds *c, const cuo_GameContext *v);
 
 /* `cuo:game/settings` */
-bool cuo_GameSettingsDto_res(const cuo_input *in, cuo_param p, cuo_GameSettingsDto *out);
-bool cuo_GameSettingsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameSettingsDto *out);
+bool cuo_GameSettings_res(const cuo_input *in, cuo_param p, cuo_GameSettings *out);
+bool cuo_GameSettings_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameSettings *out);
 
 /* `cuo:game/state` */
-bool cuo_GameStateDto_res(const cuo_input *in, cuo_param p, cuo_GameStateDto *out);
-bool cuo_GameStateDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameStateDto *out);
-void cuo_GameStateDto_put(const cuo_input *in, cuo_param p, const cuo_GameStateDto *v);
-void cuo_GameStateDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_GameStateDto *v);
-void cuo_GameStateDto_set_resource(cuo_cmds *c, const cuo_GameStateDto *v);
+bool cuo_GameState_res(const cuo_input *in, cuo_param p, cuo_GameState *out);
+bool cuo_GameState_obs_res(const cuo_obs *ev, cuo_param p, cuo_GameState *out);
+void cuo_GameState_put(const cuo_input *in, cuo_param p, const cuo_GameState *v);
+void cuo_GameState_obs_put(const cuo_obs *ev, cuo_param p, const cuo_GameState *v);
+void cuo_GameState_set_resource(cuo_cmds *c, const cuo_GameState *v);
 
 /* `cuo:gump/container` */
 cuo_comp cuo_ContainerWindow_comp(const cuo_ContainerWindow *v);
@@ -221,11 +221,11 @@ const cuo_ContainerOpenedEvent *cuo_ContainerOpenedEvent_obs_events(const cuo_ob
 const cuo_ContainerOpenedEvent *cuo_ContainerOpenedEvent_obs_value(const cuo_obs *ev);
 
 /* `cuo:gump/container-positions` */
-bool cuo_ContainerPositionsDto_res(const cuo_input *in, cuo_param p, cuo_ContainerPositionsDto *out);
-bool cuo_ContainerPositionsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ContainerPositionsDto *out);
-void cuo_ContainerPositionsDto_put(const cuo_input *in, cuo_param p, const cuo_ContainerPositionsDto *v);
-void cuo_ContainerPositionsDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ContainerPositionsDto *v);
-void cuo_ContainerPositionsDto_set_resource(cuo_cmds *c, const cuo_ContainerPositionsDto *v);
+bool cuo_ContainerPositions_res(const cuo_input *in, cuo_param p, cuo_ContainerPositions *out);
+bool cuo_ContainerPositions_obs_res(const cuo_obs *ev, cuo_param p, cuo_ContainerPositions *out);
+void cuo_ContainerPositions_put(const cuo_input *in, cuo_param p, const cuo_ContainerPositions *v);
+void cuo_ContainerPositions_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ContainerPositions *v);
+void cuo_ContainerPositions_set_resource(cuo_cmds *c, const cuo_ContainerPositions *v);
 
 /* `cuo:gump/container-slot` */
 void cuo_ContainerSlotEvent_send(cuo_cmds *c, const cuo_ContainerSlotEvent *v);
@@ -234,10 +234,10 @@ const cuo_ContainerSlotEvent *cuo_ContainerSlotEvent_obs_events(const cuo_obs *e
 const cuo_ContainerSlotEvent *cuo_ContainerSlotEvent_obs_value(const cuo_obs *ev);
 
 /* `cuo:gump/container-tag` */
-cuo_comp cuo_ContainerGumpTagDto_comp(const cuo_ContainerGumpTagDto *v);
-const cuo_ContainerGumpTagDto *cuo_ContainerGumpTagDto_column(cuo_query q, size_t term);
-void cuo_ContainerGumpTagDto_set(cuo_query q, cuo_entity e, size_t term, const cuo_ContainerGumpTagDto *v);
-const cuo_ContainerGumpTagDto *cuo_ContainerGumpTagDto_obs_value(const cuo_obs *ev);
+cuo_comp cuo_ContainerGumpTag_comp(const cuo_ContainerGumpTag *v);
+const cuo_ContainerGumpTag *cuo_ContainerGumpTag_column(cuo_query q, size_t term);
+void cuo_ContainerGumpTag_set(cuo_query q, cuo_entity e, size_t term, const cuo_ContainerGumpTag *v);
+const cuo_ContainerGumpTag *cuo_ContainerGumpTag_obs_value(const cuo_obs *ev);
 
 /* `cuo:gump/context-menu` */
 void cuo_ContextMenuEvent_send(cuo_cmds *c, const cuo_ContextMenuEvent *v);
@@ -264,8 +264,8 @@ void cuo_HealthBarWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_H
 const cuo_HealthBarWindow *cuo_HealthBarWindow_obs_value(const cuo_obs *ev);
 
 /* `cuo:gump/server` */
-const cuo_ServerGumpDto *cuo_ServerGumpDto_column(cuo_query q, size_t term);
-const cuo_ServerGumpDto *cuo_ServerGumpDto_obs_value(const cuo_obs *ev);
+const cuo_ServerGump *cuo_ServerGump_column(cuo_query q, size_t term);
+const cuo_ServerGump *cuo_ServerGump_obs_value(const cuo_obs *ev);
 
 /* `cuo:gump/vendor` */
 
@@ -276,8 +276,8 @@ const cuo_ModInputConsume *cuo_ModInputConsume_obs_events(const cuo_obs *ev, cuo
 const cuo_ModInputConsume *cuo_ModInputConsume_obs_value(const cuo_obs *ev);
 
 /* `cuo:input/host-hotkeys` */
-bool cuo_HostHotkeysDto_res(const cuo_input *in, cuo_param p, cuo_HostHotkeysDto *out);
-bool cuo_HostHotkeysDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_HostHotkeysDto *out);
+bool cuo_HostHotkeys_res(const cuo_input *in, cuo_param p, cuo_HostHotkeys *out);
+bool cuo_HostHotkeys_obs_res(const cuo_obs *ev, cuo_param p, cuo_HostHotkeys *out);
 
 /* `cuo:input/hotkey` */
 void cuo_ModHotkeyFired_send(cuo_cmds *c, const cuo_ModHotkeyFired *v);
@@ -286,15 +286,15 @@ const cuo_ModHotkeyFired *cuo_ModHotkeyFired_obs_events(const cuo_obs *ev, cuo_p
 const cuo_ModHotkeyFired *cuo_ModHotkeyFired_obs_value(const cuo_obs *ev);
 
 /* `cuo:input/mod-hotkeys` */
-bool cuo_ModHotkeyBindingsDto_res(const cuo_input *in, cuo_param p, cuo_ModHotkeyBindingsDto *out);
-bool cuo_ModHotkeyBindingsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModHotkeyBindingsDto *out);
-void cuo_ModHotkeyBindingsDto_put(const cuo_input *in, cuo_param p, const cuo_ModHotkeyBindingsDto *v);
-void cuo_ModHotkeyBindingsDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ModHotkeyBindingsDto *v);
-void cuo_ModHotkeyBindingsDto_set_resource(cuo_cmds *c, const cuo_ModHotkeyBindingsDto *v);
+bool cuo_ModHotkeyBindings_res(const cuo_input *in, cuo_param p, cuo_ModHotkeyBindings *out);
+bool cuo_ModHotkeyBindings_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModHotkeyBindings *out);
+void cuo_ModHotkeyBindings_put(const cuo_input *in, cuo_param p, const cuo_ModHotkeyBindings *v);
+void cuo_ModHotkeyBindings_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ModHotkeyBindings *v);
+void cuo_ModHotkeyBindings_set_resource(cuo_cmds *c, const cuo_ModHotkeyBindings *v);
 
 /* `cuo:input/world-single-click` */
-bool cuo_WorldSingleClickDto_res(const cuo_input *in, cuo_param p, cuo_WorldSingleClickDto *out);
-bool cuo_WorldSingleClickDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_WorldSingleClickDto *out);
+bool cuo_WorldSingleClick_res(const cuo_input *in, cuo_param p, cuo_WorldSingleClick *out);
+bool cuo_WorldSingleClick_obs_res(const cuo_obs *ev, cuo_param p, cuo_WorldSingleClick *out);
 
 /* `cuo:item/drop-sent` */
 void cuo_ItemDropSent_send(cuo_cmds *c, const cuo_ItemDropSent *v);
@@ -309,19 +309,19 @@ const cuo_ItemMoveResult *cuo_ItemMoveResult_obs_events(const cuo_obs *ev, cuo_p
 const cuo_ItemMoveResult *cuo_ItemMoveResult_obs_value(const cuo_obs *ev);
 
 /* `cuo:options/schema` */
-bool cuo_ModOptionsSchemaDto_res(const cuo_input *in, cuo_param p, cuo_ModOptionsSchemaDto *out);
-bool cuo_ModOptionsSchemaDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsSchemaDto *out);
-void cuo_ModOptionsSchemaDto_put(const cuo_input *in, cuo_param p, const cuo_ModOptionsSchemaDto *v);
-void cuo_ModOptionsSchemaDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ModOptionsSchemaDto *v);
-void cuo_ModOptionsSchemaDto_set_resource(cuo_cmds *c, const cuo_ModOptionsSchemaDto *v);
+bool cuo_ModOptionsSchema_res(const cuo_input *in, cuo_param p, cuo_ModOptionsSchema *out);
+bool cuo_ModOptionsSchema_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsSchema *out);
+void cuo_ModOptionsSchema_put(const cuo_input *in, cuo_param p, const cuo_ModOptionsSchema *v);
+void cuo_ModOptionsSchema_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ModOptionsSchema *v);
+void cuo_ModOptionsSchema_set_resource(cuo_cmds *c, const cuo_ModOptionsSchema *v);
 
 /* `cuo:options/values` */
-bool cuo_ModOptionsValuesDto_res(const cuo_input *in, cuo_param p, cuo_ModOptionsValuesDto *out);
-bool cuo_ModOptionsValuesDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsValuesDto *out);
+bool cuo_ModOptionsValues_res(const cuo_input *in, cuo_param p, cuo_ModOptionsValues *out);
+bool cuo_ModOptionsValues_obs_res(const cuo_obs *ev, cuo_param p, cuo_ModOptionsValues *out);
 
 /* `cuo:player/buffs` */
-bool cuo_PlayerBuffsDto_res(const cuo_input *in, cuo_param p, cuo_PlayerBuffsDto *out);
-bool cuo_PlayerBuffsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerBuffsDto *out);
+bool cuo_PlayerBuffs_res(const cuo_input *in, cuo_param p, cuo_PlayerBuffs *out);
+bool cuo_PlayerBuffs_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerBuffs *out);
 
 /* `cuo:player/grabbed-item` */
 bool cuo_GrabbedItem_res(const cuo_input *in, cuo_param p, cuo_GrabbedItem *out);
@@ -331,8 +331,8 @@ bool cuo_GrabbedItem_obs_res(const cuo_obs *ev, cuo_param p, cuo_GrabbedItem *ou
 cuo_comp cuo_Player_comp(void);
 
 /* `cuo:player/skills` */
-bool cuo_PlayerSkillsDto_res(const cuo_input *in, cuo_param p, cuo_PlayerSkillsDto *out);
-bool cuo_PlayerSkillsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerSkillsDto *out);
+bool cuo_PlayerSkills_res(const cuo_input *in, cuo_param p, cuo_PlayerSkills *out);
+bool cuo_PlayerSkills_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerSkills *out);
 
 /* `cuo:player/stat-locks` */
 const cuo_StatLocks *cuo_StatLocks_column(cuo_query q, size_t term);
@@ -355,10 +355,10 @@ void cuo_Anchorable_set(cuo_query q, cuo_entity e, size_t term, const cuo_Anchor
 const cuo_Anchorable *cuo_Anchorable_obs_value(const cuo_obs *ev);
 
 /* `cuo:ui/border-color` */
-cuo_comp cuo_BorderColorDto_comp(const cuo_BorderColorDto *v);
-const cuo_BorderColorDto *cuo_BorderColorDto_column(cuo_query q, size_t term);
-void cuo_BorderColorDto_set(cuo_query q, cuo_entity e, size_t term, const cuo_BorderColorDto *v);
-const cuo_BorderColorDto *cuo_BorderColorDto_obs_value(const cuo_obs *ev);
+cuo_comp cuo_BorderColor_comp(const cuo_BorderColor *v);
+const cuo_BorderColor *cuo_BorderColor_column(cuo_query q, size_t term);
+void cuo_BorderColor_set(cuo_query q, cuo_entity e, size_t term, const cuo_BorderColor *v);
+const cuo_BorderColor *cuo_BorderColor_obs_value(const cuo_obs *ev);
 
 /* `cuo:ui/button` */
 cuo_comp cuo_UOButton_comp(const cuo_UOButton *v);
@@ -385,10 +385,10 @@ const cuo_ContainerItemUI *cuo_ContainerItemUI_obs_value(const cuo_obs *ev);
 cuo_comp cuo_UiContainsByBounds_comp(void);
 
 /* `cuo:ui/custom` */
-cuo_comp cuo_UiCustomDto_comp(const cuo_UiCustomDto *v);
-const cuo_UiCustomDto *cuo_UiCustomDto_column(cuo_query q, size_t term);
-void cuo_UiCustomDto_set(cuo_query q, cuo_entity e, size_t term, const cuo_UiCustomDto *v);
-const cuo_UiCustomDto *cuo_UiCustomDto_obs_value(const cuo_obs *ev);
+cuo_comp cuo_UiCustom_comp(const cuo_UiCustom *v);
+const cuo_UiCustom *cuo_UiCustom_column(cuo_query q, size_t term);
+void cuo_UiCustom_set(cuo_query q, cuo_entity e, size_t term, const cuo_UiCustom *v);
+const cuo_UiCustom *cuo_UiCustom_obs_value(const cuo_obs *ev);
 
 /* `cuo:ui/editable-text` */
 cuo_comp cuo_EditableText_comp(const cuo_EditableText *v);
@@ -430,8 +430,8 @@ cuo_comp cuo_UiNoRightClickClose_comp(void);
 cuo_comp cuo_OptionsWindow_comp(void);
 
 /* `cuo:ui/pick` */
-bool cuo_UiPickDto_res(const cuo_input *in, cuo_param p, cuo_UiPickDto *out);
-bool cuo_UiPickDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_UiPickDto *out);
+bool cuo_UiPick_res(const cuo_input *in, cuo_param p, cuo_UiPick *out);
+bool cuo_UiPick_obs_res(const cuo_obs *ev, cuo_param p, cuo_UiPick *out);
 
 /* `cuo:ui/popup` */
 cuo_comp cuo_UiPopup_comp(void);
@@ -479,16 +479,16 @@ void cuo_ModSupersedes_set(cuo_query q, cuo_entity e, size_t term, const cuo_Mod
 const cuo_ModSupersedes *cuo_ModSupersedes_obs_value(const cuo_obs *ev);
 
 /* `cuo:ui/surface` */
-bool cuo_UiSurfaceDto_res(const cuo_input *in, cuo_param p, cuo_UiSurfaceDto *out);
-bool cuo_UiSurfaceDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_UiSurfaceDto *out);
+bool cuo_UiSurface_res(const cuo_input *in, cuo_param p, cuo_UiSurface *out);
+bool cuo_UiSurface_obs_res(const cuo_obs *ev, cuo_param p, cuo_UiSurface *out);
 
 /* `cuo:ui/text-caret` */
-bool cuo_TextCaretDto_res(const cuo_input *in, cuo_param p, cuo_TextCaretDto *out);
-bool cuo_TextCaretDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCaretDto *out);
+bool cuo_TextCaret_res(const cuo_input *in, cuo_param p, cuo_TextCaret *out);
+bool cuo_TextCaret_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCaret *out);
 
 /* `cuo:ui/text-completion-state` */
-bool cuo_TextCompletionStateDto_res(const cuo_input *in, cuo_param p, cuo_TextCompletionStateDto *out);
-bool cuo_TextCompletionStateDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionStateDto *out);
+bool cuo_TextCompletionState_res(const cuo_input *in, cuo_param p, cuo_TextCompletionState *out);
+bool cuo_TextCompletionState_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionState *out);
 
 /* `cuo:ui/text-hue` */
 cuo_comp cuo_TextHue_comp(const cuo_TextHue *v);
@@ -536,8 +536,8 @@ const cuo_MobAnimation *cuo_MobAnimation_obs_value(const cuo_obs *ev);
 /* `cuo:ent/is-multi` */
 
 /* `cuo:ent/mob-steps` */
-const cuo_MobileStepsDto *cuo_MobileStepsDto_column(cuo_query q, size_t term);
-const cuo_MobileStepsDto *cuo_MobileStepsDto_obs_value(const cuo_obs *ev);
+const cuo_MobileSteps *cuo_MobileSteps_column(cuo_query q, size_t term);
+const cuo_MobileSteps *cuo_MobileSteps_obs_value(const cuo_obs *ev);
 
 /* `cuo:gump/book` */
 
@@ -666,25 +666,25 @@ const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_events(const cuo_obs *ev, cuo_p
 const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_value(const cuo_obs *ev);
 
 /* `cuo:player/party` */
-bool cuo_PartyDto_res(const cuo_input *in, cuo_param p, cuo_PartyDto *out);
-bool cuo_PartyDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PartyDto *out);
+bool cuo_Party_res(const cuo_input *in, cuo_param p, cuo_Party *out);
+bool cuo_Party_obs_res(const cuo_obs *ev, cuo_param p, cuo_Party *out);
 
 /* `cuo:player/spellbook` */
-bool cuo_SpellbooksDto_res(const cuo_input *in, cuo_param p, cuo_SpellbooksDto *out);
-bool cuo_SpellbooksDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_SpellbooksDto *out);
+bool cuo_Spellbooks_res(const cuo_input *in, cuo_param p, cuo_Spellbooks *out);
+bool cuo_Spellbooks_obs_res(const cuo_obs *ev, cuo_param p, cuo_Spellbooks *out);
 
 /* `cuo:player/steps` */
-bool cuo_PlayerStepsDto_res(const cuo_input *in, cuo_param p, cuo_PlayerStepsDto *out);
-bool cuo_PlayerStepsDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerStepsDto *out);
+bool cuo_PlayerSteps_res(const cuo_input *in, cuo_param p, cuo_PlayerSteps *out);
+bool cuo_PlayerSteps_obs_res(const cuo_obs *ev, cuo_param p, cuo_PlayerSteps *out);
 
 /* `cuo:scene/character-creation` */
 cuo_comp cuo_CharCreationScene_comp(void);
 
 /* `cuo:scene/character-list` */
-void cuo_CharacterSelectionDto_send(cuo_cmds *c, const cuo_CharacterSelectionDto *v);
-const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_events(const cuo_input *in, cuo_param p, size_t *count);
-const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_obs_events(const cuo_obs *ev, cuo_param p, size_t *count);
-const cuo_CharacterSelectionDto *cuo_CharacterSelectionDto_obs_value(const cuo_obs *ev);
+void cuo_CharacterSelection_send(cuo_cmds *c, const cuo_CharacterSelection *v);
+const cuo_CharacterSelection *cuo_CharacterSelection_events(const cuo_input *in, cuo_param p, size_t *count);
+const cuo_CharacterSelection *cuo_CharacterSelection_obs_events(const cuo_obs *ev, cuo_param p, size_t *count);
+const cuo_CharacterSelection *cuo_CharacterSelection_obs_value(const cuo_obs *ev);
 
 /* `cuo:scene/character-selection` */
 cuo_comp cuo_CharacterSelectionScene_comp(void);
@@ -714,11 +714,11 @@ const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_value(const
 cuo_comp cuo_ServerSelectionScene_comp(void);
 
 /* `cuo:ui/clipboard-set` */
-bool cuo_ClipboardSetDto_res(const cuo_input *in, cuo_param p, cuo_ClipboardSetDto *out);
-bool cuo_ClipboardSetDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_ClipboardSetDto *out);
-void cuo_ClipboardSetDto_put(const cuo_input *in, cuo_param p, const cuo_ClipboardSetDto *v);
-void cuo_ClipboardSetDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ClipboardSetDto *v);
-void cuo_ClipboardSetDto_set_resource(cuo_cmds *c, const cuo_ClipboardSetDto *v);
+bool cuo_ClipboardSet_res(const cuo_input *in, cuo_param p, cuo_ClipboardSet *out);
+bool cuo_ClipboardSet_obs_res(const cuo_obs *ev, cuo_param p, cuo_ClipboardSet *out);
+void cuo_ClipboardSet_put(const cuo_input *in, cuo_param p, const cuo_ClipboardSet *v);
+void cuo_ClipboardSet_obs_put(const cuo_obs *ev, cuo_param p, const cuo_ClipboardSet *v);
+void cuo_ClipboardSet_set_resource(cuo_cmds *c, const cuo_ClipboardSet *v);
 
 /* `cuo:ui/focused-input` */
 bool cuo_FocusedInput_res(const cuo_input *in, cuo_param p, cuo_FocusedInput *out);
@@ -737,25 +737,25 @@ const cuo_MaskedText *cuo_MaskedText_obs_value(const cuo_obs *ev);
 cuo_comp cuo_ReadOnlyText_comp(void);
 
 /* `cuo:ui/text-clipboard-action` */
-bool cuo_TextClipboardActionDto_res(const cuo_input *in, cuo_param p, cuo_TextClipboardActionDto *out);
-bool cuo_TextClipboardActionDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextClipboardActionDto *out);
-void cuo_TextClipboardActionDto_put(const cuo_input *in, cuo_param p, const cuo_TextClipboardActionDto *v);
-void cuo_TextClipboardActionDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextClipboardActionDto *v);
-void cuo_TextClipboardActionDto_set_resource(cuo_cmds *c, const cuo_TextClipboardActionDto *v);
+bool cuo_TextClipboardAction_res(const cuo_input *in, cuo_param p, cuo_TextClipboardAction *out);
+bool cuo_TextClipboardAction_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextClipboardAction *out);
+void cuo_TextClipboardAction_put(const cuo_input *in, cuo_param p, const cuo_TextClipboardAction *v);
+void cuo_TextClipboardAction_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextClipboardAction *v);
+void cuo_TextClipboardAction_set_resource(cuo_cmds *c, const cuo_TextClipboardAction *v);
 
 /* `cuo:ui/text-completion` */
-bool cuo_TextCompletionDto_res(const cuo_input *in, cuo_param p, cuo_TextCompletionDto *out);
-bool cuo_TextCompletionDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionDto *out);
-void cuo_TextCompletionDto_put(const cuo_input *in, cuo_param p, const cuo_TextCompletionDto *v);
-void cuo_TextCompletionDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextCompletionDto *v);
-void cuo_TextCompletionDto_set_resource(cuo_cmds *c, const cuo_TextCompletionDto *v);
+bool cuo_TextCompletion_res(const cuo_input *in, cuo_param p, cuo_TextCompletion *out);
+bool cuo_TextCompletion_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletion *out);
+void cuo_TextCompletion_put(const cuo_input *in, cuo_param p, const cuo_TextCompletion *v);
+void cuo_TextCompletion_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextCompletion *v);
+void cuo_TextCompletion_set_resource(cuo_cmds *c, const cuo_TextCompletion *v);
 
 /* `cuo:ui/text-completion-pick` */
-bool cuo_TextCompletionPickDto_res(const cuo_input *in, cuo_param p, cuo_TextCompletionPickDto *out);
-bool cuo_TextCompletionPickDto_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionPickDto *out);
-void cuo_TextCompletionPickDto_put(const cuo_input *in, cuo_param p, const cuo_TextCompletionPickDto *v);
-void cuo_TextCompletionPickDto_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextCompletionPickDto *v);
-void cuo_TextCompletionPickDto_set_resource(cuo_cmds *c, const cuo_TextCompletionPickDto *v);
+bool cuo_TextCompletionPick_res(const cuo_input *in, cuo_param p, cuo_TextCompletionPick *out);
+bool cuo_TextCompletionPick_obs_res(const cuo_obs *ev, cuo_param p, cuo_TextCompletionPick *out);
+void cuo_TextCompletionPick_put(const cuo_input *in, cuo_param p, const cuo_TextCompletionPick *v);
+void cuo_TextCompletionPick_obs_put(const cuo_obs *ev, cuo_param p, const cuo_TextCompletionPick *v);
+void cuo_TextCompletionPick_set_resource(cuo_cmds *c, const cuo_TextCompletionPick *v);
 
 /* `cuo:ui/tooltip-serial` */
 cuo_comp cuo_UiTooltipSerial_comp(const cuo_UiTooltipSerial *v);

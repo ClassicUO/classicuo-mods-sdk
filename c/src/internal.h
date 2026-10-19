@@ -34,6 +34,10 @@ typedef struct cuo__pval {
     int32_t handle; /* the owned handle (dropped when the call returns) */
     /* query */
     cuo_wit_list_entity_t ents;
+    /* entity -> row + 1 (0 = empty), open addressing in scratch memory; built by the
+     * first cuo_query_index of a call with enough rows to need it */
+    uint32_t *index;
+    size_t index_mask;
     /* res */
     cuo__res_cache *res;
 } cuo__pval;

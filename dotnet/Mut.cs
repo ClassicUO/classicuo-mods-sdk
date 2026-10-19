@@ -36,10 +36,8 @@ public readonly struct Mut<T> : IMutTerm
 
         internal override Mut<T> Bind(RowReader row, int index)
         {
-            var key = (row.Slot << 8) | index;
-            var columns = row.Scope.MutColumns;
-            if (!columns.TryGetValue(key, out var column))
-                columns[key] = column = new MutColumn<T>(row.Scope, row.Slot, row.Entities, index);
+            ref var column = ref row.Scope.MutColumn(row.Slot, index);
+            column ??= new MutColumn<T>(row.Scope, row.Slot, row.Entities, index);
             return new Mut<T>((MutColumn<T>)column, row.RowIndex);
         }
     }

@@ -193,7 +193,8 @@ cuo_param cuo_observer_events(cuo_builder *m, cuo_observer o, uint16_t type_id);
  * cuo_on_event(m, "on-hotkey", CUO_PATH_INPUT_HOTKEY, …) and read cuo_ModHotkeyFired_obs_value).
  * All bindings are published once, as the cuo:input/mod-hotkeys resource, from a
  * Startup system the SDK adds (`cuo-sdk-hotkeys`, exported by cuo:c-sdk/mod); to rebind,
- * cuo_ModHotkeyBindingsDto_set_resource a new set.
+ * cuo_ModHotkeyBindings_set_resource a new set.
+ * `key` is a CUO_KEY_*, `mouse_button` a CUO_MOUSE_* (middle / X buttons / wheel notches).
  * CUO_HK_CONSUME: this mod owns the combo (the host's own binding does not fire). */
 enum { CUO_HK_CONSUME = 1, CUO_HK_CTRL = 2, CUO_HK_SHIFT = 4, CUO_HK_ALT = 8 };
 void cuo_hotkey(cuo_builder *m, const char *name, uint32_t key, unsigned flags);

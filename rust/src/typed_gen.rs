@@ -94,12 +94,62 @@ impl Conv<w::ValType> for u8 {
     }
 }
 
+impl Conv<w::InteractionState> for u8 {
+    fn to_wit(&self) -> w::InteractionState {
+        const CASES: &[w::InteractionState] = &[w::InteractionState::None, w::InteractionState::Hovered, w::InteractionState::Pressed];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::InteractionState) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::ChatKind> for u8 {
+    fn to_wit(&self) -> w::ChatKind {
+        const CASES: &[w::ChatKind] = &[w::ChatKind::Overhead, w::ChatKind::System];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::ChatKind) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::GameStateKind> for u8 {
+    fn to_wit(&self) -> w::GameStateKind {
+        const CASES: &[w::GameStateKind] = &[w::GameStateKind::Loading, w::GameStateKind::LoginScreen, w::GameStateKind::ServerSelection, w::GameStateKind::CharacterSelection, w::GameStateKind::CharacterCreation, w::GameStateKind::LoginError, w::GameStateKind::GameScreen];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::GameStateKind) -> u8 {
+        v as u8
+    }
+}
+
 impl Conv<w::ContainerSlotAction> for u8 {
     fn to_wit(&self) -> w::ContainerSlotAction {
         const CASES: &[w::ContainerSlotAction] = &[w::ContainerSlotAction::Add, w::ContainerSlotAction::Remove];
         usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
     }
     fn from_wit(v: w::ContainerSlotAction) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::ItemMoveOutcome> for u8 {
+    fn to_wit(&self) -> w::ItemMoveOutcome {
+        const CASES: &[w::ItemMoveOutcome] = &[w::ItemMoveOutcome::Accepted, w::ItemMoveOutcome::Denied, w::ItemMoveOutcome::EndDragging];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::ItemMoveOutcome) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::ModOptionKind> for u8 {
+    fn to_wit(&self) -> w::ModOptionKind {
+        const CASES: &[w::ModOptionKind] = &[w::ModOptionKind::Toggle, w::ModOptionKind::Slider, w::ModOptionKind::Stepper, w::ModOptionKind::Cycle];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::ModOptionKind) -> u8 {
         v as u8
     }
 }
@@ -114,6 +164,36 @@ impl Conv<w::Layer> for u8 {
     }
 }
 
+impl Conv<w::Lock> for u8 {
+    fn to_wit(&self) -> w::Lock {
+        const CASES: &[w::Lock] = &[w::Lock::Up, w::Lock::Down, w::Lock::Locked];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::Lock) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::TargetMode> for u8 {
+    fn to_wit(&self) -> w::TargetMode {
+        const CASES: &[w::TargetMode] = &[w::TargetMode::Object, w::TargetMode::Position, w::TargetMode::Multi];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::TargetMode) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::TargetType> for u8 {
+    fn to_wit(&self) -> w::TargetType {
+        const CASES: &[w::TargetType] = &[w::TargetType::Neutral, w::TargetType::Harmful, w::TargetType::Beneficial, w::TargetType::Cancel];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::TargetType) -> u8 {
+        v as u8
+    }
+}
+
 impl Conv<w::AnchorKind> for u8 {
     fn to_wit(&self) -> w::AnchorKind {
         const CASES: &[w::AnchorKind] = &[w::AnchorKind::Spell, w::AnchorKind::Healthbar];
@@ -124,12 +204,32 @@ impl Conv<w::AnchorKind> for u8 {
     }
 }
 
+impl Conv<w::UoCustomKind> for u8 {
+    fn to_wit(&self) -> w::UoCustomKind {
+        const CASES: &[w::UoCustomKind] = &[w::UoCustomKind::Gump, w::UoCustomKind::GumpNinePatch, w::UoCustomKind::GumpTiled, w::UoCustomKind::Art, w::UoCustomKind::Land, w::UoCustomKind::Animation, w::UoCustomKind::MiniMap, w::UoCustomKind::None, w::UoCustomKind::WrappedText, w::UoCustomKind::GumpSlice, w::UoCustomKind::HueGrid, w::UoCustomKind::DynTexture, w::UoCustomKind::WorldMap];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::UoCustomKind) -> u8 {
+        v as u8
+    }
+}
+
 impl Conv<w::ScrollbarStyle> for u8 {
     fn to_wit(&self) -> w::ScrollbarStyle {
         const CASES: &[w::ScrollbarStyle] = &[w::ScrollbarStyle::Uo, w::ScrollbarStyle::Flat];
         usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
     }
     fn from_wit(v: w::ScrollbarStyle) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::Stat> for u8 {
+    fn to_wit(&self) -> w::Stat {
+        const CASES: &[w::Stat] = &[w::Stat::Str, w::Stat::Dex, w::Stat::Int];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::Stat) -> u8 {
         v as u8
     }
 }
@@ -595,7 +695,7 @@ impl Conv<w::Interaction> for s::Interaction {
     }
 }
 
-impl Conv<w::MouseInput> for s::MouseInputDto {
+impl Conv<w::MouseInput> for s::MouseInput {
     fn to_wit(&self) -> w::MouseInput {
         w::MouseInput {
             x: Conv::to_wit(&self.x),
@@ -617,8 +717,8 @@ impl Conv<w::MouseInput> for s::MouseInputDto {
             x2_pressed: Conv::to_wit(&self.x2_pressed),
         }
     }
-    fn from_wit(v: w::MouseInput) -> s::MouseInputDto {
-        s::MouseInputDto {
+    fn from_wit(v: w::MouseInput) -> s::MouseInput {
+        s::MouseInput {
             x: Conv::from_wit(v.x),
             y: Conv::from_wit(v.y),
             left: Conv::from_wit(v.left),
@@ -640,15 +740,15 @@ impl Conv<w::MouseInput> for s::MouseInputDto {
     }
 }
 
-impl Conv<w::KeyboardInput> for s::KeyboardInputDto {
+impl Conv<w::KeyboardInput> for s::KeyboardInput {
     fn to_wit(&self) -> w::KeyboardInput {
         w::KeyboardInput {
             pressed: Conv::to_wit(&self.pressed),
             pressed_once: Conv::to_wit(&self.pressed_once),
         }
     }
-    fn from_wit(v: w::KeyboardInput) -> s::KeyboardInputDto {
-        s::KeyboardInputDto {
+    fn from_wit(v: w::KeyboardInput) -> s::KeyboardInput {
+        s::KeyboardInput {
             pressed: Conv::from_wit(v.pressed),
             pressed_once: Conv::from_wit(v.pressed_once),
         }
@@ -718,14 +818,14 @@ impl Conv<w::Time> for s::Time {
     }
 }
 
-impl Conv<w::EquipmentSlots> for s::EquipmentSlotsDto {
+impl Conv<w::EquipmentSlots> for s::EquipmentSlots {
     fn to_wit(&self) -> w::EquipmentSlots {
         w::EquipmentSlots {
             serials: Conv::to_wit(&self.serials),
         }
     }
-    fn from_wit(v: w::EquipmentSlots) -> s::EquipmentSlotsDto {
-        s::EquipmentSlotsDto {
+    fn from_wit(v: w::EquipmentSlots) -> s::EquipmentSlots {
+        s::EquipmentSlots {
             serials: Conv::from_wit(v.serials),
         }
     }
@@ -744,7 +844,7 @@ impl Conv<w::Facing> for s::Facing {
     }
 }
 
-impl Conv<w::OplLine> for s::OplLineDto {
+impl Conv<w::OplLine> for s::OplLine {
     fn to_wit(&self) -> w::OplLine {
         w::OplLine {
             cliloc: Conv::to_wit(&self.cliloc),
@@ -752,8 +852,8 @@ impl Conv<w::OplLine> for s::OplLineDto {
             text: Conv::to_wit(&self.text),
         }
     }
-    fn from_wit(v: w::OplLine) -> s::OplLineDto {
-        s::OplLineDto {
+    fn from_wit(v: w::OplLine) -> s::OplLine {
+        s::OplLine {
             cliloc: Conv::from_wit(v.cliloc),
             args: Conv::from_wit(v.args),
             text: Conv::from_wit(v.text),
@@ -761,7 +861,7 @@ impl Conv<w::OplLine> for s::OplLineDto {
     }
 }
 
-impl Conv<w::EntityProperties> for s::EntityPropertiesDto {
+impl Conv<w::EntityProperties> for s::EntityProperties {
     fn to_wit(&self) -> w::EntityProperties {
         w::EntityProperties {
             serial: Conv::to_wit(&self.serial),
@@ -770,8 +870,8 @@ impl Conv<w::EntityProperties> for s::EntityPropertiesDto {
             lines: Conv::to_wit(&self.lines),
         }
     }
-    fn from_wit(v: w::EntityProperties) -> s::EntityPropertiesDto {
-        s::EntityPropertiesDto {
+    fn from_wit(v: w::EntityProperties) -> s::EntityProperties {
+        s::EntityProperties {
             serial: Conv::from_wit(v.serial),
             revision: Conv::from_wit(v.revision),
             name: Conv::from_wit(v.name),
@@ -810,7 +910,7 @@ impl Conv<w::ContainerSlotPosition> for s::ContainerSlotPosition {
     }
 }
 
-impl Conv<w::GameContext> for s::GameContextDto {
+impl Conv<w::GameContext> for s::GameContext {
     fn to_wit(&self) -> w::GameContext {
         w::GameContext {
             player_serial: Conv::to_wit(&self.player_serial),
@@ -821,8 +921,8 @@ impl Conv<w::GameContext> for s::GameContextDto {
             use_old_status_gump: Conv::to_wit(&self.use_old_status_gump),
         }
     }
-    fn from_wit(v: w::GameContext) -> s::GameContextDto {
-        s::GameContextDto {
+    fn from_wit(v: w::GameContext) -> s::GameContext {
+        s::GameContext {
             player_serial: Conv::from_wit(v.player_serial),
             player_name: Conv::from_wit(v.player_name),
             map: Conv::from_wit(v.map),
@@ -833,7 +933,7 @@ impl Conv<w::GameContext> for s::GameContextDto {
     }
 }
 
-impl Conv<w::GameSettings> for s::GameSettingsDto {
+impl Conv<w::GameSettings> for s::GameSettings {
     fn to_wit(&self) -> w::GameSettings {
         w::GameSettings {
             grid_loot_type: Conv::to_wit(&self.grid_loot_type),
@@ -849,8 +949,8 @@ impl Conv<w::GameSettings> for s::GameSettingsDto {
             highlight_game_objects: Conv::to_wit(&self.highlight_game_objects),
         }
     }
-    fn from_wit(v: w::GameSettings) -> s::GameSettingsDto {
-        s::GameSettingsDto {
+    fn from_wit(v: w::GameSettings) -> s::GameSettings {
+        s::GameSettings {
             grid_loot_type: Conv::from_wit(v.grid_loot_type),
             skip_empty_corpse: Conv::from_wit(v.skip_empty_corpse),
             auto_open_corpses: Conv::from_wit(v.auto_open_corpses),
@@ -866,14 +966,14 @@ impl Conv<w::GameSettings> for s::GameSettingsDto {
     }
 }
 
-impl Conv<w::GameState> for s::GameStateDto {
+impl Conv<w::GameState> for s::GameState {
     fn to_wit(&self) -> w::GameState {
         w::GameState {
             current: Conv::to_wit(&self.current),
         }
     }
-    fn from_wit(v: w::GameState) -> s::GameStateDto {
-        s::GameStateDto {
+    fn from_wit(v: w::GameState) -> s::GameState {
+        s::GameState {
             current: Conv::from_wit(v.current),
         }
     }
@@ -922,7 +1022,7 @@ impl Conv<w::ContainerOpenedEvent> for s::ContainerOpenedEvent {
     }
 }
 
-impl Conv<w::ContainerPosition> for s::ContainerPositionDto {
+impl Conv<w::ContainerPosition> for s::ContainerPosition {
     fn to_wit(&self) -> w::ContainerPosition {
         w::ContainerPosition {
             serial: Conv::to_wit(&self.serial),
@@ -930,8 +1030,8 @@ impl Conv<w::ContainerPosition> for s::ContainerPositionDto {
             y: Conv::to_wit(&self.y),
         }
     }
-    fn from_wit(v: w::ContainerPosition) -> s::ContainerPositionDto {
-        s::ContainerPositionDto {
+    fn from_wit(v: w::ContainerPosition) -> s::ContainerPosition {
+        s::ContainerPosition {
             serial: Conv::from_wit(v.serial),
             x: Conv::from_wit(v.x),
             y: Conv::from_wit(v.y),
@@ -939,14 +1039,14 @@ impl Conv<w::ContainerPosition> for s::ContainerPositionDto {
     }
 }
 
-impl Conv<w::ContainerPositions> for s::ContainerPositionsDto {
+impl Conv<w::ContainerPositions> for s::ContainerPositions {
     fn to_wit(&self) -> w::ContainerPositions {
         w::ContainerPositions {
             saved: Conv::to_wit(&self.saved),
         }
     }
-    fn from_wit(v: w::ContainerPositions) -> s::ContainerPositionsDto {
-        s::ContainerPositionsDto {
+    fn from_wit(v: w::ContainerPositions) -> s::ContainerPositions {
+        s::ContainerPositions {
             saved: Conv::from_wit(v.saved),
         }
     }
@@ -979,7 +1079,7 @@ impl Conv<w::ContainerSlotEvent> for s::ContainerSlotEvent {
     }
 }
 
-impl Conv<w::ContainerGumpTag> for s::ContainerGumpTagDto {
+impl Conv<w::ContainerGumpTag> for s::ContainerGumpTag {
     fn to_wit(&self) -> w::ContainerGumpTag {
         w::ContainerGumpTag {
             graphic: Conv::to_wit(&self.graphic),
@@ -991,8 +1091,8 @@ impl Conv<w::ContainerGumpTag> for s::ContainerGumpTagDto {
             bounds_h: Conv::to_wit(&self.bounds_h),
         }
     }
-    fn from_wit(v: w::ContainerGumpTag) -> s::ContainerGumpTagDto {
-        s::ContainerGumpTagDto {
+    fn from_wit(v: w::ContainerGumpTag) -> s::ContainerGumpTag {
+        s::ContainerGumpTag {
             graphic: Conv::from_wit(v.graphic),
             original_graphic: Conv::from_wit(v.original_graphic),
             scale: Conv::from_wit(v.scale),
@@ -1095,7 +1195,7 @@ impl Conv<w::HealthBarWindow> for s::HealthBarWindow {
     }
 }
 
-impl Conv<w::ServerGumpButton> for s::ServerGumpButtonDto {
+impl Conv<w::ServerGumpButton> for s::ServerGumpButton {
     fn to_wit(&self) -> w::ServerGumpButton {
         w::ServerGumpButton {
             id: Conv::to_wit(&self.id),
@@ -1105,8 +1205,8 @@ impl Conv<w::ServerGumpButton> for s::ServerGumpButtonDto {
             h: Conv::to_wit(&self.h),
         }
     }
-    fn from_wit(v: w::ServerGumpButton) -> s::ServerGumpButtonDto {
-        s::ServerGumpButtonDto {
+    fn from_wit(v: w::ServerGumpButton) -> s::ServerGumpButton {
+        s::ServerGumpButton {
             id: Conv::from_wit(v.id),
             x: Conv::from_wit(v.x),
             y: Conv::from_wit(v.y),
@@ -1116,22 +1216,22 @@ impl Conv<w::ServerGumpButton> for s::ServerGumpButtonDto {
     }
 }
 
-impl Conv<w::ServerGumpTextEntry> for s::ServerGumpTextEntryDto {
+impl Conv<w::ServerGumpTextEntry> for s::ServerGumpTextEntry {
     fn to_wit(&self) -> w::ServerGumpTextEntry {
         w::ServerGumpTextEntry {
             id: Conv::to_wit(&self.id),
             text: Conv::to_wit(&self.text),
         }
     }
-    fn from_wit(v: w::ServerGumpTextEntry) -> s::ServerGumpTextEntryDto {
-        s::ServerGumpTextEntryDto {
+    fn from_wit(v: w::ServerGumpTextEntry) -> s::ServerGumpTextEntry {
+        s::ServerGumpTextEntry {
             id: Conv::from_wit(v.id),
             text: Conv::from_wit(v.text),
         }
     }
 }
 
-impl Conv<w::ServerGumpSwitch> for s::ServerGumpSwitchDto {
+impl Conv<w::ServerGumpSwitch> for s::ServerGumpSwitch {
     fn to_wit(&self) -> w::ServerGumpSwitch {
         w::ServerGumpSwitch {
             id: Conv::to_wit(&self.id),
@@ -1140,8 +1240,8 @@ impl Conv<w::ServerGumpSwitch> for s::ServerGumpSwitchDto {
             group: Conv::to_wit(&self.group),
         }
     }
-    fn from_wit(v: w::ServerGumpSwitch) -> s::ServerGumpSwitchDto {
-        s::ServerGumpSwitchDto {
+    fn from_wit(v: w::ServerGumpSwitch) -> s::ServerGumpSwitch {
+        s::ServerGumpSwitch {
             id: Conv::from_wit(v.id),
             checked: Conv::from_wit(v.checked),
             is_radio: Conv::from_wit(v.is_radio),
@@ -1150,7 +1250,7 @@ impl Conv<w::ServerGumpSwitch> for s::ServerGumpSwitchDto {
     }
 }
 
-impl Conv<w::ServerGump> for s::ServerGumpDto {
+impl Conv<w::ServerGump> for s::ServerGump {
     fn to_wit(&self) -> w::ServerGump {
         w::ServerGump {
             serial: Conv::to_wit(&self.serial),
@@ -1165,8 +1265,8 @@ impl Conv<w::ServerGump> for s::ServerGumpDto {
             switches: Conv::to_wit(&self.switches),
         }
     }
-    fn from_wit(v: w::ServerGump) -> s::ServerGumpDto {
-        s::ServerGumpDto {
+    fn from_wit(v: w::ServerGump) -> s::ServerGump {
+        s::ServerGump {
             serial: Conv::from_wit(v.serial),
             gump_id: Conv::from_wit(v.gump_id),
             page: Conv::from_wit(v.page),
@@ -1196,7 +1296,7 @@ impl Conv<w::InputConsume> for s::InputConsume {
     }
 }
 
-impl Conv<w::HostHotkey> for s::HostHotkeyDto {
+impl Conv<w::HostHotkey> for s::HostHotkey {
     fn to_wit(&self) -> w::HostHotkey {
         w::HostHotkey {
             key: Conv::to_wit(&self.key),
@@ -1206,8 +1306,8 @@ impl Conv<w::HostHotkey> for s::HostHotkeyDto {
             action: Conv::to_wit(&self.action),
         }
     }
-    fn from_wit(v: w::HostHotkey) -> s::HostHotkeyDto {
-        s::HostHotkeyDto {
+    fn from_wit(v: w::HostHotkey) -> s::HostHotkey {
+        s::HostHotkey {
             key: Conv::from_wit(v.key),
             ctrl: Conv::from_wit(v.ctrl),
             shift: Conv::from_wit(v.shift),
@@ -1217,14 +1317,14 @@ impl Conv<w::HostHotkey> for s::HostHotkeyDto {
     }
 }
 
-impl Conv<w::HostHotkeys> for s::HostHotkeysDto {
+impl Conv<w::HostHotkeys> for s::HostHotkeys {
     fn to_wit(&self) -> w::HostHotkeys {
         w::HostHotkeys {
             hotkeys: Conv::to_wit(&self.hotkeys),
         }
     }
-    fn from_wit(v: w::HostHotkeys) -> s::HostHotkeysDto {
-        s::HostHotkeysDto {
+    fn from_wit(v: w::HostHotkeys) -> s::HostHotkeys {
+        s::HostHotkeys {
             hotkeys: Conv::from_wit(v.hotkeys),
         }
     }
@@ -1280,30 +1380,30 @@ impl Conv<w::ModHotkeyBinding> for s::ModHotkeyBinding {
     }
 }
 
-impl Conv<w::ModHotkeyBindings> for s::ModHotkeyBindingsDto {
+impl Conv<w::ModHotkeyBindings> for s::ModHotkeyBindings {
     fn to_wit(&self) -> w::ModHotkeyBindings {
         w::ModHotkeyBindings {
             bindings: Conv::to_wit(&self.bindings),
             consume_keys: Conv::to_wit(&self.consume_keys),
         }
     }
-    fn from_wit(v: w::ModHotkeyBindings) -> s::ModHotkeyBindingsDto {
-        s::ModHotkeyBindingsDto {
+    fn from_wit(v: w::ModHotkeyBindings) -> s::ModHotkeyBindings {
+        s::ModHotkeyBindings {
             bindings: Conv::from_wit(v.bindings),
             consume_keys: Conv::from_wit(v.consume_keys),
         }
     }
 }
 
-impl Conv<w::WorldSingleClick> for s::WorldSingleClickDto {
+impl Conv<w::WorldSingleClick> for s::WorldSingleClick {
     fn to_wit(&self) -> w::WorldSingleClick {
         w::WorldSingleClick {
             serial: Conv::to_wit(&self.serial),
             at_ms: Conv::to_wit(&self.at_ms),
         }
     }
-    fn from_wit(v: w::WorldSingleClick) -> s::WorldSingleClickDto {
-        s::WorldSingleClickDto {
+    fn from_wit(v: w::WorldSingleClick) -> s::WorldSingleClick {
+        s::WorldSingleClick {
             serial: Conv::from_wit(v.serial),
             at_ms: Conv::from_wit(v.at_ms),
         }
@@ -1346,7 +1446,7 @@ impl Conv<w::ItemMoveResult> for s::ItemMoveResult {
     }
 }
 
-impl Conv<w::ModOption> for s::ModOptionDto {
+impl Conv<w::ModOption> for s::ModOption {
     fn to_wit(&self) -> w::ModOption {
         w::ModOption {
             key: Conv::to_wit(&self.key),
@@ -1361,8 +1461,8 @@ impl Conv<w::ModOption> for s::ModOptionDto {
             choices: Conv::to_wit(&self.choices),
         }
     }
-    fn from_wit(v: w::ModOption) -> s::ModOptionDto {
-        s::ModOptionDto {
+    fn from_wit(v: w::ModOption) -> s::ModOption {
+        s::ModOption {
             key: Conv::from_wit(v.key),
             label: Conv::from_wit(v.label),
             group: Conv::from_wit(v.group),
@@ -1377,48 +1477,48 @@ impl Conv<w::ModOption> for s::ModOptionDto {
     }
 }
 
-impl Conv<w::ModOptionsSchema> for s::ModOptionsSchemaDto {
+impl Conv<w::ModOptionsSchema> for s::ModOptionsSchema {
     fn to_wit(&self) -> w::ModOptionsSchema {
         w::ModOptionsSchema {
             options: Conv::to_wit(&self.options),
         }
     }
-    fn from_wit(v: w::ModOptionsSchema) -> s::ModOptionsSchemaDto {
-        s::ModOptionsSchemaDto {
+    fn from_wit(v: w::ModOptionsSchema) -> s::ModOptionsSchema {
+        s::ModOptionsSchema {
             options: Conv::from_wit(v.options),
         }
     }
 }
 
-impl Conv<w::ModOptionValue> for s::ModOptionValueDto {
+impl Conv<w::ModOptionValue> for s::ModOptionValue {
     fn to_wit(&self) -> w::ModOptionValue {
         w::ModOptionValue {
             key: Conv::to_wit(&self.key),
             value: Conv::to_wit(&self.value),
         }
     }
-    fn from_wit(v: w::ModOptionValue) -> s::ModOptionValueDto {
-        s::ModOptionValueDto {
+    fn from_wit(v: w::ModOptionValue) -> s::ModOptionValue {
+        s::ModOptionValue {
             key: Conv::from_wit(v.key),
             value: Conv::from_wit(v.value),
         }
     }
 }
 
-impl Conv<w::ModOptionsValues> for s::ModOptionsValuesDto {
+impl Conv<w::ModOptionsValues> for s::ModOptionsValues {
     fn to_wit(&self) -> w::ModOptionsValues {
         w::ModOptionsValues {
             values: Conv::to_wit(&self.values),
         }
     }
-    fn from_wit(v: w::ModOptionsValues) -> s::ModOptionsValuesDto {
-        s::ModOptionsValuesDto {
+    fn from_wit(v: w::ModOptionsValues) -> s::ModOptionsValues {
+        s::ModOptionsValues {
             values: Conv::from_wit(v.values),
         }
     }
 }
 
-impl Conv<w::PlayerBuff> for s::PlayerBuffDto {
+impl Conv<w::PlayerBuff> for s::PlayerBuff {
     fn to_wit(&self) -> w::PlayerBuff {
         w::PlayerBuff {
             type_: Conv::to_wit(&self.type_),
@@ -1427,8 +1527,8 @@ impl Conv<w::PlayerBuff> for s::PlayerBuffDto {
             text: Conv::to_wit(&self.text),
         }
     }
-    fn from_wit(v: w::PlayerBuff) -> s::PlayerBuffDto {
-        s::PlayerBuffDto {
+    fn from_wit(v: w::PlayerBuff) -> s::PlayerBuff {
+        s::PlayerBuff {
             type_: Conv::from_wit(v.type_),
             graphic: Conv::from_wit(v.graphic),
             expires_at: Conv::from_wit(v.expires_at),
@@ -1437,14 +1537,14 @@ impl Conv<w::PlayerBuff> for s::PlayerBuffDto {
     }
 }
 
-impl Conv<w::PlayerBuffs> for s::PlayerBuffsDto {
+impl Conv<w::PlayerBuffs> for s::PlayerBuffs {
     fn to_wit(&self) -> w::PlayerBuffs {
         w::PlayerBuffs {
             buffs: Conv::to_wit(&self.buffs),
         }
     }
-    fn from_wit(v: w::PlayerBuffs) -> s::PlayerBuffsDto {
-        s::PlayerBuffsDto {
+    fn from_wit(v: w::PlayerBuffs) -> s::PlayerBuffs {
+        s::PlayerBuffs {
             buffs: Conv::from_wit(v.buffs),
         }
     }
@@ -1516,7 +1616,7 @@ impl Conv<w::GrabbedItem> for s::GrabbedItem {
     }
 }
 
-impl Conv<w::PlayerSkill> for s::PlayerSkillDto {
+impl Conv<w::PlayerSkill> for s::PlayerSkill {
     fn to_wit(&self) -> w::PlayerSkill {
         w::PlayerSkill {
             index: Conv::to_wit(&self.index),
@@ -1526,8 +1626,8 @@ impl Conv<w::PlayerSkill> for s::PlayerSkillDto {
             lock: Conv::to_wit(&self.lock),
         }
     }
-    fn from_wit(v: w::PlayerSkill) -> s::PlayerSkillDto {
-        s::PlayerSkillDto {
+    fn from_wit(v: w::PlayerSkill) -> s::PlayerSkill {
+        s::PlayerSkill {
             index: Conv::from_wit(v.index),
             value: Conv::from_wit(v.value),
             base: Conv::from_wit(v.base),
@@ -1537,15 +1637,15 @@ impl Conv<w::PlayerSkill> for s::PlayerSkillDto {
     }
 }
 
-impl Conv<w::PlayerSkills> for s::PlayerSkillsDto {
+impl Conv<w::PlayerSkills> for s::PlayerSkills {
     fn to_wit(&self) -> w::PlayerSkills {
         w::PlayerSkills {
             has_data: Conv::to_wit(&self.has_data),
             skills: Conv::to_wit(&self.skills),
         }
     }
-    fn from_wit(v: w::PlayerSkills) -> s::PlayerSkillsDto {
-        s::PlayerSkillsDto {
+    fn from_wit(v: w::PlayerSkills) -> s::PlayerSkills {
+        s::PlayerSkills {
             has_data: Conv::from_wit(v.has_data),
             skills: Conv::from_wit(v.skills),
         }
@@ -1656,7 +1756,7 @@ impl Conv<w::Anchorable> for s::Anchorable {
     }
 }
 
-impl Conv<w::BorderColor> for s::BorderColorDto {
+impl Conv<w::BorderColor> for s::BorderColor {
     fn to_wit(&self) -> w::BorderColor {
         w::BorderColor {
             r: Conv::to_wit(&self.r),
@@ -1665,8 +1765,8 @@ impl Conv<w::BorderColor> for s::BorderColorDto {
             a: Conv::to_wit(&self.a),
         }
     }
-    fn from_wit(v: w::BorderColor) -> s::BorderColorDto {
-        s::BorderColorDto {
+    fn from_wit(v: w::BorderColor) -> s::BorderColor {
+        s::BorderColor {
             r: Conv::from_wit(v.r),
             g: Conv::from_wit(v.g),
             b: Conv::from_wit(v.b),
@@ -1747,7 +1847,7 @@ impl Conv<w::ContainerItemUi> for s::ContainerItemUI {
     }
 }
 
-impl Conv<w::UiCustom> for s::UiCustomDto {
+impl Conv<w::UiCustom> for s::UiCustom {
     fn to_wit(&self) -> w::UiCustom {
         w::UiCustom {
             kind: Conv::to_wit(&self.kind),
@@ -1758,8 +1858,8 @@ impl Conv<w::UiCustom> for s::UiCustomDto {
             stacked: Conv::to_wit(&self.stacked),
         }
     }
-    fn from_wit(v: w::UiCustom) -> s::UiCustomDto {
-        s::UiCustomDto {
+    fn from_wit(v: w::UiCustom) -> s::UiCustom {
+        s::UiCustom {
             kind: Conv::from_wit(v.kind),
             asset_id: Conv::from_wit(v.asset_id),
             hue_x: Conv::from_wit(v.hue_x),
@@ -1824,7 +1924,7 @@ impl Conv<w::UiName> for s::UiName {
     }
 }
 
-impl Conv<w::UiPick> for s::UiPickDto {
+impl Conv<w::UiPick> for s::UiPick {
     fn to_wit(&self) -> w::UiPick {
         w::UiPick {
             entity: Conv::to_wit(&self.entity),
@@ -1834,8 +1934,8 @@ impl Conv<w::UiPick> for s::UiPickDto {
             y: Conv::to_wit(&self.y),
         }
     }
-    fn from_wit(v: w::UiPick) -> s::UiPickDto {
-        s::UiPickDto {
+    fn from_wit(v: w::UiPick) -> s::UiPick {
+        s::UiPick {
             entity: Conv::from_wit(v.entity),
             root: Conv::from_wit(v.root),
             paint_order: Conv::from_wit(v.paint_order),
@@ -1956,22 +2056,22 @@ impl Conv<w::ModSupersedes> for s::ModSupersedes {
     }
 }
 
-impl Conv<w::UiSurface> for s::UiSurfaceDto {
+impl Conv<w::UiSurface> for s::UiSurface {
     fn to_wit(&self) -> w::UiSurface {
         w::UiSurface {
             w: Conv::to_wit(&self.w),
             h: Conv::to_wit(&self.h),
         }
     }
-    fn from_wit(v: w::UiSurface) -> s::UiSurfaceDto {
-        s::UiSurfaceDto {
+    fn from_wit(v: w::UiSurface) -> s::UiSurface {
+        s::UiSurface {
             w: Conv::from_wit(v.w),
             h: Conv::from_wit(v.h),
         }
     }
 }
 
-impl Conv<w::TextCaret> for s::TextCaretDto {
+impl Conv<w::TextCaret> for s::TextCaret {
     fn to_wit(&self) -> w::TextCaret {
         w::TextCaret {
             entity: Conv::to_wit(&self.entity),
@@ -1985,8 +2085,8 @@ impl Conv<w::TextCaret> for s::TextCaretDto {
             row_height: Conv::to_wit(&self.row_height),
         }
     }
-    fn from_wit(v: w::TextCaret) -> s::TextCaretDto {
-        s::TextCaretDto {
+    fn from_wit(v: w::TextCaret) -> s::TextCaret {
+        s::TextCaret {
             entity: Conv::from_wit(v.entity),
             cursor: Conv::from_wit(v.cursor),
             select_start: Conv::from_wit(v.select_start),
@@ -2000,14 +2100,14 @@ impl Conv<w::TextCaret> for s::TextCaretDto {
     }
 }
 
-impl Conv<w::TextCompletionState> for s::TextCompletionStateDto {
+impl Conv<w::TextCompletionState> for s::TextCompletionState {
     fn to_wit(&self) -> w::TextCompletionState {
         w::TextCompletionState {
             selected: Conv::to_wit(&self.selected),
         }
     }
-    fn from_wit(v: w::TextCompletionState) -> s::TextCompletionStateDto {
-        s::TextCompletionStateDto {
+    fn from_wit(v: w::TextCompletionState) -> s::TextCompletionState {
+        s::TextCompletionState {
             selected: Conv::from_wit(v.selected),
         }
     }
@@ -2121,7 +2221,7 @@ impl Conv<w::MobAnimation> for s::MobAnimation {
     }
 }
 
-impl Conv<w::MobStep> for s::MobStepDto {
+impl Conv<w::MobStep> for s::MobStep {
     fn to_wit(&self) -> w::MobStep {
         w::MobStep {
             x: Conv::to_wit(&self.x),
@@ -2131,8 +2231,8 @@ impl Conv<w::MobStep> for s::MobStepDto {
             run: Conv::to_wit(&self.run),
         }
     }
-    fn from_wit(v: w::MobStep) -> s::MobStepDto {
-        s::MobStepDto {
+    fn from_wit(v: w::MobStep) -> s::MobStep {
+        s::MobStep {
             x: Conv::from_wit(v.x),
             y: Conv::from_wit(v.y),
             z: Conv::from_wit(v.z),
@@ -2142,7 +2242,7 @@ impl Conv<w::MobStep> for s::MobStepDto {
     }
 }
 
-impl Conv<w::MobileSteps> for s::MobileStepsDto {
+impl Conv<w::MobileSteps> for s::MobileSteps {
     fn to_wit(&self) -> w::MobileSteps {
         w::MobileSteps {
             index: Conv::to_wit(&self.index),
@@ -2150,8 +2250,8 @@ impl Conv<w::MobileSteps> for s::MobileStepsDto {
             steps: Conv::to_wit(&self.steps),
         }
     }
-    fn from_wit(v: w::MobileSteps) -> s::MobileStepsDto {
-        s::MobileStepsDto {
+    fn from_wit(v: w::MobileSteps) -> s::MobileSteps {
+        s::MobileSteps {
             index: Conv::from_wit(v.index),
             time: Conv::from_wit(v.time),
             steps: Conv::from_wit(v.steps),
@@ -2625,22 +2725,22 @@ impl Conv<w::ModMoveRequest> for s::ModMoveRequest {
     }
 }
 
-impl Conv<w::PartyMember> for s::PartyMemberDto {
+impl Conv<w::PartyMember> for s::PartyMember {
     fn to_wit(&self) -> w::PartyMember {
         w::PartyMember {
             serial: Conv::to_wit(&self.serial),
             name: Conv::to_wit(&self.name),
         }
     }
-    fn from_wit(v: w::PartyMember) -> s::PartyMemberDto {
-        s::PartyMemberDto {
+    fn from_wit(v: w::PartyMember) -> s::PartyMember {
+        s::PartyMember {
             serial: Conv::from_wit(v.serial),
             name: Conv::from_wit(v.name),
         }
     }
 }
 
-impl Conv<w::Party> for s::PartyDto {
+impl Conv<w::Party> for s::Party {
     fn to_wit(&self) -> w::Party {
         w::Party {
             leader: Conv::to_wit(&self.leader),
@@ -2649,8 +2749,8 @@ impl Conv<w::Party> for s::PartyDto {
             can_loot: Conv::to_wit(&self.can_loot),
         }
     }
-    fn from_wit(v: w::Party) -> s::PartyDto {
-        s::PartyDto {
+    fn from_wit(v: w::Party) -> s::Party {
+        s::Party {
             leader: Conv::from_wit(v.leader),
             members: Conv::from_wit(v.members),
             in_party: Conv::from_wit(v.in_party),
@@ -2659,7 +2759,7 @@ impl Conv<w::Party> for s::PartyDto {
     }
 }
 
-impl Conv<w::Spellbook> for s::SpellbookDto {
+impl Conv<w::Spellbook> for s::Spellbook {
     fn to_wit(&self) -> w::Spellbook {
         w::Spellbook {
             serial: Conv::to_wit(&self.serial),
@@ -2667,8 +2767,8 @@ impl Conv<w::Spellbook> for s::SpellbookDto {
             spells: Conv::to_wit(&self.spells),
         }
     }
-    fn from_wit(v: w::Spellbook) -> s::SpellbookDto {
-        s::SpellbookDto {
+    fn from_wit(v: w::Spellbook) -> s::Spellbook {
+        s::Spellbook {
             serial: Conv::from_wit(v.serial),
             book_type: Conv::from_wit(v.book_type),
             spells: Conv::from_wit(v.spells),
@@ -2676,22 +2776,22 @@ impl Conv<w::Spellbook> for s::SpellbookDto {
     }
 }
 
-impl Conv<w::Spellbooks> for s::SpellbooksDto {
+impl Conv<w::Spellbooks> for s::Spellbooks {
     fn to_wit(&self) -> w::Spellbooks {
         w::Spellbooks {
             revision: Conv::to_wit(&self.revision),
             books: Conv::to_wit(&self.books),
         }
     }
-    fn from_wit(v: w::Spellbooks) -> s::SpellbooksDto {
-        s::SpellbooksDto {
+    fn from_wit(v: w::Spellbooks) -> s::Spellbooks {
+        s::Spellbooks {
             revision: Conv::from_wit(v.revision),
             books: Conv::from_wit(v.books),
         }
     }
 }
 
-impl Conv<w::PlayerStep> for s::PlayerStepDto {
+impl Conv<w::PlayerStep> for s::PlayerStep {
     fn to_wit(&self) -> w::PlayerStep {
         w::PlayerStep {
             sequence: Conv::to_wit(&self.sequence),
@@ -2701,8 +2801,8 @@ impl Conv<w::PlayerStep> for s::PlayerStepDto {
             z: Conv::to_wit(&self.z),
         }
     }
-    fn from_wit(v: w::PlayerStep) -> s::PlayerStepDto {
-        s::PlayerStepDto {
+    fn from_wit(v: w::PlayerStep) -> s::PlayerStep {
+        s::PlayerStep {
             sequence: Conv::from_wit(v.sequence),
             direction: Conv::from_wit(v.direction),
             x: Conv::from_wit(v.x),
@@ -2712,7 +2812,7 @@ impl Conv<w::PlayerStep> for s::PlayerStepDto {
     }
 }
 
-impl Conv<w::PlayerSteps> for s::PlayerStepsDto {
+impl Conv<w::PlayerSteps> for s::PlayerSteps {
     fn to_wit(&self) -> w::PlayerSteps {
         w::PlayerSteps {
             last_step: Conv::to_wit(&self.last_step),
@@ -2722,8 +2822,8 @@ impl Conv<w::PlayerSteps> for s::PlayerStepsDto {
             steps: Conv::to_wit(&self.steps),
         }
     }
-    fn from_wit(v: w::PlayerSteps) -> s::PlayerStepsDto {
-        s::PlayerStepsDto {
+    fn from_wit(v: w::PlayerSteps) -> s::PlayerSteps {
+        s::PlayerSteps {
             last_step: Conv::from_wit(v.last_step),
             count: Conv::from_wit(v.count),
             sequence: Conv::from_wit(v.sequence),
@@ -2733,22 +2833,22 @@ impl Conv<w::PlayerSteps> for s::PlayerStepsDto {
     }
 }
 
-impl Conv<w::CharInfo> for s::CharInfoDto {
+impl Conv<w::CharInfo> for s::CharInfo {
     fn to_wit(&self) -> w::CharInfo {
         w::CharInfo {
             name: Conv::to_wit(&self.name),
             index: Conv::to_wit(&self.index),
         }
     }
-    fn from_wit(v: w::CharInfo) -> s::CharInfoDto {
-        s::CharInfoDto {
+    fn from_wit(v: w::CharInfo) -> s::CharInfo {
+        s::CharInfo {
             name: Conv::from_wit(v.name),
             index: Conv::from_wit(v.index),
         }
     }
 }
 
-impl Conv<w::TownInfo> for s::TownInfoDto {
+impl Conv<w::TownInfo> for s::TownInfo {
     fn to_wit(&self) -> w::TownInfo {
         w::TownInfo {
             index: Conv::to_wit(&self.index),
@@ -2761,8 +2861,8 @@ impl Conv<w::TownInfo> for s::TownInfoDto {
             cliloc_description: Conv::to_wit(&self.cliloc_description),
         }
     }
-    fn from_wit(v: w::TownInfo) -> s::TownInfoDto {
-        s::TownInfoDto {
+    fn from_wit(v: w::TownInfo) -> s::TownInfo {
+        s::TownInfo {
             index: Conv::from_wit(v.index),
             name: Conv::from_wit(v.name),
             building: Conv::from_wit(v.building),
@@ -2775,15 +2875,15 @@ impl Conv<w::TownInfo> for s::TownInfoDto {
     }
 }
 
-impl Conv<w::CharacterSelection> for s::CharacterSelectionDto {
+impl Conv<w::CharacterSelection> for s::CharacterSelection {
     fn to_wit(&self) -> w::CharacterSelection {
         w::CharacterSelection {
             characters: Conv::to_wit(&self.characters),
             towns: Conv::to_wit(&self.towns),
         }
     }
-    fn from_wit(v: w::CharacterSelection) -> s::CharacterSelectionDto {
-        s::CharacterSelectionDto {
+    fn from_wit(v: w::CharacterSelection) -> s::CharacterSelection {
+        s::CharacterSelection {
             characters: Conv::from_wit(v.characters),
             towns: Conv::from_wit(v.towns),
         }
@@ -2850,15 +2950,15 @@ impl Conv<w::ServerSelectionInfoEvent> for s::ServerSelectionInfoEvent {
     }
 }
 
-impl Conv<w::ClipboardSet> for s::ClipboardSetDto {
+impl Conv<w::ClipboardSet> for s::ClipboardSet {
     fn to_wit(&self) -> w::ClipboardSet {
         w::ClipboardSet {
             seq: Conv::to_wit(&self.seq),
             text: Conv::to_wit(&self.text),
         }
     }
-    fn from_wit(v: w::ClipboardSet) -> s::ClipboardSetDto {
-        s::ClipboardSetDto {
+    fn from_wit(v: w::ClipboardSet) -> s::ClipboardSet {
+        s::ClipboardSet {
             seq: Conv::from_wit(v.seq),
             text: Conv::from_wit(v.text),
         }
@@ -2893,7 +2993,7 @@ impl Conv<w::MaskedText> for s::MaskedText {
     }
 }
 
-impl Conv<w::TextClipboardAction> for s::TextClipboardActionDto {
+impl Conv<w::TextClipboardAction> for s::TextClipboardAction {
     fn to_wit(&self) -> w::TextClipboardAction {
         w::TextClipboardAction {
             entity: Conv::to_wit(&self.entity),
@@ -2901,8 +3001,8 @@ impl Conv<w::TextClipboardAction> for s::TextClipboardActionDto {
             seq: Conv::to_wit(&self.seq),
         }
     }
-    fn from_wit(v: w::TextClipboardAction) -> s::TextClipboardActionDto {
-        s::TextClipboardActionDto {
+    fn from_wit(v: w::TextClipboardAction) -> s::TextClipboardAction {
+        s::TextClipboardAction {
             entity: Conv::from_wit(v.entity),
             action: Conv::from_wit(v.action),
             seq: Conv::from_wit(v.seq),
@@ -2910,7 +3010,7 @@ impl Conv<w::TextClipboardAction> for s::TextClipboardActionDto {
     }
 }
 
-impl Conv<w::TextCompletion> for s::TextCompletionDto {
+impl Conv<w::TextCompletion> for s::TextCompletion {
     fn to_wit(&self) -> w::TextCompletion {
         w::TextCompletion {
             entity: Conv::to_wit(&self.entity),
@@ -2918,8 +3018,8 @@ impl Conv<w::TextCompletion> for s::TextCompletionDto {
             items: Conv::to_wit(&self.items),
         }
     }
-    fn from_wit(v: w::TextCompletion) -> s::TextCompletionDto {
-        s::TextCompletionDto {
+    fn from_wit(v: w::TextCompletion) -> s::TextCompletion {
+        s::TextCompletion {
             entity: Conv::from_wit(v.entity),
             prefix: Conv::from_wit(v.prefix),
             items: Conv::from_wit(v.items),
@@ -2927,7 +3027,7 @@ impl Conv<w::TextCompletion> for s::TextCompletionDto {
     }
 }
 
-impl Conv<w::TextCompletionPick> for s::TextCompletionPickDto {
+impl Conv<w::TextCompletionPick> for s::TextCompletionPick {
     fn to_wit(&self) -> w::TextCompletionPick {
         w::TextCompletionPick {
             entity: Conv::to_wit(&self.entity),
@@ -2935,8 +3035,8 @@ impl Conv<w::TextCompletionPick> for s::TextCompletionPickDto {
             seq: Conv::to_wit(&self.seq),
         }
     }
-    fn from_wit(v: w::TextCompletionPick) -> s::TextCompletionPickDto {
-        s::TextCompletionPickDto {
+    fn from_wit(v: w::TextCompletionPick) -> s::TextCompletionPick {
+        s::TextCompletionPick {
             entity: Conv::from_wit(v.entity),
             index: Conv::from_wit(v.index),
             seq: Conv::from_wit(v.seq),
@@ -3350,14 +3450,14 @@ impl WritableComponent for s::Interaction {
 }
 
 // `cuo:input/mouse`
-impl Resource for s::MouseInputDto {
+impl Resource for s::MouseInput {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_mouse(r).map(Conv::from_wit)
     }
 }
 
 // `cuo:input/keyboard`
-impl Resource for s::KeyboardInputDto {
+impl Resource for s::KeyboardInput {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_keyboard(r).map(Conv::from_wit)
     }
@@ -3407,7 +3507,7 @@ impl Component for s::ContainedInto {
 }
 
 // `cuo:ent/equipment`
-impl Component for s::EquipmentSlotsDto {
+impl Component for s::EquipmentSlots {
     fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
         c::column_equipment(q, term).into_iter().map(Conv::from_wit).collect()
     }
@@ -3462,7 +3562,7 @@ impl Component for s::ManualOpenedCorpse {
 }
 
 // `cuo:ent/properties`
-impl Component for s::EntityPropertiesDto {
+impl Component for s::EntityProperties {
     fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
         c::column_properties(q, term).into_iter().map(Conv::from_wit).collect()
     }
@@ -3496,12 +3596,12 @@ impl WritableComponent for s::ContainerSlotPosition {
 }
 
 // `cuo:game/context`
-impl Resource for s::GameContextDto {
+impl Resource for s::GameContext {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_context(r).map(Conv::from_wit)
     }
 }
-impl WritableResource for s::GameContextDto {
+impl WritableResource for s::GameContext {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::GameContext>::to_wit(self) == Conv::<w::GameContext>::to_wit(other)
     }
@@ -3516,19 +3616,19 @@ impl WritableResource for s::GameContextDto {
 }
 
 // `cuo:game/settings`
-impl Resource for s::GameSettingsDto {
+impl Resource for s::GameSettings {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_settings(r).map(Conv::from_wit)
     }
 }
 
 // `cuo:game/state`
-impl Resource for s::GameStateDto {
+impl Resource for s::GameState {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_state(r).map(Conv::from_wit)
     }
 }
-impl WritableResource for s::GameStateDto {
+impl WritableResource for s::GameState {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::GameState>::to_wit(self) == Conv::<w::GameState>::to_wit(other)
     }
@@ -3585,12 +3685,12 @@ impl GameEvent for s::ContainerOpenedEvent {
 }
 
 // `cuo:gump/container-positions`
-impl Resource for s::ContainerPositionsDto {
+impl Resource for s::ContainerPositions {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_container_positions(r).map(Conv::from_wit)
     }
 }
-impl WritableResource for s::ContainerPositionsDto {
+impl WritableResource for s::ContainerPositions {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::ContainerPositions>::to_wit(self) == Conv::<w::ContainerPositions>::to_wit(other)
     }
@@ -3616,12 +3716,12 @@ impl GameEvent for s::ContainerSlotEvent {
 }
 
 // `cuo:gump/container-tag`
-impl Component for s::ContainerGumpTagDto {
+impl Component for s::ContainerGumpTag {
     fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
         c::column_container_tag(q, term).into_iter().map(Conv::from_wit).collect()
     }
 }
-impl WritableComponent for s::ContainerGumpTagDto {
+impl WritableComponent for s::ContainerGumpTag {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::ContainerGumpTag>::to_wit(self) == Conv::<w::ContainerGumpTag>::to_wit(other)
     }
@@ -3707,7 +3807,7 @@ impl WritableComponent for s::HealthBarWindow {
 }
 
 // `cuo:gump/server`
-impl Component for s::ServerGumpDto {
+impl Component for s::ServerGump {
     fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
         c::column_server(q, term).into_iter().map(Conv::from_wit).collect()
     }
@@ -3732,7 +3832,7 @@ impl GameEvent for s::InputConsume {
 }
 
 // `cuo:input/host-hotkeys`
-impl Resource for s::HostHotkeysDto {
+impl Resource for s::HostHotkeys {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_host_hotkeys(r).map(Conv::from_wit)
     }
@@ -3750,12 +3850,12 @@ impl GameEvent for s::ModHotkeyFired {
 }
 
 // `cuo:input/mod-hotkeys`
-impl Resource for s::ModHotkeyBindingsDto {
+impl Resource for s::ModHotkeyBindings {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_mod_hotkeys(r).map(Conv::from_wit)
     }
 }
-impl WritableResource for s::ModHotkeyBindingsDto {
+impl WritableResource for s::ModHotkeyBindings {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::ModHotkeyBindings>::to_wit(self) == Conv::<w::ModHotkeyBindings>::to_wit(other)
     }
@@ -3770,7 +3870,7 @@ impl WritableResource for s::ModHotkeyBindingsDto {
 }
 
 // `cuo:input/world-single-click`
-impl Resource for s::WorldSingleClickDto {
+impl Resource for s::WorldSingleClick {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_world_single_click(r).map(Conv::from_wit)
     }
@@ -3799,12 +3899,12 @@ impl GameEvent for s::ItemMoveResult {
 }
 
 // `cuo:options/schema`
-impl Resource for s::ModOptionsSchemaDto {
+impl Resource for s::ModOptionsSchema {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_schema(r).map(Conv::from_wit)
     }
 }
-impl WritableResource for s::ModOptionsSchemaDto {
+impl WritableResource for s::ModOptionsSchema {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::ModOptionsSchema>::to_wit(self) == Conv::<w::ModOptionsSchema>::to_wit(other)
     }
@@ -3819,14 +3919,14 @@ impl WritableResource for s::ModOptionsSchemaDto {
 }
 
 // `cuo:options/values`
-impl Resource for s::ModOptionsValuesDto {
+impl Resource for s::ModOptionsValues {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_values(r).map(Conv::from_wit)
     }
 }
 
 // `cuo:player/buffs`
-impl Resource for s::PlayerBuffsDto {
+impl Resource for s::PlayerBuffs {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_buffs(r).map(Conv::from_wit)
     }
@@ -3857,7 +3957,7 @@ impl WritableComponent for s::Player {
 }
 
 // `cuo:player/skills`
-impl Resource for s::PlayerSkillsDto {
+impl Resource for s::PlayerSkills {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_skills(r).map(Conv::from_wit)
     }
@@ -3909,12 +4009,12 @@ impl WritableComponent for s::Anchorable {
 }
 
 // `cuo:ui/border-color`
-impl Component for s::BorderColorDto {
+impl Component for s::BorderColor {
     fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
         c::column_border_color(q, term).into_iter().map(Conv::from_wit).collect()
     }
 }
-impl WritableComponent for s::BorderColorDto {
+impl WritableComponent for s::BorderColor {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::BorderColor>::to_wit(self) == Conv::<w::BorderColor>::to_wit(other)
     }
@@ -4003,12 +4103,12 @@ impl WritableComponent for s::UiContainsByBounds {
 }
 
 // `cuo:ui/custom`
-impl Component for s::UiCustomDto {
+impl Component for s::UiCustom {
     fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
         c::column_custom(q, term).into_iter().map(Conv::from_wit).collect()
     }
 }
-impl WritableComponent for s::UiCustomDto {
+impl WritableComponent for s::UiCustom {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::UiCustom>::to_wit(self) == Conv::<w::UiCustom>::to_wit(other)
     }
@@ -4179,7 +4279,7 @@ impl WritableComponent for s::OptionsWindow {
 }
 
 // `cuo:ui/pick`
-impl Resource for s::UiPickDto {
+impl Resource for s::UiPick {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_pick(r).map(Conv::from_wit)
     }
@@ -4334,21 +4434,21 @@ impl WritableComponent for s::ModSupersedes {
 }
 
 // `cuo:ui/surface`
-impl Resource for s::UiSurfaceDto {
+impl Resource for s::UiSurface {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_surface(r).map(Conv::from_wit)
     }
 }
 
 // `cuo:ui/text-caret`
-impl Resource for s::TextCaretDto {
+impl Resource for s::TextCaret {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_text_caret(r).map(Conv::from_wit)
     }
 }
 
 // `cuo:ui/text-completion-state`
-impl Resource for s::TextCompletionStateDto {
+impl Resource for s::TextCompletionState {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_text_completion_state(r).map(Conv::from_wit)
     }
@@ -4534,7 +4634,7 @@ impl Component for s::IsMulti {
 }
 
 // `cuo:ent/mob-steps`
-impl Component for s::MobileStepsDto {
+impl Component for s::MobileSteps {
     fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
         c::column_mob_steps(q, term).into_iter().map(Conv::from_wit).collect()
     }
@@ -4963,21 +5063,21 @@ impl GameEvent for s::ModMoveRequest {
 }
 
 // `cuo:player/party`
-impl Resource for s::PartyDto {
+impl Resource for s::Party {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_party(r).map(Conv::from_wit)
     }
 }
 
 // `cuo:player/spellbook`
-impl Resource for s::SpellbooksDto {
+impl Resource for s::Spellbooks {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_player_spellbook(r).map(Conv::from_wit)
     }
 }
 
 // `cuo:player/steps`
-impl Resource for s::PlayerStepsDto {
+impl Resource for s::PlayerSteps {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_steps(r).map(Conv::from_wit)
     }
@@ -5001,7 +5101,7 @@ impl WritableComponent for s::CharCreationScene {
 }
 
 // `cuo:scene/character-list`
-impl GameEvent for s::CharacterSelectionDto {
+impl GameEvent for s::CharacterSelection {
     fn __send(&self, cmds: &wit::Commands) {
         let v: w::CharacterSelection = self.to_wit();
         c::send_character_list(cmds, &v);
@@ -5119,12 +5219,12 @@ impl WritableComponent for s::ServerSelectionScene {
 }
 
 // `cuo:ui/clipboard-set`
-impl Resource for s::ClipboardSetDto {
+impl Resource for s::ClipboardSet {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_clipboard_set(r).map(Conv::from_wit)
     }
 }
-impl WritableResource for s::ClipboardSetDto {
+impl WritableResource for s::ClipboardSet {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::ClipboardSet>::to_wit(self) == Conv::<w::ClipboardSet>::to_wit(other)
     }
@@ -5196,12 +5296,12 @@ impl WritableComponent for s::ReadOnlyText {
 }
 
 // `cuo:ui/text-clipboard-action`
-impl Resource for s::TextClipboardActionDto {
+impl Resource for s::TextClipboardAction {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_text_clipboard_action(r).map(Conv::from_wit)
     }
 }
-impl WritableResource for s::TextClipboardActionDto {
+impl WritableResource for s::TextClipboardAction {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::TextClipboardAction>::to_wit(self) == Conv::<w::TextClipboardAction>::to_wit(other)
     }
@@ -5216,12 +5316,12 @@ impl WritableResource for s::TextClipboardActionDto {
 }
 
 // `cuo:ui/text-completion`
-impl Resource for s::TextCompletionDto {
+impl Resource for s::TextCompletion {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_text_completion(r).map(Conv::from_wit)
     }
 }
-impl WritableResource for s::TextCompletionDto {
+impl WritableResource for s::TextCompletion {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::TextCompletion>::to_wit(self) == Conv::<w::TextCompletion>::to_wit(other)
     }
@@ -5236,12 +5336,12 @@ impl WritableResource for s::TextCompletionDto {
 }
 
 // `cuo:ui/text-completion-pick`
-impl Resource for s::TextCompletionPickDto {
+impl Resource for s::TextCompletionPick {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_text_completion_pick(r).map(Conv::from_wit)
     }
 }
-impl WritableResource for s::TextCompletionPickDto {
+impl WritableResource for s::TextCompletionPick {
     fn __same(&self, other: &Self) -> bool {
         Conv::<w::TextCompletionPick>::to_wit(self) == Conv::<w::TextCompletionPick>::to_wit(other)
     }
@@ -5475,9 +5575,9 @@ impl TagTrigger for s::ContainedInto {
     }
 }
 
-impl TypedTrigger for s::EquipmentSlotsDto {
+impl TypedTrigger for s::EquipmentSlots {
     type Wit = w::EquipmentSlots;
-    fn lift(v: w::EquipmentSlots) -> s::EquipmentSlotsDto {
+    fn lift(v: w::EquipmentSlots) -> s::EquipmentSlots {
         Conv::from_wit(v)
     }
 }
@@ -5513,9 +5613,9 @@ impl TagTrigger for s::ManualOpenedCorpse {
     }
 }
 
-impl TypedTrigger for s::EntityPropertiesDto {
+impl TypedTrigger for s::EntityProperties {
     type Wit = w::EntityProperties;
-    fn lift(v: w::EntityProperties) -> s::EntityPropertiesDto {
+    fn lift(v: w::EntityProperties) -> s::EntityProperties {
         Conv::from_wit(v)
     }
 }
@@ -5562,9 +5662,9 @@ impl TypedTrigger for s::ContainerSlotEvent {
     }
 }
 
-impl TypedTrigger for s::ContainerGumpTagDto {
+impl TypedTrigger for s::ContainerGumpTag {
     type Wit = w::ContainerGumpTag;
-    fn lift(v: w::ContainerGumpTag) -> s::ContainerGumpTagDto {
+    fn lift(v: w::ContainerGumpTag) -> s::ContainerGumpTag {
         Conv::from_wit(v)
     }
 }
@@ -5597,9 +5697,9 @@ impl TypedTrigger for s::HealthBarWindow {
     }
 }
 
-impl TypedTrigger for s::ServerGumpDto {
+impl TypedTrigger for s::ServerGump {
     type Wit = w::ServerGump;
-    fn lift(v: w::ServerGump) -> s::ServerGumpDto {
+    fn lift(v: w::ServerGump) -> s::ServerGump {
         Conv::from_wit(v)
     }
 }
@@ -5665,9 +5765,9 @@ impl TypedTrigger for s::Anchorable {
     }
 }
 
-impl TypedTrigger for s::BorderColorDto {
+impl TypedTrigger for s::BorderColor {
     type Wit = w::BorderColor;
-    fn lift(v: w::BorderColor) -> s::BorderColorDto {
+    fn lift(v: w::BorderColor) -> s::BorderColor {
         Conv::from_wit(v)
     }
 }
@@ -5705,9 +5805,9 @@ impl TagTrigger for s::UiContainsByBounds {
     }
 }
 
-impl TypedTrigger for s::UiCustomDto {
+impl TypedTrigger for s::UiCustom {
     type Wit = w::UiCustom;
-    fn lift(v: w::UiCustom) -> s::UiCustomDto {
+    fn lift(v: w::UiCustom) -> s::UiCustom {
         Conv::from_wit(v)
     }
 }
@@ -5896,9 +5996,9 @@ impl TagTrigger for s::IsMulti {
     }
 }
 
-impl TypedTrigger for s::MobileStepsDto {
+impl TypedTrigger for s::MobileSteps {
     type Wit = w::MobileSteps;
-    fn lift(v: w::MobileSteps) -> s::MobileStepsDto {
+    fn lift(v: w::MobileSteps) -> s::MobileSteps {
         Conv::from_wit(v)
     }
 }
@@ -6077,9 +6177,9 @@ impl TagTrigger for s::CharCreationScene {
     }
 }
 
-impl TypedTrigger for s::CharacterSelectionDto {
+impl TypedTrigger for s::CharacterSelection {
     type Wit = w::CharacterSelection;
-    fn lift(v: w::CharacterSelection) -> s::CharacterSelectionDto {
+    fn lift(v: w::CharacterSelection) -> s::CharacterSelection {
         Conv::from_wit(v)
     }
 }

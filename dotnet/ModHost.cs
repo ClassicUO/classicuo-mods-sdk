@@ -12,11 +12,14 @@ internal sealed class ModHost
     internal void UseJson(JsonSerializerContext context) => _json.Add(context);
 
     internal static string PathOf<T>() =>
-        TypePaths.TryOf<T>(out var path)
-            ? path
-            : throw new InvalidOperationException(
-                $"{typeof(T).Name} is not a host payload type — only CuoModSdk.Types.* types " +
-                "carry a registry type-path (regenerate with `make gen-mod-sdk` if the host has it)");
+        PathCache<T>.Path ?? throw new InvalidOperationException(
+            $"{typeof(T).Name} is not a host payload type — only CuoModSdk.Types.* types " +
+            "carry a registry type-path (regenerate with `make gen-mod-sdk` if the host has it)");
+
+    static class PathCache<T>
+    {
+        internal static readonly string? Path = TypePaths.TryOf<T>(out var path) ? path : null;
+    }
 
     /// <summary>
     /// Source-gen JSON metadata for a <see cref="Storage"/> blob type: any context the mod

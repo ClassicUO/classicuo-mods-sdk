@@ -19,352 +19,6 @@ interface host {
   storage-set: func(scope: scope, value: string);
 }
 
-interface assets {
-  enum image-kind {
-    land,
-    art,
-    gump,
-    texmap,
-    light,
-  }
-
-  record size {
-    width: u32,
-    height: u32,
-  }
-
-  record image {
-    width: u32,
-    height: u32,
-    rgba: list<u8>,
-  }
-
-  record anim-key {
-    body: u16,
-    action: u8,
-    direction: u8,
-  }
-
-  record frame-info {
-    width: u32,
-    height: u32,
-    center-x: s32,
-    center-y: s32,
-  }
-
-  record static-info {
-    name: string,
-    %flags: u64,
-    weight: u8,
-    layer: u8,
-    count: s32,
-    anim-id: u16,
-    hue: u16,
-    light-index: u16,
-    height: u8,
-  }
-
-  record land-info {
-    name: string,
-    %flags: u64,
-    texmap: u16,
-  }
-
-  record land-cell {
-    graphic: u16,
-    z: s8,
-  }
-
-  record static-cell {
-    graphic: u16,
-    z: s8,
-    hue: u16,
-  }
-
-  record multi-part {
-    graphic: u16,
-    x: s16,
-    y: s16,
-    z: s16,
-  }
-
-  record skill {
-    index: u16,
-    name: string,
-    has-action: bool,
-  }
-
-  image-size: func(kind: image-kind, id: u32) -> option<size>;
-
-  image-pixels: func(kind: image-kind, id: u32, hue: u16) -> option<image>;
-
-  anim-frames: func(key: anim-key) -> option<u32>;
-
-  anim-frame: func(key: anim-key, frame: u32) -> option<frame-info>;
-
-  anim-pixels: func(key: anim-key, frame: u32, hue: u16) -> option<image>;
-
-  static-tile: func(graphic: u16) -> option<static-info>;
-
-  land-tile: func(id: u16) -> option<land-info>;
-
-  hue-ramp: func(hue: u16) -> option<list<u32>>;
-
-  cliloc: func(id: u32, args: list<string>) -> string;
-
-  map-size: func(%map: u8) -> option<size>;
-
-  map-land: func(%map: u8, x: u16, y: u16) -> option<land-cell>;
-
-  map-statics: func(%map: u8, x: u16, y: u16) -> list<static-cell>;
-
-  multi: func(id: u16) -> list<multi-part>;
-
-  skills: func() -> list<skill>;
-}
-
-interface actions {
-  type serial = u32;
-
-  enum direction {
-    north,
-    north-east,
-    east,
-    south-east,
-    south,
-    south-west,
-    west,
-    north-west,
-  }
-
-  enum speech-kind {
-    regular,
-    emote,
-    whisper,
-    yell,
-    guild,
-    alliance,
-  }
-
-  enum lock-state {
-    up,
-    down,
-    locked,
-  }
-
-  enum stat {
-    str,
-    dex,
-    int,
-  }
-
-  enum virtue {
-    honor,
-    sacrifice,
-    valor,
-  }
-
-  enum ability {
-    primary,
-    secondary,
-  }
-
-  enum window {
-    paperdoll,
-    status,
-    journal,
-    skills,
-    backpack,
-    world-map,
-    minimap,
-    options,
-    buffs,
-    combat-book,
-    party,
-    guild,
-    quest,
-    logout,
-  }
-
-  record point {
-    x: u16,
-    y: u16,
-    z: s8,
-  }
-
-  variant destination {
-    container(serial),
-    container-at(tuple<serial, u16, u16>),
-    ground(point),
-  }
-
-  double-click: func(target: serial);
-
-  single-click: func(target: serial);
-
-  pick-up: func(item: serial, amount: u16);
-
-  drop: func(to: destination);
-
-  equip: func(layer: u8, mobile: serial);
-
-  move-item: func(item: serial, amount: u16, to: destination);
-
-  wear: func(item: serial, layer: u8, mobile: serial);
-
-  use-item-on: func(item: serial, target: serial);
-
-  equip-last-weapon: func();
-
-  rename: func(mobile: serial, name: string);
-
-  request-properties: func(target: serial);
-
-  close-container: func(container: serial);
-
-  walk: func(dir: direction, run: bool);
-
-  walk-to: func(at: point);
-
-  walk-to-within: func(at: point, distance: u32);
-
-  cancel-walk-to: func();
-
-  open-door: func();
-
-  resync: func();
-
-  set-war-mode: func(on: bool);
-
-  attack: func(mobile: serial);
-
-  use-ability: func(which: ability);
-
-  clear-ability: func();
-
-  toggle-flying: func();
-
-  target-object: func(target: serial);
-
-  target-location: func(at: point, graphic: u16);
-
-  target-cancel: func();
-
-  clear-target-queue: func();
-
-  request-target: func(prompt: string);
-
-  cast-spell: func(id: u16);
-
-  open-spellbook: func(kind: u8);
-
-  use-skill: func(index: u16);
-
-  set-skill-lock: func(index: u16, state: lock-state);
-
-  set-stat-lock: func(which: stat, state: lock-state);
-
-  invoke-virtue: func(which: virtue);
-
-  emote-action: func(name: string);
-
-  say: func(text: string, kind: speech-kind, hue: option<u16>);
-
-  party-say: func(text: string, to: option<serial>);
-
-  gump-reply: func(gump: u32, button: s32, switches: list<u32>, texts: list<tuple<u16, string>>);
-
-  gump-close: func(gump: u32);
-
-  request-context-menu: func(target: serial);
-
-  context-menu-reply: func(target: serial, index: u16);
-
-  prompt-reply: func(text: string);
-
-  prompt-cancel: func();
-
-  menu-reply: func(menu: serial, menu-id: u16, index: u16, graphic: u16, hue: u16);
-
-  text-entry-reply: func(dialog: serial, parent-id: u8, button: u8, text: string, ok: bool);
-
-  dye-reply: func(tub: serial, graphic: u16, hue: u16);
-
-  help-request: func();
-
-  party-invite: func();
-
-  party-remove: func(member: option<serial>);
-
-  party-accept: func(leader: serial);
-
-  party-decline: func(leader: serial);
-
-  party-set-loot: func(shareable: bool);
-
-  trade-accept: func(container: serial, accepted: bool);
-
-  trade-cancel: func(container: serial);
-
-  trade-set-gold: func(container: serial, gold: u32, platinum: u32);
-
-  vendor-buy: func(vendor: serial, items: list<tuple<serial, u16>>);
-
-  vendor-sell: func(vendor: serial, items: list<tuple<serial, u16>>);
-
-  request-status: func(mobile: option<serial>);
-
-  request-skills: func(mobile: option<serial>);
-
-  open-window: func(w: window, target: option<serial>);
-
-  close-window: func(w: window);
-
-  set-view-range: func(range: u8);
-
-  logout: func();
-
-  set-window-title: func(title: string);
-}
-
-interface packets {
-  send-to-server: func(packet: list<u8>);
-
-  send-to-client: func(packet: list<u8>);
-}
-
-interface net {
-  ws-open: func(url: string) -> u32;
-
-  ws-send: func(socket: u32, data: list<u8>) -> bool;
-
-  ws-recv: func(socket: u32) -> option<list<u8>>;
-
-  ws-close: func(socket: u32);
-}
-
-interface legacy-plugins {
-  active: func() -> bool;
-
-  packet-lengths: func() -> list<u8>;
-
-  load: func(paths: list<string>, client-version: u32, packet-lengths: list<u8>) -> u32;
-
-  packet: func(incoming: bool, data: list<u8>) -> list<u8>;
-
-  poll: func() -> list<u8>;
-
-  hotkey: func(key: s32, mods: s32, pressed: bool) -> bool;
-
-  mouse: func(button: s32, wheel: s32);
-
-  notify: func(ev: u32);
-
-  player-position: func(has: bool, x: s32, y: s32, z: s32);
-
-  autowalking: func(on: bool);
-}
-
 interface types {
   use tinyecs:modding/ecs@0.1.0.{entity};
 
@@ -579,8 +233,14 @@ interface types {
     value: s32,
   }
 
+  enum interaction-state {
+    none,
+    hovered,
+    pressed,
+  }
+
   record interaction {
-    state: u8,
+    state: interaction-state,
   }
 
   record mouse-input {
@@ -608,6 +268,11 @@ interface types {
     pressed-once: list<s32>,
   }
 
+  enum chat-kind {
+    overhead,
+    system,
+  }
+
   record chat-message {
     serial: u32,
     text: string,
@@ -617,7 +282,7 @@ interface types {
     is-unicode: bool,
     message-type: u8,
     time: f32,
-    kind: u8,
+    kind: chat-kind,
   }
 
   record prompt-opened-event {
@@ -686,8 +351,18 @@ interface types {
     highlight-game-objects: bool,
   }
 
+  enum game-state-kind {
+    loading,
+    login-screen,
+    server-selection,
+    character-selection,
+    character-creation,
+    login-error,
+    game-screen,
+  }
+
   record game-state {
-    current: u8,
+    current: game-state-kind,
   }
 
   record container-window {
@@ -861,9 +536,22 @@ interface types {
     container: u32,
   }
 
+  enum item-move-outcome {
+    accepted,
+    denied,
+    end-dragging,
+  }
+
   record item-move-result {
-    %result: u8,
+    %result: item-move-outcome,
     code: u8,
+  }
+
+  enum mod-option-kind {
+    toggle,
+    slider,
+    stepper,
+    cycle,
   }
 
   record mod-option {
@@ -871,7 +559,7 @@ interface types {
     label: string,
     group: string,
     keywords: string,
-    kind: u8,
+    kind: mod-option-kind,
     min: s32,
     max: s32,
     step: s32,
@@ -964,12 +652,18 @@ interface types {
     mouse-offset: vector2,
   }
 
+  enum lock {
+    up,
+    down,
+    locked,
+  }
+
   record player-skill {
     index: s32,
     value: u16,
     base: u16,
     cap: u16,
-    lock: u8,
+    lock: lock,
   }
 
   record player-skills {
@@ -978,9 +672,9 @@ interface types {
   }
 
   record stat-locks {
-    str: u8,
-    dex: u8,
-    int: u8,
+    str: lock,
+    dex: lock,
+    int: lock,
   }
 
   record local-target-result-event {
@@ -993,12 +687,25 @@ interface types {
     cancelled: bool,
   }
 
+  enum target-mode {
+    object,
+    position,
+    multi,
+  }
+
+  enum target-type {
+    neutral,
+    harmful,
+    beneficial,
+    cancel,
+  }
+
   record targeting-state {
     is-targeting: bool,
-    mode: u8,
+    mode: target-mode,
     local: bool,
     cursor-id: u32,
-    cursor-type: u8,
+    cursor-type: target-type,
     just-targeted: bool,
     multi-id: u16,
     multi-offset-x: s16,
@@ -1057,8 +764,24 @@ interface types {
     hover-hue: vector3,
   }
 
+  enum uo-custom-kind {
+    gump,
+    gump-nine-patch,
+    gump-tiled,
+    art,
+    land,
+    animation,
+    mini-map,
+    none,
+    wrapped-text,
+    gump-slice,
+    hue-grid,
+    dyn-texture,
+    world-map,
+  }
+
   record ui-custom {
-    kind: u8,
+    kind: uo-custom-kind,
     asset-id: u32,
     hue-x: f32,
     hue-y: f32,
@@ -1121,8 +844,14 @@ interface types {
     style: scrollbar-style,
   }
 
+  enum stat {
+    str,
+    dex,
+    int,
+  }
+
   record stat-lock-button {
-    stat: u8,
+    stat: stat,
   }
 
   record status-bar-window {
@@ -1341,7 +1070,7 @@ interface types {
 
   record spellbook-window {
     serial: u32,
-    school: s32,
+    school: u8,
     page: s32,
     sounded-page: s32,
     page-count: s32,
@@ -1526,6 +1255,349 @@ interface types {
     color: color,
     name-hue: u16,
   }
+}
+
+interface assets {
+  use types.{layer};
+
+  enum image-kind {
+    land,
+    art,
+    gump,
+    texmap,
+    light,
+  }
+
+  record size {
+    width: u32,
+    height: u32,
+  }
+
+  record image {
+    width: u32,
+    height: u32,
+    rgba: list<u8>,
+  }
+
+  record anim-key {
+    body: u16,
+    action: u8,
+    direction: u8,
+  }
+
+  record frame-info {
+    width: u32,
+    height: u32,
+    center-x: s32,
+    center-y: s32,
+  }
+
+  record static-info {
+    name: string,
+    %flags: u64,
+    weight: u8,
+    layer: layer,
+    count: s32,
+    anim-id: u16,
+    hue: u16,
+    light-index: u16,
+    height: u8,
+  }
+
+  record land-info {
+    name: string,
+    %flags: u64,
+    texmap: u16,
+  }
+
+  record land-cell {
+    graphic: u16,
+    z: s8,
+  }
+
+  record static-cell {
+    graphic: u16,
+    z: s8,
+    hue: u16,
+  }
+
+  record multi-part {
+    graphic: u16,
+    x: s16,
+    y: s16,
+    z: s16,
+  }
+
+  record skill {
+    index: u16,
+    name: string,
+    has-action: bool,
+  }
+
+  image-size: func(kind: image-kind, id: u32) -> option<size>;
+
+  image-pixels: func(kind: image-kind, id: u32, hue: u16) -> option<image>;
+
+  anim-frames: func(key: anim-key) -> option<u32>;
+
+  anim-frame: func(key: anim-key, frame: u32) -> option<frame-info>;
+
+  anim-pixels: func(key: anim-key, frame: u32, hue: u16) -> option<image>;
+
+  static-tile: func(graphic: u16) -> option<static-info>;
+
+  land-tile: func(id: u16) -> option<land-info>;
+
+  hue-ramp: func(hue: u16) -> option<list<u32>>;
+
+  cliloc: func(id: u32, args: list<string>) -> string;
+
+  map-size: func(%map: u8) -> option<size>;
+
+  map-land: func(%map: u8, x: u16, y: u16) -> option<land-cell>;
+
+  map-statics: func(%map: u8, x: u16, y: u16) -> list<static-cell>;
+
+  multi: func(id: u16) -> list<multi-part>;
+
+  skills: func() -> list<skill>;
+}
+
+interface actions {
+  use types.{layer, lock as lock-state, stat};
+
+  type serial = u32;
+
+  enum direction {
+    north,
+    north-east,
+    east,
+    south-east,
+    south,
+    south-west,
+    west,
+    north-west,
+  }
+
+  enum speech-kind {
+    regular,
+    emote,
+    whisper,
+    yell,
+    guild,
+    alliance,
+  }
+
+  enum emote {
+    bow,
+    salute,
+  }
+
+  enum virtue {
+    honor,
+    sacrifice,
+    valor,
+  }
+
+  enum ability {
+    primary,
+    secondary,
+  }
+
+  enum window {
+    paperdoll,
+    status,
+    journal,
+    skills,
+    backpack,
+    world-map,
+    minimap,
+    options,
+    buffs,
+    combat-book,
+    party,
+    guild,
+    quest,
+    logout,
+  }
+
+  record point {
+    x: u16,
+    y: u16,
+    z: s8,
+  }
+
+  variant destination {
+    container(serial),
+    container-at(tuple<serial, u16, u16>),
+    ground(point),
+  }
+
+  double-click: func(target: serial);
+
+  single-click: func(target: serial);
+
+  pick-up: func(item: serial, amount: u16);
+
+  drop: func(to: destination);
+
+  equip: func(layer: layer, mobile: serial);
+
+  move-item: func(item: serial, amount: u16, to: destination);
+
+  wear: func(item: serial, layer: layer, mobile: serial);
+
+  use-item-on: func(item: serial, target: serial);
+
+  equip-last-weapon: func();
+
+  rename: func(mobile: serial, name: string);
+
+  request-properties: func(target: serial);
+
+  close-container: func(container: serial);
+
+  walk: func(dir: direction, run: bool);
+
+  walk-to: func(at: point);
+
+  walk-to-within: func(at: point, distance: u32);
+
+  cancel-walk-to: func();
+
+  open-door: func();
+
+  resync: func();
+
+  set-war-mode: func(on: bool);
+
+  attack: func(mobile: serial);
+
+  use-ability: func(which: ability);
+
+  clear-ability: func();
+
+  toggle-flying: func();
+
+  target-object: func(target: serial);
+
+  target-location: func(at: point, graphic: u16);
+
+  target-cancel: func();
+
+  clear-target-queue: func();
+
+  request-target: func(prompt: string);
+
+  cast-spell: func(id: u16);
+
+  open-spellbook: func(kind: u8);
+
+  use-skill: func(index: u16);
+
+  set-skill-lock: func(index: u16, state: lock-state);
+
+  set-stat-lock: func(which: stat, state: lock-state);
+
+  invoke-virtue: func(which: virtue);
+
+  emote-action: func(which: emote);
+
+  say: func(text: string, kind: speech-kind, hue: option<u16>);
+
+  party-say: func(text: string, to: option<serial>);
+
+  gump-reply: func(gump: u32, button: s32, switches: list<u32>, texts: list<tuple<u16, string>>);
+
+  gump-close: func(gump: u32);
+
+  request-context-menu: func(target: serial);
+
+  context-menu-reply: func(target: serial, index: u16);
+
+  prompt-reply: func(text: string);
+
+  prompt-cancel: func();
+
+  menu-reply: func(menu: serial, menu-id: u16, index: u16, graphic: u16, hue: u16);
+
+  text-entry-reply: func(dialog: serial, parent-id: u8, button: u8, text: string, ok: bool);
+
+  dye-reply: func(tub: serial, graphic: u16, hue: u16);
+
+  help-request: func();
+
+  party-invite: func();
+
+  party-remove: func(member: option<serial>);
+
+  party-accept: func(leader: serial);
+
+  party-decline: func(leader: serial);
+
+  party-set-loot: func(shareable: bool);
+
+  trade-accept: func(container: serial, accepted: bool);
+
+  trade-cancel: func(container: serial);
+
+  trade-set-gold: func(container: serial, gold: u32, platinum: u32);
+
+  vendor-buy: func(vendor: serial, items: list<tuple<serial, u16>>);
+
+  vendor-sell: func(vendor: serial, items: list<tuple<serial, u16>>);
+
+  request-status: func(mobile: option<serial>);
+
+  request-skills: func(mobile: option<serial>);
+
+  open-window: func(w: window, target: option<serial>);
+
+  close-window: func(w: window);
+
+  set-view-range: func(range: u8);
+
+  logout: func();
+
+  set-window-title: func(title: string);
+}
+
+interface packets {
+  send-to-server: func(packet: list<u8>);
+
+  send-to-client: func(packet: list<u8>);
+}
+
+interface net {
+  ws-open: func(url: string) -> u32;
+
+  ws-send: func(socket: u32, data: list<u8>) -> bool;
+
+  ws-recv: func(socket: u32) -> option<list<u8>>;
+
+  ws-close: func(socket: u32);
+}
+
+interface legacy-plugins {
+  active: func() -> bool;
+
+  packet-lengths: func() -> list<u8>;
+
+  load: func(paths: list<string>, client-version: u32, packet-lengths: list<u8>) -> u32;
+
+  packet: func(incoming: bool, data: list<u8>) -> list<u8>;
+
+  poll: func() -> list<u8>;
+
+  hotkey: func(key: s32, mods: s32, pressed: bool) -> bool;
+
+  mouse: func(button: s32, wheel: s32);
+
+  notify: func(ev: u32);
+
+  player-position: func(has: bool, x: s32, y: s32, z: s32);
+
+  autowalking: func(on: bool);
 }
 
 interface components {
@@ -2062,12 +2134,12 @@ interface components {
 world mod {
   import tinyecs:modding/ecs@0.1.0;
   import host;
+  import types;
   import assets;
   import actions;
   import packets;
   import net;
   import legacy-plugins;
-  import types;
   import components;
   use tinyecs:modding/ecs@0.1.0.{app};
 

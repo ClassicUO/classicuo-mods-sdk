@@ -14,12 +14,8 @@ internal interface IActionsImports {
         REGULAR, EMOTE, WHISPER, YELL, GUILD, ALLIANCE
     }
 
-    internal enum LockState {
-        UP, DOWN, LOCKED
-    }
-
-    internal enum Stat {
-        STR, DEX, INT
+    internal enum Emote {
+        BOW, SALUTE
     }
 
     internal enum Virtue {
@@ -171,9 +167,9 @@ internal interface IActionsImports {
 
     }
 
-    internal static unsafe void Equip(byte layer, uint mobile)
+    internal static unsafe void Equip(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Layer layer, uint mobile)
     {
-        ActionsImportsInterop.EquipWasmInterop.wasmImportEquip(layer, unchecked((int)(mobile)));
+        ActionsImportsInterop.EquipWasmInterop.wasmImportEquip((int)layer, unchecked((int)(mobile)));
 
     }
 
@@ -223,9 +219,9 @@ internal interface IActionsImports {
 
     }
 
-    internal static unsafe void Wear(uint item, byte layer, uint mobile)
+    internal static unsafe void Wear(uint item, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Layer layer, uint mobile)
     {
-        ActionsImportsInterop.WearWasmInterop.wasmImportWear(unchecked((int)(item)), layer, unchecked((int)(mobile)));
+        ActionsImportsInterop.WearWasmInterop.wasmImportWear(unchecked((int)(item)), (int)layer, unchecked((int)(mobile)));
 
     }
 
@@ -399,13 +395,13 @@ internal interface IActionsImports {
 
     }
 
-    internal static unsafe void SetSkillLock(ushort index, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IActionsImports.LockState state)
+    internal static unsafe void SetSkillLock(ushort index, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Lock state)
     {
         ActionsImportsInterop.SetSkillLockWasmInterop.wasmImportSetSkillLock(index, (int)state);
 
     }
 
-    internal static unsafe void SetStatLock(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IActionsImports.Stat which, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IActionsImports.LockState state)
+    internal static unsafe void SetStatLock(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Stat which, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Lock state)
     {
         ActionsImportsInterop.SetStatLockWasmInterop.wasmImportSetStatLock((int)which, (int)state);
 
@@ -417,22 +413,9 @@ internal interface IActionsImports {
 
     }
 
-    internal static unsafe void EmoteAction(string name)
+    internal static unsafe void EmoteAction(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IActionsImports.Emote which)
     {
-        var cleanups = new global::System.Collections.Generic.List<global::System.Action>();
-
-        var utf8Bytes = global::System.Text.Encoding.UTF8.GetBytes(name);
-        var length = utf8Bytes.Length;
-        var gcHandle = global::System.Runtime.InteropServices.GCHandle.Alloc(utf8Bytes, global::System.Runtime.InteropServices.GCHandleType.Pinned);
-        var strPtr = gcHandle.AddrOfPinnedObject();
-
-        cleanups.Add(()=> gcHandle.Free());
-        ActionsImportsInterop.EmoteActionWasmInterop.wasmImportEmoteAction(strPtr.ToInt32(), length);
-
-        foreach (var cleanup in cleanups)
-        {
-            cleanup();
-        }
+        ActionsImportsInterop.EmoteActionWasmInterop.wasmImportEmoteAction((int)which);
 
     }
 

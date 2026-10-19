@@ -174,6 +174,15 @@ e)` for an existing entity), resource reads (`get-mouse`), resource writes throu
 and events (`send-<x>` / `read-<x>`). A value the game sends that an enum has no case for
 reads as case 0.
 
+Enumerated fields carry a name, never a bare number. A field with a fixed set of values
+0..n (a skill `lock`, a chat `kind`, the `game-state-kind`, a `layer`, ...) is a WIT
+`enum`; one whose values have gaps or a bit mask (`direction`, `message-type`,
+`spell-book-type`, `flags`) crosses as the integer, with named constants in every SDK
+(Rust `direction::SOUTH`, C# `Direction.South`, C `CUO_DIRECTION_SOUTH`). Hotkey keys and
+mouse buttons have the same: Rust `key_code::F8` / `mouse_button::MIDDLE`, C# `KeyCode.F8`
+/ `MouseButton.Middle`, C `CUO_KEY_F8` / `CUO_MOUSE_MIDDLE` (wheel notches are
+`WHEEL_UP` / `WHEEL_DOWN`).
+
 ### Settings
 
 Declare your options once (`cuo:options/schema`) and they appear in the client's

@@ -71,7 +71,7 @@ public partial struct BookWindow
 }
 
 /// <summary><c>cuo:ui/border-color</c></summary>
-public partial struct BorderColorDto
+public partial struct BorderColor
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/border-color";
@@ -122,20 +122,20 @@ public partial struct CharCreationScene
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.CharInfoDto</c>).</summary>
-public partial struct CharInfoDto
+public partial struct CharInfo
 {
     public string Name;
     public uint Index;
 }
 
 /// <summary><c>cuo:scene/character-list</c></summary>
-public partial struct CharacterSelectionDto
+public partial struct CharacterSelection
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:scene/character-list";
 
-    public CharInfoDto[] Characters;
-    public TownInfoDto[] Towns;
+    public CharInfo[] Characters;
+    public TownInfo[] Towns;
 }
 
 /// <summary><c>cuo:scene/character-selection</c>
@@ -147,8 +147,15 @@ public partial struct CharacterSelectionScene
     public const string Path = "cuo:scene/character-selection";
 }
 
+/// <remarks><c>ClassicUO.Ecs.Modding.ChatKind</c> — crosses the boundary as a number.</remarks>
+public enum ChatKind : byte
+{
+    Overhead = 0,
+    System = 1,
+}
+
 /// <summary><c>cuo:ecs/child-of</c></summary>
-public partial struct ChildOfDto
+public partial struct ChildOf
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ecs/child-of";
@@ -157,7 +164,7 @@ public partial struct ChildOfDto
 }
 
 /// <summary><c>cuo:ui/clipboard-set</c></summary>
-public sealed partial class ClipboardSetDto
+public sealed partial class ClipboardSet
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/clipboard-set";
@@ -226,7 +233,7 @@ public partial struct ContainerClosedEvent
 }
 
 /// <summary><c>cuo:gump/container-tag</c></summary>
-public partial struct ContainerGumpTagDto
+public partial struct ContainerGumpTag
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:gump/container-tag";
@@ -263,7 +270,7 @@ public partial struct ContainerOpenedEvent
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.ContainerPositionDto</c>).</summary>
-public partial struct ContainerPositionDto
+public partial struct ContainerPosition
 {
     public uint Serial;
     public int X;
@@ -271,12 +278,12 @@ public partial struct ContainerPositionDto
 }
 
 /// <summary><c>cuo:gump/container-positions</c></summary>
-public partial struct ContainerPositionsDto
+public partial struct ContainerPositions
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:gump/container-positions";
 
-    public ContainerPositionDto[] Saved;
+    public ContainerPosition[] Saved;
 }
 
 /// <remarks><c>ClassicUO.Ecs.ContainerSlotAction</c> — crosses the boundary as a number.</remarks>
@@ -329,7 +336,8 @@ public partial struct ContextMenuEntry
     public ushort Index;
     public int Cliloc;
     public string Text;
-    public ushort Flags;
+    /// <summary>enum ContextMenuFlags (0=None, 1=Disabled, 2=Arrow, 32=Hued)</summary>
+    public ContextMenuFlags Flags;
     public ushort Hue;
 }
 
@@ -341,6 +349,15 @@ public partial struct ContextMenuEvent
 
     public uint Serial;
     public ContextMenuEntry[] Entries;
+}
+
+/// <remarks><c>ClassicUO.Ecs.ContextMenuFlags</c> — crosses the boundary as a number.</remarks>
+public enum ContextMenuFlags : ushort
+{
+    None = 0,
+    Disabled = 1,
+    Arrow = 2,
+    Hued = 32,
 }
 
 /// <remarks><c>ClassicUO.Game.Data.Direction</c> — crosses the boundary as a number.</remarks>
@@ -385,7 +402,7 @@ public partial struct EntityName
 }
 
 /// <summary><c>cuo:ent/properties</c></summary>
-public partial struct EntityPropertiesDto
+public partial struct EntityProperties
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ent/properties";
@@ -393,11 +410,11 @@ public partial struct EntityPropertiesDto
     public uint Serial;
     public uint Revision;
     public string Name;
-    public OplLineDto[] Lines;
+    public OplLine[] Lines;
 }
 
 /// <summary><c>cuo:ent/equipment</c></summary>
-public partial struct EquipmentSlotsDto
+public partial struct EquipmentSlots
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ent/equipment";
@@ -447,7 +464,7 @@ public sealed partial class FocusedInput
 }
 
 /// <summary><c>cuo:game/context</c></summary>
-public partial struct GameContextDto
+public partial struct GameContext
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:game/context";
@@ -470,7 +487,7 @@ public partial struct GameScene
 }
 
 /// <summary><c>cuo:game/settings</c></summary>
-public partial struct GameSettingsDto
+public partial struct GameSettings
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:game/settings";
@@ -489,12 +506,25 @@ public partial struct GameSettingsDto
 }
 
 /// <summary><c>cuo:game/state</c></summary>
-public partial struct GameStateDto
+public partial struct GameState
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:game/state";
 
-    public byte Current;
+    /// <summary>enum GameStateKind (0=Loading, 1=LoginScreen, 2=ServerSelection, 3=CharacterSelection, 4=CharacterCreation, 5=LoginError, 6=GameScreen)</summary>
+    public GameStateKind Current;
+}
+
+/// <remarks><c>ClassicUO.Ecs.Modding.GameStateKind</c> — crosses the boundary as a number.</remarks>
+public enum GameStateKind : byte
+{
+    Loading = 0,
+    LoginScreen = 1,
+    ServerSelection = 2,
+    CharacterSelection = 3,
+    CharacterCreation = 4,
+    LoginError = 5,
+    GameScreen = 6,
 }
 
 /// <summary><c>cuo:ui/global-z</c></summary>
@@ -599,7 +629,7 @@ public partial struct Hits
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.HostHotkeyDto</c>).</summary>
-public partial struct HostHotkeyDto
+public partial struct HostHotkey
 {
     public int Key;
     public bool Ctrl;
@@ -609,12 +639,12 @@ public partial struct HostHotkeyDto
 }
 
 /// <summary><c>cuo:input/host-hotkeys</c></summary>
-public partial struct HostHotkeysDto
+public partial struct HostHotkeys
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:input/host-hotkeys";
 
-    public HostHotkeyDto[] Hotkeys;
+    public HostHotkey[] Hotkeys;
 }
 
 /// <summary><c>cuo:gump/house-design</c></summary>
@@ -637,12 +667,21 @@ public partial struct Hue
 }
 
 /// <summary><c>cuo:ui/interaction</c></summary>
-public partial struct InteractionDto
+public partial struct Interaction
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/interaction";
 
-    public byte State;
+    /// <summary>enum InteractionState (0=None, 1=Hovered, 2=Pressed)</summary>
+    public InteractionState State;
+}
+
+/// <remarks><c>ClassicUO.Ecs.Modding.InteractionState</c> — crosses the boundary as a number.</remarks>
+public enum InteractionState : byte
+{
+    None = 0,
+    Hovered = 1,
+    Pressed = 2,
 }
 
 /// <summary><c>cuo:ent/is-container</c>
@@ -685,13 +724,22 @@ public partial struct ItemDropSent
     public uint Container;
 }
 
+/// <remarks><c>ClassicUO.Ecs.Modding.ItemMoveOutcome</c> — crosses the boundary as a number.</remarks>
+public enum ItemMoveOutcome : byte
+{
+    Accepted = 0,
+    Denied = 1,
+    EndDragging = 2,
+}
+
 /// <summary><c>cuo:item/move-result</c></summary>
 public partial struct ItemMoveResult
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:item/move-result";
 
-    public byte Result;
+    /// <summary>enum ItemMoveOutcome (0=Accepted, 1=Denied, 2=EndDragging)</summary>
+    public ItemMoveOutcome Result;
     public byte Code;
 }
 
@@ -743,7 +791,7 @@ public enum JustifyContent : byte
 }
 
 /// <summary><c>cuo:input/keyboard</c></summary>
-public partial struct KeyboardInputDto
+public partial struct KeyboardInput
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:input/keyboard";
@@ -800,6 +848,14 @@ public partial struct LocalTargetResultEvent
     public ushort Y;
     public sbyte Z;
     public bool Cancelled;
+}
+
+/// <remarks><c>ClassicUO.Game.Data.Lock</c> — crosses the boundary as a number.</remarks>
+public enum Lock : byte
+{
+    Up = 0,
+    Down = 1,
+    Locked = 2,
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.LoginErrorInfo</c>).</summary>
@@ -903,6 +959,26 @@ public partial struct MessageBoxWindow
     public const string Path = "cuo:gump/message-box";
 }
 
+/// <remarks><c>ClassicUO.Game.Data.MessageType</c> — crosses the boundary as a number.</remarks>
+public enum MessageType : byte
+{
+    Regular = 0,
+    System = 1,
+    Emote = 2,
+    Limit3Spell = 3,
+    Label = 6,
+    Focus = 7,
+    Whisper = 8,
+    Yell = 9,
+    Spell = 10,
+    Guild = 13,
+    Alliance = 14,
+    Command = 15,
+    GmChat = 16,
+    Encoded = 192,
+    Party = 255,
+}
+
 /// <summary><c>cuo:gump/minimap</c></summary>
 public partial struct MiniMapWindow
 {
@@ -935,24 +1011,25 @@ public partial struct MobAnimation
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.MobStepDto</c>).</summary>
-public partial struct MobStepDto
+public partial struct MobStep
 {
     public int X;
     public int Y;
     public sbyte Z;
-    public byte Direction;
+    /// <summary>enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)</summary>
+    public Direction Direction;
     public bool Run;
 }
 
 /// <summary><c>cuo:ent/mob-steps</c></summary>
-public partial struct MobileStepsDto
+public partial struct MobileSteps
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ent/mob-steps";
 
     public int Index;
     public float Time;
-    public MobStepDto[] Steps;
+    public MobStep[] Steps;
 }
 
 /// <summary><c>cuo:ent/is-mobile</c>
@@ -976,9 +1053,11 @@ public partial struct ModChatMessage
     public ushort Hue;
     public byte Font;
     public bool IsUnicode;
-    public byte MessageType;
+    /// <summary>enum MessageType (0=Regular, 1=System, 2=Emote, 3=Limit3Spell, 6=Label, 7=Focus, 8=Whisper, 9=Yell, 10=Spell, 13=Guild, 14=Alliance, 15=Command, 16=GmChat, 192=Encoded, 255=Party)</summary>
+    public MessageType MessageType;
     public float Time;
-    public byte Kind;
+    /// <summary>enum ChatKind (0=Overhead, 1=System)</summary>
+    public ChatKind Kind;
 }
 
 /// <summary><c>cuo:ui/click</c>
@@ -1003,7 +1082,7 @@ public sealed partial class ModHotkeyBinding
 }
 
 /// <summary><c>cuo:input/mod-hotkeys</c></summary>
-public partial struct ModHotkeyBindingsDto
+public partial struct ModHotkeyBindings
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:input/mod-hotkeys";
@@ -1052,19 +1131,21 @@ public partial struct ModMoveRequest
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:player/move-request";
 
-    public byte Direction;
+    /// <summary>enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)</summary>
+    public Direction Direction;
     public bool Run;
     public byte Sequence;
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.ModOptionDto</c>).</summary>
-public partial struct ModOptionDto
+public partial struct ModOption
 {
     public string Key;
     public string Label;
     public string Group;
     public string Keywords;
-    public byte Kind;
+    /// <summary>enum ModOptionKind (0=Toggle, 1=Slider, 2=Stepper, 3=Cycle)</summary>
+    public ModOptionKind Kind;
     public int Min;
     public int Max;
     public int Step;
@@ -1072,29 +1153,38 @@ public partial struct ModOptionDto
     public string[] Choices;
 }
 
+/// <remarks><c>ClassicUO.Ecs.Modding.ModOptionKind</c> — crosses the boundary as a number.</remarks>
+public enum ModOptionKind : byte
+{
+    Toggle = 0,
+    Slider = 1,
+    Stepper = 2,
+    Cycle = 3,
+}
+
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.ModOptionValueDto</c>).</summary>
-public partial struct ModOptionValueDto
+public partial struct ModOptionValue
 {
     public string Key;
     public int Value;
 }
 
 /// <summary><c>cuo:options/schema</c></summary>
-public partial struct ModOptionsSchemaDto
+public partial struct ModOptionsSchema
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:options/schema";
 
-    public ModOptionDto[] Options;
+    public ModOption[] Options;
 }
 
 /// <summary><c>cuo:options/values</c></summary>
-public partial struct ModOptionsValuesDto
+public partial struct ModOptionsValues
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:options/values";
 
-    public ModOptionValueDto[] Values;
+    public ModOptionValue[] Values;
 }
 
 /// <summary><c>cuo:ui/right-click</c></summary>
@@ -1117,7 +1207,7 @@ public partial struct ModSupersedes
 }
 
 /// <summary><c>cuo:input/mouse</c></summary>
-public partial struct MouseInputDto
+public partial struct MouseInput
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:input/mouse";
@@ -1208,7 +1298,7 @@ public enum NotorietyFlag : byte
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.OplLineDto</c>).</summary>
-public partial struct OplLineDto
+public partial struct OplLine
 {
     public int Cliloc;
     public string Args;
@@ -1245,13 +1335,13 @@ public partial struct PaperdollWindow
 }
 
 /// <summary><c>cuo:player/party</c></summary>
-public partial struct PartyDto
+public partial struct Party
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:player/party";
 
     public uint Leader;
-    public PartyMemberDto[] Members;
+    public PartyMember[] Members;
     public bool InParty;
     public bool CanLoot;
 }
@@ -1275,7 +1365,7 @@ public partial struct PartyManifestWindow
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.PartyMemberDto</c>).</summary>
-public partial struct PartyMemberDto
+public partial struct PartyMember
 {
     public uint Serial;
     public string Name;
@@ -1291,7 +1381,7 @@ public partial struct Player
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.PlayerBuffDto</c>).</summary>
-public partial struct PlayerBuffDto
+public partial struct PlayerBuff
 {
     public int Type;
     public ushort Graphic;
@@ -1300,12 +1390,12 @@ public partial struct PlayerBuffDto
 }
 
 /// <summary><c>cuo:player/buffs</c></summary>
-public partial struct PlayerBuffsDto
+public partial struct PlayerBuffs
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:player/buffs";
 
-    public PlayerBuffDto[] Buffs;
+    public PlayerBuff[] Buffs;
 }
 
 /// <summary><c>cuo:player/data</c></summary>
@@ -1356,37 +1446,39 @@ public partial struct PlayerData
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.PlayerSkillDto</c>).</summary>
-public partial struct PlayerSkillDto
+public partial struct PlayerSkill
 {
     public int Index;
     public ushort Value;
     public ushort Base;
     public ushort Cap;
-    public byte Lock;
+    /// <summary>enum Lock (0=Up, 1=Down, 2=Locked)</summary>
+    public Lock Lock;
 }
 
 /// <summary><c>cuo:player/skills</c></summary>
-public partial struct PlayerSkillsDto
+public partial struct PlayerSkills
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:player/skills";
 
     public bool HasData;
-    public PlayerSkillDto[] Skills;
+    public PlayerSkill[] Skills;
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.PlayerStepDto</c>).</summary>
-public partial struct PlayerStepDto
+public partial struct PlayerStep
 {
     public byte Sequence;
-    public byte Direction;
+    /// <summary>enum Direction (0=North, 1=Right, 2=East, 3=Down, 4=South, 5=Left, 6=West, 7=Up, 7=Mask, 128=Running, 237=NONE)</summary>
+    public Direction Direction;
     public ushort X;
     public ushort Y;
     public sbyte Z;
 }
 
 /// <summary><c>cuo:player/steps</c></summary>
-public partial struct PlayerStepsDto
+public partial struct PlayerSteps
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:player/steps";
@@ -1395,7 +1487,7 @@ public partial struct PlayerStepsDto
     public int Count;
     public byte Sequence;
     public bool ResyncSent;
-    public PlayerStepDto[] Steps;
+    public PlayerStep[] Steps;
 }
 
 /// <remarks><c>TinyEcs.Bevy.UI.PositionType</c> — crosses the boundary as a number.</remarks>
@@ -1498,8 +1590,26 @@ public partial struct ServerFlags
     public Flags Value;
 }
 
+/// <summary><c>cuo:gump/server</c></summary>
+public partial struct ServerGump
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:gump/server";
+
+    public uint Serial;
+    public uint GumpId;
+    public int Page;
+    public int X;
+    public int Y;
+    public string[] Layout;
+    public string[] Texts;
+    public ServerGumpButton[] Buttons;
+    public ServerGumpTextEntry[] TextEntries;
+    public ServerGumpSwitch[] Switches;
+}
+
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.ServerGumpButtonDto</c>).</summary>
-public partial struct ServerGumpButtonDto
+public partial struct ServerGumpButton
 {
     public int Id;
     public float X;
@@ -1518,24 +1628,6 @@ public partial struct ServerGumpClosedEvent
     public uint GumpId;
 }
 
-/// <summary><c>cuo:gump/server</c></summary>
-public partial struct ServerGumpDto
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:gump/server";
-
-    public uint Serial;
-    public uint GumpId;
-    public int Page;
-    public int X;
-    public int Y;
-    public string[] Layout;
-    public string[] Texts;
-    public ServerGumpButtonDto[] Buttons;
-    public ServerGumpTextEntryDto[] TextEntries;
-    public ServerGumpSwitchDto[] Switches;
-}
-
 /// <summary><c>cuo:gump/server-opened</c></summary>
 public partial struct ServerGumpOpenedEvent
 {
@@ -1547,7 +1639,7 @@ public partial struct ServerGumpOpenedEvent
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.ServerGumpSwitchDto</c>).</summary>
-public partial struct ServerGumpSwitchDto
+public partial struct ServerGumpSwitch
 {
     public uint Id;
     public bool Checked;
@@ -1556,7 +1648,7 @@ public partial struct ServerGumpSwitchDto
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.ServerGumpTextEntryDto</c>).</summary>
-public partial struct ServerGumpTextEntryDto
+public partial struct ServerGumpTextEntry
 {
     public ushort Id;
     public string Text;
@@ -1617,7 +1709,7 @@ public partial struct SkillsWindow
 }
 
 /// <remarks><c>ClassicUO.Ecs.SpellBookType</c> — crosses the boundary as a number.</remarks>
-public enum SpellBookType : int
+public enum SpellBookType : byte
 {
     Magery = 0,
     Necromancy = 1,
@@ -1631,10 +1723,11 @@ public enum SpellBookType : int
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.SpellbookDto</c>).</summary>
-public partial struct SpellbookDto
+public partial struct Spellbook
 {
     public uint Serial;
-    public byte BookType;
+    /// <summary>enum SpellBookType (0=Magery, 1=Necromancy, 2=Chivalry, 4=Bushido, 5=Ninjitsu, 6=Spellweaving, 7=Mysticism, 8=Mastery, 255=Unknown)</summary>
+    public SpellBookType BookType;
     public int[] Spells;
 }
 
@@ -1659,13 +1752,13 @@ public partial struct SpellbookWindow
 }
 
 /// <summary><c>cuo:player/spellbook</c></summary>
-public partial struct SpellbooksDto
+public partial struct Spellbooks
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:player/spellbook";
 
     public int Revision;
-    public SpellbookDto[] Books;
+    public Spellbook[] Books;
 }
 
 /// <summary><c>cuo:gump/split-menu</c></summary>
@@ -1706,13 +1799,22 @@ public partial struct Stamina
     public ushort MaxValue;
 }
 
+/// <remarks><c>ClassicUO.Ecs.Stat</c> — crosses the boundary as a number.</remarks>
+public enum Stat : byte
+{
+    Str = 0,
+    Dex = 1,
+    Int = 2,
+}
+
 /// <summary><c>cuo:ui/stat-lock-button</c></summary>
 public partial struct StatLockButton
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/stat-lock-button";
 
-    public byte Stat;
+    /// <summary>enum Stat (0=Str, 1=Dex, 2=Int)</summary>
+    public Stat Stat;
 }
 
 /// <summary><c>cuo:player/stat-locks</c></summary>
@@ -1721,9 +1823,12 @@ public partial struct StatLocks
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:player/stat-locks";
 
-    public byte Str;
-    public byte Dex;
-    public byte Int;
+    /// <summary>enum Lock (0=Up, 1=Down, 2=Locked)</summary>
+    public Lock Str;
+    /// <summary>enum Lock (0=Up, 1=Down, 2=Locked)</summary>
+    public Lock Dex;
+    /// <summary>enum Lock (0=Up, 1=Down, 2=Locked)</summary>
+    public Lock Int;
 }
 
 /// <summary><c>cuo:ui/statusbar-window</c></summary>
@@ -1736,6 +1841,23 @@ public partial struct StatusBarWindow
     public float MinimizeY;
 }
 
+/// <remarks><c>ClassicUO.Ecs.TargetMode</c> — crosses the boundary as a number.</remarks>
+public enum TargetMode : byte
+{
+    Object = 0,
+    Position = 1,
+    Multi = 2,
+}
+
+/// <remarks><c>ClassicUO.Ecs.TargetType</c> — crosses the boundary as a number.</remarks>
+public enum TargetType : byte
+{
+    Neutral = 0,
+    Harmful = 1,
+    Beneficial = 2,
+    Cancel = 3,
+}
+
 /// <summary><c>cuo:target/state</c></summary>
 public sealed partial class TargetingState
 {
@@ -1743,10 +1865,12 @@ public sealed partial class TargetingState
     public const string Path = "cuo:target/state";
 
     public bool IsTargeting;
-    public byte Mode;
+    /// <summary>enum TargetMode (0=Object, 1=Position, 2=Multi)</summary>
+    public TargetMode Mode;
     public bool Local;
     public uint CursorId;
-    public byte CursorType;
+    /// <summary>enum TargetType (0=Neutral, 1=Harmful, 2=Beneficial, 3=Cancel)</summary>
+    public TargetType CursorType;
     public bool JustTargeted;
     public ushort MultiId;
     public short MultiOffsetX;
@@ -1773,7 +1897,7 @@ public partial struct Text
 }
 
 /// <summary><c>cuo:ui/text-caret</c></summary>
-public partial struct TextCaretDto
+public partial struct TextCaret
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/text-caret";
@@ -1790,7 +1914,7 @@ public partial struct TextCaretDto
 }
 
 /// <summary><c>cuo:ui/text-clipboard-action</c></summary>
-public sealed partial class TextClipboardActionDto
+public sealed partial class TextClipboardAction
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/text-clipboard-action";
@@ -1810,7 +1934,7 @@ public partial struct TextColor
 }
 
 /// <summary><c>cuo:ui/text-completion</c></summary>
-public sealed partial class TextCompletionDto
+public sealed partial class TextCompletion
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/text-completion";
@@ -1821,7 +1945,7 @@ public sealed partial class TextCompletionDto
 }
 
 /// <summary><c>cuo:ui/text-completion-pick</c></summary>
-public sealed partial class TextCompletionPickDto
+public sealed partial class TextCompletionPick
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/text-completion-pick";
@@ -1832,7 +1956,7 @@ public sealed partial class TextCompletionPickDto
 }
 
 /// <summary><c>cuo:ui/text-completion-state</c></summary>
-public partial struct TextCompletionStateDto
+public partial struct TextCompletionState
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/text-completion-state";
@@ -1957,7 +2081,7 @@ public partial struct TopBarFull
 }
 
 /// <summary>Nested payload type (<c>ClassicUO.Ecs.Modding.TownInfoDto</c>).</summary>
-public partial struct TownInfoDto
+public partial struct TownInfo
 {
     public byte Index;
     public string Name;
@@ -1994,6 +2118,24 @@ public partial struct UOButton
     public ushort Over;
 }
 
+/// <remarks><c>ClassicUO.Ecs.UOCustomKind</c> — crosses the boundary as a number.</remarks>
+public enum UOCustomKind : byte
+{
+    Gump = 0,
+    GumpNinePatch = 1,
+    GumpTiled = 2,
+    Art = 3,
+    Land = 4,
+    Animation = 5,
+    MiniMap = 6,
+    None = 7,
+    WrappedText = 8,
+    GumpSlice = 9,
+    HueGrid = 10,
+    DynTexture = 11,
+    WorldMap = 12,
+}
+
 /// <summary><c>cuo:ui/contains-by-bounds</c>
 /// <para>Zero-size tag: no value crosses, only its presence.</para>
 /// </summary>
@@ -2004,12 +2146,13 @@ public partial struct UiContainsByBounds
 }
 
 /// <summary><c>cuo:ui/custom</c></summary>
-public partial struct UiCustomDto
+public partial struct UiCustom
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/custom";
 
-    public byte Kind;
+    /// <summary>enum UOCustomKind (0=Gump, 1=GumpNinePatch, 2=GumpTiled, 3=Art, 4=Land, 5=Animation, 6=MiniMap, 7=None, 8=WrappedText, 9=GumpSlice, 10=HueGrid, 11=DynTexture, 12=WorldMap)</summary>
+    public UOCustomKind Kind;
     public uint AssetId;
     public float HueX;
     public float HueY;
@@ -2082,7 +2225,7 @@ public partial struct UiNoWindowDrag
 }
 
 /// <summary><c>cuo:ui/pick</c></summary>
-public partial struct UiPickDto
+public partial struct UiPick
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/pick";
@@ -2139,7 +2282,7 @@ public partial struct UiScrollbar
 }
 
 /// <summary><c>cuo:ui/surface</c></summary>
-public partial struct UiSurfaceDto
+public partial struct UiSurface
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/surface";
@@ -2245,7 +2388,7 @@ public partial struct WorldPosition
 }
 
 /// <summary><c>cuo:input/world-single-click</c></summary>
-public partial struct WorldSingleClickDto
+public partial struct WorldSingleClick
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:input/world-single-click";
@@ -2265,37 +2408,37 @@ public static class TypePaths
         [typeof(AutoOpenedCorpse)] = "cuo:ent/auto-opened-corpse",
         [typeof(BackgroundColor)] = "cuo:ui/bg-color",
         [typeof(BookWindow)] = "cuo:gump/book",
-        [typeof(BorderColorDto)] = "cuo:ui/border-color",
+        [typeof(BorderColor)] = "cuo:ui/border-color",
         [typeof(BorderRadius)] = "cuo:ui/border-radius",
         [typeof(BuffGumpUI)] = "cuo:gump/buff",
         [typeof(BulletinBoardWindow)] = "cuo:gump/bulletin-board",
         [typeof(CharCreationScene)] = "cuo:scene/character-creation",
-        [typeof(CharacterSelectionDto)] = "cuo:scene/character-list",
+        [typeof(CharacterSelection)] = "cuo:scene/character-list",
         [typeof(CharacterSelectionScene)] = "cuo:scene/character-selection",
-        [typeof(ChildOfDto)] = "cuo:ecs/child-of",
-        [typeof(ClipboardSetDto)] = "cuo:ui/clipboard-set",
+        [typeof(ChildOf)] = "cuo:ecs/child-of",
+        [typeof(ClipboardSet)] = "cuo:ui/clipboard-set",
         [typeof(CombatBookWindow)] = "cuo:gump/combat-book",
         [typeof(ComputedNode)] = "cuo:ui/computed",
         [typeof(ContainedInto)] = "cuo:ent/contained-into",
         [typeof(ContainerClosedEvent)] = "cuo:gump/container-closed",
-        [typeof(ContainerGumpTagDto)] = "cuo:gump/container-tag",
+        [typeof(ContainerGumpTag)] = "cuo:gump/container-tag",
         [typeof(ContainerItemUI)] = "cuo:ui/container-item",
         [typeof(ContainerOpenedEvent)] = "cuo:gump/container-opened",
-        [typeof(ContainerPositionsDto)] = "cuo:gump/container-positions",
+        [typeof(ContainerPositions)] = "cuo:gump/container-positions",
         [typeof(ContainerSlotEvent)] = "cuo:gump/container-slot",
         [typeof(ContainerSlotPosition)] = "cuo:ent/slot-position",
         [typeof(ContainerWindow)] = "cuo:gump/container",
         [typeof(ContextMenuEvent)] = "cuo:gump/context-menu",
         [typeof(EditableText)] = "cuo:ui/editable-text",
         [typeof(EntityName)] = "cuo:ent/name",
-        [typeof(EntityPropertiesDto)] = "cuo:ent/properties",
-        [typeof(EquipmentSlotsDto)] = "cuo:ent/equipment",
+        [typeof(EntityProperties)] = "cuo:ent/properties",
+        [typeof(EquipmentSlots)] = "cuo:ent/equipment",
         [typeof(Facing)] = "cuo:ent/facing",
         [typeof(FocusedInput)] = "cuo:ui/focused-input",
-        [typeof(GameContextDto)] = "cuo:game/context",
+        [typeof(GameContext)] = "cuo:game/context",
         [typeof(GameScene)] = "cuo:scene/game",
-        [typeof(GameSettingsDto)] = "cuo:game/settings",
-        [typeof(GameStateDto)] = "cuo:game/state",
+        [typeof(GameSettings)] = "cuo:game/settings",
+        [typeof(GameState)] = "cuo:game/state",
         [typeof(GlobalZIndex)] = "cuo:ui/global-z",
         [typeof(GrabbedItem)] = "cuo:player/grabbed-item",
         [typeof(Graphic)] = "cuo:ent/graphic",
@@ -2304,10 +2447,10 @@ public static class TypePaths
         [typeof(GridPinnedCell)] = "cuo:ui/no-pickup",
         [typeof(HealthBarWindow)] = "cuo:gump/health-bar",
         [typeof(Hits)] = "cuo:player/hits",
-        [typeof(HostHotkeysDto)] = "cuo:input/host-hotkeys",
+        [typeof(HostHotkeys)] = "cuo:input/host-hotkeys",
         [typeof(HouseDesignWindow)] = "cuo:gump/house-design",
         [typeof(Hue)] = "cuo:ent/hue",
-        [typeof(InteractionDto)] = "cuo:ui/interaction",
+        [typeof(Interaction)] = "cuo:ui/interaction",
         [typeof(IsContainer)] = "cuo:ent/is-container",
         [typeof(IsMulti)] = "cuo:ent/is-multi",
         [typeof(IsTopBar)] = "cuo:ui/topbar-root",
@@ -2315,7 +2458,7 @@ public static class TypePaths
         [typeof(ItemMoveResult)] = "cuo:item/move-result",
         [typeof(Items)] = "cuo:ent/is-item",
         [typeof(JournalWindow)] = "cuo:gump/journal",
-        [typeof(KeyboardInputDto)] = "cuo:input/keyboard",
+        [typeof(KeyboardInput)] = "cuo:input/keyboard",
         [typeof(LocalTargetResultEvent)] = "cuo:target/local-result",
         [typeof(LoginErrorScene)] = "cuo:scene/login-error",
         [typeof(LoginErrorsInfoEvent)] = "cuo:scene/login-error-info",
@@ -2329,47 +2472,47 @@ public static class TypePaths
         [typeof(MessageBoxWindow)] = "cuo:gump/message-box",
         [typeof(MiniMapWindow)] = "cuo:gump/minimap",
         [typeof(MobAnimation)] = "cuo:ent/animation",
-        [typeof(MobileStepsDto)] = "cuo:ent/mob-steps",
+        [typeof(MobileSteps)] = "cuo:ent/mob-steps",
         [typeof(Mobiles)] = "cuo:ent/is-mobile",
         [typeof(ModChatMessage)] = "cuo:chat/message",
         [typeof(ModClick)] = "cuo:ui/click",
-        [typeof(ModHotkeyBindingsDto)] = "cuo:input/mod-hotkeys",
+        [typeof(ModHotkeyBindings)] = "cuo:input/mod-hotkeys",
         [typeof(ModHotkeyFired)] = "cuo:input/hotkey",
         [typeof(ModHover)] = "cuo:ui/hover",
         [typeof(ModInputConsume)] = "cuo:input/consume",
         [typeof(ModMoveRequest)] = "cuo:player/move-request",
-        [typeof(ModOptionsSchemaDto)] = "cuo:options/schema",
-        [typeof(ModOptionsValuesDto)] = "cuo:options/values",
+        [typeof(ModOptionsSchema)] = "cuo:options/schema",
+        [typeof(ModOptionsValues)] = "cuo:options/values",
         [typeof(ModRightClick)] = "cuo:ui/right-click",
         [typeof(ModSupersedes)] = "cuo:ui/supersedes",
-        [typeof(MouseInputDto)] = "cuo:input/mouse",
+        [typeof(MouseInput)] = "cuo:input/mouse",
         [typeof(NetworkSerial)] = "cuo:ent/serial",
         [typeof(Node)] = "cuo:ui/node",
         [typeof(Notoriety)] = "cuo:ent/notoriety",
         [typeof(OptionsWindow)] = "cuo:ui/options-window",
         [typeof(PaperdollWindow)] = "cuo:gump/paperdoll",
-        [typeof(PartyDto)] = "cuo:player/party",
+        [typeof(Party)] = "cuo:player/party",
         [typeof(PartyInviteWindow)] = "cuo:gump/party-invite",
         [typeof(PartyManifestWindow)] = "cuo:gump/party-manifest",
         [typeof(Player)] = "cuo:player/player",
-        [typeof(PlayerBuffsDto)] = "cuo:player/buffs",
+        [typeof(PlayerBuffs)] = "cuo:player/buffs",
         [typeof(PlayerData)] = "cuo:player/data",
-        [typeof(PlayerSkillsDto)] = "cuo:player/skills",
-        [typeof(PlayerStepsDto)] = "cuo:player/steps",
+        [typeof(PlayerSkills)] = "cuo:player/skills",
+        [typeof(PlayerSteps)] = "cuo:player/steps",
         [typeof(ProfileWindow)] = "cuo:gump/profile",
         [typeof(PromptOpenedEvent)] = "cuo:chat/prompt",
         [typeof(RacialBookWindow)] = "cuo:gump/racial-book",
         [typeof(ReadOnlyText)] = "cuo:ui/read-only-text",
         [typeof(ScrollPosition)] = "cuo:ui/scroll",
         [typeof(ServerFlags)] = "cuo:ent/server-flags",
+        [typeof(ServerGump)] = "cuo:gump/server",
         [typeof(ServerGumpClosedEvent)] = "cuo:gump/server-closed",
-        [typeof(ServerGumpDto)] = "cuo:gump/server",
         [typeof(ServerGumpOpenedEvent)] = "cuo:gump/server-opened",
         [typeof(ServerSelectionInfoEvent)] = "cuo:scene/server-list",
         [typeof(ServerSelectionScene)] = "cuo:scene/server-selection",
         [typeof(SkillsWindow)] = "cuo:gump/skills",
         [typeof(SpellbookWindow)] = "cuo:gump/spellbook",
-        [typeof(SpellbooksDto)] = "cuo:player/spellbook",
+        [typeof(Spellbooks)] = "cuo:player/spellbook",
         [typeof(SplitMenuWindow)] = "cuo:gump/split-menu",
         [typeof(Stamina)] = "cuo:player/stamina",
         [typeof(StatLockButton)] = "cuo:ui/stat-lock-button",
@@ -2377,12 +2520,12 @@ public static class TypePaths
         [typeof(StatusBarWindow)] = "cuo:ui/statusbar-window",
         [typeof(TargetingState)] = "cuo:target/state",
         [typeof(Text)] = "cuo:ui/text",
-        [typeof(TextCaretDto)] = "cuo:ui/text-caret",
-        [typeof(TextClipboardActionDto)] = "cuo:ui/text-clipboard-action",
+        [typeof(TextCaret)] = "cuo:ui/text-caret",
+        [typeof(TextClipboardAction)] = "cuo:ui/text-clipboard-action",
         [typeof(TextColor)] = "cuo:ui/text-color",
-        [typeof(TextCompletionDto)] = "cuo:ui/text-completion",
-        [typeof(TextCompletionPickDto)] = "cuo:ui/text-completion-pick",
-        [typeof(TextCompletionStateDto)] = "cuo:ui/text-completion-state",
+        [typeof(TextCompletion)] = "cuo:ui/text-completion",
+        [typeof(TextCompletionPick)] = "cuo:ui/text-completion-pick",
+        [typeof(TextCompletionState)] = "cuo:ui/text-completion-state",
         [typeof(TextFont)] = "cuo:ui/text-font",
         [typeof(TextHue)] = "cuo:ui/text-hue",
         [typeof(TextInput)] = "cuo:ui/text-input",
@@ -2396,7 +2539,7 @@ public static class TypePaths
         [typeof(TradeWindow)] = "cuo:gump/trade",
         [typeof(UOButton)] = "cuo:ui/button",
         [typeof(UiContainsByBounds)] = "cuo:ui/contains-by-bounds",
-        [typeof(UiCustomDto)] = "cuo:ui/custom",
+        [typeof(UiCustom)] = "cuo:ui/custom",
         [typeof(UiHoverTint)] = "cuo:ui/hover-tint",
         [typeof(UiMovable)] = "cuo:ui/movable",
         [typeof(UiMovableNoDrag)] = "cuo:ui/movable-no-drag",
@@ -2404,18 +2547,18 @@ public static class TypePaths
         [typeof(UiNoBlur)] = "cuo:ui/no-blur",
         [typeof(UiNoRightClickClose)] = "cuo:ui/no-right-click-close",
         [typeof(UiNoWindowDrag)] = "cuo:ui/no-window-drag",
-        [typeof(UiPickDto)] = "cuo:ui/pick",
+        [typeof(UiPick)] = "cuo:ui/pick",
         [typeof(UiPopup)] = "cuo:ui/popup",
         [typeof(UiResizable)] = "cuo:ui/resizable",
         [typeof(UiScrollbar)] = "cuo:ui/scrollbar",
-        [typeof(UiSurfaceDto)] = "cuo:ui/surface",
+        [typeof(UiSurface)] = "cuo:ui/surface",
         [typeof(UiTooltip)] = "cuo:ui/tooltip",
         [typeof(UiTooltipSerial)] = "cuo:ui/tooltip-serial",
         [typeof(VendorWindow)] = "cuo:gump/vendor",
         [typeof(WorldMapMarker)] = "cuo:worldmap/marker",
         [typeof(WorldMapWindow)] = "cuo:gump/worldmap",
         [typeof(WorldPosition)] = "cuo:ent/world-position",
-        [typeof(WorldSingleClickDto)] = "cuo:input/world-single-click",
+        [typeof(WorldSingleClick)] = "cuo:input/world-single-click",
     };
 
     public static string Of<T>() => Map[typeof(T)];

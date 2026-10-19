@@ -109,13 +109,13 @@ public static partial class Packets
 public static partial class Assets
 {
 
-    static G.IAssetsImports.AnimKey Lower(AnimKey k) => new(k.Body, k.Action, k.Direction);
+    static G.IAssetsImports.AnimKey Lower(AnimKey k) => new(k.Body, k.Action, (byte)k.Direction);
     static Size Lift(G.IAssetsImports.Size v) => new() { Width = v.width, Height = v.height };
     static Image Lift(G.IAssetsImports.Image v) => new() { Width = v.width, Height = v.height, Rgba = v.rgba };
     static FrameInfo Lift(G.IAssetsImports.FrameInfo v) => new() { Width = v.width, Height = v.height, CenterX = v.centerX, CenterY = v.centerY };
     static StaticInfo Lift(G.IAssetsImports.StaticInfo v) => new()
     {
-        Name = v.name, Flags = v.flags, Weight = v.weight, Layer = v.layer, Count = v.count,
+        Name = v.name, Flags = v.flags, Weight = v.weight, Layer = (Types.Layer)v.layer, Count = v.count,
         AnimId = v.animId, Hue = v.hue, LightIndex = v.lightIndex, Height = v.height,
     };
     static LandInfo Lift(G.IAssetsImports.LandInfo v) => new() { Name = v.name, Flags = v.flags, Texmap = v.texmap };
@@ -162,14 +162,14 @@ public static partial class Assets
     }
 
     /// <summary>
-    /// Which mobile animation to read. `direction` is 0..7 (the host mirrors the
+    /// Which mobile animation to read. `direction` is North..Up (the host mirrors the
     /// ones UO stores flipped); `action` is the UO action group.
     /// </summary>
     public struct AnimKey
     {
         public ushort Body;
         public byte Action;
-        public byte Direction;
+        public Types.Direction Direction;
     }
 
     public struct FrameInfo
@@ -188,7 +188,7 @@ public static partial class Assets
         public string Name;
         public ulong Flags;
         public byte Weight;
-        public byte Layer;
+        public Types.Layer Layer;
         public int Count;
         public ushort AnimId;
         public ushort Hue;
@@ -394,6 +394,12 @@ public static partial class Actions
         Int,
     }
 
+    public enum Emote
+    {
+        Bow,
+        Salute,
+    }
+
     public enum Virtue
     {
         Honor,
@@ -481,9 +487,9 @@ public static partial class Actions
     /// <summary>
     /// Equips the item held on the cursor.
     /// </summary>
-    public static void Equip(byte layer, uint mobile)
+    public static void Equip(Types.Layer layer, uint mobile)
     {
-        G.IActionsImports.Equip(layer, mobile);
+        G.IActionsImports.Equip((G.ITypesImports.Layer)layer, mobile);
     }
 
     /// <summary>
@@ -497,9 +503,9 @@ public static partial class Actions
     /// <summary>
     /// Pick up + equip in one step.
     /// </summary>
-    public static void Wear(uint item, byte layer, uint mobile)
+    public static void Wear(uint item, Types.Layer layer, uint mobile)
     {
-        G.IActionsImports.Wear(item, layer, mobile);
+        G.IActionsImports.Wear(item, (G.ITypesImports.Layer)layer, mobile);
     }
 
     /// <summary>
@@ -632,9 +638,9 @@ public static partial class Actions
         G.IActionsImports.CastSpell(id);
     }
 
-    public static void OpenSpellbook(byte kind)
+    public static void OpenSpellbook(Types.SpellBookType kind)
     {
-        G.IActionsImports.OpenSpellbook(kind);
+        G.IActionsImports.OpenSpellbook((byte)kind);
     }
 
     public static void UseSkill(ushort index)
@@ -644,12 +650,12 @@ public static partial class Actions
 
     public static void SetSkillLock(ushort index, LockState state)
     {
-        G.IActionsImports.SetSkillLock(index, (G.IActionsImports.LockState)state);
+        G.IActionsImports.SetSkillLock(index, (G.ITypesImports.Lock)state);
     }
 
     public static void SetStatLock(Stat which, LockState state)
     {
-        G.IActionsImports.SetStatLock((G.IActionsImports.Stat)which, (G.IActionsImports.LockState)state);
+        G.IActionsImports.SetStatLock((G.ITypesImports.Stat)which, (G.ITypesImports.Lock)state);
     }
 
     public static void InvokeVirtue(Virtue which)
@@ -657,12 +663,9 @@ public static partial class Actions
         G.IActionsImports.InvokeVirtue((G.IActionsImports.Virtue)which);
     }
 
-    /// <summary>
-    /// "bow" or "salute".
-    /// </summary>
-    public static void EmoteAction(string name)
+    public static void EmoteAction(Emote which)
     {
-        G.IActionsImports.EmoteAction(name);
+        G.IActionsImports.EmoteAction((G.IActionsImports.Emote)which);
     }
 
     /// <summary>

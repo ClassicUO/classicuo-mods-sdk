@@ -51,11 +51,11 @@ public sealed class ModBuilder
             Name = name, Key = (int)key, Ctrl = ctrl, Shift = shift, Alt = alt, Consume = consume,
         });
 
-    /// <summary><see cref="Hotkey"/> on a mouse button (3 middle, 4/5 X1/X2, 8/9 wheel up/down).</summary>
-    public void HotkeyMouse(string name, int mouseButton, bool consume = false, bool ctrl = false, bool shift = false, bool alt = false)
+    /// <summary><see cref="Hotkey"/> on a mouse button (Middle / XButton1 / XButton2) or a wheel notch.</summary>
+    public void HotkeyMouse(string name, MouseButton button, bool consume = false, bool ctrl = false, bool shift = false, bool alt = false)
         => _hotkeys.Add(new Types.ModHotkeyBinding
         {
-            Name = name, Mouse = mouseButton, Ctrl = ctrl, Shift = shift, Alt = alt, Consume = consume,
+            Name = name, Mouse = (int)button, Ctrl = ctrl, Shift = shift, Alt = alt, Consume = consume,
         });
 
     // ── AddSystem ────────────────────────────────────────────────────────────────
@@ -574,7 +574,7 @@ public sealed class ModBuilder
         if (_hotkeys.Count == 0)
             return;
         // The binding set is this mod's slice of cuo:input/mod-hotkeys, written once at startup.
-        var bindings = new Types.ModHotkeyBindingsDto { Bindings = _hotkeys.ToArray() };
+        var bindings = new Types.ModHotkeyBindings { Bindings = _hotkeys.ToArray() };
         var d = Describer();
         d.Add(new ParamDecl { Kind = ParamKind.Commands });
         AddSystem(d, scope => scope.Commands.SetResource(bindings)).InStage(Stage.Startup).Label("sdk-hotkeys");
@@ -658,8 +658,10 @@ internal sealed class Entry(Action<RunScope> run, string name, List<ParamDecl> @
     internal ObserverTrigger? Trigger;
     // Per host-param slot: the Res / ResMut parse kept across runs (see ResCell).
     internal object?[] ResCells = [];
-    // Typed query columns, keyed (query param slot << 8 | term index): see RunScope.Column.
-    internal Dictionary<int, TypedColumnBase>? Columns;
+    // Params' ABI kinds, what each run hands RunScope.Begin.
+    internal byte[]? Kinds;
+    // Typed query columns per [query param slot][term index]: see RunScope.Column.
+    internal TypedColumnBase?[]?[]? Columns;
     internal readonly List<Entry> After = new();
     internal readonly List<Entry> Before = new();
 

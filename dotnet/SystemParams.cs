@@ -90,12 +90,16 @@ internal sealed class RunScope
     nint[] _rows = new nint[4];
     int[] _rowCounts = new int[4];
     bool[] _fetched = new bool[4];
+    // entity -> row per query param, built by the first big lookup of a run; the
+    // dictionaries are kept (cleared) across runs.
+    Dictionary<ulong, int>?[] _index = new Dictionary<ulong, int>?[4];
+    bool[] _indexed = new bool[4];
     // Columns fetched this run, freed by Release.
     readonly List<TypedColumnBase> _columns = new();
 
     readonly List<Action> _writeBacks = new();
-    // Mut<T> row storage, keyed (query param slot << 8 | term index).
-    internal readonly Dictionary<int, object> MutColumns = new();
+    // Mut<T> row storage per [query param slot][term index], cleared by Release.
+    object?[]?[] _mutColumns = [];
 
     internal void Begin(byte[] kinds, int[] handles, int count, List<object>? locals)
     {
@@ -117,6 +121,8 @@ internal sealed class RunScope
             _rows = new nint[count];
             _rowCounts = new int[count];
             _fetched = new bool[count];
+            Array.Resize(ref _index, count);
+            _indexed = new bool[count];
         }
     }
 
@@ -134,15 +140,50 @@ internal sealed class RunScope
         return (_rows[slot], _rowCounts[slot]);
     }
 
+    // Below this many rows a lookup scans: cheaper than building the index.
+    const int IndexMin = 16;
+
+    /// <summary>The row of <paramref name="id"/> among query param <paramref name="slot"/>'s rows, or -1.</summary>
+    internal int RowOf(int slot, nint rows, int count, ulong id)
+    {
+        if (count < IndexMin)
+        {
+            for (var i = 0; i < count; i++)
+                if (EcsAbi.EntityAt(rows, i) == id)
+                    return i;
+            return -1;
+        }
+        var index = _index[slot] ??= new Dictionary<ulong, int>(count);
+        if (!_indexed[slot])
+        {
+            for (var i = 0; i < count; i++)
+                index.TryAdd(EcsAbi.EntityAt(rows, i), i);
+            _indexed[slot] = true;
+        }
+        return index.TryGetValue(id, out var row) ? row : -1;
+    }
+
     /// <summary>The column of read term <paramref name="term"/> of query param <paramref name="slot"/> (kept on the system across runs).</summary>
     internal TypedColumn<T> Column<T>(int slot, int term, TypedCodec<T> codec)
     {
         var entry = Entry!;
-        var key = (slot << 8) | term;
-        entry.Columns ??= new();
-        if (!entry.Columns.TryGetValue(key, out var column))
-            entry.Columns[key] = column = new TypedColumn<T>(codec, (byte)term);
-        return (TypedColumn<T>)column;
+        var columns = entry.Columns ??= new TypedColumnBase?[entry.Params.Count][];
+        var terms = columns[slot] ??= new TypedColumnBase?[entry.Params[slot].Terms!.Count];
+        return (TypedColumn<T>)(terms[term] ??= new TypedColumn<T>(codec, (byte)term));
+    }
+
+    /// <summary>The Mut storage slot of term <paramref name="term"/> of query param <paramref name="slot"/> for this run.</summary>
+    internal ref object? MutColumn(int slot, int term)
+    {
+        if (_mutColumns.Length <= slot)
+            Array.Resize(ref _mutColumns, slot + 1);
+        var terms = _mutColumns[slot];
+        if (terms == null || terms.Length <= term)
+        {
+            Array.Resize(ref terms, term + 1);
+            _mutColumns[slot] = terms;
+        }
+        return ref terms[term];
     }
 
     internal void HoldColumn(TypedColumnBase column) => _columns.Add(column);
@@ -171,12 +212,15 @@ internal sealed class RunScope
     {
         Commands.End();
         _writeBacks.Clear();
-        MutColumns.Clear();
+        foreach (var terms in _mutColumns)
+            if (terms != null)
+                Array.Clear(terms);
         for (var i = 0; i < _columns.Count; i++)
             _columns[i].Release();
         _columns.Clear();
         TypedArena.Reset();
         for (var i = 0; i < _count; i++)
+        {
             if (_fetched[i])
             {
                 EcsAbi.FreeEntities(_rows[i], _rowCounts[i]);
@@ -184,6 +228,12 @@ internal sealed class RunScope
                 _rows[i] = 0;
                 _rowCounts[i] = 0;
             }
+            if (_indexed[i])
+            {
+                _index[i]!.Clear();
+                _indexed[i] = false;
+            }
+        }
         _count = 0;
         Entry = null;
         Locals = null;

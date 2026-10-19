@@ -479,13 +479,21 @@ internal interface ITypesImports {
     }
 
     /**
+    * `InteractionState`
+    */
+
+    internal enum InteractionState {
+        NONE, HOVERED, PRESSED
+    }
+
+    /**
     * `cuo:ui/interaction`
     */
 
     internal struct Interaction {
-        internal byte state;
+        internal InteractionState state;
 
-        internal Interaction(byte state) {
+        internal Interaction(InteractionState state) {
             this.state = state;
         }
     }
@@ -549,6 +557,14 @@ internal interface ITypesImports {
     }
 
     /**
+    * `ChatKind`
+    */
+
+    internal enum ChatKind {
+        OVERHEAD, SYSTEM
+    }
+
+    /**
     * `cuo:chat/message`
     */
 
@@ -561,9 +577,9 @@ internal interface ITypesImports {
         internal bool isUnicode;
         internal byte messageType;
         internal float time;
-        internal byte kind;
+        internal ChatKind kind;
 
-        internal ChatMessage(uint serial, string text, string name, ushort hue, byte font, bool isUnicode, byte messageType, float time, byte kind) {
+        internal ChatMessage(uint serial, string text, string name, ushort hue, byte font, bool isUnicode, byte messageType, float time, ChatKind kind) {
             this.serial = serial;
             this.text = text;
             this.name = name;
@@ -633,7 +649,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `OplLineDto`
+    * `OplLine`
     */
 
     internal struct OplLine {
@@ -749,13 +765,21 @@ internal interface ITypesImports {
     }
 
     /**
+    * `GameStateKind`
+    */
+
+    internal enum GameStateKind {
+        LOADING, LOGIN_SCREEN, SERVER_SELECTION, CHARACTER_SELECTION, CHARACTER_CREATION, LOGIN_ERROR, GAME_SCREEN
+    }
+
+    /**
     * `cuo:game/state`
     */
 
     internal struct GameState {
-        internal byte current;
+        internal GameStateKind current;
 
-        internal GameState(byte current) {
+        internal GameState(GameStateKind current) {
             this.current = current;
         }
     }
@@ -801,7 +825,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `ContainerPositionDto`
+    * `ContainerPosition`
     */
 
     internal struct ContainerPosition {
@@ -973,7 +997,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `ServerGumpButtonDto`
+    * `ServerGumpButton`
     */
 
     internal struct ServerGumpButton {
@@ -993,7 +1017,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `ServerGumpTextEntryDto`
+    * `ServerGumpTextEntry`
     */
 
     internal struct ServerGumpTextEntry {
@@ -1007,7 +1031,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `ServerGumpSwitchDto`
+    * `ServerGumpSwitch`
     */
 
     internal struct ServerGumpSwitch {
@@ -1069,7 +1093,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `HostHotkeyDto`
+    * `HostHotkey`
     */
 
     internal struct HostHotkey {
@@ -1197,21 +1221,37 @@ internal interface ITypesImports {
     }
 
     /**
+    * `ItemMoveOutcome`
+    */
+
+    internal enum ItemMoveOutcome {
+        ACCEPTED, DENIED, END_DRAGGING
+    }
+
+    /**
     * `cuo:item/move-result`
     */
 
     internal struct ItemMoveResult {
-        internal byte result;
+        internal ItemMoveOutcome result;
         internal byte code;
 
-        internal ItemMoveResult(byte result, byte code) {
+        internal ItemMoveResult(ItemMoveOutcome result, byte code) {
             this.result = result;
             this.code = code;
         }
     }
 
     /**
-    * `ModOptionDto`
+    * `ModOptionKind`
+    */
+
+    internal enum ModOptionKind {
+        TOGGLE, SLIDER, STEPPER, CYCLE
+    }
+
+    /**
+    * `ModOption`
     */
 
     internal struct ModOption {
@@ -1219,14 +1259,14 @@ internal interface ITypesImports {
         internal string label;
         internal string group;
         internal string keywords;
-        internal byte kind;
+        internal ModOptionKind kind;
         internal int min;
         internal int max;
         internal int step;
         internal int @default;
         internal global::System.Collections.Generic.List<string> choices;
 
-        internal ModOption(string key, string label, string group, string keywords, byte kind, int min, int max, int step, int @default, global::System.Collections.Generic.List<string> choices) {
+        internal ModOption(string key, string label, string group, string keywords, ModOptionKind kind, int min, int max, int step, int @default, global::System.Collections.Generic.List<string> choices) {
             this.key = key;
             this.label = label;
             this.group = group;
@@ -1253,7 +1293,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `ModOptionValueDto`
+    * `ModOptionValue`
     */
 
     internal struct ModOptionValue {
@@ -1279,7 +1319,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `PlayerBuffDto`
+    * `PlayerBuff`
     */
 
     internal struct PlayerBuff {
@@ -1381,7 +1421,15 @@ internal interface ITypesImports {
     }
 
     /**
-    * `PlayerSkillDto`
+    * `Lock`
+    */
+
+    internal enum Lock {
+        UP, DOWN, LOCKED
+    }
+
+    /**
+    * `PlayerSkill`
     */
 
     internal struct PlayerSkill {
@@ -1389,9 +1437,9 @@ internal interface ITypesImports {
         internal ushort value;
         internal ushort @base;
         internal ushort cap;
-        internal byte @lock;
+        internal Lock @lock;
 
-        internal PlayerSkill(int index, ushort value, ushort @base, ushort cap, byte @lock) {
+        internal PlayerSkill(int index, ushort value, ushort @base, ushort cap, Lock @lock) {
             this.index = index;
             this.value = value;
             this.@base = @base;
@@ -1419,11 +1467,11 @@ internal interface ITypesImports {
     */
 
     internal struct StatLocks {
-        internal byte str;
-        internal byte dex;
-        internal byte @int;
+        internal Lock str;
+        internal Lock dex;
+        internal Lock @int;
 
-        internal StatLocks(byte str, byte dex, byte @int) {
+        internal StatLocks(Lock str, Lock dex, Lock @int) {
             this.str = str;
             this.dex = dex;
             this.@int = @int;
@@ -1455,15 +1503,31 @@ internal interface ITypesImports {
     }
 
     /**
+    * `TargetMode`
+    */
+
+    internal enum TargetMode {
+        OBJECT, POSITION, MULTI
+    }
+
+    /**
+    * `TargetType`
+    */
+
+    internal enum TargetType {
+        NEUTRAL, HARMFUL, BENEFICIAL, CANCEL
+    }
+
+    /**
     * `cuo:target/state`
     */
 
     internal struct TargetingState {
         internal bool isTargeting;
-        internal byte mode;
+        internal TargetMode mode;
         internal bool local;
         internal uint cursorId;
-        internal byte cursorType;
+        internal TargetType cursorType;
         internal bool justTargeted;
         internal ushort multiId;
         internal short multiOffsetX;
@@ -1479,7 +1543,7 @@ internal interface ITypesImports {
         internal sbyte localZ;
         internal bool localCancelled;
 
-        internal TargetingState(bool isTargeting, byte mode, bool local, uint cursorId, byte cursorType, bool justTargeted, ushort multiId, short multiOffsetX, short multiOffsetY, short multiOffsetZ, ushort multiHue, ushort previewBuiltId, bool hasLocalResult, uint localSerial, ushort localGraphic, ushort localX, ushort localY, sbyte localZ, bool localCancelled) {
+        internal TargetingState(bool isTargeting, TargetMode mode, bool local, uint cursorId, TargetType cursorType, bool justTargeted, ushort multiId, short multiOffsetX, short multiOffsetY, short multiOffsetZ, ushort multiHue, ushort previewBuiltId, bool hasLocalResult, uint localSerial, ushort localGraphic, ushort localX, ushort localY, sbyte localZ, bool localCancelled) {
             this.isTargeting = isTargeting;
             this.mode = mode;
             this.local = local;
@@ -1609,18 +1673,26 @@ internal interface ITypesImports {
     }
 
     /**
+    * `UOCustomKind`
+    */
+
+    internal enum UoCustomKind {
+        GUMP, GUMP_NINE_PATCH, GUMP_TILED, ART, LAND, ANIMATION, MINI_MAP, NONE, WRAPPED_TEXT, GUMP_SLICE, HUE_GRID, DYN_TEXTURE, WORLD_MAP
+    }
+
+    /**
     * `cuo:ui/custom`
     */
 
     internal struct UiCustom {
-        internal byte kind;
+        internal UoCustomKind kind;
         internal uint assetId;
         internal float hueX;
         internal float hueY;
         internal float hueZ;
         internal bool stacked;
 
-        internal UiCustom(byte kind, uint assetId, float hueX, float hueY, float hueZ, bool stacked) {
+        internal UiCustom(UoCustomKind kind, uint assetId, float hueX, float hueY, float hueZ, bool stacked) {
             this.kind = kind;
             this.assetId = assetId;
             this.hueX = hueX;
@@ -1775,13 +1847,21 @@ internal interface ITypesImports {
     }
 
     /**
+    * `Stat`
+    */
+
+    internal enum Stat {
+        STR, DEX, INT
+    }
+
+    /**
     * `cuo:ui/stat-lock-button`
     */
 
     internal struct StatLockButton {
-        internal byte stat;
+        internal Stat stat;
 
-        internal StatLockButton(byte stat) {
+        internal StatLockButton(Stat stat) {
             this.stat = stat;
         }
     }
@@ -1977,7 +2057,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `MobStepDto`
+    * `MobStep`
     */
 
     internal struct MobStep {
@@ -2320,7 +2400,7 @@ internal interface ITypesImports {
 
     internal struct SpellbookWindow {
         internal uint serial;
-        internal int school;
+        internal byte school;
         internal int page;
         internal int soundedPage;
         internal int pageCount;
@@ -2331,7 +2411,7 @@ internal interface ITypesImports {
         internal ulong rightCorner;
         internal bool minimized;
 
-        internal SpellbookWindow(uint serial, int school, int page, int soundedPage, int pageCount, int builtRevision, bool dirty, ulong contentEntity, ulong leftCorner, ulong rightCorner, bool minimized) {
+        internal SpellbookWindow(uint serial, byte school, int page, int soundedPage, int pageCount, int builtRevision, bool dirty, ulong contentEntity, ulong leftCorner, ulong rightCorner, bool minimized) {
             this.serial = serial;
             this.school = school;
             this.page = page;
@@ -2461,7 +2541,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `PartyMemberDto`
+    * `PartyMember`
     */
 
     internal struct PartyMember {
@@ -2493,7 +2573,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `SpellbookDto`
+    * `Spellbook`
     */
 
     internal struct Spellbook {
@@ -2523,7 +2603,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `PlayerStepDto`
+    * `PlayerStep`
     */
 
     internal struct PlayerStep {
@@ -2563,7 +2643,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `CharInfoDto`
+    * `CharInfo`
     */
 
     internal struct CharInfo {
@@ -2577,7 +2657,7 @@ internal interface ITypesImports {
     }
 
     /**
-    * `TownInfoDto`
+    * `TownInfo`
     */
 
     internal struct TownInfo {

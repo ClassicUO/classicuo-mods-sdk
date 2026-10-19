@@ -103,7 +103,7 @@ void cuo_chat_system(cuo_cmds *c, const char *text, uint16_t hue)
     m.hue = hue;
     m.font = SPEECH_FONT;
     m.is_unicode = true;
-    m.kind = 1;
+    m.kind = CUO_CHAT_KIND_SYSTEM;
     cuo_ModChatMessage_send(c, &m);
 }
 
@@ -117,7 +117,7 @@ void cuo_chat_overhead(cuo_cmds *c, const char *text, uint16_t hue, uint32_t ser
     m.serial = serial;
     m.font = SPEECH_FONT;
     m.is_unicode = true;
-    m.kind = 0;
+    m.kind = CUO_CHAT_KIND_OVERHEAD;
     cuo_ModChatMessage_send(c, &m);
 }
 
@@ -161,8 +161,8 @@ static void publish(const cuo_input *in, cuo_cmds *c, void *user)
     (void)in;
     (void)user;
     /* ConsumeKeys stays false: consume is per binding. */
-    cuo_ModHotkeyBindingsDto dto = { { bindings, nbindings }, false };
-    cuo_ModHotkeyBindingsDto_set_resource(c, &dto);
+    cuo_ModHotkeyBindings dto = { { bindings, nbindings }, false };
+    cuo_ModHotkeyBindings_set_resource(c, &dto);
 }
 
 void cuo__publish_hotkeys(cuo_builder *m)

@@ -215,7 +215,7 @@ namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
         public static class EmoteActionWasmInterop
         {
             [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/actions@0.1.0", EntryPoint = "emote-action"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
-            public static extern void wasmImportEmoteAction(nint p0, int p1);
+            public static extern void wasmImportEmoteAction(int p0);
         }
 
         public static class SayWasmInterop

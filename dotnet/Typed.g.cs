@@ -29,59 +29,59 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.TextColor) ? new CodecTextColor() :
             typeof(T) == typeof(global::CuoModSdk.Types.BackgroundColor) ? new CodecBgColor() :
             typeof(T) == typeof(global::CuoModSdk.Types.BorderRadius) ? new CodecBorderRadius() :
-            typeof(T) == typeof(global::CuoModSdk.Types.ChildOfDto) ? new CodecChildOf() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ChildOf) ? new CodecChildOf() :
             typeof(T) == typeof(global::CuoModSdk.Types.GlobalZIndex) ? new CodecGlobalZ() :
-            typeof(T) == typeof(global::CuoModSdk.Types.InteractionDto) ? new CodecInteraction() :
-            typeof(T) == typeof(global::CuoModSdk.Types.MouseInputDto) ? new CodecMouse() :
-            typeof(T) == typeof(global::CuoModSdk.Types.KeyboardInputDto) ? new CodecKeyboard() :
+            typeof(T) == typeof(global::CuoModSdk.Types.Interaction) ? new CodecInteraction() :
+            typeof(T) == typeof(global::CuoModSdk.Types.MouseInput) ? new CodecMouse() :
+            typeof(T) == typeof(global::CuoModSdk.Types.KeyboardInput) ? new CodecKeyboard() :
             typeof(T) == typeof(global::CuoModSdk.Types.ModChatMessage) ? new CodecMessage() :
             typeof(T) == typeof(global::CuoModSdk.Types.PromptOpenedEvent) ? new CodecPrompt() :
             typeof(T) == typeof(global::CuoModSdk.Types.Time) ? new CodecTime() :
-            typeof(T) == typeof(global::CuoModSdk.Types.EquipmentSlotsDto) ? new CodecEquipment() :
+            typeof(T) == typeof(global::CuoModSdk.Types.EquipmentSlots) ? new CodecEquipment() :
             typeof(T) == typeof(global::CuoModSdk.Types.Facing) ? new CodecFacing() :
-            typeof(T) == typeof(global::CuoModSdk.Types.EntityPropertiesDto) ? new CodecProperties() :
+            typeof(T) == typeof(global::CuoModSdk.Types.EntityProperties) ? new CodecProperties() :
             typeof(T) == typeof(global::CuoModSdk.Types.ServerFlags) ? new CodecServerFlags() :
             typeof(T) == typeof(global::CuoModSdk.Types.ContainerSlotPosition) ? new CodecSlotPosition() :
-            typeof(T) == typeof(global::CuoModSdk.Types.GameContextDto) ? new CodecContext() :
-            typeof(T) == typeof(global::CuoModSdk.Types.GameSettingsDto) ? new CodecSettings() :
-            typeof(T) == typeof(global::CuoModSdk.Types.GameStateDto) ? new CodecState() :
+            typeof(T) == typeof(global::CuoModSdk.Types.GameContext) ? new CodecContext() :
+            typeof(T) == typeof(global::CuoModSdk.Types.GameSettings) ? new CodecSettings() :
+            typeof(T) == typeof(global::CuoModSdk.Types.GameState) ? new CodecState() :
             typeof(T) == typeof(global::CuoModSdk.Types.ContainerWindow) ? new CodecContainer() :
             typeof(T) == typeof(global::CuoModSdk.Types.ContainerClosedEvent) ? new CodecContainerClosed() :
             typeof(T) == typeof(global::CuoModSdk.Types.ContainerOpenedEvent) ? new CodecContainerOpened() :
-            typeof(T) == typeof(global::CuoModSdk.Types.ContainerPositionsDto) ? new CodecContainerPositions() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ContainerPositions) ? new CodecContainerPositions() :
             typeof(T) == typeof(global::CuoModSdk.Types.ContainerSlotEvent) ? new CodecContainerSlot() :
-            typeof(T) == typeof(global::CuoModSdk.Types.ContainerGumpTagDto) ? new CodecContainerTag() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ContainerGumpTag) ? new CodecContainerTag() :
             typeof(T) == typeof(global::CuoModSdk.Types.ContextMenuEvent) ? new CodecContextMenu() :
             typeof(T) == typeof(global::CuoModSdk.Types.GridContainerWindow) ? new CodecGridContainer() :
             typeof(T) == typeof(global::CuoModSdk.Types.GridLootWindow) ? new CodecGridLoot() :
             typeof(T) == typeof(global::CuoModSdk.Types.HealthBarWindow) ? new CodecHealthBar() :
-            typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpDto) ? new CodecServer() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ServerGump) ? new CodecServer() :
             typeof(T) == typeof(global::CuoModSdk.Types.ModInputConsume) ? new CodecConsume() :
-            typeof(T) == typeof(global::CuoModSdk.Types.HostHotkeysDto) ? new CodecHostHotkeys() :
+            typeof(T) == typeof(global::CuoModSdk.Types.HostHotkeys) ? new CodecHostHotkeys() :
             typeof(T) == typeof(global::CuoModSdk.Types.ModHotkeyFired) ? new CodecHotkey() :
-            typeof(T) == typeof(global::CuoModSdk.Types.ModHotkeyBindingsDto) ? new CodecModHotkeys() :
-            typeof(T) == typeof(global::CuoModSdk.Types.WorldSingleClickDto) ? new CodecWorldSingleClick() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ModHotkeyBindings) ? new CodecModHotkeys() :
+            typeof(T) == typeof(global::CuoModSdk.Types.WorldSingleClick) ? new CodecWorldSingleClick() :
             typeof(T) == typeof(global::CuoModSdk.Types.ItemDropSent) ? new CodecDropSent() :
             typeof(T) == typeof(global::CuoModSdk.Types.ItemMoveResult) ? new CodecMoveResult() :
-            typeof(T) == typeof(global::CuoModSdk.Types.ModOptionsSchemaDto) ? new CodecSchema() :
-            typeof(T) == typeof(global::CuoModSdk.Types.ModOptionsValuesDto) ? new CodecValues() :
-            typeof(T) == typeof(global::CuoModSdk.Types.PlayerBuffsDto) ? new CodecBuffs() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ModOptionsSchema) ? new CodecSchema() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ModOptionsValues) ? new CodecValues() :
+            typeof(T) == typeof(global::CuoModSdk.Types.PlayerBuffs) ? new CodecBuffs() :
             typeof(T) == typeof(global::CuoModSdk.Types.GrabbedItem) ? new CodecGrabbedItem() :
-            typeof(T) == typeof(global::CuoModSdk.Types.PlayerSkillsDto) ? new CodecSkills() :
+            typeof(T) == typeof(global::CuoModSdk.Types.PlayerSkills) ? new CodecSkills() :
             typeof(T) == typeof(global::CuoModSdk.Types.StatLocks) ? new CodecStatLocks() :
             typeof(T) == typeof(global::CuoModSdk.Types.LocalTargetResultEvent) ? new CodecLocalResult() :
             typeof(T) == typeof(global::CuoModSdk.Types.TargetingState) ? new CodecTargetState() :
             typeof(T) == typeof(global::CuoModSdk.Types.Anchorable) ? new CodecAnchorable() :
-            typeof(T) == typeof(global::CuoModSdk.Types.BorderColorDto) ? new CodecBorderColor() :
+            typeof(T) == typeof(global::CuoModSdk.Types.BorderColor) ? new CodecBorderColor() :
             typeof(T) == typeof(global::CuoModSdk.Types.UOButton) ? new CodecButton() :
             typeof(T) == typeof(global::CuoModSdk.Types.ComputedNode) ? new CodecComputed() :
             typeof(T) == typeof(global::CuoModSdk.Types.ContainerItemUI) ? new CodecContainerItem() :
-            typeof(T) == typeof(global::CuoModSdk.Types.UiCustomDto) ? new CodecCustom() :
+            typeof(T) == typeof(global::CuoModSdk.Types.UiCustom) ? new CodecCustom() :
             typeof(T) == typeof(global::CuoModSdk.Types.EditableText) ? new CodecEditableText() :
             typeof(T) == typeof(global::CuoModSdk.Types.ModHover) ? new CodecHover() :
             typeof(T) == typeof(global::CuoModSdk.Types.UiHoverTint) ? new CodecHoverTint() :
             typeof(T) == typeof(global::CuoModSdk.Types.UiName) ? new CodecUiName() :
-            typeof(T) == typeof(global::CuoModSdk.Types.UiPickDto) ? new CodecPick() :
+            typeof(T) == typeof(global::CuoModSdk.Types.UiPick) ? new CodecPick() :
             typeof(T) == typeof(global::CuoModSdk.Types.UiResizable) ? new CodecResizable() :
             typeof(T) == typeof(global::CuoModSdk.Types.ModRightClick) ? new CodecRightClick() :
             typeof(T) == typeof(global::CuoModSdk.Types.ScrollPosition) ? new CodecScroll() :
@@ -89,15 +89,15 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.StatLockButton) ? new CodecStatLockButton() :
             typeof(T) == typeof(global::CuoModSdk.Types.StatusBarWindow) ? new CodecStatusbarWindow() :
             typeof(T) == typeof(global::CuoModSdk.Types.ModSupersedes) ? new CodecSupersedes() :
-            typeof(T) == typeof(global::CuoModSdk.Types.UiSurfaceDto) ? new CodecSurface() :
-            typeof(T) == typeof(global::CuoModSdk.Types.TextCaretDto) ? new CodecTextCaret() :
-            typeof(T) == typeof(global::CuoModSdk.Types.TextCompletionStateDto) ? new CodecTextCompletionState() :
+            typeof(T) == typeof(global::CuoModSdk.Types.UiSurface) ? new CodecSurface() :
+            typeof(T) == typeof(global::CuoModSdk.Types.TextCaret) ? new CodecTextCaret() :
+            typeof(T) == typeof(global::CuoModSdk.Types.TextCompletionState) ? new CodecTextCompletionState() :
             typeof(T) == typeof(global::CuoModSdk.Types.TextHue) ? new CodecTextHue() :
             typeof(T) == typeof(global::CuoModSdk.Types.TextSpans) ? new CodecTextSpans() :
             typeof(T) == typeof(global::CuoModSdk.Types.TextWrap) ? new CodecTextWrap() :
             typeof(T) == typeof(global::CuoModSdk.Types.UiTooltip) ? new CodecTooltip() :
             typeof(T) == typeof(global::CuoModSdk.Types.MobAnimation) ? new CodecAnimation() :
-            typeof(T) == typeof(global::CuoModSdk.Types.MobileStepsDto) ? new CodecMobSteps() :
+            typeof(T) == typeof(global::CuoModSdk.Types.MobileSteps) ? new CodecMobSteps() :
             typeof(T) == typeof(global::CuoModSdk.Types.CombatBookWindow) ? new CodecCombatBook() :
             typeof(T) == typeof(global::CuoModSdk.Types.HouseDesignWindow) ? new CodecHouseDesign() :
             typeof(T) == typeof(global::CuoModSdk.Types.JournalWindow) ? new CodecJournal() :
@@ -116,18 +116,18 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.TipNoticeWindow) ? new CodecTipNotice() :
             typeof(T) == typeof(global::CuoModSdk.Types.TradeWindow) ? new CodecTrade() :
             typeof(T) == typeof(global::CuoModSdk.Types.ModMoveRequest) ? new CodecMoveRequest() :
-            typeof(T) == typeof(global::CuoModSdk.Types.PartyDto) ? new CodecParty() :
-            typeof(T) == typeof(global::CuoModSdk.Types.SpellbooksDto) ? new CodecPlayerSpellbook() :
-            typeof(T) == typeof(global::CuoModSdk.Types.PlayerStepsDto) ? new CodecSteps() :
-            typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionDto) ? new CodecCharacterList() :
+            typeof(T) == typeof(global::CuoModSdk.Types.Party) ? new CodecParty() :
+            typeof(T) == typeof(global::CuoModSdk.Types.Spellbooks) ? new CodecPlayerSpellbook() :
+            typeof(T) == typeof(global::CuoModSdk.Types.PlayerSteps) ? new CodecSteps() :
+            typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelection) ? new CodecCharacterList() :
             typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorsInfoEvent) ? new CodecLoginErrorInfo() :
             typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new CodecServerList() :
-            typeof(T) == typeof(global::CuoModSdk.Types.ClipboardSetDto) ? new CodecClipboardSet() :
+            typeof(T) == typeof(global::CuoModSdk.Types.ClipboardSet) ? new CodecClipboardSet() :
             typeof(T) == typeof(global::CuoModSdk.Types.FocusedInput) ? new CodecFocusedInput() :
             typeof(T) == typeof(global::CuoModSdk.Types.MaskedText) ? new CodecMaskedText() :
-            typeof(T) == typeof(global::CuoModSdk.Types.TextClipboardActionDto) ? new CodecTextClipboardAction() :
-            typeof(T) == typeof(global::CuoModSdk.Types.TextCompletionDto) ? new CodecTextCompletion() :
-            typeof(T) == typeof(global::CuoModSdk.Types.TextCompletionPickDto) ? new CodecTextCompletionPick() :
+            typeof(T) == typeof(global::CuoModSdk.Types.TextClipboardAction) ? new CodecTextClipboardAction() :
+            typeof(T) == typeof(global::CuoModSdk.Types.TextCompletion) ? new CodecTextCompletion() :
+            typeof(T) == typeof(global::CuoModSdk.Types.TextCompletionPick) ? new CodecTextCompletionPick() :
             typeof(T) == typeof(global::CuoModSdk.Types.UiTooltipSerial) ? new CodecTooltipSerial() :
             typeof(T) == typeof(global::CuoModSdk.Types.WorldMapMarker) ? new CodecMarker() :
             null;
@@ -224,7 +224,7 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpClosedEvent) ? new EventServerClosed() :
             typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpOpenedEvent) ? new EventServerOpened() :
             typeof(T) == typeof(global::CuoModSdk.Types.ModMoveRequest) ? new EventMoveRequest() :
-            typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionDto) ? new EventCharacterList() :
+            typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelection) ? new EventCharacterList() :
             typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorsInfoEvent) ? new EventLoginErrorInfo() :
             typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new EventServerList() :
             null;
@@ -250,34 +250,34 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.TextColor) ? new TypedTrigger("text-color", 16, 4, [new TypedFlat("float", 0, "float"), new TypedFlat("float", 4, "float"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float")], new CodecTextColor()) :
         typeof(T) == typeof(global::CuoModSdk.Types.BackgroundColor) ? new TypedTrigger("background-color", 16, 4, [new TypedFlat("float", 0, "float"), new TypedFlat("float", 4, "float"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float")], new CodecBgColor()) :
         typeof(T) == typeof(global::CuoModSdk.Types.BorderRadius) ? new TypedTrigger("border-radius", 16, 4, [new TypedFlat("float", 0, "float"), new TypedFlat("float", 4, "float"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float")], new CodecBorderRadius()) :
-        typeof(T) == typeof(global::CuoModSdk.Types.ChildOfDto) ? new TypedTrigger("child-of", 8, 8, [new TypedFlat("long", 0, "ulong")], new CodecChildOf()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ChildOf) ? new TypedTrigger("child-of", 8, 8, [new TypedFlat("long", 0, "ulong")], new CodecChildOf()) :
         typeof(T) == typeof(global::CuoModSdk.Types.UiMovable) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.UiNoWindowDrag) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.GlobalZIndex) ? new TypedTrigger("global-z-index", 4, 4, [new TypedFlat("int", 0, "int")], new CodecGlobalZ()) :
-        typeof(T) == typeof(global::CuoModSdk.Types.InteractionDto) ? new TypedTrigger("interaction", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecInteraction()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.Interaction) ? new TypedTrigger("interaction", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecInteraction()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ModChatMessage) ? new TypedTrigger("chat-message", 36, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "ushort"), new TypedFlat("int", 22, "byte"), new TypedFlat("int", 23, "byte"), new TypedFlat("int", 24, "byte"), new TypedFlat("float", 28, "float"), new TypedFlat("int", 32, "byte")], new CodecMessage()) :
         typeof(T) == typeof(global::CuoModSdk.Types.PromptOpenedEvent) ? new TypedTrigger("prompt-opened-event", 20, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "uint"), new TypedFlat("int", 8, "byte"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int")], new CodecPrompt()) :
         typeof(T) == typeof(global::CuoModSdk.Types.AutoOpenedCorpse) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.ContainedInto) ? new TypedTrigger(null, 0, 1, [], null) :
-        typeof(T) == typeof(global::CuoModSdk.Types.EquipmentSlotsDto) ? new TypedTrigger("equipment-slots", 8, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int")], new CodecEquipment()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.EquipmentSlots) ? new TypedTrigger("equipment-slots", 8, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int")], new CodecEquipment()) :
         typeof(T) == typeof(global::CuoModSdk.Types.Facing) ? new TypedTrigger("facing", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecFacing()) :
         typeof(T) == typeof(global::CuoModSdk.Types.IsContainer) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.Items) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.Mobiles) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.ManualOpenedCorpse) ? new TypedTrigger(null, 0, 1, [], null) :
-        typeof(T) == typeof(global::CuoModSdk.Types.EntityPropertiesDto) ? new TypedTrigger("entity-properties", 24, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "uint"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int")], new CodecProperties()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.EntityProperties) ? new TypedTrigger("entity-properties", 24, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "uint"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int")], new CodecProperties()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ServerFlags) ? new TypedTrigger("server-flags", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecServerFlags()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ContainerSlotPosition) ? new TypedTrigger("container-slot-position", 6, 2, [new TypedFlat("int", 0, "ushort"), new TypedFlat("int", 2, "ushort"), new TypedFlat("int", 4, "byte")], new CodecSlotPosition()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ContainerWindow) ? new TypedTrigger("container-window", 4, 4, [new TypedFlat("int", 0, "uint")], new CodecContainer()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ContainerClosedEvent) ? new TypedTrigger("container-closed-event", 8, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "byte")], new CodecContainerClosed()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ContainerOpenedEvent) ? new TypedTrigger("container-opened-event", 8, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "ushort")], new CodecContainerOpened()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ContainerSlotEvent) ? new TypedTrigger("container-slot-event", 24, 4, [new TypedFlat("int", 0, "byte"), new TypedFlat("int", 4, "uint"), new TypedFlat("int", 8, "uint"), new TypedFlat("int", 12, "ushort"), new TypedFlat("int", 14, "ushort"), new TypedFlat("int", 16, "ushort"), new TypedFlat("int", 18, "ushort"), new TypedFlat("int", 20, "ushort")], new CodecContainerSlot()) :
-        typeof(T) == typeof(global::CuoModSdk.Types.ContainerGumpTagDto) ? new TypedTrigger("container-gump-tag", 24, 4, [new TypedFlat("int", 0, "ushort"), new TypedFlat("int", 2, "ushort"), new TypedFlat("float", 4, "float"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int")], new CodecContainerTag()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ContainerGumpTag) ? new TypedTrigger("container-gump-tag", 24, 4, [new TypedFlat("int", 0, "ushort"), new TypedFlat("int", 2, "ushort"), new TypedFlat("float", 4, "float"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int")], new CodecContainerTag()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ContextMenuEvent) ? new TypedTrigger("context-menu-event", 12, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int")], new CodecContextMenu()) :
         typeof(T) == typeof(global::CuoModSdk.Types.GridContainerWindow) ? new TypedTrigger("grid-container-window", 4, 4, [new TypedFlat("int", 0, "uint")], new CodecGridContainer()) :
         typeof(T) == typeof(global::CuoModSdk.Types.GridLootWindow) ? new TypedTrigger("grid-loot-window", 24, 8, [new TypedFlat("int", 0, "uint"), new TypedFlat("long", 8, "ulong"), new TypedFlat("int", 16, "int")], new CodecGridLoot()) :
         typeof(T) == typeof(global::CuoModSdk.Types.HealthBarWindow) ? new TypedTrigger("health-bar-window", 12, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "byte"), new TypedFlat("int", 5, "byte"), new TypedFlat("int", 6, "byte"), new TypedFlat("int", 7, "byte"), new TypedFlat("int", 8, "byte"), new TypedFlat("int", 9, "byte")], new CodecHealthBar()) :
-        typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpDto) ? new TypedTrigger("server-gump", 60, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "uint"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int"), new TypedFlat("int", 24, "int"), new TypedFlat("int", 28, "int"), new TypedFlat("int", 32, "int"), new TypedFlat("int", 36, "int"), new TypedFlat("int", 40, "int"), new TypedFlat("int", 44, "int"), new TypedFlat("int", 48, "int"), new TypedFlat("int", 52, "int"), new TypedFlat("int", 56, "int")], new CodecServer()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.ServerGump) ? new TypedTrigger("server-gump", 60, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "uint"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int"), new TypedFlat("int", 24, "int"), new TypedFlat("int", 28, "int"), new TypedFlat("int", 32, "int"), new TypedFlat("int", 36, "int"), new TypedFlat("int", 40, "int"), new TypedFlat("int", 44, "int"), new TypedFlat("int", 48, "int"), new TypedFlat("int", 52, "int"), new TypedFlat("int", 56, "int")], new CodecServer()) :
         typeof(T) == typeof(global::CuoModSdk.Types.VendorWindow) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.ModInputConsume) ? new TypedTrigger("input-consume", 8, 4, [new TypedFlat("int", 0, "byte"), new TypedFlat("int", 4, "uint")], new CodecConsume()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ModHotkeyFired) ? new TypedTrigger("mod-hotkey-fired", 20, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "byte"), new TypedFlat("int", 17, "byte"), new TypedFlat("int", 18, "byte"), new TypedFlat("int", 19, "byte")], new CodecHotkey()) :
@@ -287,13 +287,13 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.StatLocks) ? new TypedTrigger("stat-locks", 3, 1, [new TypedFlat("int", 0, "byte"), new TypedFlat("int", 1, "byte"), new TypedFlat("int", 2, "byte")], new CodecStatLocks()) :
         typeof(T) == typeof(global::CuoModSdk.Types.LocalTargetResultEvent) ? new TypedTrigger("local-target-result-event", 24, 8, [new TypedFlat("long", 0, "ulong"), new TypedFlat("int", 8, "uint"), new TypedFlat("int", 12, "ushort"), new TypedFlat("int", 14, "ushort"), new TypedFlat("int", 16, "ushort"), new TypedFlat("int", 18, "sbyte"), new TypedFlat("int", 19, "byte")], new CodecLocalResult()) :
         typeof(T) == typeof(global::CuoModSdk.Types.Anchorable) ? new TypedTrigger("anchorable", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecAnchorable()) :
-        typeof(T) == typeof(global::CuoModSdk.Types.BorderColorDto) ? new TypedTrigger("border-color", 16, 4, [new TypedFlat("float", 0, "float"), new TypedFlat("float", 4, "float"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float")], new CodecBorderColor()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.BorderColor) ? new TypedTrigger("border-color", 16, 4, [new TypedFlat("float", 0, "float"), new TypedFlat("float", 4, "float"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float")], new CodecBorderColor()) :
         typeof(T) == typeof(global::CuoModSdk.Types.UOButton) ? new TypedTrigger("uo-button", 6, 2, [new TypedFlat("int", 0, "ushort"), new TypedFlat("int", 2, "ushort"), new TypedFlat("int", 4, "ushort")], new CodecButton()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ModClick) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.ComputedNode) ? new TypedTrigger("computed-node", 24, 4, [new TypedFlat("float", 0, "float"), new TypedFlat("float", 4, "float"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float"), new TypedFlat("int", 16, "uint"), new TypedFlat("int", 20, "int")], new CodecComputed()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ContainerItemUI) ? new TypedTrigger("container-item-ui", 40, 8, [new TypedFlat("long", 0, "ulong"), new TypedFlat("int", 8, "uint"), new TypedFlat("float", 12, "float"), new TypedFlat("float", 16, "float"), new TypedFlat("float", 20, "float"), new TypedFlat("float", 24, "float"), new TypedFlat("float", 28, "float"), new TypedFlat("float", 32, "float")], new CodecContainerItem()) :
         typeof(T) == typeof(global::CuoModSdk.Types.UiContainsByBounds) ? new TypedTrigger(null, 0, 1, [], null) :
-        typeof(T) == typeof(global::CuoModSdk.Types.UiCustomDto) ? new TypedTrigger("ui-custom", 24, 4, [new TypedFlat("int", 0, "byte"), new TypedFlat("int", 4, "uint"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float"), new TypedFlat("float", 16, "float"), new TypedFlat("int", 20, "byte")], new CodecCustom()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.UiCustom) ? new TypedTrigger("ui-custom", 24, 4, [new TypedFlat("int", 0, "byte"), new TypedFlat("int", 4, "uint"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float"), new TypedFlat("float", 16, "float"), new TypedFlat("int", 20, "byte")], new CodecCustom()) :
         typeof(T) == typeof(global::CuoModSdk.Types.EditableText) ? new TypedTrigger("editable-text", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecEditableText()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ModHover) ? new TypedTrigger("ui-hover", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecHover()) :
         typeof(T) == typeof(global::CuoModSdk.Types.UiHoverTint) ? new TypedTrigger("ui-hover-tint", 32, 4, [new TypedFlat("float", 0, "float"), new TypedFlat("float", 4, "float"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float"), new TypedFlat("float", 16, "float"), new TypedFlat("float", 20, "float"), new TypedFlat("float", 24, "float"), new TypedFlat("float", 28, "float")], new CodecHoverTint()) :
@@ -322,7 +322,7 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.IsTopBar) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.MobAnimation) ? new TypedTrigger("mob-animation", 36, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "byte"), new TypedFlat("int", 21, "byte"), new TypedFlat("int", 22, "byte"), new TypedFlat("int", 23, "byte"), new TypedFlat("int", 24, "byte"), new TypedFlat("int", 25, "byte"), new TypedFlat("float", 28, "float"), new TypedFlat("int", 32, "byte")], new CodecAnimation()) :
         typeof(T) == typeof(global::CuoModSdk.Types.IsMulti) ? new TypedTrigger(null, 0, 1, [], null) :
-        typeof(T) == typeof(global::CuoModSdk.Types.MobileStepsDto) ? new TypedTrigger("mobile-steps", 16, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("float", 4, "float"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int")], new CodecMobSteps()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.MobileSteps) ? new TypedTrigger("mobile-steps", 16, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("float", 4, "float"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int")], new CodecMobSteps()) :
         typeof(T) == typeof(global::CuoModSdk.Types.BookWindow) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.BuffGumpUI) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.BulletinBoardWindow) ? new TypedTrigger(null, 0, 1, [], null) :
@@ -342,14 +342,14 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpClosedEvent) ? new TypedTrigger("server-gump-closed-event", 8, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "uint")], new CodecServerClosed()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ServerGumpOpenedEvent) ? new TypedTrigger("server-gump-opened-event", 8, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "uint")], new CodecServerOpened()) :
         typeof(T) == typeof(global::CuoModSdk.Types.SkillsWindow) ? new TypedTrigger("skills-window", 104, 8, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "byte"), new TypedFlat("int", 5, "byte"), new TypedFlat("int", 6, "byte"), new TypedFlat("int", 7, "byte"), new TypedFlat("int", 8, "int"), new TypedFlat("float", 12, "float"), new TypedFlat("float", 16, "float"), new TypedFlat("long", 24, "ulong"), new TypedFlat("long", 32, "ulong"), new TypedFlat("long", 40, "ulong"), new TypedFlat("long", 48, "ulong"), new TypedFlat("long", 56, "ulong"), new TypedFlat("long", 64, "ulong"), new TypedFlat("long", 72, "ulong"), new TypedFlat("long", 80, "ulong"), new TypedFlat("long", 88, "ulong"), new TypedFlat("float", 96, "float")], new CodecGumpSkills()) :
-        typeof(T) == typeof(global::CuoModSdk.Types.SpellbookWindow) ? new TypedTrigger("spellbook-window", 64, 8, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int"), new TypedFlat("int", 24, "byte"), new TypedFlat("long", 32, "ulong"), new TypedFlat("long", 40, "ulong"), new TypedFlat("long", 48, "ulong"), new TypedFlat("int", 56, "byte")], new CodecSpellbook()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.SpellbookWindow) ? new TypedTrigger("spellbook-window", 64, 8, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "byte"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int"), new TypedFlat("int", 24, "byte"), new TypedFlat("long", 32, "ulong"), new TypedFlat("long", 40, "ulong"), new TypedFlat("long", 48, "ulong"), new TypedFlat("int", 56, "byte")], new CodecSpellbook()) :
         typeof(T) == typeof(global::CuoModSdk.Types.SplitMenuWindow) ? new TypedTrigger("split-menu-window", 80, 8, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "int"), new TypedFlat("long", 8, "ulong"), new TypedFlat("long", 16, "ulong"), new TypedFlat("long", 24, "ulong"), new TypedFlat("int", 32, "int"), new TypedFlat("int", 36, "int"), new TypedFlat("int", 40, "int"), new TypedFlat("int", 44, "ushort"), new TypedFlat("int", 46, "ushort"), new TypedFlat("long", 48, "ulong"), new TypedFlat("int", 56, "uint"), new TypedFlat("int", 60, "ushort"), new TypedFlat("int", 62, "ushort"), new TypedFlat("int", 64, "ushort"), new TypedFlat("int", 66, "ushort"), new TypedFlat("int", 68, "ushort"), new TypedFlat("int", 70, "sbyte"), new TypedFlat("int", 72, "uint"), new TypedFlat("int", 76, "byte"), new TypedFlat("int", 77, "byte")], new CodecSplitMenu()) :
         typeof(T) == typeof(global::CuoModSdk.Types.TipNoticeWindow) ? new TypedTrigger("tip-notice-window", 56, 8, [new TypedFlat("int", 0, "ushort"), new TypedFlat("int", 4, "int"), new TypedFlat("float", 8, "float"), new TypedFlat("long", 16, "ulong"), new TypedFlat("long", 24, "ulong"), new TypedFlat("long", 32, "ulong"), new TypedFlat("long", 40, "ulong"), new TypedFlat("long", 48, "ulong")], new CodecTipNotice()) :
         typeof(T) == typeof(global::CuoModSdk.Types.TradeWindow) ? new TypedTrigger("trade-window", 16, 4, [new TypedFlat("int", 0, "uint"), new TypedFlat("int", 4, "uint"), new TypedFlat("int", 8, "uint"), new TypedFlat("int", 12, "byte"), new TypedFlat("int", 13, "byte"), new TypedFlat("int", 14, "byte")], new CodecTrade()) :
         typeof(T) == typeof(global::CuoModSdk.Types.WorldMapWindow) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.ModMoveRequest) ? new TypedTrigger("mod-move-request", 3, 1, [new TypedFlat("int", 0, "byte"), new TypedFlat("int", 1, "byte"), new TypedFlat("int", 2, "byte")], new CodecMoveRequest()) :
         typeof(T) == typeof(global::CuoModSdk.Types.CharCreationScene) ? new TypedTrigger(null, 0, 1, [], null) :
-        typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionDto) ? new TypedTrigger("character-selection", 16, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int")], new CodecCharacterList()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelection) ? new TypedTrigger("character-selection", 16, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int")], new CodecCharacterList()) :
         typeof(T) == typeof(global::CuoModSdk.Types.CharacterSelectionScene) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.GameScene) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.LoginScene) ? new TypedTrigger(null, 0, 1, [], null) :
@@ -955,16 +955,16 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 12) == *(uint*)(b + 12);
 
     // child-of: 8 bytes, align 8
-    internal static global::CuoModSdk.Types.ChildOfDto LiftChildOf(byte* p)
+    internal static global::CuoModSdk.Types.ChildOf LiftChildOf(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ChildOfDto
+        var v = new global::CuoModSdk.Types.ChildOf
         {
             Parent = *(ulong*)(p + 0),
         };
         return v;
     }
 
-    internal static void LowerChildOf(in global::CuoModSdk.Types.ChildOfDto v, byte* p)
+    internal static void LowerChildOf(in global::CuoModSdk.Types.ChildOf v, byte* p)
     {
         *(ulong*)(p + 0) = v.Parent;
     }
@@ -991,27 +991,27 @@ internal static unsafe class TypedGen
         *(uint*)(a + 0) == *(uint*)(b + 0);
 
     // interaction: 1 bytes, align 1
-    internal static global::CuoModSdk.Types.InteractionDto LiftInteraction(byte* p)
+    internal static global::CuoModSdk.Types.Interaction LiftInteraction(byte* p)
     {
-        var v = new global::CuoModSdk.Types.InteractionDto
+        var v = new global::CuoModSdk.Types.Interaction
         {
-            State = *(p + 0),
+            State = (global::CuoModSdk.Types.InteractionState)(*(byte*)(p + 0)),
         };
         return v;
     }
 
-    internal static void LowerInteraction(in global::CuoModSdk.Types.InteractionDto v, byte* p)
+    internal static void LowerInteraction(in global::CuoModSdk.Types.Interaction v, byte* p)
     {
-        *(p + 0) = v.State;
+        *(byte*)(p + 0) = (byte)v.State;
     }
 
     internal static bool EqInteraction(byte* a, byte* b) =>
         *(a + 0) == *(b + 0);
 
     // mouse-input: 32 bytes, align 4
-    internal static global::CuoModSdk.Types.MouseInputDto LiftMouseInput(byte* p)
+    internal static global::CuoModSdk.Types.MouseInput LiftMouseInput(byte* p)
     {
-        var v = new global::CuoModSdk.Types.MouseInputDto
+        var v = new global::CuoModSdk.Types.MouseInput
         {
             X = *(float*)(p + 0),
             Y = *(float*)(p + 4),
@@ -1034,7 +1034,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerMouseInput(in global::CuoModSdk.Types.MouseInputDto v, byte* p)
+    internal static void LowerMouseInput(in global::CuoModSdk.Types.MouseInput v, byte* p)
     {
         *(float*)(p + 0) = v.X;
         *(float*)(p + 4) = v.Y;
@@ -1075,9 +1075,9 @@ internal static unsafe class TypedGen
         && (*(a + 28) != 0) == (*(b + 28) != 0);
 
     // keyboard-input: 16 bytes, align 4
-    internal static global::CuoModSdk.Types.KeyboardInputDto LiftKeyboardInput(byte* p)
+    internal static global::CuoModSdk.Types.KeyboardInput LiftKeyboardInput(byte* p)
     {
-        var v = new global::CuoModSdk.Types.KeyboardInputDto
+        var v = new global::CuoModSdk.Types.KeyboardInput
         {
             Pressed = LiftList0(p + 0),
             PressedOnce = LiftList1(p + 8),
@@ -1085,7 +1085,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerKeyboardInput(in global::CuoModSdk.Types.KeyboardInputDto v, byte* p)
+    internal static void LowerKeyboardInput(in global::CuoModSdk.Types.KeyboardInput v, byte* p)
     {
         LowerList0(v.Pressed, p + 0);
         LowerList1(v.PressedOnce, p + 8);
@@ -1112,9 +1112,9 @@ internal static unsafe class TypedGen
             Hue = *(ushort*)(p + 20),
             Font = *(p + 22),
             IsUnicode = *(p + 23) != 0,
-            MessageType = *(p + 24),
+            MessageType = (global::CuoModSdk.Types.MessageType)(*(byte*)(p + 24)),
             Time = *(float*)(p + 28),
-            Kind = *(p + 32),
+            Kind = (global::CuoModSdk.Types.ChatKind)(*(byte*)(p + 32)),
         };
         return v;
     }
@@ -1127,9 +1127,9 @@ internal static unsafe class TypedGen
         *(ushort*)(p + 20) = v.Hue;
         *(p + 22) = v.Font;
         *(p + 23) = (byte)(v.IsUnicode ? 1 : 0);
-        *(p + 24) = v.MessageType;
+        *(byte*)(p + 24) = (byte)v.MessageType;
         *(float*)(p + 28) = v.Time;
-        *(p + 32) = v.Kind;
+        *(byte*)(p + 32) = (byte)v.Kind;
     }
 
     internal static void FreeChatMessage(byte* p)
@@ -1203,16 +1203,16 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 4) == *(uint*)(b + 4);
 
     // equipment-slots: 8 bytes, align 4
-    internal static global::CuoModSdk.Types.EquipmentSlotsDto LiftEquipmentSlots(byte* p)
+    internal static global::CuoModSdk.Types.EquipmentSlots LiftEquipmentSlots(byte* p)
     {
-        var v = new global::CuoModSdk.Types.EquipmentSlotsDto
+        var v = new global::CuoModSdk.Types.EquipmentSlots
         {
             Serials = LiftList2(p + 0),
         };
         return v;
     }
 
-    internal static void LowerEquipmentSlots(in global::CuoModSdk.Types.EquipmentSlotsDto v, byte* p)
+    internal static void LowerEquipmentSlots(in global::CuoModSdk.Types.EquipmentSlots v, byte* p)
     {
         LowerList2(v.Serials, p + 0);
     }
@@ -1244,9 +1244,9 @@ internal static unsafe class TypedGen
         *(a + 0) == *(b + 0);
 
     // opl-line: 20 bytes, align 4
-    internal static global::CuoModSdk.Types.OplLineDto LiftOplLine(byte* p)
+    internal static global::CuoModSdk.Types.OplLine LiftOplLine(byte* p)
     {
-        var v = new global::CuoModSdk.Types.OplLineDto
+        var v = new global::CuoModSdk.Types.OplLine
         {
             Cliloc = *(int*)(p + 0),
             Args = TypedCodecs.ReadString(p + 4),
@@ -1255,7 +1255,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerOplLine(in global::CuoModSdk.Types.OplLineDto v, byte* p)
+    internal static void LowerOplLine(in global::CuoModSdk.Types.OplLine v, byte* p)
     {
         *(int*)(p + 0) = v.Cliloc;
         TypedCodecs.WriteString(v.Args, p + 4);
@@ -1274,9 +1274,9 @@ internal static unsafe class TypedGen
         && TypedStrings.SameRecord(a + 12, b + 12);
 
     // entity-properties: 24 bytes, align 4
-    internal static global::CuoModSdk.Types.EntityPropertiesDto LiftEntityProperties(byte* p)
+    internal static global::CuoModSdk.Types.EntityProperties LiftEntityProperties(byte* p)
     {
-        var v = new global::CuoModSdk.Types.EntityPropertiesDto
+        var v = new global::CuoModSdk.Types.EntityProperties
         {
             Serial = *(uint*)(p + 0),
             Revision = *(uint*)(p + 4),
@@ -1286,7 +1286,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerEntityProperties(in global::CuoModSdk.Types.EntityPropertiesDto v, byte* p)
+    internal static void LowerEntityProperties(in global::CuoModSdk.Types.EntityProperties v, byte* p)
     {
         *(uint*)(p + 0) = v.Serial;
         *(uint*)(p + 4) = v.Revision;
@@ -1349,9 +1349,9 @@ internal static unsafe class TypedGen
         && *(a + 4) == *(b + 4);
 
     // game-context: 28 bytes, align 4
-    internal static global::CuoModSdk.Types.GameContextDto LiftGameContext(byte* p)
+    internal static global::CuoModSdk.Types.GameContext LiftGameContext(byte* p)
     {
-        var v = new global::CuoModSdk.Types.GameContextDto
+        var v = new global::CuoModSdk.Types.GameContext
         {
             PlayerSerial = *(uint*)(p + 0),
             PlayerName = TypedCodecs.ReadString(p + 4),
@@ -1363,7 +1363,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerGameContext(in global::CuoModSdk.Types.GameContextDto v, byte* p)
+    internal static void LowerGameContext(in global::CuoModSdk.Types.GameContext v, byte* p)
     {
         *(uint*)(p + 0) = v.PlayerSerial;
         TypedCodecs.WriteString(v.PlayerName, p + 4);
@@ -1387,9 +1387,9 @@ internal static unsafe class TypedGen
         && (*(a + 24) != 0) == (*(b + 24) != 0);
 
     // game-settings: 24 bytes, align 4
-    internal static global::CuoModSdk.Types.GameSettingsDto LiftGameSettings(byte* p)
+    internal static global::CuoModSdk.Types.GameSettings LiftGameSettings(byte* p)
     {
-        var v = new global::CuoModSdk.Types.GameSettingsDto
+        var v = new global::CuoModSdk.Types.GameSettings
         {
             GridLootType = *(int*)(p + 0),
             SkipEmptyCorpse = *(p + 4) != 0,
@@ -1406,7 +1406,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerGameSettings(in global::CuoModSdk.Types.GameSettingsDto v, byte* p)
+    internal static void LowerGameSettings(in global::CuoModSdk.Types.GameSettings v, byte* p)
     {
         *(int*)(p + 0) = v.GridLootType;
         *(p + 4) = (byte)(v.SkipEmptyCorpse ? 1 : 0);
@@ -1435,18 +1435,18 @@ internal static unsafe class TypedGen
         && (*(a + 23) != 0) == (*(b + 23) != 0);
 
     // game-state: 1 bytes, align 1
-    internal static global::CuoModSdk.Types.GameStateDto LiftGameState(byte* p)
+    internal static global::CuoModSdk.Types.GameState LiftGameState(byte* p)
     {
-        var v = new global::CuoModSdk.Types.GameStateDto
+        var v = new global::CuoModSdk.Types.GameState
         {
-            Current = *(p + 0),
+            Current = (global::CuoModSdk.Types.GameStateKind)(*(byte*)(p + 0)),
         };
         return v;
     }
 
-    internal static void LowerGameState(in global::CuoModSdk.Types.GameStateDto v, byte* p)
+    internal static void LowerGameState(in global::CuoModSdk.Types.GameState v, byte* p)
     {
-        *(p + 0) = v.Current;
+        *(byte*)(p + 0) = (byte)v.Current;
     }
 
     internal static bool EqGameState(byte* a, byte* b) =>
@@ -1513,9 +1513,9 @@ internal static unsafe class TypedGen
         && *(ushort*)(a + 4) == *(ushort*)(b + 4);
 
     // container-position: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.ContainerPositionDto LiftContainerPosition(byte* p)
+    internal static global::CuoModSdk.Types.ContainerPosition LiftContainerPosition(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ContainerPositionDto
+        var v = new global::CuoModSdk.Types.ContainerPosition
         {
             Serial = *(uint*)(p + 0),
             X = *(int*)(p + 4),
@@ -1524,7 +1524,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerContainerPosition(in global::CuoModSdk.Types.ContainerPositionDto v, byte* p)
+    internal static void LowerContainerPosition(in global::CuoModSdk.Types.ContainerPosition v, byte* p)
     {
         *(uint*)(p + 0) = v.Serial;
         *(int*)(p + 4) = v.X;
@@ -1537,16 +1537,16 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 8) == *(uint*)(b + 8);
 
     // container-positions: 8 bytes, align 4
-    internal static global::CuoModSdk.Types.ContainerPositionsDto LiftContainerPositions(byte* p)
+    internal static global::CuoModSdk.Types.ContainerPositions LiftContainerPositions(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ContainerPositionsDto
+        var v = new global::CuoModSdk.Types.ContainerPositions
         {
             Saved = LiftList4(p + 0),
         };
         return v;
     }
 
-    internal static void LowerContainerPositions(in global::CuoModSdk.Types.ContainerPositionsDto v, byte* p)
+    internal static void LowerContainerPositions(in global::CuoModSdk.Types.ContainerPositions v, byte* p)
     {
         LowerList4(v.Saved, p + 0);
     }
@@ -1599,9 +1599,9 @@ internal static unsafe class TypedGen
         && *(ushort*)(a + 20) == *(ushort*)(b + 20);
 
     // container-gump-tag: 24 bytes, align 4
-    internal static global::CuoModSdk.Types.ContainerGumpTagDto LiftContainerGumpTag(byte* p)
+    internal static global::CuoModSdk.Types.ContainerGumpTag LiftContainerGumpTag(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ContainerGumpTagDto
+        var v = new global::CuoModSdk.Types.ContainerGumpTag
         {
             Graphic = *(ushort*)(p + 0),
             OriginalGraphic = *(ushort*)(p + 2),
@@ -1614,7 +1614,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerContainerGumpTag(in global::CuoModSdk.Types.ContainerGumpTagDto v, byte* p)
+    internal static void LowerContainerGumpTag(in global::CuoModSdk.Types.ContainerGumpTag v, byte* p)
     {
         *(ushort*)(p + 0) = v.Graphic;
         *(ushort*)(p + 2) = v.OriginalGraphic;
@@ -1642,7 +1642,7 @@ internal static unsafe class TypedGen
             Index = *(ushort*)(p + 0),
             Cliloc = *(int*)(p + 4),
             Text = TypedCodecs.ReadString(p + 8),
-            Flags = *(ushort*)(p + 16),
+            Flags = (global::CuoModSdk.Types.ContextMenuFlags)(*(ushort*)(p + 16)),
             Hue = *(ushort*)(p + 18),
         };
         return v;
@@ -1653,7 +1653,7 @@ internal static unsafe class TypedGen
         *(ushort*)(p + 0) = v.Index;
         *(int*)(p + 4) = v.Cliloc;
         TypedCodecs.WriteString(v.Text, p + 8);
-        *(ushort*)(p + 16) = v.Flags;
+        *(ushort*)(p + 16) = (ushort)v.Flags;
         *(ushort*)(p + 18) = v.Hue;
     }
 
@@ -1774,9 +1774,9 @@ internal static unsafe class TypedGen
         && (*(a + 9) != 0) == (*(b + 9) != 0);
 
     // server-gump-button: 20 bytes, align 4
-    internal static global::CuoModSdk.Types.ServerGumpButtonDto LiftServerGumpButton(byte* p)
+    internal static global::CuoModSdk.Types.ServerGumpButton LiftServerGumpButton(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ServerGumpButtonDto
+        var v = new global::CuoModSdk.Types.ServerGumpButton
         {
             Id = *(int*)(p + 0),
             X = *(float*)(p + 4),
@@ -1787,7 +1787,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerServerGumpButton(in global::CuoModSdk.Types.ServerGumpButtonDto v, byte* p)
+    internal static void LowerServerGumpButton(in global::CuoModSdk.Types.ServerGumpButton v, byte* p)
     {
         *(int*)(p + 0) = v.Id;
         *(float*)(p + 4) = v.X;
@@ -1804,9 +1804,9 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 16) == *(uint*)(b + 16);
 
     // server-gump-text-entry: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.ServerGumpTextEntryDto LiftServerGumpTextEntry(byte* p)
+    internal static global::CuoModSdk.Types.ServerGumpTextEntry LiftServerGumpTextEntry(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ServerGumpTextEntryDto
+        var v = new global::CuoModSdk.Types.ServerGumpTextEntry
         {
             Id = *(ushort*)(p + 0),
             Text = TypedCodecs.ReadString(p + 4),
@@ -1814,7 +1814,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerServerGumpTextEntry(in global::CuoModSdk.Types.ServerGumpTextEntryDto v, byte* p)
+    internal static void LowerServerGumpTextEntry(in global::CuoModSdk.Types.ServerGumpTextEntry v, byte* p)
     {
         *(ushort*)(p + 0) = v.Id;
         TypedCodecs.WriteString(v.Text, p + 4);
@@ -1830,9 +1830,9 @@ internal static unsafe class TypedGen
         && TypedStrings.SameRecord(a + 4, b + 4);
 
     // server-gump-switch: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.ServerGumpSwitchDto LiftServerGumpSwitch(byte* p)
+    internal static global::CuoModSdk.Types.ServerGumpSwitch LiftServerGumpSwitch(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ServerGumpSwitchDto
+        var v = new global::CuoModSdk.Types.ServerGumpSwitch
         {
             Id = *(uint*)(p + 0),
             Checked = *(p + 4) != 0,
@@ -1842,7 +1842,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerServerGumpSwitch(in global::CuoModSdk.Types.ServerGumpSwitchDto v, byte* p)
+    internal static void LowerServerGumpSwitch(in global::CuoModSdk.Types.ServerGumpSwitch v, byte* p)
     {
         *(uint*)(p + 0) = v.Id;
         *(p + 4) = (byte)(v.Checked ? 1 : 0);
@@ -1857,9 +1857,9 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 8) == *(uint*)(b + 8);
 
     // server-gump: 60 bytes, align 4
-    internal static global::CuoModSdk.Types.ServerGumpDto LiftServerGump(byte* p)
+    internal static global::CuoModSdk.Types.ServerGump LiftServerGump(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ServerGumpDto
+        var v = new global::CuoModSdk.Types.ServerGump
         {
             Serial = *(uint*)(p + 0),
             GumpId = *(uint*)(p + 4),
@@ -1875,7 +1875,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerServerGump(in global::CuoModSdk.Types.ServerGumpDto v, byte* p)
+    internal static void LowerServerGump(in global::CuoModSdk.Types.ServerGump v, byte* p)
     {
         *(uint*)(p + 0) = v.Serial;
         *(uint*)(p + 4) = v.GumpId;
@@ -1932,9 +1932,9 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 4) == *(uint*)(b + 4);
 
     // host-hotkey: 16 bytes, align 4
-    internal static global::CuoModSdk.Types.HostHotkeyDto LiftHostHotkey(byte* p)
+    internal static global::CuoModSdk.Types.HostHotkey LiftHostHotkey(byte* p)
     {
-        var v = new global::CuoModSdk.Types.HostHotkeyDto
+        var v = new global::CuoModSdk.Types.HostHotkey
         {
             Key = *(int*)(p + 0),
             Ctrl = *(p + 4) != 0,
@@ -1945,7 +1945,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerHostHotkey(in global::CuoModSdk.Types.HostHotkeyDto v, byte* p)
+    internal static void LowerHostHotkey(in global::CuoModSdk.Types.HostHotkey v, byte* p)
     {
         *(int*)(p + 0) = v.Key;
         *(p + 4) = (byte)(v.Ctrl ? 1 : 0);
@@ -1967,16 +1967,16 @@ internal static unsafe class TypedGen
         && TypedStrings.SameRecord(a + 8, b + 8);
 
     // host-hotkeys: 8 bytes, align 4
-    internal static global::CuoModSdk.Types.HostHotkeysDto LiftHostHotkeys(byte* p)
+    internal static global::CuoModSdk.Types.HostHotkeys LiftHostHotkeys(byte* p)
     {
-        var v = new global::CuoModSdk.Types.HostHotkeysDto
+        var v = new global::CuoModSdk.Types.HostHotkeys
         {
             Hotkeys = LiftList11(p + 0),
         };
         return v;
     }
 
-    internal static void LowerHostHotkeys(in global::CuoModSdk.Types.HostHotkeysDto v, byte* p)
+    internal static void LowerHostHotkeys(in global::CuoModSdk.Types.HostHotkeys v, byte* p)
     {
         LowerList11(v.Hotkeys, p + 0);
     }
@@ -2072,9 +2072,9 @@ internal static unsafe class TypedGen
         && (*(a + 19) != 0) == (*(b + 19) != 0);
 
     // mod-hotkey-bindings: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.ModHotkeyBindingsDto LiftModHotkeyBindings(byte* p)
+    internal static global::CuoModSdk.Types.ModHotkeyBindings LiftModHotkeyBindings(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ModHotkeyBindingsDto
+        var v = new global::CuoModSdk.Types.ModHotkeyBindings
         {
             Bindings = LiftList12(p + 0),
             ConsumeKeys = *(p + 8) != 0,
@@ -2082,7 +2082,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerModHotkeyBindings(in global::CuoModSdk.Types.ModHotkeyBindingsDto v, byte* p)
+    internal static void LowerModHotkeyBindings(in global::CuoModSdk.Types.ModHotkeyBindings v, byte* p)
     {
         LowerList12(v.Bindings, p + 0);
         *(p + 8) = (byte)(v.ConsumeKeys ? 1 : 0);
@@ -2098,9 +2098,9 @@ internal static unsafe class TypedGen
         && (*(a + 8) != 0) == (*(b + 8) != 0);
 
     // world-single-click: 16 bytes, align 8
-    internal static global::CuoModSdk.Types.WorldSingleClickDto LiftWorldSingleClick(byte* p)
+    internal static global::CuoModSdk.Types.WorldSingleClick LiftWorldSingleClick(byte* p)
     {
-        var v = new global::CuoModSdk.Types.WorldSingleClickDto
+        var v = new global::CuoModSdk.Types.WorldSingleClick
         {
             Serial = *(uint*)(p + 0),
             AtMs = *(ulong*)(p + 8),
@@ -2108,7 +2108,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerWorldSingleClick(in global::CuoModSdk.Types.WorldSingleClickDto v, byte* p)
+    internal static void LowerWorldSingleClick(in global::CuoModSdk.Types.WorldSingleClick v, byte* p)
     {
         *(uint*)(p + 0) = v.Serial;
         *(ulong*)(p + 8) = v.AtMs;
@@ -2153,7 +2153,7 @@ internal static unsafe class TypedGen
     {
         var v = new global::CuoModSdk.Types.ItemMoveResult
         {
-            Result = *(p + 0),
+            Result = (global::CuoModSdk.Types.ItemMoveOutcome)(*(byte*)(p + 0)),
             Code = *(p + 1),
         };
         return v;
@@ -2161,7 +2161,7 @@ internal static unsafe class TypedGen
 
     internal static void LowerItemMoveResult(in global::CuoModSdk.Types.ItemMoveResult v, byte* p)
     {
-        *(p + 0) = v.Result;
+        *(byte*)(p + 0) = (byte)v.Result;
         *(p + 1) = v.Code;
     }
 
@@ -2170,15 +2170,15 @@ internal static unsafe class TypedGen
         && *(a + 1) == *(b + 1);
 
     // mod-option: 60 bytes, align 4
-    internal static global::CuoModSdk.Types.ModOptionDto LiftModOption(byte* p)
+    internal static global::CuoModSdk.Types.ModOption LiftModOption(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ModOptionDto
+        var v = new global::CuoModSdk.Types.ModOption
         {
             Key = TypedCodecs.ReadString(p + 0),
             Label = TypedCodecs.ReadString(p + 8),
             Group = TypedCodecs.ReadString(p + 16),
             Keywords = TypedCodecs.ReadString(p + 24),
-            Kind = *(p + 32),
+            Kind = (global::CuoModSdk.Types.ModOptionKind)(*(byte*)(p + 32)),
             Min = *(int*)(p + 36),
             Max = *(int*)(p + 40),
             Step = *(int*)(p + 44),
@@ -2188,13 +2188,13 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerModOption(in global::CuoModSdk.Types.ModOptionDto v, byte* p)
+    internal static void LowerModOption(in global::CuoModSdk.Types.ModOption v, byte* p)
     {
         TypedCodecs.WriteString(v.Key, p + 0);
         TypedCodecs.WriteString(v.Label, p + 8);
         TypedCodecs.WriteString(v.Group, p + 16);
         TypedCodecs.WriteString(v.Keywords, p + 24);
-        *(p + 32) = v.Kind;
+        *(byte*)(p + 32) = (byte)v.Kind;
         *(int*)(p + 36) = v.Min;
         *(int*)(p + 40) = v.Max;
         *(int*)(p + 44) = v.Step;
@@ -2224,16 +2224,16 @@ internal static unsafe class TypedGen
         && EqList13(a + 52, b + 52);
 
     // mod-options-schema: 8 bytes, align 4
-    internal static global::CuoModSdk.Types.ModOptionsSchemaDto LiftModOptionsSchema(byte* p)
+    internal static global::CuoModSdk.Types.ModOptionsSchema LiftModOptionsSchema(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ModOptionsSchemaDto
+        var v = new global::CuoModSdk.Types.ModOptionsSchema
         {
             Options = LiftList14(p + 0),
         };
         return v;
     }
 
-    internal static void LowerModOptionsSchema(in global::CuoModSdk.Types.ModOptionsSchemaDto v, byte* p)
+    internal static void LowerModOptionsSchema(in global::CuoModSdk.Types.ModOptionsSchema v, byte* p)
     {
         LowerList14(v.Options, p + 0);
     }
@@ -2247,9 +2247,9 @@ internal static unsafe class TypedGen
         EqList14(a + 0, b + 0);
 
     // mod-option-value: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.ModOptionValueDto LiftModOptionValue(byte* p)
+    internal static global::CuoModSdk.Types.ModOptionValue LiftModOptionValue(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ModOptionValueDto
+        var v = new global::CuoModSdk.Types.ModOptionValue
         {
             Key = TypedCodecs.ReadString(p + 0),
             Value = *(int*)(p + 8),
@@ -2257,7 +2257,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerModOptionValue(in global::CuoModSdk.Types.ModOptionValueDto v, byte* p)
+    internal static void LowerModOptionValue(in global::CuoModSdk.Types.ModOptionValue v, byte* p)
     {
         TypedCodecs.WriteString(v.Key, p + 0);
         *(int*)(p + 8) = v.Value;
@@ -2273,16 +2273,16 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 8) == *(uint*)(b + 8);
 
     // mod-options-values: 8 bytes, align 4
-    internal static global::CuoModSdk.Types.ModOptionsValuesDto LiftModOptionsValues(byte* p)
+    internal static global::CuoModSdk.Types.ModOptionsValues LiftModOptionsValues(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ModOptionsValuesDto
+        var v = new global::CuoModSdk.Types.ModOptionsValues
         {
             Values = LiftList15(p + 0),
         };
         return v;
     }
 
-    internal static void LowerModOptionsValues(in global::CuoModSdk.Types.ModOptionsValuesDto v, byte* p)
+    internal static void LowerModOptionsValues(in global::CuoModSdk.Types.ModOptionsValues v, byte* p)
     {
         LowerList15(v.Values, p + 0);
     }
@@ -2296,9 +2296,9 @@ internal static unsafe class TypedGen
         EqList15(a + 0, b + 0);
 
     // player-buff: 20 bytes, align 4
-    internal static global::CuoModSdk.Types.PlayerBuffDto LiftPlayerBuff(byte* p)
+    internal static global::CuoModSdk.Types.PlayerBuff LiftPlayerBuff(byte* p)
     {
-        var v = new global::CuoModSdk.Types.PlayerBuffDto
+        var v = new global::CuoModSdk.Types.PlayerBuff
         {
             Type = *(int*)(p + 0),
             Graphic = *(ushort*)(p + 4),
@@ -2308,7 +2308,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerPlayerBuff(in global::CuoModSdk.Types.PlayerBuffDto v, byte* p)
+    internal static void LowerPlayerBuff(in global::CuoModSdk.Types.PlayerBuff v, byte* p)
     {
         *(int*)(p + 0) = v.Type;
         *(ushort*)(p + 4) = v.Graphic;
@@ -2328,16 +2328,16 @@ internal static unsafe class TypedGen
         && TypedStrings.SameRecord(a + 12, b + 12);
 
     // player-buffs: 8 bytes, align 4
-    internal static global::CuoModSdk.Types.PlayerBuffsDto LiftPlayerBuffs(byte* p)
+    internal static global::CuoModSdk.Types.PlayerBuffs LiftPlayerBuffs(byte* p)
     {
-        var v = new global::CuoModSdk.Types.PlayerBuffsDto
+        var v = new global::CuoModSdk.Types.PlayerBuffs
         {
             Buffs = LiftList16(p + 0),
         };
         return v;
     }
 
-    internal static void LowerPlayerBuffs(in global::CuoModSdk.Types.PlayerBuffsDto v, byte* p)
+    internal static void LowerPlayerBuffs(in global::CuoModSdk.Types.PlayerBuffs v, byte* p)
     {
         LowerList16(v.Buffs, p + 0);
     }
@@ -2447,26 +2447,26 @@ internal static unsafe class TypedGen
         && EqVector2(a + 52, b + 52);
 
     // player-skill: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.PlayerSkillDto LiftPlayerSkill(byte* p)
+    internal static global::CuoModSdk.Types.PlayerSkill LiftPlayerSkill(byte* p)
     {
-        var v = new global::CuoModSdk.Types.PlayerSkillDto
+        var v = new global::CuoModSdk.Types.PlayerSkill
         {
             Index = *(int*)(p + 0),
             Value = *(ushort*)(p + 4),
             Base = *(ushort*)(p + 6),
             Cap = *(ushort*)(p + 8),
-            Lock = *(p + 10),
+            Lock = (global::CuoModSdk.Types.Lock)(*(byte*)(p + 10)),
         };
         return v;
     }
 
-    internal static void LowerPlayerSkill(in global::CuoModSdk.Types.PlayerSkillDto v, byte* p)
+    internal static void LowerPlayerSkill(in global::CuoModSdk.Types.PlayerSkill v, byte* p)
     {
         *(int*)(p + 0) = v.Index;
         *(ushort*)(p + 4) = v.Value;
         *(ushort*)(p + 6) = v.Base;
         *(ushort*)(p + 8) = v.Cap;
-        *(p + 10) = v.Lock;
+        *(byte*)(p + 10) = (byte)v.Lock;
     }
 
     internal static bool EqPlayerSkill(byte* a, byte* b) =>
@@ -2477,9 +2477,9 @@ internal static unsafe class TypedGen
         && *(a + 10) == *(b + 10);
 
     // player-skills: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.PlayerSkillsDto LiftPlayerSkills(byte* p)
+    internal static global::CuoModSdk.Types.PlayerSkills LiftPlayerSkills(byte* p)
     {
-        var v = new global::CuoModSdk.Types.PlayerSkillsDto
+        var v = new global::CuoModSdk.Types.PlayerSkills
         {
             HasData = *(p + 0) != 0,
             Skills = LiftList17(p + 4),
@@ -2487,7 +2487,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerPlayerSkills(in global::CuoModSdk.Types.PlayerSkillsDto v, byte* p)
+    internal static void LowerPlayerSkills(in global::CuoModSdk.Types.PlayerSkills v, byte* p)
     {
         *(p + 0) = (byte)(v.HasData ? 1 : 0);
         LowerList17(v.Skills, p + 4);
@@ -2507,18 +2507,18 @@ internal static unsafe class TypedGen
     {
         var v = new global::CuoModSdk.Types.StatLocks
         {
-            Str = *(p + 0),
-            Dex = *(p + 1),
-            Int = *(p + 2),
+            Str = (global::CuoModSdk.Types.Lock)(*(byte*)(p + 0)),
+            Dex = (global::CuoModSdk.Types.Lock)(*(byte*)(p + 1)),
+            Int = (global::CuoModSdk.Types.Lock)(*(byte*)(p + 2)),
         };
         return v;
     }
 
     internal static void LowerStatLocks(in global::CuoModSdk.Types.StatLocks v, byte* p)
     {
-        *(p + 0) = v.Str;
-        *(p + 1) = v.Dex;
-        *(p + 2) = v.Int;
+        *(byte*)(p + 0) = (byte)v.Str;
+        *(byte*)(p + 1) = (byte)v.Dex;
+        *(byte*)(p + 2) = (byte)v.Int;
     }
 
     internal static bool EqStatLocks(byte* a, byte* b) =>
@@ -2568,10 +2568,10 @@ internal static unsafe class TypedGen
         var v = new global::CuoModSdk.Types.TargetingState
         {
             IsTargeting = *(p + 0) != 0,
-            Mode = *(p + 1),
+            Mode = (global::CuoModSdk.Types.TargetMode)(*(byte*)(p + 1)),
             Local = *(p + 2) != 0,
             CursorId = *(uint*)(p + 4),
-            CursorType = *(p + 8),
+            CursorType = (global::CuoModSdk.Types.TargetType)(*(byte*)(p + 8)),
             JustTargeted = *(p + 9) != 0,
             MultiId = *(ushort*)(p + 10),
             MultiOffsetX = *(short*)(p + 12),
@@ -2593,10 +2593,10 @@ internal static unsafe class TypedGen
     internal static void LowerTargetingState(in global::CuoModSdk.Types.TargetingState v, byte* p)
     {
         *(p + 0) = (byte)(v.IsTargeting ? 1 : 0);
-        *(p + 1) = v.Mode;
+        *(byte*)(p + 1) = (byte)v.Mode;
         *(p + 2) = (byte)(v.Local ? 1 : 0);
         *(uint*)(p + 4) = v.CursorId;
-        *(p + 8) = v.CursorType;
+        *(byte*)(p + 8) = (byte)v.CursorType;
         *(p + 9) = (byte)(v.JustTargeted ? 1 : 0);
         *(ushort*)(p + 10) = v.MultiId;
         *(short*)(p + 12) = v.MultiOffsetX;
@@ -2653,9 +2653,9 @@ internal static unsafe class TypedGen
         *(a + 0) == *(b + 0);
 
     // border-color: 16 bytes, align 4
-    internal static global::CuoModSdk.Types.BorderColorDto LiftBorderColor(byte* p)
+    internal static global::CuoModSdk.Types.BorderColor LiftBorderColor(byte* p)
     {
-        var v = new global::CuoModSdk.Types.BorderColorDto
+        var v = new global::CuoModSdk.Types.BorderColor
         {
             R = *(float*)(p + 0),
             G = *(float*)(p + 4),
@@ -2665,7 +2665,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerBorderColor(in global::CuoModSdk.Types.BorderColorDto v, byte* p)
+    internal static void LowerBorderColor(in global::CuoModSdk.Types.BorderColor v, byte* p)
     {
         *(float*)(p + 0) = v.R;
         *(float*)(p + 4) = v.G;
@@ -2782,11 +2782,11 @@ internal static unsafe class TypedGen
         && EqVector3(a + 24, b + 24);
 
     // ui-custom: 24 bytes, align 4
-    internal static global::CuoModSdk.Types.UiCustomDto LiftUiCustom(byte* p)
+    internal static global::CuoModSdk.Types.UiCustom LiftUiCustom(byte* p)
     {
-        var v = new global::CuoModSdk.Types.UiCustomDto
+        var v = new global::CuoModSdk.Types.UiCustom
         {
-            Kind = *(p + 0),
+            Kind = (global::CuoModSdk.Types.UOCustomKind)(*(byte*)(p + 0)),
             AssetId = *(uint*)(p + 4),
             HueX = *(float*)(p + 8),
             HueY = *(float*)(p + 12),
@@ -2796,9 +2796,9 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerUiCustom(in global::CuoModSdk.Types.UiCustomDto v, byte* p)
+    internal static void LowerUiCustom(in global::CuoModSdk.Types.UiCustom v, byte* p)
     {
-        *(p + 0) = v.Kind;
+        *(byte*)(p + 0) = (byte)v.Kind;
         *(uint*)(p + 4) = v.AssetId;
         *(float*)(p + 8) = v.HueX;
         *(float*)(p + 12) = v.HueY;
@@ -2895,9 +2895,9 @@ internal static unsafe class TypedGen
         TypedStrings.SameRecord(a + 0, b + 0);
 
     // ui-pick: 32 bytes, align 8
-    internal static global::CuoModSdk.Types.UiPickDto LiftUiPick(byte* p)
+    internal static global::CuoModSdk.Types.UiPick LiftUiPick(byte* p)
     {
-        var v = new global::CuoModSdk.Types.UiPickDto
+        var v = new global::CuoModSdk.Types.UiPick
         {
             Entity = *(ulong*)(p + 0),
             Root = *(ulong*)(p + 8),
@@ -2908,7 +2908,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerUiPick(in global::CuoModSdk.Types.UiPickDto v, byte* p)
+    internal static void LowerUiPick(in global::CuoModSdk.Types.UiPick v, byte* p)
     {
         *(ulong*)(p + 0) = v.Entity;
         *(ulong*)(p + 8) = v.Root;
@@ -3028,14 +3028,14 @@ internal static unsafe class TypedGen
     {
         var v = new global::CuoModSdk.Types.StatLockButton
         {
-            Stat = *(p + 0),
+            Stat = (global::CuoModSdk.Types.Stat)(*(byte*)(p + 0)),
         };
         return v;
     }
 
     internal static void LowerStatLockButton(in global::CuoModSdk.Types.StatLockButton v, byte* p)
     {
-        *(p + 0) = v.Stat;
+        *(byte*)(p + 0) = (byte)v.Stat;
     }
 
     internal static bool EqStatLockButton(byte* a, byte* b) =>
@@ -3086,9 +3086,9 @@ internal static unsafe class TypedGen
         TypedStrings.SameRecord(a + 0, b + 0);
 
     // ui-surface: 8 bytes, align 4
-    internal static global::CuoModSdk.Types.UiSurfaceDto LiftUiSurface(byte* p)
+    internal static global::CuoModSdk.Types.UiSurface LiftUiSurface(byte* p)
     {
-        var v = new global::CuoModSdk.Types.UiSurfaceDto
+        var v = new global::CuoModSdk.Types.UiSurface
         {
             W = *(float*)(p + 0),
             H = *(float*)(p + 4),
@@ -3096,7 +3096,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerUiSurface(in global::CuoModSdk.Types.UiSurfaceDto v, byte* p)
+    internal static void LowerUiSurface(in global::CuoModSdk.Types.UiSurface v, byte* p)
     {
         *(float*)(p + 0) = v.W;
         *(float*)(p + 4) = v.H;
@@ -3107,9 +3107,9 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 4) == *(uint*)(b + 4);
 
     // text-caret: 40 bytes, align 8
-    internal static global::CuoModSdk.Types.TextCaretDto LiftTextCaret(byte* p)
+    internal static global::CuoModSdk.Types.TextCaret LiftTextCaret(byte* p)
     {
-        var v = new global::CuoModSdk.Types.TextCaretDto
+        var v = new global::CuoModSdk.Types.TextCaret
         {
             Entity = *(ulong*)(p + 0),
             Cursor = *(int*)(p + 8),
@@ -3124,7 +3124,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerTextCaret(in global::CuoModSdk.Types.TextCaretDto v, byte* p)
+    internal static void LowerTextCaret(in global::CuoModSdk.Types.TextCaret v, byte* p)
     {
         *(ulong*)(p + 0) = v.Entity;
         *(int*)(p + 8) = v.Cursor;
@@ -3149,16 +3149,16 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 36) == *(uint*)(b + 36);
 
     // text-completion-state: 4 bytes, align 4
-    internal static global::CuoModSdk.Types.TextCompletionStateDto LiftTextCompletionState(byte* p)
+    internal static global::CuoModSdk.Types.TextCompletionState LiftTextCompletionState(byte* p)
     {
-        var v = new global::CuoModSdk.Types.TextCompletionStateDto
+        var v = new global::CuoModSdk.Types.TextCompletionState
         {
             Selected = *(int*)(p + 0),
         };
         return v;
     }
 
-    internal static void LowerTextCompletionState(in global::CuoModSdk.Types.TextCompletionStateDto v, byte* p)
+    internal static void LowerTextCompletionState(in global::CuoModSdk.Types.TextCompletionState v, byte* p)
     {
         *(int*)(p + 0) = v.Selected;
     }
@@ -3330,25 +3330,25 @@ internal static unsafe class TypedGen
         && (*(a + 32) != 0) == (*(b + 32) != 0);
 
     // mob-step: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.MobStepDto LiftMobStep(byte* p)
+    internal static global::CuoModSdk.Types.MobStep LiftMobStep(byte* p)
     {
-        var v = new global::CuoModSdk.Types.MobStepDto
+        var v = new global::CuoModSdk.Types.MobStep
         {
             X = *(int*)(p + 0),
             Y = *(int*)(p + 4),
             Z = *(sbyte*)(p + 8),
-            Direction = *(p + 9),
+            Direction = (global::CuoModSdk.Types.Direction)(*(byte*)(p + 9)),
             Run = *(p + 10) != 0,
         };
         return v;
     }
 
-    internal static void LowerMobStep(in global::CuoModSdk.Types.MobStepDto v, byte* p)
+    internal static void LowerMobStep(in global::CuoModSdk.Types.MobStep v, byte* p)
     {
         *(int*)(p + 0) = v.X;
         *(int*)(p + 4) = v.Y;
         *(sbyte*)(p + 8) = v.Z;
-        *(p + 9) = v.Direction;
+        *(byte*)(p + 9) = (byte)v.Direction;
         *(p + 10) = (byte)(v.Run ? 1 : 0);
     }
 
@@ -3360,9 +3360,9 @@ internal static unsafe class TypedGen
         && (*(a + 10) != 0) == (*(b + 10) != 0);
 
     // mobile-steps: 16 bytes, align 4
-    internal static global::CuoModSdk.Types.MobileStepsDto LiftMobileSteps(byte* p)
+    internal static global::CuoModSdk.Types.MobileSteps LiftMobileSteps(byte* p)
     {
-        var v = new global::CuoModSdk.Types.MobileStepsDto
+        var v = new global::CuoModSdk.Types.MobileSteps
         {
             Index = *(int*)(p + 0),
             Time = *(float*)(p + 4),
@@ -3371,7 +3371,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerMobileSteps(in global::CuoModSdk.Types.MobileStepsDto v, byte* p)
+    internal static void LowerMobileSteps(in global::CuoModSdk.Types.MobileSteps v, byte* p)
     {
         *(int*)(p + 0) = v.Index;
         *(float*)(p + 4) = v.Time;
@@ -3847,7 +3847,7 @@ internal static unsafe class TypedGen
         var v = new global::CuoModSdk.Types.SpellbookWindow
         {
             Serial = *(uint*)(p + 0),
-            School = (global::CuoModSdk.Types.SpellBookType)(*(int*)(p + 4)),
+            School = (global::CuoModSdk.Types.SpellBookType)(*(byte*)(p + 4)),
             Page = *(int*)(p + 8),
             SoundedPage = *(int*)(p + 12),
             PageCount = *(int*)(p + 16),
@@ -3864,7 +3864,7 @@ internal static unsafe class TypedGen
     internal static void LowerSpellbookWindow(in global::CuoModSdk.Types.SpellbookWindow v, byte* p)
     {
         *(uint*)(p + 0) = v.Serial;
-        *(int*)(p + 4) = (int)v.School;
+        *(byte*)(p + 4) = (byte)v.School;
         *(int*)(p + 8) = v.Page;
         *(int*)(p + 12) = v.SoundedPage;
         *(int*)(p + 16) = v.PageCount;
@@ -3878,7 +3878,7 @@ internal static unsafe class TypedGen
 
     internal static bool EqSpellbookWindow(byte* a, byte* b) =>
         *(uint*)(a + 0) == *(uint*)(b + 0)
-        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && *(a + 4) == *(b + 4)
         && *(uint*)(a + 8) == *(uint*)(b + 8)
         && *(uint*)(a + 12) == *(uint*)(b + 12)
         && *(uint*)(a + 16) == *(uint*)(b + 16)
@@ -4046,7 +4046,7 @@ internal static unsafe class TypedGen
     {
         var v = new global::CuoModSdk.Types.ModMoveRequest
         {
-            Direction = *(p + 0),
+            Direction = (global::CuoModSdk.Types.Direction)(*(byte*)(p + 0)),
             Run = *(p + 1) != 0,
             Sequence = *(p + 2),
         };
@@ -4055,7 +4055,7 @@ internal static unsafe class TypedGen
 
     internal static void LowerModMoveRequest(in global::CuoModSdk.Types.ModMoveRequest v, byte* p)
     {
-        *(p + 0) = v.Direction;
+        *(byte*)(p + 0) = (byte)v.Direction;
         *(p + 1) = (byte)(v.Run ? 1 : 0);
         *(p + 2) = v.Sequence;
     }
@@ -4066,9 +4066,9 @@ internal static unsafe class TypedGen
         && *(a + 2) == *(b + 2);
 
     // party-member: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.PartyMemberDto LiftPartyMember(byte* p)
+    internal static global::CuoModSdk.Types.PartyMember LiftPartyMember(byte* p)
     {
-        var v = new global::CuoModSdk.Types.PartyMemberDto
+        var v = new global::CuoModSdk.Types.PartyMember
         {
             Serial = *(uint*)(p + 0),
             Name = TypedCodecs.ReadString(p + 4),
@@ -4076,7 +4076,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerPartyMember(in global::CuoModSdk.Types.PartyMemberDto v, byte* p)
+    internal static void LowerPartyMember(in global::CuoModSdk.Types.PartyMember v, byte* p)
     {
         *(uint*)(p + 0) = v.Serial;
         TypedCodecs.WriteString(v.Name, p + 4);
@@ -4092,9 +4092,9 @@ internal static unsafe class TypedGen
         && TypedStrings.SameRecord(a + 4, b + 4);
 
     // party: 16 bytes, align 4
-    internal static global::CuoModSdk.Types.PartyDto LiftParty(byte* p)
+    internal static global::CuoModSdk.Types.Party LiftParty(byte* p)
     {
-        var v = new global::CuoModSdk.Types.PartyDto
+        var v = new global::CuoModSdk.Types.Party
         {
             Leader = *(uint*)(p + 0),
             Members = LiftList20(p + 4),
@@ -4104,7 +4104,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerParty(in global::CuoModSdk.Types.PartyDto v, byte* p)
+    internal static void LowerParty(in global::CuoModSdk.Types.Party v, byte* p)
     {
         *(uint*)(p + 0) = v.Leader;
         LowerList20(v.Members, p + 4);
@@ -4124,21 +4124,21 @@ internal static unsafe class TypedGen
         && (*(a + 13) != 0) == (*(b + 13) != 0);
 
     // spellbook: 16 bytes, align 4
-    internal static global::CuoModSdk.Types.SpellbookDto LiftSpellbook(byte* p)
+    internal static global::CuoModSdk.Types.Spellbook LiftSpellbook(byte* p)
     {
-        var v = new global::CuoModSdk.Types.SpellbookDto
+        var v = new global::CuoModSdk.Types.Spellbook
         {
             Serial = *(uint*)(p + 0),
-            BookType = *(p + 4),
+            BookType = (global::CuoModSdk.Types.SpellBookType)(*(byte*)(p + 4)),
             Spells = LiftList21(p + 8),
         };
         return v;
     }
 
-    internal static void LowerSpellbook(in global::CuoModSdk.Types.SpellbookDto v, byte* p)
+    internal static void LowerSpellbook(in global::CuoModSdk.Types.Spellbook v, byte* p)
     {
         *(uint*)(p + 0) = v.Serial;
-        *(p + 4) = v.BookType;
+        *(byte*)(p + 4) = (byte)v.BookType;
         LowerList21(v.Spells, p + 8);
     }
 
@@ -4153,9 +4153,9 @@ internal static unsafe class TypedGen
         && EqList21(a + 8, b + 8);
 
     // spellbooks: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.SpellbooksDto LiftSpellbooks(byte* p)
+    internal static global::CuoModSdk.Types.Spellbooks LiftSpellbooks(byte* p)
     {
-        var v = new global::CuoModSdk.Types.SpellbooksDto
+        var v = new global::CuoModSdk.Types.Spellbooks
         {
             Revision = *(int*)(p + 0),
             Books = LiftList22(p + 4),
@@ -4163,7 +4163,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerSpellbooks(in global::CuoModSdk.Types.SpellbooksDto v, byte* p)
+    internal static void LowerSpellbooks(in global::CuoModSdk.Types.Spellbooks v, byte* p)
     {
         *(int*)(p + 0) = v.Revision;
         LowerList22(v.Books, p + 4);
@@ -4179,12 +4179,12 @@ internal static unsafe class TypedGen
         && EqList22(a + 4, b + 4);
 
     // player-step: 8 bytes, align 2
-    internal static global::CuoModSdk.Types.PlayerStepDto LiftPlayerStep(byte* p)
+    internal static global::CuoModSdk.Types.PlayerStep LiftPlayerStep(byte* p)
     {
-        var v = new global::CuoModSdk.Types.PlayerStepDto
+        var v = new global::CuoModSdk.Types.PlayerStep
         {
             Sequence = *(p + 0),
-            Direction = *(p + 1),
+            Direction = (global::CuoModSdk.Types.Direction)(*(byte*)(p + 1)),
             X = *(ushort*)(p + 2),
             Y = *(ushort*)(p + 4),
             Z = *(sbyte*)(p + 6),
@@ -4192,10 +4192,10 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerPlayerStep(in global::CuoModSdk.Types.PlayerStepDto v, byte* p)
+    internal static void LowerPlayerStep(in global::CuoModSdk.Types.PlayerStep v, byte* p)
     {
         *(p + 0) = v.Sequence;
-        *(p + 1) = v.Direction;
+        *(byte*)(p + 1) = (byte)v.Direction;
         *(ushort*)(p + 2) = v.X;
         *(ushort*)(p + 4) = v.Y;
         *(sbyte*)(p + 6) = v.Z;
@@ -4209,9 +4209,9 @@ internal static unsafe class TypedGen
         && *(a + 6) == *(b + 6);
 
     // player-steps: 20 bytes, align 4
-    internal static global::CuoModSdk.Types.PlayerStepsDto LiftPlayerSteps(byte* p)
+    internal static global::CuoModSdk.Types.PlayerSteps LiftPlayerSteps(byte* p)
     {
-        var v = new global::CuoModSdk.Types.PlayerStepsDto
+        var v = new global::CuoModSdk.Types.PlayerSteps
         {
             LastStep = *(float*)(p + 0),
             Count = *(int*)(p + 4),
@@ -4222,7 +4222,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerPlayerSteps(in global::CuoModSdk.Types.PlayerStepsDto v, byte* p)
+    internal static void LowerPlayerSteps(in global::CuoModSdk.Types.PlayerSteps v, byte* p)
     {
         *(float*)(p + 0) = v.LastStep;
         *(int*)(p + 4) = v.Count;
@@ -4244,9 +4244,9 @@ internal static unsafe class TypedGen
         && EqList23(a + 12, b + 12);
 
     // char-info: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.CharInfoDto LiftCharInfo(byte* p)
+    internal static global::CuoModSdk.Types.CharInfo LiftCharInfo(byte* p)
     {
-        var v = new global::CuoModSdk.Types.CharInfoDto
+        var v = new global::CuoModSdk.Types.CharInfo
         {
             Name = TypedCodecs.ReadString(p + 0),
             Index = *(uint*)(p + 8),
@@ -4254,7 +4254,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerCharInfo(in global::CuoModSdk.Types.CharInfoDto v, byte* p)
+    internal static void LowerCharInfo(in global::CuoModSdk.Types.CharInfo v, byte* p)
     {
         TypedCodecs.WriteString(v.Name, p + 0);
         *(uint*)(p + 8) = v.Index;
@@ -4270,9 +4270,9 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 8) == *(uint*)(b + 8);
 
     // town-info: 36 bytes, align 4
-    internal static global::CuoModSdk.Types.TownInfoDto LiftTownInfo(byte* p)
+    internal static global::CuoModSdk.Types.TownInfo LiftTownInfo(byte* p)
     {
-        var v = new global::CuoModSdk.Types.TownInfoDto
+        var v = new global::CuoModSdk.Types.TownInfo
         {
             Index = *(p + 0),
             Name = TypedCodecs.ReadString(p + 4),
@@ -4286,7 +4286,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerTownInfo(in global::CuoModSdk.Types.TownInfoDto v, byte* p)
+    internal static void LowerTownInfo(in global::CuoModSdk.Types.TownInfo v, byte* p)
     {
         *(p + 0) = v.Index;
         TypedCodecs.WriteString(v.Name, p + 4);
@@ -4315,9 +4315,9 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 32) == *(uint*)(b + 32);
 
     // character-selection: 16 bytes, align 4
-    internal static global::CuoModSdk.Types.CharacterSelectionDto LiftCharacterSelection(byte* p)
+    internal static global::CuoModSdk.Types.CharacterSelection LiftCharacterSelection(byte* p)
     {
-        var v = new global::CuoModSdk.Types.CharacterSelectionDto
+        var v = new global::CuoModSdk.Types.CharacterSelection
         {
             Characters = LiftList24(p + 0),
             Towns = LiftList25(p + 8),
@@ -4325,7 +4325,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerCharacterSelection(in global::CuoModSdk.Types.CharacterSelectionDto v, byte* p)
+    internal static void LowerCharacterSelection(in global::CuoModSdk.Types.CharacterSelection v, byte* p)
     {
         LowerList24(v.Characters, p + 0);
         LowerList25(v.Towns, p + 8);
@@ -4446,9 +4446,9 @@ internal static unsafe class TypedGen
         EqList26(a + 0, b + 0);
 
     // clipboard-set: 12 bytes, align 4
-    internal static global::CuoModSdk.Types.ClipboardSetDto LiftClipboardSet(byte* p)
+    internal static global::CuoModSdk.Types.ClipboardSet LiftClipboardSet(byte* p)
     {
-        var v = new global::CuoModSdk.Types.ClipboardSetDto
+        var v = new global::CuoModSdk.Types.ClipboardSet
         {
             Seq = *(int*)(p + 0),
             Text = TypedCodecs.ReadString(p + 4),
@@ -4456,7 +4456,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerClipboardSet(in global::CuoModSdk.Types.ClipboardSetDto v, byte* p)
+    internal static void LowerClipboardSet(in global::CuoModSdk.Types.ClipboardSet v, byte* p)
     {
         *(int*)(p + 0) = v.Seq;
         TypedCodecs.WriteString(v.Text, p + 4);
@@ -4516,9 +4516,9 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 8) == *(uint*)(b + 8);
 
     // text-clipboard-action: 16 bytes, align 8
-    internal static global::CuoModSdk.Types.TextClipboardActionDto LiftTextClipboardAction(byte* p)
+    internal static global::CuoModSdk.Types.TextClipboardAction LiftTextClipboardAction(byte* p)
     {
-        var v = new global::CuoModSdk.Types.TextClipboardActionDto
+        var v = new global::CuoModSdk.Types.TextClipboardAction
         {
             Entity = *(ulong*)(p + 0),
             Action = *(int*)(p + 8),
@@ -4527,7 +4527,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerTextClipboardAction(in global::CuoModSdk.Types.TextClipboardActionDto v, byte* p)
+    internal static void LowerTextClipboardAction(in global::CuoModSdk.Types.TextClipboardAction v, byte* p)
     {
         *(ulong*)(p + 0) = v.Entity;
         *(int*)(p + 8) = v.Action;
@@ -4540,9 +4540,9 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 12) == *(uint*)(b + 12);
 
     // text-completion: 24 bytes, align 8
-    internal static global::CuoModSdk.Types.TextCompletionDto LiftTextCompletion(byte* p)
+    internal static global::CuoModSdk.Types.TextCompletion LiftTextCompletion(byte* p)
     {
-        var v = new global::CuoModSdk.Types.TextCompletionDto
+        var v = new global::CuoModSdk.Types.TextCompletion
         {
             Entity = *(ulong*)(p + 0),
             Prefix = TypedCodecs.ReadString(p + 8),
@@ -4551,7 +4551,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerTextCompletion(in global::CuoModSdk.Types.TextCompletionDto v, byte* p)
+    internal static void LowerTextCompletion(in global::CuoModSdk.Types.TextCompletion v, byte* p)
     {
         *(ulong*)(p + 0) = v.Entity;
         TypedCodecs.WriteString(v.Prefix, p + 8);
@@ -4570,9 +4570,9 @@ internal static unsafe class TypedGen
         && EqList27(a + 16, b + 16);
 
     // text-completion-pick: 16 bytes, align 8
-    internal static global::CuoModSdk.Types.TextCompletionPickDto LiftTextCompletionPick(byte* p)
+    internal static global::CuoModSdk.Types.TextCompletionPick LiftTextCompletionPick(byte* p)
     {
-        var v = new global::CuoModSdk.Types.TextCompletionPickDto
+        var v = new global::CuoModSdk.Types.TextCompletionPick
         {
             Entity = *(ulong*)(p + 0),
             Index = *(int*)(p + 8),
@@ -4581,7 +4581,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerTextCompletionPick(in global::CuoModSdk.Types.TextCompletionPickDto v, byte* p)
+    internal static void LowerTextCompletionPick(in global::CuoModSdk.Types.TextCompletionPick v, byte* p)
     {
         *(ulong*)(p + 0) = v.Entity;
         *(int*)(p + 8) = v.Index;
@@ -4781,17 +4781,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.OplLineDto[] LiftList3(byte* p)
+    internal static global::CuoModSdk.Types.OplLine[] LiftList3(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.OplLineDto[len];
+        var v = new global::CuoModSdk.Types.OplLine[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftOplLine(items + i * 20);
         return v;
     }
 
-    internal static void LowerList3(global::CuoModSdk.Types.OplLineDto[]? v, byte* p)
+    internal static void LowerList3(global::CuoModSdk.Types.OplLine[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 20, 4);
@@ -4827,17 +4827,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.ContainerPositionDto[] LiftList4(byte* p)
+    internal static global::CuoModSdk.Types.ContainerPosition[] LiftList4(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.ContainerPositionDto[len];
+        var v = new global::CuoModSdk.Types.ContainerPosition[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftContainerPosition(items + i * 12);
         return v;
     }
 
-    internal static void LowerList4(global::CuoModSdk.Types.ContainerPositionDto[]? v, byte* p)
+    internal static void LowerList4(global::CuoModSdk.Types.ContainerPosition[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 12, 4);
@@ -5009,17 +5009,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.ServerGumpButtonDto[] LiftList8(byte* p)
+    internal static global::CuoModSdk.Types.ServerGumpButton[] LiftList8(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.ServerGumpButtonDto[len];
+        var v = new global::CuoModSdk.Types.ServerGumpButton[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftServerGumpButton(items + i * 20);
         return v;
     }
 
-    internal static void LowerList8(global::CuoModSdk.Types.ServerGumpButtonDto[]? v, byte* p)
+    internal static void LowerList8(global::CuoModSdk.Types.ServerGumpButton[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 20, 4);
@@ -5053,17 +5053,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.ServerGumpTextEntryDto[] LiftList9(byte* p)
+    internal static global::CuoModSdk.Types.ServerGumpTextEntry[] LiftList9(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.ServerGumpTextEntryDto[len];
+        var v = new global::CuoModSdk.Types.ServerGumpTextEntry[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftServerGumpTextEntry(items + i * 12);
         return v;
     }
 
-    internal static void LowerList9(global::CuoModSdk.Types.ServerGumpTextEntryDto[]? v, byte* p)
+    internal static void LowerList9(global::CuoModSdk.Types.ServerGumpTextEntry[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 12, 4);
@@ -5099,17 +5099,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.ServerGumpSwitchDto[] LiftList10(byte* p)
+    internal static global::CuoModSdk.Types.ServerGumpSwitch[] LiftList10(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.ServerGumpSwitchDto[len];
+        var v = new global::CuoModSdk.Types.ServerGumpSwitch[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftServerGumpSwitch(items + i * 12);
         return v;
     }
 
-    internal static void LowerList10(global::CuoModSdk.Types.ServerGumpSwitchDto[]? v, byte* p)
+    internal static void LowerList10(global::CuoModSdk.Types.ServerGumpSwitch[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 12, 4);
@@ -5143,17 +5143,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.HostHotkeyDto[] LiftList11(byte* p)
+    internal static global::CuoModSdk.Types.HostHotkey[] LiftList11(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.HostHotkeyDto[len];
+        var v = new global::CuoModSdk.Types.HostHotkey[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftHostHotkey(items + i * 16);
         return v;
     }
 
-    internal static void LowerList11(global::CuoModSdk.Types.HostHotkeyDto[]? v, byte* p)
+    internal static void LowerList11(global::CuoModSdk.Types.HostHotkey[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 16, 4);
@@ -5281,17 +5281,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.ModOptionDto[] LiftList14(byte* p)
+    internal static global::CuoModSdk.Types.ModOption[] LiftList14(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.ModOptionDto[len];
+        var v = new global::CuoModSdk.Types.ModOption[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftModOption(items + i * 60);
         return v;
     }
 
-    internal static void LowerList14(global::CuoModSdk.Types.ModOptionDto[]? v, byte* p)
+    internal static void LowerList14(global::CuoModSdk.Types.ModOption[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 60, 4);
@@ -5327,17 +5327,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.ModOptionValueDto[] LiftList15(byte* p)
+    internal static global::CuoModSdk.Types.ModOptionValue[] LiftList15(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.ModOptionValueDto[len];
+        var v = new global::CuoModSdk.Types.ModOptionValue[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftModOptionValue(items + i * 12);
         return v;
     }
 
-    internal static void LowerList15(global::CuoModSdk.Types.ModOptionValueDto[]? v, byte* p)
+    internal static void LowerList15(global::CuoModSdk.Types.ModOptionValue[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 12, 4);
@@ -5373,17 +5373,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.PlayerBuffDto[] LiftList16(byte* p)
+    internal static global::CuoModSdk.Types.PlayerBuff[] LiftList16(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.PlayerBuffDto[len];
+        var v = new global::CuoModSdk.Types.PlayerBuff[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftPlayerBuff(items + i * 20);
         return v;
     }
 
-    internal static void LowerList16(global::CuoModSdk.Types.PlayerBuffDto[]? v, byte* p)
+    internal static void LowerList16(global::CuoModSdk.Types.PlayerBuff[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 20, 4);
@@ -5419,17 +5419,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.PlayerSkillDto[] LiftList17(byte* p)
+    internal static global::CuoModSdk.Types.PlayerSkill[] LiftList17(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.PlayerSkillDto[len];
+        var v = new global::CuoModSdk.Types.PlayerSkill[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftPlayerSkill(items + i * 12);
         return v;
     }
 
-    internal static void LowerList17(global::CuoModSdk.Types.PlayerSkillDto[]? v, byte* p)
+    internal static void LowerList17(global::CuoModSdk.Types.PlayerSkill[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 12, 4);
@@ -5507,17 +5507,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.MobStepDto[] LiftList19(byte* p)
+    internal static global::CuoModSdk.Types.MobStep[] LiftList19(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.MobStepDto[len];
+        var v = new global::CuoModSdk.Types.MobStep[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftMobStep(items + i * 12);
         return v;
     }
 
-    internal static void LowerList19(global::CuoModSdk.Types.MobStepDto[]? v, byte* p)
+    internal static void LowerList19(global::CuoModSdk.Types.MobStep[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 12, 4);
@@ -5551,17 +5551,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.PartyMemberDto[] LiftList20(byte* p)
+    internal static global::CuoModSdk.Types.PartyMember[] LiftList20(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.PartyMemberDto[len];
+        var v = new global::CuoModSdk.Types.PartyMember[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftPartyMember(items + i * 12);
         return v;
     }
 
-    internal static void LowerList20(global::CuoModSdk.Types.PartyMemberDto[]? v, byte* p)
+    internal static void LowerList20(global::CuoModSdk.Types.PartyMember[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 12, 4);
@@ -5641,17 +5641,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.SpellbookDto[] LiftList22(byte* p)
+    internal static global::CuoModSdk.Types.Spellbook[] LiftList22(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.SpellbookDto[len];
+        var v = new global::CuoModSdk.Types.Spellbook[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftSpellbook(items + i * 16);
         return v;
     }
 
-    internal static void LowerList22(global::CuoModSdk.Types.SpellbookDto[]? v, byte* p)
+    internal static void LowerList22(global::CuoModSdk.Types.Spellbook[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 16, 4);
@@ -5687,17 +5687,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.PlayerStepDto[] LiftList23(byte* p)
+    internal static global::CuoModSdk.Types.PlayerStep[] LiftList23(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.PlayerStepDto[len];
+        var v = new global::CuoModSdk.Types.PlayerStep[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftPlayerStep(items + i * 8);
         return v;
     }
 
-    internal static void LowerList23(global::CuoModSdk.Types.PlayerStepDto[]? v, byte* p)
+    internal static void LowerList23(global::CuoModSdk.Types.PlayerStep[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 8, 2);
@@ -5731,17 +5731,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.CharInfoDto[] LiftList24(byte* p)
+    internal static global::CuoModSdk.Types.CharInfo[] LiftList24(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.CharInfoDto[len];
+        var v = new global::CuoModSdk.Types.CharInfo[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftCharInfo(items + i * 12);
         return v;
     }
 
-    internal static void LowerList24(global::CuoModSdk.Types.CharInfoDto[]? v, byte* p)
+    internal static void LowerList24(global::CuoModSdk.Types.CharInfo[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 12, 4);
@@ -5777,17 +5777,17 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static global::CuoModSdk.Types.TownInfoDto[] LiftList25(byte* p)
+    internal static global::CuoModSdk.Types.TownInfo[] LiftList25(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
-        var v = new global::CuoModSdk.Types.TownInfoDto[len];
+        var v = new global::CuoModSdk.Types.TownInfo[len];
         for (var i = 0; i < len; i++)
             v[i] = LiftTownInfo(items + i * 36);
         return v;
     }
 
-    internal static void LowerList25(global::CuoModSdk.Types.TownInfoDto[]? v, byte* p)
+    internal static void LowerList25(global::CuoModSdk.Types.TownInfo[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 36, 4);
@@ -7257,13 +7257,13 @@ internal sealed unsafe class CodecBorderRadius : TypedCodec<global::CuoModSdk.Ty
 }
 
 /// <summary><c>cuo:ecs/child-of</c> (child-of).</summary>
-internal sealed unsafe class CodecChildOf : TypedCodec<global::CuoModSdk.Types.ChildOfDto>
+internal sealed unsafe class CodecChildOf : TypedCodec<global::CuoModSdk.Types.ChildOf>
 {
     internal override int Size => 8;
     internal override string Path => "cuo:ecs/child-of";
-    internal override global::CuoModSdk.Types.ChildOfDto Lift(byte* p) => TypedGen.LiftChildOf(p);
-    protected override void Lower(in global::CuoModSdk.Types.ChildOfDto v, byte* p) => TypedGen.LowerChildOf(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.ChildOfDto now, byte* original)
+    internal override global::CuoModSdk.Types.ChildOf Lift(byte* p) => TypedGen.LiftChildOf(p);
+    protected override void Lower(in global::CuoModSdk.Types.ChildOf v, byte* p) => TypedGen.LowerChildOf(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ChildOf now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
@@ -7305,13 +7305,13 @@ internal sealed unsafe class CodecGlobalZ : TypedCodec<global::CuoModSdk.Types.G
 }
 
 /// <summary><c>cuo:ui/interaction</c> (interaction).</summary>
-internal sealed unsafe class CodecInteraction : TypedCodec<global::CuoModSdk.Types.InteractionDto>
+internal sealed unsafe class CodecInteraction : TypedCodec<global::CuoModSdk.Types.Interaction>
 {
     internal override int Size => 1;
     internal override string Path => "cuo:ui/interaction";
-    internal override global::CuoModSdk.Types.InteractionDto Lift(byte* p) => TypedGen.LiftInteraction(p);
-    protected override void Lower(in global::CuoModSdk.Types.InteractionDto v, byte* p) => TypedGen.LowerInteraction(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.InteractionDto now, byte* original)
+    internal override global::CuoModSdk.Types.Interaction Lift(byte* p) => TypedGen.LiftInteraction(p);
+    protected override void Lower(in global::CuoModSdk.Types.Interaction v, byte* p) => TypedGen.LowerInteraction(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.Interaction now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
@@ -7329,13 +7329,13 @@ internal sealed unsafe class CodecInteraction : TypedCodec<global::CuoModSdk.Typ
 }
 
 /// <summary><c>cuo:input/mouse</c> (mouse-input).</summary>
-internal sealed unsafe class CodecMouse : TypedCodec<global::CuoModSdk.Types.MouseInputDto>
+internal sealed unsafe class CodecMouse : TypedCodec<global::CuoModSdk.Types.MouseInput>
 {
     internal override int Size => 32;
     internal override string Path => "cuo:input/mouse";
-    internal override global::CuoModSdk.Types.MouseInputDto Lift(byte* p) => TypedGen.LiftMouseInput(p);
-    protected override void Lower(in global::CuoModSdk.Types.MouseInputDto v, byte* p) => TypedGen.LowerMouseInput(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.MouseInputDto now, byte* original)
+    internal override global::CuoModSdk.Types.MouseInput Lift(byte* p) => TypedGen.LiftMouseInput(p);
+    protected override void Lower(in global::CuoModSdk.Types.MouseInput v, byte* p) => TypedGen.LowerMouseInput(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.MouseInput now, byte* original)
     {
         var mine = stackalloc ulong[4];
         LowerInto(now, (byte*)mine);
@@ -7354,13 +7354,13 @@ internal sealed unsafe class CodecMouse : TypedCodec<global::CuoModSdk.Types.Mou
 }
 
 /// <summary><c>cuo:input/keyboard</c> (keyboard-input).</summary>
-internal sealed unsafe class CodecKeyboard : TypedCodec<global::CuoModSdk.Types.KeyboardInputDto>
+internal sealed unsafe class CodecKeyboard : TypedCodec<global::CuoModSdk.Types.KeyboardInput>
 {
     internal override int Size => 16;
     internal override string Path => "cuo:input/keyboard";
-    internal override global::CuoModSdk.Types.KeyboardInputDto Lift(byte* p) => TypedGen.LiftKeyboardInput(p);
-    protected override void Lower(in global::CuoModSdk.Types.KeyboardInputDto v, byte* p) => TypedGen.LowerKeyboardInput(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.KeyboardInputDto now, byte* original)
+    internal override global::CuoModSdk.Types.KeyboardInput Lift(byte* p) => TypedGen.LiftKeyboardInput(p);
+    protected override void Lower(in global::CuoModSdk.Types.KeyboardInput v, byte* p) => TypedGen.LowerKeyboardInput(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.KeyboardInput now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);
@@ -7495,13 +7495,13 @@ internal sealed unsafe class CodecTime : TypedCodec<global::CuoModSdk.Types.Time
 }
 
 /// <summary><c>cuo:ent/equipment</c> (equipment-slots).</summary>
-internal sealed unsafe class CodecEquipment : TypedCodec<global::CuoModSdk.Types.EquipmentSlotsDto>
+internal sealed unsafe class CodecEquipment : TypedCodec<global::CuoModSdk.Types.EquipmentSlots>
 {
     internal override int Size => 8;
     internal override string Path => "cuo:ent/equipment";
-    internal override global::CuoModSdk.Types.EquipmentSlotsDto Lift(byte* p) => TypedGen.LiftEquipmentSlots(p);
-    protected override void Lower(in global::CuoModSdk.Types.EquipmentSlotsDto v, byte* p) => TypedGen.LowerEquipmentSlots(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.EquipmentSlotsDto now, byte* original)
+    internal override global::CuoModSdk.Types.EquipmentSlots Lift(byte* p) => TypedGen.LiftEquipmentSlots(p);
+    protected override void Lower(in global::CuoModSdk.Types.EquipmentSlots v, byte* p) => TypedGen.LowerEquipmentSlots(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.EquipmentSlots now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
@@ -7536,13 +7536,13 @@ internal sealed unsafe class CodecFacing : TypedCodec<global::CuoModSdk.Types.Fa
 }
 
 /// <summary><c>cuo:ent/properties</c> (entity-properties).</summary>
-internal sealed unsafe class CodecProperties : TypedCodec<global::CuoModSdk.Types.EntityPropertiesDto>
+internal sealed unsafe class CodecProperties : TypedCodec<global::CuoModSdk.Types.EntityProperties>
 {
     internal override int Size => 24;
     internal override string Path => "cuo:ent/properties";
-    internal override global::CuoModSdk.Types.EntityPropertiesDto Lift(byte* p) => TypedGen.LiftEntityProperties(p);
-    protected override void Lower(in global::CuoModSdk.Types.EntityPropertiesDto v, byte* p) => TypedGen.LowerEntityProperties(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.EntityPropertiesDto now, byte* original)
+    internal override global::CuoModSdk.Types.EntityProperties Lift(byte* p) => TypedGen.LiftEntityProperties(p);
+    protected override void Lower(in global::CuoModSdk.Types.EntityProperties v, byte* p) => TypedGen.LowerEntityProperties(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.EntityProperties now, byte* original)
     {
         var mine = stackalloc ulong[3];
         LowerInto(now, (byte*)mine);
@@ -7593,13 +7593,13 @@ internal sealed unsafe class CodecSlotPosition : TypedCodec<global::CuoModSdk.Ty
 }
 
 /// <summary><c>cuo:game/context</c> (game-context).</summary>
-internal sealed unsafe class CodecContext : TypedCodec<global::CuoModSdk.Types.GameContextDto>
+internal sealed unsafe class CodecContext : TypedCodec<global::CuoModSdk.Types.GameContext>
 {
     internal override int Size => 28;
     internal override string Path => "cuo:game/context";
-    internal override global::CuoModSdk.Types.GameContextDto Lift(byte* p) => TypedGen.LiftGameContext(p);
-    protected override void Lower(in global::CuoModSdk.Types.GameContextDto v, byte* p) => TypedGen.LowerGameContext(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.GameContextDto now, byte* original)
+    internal override global::CuoModSdk.Types.GameContext Lift(byte* p) => TypedGen.LiftGameContext(p);
+    protected override void Lower(in global::CuoModSdk.Types.GameContext v, byte* p) => TypedGen.LowerGameContext(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.GameContext now, byte* original)
     {
         var mine = stackalloc ulong[4];
         LowerInto(now, (byte*)mine);
@@ -7627,13 +7627,13 @@ internal sealed unsafe class CodecContext : TypedCodec<global::CuoModSdk.Types.G
 }
 
 /// <summary><c>cuo:game/settings</c> (game-settings).</summary>
-internal sealed unsafe class CodecSettings : TypedCodec<global::CuoModSdk.Types.GameSettingsDto>
+internal sealed unsafe class CodecSettings : TypedCodec<global::CuoModSdk.Types.GameSettings>
 {
     internal override int Size => 24;
     internal override string Path => "cuo:game/settings";
-    internal override global::CuoModSdk.Types.GameSettingsDto Lift(byte* p) => TypedGen.LiftGameSettings(p);
-    protected override void Lower(in global::CuoModSdk.Types.GameSettingsDto v, byte* p) => TypedGen.LowerGameSettings(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.GameSettingsDto now, byte* original)
+    internal override global::CuoModSdk.Types.GameSettings Lift(byte* p) => TypedGen.LiftGameSettings(p);
+    protected override void Lower(in global::CuoModSdk.Types.GameSettings v, byte* p) => TypedGen.LowerGameSettings(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.GameSettings now, byte* original)
     {
         var mine = stackalloc ulong[3];
         LowerInto(now, (byte*)mine);
@@ -7652,13 +7652,13 @@ internal sealed unsafe class CodecSettings : TypedCodec<global::CuoModSdk.Types.
 }
 
 /// <summary><c>cuo:game/state</c> (game-state).</summary>
-internal sealed unsafe class CodecState : TypedCodec<global::CuoModSdk.Types.GameStateDto>
+internal sealed unsafe class CodecState : TypedCodec<global::CuoModSdk.Types.GameState>
 {
     internal override int Size => 1;
     internal override string Path => "cuo:game/state";
-    internal override global::CuoModSdk.Types.GameStateDto Lift(byte* p) => TypedGen.LiftGameState(p);
-    protected override void Lower(in global::CuoModSdk.Types.GameStateDto v, byte* p) => TypedGen.LowerGameState(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.GameStateDto now, byte* original)
+    internal override global::CuoModSdk.Types.GameState Lift(byte* p) => TypedGen.LiftGameState(p);
+    protected override void Lower(in global::CuoModSdk.Types.GameState v, byte* p) => TypedGen.LowerGameState(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.GameState now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
@@ -7795,13 +7795,13 @@ internal sealed unsafe class CodecContainerOpened : TypedCodec<global::CuoModSdk
 }
 
 /// <summary><c>cuo:gump/container-positions</c> (container-positions).</summary>
-internal sealed unsafe class CodecContainerPositions : TypedCodec<global::CuoModSdk.Types.ContainerPositionsDto>
+internal sealed unsafe class CodecContainerPositions : TypedCodec<global::CuoModSdk.Types.ContainerPositions>
 {
     internal override int Size => 8;
     internal override string Path => "cuo:gump/container-positions";
-    internal override global::CuoModSdk.Types.ContainerPositionsDto Lift(byte* p) => TypedGen.LiftContainerPositions(p);
-    protected override void Lower(in global::CuoModSdk.Types.ContainerPositionsDto v, byte* p) => TypedGen.LowerContainerPositions(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.ContainerPositionsDto now, byte* original)
+    internal override global::CuoModSdk.Types.ContainerPositions Lift(byte* p) => TypedGen.LiftContainerPositions(p);
+    protected override void Lower(in global::CuoModSdk.Types.ContainerPositions v, byte* p) => TypedGen.LowerContainerPositions(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ContainerPositions now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
@@ -7872,13 +7872,13 @@ internal sealed unsafe class CodecContainerSlot : TypedCodec<global::CuoModSdk.T
 }
 
 /// <summary><c>cuo:gump/container-tag</c> (container-gump-tag).</summary>
-internal sealed unsafe class CodecContainerTag : TypedCodec<global::CuoModSdk.Types.ContainerGumpTagDto>
+internal sealed unsafe class CodecContainerTag : TypedCodec<global::CuoModSdk.Types.ContainerGumpTag>
 {
     internal override int Size => 24;
     internal override string Path => "cuo:gump/container-tag";
-    internal override global::CuoModSdk.Types.ContainerGumpTagDto Lift(byte* p) => TypedGen.LiftContainerGumpTag(p);
-    protected override void Lower(in global::CuoModSdk.Types.ContainerGumpTagDto v, byte* p) => TypedGen.LowerContainerGumpTag(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.ContainerGumpTagDto now, byte* original)
+    internal override global::CuoModSdk.Types.ContainerGumpTag Lift(byte* p) => TypedGen.LiftContainerGumpTag(p);
+    protected override void Lower(in global::CuoModSdk.Types.ContainerGumpTag v, byte* p) => TypedGen.LowerContainerGumpTag(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ContainerGumpTag now, byte* original)
     {
         var mine = stackalloc ulong[3];
         LowerInto(now, (byte*)mine);
@@ -8013,13 +8013,13 @@ internal sealed unsafe class CodecHealthBar : TypedCodec<global::CuoModSdk.Types
 }
 
 /// <summary><c>cuo:gump/server</c> (server-gump).</summary>
-internal sealed unsafe class CodecServer : TypedCodec<global::CuoModSdk.Types.ServerGumpDto>
+internal sealed unsafe class CodecServer : TypedCodec<global::CuoModSdk.Types.ServerGump>
 {
     internal override int Size => 60;
     internal override string Path => "cuo:gump/server";
-    internal override global::CuoModSdk.Types.ServerGumpDto Lift(byte* p) => TypedGen.LiftServerGump(p);
-    protected override void Lower(in global::CuoModSdk.Types.ServerGumpDto v, byte* p) => TypedGen.LowerServerGump(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.ServerGumpDto now, byte* original)
+    internal override global::CuoModSdk.Types.ServerGump Lift(byte* p) => TypedGen.LiftServerGump(p);
+    protected override void Lower(in global::CuoModSdk.Types.ServerGump v, byte* p) => TypedGen.LowerServerGump(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ServerGump now, byte* original)
     {
         var mine = stackalloc ulong[8];
         LowerInto(now, (byte*)mine);
@@ -8073,13 +8073,13 @@ internal sealed unsafe class CodecConsume : TypedCodec<global::CuoModSdk.Types.M
 }
 
 /// <summary><c>cuo:input/host-hotkeys</c> (host-hotkeys).</summary>
-internal sealed unsafe class CodecHostHotkeys : TypedCodec<global::CuoModSdk.Types.HostHotkeysDto>
+internal sealed unsafe class CodecHostHotkeys : TypedCodec<global::CuoModSdk.Types.HostHotkeys>
 {
     internal override int Size => 8;
     internal override string Path => "cuo:input/host-hotkeys";
-    internal override global::CuoModSdk.Types.HostHotkeysDto Lift(byte* p) => TypedGen.LiftHostHotkeys(p);
-    protected override void Lower(in global::CuoModSdk.Types.HostHotkeysDto v, byte* p) => TypedGen.LowerHostHotkeys(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.HostHotkeysDto now, byte* original)
+    internal override global::CuoModSdk.Types.HostHotkeys Lift(byte* p) => TypedGen.LiftHostHotkeys(p);
+    protected override void Lower(in global::CuoModSdk.Types.HostHotkeys v, byte* p) => TypedGen.LowerHostHotkeys(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.HostHotkeys now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
@@ -8144,13 +8144,13 @@ internal sealed unsafe class CodecHotkey : TypedCodec<global::CuoModSdk.Types.Mo
 }
 
 /// <summary><c>cuo:input/mod-hotkeys</c> (mod-hotkey-bindings).</summary>
-internal sealed unsafe class CodecModHotkeys : TypedCodec<global::CuoModSdk.Types.ModHotkeyBindingsDto>
+internal sealed unsafe class CodecModHotkeys : TypedCodec<global::CuoModSdk.Types.ModHotkeyBindings>
 {
     internal override int Size => 12;
     internal override string Path => "cuo:input/mod-hotkeys";
-    internal override global::CuoModSdk.Types.ModHotkeyBindingsDto Lift(byte* p) => TypedGen.LiftModHotkeyBindings(p);
-    protected override void Lower(in global::CuoModSdk.Types.ModHotkeyBindingsDto v, byte* p) => TypedGen.LowerModHotkeyBindings(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.ModHotkeyBindingsDto now, byte* original)
+    internal override global::CuoModSdk.Types.ModHotkeyBindings Lift(byte* p) => TypedGen.LiftModHotkeyBindings(p);
+    protected override void Lower(in global::CuoModSdk.Types.ModHotkeyBindings v, byte* p) => TypedGen.LowerModHotkeyBindings(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ModHotkeyBindings now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);
@@ -8178,13 +8178,13 @@ internal sealed unsafe class CodecModHotkeys : TypedCodec<global::CuoModSdk.Type
 }
 
 /// <summary><c>cuo:input/world-single-click</c> (world-single-click).</summary>
-internal sealed unsafe class CodecWorldSingleClick : TypedCodec<global::CuoModSdk.Types.WorldSingleClickDto>
+internal sealed unsafe class CodecWorldSingleClick : TypedCodec<global::CuoModSdk.Types.WorldSingleClick>
 {
     internal override int Size => 16;
     internal override string Path => "cuo:input/world-single-click";
-    internal override global::CuoModSdk.Types.WorldSingleClickDto Lift(byte* p) => TypedGen.LiftWorldSingleClick(p);
-    protected override void Lower(in global::CuoModSdk.Types.WorldSingleClickDto v, byte* p) => TypedGen.LowerWorldSingleClick(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.WorldSingleClickDto now, byte* original)
+    internal override global::CuoModSdk.Types.WorldSingleClick Lift(byte* p) => TypedGen.LiftWorldSingleClick(p);
+    protected override void Lower(in global::CuoModSdk.Types.WorldSingleClick v, byte* p) => TypedGen.LowerWorldSingleClick(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.WorldSingleClick now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);
@@ -8289,13 +8289,13 @@ internal sealed unsafe class CodecMoveResult : TypedCodec<global::CuoModSdk.Type
 }
 
 /// <summary><c>cuo:options/schema</c> (mod-options-schema).</summary>
-internal sealed unsafe class CodecSchema : TypedCodec<global::CuoModSdk.Types.ModOptionsSchemaDto>
+internal sealed unsafe class CodecSchema : TypedCodec<global::CuoModSdk.Types.ModOptionsSchema>
 {
     internal override int Size => 8;
     internal override string Path => "cuo:options/schema";
-    internal override global::CuoModSdk.Types.ModOptionsSchemaDto Lift(byte* p) => TypedGen.LiftModOptionsSchema(p);
-    protected override void Lower(in global::CuoModSdk.Types.ModOptionsSchemaDto v, byte* p) => TypedGen.LowerModOptionsSchema(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.ModOptionsSchemaDto now, byte* original)
+    internal override global::CuoModSdk.Types.ModOptionsSchema Lift(byte* p) => TypedGen.LiftModOptionsSchema(p);
+    protected override void Lower(in global::CuoModSdk.Types.ModOptionsSchema v, byte* p) => TypedGen.LowerModOptionsSchema(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ModOptionsSchema now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
@@ -8323,13 +8323,13 @@ internal sealed unsafe class CodecSchema : TypedCodec<global::CuoModSdk.Types.Mo
 }
 
 /// <summary><c>cuo:options/values</c> (mod-options-values).</summary>
-internal sealed unsafe class CodecValues : TypedCodec<global::CuoModSdk.Types.ModOptionsValuesDto>
+internal sealed unsafe class CodecValues : TypedCodec<global::CuoModSdk.Types.ModOptionsValues>
 {
     internal override int Size => 8;
     internal override string Path => "cuo:options/values";
-    internal override global::CuoModSdk.Types.ModOptionsValuesDto Lift(byte* p) => TypedGen.LiftModOptionsValues(p);
-    protected override void Lower(in global::CuoModSdk.Types.ModOptionsValuesDto v, byte* p) => TypedGen.LowerModOptionsValues(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.ModOptionsValuesDto now, byte* original)
+    internal override global::CuoModSdk.Types.ModOptionsValues Lift(byte* p) => TypedGen.LiftModOptionsValues(p);
+    protected override void Lower(in global::CuoModSdk.Types.ModOptionsValues v, byte* p) => TypedGen.LowerModOptionsValues(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ModOptionsValues now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
@@ -8349,13 +8349,13 @@ internal sealed unsafe class CodecValues : TypedCodec<global::CuoModSdk.Types.Mo
 }
 
 /// <summary><c>cuo:player/buffs</c> (player-buffs).</summary>
-internal sealed unsafe class CodecBuffs : TypedCodec<global::CuoModSdk.Types.PlayerBuffsDto>
+internal sealed unsafe class CodecBuffs : TypedCodec<global::CuoModSdk.Types.PlayerBuffs>
 {
     internal override int Size => 8;
     internal override string Path => "cuo:player/buffs";
-    internal override global::CuoModSdk.Types.PlayerBuffsDto Lift(byte* p) => TypedGen.LiftPlayerBuffs(p);
-    protected override void Lower(in global::CuoModSdk.Types.PlayerBuffsDto v, byte* p) => TypedGen.LowerPlayerBuffs(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.PlayerBuffsDto now, byte* original)
+    internal override global::CuoModSdk.Types.PlayerBuffs Lift(byte* p) => TypedGen.LiftPlayerBuffs(p);
+    protected override void Lower(in global::CuoModSdk.Types.PlayerBuffs v, byte* p) => TypedGen.LowerPlayerBuffs(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.PlayerBuffs now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
@@ -8400,13 +8400,13 @@ internal sealed unsafe class CodecGrabbedItem : TypedCodec<global::CuoModSdk.Typ
 }
 
 /// <summary><c>cuo:player/skills</c> (player-skills).</summary>
-internal sealed unsafe class CodecSkills : TypedCodec<global::CuoModSdk.Types.PlayerSkillsDto>
+internal sealed unsafe class CodecSkills : TypedCodec<global::CuoModSdk.Types.PlayerSkills>
 {
     internal override int Size => 12;
     internal override string Path => "cuo:player/skills";
-    internal override global::CuoModSdk.Types.PlayerSkillsDto Lift(byte* p) => TypedGen.LiftPlayerSkills(p);
-    protected override void Lower(in global::CuoModSdk.Types.PlayerSkillsDto v, byte* p) => TypedGen.LowerPlayerSkills(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.PlayerSkillsDto now, byte* original)
+    internal override global::CuoModSdk.Types.PlayerSkills Lift(byte* p) => TypedGen.LiftPlayerSkills(p);
+    protected override void Lower(in global::CuoModSdk.Types.PlayerSkills v, byte* p) => TypedGen.LowerPlayerSkills(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.PlayerSkills now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);
@@ -8534,13 +8534,13 @@ internal sealed unsafe class CodecAnchorable : TypedCodec<global::CuoModSdk.Type
 }
 
 /// <summary><c>cuo:ui/border-color</c> (border-color).</summary>
-internal sealed unsafe class CodecBorderColor : TypedCodec<global::CuoModSdk.Types.BorderColorDto>
+internal sealed unsafe class CodecBorderColor : TypedCodec<global::CuoModSdk.Types.BorderColor>
 {
     internal override int Size => 16;
     internal override string Path => "cuo:ui/border-color";
-    internal override global::CuoModSdk.Types.BorderColorDto Lift(byte* p) => TypedGen.LiftBorderColor(p);
-    protected override void Lower(in global::CuoModSdk.Types.BorderColorDto v, byte* p) => TypedGen.LowerBorderColor(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.BorderColorDto now, byte* original)
+    internal override global::CuoModSdk.Types.BorderColor Lift(byte* p) => TypedGen.LiftBorderColor(p);
+    protected override void Lower(in global::CuoModSdk.Types.BorderColor v, byte* p) => TypedGen.LowerBorderColor(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.BorderColor now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);
@@ -8633,13 +8633,13 @@ internal sealed unsafe class CodecContainerItem : TypedCodec<global::CuoModSdk.T
 }
 
 /// <summary><c>cuo:ui/custom</c> (ui-custom).</summary>
-internal sealed unsafe class CodecCustom : TypedCodec<global::CuoModSdk.Types.UiCustomDto>
+internal sealed unsafe class CodecCustom : TypedCodec<global::CuoModSdk.Types.UiCustom>
 {
     internal override int Size => 24;
     internal override string Path => "cuo:ui/custom";
-    internal override global::CuoModSdk.Types.UiCustomDto Lift(byte* p) => TypedGen.LiftUiCustom(p);
-    protected override void Lower(in global::CuoModSdk.Types.UiCustomDto v, byte* p) => TypedGen.LowerUiCustom(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.UiCustomDto now, byte* original)
+    internal override global::CuoModSdk.Types.UiCustom Lift(byte* p) => TypedGen.LiftUiCustom(p);
+    protected override void Lower(in global::CuoModSdk.Types.UiCustom v, byte* p) => TypedGen.LowerUiCustom(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.UiCustom now, byte* original)
     {
         var mine = stackalloc ulong[3];
         LowerInto(now, (byte*)mine);
@@ -8773,13 +8773,13 @@ internal sealed unsafe class CodecUiName : TypedCodec<global::CuoModSdk.Types.Ui
 }
 
 /// <summary><c>cuo:ui/pick</c> (ui-pick).</summary>
-internal sealed unsafe class CodecPick : TypedCodec<global::CuoModSdk.Types.UiPickDto>
+internal sealed unsafe class CodecPick : TypedCodec<global::CuoModSdk.Types.UiPick>
 {
     internal override int Size => 32;
     internal override string Path => "cuo:ui/pick";
-    internal override global::CuoModSdk.Types.UiPickDto Lift(byte* p) => TypedGen.LiftUiPick(p);
-    protected override void Lower(in global::CuoModSdk.Types.UiPickDto v, byte* p) => TypedGen.LowerUiPick(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.UiPickDto now, byte* original)
+    internal override global::CuoModSdk.Types.UiPick Lift(byte* p) => TypedGen.LiftUiPick(p);
+    protected override void Lower(in global::CuoModSdk.Types.UiPick v, byte* p) => TypedGen.LowerUiPick(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.UiPick now, byte* original)
     {
         var mine = stackalloc ulong[4];
         LowerInto(now, (byte*)mine);
@@ -8986,13 +8986,13 @@ internal sealed unsafe class CodecSupersedes : TypedCodec<global::CuoModSdk.Type
 }
 
 /// <summary><c>cuo:ui/surface</c> (ui-surface).</summary>
-internal sealed unsafe class CodecSurface : TypedCodec<global::CuoModSdk.Types.UiSurfaceDto>
+internal sealed unsafe class CodecSurface : TypedCodec<global::CuoModSdk.Types.UiSurface>
 {
     internal override int Size => 8;
     internal override string Path => "cuo:ui/surface";
-    internal override global::CuoModSdk.Types.UiSurfaceDto Lift(byte* p) => TypedGen.LiftUiSurface(p);
-    protected override void Lower(in global::CuoModSdk.Types.UiSurfaceDto v, byte* p) => TypedGen.LowerUiSurface(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.UiSurfaceDto now, byte* original)
+    internal override global::CuoModSdk.Types.UiSurface Lift(byte* p) => TypedGen.LiftUiSurface(p);
+    protected override void Lower(in global::CuoModSdk.Types.UiSurface v, byte* p) => TypedGen.LowerUiSurface(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.UiSurface now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
@@ -9011,13 +9011,13 @@ internal sealed unsafe class CodecSurface : TypedCodec<global::CuoModSdk.Types.U
 }
 
 /// <summary><c>cuo:ui/text-caret</c> (text-caret).</summary>
-internal sealed unsafe class CodecTextCaret : TypedCodec<global::CuoModSdk.Types.TextCaretDto>
+internal sealed unsafe class CodecTextCaret : TypedCodec<global::CuoModSdk.Types.TextCaret>
 {
     internal override int Size => 40;
     internal override string Path => "cuo:ui/text-caret";
-    internal override global::CuoModSdk.Types.TextCaretDto Lift(byte* p) => TypedGen.LiftTextCaret(p);
-    protected override void Lower(in global::CuoModSdk.Types.TextCaretDto v, byte* p) => TypedGen.LowerTextCaret(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.TextCaretDto now, byte* original)
+    internal override global::CuoModSdk.Types.TextCaret Lift(byte* p) => TypedGen.LiftTextCaret(p);
+    protected override void Lower(in global::CuoModSdk.Types.TextCaret v, byte* p) => TypedGen.LowerTextCaret(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.TextCaret now, byte* original)
     {
         var mine = stackalloc ulong[5];
         LowerInto(now, (byte*)mine);
@@ -9036,13 +9036,13 @@ internal sealed unsafe class CodecTextCaret : TypedCodec<global::CuoModSdk.Types
 }
 
 /// <summary><c>cuo:ui/text-completion-state</c> (text-completion-state).</summary>
-internal sealed unsafe class CodecTextCompletionState : TypedCodec<global::CuoModSdk.Types.TextCompletionStateDto>
+internal sealed unsafe class CodecTextCompletionState : TypedCodec<global::CuoModSdk.Types.TextCompletionState>
 {
     internal override int Size => 4;
     internal override string Path => "cuo:ui/text-completion-state";
-    internal override global::CuoModSdk.Types.TextCompletionStateDto Lift(byte* p) => TypedGen.LiftTextCompletionState(p);
-    protected override void Lower(in global::CuoModSdk.Types.TextCompletionStateDto v, byte* p) => TypedGen.LowerTextCompletionState(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.TextCompletionStateDto now, byte* original)
+    internal override global::CuoModSdk.Types.TextCompletionState Lift(byte* p) => TypedGen.LiftTextCompletionState(p);
+    protected override void Lower(in global::CuoModSdk.Types.TextCompletionState v, byte* p) => TypedGen.LowerTextCompletionState(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.TextCompletionState now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
@@ -9175,13 +9175,13 @@ internal sealed unsafe class CodecAnimation : TypedCodec<global::CuoModSdk.Types
 }
 
 /// <summary><c>cuo:ent/mob-steps</c> (mobile-steps).</summary>
-internal sealed unsafe class CodecMobSteps : TypedCodec<global::CuoModSdk.Types.MobileStepsDto>
+internal sealed unsafe class CodecMobSteps : TypedCodec<global::CuoModSdk.Types.MobileSteps>
 {
     internal override int Size => 16;
     internal override string Path => "cuo:ent/mob-steps";
-    internal override global::CuoModSdk.Types.MobileStepsDto Lift(byte* p) => TypedGen.LiftMobileSteps(p);
-    protected override void Lower(in global::CuoModSdk.Types.MobileStepsDto v, byte* p) => TypedGen.LowerMobileSteps(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.MobileStepsDto now, byte* original)
+    internal override global::CuoModSdk.Types.MobileSteps Lift(byte* p) => TypedGen.LiftMobileSteps(p);
+    protected override void Lower(in global::CuoModSdk.Types.MobileSteps v, byte* p) => TypedGen.LowerMobileSteps(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.MobileSteps now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);
@@ -9576,12 +9576,12 @@ internal sealed unsafe class CodecSpellbook : TypedCodec<global::CuoModSdk.Types
     }
     internal override int Build(int b, byte* rec)
     {
-        return TypedImports.B_Spellbook(b, (int)*(uint*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20), *(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40), *(long*)(rec + 48), *(rec + 56));
+        return TypedImports.B_Spellbook(b, (int)*(uint*)(rec + 0), *(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20), *(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40), *(long*)(rec + 48), *(rec + 56));
     }
     internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Spellbook(q, t, ret);
     internal override void Set(int q, ulong e, byte t, byte* rec)
     {
-        TypedImports.Set_Spellbook(q, (long)e, t, (int)*(uint*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20), *(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40), *(long*)(rec + 48), *(rec + 56));
+        TypedImports.Set_Spellbook(q, (long)e, t, (int)*(uint*)(rec + 0), *(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20), *(rec + 24), *(long*)(rec + 32), *(long*)(rec + 40), *(long*)(rec + 48), *(rec + 56));
     }
 }
 
@@ -9712,13 +9712,13 @@ internal sealed unsafe class CodecMoveRequest : TypedCodec<global::CuoModSdk.Typ
 }
 
 /// <summary><c>cuo:player/party</c> (party).</summary>
-internal sealed unsafe class CodecParty : TypedCodec<global::CuoModSdk.Types.PartyDto>
+internal sealed unsafe class CodecParty : TypedCodec<global::CuoModSdk.Types.Party>
 {
     internal override int Size => 16;
     internal override string Path => "cuo:player/party";
-    internal override global::CuoModSdk.Types.PartyDto Lift(byte* p) => TypedGen.LiftParty(p);
-    protected override void Lower(in global::CuoModSdk.Types.PartyDto v, byte* p) => TypedGen.LowerParty(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.PartyDto now, byte* original)
+    internal override global::CuoModSdk.Types.Party Lift(byte* p) => TypedGen.LiftParty(p);
+    protected override void Lower(in global::CuoModSdk.Types.Party v, byte* p) => TypedGen.LowerParty(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.Party now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);
@@ -9738,13 +9738,13 @@ internal sealed unsafe class CodecParty : TypedCodec<global::CuoModSdk.Types.Par
 }
 
 /// <summary><c>cuo:player/spellbook</c> (spellbooks).</summary>
-internal sealed unsafe class CodecPlayerSpellbook : TypedCodec<global::CuoModSdk.Types.SpellbooksDto>
+internal sealed unsafe class CodecPlayerSpellbook : TypedCodec<global::CuoModSdk.Types.Spellbooks>
 {
     internal override int Size => 12;
     internal override string Path => "cuo:player/spellbook";
-    internal override global::CuoModSdk.Types.SpellbooksDto Lift(byte* p) => TypedGen.LiftSpellbooks(p);
-    protected override void Lower(in global::CuoModSdk.Types.SpellbooksDto v, byte* p) => TypedGen.LowerSpellbooks(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.SpellbooksDto now, byte* original)
+    internal override global::CuoModSdk.Types.Spellbooks Lift(byte* p) => TypedGen.LiftSpellbooks(p);
+    protected override void Lower(in global::CuoModSdk.Types.Spellbooks v, byte* p) => TypedGen.LowerSpellbooks(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.Spellbooks now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);
@@ -9764,13 +9764,13 @@ internal sealed unsafe class CodecPlayerSpellbook : TypedCodec<global::CuoModSdk
 }
 
 /// <summary><c>cuo:player/steps</c> (player-steps).</summary>
-internal sealed unsafe class CodecSteps : TypedCodec<global::CuoModSdk.Types.PlayerStepsDto>
+internal sealed unsafe class CodecSteps : TypedCodec<global::CuoModSdk.Types.PlayerSteps>
 {
     internal override int Size => 20;
     internal override string Path => "cuo:player/steps";
-    internal override global::CuoModSdk.Types.PlayerStepsDto Lift(byte* p) => TypedGen.LiftPlayerSteps(p);
-    protected override void Lower(in global::CuoModSdk.Types.PlayerStepsDto v, byte* p) => TypedGen.LowerPlayerSteps(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.PlayerStepsDto now, byte* original)
+    internal override global::CuoModSdk.Types.PlayerSteps Lift(byte* p) => TypedGen.LiftPlayerSteps(p);
+    protected override void Lower(in global::CuoModSdk.Types.PlayerSteps v, byte* p) => TypedGen.LowerPlayerSteps(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.PlayerSteps now, byte* original)
     {
         var mine = stackalloc ulong[3];
         LowerInto(now, (byte*)mine);
@@ -9790,16 +9790,16 @@ internal sealed unsafe class CodecSteps : TypedCodec<global::CuoModSdk.Types.Pla
 }
 
 /// <summary>The <c>cuo:scene/character-list</c> event, typed.</summary>
-internal sealed unsafe class EventCharacterList : TypedEvent<global::CuoModSdk.Types.CharacterSelectionDto>
+internal sealed unsafe class EventCharacterList : TypedEvent<global::CuoModSdk.Types.CharacterSelection>
 {
-    internal override void Send(int c, in global::CuoModSdk.Types.CharacterSelectionDto v)
+    internal override void Send(int c, in global::CuoModSdk.Types.CharacterSelection v)
     {
         var buf = stackalloc ulong[2];
         var rec = (byte*)buf;
         TypedGen.LowerCharacterSelection(v, rec);
         TypedImports.Send_CharacterList(c, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12));
     }
-    internal override global::CuoModSdk.Types.CharacterSelectionDto[] Read(int e)
+    internal override global::CuoModSdk.Types.CharacterSelection[] Read(int e)
     {
         var ret = stackalloc int[2];
         TypedImports.Read_CharacterList(e, (nint)ret);
@@ -9807,7 +9807,7 @@ internal sealed unsafe class EventCharacterList : TypedEvent<global::CuoModSdk.T
         var n = ret[1];
         if (n <= 0)
             return [];
-        var v = new global::CuoModSdk.Types.CharacterSelectionDto[n];
+        var v = new global::CuoModSdk.Types.CharacterSelection[n];
         for (var i = 0; i < n; i++)
         {
             v[i] = TypedGen.LiftCharacterSelection(list + i * 16);
@@ -9819,13 +9819,13 @@ internal sealed unsafe class EventCharacterList : TypedEvent<global::CuoModSdk.T
 }
 
 /// <summary><c>cuo:scene/character-list</c> (character-selection).</summary>
-internal sealed unsafe class CodecCharacterList : TypedCodec<global::CuoModSdk.Types.CharacterSelectionDto>
+internal sealed unsafe class CodecCharacterList : TypedCodec<global::CuoModSdk.Types.CharacterSelection>
 {
     internal override int Size => 16;
     internal override string Path => "cuo:scene/character-list";
-    internal override global::CuoModSdk.Types.CharacterSelectionDto Lift(byte* p) => TypedGen.LiftCharacterSelection(p);
-    protected override void Lower(in global::CuoModSdk.Types.CharacterSelectionDto v, byte* p) => TypedGen.LowerCharacterSelection(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.CharacterSelectionDto now, byte* original)
+    internal override global::CuoModSdk.Types.CharacterSelection Lift(byte* p) => TypedGen.LiftCharacterSelection(p);
+    protected override void Lower(in global::CuoModSdk.Types.CharacterSelection v, byte* p) => TypedGen.LowerCharacterSelection(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.CharacterSelection now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);
@@ -9925,13 +9925,13 @@ internal sealed unsafe class CodecServerList : TypedCodec<global::CuoModSdk.Type
 }
 
 /// <summary><c>cuo:ui/clipboard-set</c> (clipboard-set).</summary>
-internal sealed unsafe class CodecClipboardSet : TypedCodec<global::CuoModSdk.Types.ClipboardSetDto>
+internal sealed unsafe class CodecClipboardSet : TypedCodec<global::CuoModSdk.Types.ClipboardSet>
 {
     internal override int Size => 12;
     internal override string Path => "cuo:ui/clipboard-set";
-    internal override global::CuoModSdk.Types.ClipboardSetDto Lift(byte* p) => TypedGen.LiftClipboardSet(p);
-    protected override void Lower(in global::CuoModSdk.Types.ClipboardSetDto v, byte* p) => TypedGen.LowerClipboardSet(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.ClipboardSetDto now, byte* original)
+    internal override global::CuoModSdk.Types.ClipboardSet Lift(byte* p) => TypedGen.LiftClipboardSet(p);
+    protected override void Lower(in global::CuoModSdk.Types.ClipboardSet v, byte* p) => TypedGen.LowerClipboardSet(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.ClipboardSet now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);
@@ -10017,13 +10017,13 @@ internal sealed unsafe class CodecMaskedText : TypedCodec<global::CuoModSdk.Type
 }
 
 /// <summary><c>cuo:ui/text-clipboard-action</c> (text-clipboard-action).</summary>
-internal sealed unsafe class CodecTextClipboardAction : TypedCodec<global::CuoModSdk.Types.TextClipboardActionDto>
+internal sealed unsafe class CodecTextClipboardAction : TypedCodec<global::CuoModSdk.Types.TextClipboardAction>
 {
     internal override int Size => 16;
     internal override string Path => "cuo:ui/text-clipboard-action";
-    internal override global::CuoModSdk.Types.TextClipboardActionDto Lift(byte* p) => TypedGen.LiftTextClipboardAction(p);
-    protected override void Lower(in global::CuoModSdk.Types.TextClipboardActionDto v, byte* p) => TypedGen.LowerTextClipboardAction(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.TextClipboardActionDto now, byte* original)
+    internal override global::CuoModSdk.Types.TextClipboardAction Lift(byte* p) => TypedGen.LiftTextClipboardAction(p);
+    protected override void Lower(in global::CuoModSdk.Types.TextClipboardAction v, byte* p) => TypedGen.LowerTextClipboardAction(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.TextClipboardAction now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);
@@ -10050,13 +10050,13 @@ internal sealed unsafe class CodecTextClipboardAction : TypedCodec<global::CuoMo
 }
 
 /// <summary><c>cuo:ui/text-completion</c> (text-completion).</summary>
-internal sealed unsafe class CodecTextCompletion : TypedCodec<global::CuoModSdk.Types.TextCompletionDto>
+internal sealed unsafe class CodecTextCompletion : TypedCodec<global::CuoModSdk.Types.TextCompletion>
 {
     internal override int Size => 24;
     internal override string Path => "cuo:ui/text-completion";
-    internal override global::CuoModSdk.Types.TextCompletionDto Lift(byte* p) => TypedGen.LiftTextCompletion(p);
-    protected override void Lower(in global::CuoModSdk.Types.TextCompletionDto v, byte* p) => TypedGen.LowerTextCompletion(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.TextCompletionDto now, byte* original)
+    internal override global::CuoModSdk.Types.TextCompletion Lift(byte* p) => TypedGen.LiftTextCompletion(p);
+    protected override void Lower(in global::CuoModSdk.Types.TextCompletion v, byte* p) => TypedGen.LowerTextCompletion(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.TextCompletion now, byte* original)
     {
         var mine = stackalloc ulong[3];
         LowerInto(now, (byte*)mine);
@@ -10084,13 +10084,13 @@ internal sealed unsafe class CodecTextCompletion : TypedCodec<global::CuoModSdk.
 }
 
 /// <summary><c>cuo:ui/text-completion-pick</c> (text-completion-pick).</summary>
-internal sealed unsafe class CodecTextCompletionPick : TypedCodec<global::CuoModSdk.Types.TextCompletionPickDto>
+internal sealed unsafe class CodecTextCompletionPick : TypedCodec<global::CuoModSdk.Types.TextCompletionPick>
 {
     internal override int Size => 16;
     internal override string Path => "cuo:ui/text-completion-pick";
-    internal override global::CuoModSdk.Types.TextCompletionPickDto Lift(byte* p) => TypedGen.LiftTextCompletionPick(p);
-    protected override void Lower(in global::CuoModSdk.Types.TextCompletionPickDto v, byte* p) => TypedGen.LowerTextCompletionPick(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.TextCompletionPickDto now, byte* original)
+    internal override global::CuoModSdk.Types.TextCompletionPick Lift(byte* p) => TypedGen.LiftTextCompletionPick(p);
+    protected override void Lower(in global::CuoModSdk.Types.TextCompletionPick v, byte* p) => TypedGen.LowerTextCompletionPick(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.TextCompletionPick now, byte* original)
     {
         var mine = stackalloc ulong[2];
         LowerInto(now, (byte*)mine);

@@ -34,7 +34,7 @@ fn low_hp_warning(
 #[system]
 fn bandage_hotkey(
     on: On<Event, ModHotkeyFired>,
-    me: Query<(&Serial, &EquipmentSlotsDto), With<Player>>,
+    me: Query<(&Serial, &EquipmentSlots), With<Player>>,
     items: helpers::Items,
 ) {
     if on.name != "bandage" {
