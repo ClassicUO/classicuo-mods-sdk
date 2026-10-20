@@ -194,16 +194,6 @@ impl Conv<w::TargetType> for u8 {
     }
 }
 
-impl Conv<w::AnchorKind> for u8 {
-    fn to_wit(&self) -> w::AnchorKind {
-        const CASES: &[w::AnchorKind] = &[w::AnchorKind::Spell, w::AnchorKind::Healthbar];
-        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
-    }
-    fn from_wit(v: w::AnchorKind) -> u8 {
-        v as u8
-    }
-}
-
 impl Conv<w::UoCustomKind> for u8 {
     fn to_wit(&self) -> w::UoCustomKind {
         const CASES: &[w::UoCustomKind] = &[w::UoCustomKind::Gump, w::UoCustomKind::GumpNinePatch, w::UoCustomKind::GumpTiled, w::UoCustomKind::Art, w::UoCustomKind::Land, w::UoCustomKind::Animation, w::UoCustomKind::MiniMap, w::UoCustomKind::None, w::UoCustomKind::WrappedText, w::UoCustomKind::GumpSlice, w::UoCustomKind::HueGrid, w::UoCustomKind::DynTexture, w::UoCustomKind::WorldMap];
@@ -214,12 +204,12 @@ impl Conv<w::UoCustomKind> for u8 {
     }
 }
 
-impl Conv<w::ScrollbarStyle> for u8 {
-    fn to_wit(&self) -> w::ScrollbarStyle {
-        const CASES: &[w::ScrollbarStyle] = &[w::ScrollbarStyle::Uo, w::ScrollbarStyle::Flat];
+impl Conv<w::UiScrollbarStyle> for u8 {
+    fn to_wit(&self) -> w::UiScrollbarStyle {
+        const CASES: &[w::UiScrollbarStyle] = &[w::UiScrollbarStyle::Skinned, w::UiScrollbarStyle::Flat];
         usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
     }
-    fn from_wit(v: w::ScrollbarStyle) -> u8 {
+    fn from_wit(v: w::UiScrollbarStyle) -> u8 {
         v as u8
     }
 }
@@ -1743,14 +1733,14 @@ impl Conv<w::TargetingState> for s::TargetingState {
     }
 }
 
-impl Conv<w::Anchorable> for s::Anchorable {
-    fn to_wit(&self) -> w::Anchorable {
-        w::Anchorable {
+impl Conv<w::UiAnchorable> for s::UiAnchorable {
+    fn to_wit(&self) -> w::UiAnchorable {
+        w::UiAnchorable {
             kind: Conv::to_wit(&self.kind),
         }
     }
-    fn from_wit(v: w::Anchorable) -> s::Anchorable {
-        s::Anchorable {
+    fn from_wit(v: w::UiAnchorable) -> s::UiAnchorable {
+        s::UiAnchorable {
             kind: Conv::from_wit(v.kind),
         }
     }
@@ -2965,14 +2955,14 @@ impl Conv<w::ClipboardSet> for s::ClipboardSet {
     }
 }
 
-impl Conv<w::FocusedInput> for s::FocusedInput {
-    fn to_wit(&self) -> w::FocusedInput {
-        w::FocusedInput {
+impl Conv<w::InputFocus> for s::InputFocus {
+    fn to_wit(&self) -> w::InputFocus {
+        w::InputFocus {
             entity: Conv::to_wit(&self.entity),
         }
     }
-    fn from_wit(v: w::FocusedInput) -> s::FocusedInput {
-        s::FocusedInput {
+    fn from_wit(v: w::InputFocus) -> s::InputFocus {
+        s::InputFocus {
             entity: Conv::from_wit(v.entity),
         }
     }
@@ -3989,21 +3979,21 @@ impl Resource for s::TargetingState {
 }
 
 // `cuo:ui/anchorable`
-impl Component for s::Anchorable {
+impl Component for s::UiAnchorable {
     fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
         c::column_anchorable(q, term).into_iter().map(Conv::from_wit).collect()
     }
 }
-impl WritableComponent for s::Anchorable {
+impl WritableComponent for s::UiAnchorable {
     fn __same(&self, other: &Self) -> bool {
-        Conv::<w::Anchorable>::to_wit(self) == Conv::<w::Anchorable>::to_wit(other)
+        Conv::<w::UiAnchorable>::to_wit(self) == Conv::<w::UiAnchorable>::to_wit(other)
     }
     fn __set(&self, q: &wit::Query, entity: u64, term: u8) {
-        let v: w::Anchorable = self.to_wit();
+        let v: w::UiAnchorable = self.to_wit();
         c::set_anchorable(q, entity, term, v);
     }
     fn __insert(&self, b: &c::EntityBuilder) -> c::EntityBuilder {
-        let v: w::Anchorable = self.to_wit();
+        let v: w::UiAnchorable = self.to_wit();
         b.anchorable(v)
     }
 }
@@ -5239,21 +5229,21 @@ impl WritableResource for s::ClipboardSet {
 }
 
 // `cuo:ui/focused-input`
-impl Resource for s::FocusedInput {
+impl Resource for s::InputFocus {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_focused_input(r).map(Conv::from_wit)
     }
 }
-impl WritableResource for s::FocusedInput {
+impl WritableResource for s::InputFocus {
     fn __same(&self, other: &Self) -> bool {
-        Conv::<w::FocusedInput>::to_wit(self) == Conv::<w::FocusedInput>::to_wit(other)
+        Conv::<w::InputFocus>::to_wit(self) == Conv::<w::InputFocus>::to_wit(other)
     }
     fn __put(&self, r: &wit::Res) {
-        let v: w::FocusedInput = self.to_wit();
+        let v: w::InputFocus = self.to_wit();
         c::put_focused_input(r, v);
     }
     fn __set_resource(&self, cmds: &wit::Commands) {
-        let v: w::FocusedInput = self.to_wit();
+        let v: w::InputFocus = self.to_wit();
         c::set_resource_focused_input(cmds, v);
     }
 }
@@ -5758,9 +5748,9 @@ impl TypedTrigger for s::LocalTargetResultEvent {
     }
 }
 
-impl TypedTrigger for s::Anchorable {
-    type Wit = w::Anchorable;
-    fn lift(v: w::Anchorable) -> s::Anchorable {
+impl TypedTrigger for s::UiAnchorable {
+    type Wit = w::UiAnchorable;
+    fn lift(v: w::UiAnchorable) -> s::UiAnchorable {
         Conv::from_wit(v)
     }
 }

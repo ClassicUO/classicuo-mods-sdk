@@ -1567,21 +1567,13 @@ internal interface ITypesImports {
     }
 
     /**
-    * `AnchorKind`
-    */
-
-    internal enum AnchorKind {
-        SPELL, HEALTHBAR
-    }
-
-    /**
     * `cuo:ui/anchorable`
     */
 
-    internal struct Anchorable {
-        internal AnchorKind kind;
+    internal struct UiAnchorable {
+        internal int kind;
 
-        internal Anchorable(AnchorKind kind) {
+        internal UiAnchorable(int kind) {
             this.kind = kind;
         }
     }
@@ -1825,11 +1817,11 @@ internal interface ITypesImports {
     }
 
     /**
-    * `ScrollbarStyle`
+    * `UiScrollbarStyle`
     */
 
-    internal enum ScrollbarStyle {
-        UO, FLAT
+    internal enum UiScrollbarStyle {
+        SKINNED, FLAT
     }
 
     /**
@@ -1838,9 +1830,9 @@ internal interface ITypesImports {
 
     internal struct UiScrollbar {
         internal float width;
-        internal ScrollbarStyle style;
+        internal UiScrollbarStyle style;
 
-        internal UiScrollbar(float width, ScrollbarStyle style) {
+        internal UiScrollbar(float width, UiScrollbarStyle style) {
             this.width = width;
             this.style = style;
         }
@@ -2770,10 +2762,10 @@ internal interface ITypesImports {
     * `cuo:ui/focused-input`
     */
 
-    internal struct FocusedInput {
+    internal struct InputFocus {
         internal ulong entity;
 
-        internal FocusedInput(ulong entity) {
+        internal InputFocus(ulong entity) {
             this.entity = entity;
         }
     }

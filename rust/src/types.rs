@@ -43,24 +43,6 @@ impl HasPath for Amount {
     const PATH: &'static str = paths::ent::AMOUNT;
 }
 
-/// `ClassicUO.Ecs.AnchorKind` — crosses as `u8`.
-pub type AnchorKind = u8;
-pub mod anchor_kind {
-    pub const SPELL: super::AnchorKind = 0;
-    pub const HEALTHBAR: super::AnchorKind = 1;
-}
-
-/// `cuo:ui/anchorable`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct Anchorable {
-    /// enum AnchorKind (0=Spell, 1=Healthbar)
-    pub kind: AnchorKind,
-}
-impl HasPath for Anchorable {
-    const PATH: &'static str = paths::ui::ANCHORABLE;
-}
-
 /// `cuo:ent/auto-opened-corpse`
 /// Zero-size tag: no value crosses, only its presence.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -498,16 +480,6 @@ pub mod flex_direction {
     pub const COLUMN: super::FlexDirection = 1;
 }
 
-/// `cuo:ui/focused-input`
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-#[serde(default, rename_all = "PascalCase")]
-pub struct FocusedInput {
-    pub entity: u64,
-}
-impl HasPath for FocusedInput {
-    const PATH: &'static str = paths::ui::FOCUSED_INPUT;
-}
-
 /// `cuo:game/context`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -723,6 +695,16 @@ pub struct Hue {
 }
 impl HasPath for Hue {
     const PATH: &'static str = paths::ent::HUE;
+}
+
+/// `cuo:ui/focused-input`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct InputFocus {
+    pub entity: u64,
+}
+impl HasPath for InputFocus {
+    const PATH: &'static str = paths::ui::FOCUSED_INPUT;
 }
 
 /// `cuo:ui/interaction`
@@ -1681,13 +1663,6 @@ impl HasPath for ScrollPosition {
     const PATH: &'static str = paths::ui::SCROLL;
 }
 
-/// `ClassicUO.Ecs.ScrollbarStyle` — crosses as `u8`.
-pub type ScrollbarStyle = u8;
-pub mod scrollbar_style {
-    pub const UO: super::ScrollbarStyle = 0;
-    pub const FLAT: super::ScrollbarStyle = 1;
-}
-
 /// `cuo:ent/server-flags`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -2128,7 +2103,7 @@ impl HasPath for TextInput {
     const PATH: &'static str = paths::ui::TEXT_INPUT;
 }
 
-/// Nested payload type (`ClassicUO.Ecs.TextSpan`).
+/// Nested payload type (`TinyEcs.Bevy.UI.TextSpan`).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct TextSpan {
@@ -2280,6 +2255,16 @@ pub mod uo_custom_kind {
     pub const WORLD_MAP: super::UOCustomKind = 12;
 }
 
+/// `cuo:ui/anchorable`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct UiAnchorable {
+    pub kind: i32,
+}
+impl HasPath for UiAnchorable {
+    const PATH: &'static str = paths::ui::ANCHORABLE;
+}
+
 /// `cuo:ui/contains-by-bounds`
 /// Zero-size tag: no value crosses, only its presence.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -2425,11 +2410,18 @@ impl HasPath for UiResizable {
 #[serde(default, rename_all = "PascalCase")]
 pub struct UiScrollbar {
     pub width: f32,
-    /// enum ScrollbarStyle (0=Uo, 1=Flat)
-    pub style: ScrollbarStyle,
+    /// enum UiScrollbarStyle (0=Skinned, 1=Flat)
+    pub style: UiScrollbarStyle,
 }
 impl HasPath for UiScrollbar {
     const PATH: &'static str = paths::ui::SCROLLBAR;
+}
+
+/// `TinyEcs.Bevy.UI.UiScrollbarStyle` — crosses as `u8`.
+pub type UiScrollbarStyle = u8;
+pub mod ui_scrollbar_style {
+    pub const SKINNED: super::UiScrollbarStyle = 0;
+    pub const FLAT: super::UiScrollbarStyle = 1;
 }
 
 /// `cuo:ui/surface`

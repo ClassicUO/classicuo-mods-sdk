@@ -14,7 +14,6 @@ pub(crate) struct TypedTrigger {
 
 pub(crate) const TYPED_TRIGGERS: &[TypedTrigger] = &[
     TypedTrigger { sdk: "Amount", wit: "amount", rust: "Amount", flat: &["i32"] },
-    TypedTrigger { sdk: "Anchorable", wit: "anchorable", rust: "Anchorable", flat: &["i32"] },
     TypedTrigger { sdk: "AutoOpenedCorpse", wit: "", rust: "", flat: &[] },
     TypedTrigger { sdk: "BackgroundColor", wit: "background-color", rust: "BackgroundColor", flat: &["f32", "f32", "f32", "f32"] },
     TypedTrigger { sdk: "BookWindow", wit: "", rust: "", flat: &[] },
@@ -120,6 +119,7 @@ pub(crate) const TYPED_TRIGGERS: &[TypedTrigger] = &[
     TypedTrigger { sdk: "TopBarFull", wit: "", rust: "", flat: &[] },
     TypedTrigger { sdk: "TradeWindow", wit: "trade-window", rust: "TradeWindow", flat: &["i32", "i32", "i32", "i32", "i32", "i32"] },
     TypedTrigger { sdk: "UOButton", wit: "uo-button", rust: "UoButton", flat: &["i32", "i32", "i32"] },
+    TypedTrigger { sdk: "UiAnchorable", wit: "ui-anchorable", rust: "UiAnchorable", flat: &["i32"] },
     TypedTrigger { sdk: "UiClick", wit: "", rust: "", flat: &[] },
     TypedTrigger { sdk: "UiContainsByBounds", wit: "", rust: "", flat: &[] },
     TypedTrigger { sdk: "UiCustom", wit: "ui-custom", rust: "UiCustom", flat: &["i32", "i32", "f32", "f32", "f32", "i32"] },

@@ -158,8 +158,8 @@ static void to_LocalTargetResultEvent(cuo_modding_types_local_target_result_even
 static void from_LocalTargetResultEvent(cuo_LocalTargetResultEvent *o, const cuo_modding_types_local_target_result_event_t *w);
 static void to_TargetingState(cuo_modding_types_targeting_state_t *w, const cuo_TargetingState *v);
 static void from_TargetingState(cuo_TargetingState *o, const cuo_modding_types_targeting_state_t *w);
-static void to_Anchorable(cuo_modding_types_anchorable_t *w, const cuo_Anchorable *v);
-static void from_Anchorable(cuo_Anchorable *o, const cuo_modding_types_anchorable_t *w);
+static void to_UiAnchorable(cuo_modding_types_ui_anchorable_t *w, const cuo_UiAnchorable *v);
+static void from_UiAnchorable(cuo_UiAnchorable *o, const cuo_modding_types_ui_anchorable_t *w);
 static void to_BorderColor(cuo_modding_types_border_color_t *w, const cuo_BorderColor *v);
 static void from_BorderColor(cuo_BorderColor *o, const cuo_modding_types_border_color_t *w);
 static void to_UoButton(cuo_modding_types_uo_button_t *w, const cuo_UOButton *v);
@@ -282,8 +282,8 @@ static void to_ServerSelectionInfoEvent(cuo_modding_types_server_selection_info_
 static void from_ServerSelectionInfoEvent(cuo_ServerSelectionInfoEvent *o, const cuo_modding_types_server_selection_info_event_t *w);
 static void to_ClipboardSet(cuo_modding_types_clipboard_set_t *w, const cuo_ClipboardSet *v);
 static void from_ClipboardSet(cuo_ClipboardSet *o, const cuo_modding_types_clipboard_set_t *w);
-static void to_FocusedInput(cuo_modding_types_focused_input_t *w, const cuo_FocusedInput *v);
-static void from_FocusedInput(cuo_FocusedInput *o, const cuo_modding_types_focused_input_t *w);
+static void to_InputFocus(cuo_modding_types_input_focus_t *w, const cuo_InputFocus *v);
+static void from_InputFocus(cuo_InputFocus *o, const cuo_modding_types_input_focus_t *w);
 static void to_MaskedText(cuo_modding_types_masked_text_t *w, const cuo_MaskedText *v);
 static void from_MaskedText(cuo_MaskedText *o, const cuo_modding_types_masked_text_t *w);
 static void to_TextClipboardAction(cuo_modding_types_text_clipboard_action_t *w, const cuo_TextClipboardAction *v);
@@ -1709,12 +1709,12 @@ static void from_TargetingState(cuo_TargetingState *o, const cuo_modding_types_t
     o->local_cancelled = w->local_cancelled;
 }
 
-static void to_Anchorable(cuo_modding_types_anchorable_t *w, const cuo_Anchorable *v)
+static void to_UiAnchorable(cuo_modding_types_ui_anchorable_t *w, const cuo_UiAnchorable *v)
 {
-    w->kind = (uint32_t)(v->kind) < 2u ? (v->kind) : 0;
+    w->kind = v->kind;
 }
 
-static void from_Anchorable(cuo_Anchorable *o, const cuo_modding_types_anchorable_t *w)
+static void from_UiAnchorable(cuo_UiAnchorable *o, const cuo_modding_types_ui_anchorable_t *w)
 {
     o->kind = w->kind;
 }
@@ -2817,12 +2817,12 @@ static void from_ClipboardSet(cuo_ClipboardSet *o, const cuo_modding_types_clipb
     o->text = cuo_strndup((const char *)w->text.ptr, w->text.len);
 }
 
-static void to_FocusedInput(cuo_modding_types_focused_input_t *w, const cuo_FocusedInput *v)
+static void to_InputFocus(cuo_modding_types_input_focus_t *w, const cuo_InputFocus *v)
 {
     w->entity = v->entity;
 }
 
-static void from_FocusedInput(cuo_FocusedInput *o, const cuo_modding_types_focused_input_t *w)
+static void from_InputFocus(cuo_InputFocus *o, const cuo_modding_types_input_focus_t *w)
 {
     o->entity = w->entity;
 }
@@ -3056,11 +3056,11 @@ cuo_comp cuo_HealthBarWindow_comp(const cuo_HealthBarWindow *v)
     return cuo__comp(cuo_HealthBarWindow_id(), 24, w);
 }
 cuo_comp cuo_Player_comp(void) { return cuo__comp(cuo_Player_id(), 25, NULL); }
-cuo_comp cuo_Anchorable_comp(const cuo_Anchorable *v)
+cuo_comp cuo_UiAnchorable_comp(const cuo_UiAnchorable *v)
 {
-    cuo_modding_types_anchorable_t *w = cuo_alloc(sizeof *w);
-    to_Anchorable(w, v);
-    return cuo__comp(cuo_Anchorable_id(), 26, w);
+    cuo_modding_types_ui_anchorable_t *w = cuo_alloc(sizeof *w);
+    to_UiAnchorable(w, v);
+    return cuo__comp(cuo_UiAnchorable_id(), 26, w);
 }
 cuo_comp cuo_BorderColor_comp(const cuo_BorderColor *v)
 {
@@ -3960,23 +3960,23 @@ const cuo_StatLocks *cuo_StatLocks_column(cuo_query q, size_t term)
     return out;
 }
 
-const cuo_Anchorable *cuo_Anchorable_column(cuo_query q, size_t term)
+const cuo_UiAnchorable *cuo_UiAnchorable_column(cuo_query q, size_t term)
 {
     if (!q.len)
         return NULL;
-    cuo_modding_components_list_anchorable_t l;
+    cuo_modding_components_list_ui_anchorable_t l;
     cuo_modding_components_column_anchorable(cuo__typed_query(q), (uint8_t)term, &l);
-    cuo_Anchorable *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    cuo_UiAnchorable *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
     for (size_t i = 0; i < l.len; i++)
-        from_Anchorable(&out[i], &l.ptr[i]);
-    cuo_modding_components_list_anchorable_free(&l);
+        from_UiAnchorable(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_ui_anchorable_free(&l);
     return out;
 }
 
-void cuo_Anchorable_set(cuo_query q, cuo_entity e, size_t term, const cuo_Anchorable *v)
+void cuo_UiAnchorable_set(cuo_query q, cuo_entity e, size_t term, const cuo_UiAnchorable *v)
 {
-    cuo_modding_types_anchorable_t w;
-    to_Anchorable(&w, v);
+    cuo_modding_types_ui_anchorable_t w;
+    to_UiAnchorable(&w, v);
     cuo_modding_components_set_anchorable(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
@@ -4748,7 +4748,7 @@ size_t cuo__typed_res_size(uint16_t kind)
     case 22: return sizeof(cuo_modding_types_spellbooks_t);
     case 23: return sizeof(cuo_modding_types_player_steps_t);
     case 24: return sizeof(cuo_modding_types_clipboard_set_t);
-    case 25: return sizeof(cuo_modding_types_focused_input_t);
+    case 25: return sizeof(cuo_modding_types_input_focus_t);
     case 26: return sizeof(cuo_modding_types_text_clipboard_action_t);
     case 27: return sizeof(cuo_modding_types_text_completion_t);
     case 28: return sizeof(cuo_modding_types_text_completion_pick_t);
@@ -5137,27 +5137,27 @@ void cuo_ClipboardSet_set_resource(cuo_cmds *c, const cuo_ClipboardSet *v)
     cuo_modding_components_set_resource_clipboard_set(cuo__typed_cmds(c), &w);
 }
 
-static bool res_FocusedInput(const cuo__params *ps, cuo_param p, cuo_FocusedInput *out)
+static bool res_InputFocus(const cuo__params *ps, cuo_param p, cuo_InputFocus *out)
 {
-    const cuo_modding_types_focused_input_t *w = cuo__res_typed(ps, p, 25);
+    const cuo_modding_types_input_focus_t *w = cuo__res_typed(ps, p, 25);
     if (w)
-        from_FocusedInput(out, w);
+        from_InputFocus(out, w);
     return w != NULL;
 }
-bool cuo_FocusedInput_res(const cuo_input *in, cuo_param p, cuo_FocusedInput *out) { return res_FocusedInput(in->params, p, out); }
-bool cuo_FocusedInput_obs_res(const cuo_obs *ev, cuo_param p, cuo_FocusedInput *out) { return res_FocusedInput(ev->params, p, out); }
-static void put_FocusedInput(const cuo__params *ps, cuo_param p, const cuo_FocusedInput *v)
+bool cuo_InputFocus_res(const cuo_input *in, cuo_param p, cuo_InputFocus *out) { return res_InputFocus(in->params, p, out); }
+bool cuo_InputFocus_obs_res(const cuo_obs *ev, cuo_param p, cuo_InputFocus *out) { return res_InputFocus(ev->params, p, out); }
+static void put_InputFocus(const cuo__params *ps, cuo_param p, const cuo_InputFocus *v)
 {
-    cuo_modding_types_focused_input_t w;
-    to_FocusedInput(&w, v);
+    cuo_modding_types_input_focus_t w;
+    to_InputFocus(&w, v);
     cuo_modding_components_put_focused_input(cuo__res_put(ps, p), &w);
 }
-void cuo_FocusedInput_put(const cuo_input *in, cuo_param p, const cuo_FocusedInput *v) { put_FocusedInput(in->params, p, v); }
-void cuo_FocusedInput_obs_put(const cuo_obs *ev, cuo_param p, const cuo_FocusedInput *v) { put_FocusedInput(ev->params, p, v); }
-void cuo_FocusedInput_set_resource(cuo_cmds *c, const cuo_FocusedInput *v)
+void cuo_InputFocus_put(const cuo_input *in, cuo_param p, const cuo_InputFocus *v) { put_InputFocus(in->params, p, v); }
+void cuo_InputFocus_obs_put(const cuo_obs *ev, cuo_param p, const cuo_InputFocus *v) { put_InputFocus(ev->params, p, v); }
+void cuo_InputFocus_set_resource(cuo_cmds *c, const cuo_InputFocus *v)
 {
-    cuo_modding_types_focused_input_t w;
-    to_FocusedInput(&w, v);
+    cuo_modding_types_input_focus_t w;
+    to_InputFocus(&w, v);
     cuo_modding_components_set_resource_focused_input(cuo__typed_cmds(c), &w);
 }
 
@@ -5758,7 +5758,7 @@ int cuo__trigger_kind(const char *path, const char **record)
     if (strcmp(path, "cuo:player/player") == 0) return 0;
     if (strcmp(path, "cuo:player/stat-locks") == 0) return *record = "stat-locks", 57;
     if (strcmp(path, "cuo:target/local-result") == 0) return *record = "local-target-result-event", 58;
-    if (strcmp(path, "cuo:ui/anchorable") == 0) return *record = "anchorable", 59;
+    if (strcmp(path, "cuo:ui/anchorable") == 0) return *record = "ui-anchorable", 59;
     if (strcmp(path, "cuo:ui/border-color") == 0) return *record = "border-color", 60;
     if (strcmp(path, "cuo:ui/button") == 0) return *record = "uo-button", 61;
     if (strcmp(path, "cuo:ui/click") == 0) return 0;
@@ -6064,8 +6064,8 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 59: {
-        cuo_Anchorable *o = cuo_alloc(sizeof *o);
-        from_Anchorable(o, rec);
+        cuo_UiAnchorable *o = cuo_alloc(sizeof *o);
+        from_UiAnchorable(o, rec);
         return o;
     }
     case 60: {
@@ -6356,7 +6356,7 @@ const cuo_ItemDropSent *cuo_ItemDropSent_obs_value(const cuo_obs *ev) { return e
 const cuo_ItemMoveResult *cuo_ItemMoveResult_obs_value(const cuo_obs *ev) { return ev->value_kind == 56 ? ev->value : NULL; }
 const cuo_StatLocks *cuo_StatLocks_obs_value(const cuo_obs *ev) { return ev->value_kind == 57 ? ev->value : NULL; }
 const cuo_LocalTargetResultEvent *cuo_LocalTargetResultEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 58 ? ev->value : NULL; }
-const cuo_Anchorable *cuo_Anchorable_obs_value(const cuo_obs *ev) { return ev->value_kind == 59 ? ev->value : NULL; }
+const cuo_UiAnchorable *cuo_UiAnchorable_obs_value(const cuo_obs *ev) { return ev->value_kind == 59 ? ev->value : NULL; }
 const cuo_BorderColor *cuo_BorderColor_obs_value(const cuo_obs *ev) { return ev->value_kind == 60 ? ev->value : NULL; }
 const cuo_UOButton *cuo_UOButton_obs_value(const cuo_obs *ev) { return ev->value_kind == 61 ? ev->value : NULL; }
 const cuo_ComputedNode *cuo_ComputedNode_obs_value(const cuo_obs *ev) { return ev->value_kind == 62 ? ev->value : NULL; }

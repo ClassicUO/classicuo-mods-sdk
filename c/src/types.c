@@ -5,7 +5,6 @@
 #define TYPE_ID(path) do { static uint16_t id_; static bool ok_; if (!ok_) { id_ = cuo_type_id(path); ok_ = true; } return id_; } while (0)
 
 uint16_t cuo_Amount_id(void) { TYPE_ID(cuo_Amount_PATH); }
-uint16_t cuo_Anchorable_id(void) { TYPE_ID(cuo_Anchorable_PATH); }
 uint16_t cuo_AutoOpenedCorpse_id(void) { TYPE_ID(cuo_AutoOpenedCorpse_PATH); }
 uint16_t cuo_BackgroundColor_id(void) { TYPE_ID(cuo_BackgroundColor_PATH); }
 uint16_t cuo_BookWindow_id(void) { TYPE_ID(cuo_BookWindow_PATH); }
@@ -35,7 +34,6 @@ uint16_t cuo_EntityName_id(void) { TYPE_ID(cuo_EntityName_PATH); }
 uint16_t cuo_EntityProperties_id(void) { TYPE_ID(cuo_EntityProperties_PATH); }
 uint16_t cuo_EquipmentSlots_id(void) { TYPE_ID(cuo_EquipmentSlots_PATH); }
 uint16_t cuo_Facing_id(void) { TYPE_ID(cuo_Facing_PATH); }
-uint16_t cuo_FocusedInput_id(void) { TYPE_ID(cuo_FocusedInput_PATH); }
 uint16_t cuo_GameContext_id(void) { TYPE_ID(cuo_GameContext_PATH); }
 uint16_t cuo_GameScene_id(void) { TYPE_ID(cuo_GameScene_PATH); }
 uint16_t cuo_GameSettings_id(void) { TYPE_ID(cuo_GameSettings_PATH); }
@@ -51,6 +49,7 @@ uint16_t cuo_Hits_id(void) { TYPE_ID(cuo_Hits_PATH); }
 uint16_t cuo_HostHotkeys_id(void) { TYPE_ID(cuo_HostHotkeys_PATH); }
 uint16_t cuo_HouseDesignWindow_id(void) { TYPE_ID(cuo_HouseDesignWindow_PATH); }
 uint16_t cuo_Hue_id(void) { TYPE_ID(cuo_Hue_PATH); }
+uint16_t cuo_InputFocus_id(void) { TYPE_ID(cuo_InputFocus_PATH); }
 uint16_t cuo_Interaction_id(void) { TYPE_ID(cuo_Interaction_PATH); }
 uint16_t cuo_IsContainer_id(void) { TYPE_ID(cuo_IsContainer_PATH); }
 uint16_t cuo_IsMulti_id(void) { TYPE_ID(cuo_IsMulti_PATH); }
@@ -139,6 +138,7 @@ uint16_t cuo_TopBarDragHandle_id(void) { TYPE_ID(cuo_TopBarDragHandle_PATH); }
 uint16_t cuo_TopBarFull_id(void) { TYPE_ID(cuo_TopBarFull_PATH); }
 uint16_t cuo_TradeWindow_id(void) { TYPE_ID(cuo_TradeWindow_PATH); }
 uint16_t cuo_UOButton_id(void) { TYPE_ID(cuo_UOButton_PATH); }
+uint16_t cuo_UiAnchorable_id(void) { TYPE_ID(cuo_UiAnchorable_PATH); }
 uint16_t cuo_UiContainsByBounds_id(void) { TYPE_ID(cuo_UiContainsByBounds_PATH); }
 uint16_t cuo_UiCustom_id(void) { TYPE_ID(cuo_UiCustom_PATH); }
 uint16_t cuo_UiHoverTint_id(void) { TYPE_ID(cuo_UiHoverTint_PATH); }

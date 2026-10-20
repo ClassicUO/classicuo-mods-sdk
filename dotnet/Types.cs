@@ -26,23 +26,6 @@ public partial struct Amount
     public int Value;
 }
 
-/// <remarks><c>ClassicUO.Ecs.AnchorKind</c> — crosses the boundary as a number.</remarks>
-public enum AnchorKind : byte
-{
-    Spell = 0,
-    Healthbar = 1,
-}
-
-/// <summary><c>cuo:ui/anchorable</c></summary>
-public partial struct Anchorable
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:ui/anchorable";
-
-    /// <summary>enum AnchorKind (0=Spell, 1=Healthbar)</summary>
-    public AnchorKind Kind;
-}
-
 /// <summary><c>cuo:ent/auto-opened-corpse</c>
 /// <para>Zero-size tag: no value crosses, only its presence.</para>
 /// </summary>
@@ -454,15 +437,6 @@ public enum FlexDirection : byte
     Column = 1,
 }
 
-/// <summary><c>cuo:ui/focused-input</c></summary>
-public sealed partial class FocusedInput
-{
-    /// <summary>The registry type-path this payload belongs to.</summary>
-    public const string Path = "cuo:ui/focused-input";
-
-    public ulong Entity;
-}
-
 /// <summary><c>cuo:game/context</c></summary>
 public partial struct GameContext
 {
@@ -664,6 +638,15 @@ public partial struct Hue
     public const string Path = "cuo:ent/hue";
 
     public ushort Value;
+}
+
+/// <summary><c>cuo:ui/focused-input</c></summary>
+public sealed partial class InputFocus
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/focused-input";
+
+    public ulong Entity;
 }
 
 /// <summary><c>cuo:ui/interaction</c></summary>
@@ -1573,13 +1556,6 @@ public partial struct ScrollPosition
     public float OffsetY;
 }
 
-/// <remarks><c>ClassicUO.Ecs.ScrollbarStyle</c> — crosses the boundary as a number.</remarks>
-public enum ScrollbarStyle : byte
-{
-    Uo = 0,
-    Flat = 1,
-}
-
 /// <summary><c>cuo:ent/server-flags</c></summary>
 public partial struct ServerFlags
 {
@@ -1992,7 +1968,7 @@ public partial struct TextInput
     public const string Path = "cuo:ui/text-input";
 }
 
-/// <summary>Nested payload type (<c>ClassicUO.Ecs.TextSpan</c>).</summary>
+/// <summary>Nested payload type (<c>TinyEcs.Bevy.UI.TextSpan</c>).</summary>
 public partial struct TextSpan
 {
     public int Start;
@@ -2136,6 +2112,15 @@ public enum UOCustomKind : byte
     WorldMap = 12,
 }
 
+/// <summary><c>cuo:ui/anchorable</c></summary>
+public partial struct UiAnchorable
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/anchorable";
+
+    public int Kind;
+}
+
 /// <summary><c>cuo:ui/contains-by-bounds</c>
 /// <para>Zero-size tag: no value crosses, only its presence.</para>
 /// </summary>
@@ -2277,8 +2262,15 @@ public partial struct UiScrollbar
     public const string Path = "cuo:ui/scrollbar";
 
     public float Width;
-    /// <summary>enum ScrollbarStyle (0=Uo, 1=Flat)</summary>
-    public ScrollbarStyle Style;
+    /// <summary>enum UiScrollbarStyle (0=Skinned, 1=Flat)</summary>
+    public UiScrollbarStyle Style;
+}
+
+/// <remarks><c>TinyEcs.Bevy.UI.UiScrollbarStyle</c> — crosses the boundary as a number.</remarks>
+public enum UiScrollbarStyle : byte
+{
+    Skinned = 0,
+    Flat = 1,
 }
 
 /// <summary><c>cuo:ui/surface</c></summary>
@@ -2404,7 +2396,6 @@ public static class TypePaths
     private static readonly System.Collections.Generic.Dictionary<System.Type, string> Map = new()
     {
         [typeof(Amount)] = "cuo:ent/amount",
-        [typeof(Anchorable)] = "cuo:ui/anchorable",
         [typeof(AutoOpenedCorpse)] = "cuo:ent/auto-opened-corpse",
         [typeof(BackgroundColor)] = "cuo:ui/bg-color",
         [typeof(BookWindow)] = "cuo:gump/book",
@@ -2434,7 +2425,6 @@ public static class TypePaths
         [typeof(EntityProperties)] = "cuo:ent/properties",
         [typeof(EquipmentSlots)] = "cuo:ent/equipment",
         [typeof(Facing)] = "cuo:ent/facing",
-        [typeof(FocusedInput)] = "cuo:ui/focused-input",
         [typeof(GameContext)] = "cuo:game/context",
         [typeof(GameScene)] = "cuo:scene/game",
         [typeof(GameSettings)] = "cuo:game/settings",
@@ -2450,6 +2440,7 @@ public static class TypePaths
         [typeof(HostHotkeys)] = "cuo:input/host-hotkeys",
         [typeof(HouseDesignWindow)] = "cuo:gump/house-design",
         [typeof(Hue)] = "cuo:ent/hue",
+        [typeof(InputFocus)] = "cuo:ui/focused-input",
         [typeof(Interaction)] = "cuo:ui/interaction",
         [typeof(IsContainer)] = "cuo:ent/is-container",
         [typeof(IsMulti)] = "cuo:ent/is-multi",
@@ -2538,6 +2529,7 @@ public static class TypePaths
         [typeof(TopBarFull)] = "cuo:ui/topbar-full",
         [typeof(TradeWindow)] = "cuo:gump/trade",
         [typeof(UOButton)] = "cuo:ui/button",
+        [typeof(UiAnchorable)] = "cuo:ui/anchorable",
         [typeof(UiContainsByBounds)] = "cuo:ui/contains-by-bounds",
         [typeof(UiCustom)] = "cuo:ui/custom",
         [typeof(UiHoverTint)] = "cuo:ui/hover-tint",

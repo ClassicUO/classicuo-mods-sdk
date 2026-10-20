@@ -50,7 +50,7 @@
         cuo_modding_types_item_move_result_t *: 56, \
         cuo_modding_types_stat_locks_t *: 57, \
         cuo_modding_types_local_target_result_event_t *: 58, \
-        cuo_modding_types_anchorable_t *: 59, \
+        cuo_modding_types_ui_anchorable_t *: 59, \
         cuo_modding_types_border_color_t *: 60, \
         cuo_modding_types_uo_button_t *: 61, \
         cuo_modding_types_computed_node_t *: 62, \

@@ -342,10 +342,10 @@ internal interface IComponentsImports {
 
         }
 
-        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Anchorable(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Anchorable v)
+        internal  unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder Anchorable(global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiAnchorable v)
         {
             var handle = this.Handle;
-            var result =  ComponentsImportsInterop.EntityBuilder.AnchorableWasmInterop.wasmImportAnchorable(handle, (int)v.kind);
+            var result =  ComponentsImportsInterop.EntityBuilder.AnchorableWasmInterop.wasmImportAnchorable(handle, v.kind);
             var resource = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.IComponentsImports.EntityBuilder.THandle(result));
             return resource;
 
@@ -2181,7 +2181,7 @@ internal interface IComponentsImports {
 
     }
 
-    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Anchorable> ColumnAnchorable(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
+    internal static unsafe global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiAnchorable> ColumnAnchorable(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, byte term)
     {
         var handle = q.Handle;
 
@@ -2189,12 +2189,12 @@ internal interface IComponentsImports {
         var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 4);
         ComponentsImportsInterop.ColumnAnchorableWasmInterop.wasmImportColumnAnchorable(handle, term, ptr);
 
-        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Anchorable>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
+        var array = new global::System.Collections.Generic.List<global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiAnchorable>(new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]);
         for (int index = 0; index < new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0]; ++index) {
-            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 1);
+            nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 4);
 
-            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Anchorable (
-            (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.AnchorKind)new global::System.Span<byte>((byte*)basePtr + 0, 1)[0]));
+            array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiAnchorable (
+            new global::System.Span<int>((void*)((byte*)basePtr + 0), 1)[0]));
         }
 
         if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
@@ -2204,10 +2204,10 @@ internal interface IComponentsImports {
 
     }
 
-    internal static unsafe void SetAnchorable(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.Anchorable v)
+    internal static unsafe void SetAnchorable(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Query q, ulong e, byte term, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiAnchorable v)
     {
         var handle = q.Handle;
-        ComponentsImportsInterop.SetAnchorableWasmInterop.wasmImportSetAnchorable(handle, unchecked((long)(e)), term, (int)v.kind);
+        ComponentsImportsInterop.SetAnchorableWasmInterop.wasmImportSetAnchorable(handle, unchecked((long)(e)), term, v.kind);
 
     }
 
@@ -2541,7 +2541,7 @@ internal interface IComponentsImports {
             nint basePtr = new global::System.Span<nint>((void*)((byte*)ptr + 0), 1)[0] + (index * 8);
 
             array.Add(new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiScrollbar (
-            new global::System.Span<float>((void*)((byte*)basePtr + 0), 1)[0], (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.ScrollbarStyle)new global::System.Span<byte>((byte*)basePtr + 4, 1)[0]));
+            new global::System.Span<float>((void*)((byte*)basePtr + 0), 1)[0], (global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.UiScrollbarStyle)new global::System.Span<byte>((byte*)basePtr + 4, 1)[0]));
         }
 
         if (new global::System.Span<int>((void*)((byte*)ptr + 4), 1)[0] > 0) {
@@ -4944,7 +4944,7 @@ internal interface IComponentsImports {
 
     }
 
-    internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.FocusedInput? GetFocusedInput(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
+    internal static unsafe global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.InputFocus? GetFocusedInput(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r)
     {
         var handle = r.Handle;
 
@@ -4952,7 +4952,7 @@ internal interface IComponentsImports {
         var ptr = (nint)MemoryHelper.AlignStackPtr(retArea, 8);
         ComponentsImportsInterop.GetFocusedInputWasmInterop.wasmImportGetFocusedInput(handle, ptr);
 
-        global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.FocusedInput? lifted;
+        global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.InputFocus? lifted;
 
         switch (new global::System.Span<byte>((byte*)ptr + 0, 1)[0]) {
             case 0: {
@@ -4962,7 +4962,7 @@ internal interface IComponentsImports {
 
             case 1: {
 
-                lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.FocusedInput (
+                lifted = new global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.InputFocus (
                 unchecked((ulong)(new global::System.Span<long>((void*)((byte*)ptr + 8), 1)[0])));
                 break;
             }
@@ -4973,14 +4973,14 @@ internal interface IComponentsImports {
 
     }
 
-    internal static unsafe void PutFocusedInput(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.FocusedInput v)
+    internal static unsafe void PutFocusedInput(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Res r, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.InputFocus v)
     {
         var handle = r.Handle;
         ComponentsImportsInterop.PutFocusedInputWasmInterop.wasmImportPutFocusedInput(handle, unchecked((long)(v.entity)));
 
     }
 
-    internal static unsafe void SetResourceFocusedInput(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.FocusedInput v)
+    internal static unsafe void SetResourceFocusedInput(global::ModWorld.wit.Imports.tinyecs.modding.v0_1_0.IEcsImports.Commands c, global::ModWorld.wit.Imports.cuo.modding.v0_1_0.ITypesImports.InputFocus v)
     {
         var handle = c.Handle;
         ComponentsImportsInterop.SetResourceFocusedInputWasmInterop.wasmImportSetResourceFocusedInput(handle, unchecked((long)(v.entity)));

@@ -71,7 +71,7 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.StatLocks) ? new CodecStatLocks() :
             typeof(T) == typeof(global::CuoModSdk.Types.LocalTargetResultEvent) ? new CodecLocalResult() :
             typeof(T) == typeof(global::CuoModSdk.Types.TargetingState) ? new CodecTargetState() :
-            typeof(T) == typeof(global::CuoModSdk.Types.Anchorable) ? new CodecAnchorable() :
+            typeof(T) == typeof(global::CuoModSdk.Types.UiAnchorable) ? new CodecAnchorable() :
             typeof(T) == typeof(global::CuoModSdk.Types.BorderColor) ? new CodecBorderColor() :
             typeof(T) == typeof(global::CuoModSdk.Types.UOButton) ? new CodecButton() :
             typeof(T) == typeof(global::CuoModSdk.Types.ComputedNode) ? new CodecComputed() :
@@ -123,7 +123,7 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorsInfoEvent) ? new CodecLoginErrorInfo() :
             typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new CodecServerList() :
             typeof(T) == typeof(global::CuoModSdk.Types.ClipboardSet) ? new CodecClipboardSet() :
-            typeof(T) == typeof(global::CuoModSdk.Types.FocusedInput) ? new CodecFocusedInput() :
+            typeof(T) == typeof(global::CuoModSdk.Types.InputFocus) ? new CodecFocusedInput() :
             typeof(T) == typeof(global::CuoModSdk.Types.MaskedText) ? new CodecMaskedText() :
             typeof(T) == typeof(global::CuoModSdk.Types.TextClipboardAction) ? new CodecTextClipboardAction() :
             typeof(T) == typeof(global::CuoModSdk.Types.TextCompletion) ? new CodecTextCompletion() :
@@ -286,7 +286,7 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.Player) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.StatLocks) ? new TypedTrigger("stat-locks", 3, 1, [new TypedFlat("int", 0, "byte"), new TypedFlat("int", 1, "byte"), new TypedFlat("int", 2, "byte")], new CodecStatLocks()) :
         typeof(T) == typeof(global::CuoModSdk.Types.LocalTargetResultEvent) ? new TypedTrigger("local-target-result-event", 24, 8, [new TypedFlat("long", 0, "ulong"), new TypedFlat("int", 8, "uint"), new TypedFlat("int", 12, "ushort"), new TypedFlat("int", 14, "ushort"), new TypedFlat("int", 16, "ushort"), new TypedFlat("int", 18, "sbyte"), new TypedFlat("int", 19, "byte")], new CodecLocalResult()) :
-        typeof(T) == typeof(global::CuoModSdk.Types.Anchorable) ? new TypedTrigger("anchorable", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecAnchorable()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.UiAnchorable) ? new TypedTrigger("ui-anchorable", 4, 4, [new TypedFlat("int", 0, "int")], new CodecAnchorable()) :
         typeof(T) == typeof(global::CuoModSdk.Types.BorderColor) ? new TypedTrigger("border-color", 16, 4, [new TypedFlat("float", 0, "float"), new TypedFlat("float", 4, "float"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float")], new CodecBorderColor()) :
         typeof(T) == typeof(global::CuoModSdk.Types.UOButton) ? new TypedTrigger("uo-button", 6, 2, [new TypedFlat("int", 0, "ushort"), new TypedFlat("int", 2, "ushort"), new TypedFlat("int", 4, "ushort")], new CodecButton()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ModClick) ? new TypedTrigger(null, 0, 1, [], null) :
@@ -2634,23 +2634,23 @@ internal static unsafe class TypedGen
         && *(a + 34) == *(b + 34)
         && (*(a + 35) != 0) == (*(b + 35) != 0);
 
-    // anchorable: 1 bytes, align 1
-    internal static global::CuoModSdk.Types.Anchorable LiftAnchorable(byte* p)
+    // ui-anchorable: 4 bytes, align 4
+    internal static global::CuoModSdk.Types.UiAnchorable LiftUiAnchorable(byte* p)
     {
-        var v = new global::CuoModSdk.Types.Anchorable
+        var v = new global::CuoModSdk.Types.UiAnchorable
         {
-            Kind = (global::CuoModSdk.Types.AnchorKind)(*(byte*)(p + 0)),
+            Kind = *(int*)(p + 0),
         };
         return v;
     }
 
-    internal static void LowerAnchorable(in global::CuoModSdk.Types.Anchorable v, byte* p)
+    internal static void LowerUiAnchorable(in global::CuoModSdk.Types.UiAnchorable v, byte* p)
     {
-        *(byte*)(p + 0) = (byte)v.Kind;
+        *(int*)(p + 0) = v.Kind;
     }
 
-    internal static bool EqAnchorable(byte* a, byte* b) =>
-        *(a + 0) == *(b + 0);
+    internal static bool EqUiAnchorable(byte* a, byte* b) =>
+        *(uint*)(a + 0) == *(uint*)(b + 0);
 
     // border-color: 16 bytes, align 4
     internal static global::CuoModSdk.Types.BorderColor LiftBorderColor(byte* p)
@@ -3008,7 +3008,7 @@ internal static unsafe class TypedGen
         var v = new global::CuoModSdk.Types.UiScrollbar
         {
             Width = *(float*)(p + 0),
-            Style = (global::CuoModSdk.Types.ScrollbarStyle)(*(byte*)(p + 4)),
+            Style = (global::CuoModSdk.Types.UiScrollbarStyle)(*(byte*)(p + 4)),
         };
         return v;
     }
@@ -4471,22 +4471,22 @@ internal static unsafe class TypedGen
         *(uint*)(a + 0) == *(uint*)(b + 0)
         && TypedStrings.SameRecord(a + 4, b + 4);
 
-    // focused-input: 8 bytes, align 8
-    internal static global::CuoModSdk.Types.FocusedInput LiftFocusedInput(byte* p)
+    // input-focus: 8 bytes, align 8
+    internal static global::CuoModSdk.Types.InputFocus LiftInputFocus(byte* p)
     {
-        var v = new global::CuoModSdk.Types.FocusedInput
+        var v = new global::CuoModSdk.Types.InputFocus
         {
             Entity = *(ulong*)(p + 0),
         };
         return v;
     }
 
-    internal static void LowerFocusedInput(in global::CuoModSdk.Types.FocusedInput v, byte* p)
+    internal static void LowerInputFocus(in global::CuoModSdk.Types.InputFocus v, byte* p)
     {
         *(ulong*)(p + 0) = v.Entity;
     }
 
-    internal static bool EqFocusedInput(byte* a, byte* b) =>
+    internal static bool EqInputFocus(byte* a, byte* b) =>
         *(ulong*)(a + 0) == *(ulong*)(b + 0);
 
     // masked-text: 12 bytes, align 4
@@ -8509,27 +8509,27 @@ internal sealed unsafe class CodecTargetState : TypedCodec<global::CuoModSdk.Typ
     }
 }
 
-/// <summary><c>cuo:ui/anchorable</c> (anchorable).</summary>
-internal sealed unsafe class CodecAnchorable : TypedCodec<global::CuoModSdk.Types.Anchorable>
+/// <summary><c>cuo:ui/anchorable</c> (ui-anchorable).</summary>
+internal sealed unsafe class CodecAnchorable : TypedCodec<global::CuoModSdk.Types.UiAnchorable>
 {
-    internal override int Size => 1;
+    internal override int Size => 4;
     internal override string Path => "cuo:ui/anchorable";
-    internal override global::CuoModSdk.Types.Anchorable Lift(byte* p) => TypedGen.LiftAnchorable(p);
-    protected override void Lower(in global::CuoModSdk.Types.Anchorable v, byte* p) => TypedGen.LowerAnchorable(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.Anchorable now, byte* original)
+    internal override global::CuoModSdk.Types.UiAnchorable Lift(byte* p) => TypedGen.LiftUiAnchorable(p);
+    protected override void Lower(in global::CuoModSdk.Types.UiAnchorable v, byte* p) => TypedGen.LowerUiAnchorable(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.UiAnchorable now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
-        return !TypedGen.EqAnchorable((byte*)mine, original);
+        return !TypedGen.EqUiAnchorable((byte*)mine, original);
     }
     internal override int Build(int b, byte* rec)
     {
-        return TypedImports.B_Anchorable(b, *(rec + 0));
+        return TypedImports.B_Anchorable(b, *(int*)(rec + 0));
     }
     internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Anchorable(q, t, ret);
     internal override void Set(int q, ulong e, byte t, byte* rec)
     {
-        TypedImports.Set_Anchorable(q, (long)e, t, *(rec + 0));
+        TypedImports.Set_Anchorable(q, (long)e, t, *(int*)(rec + 0));
     }
 }
 
@@ -9958,18 +9958,18 @@ internal sealed unsafe class CodecClipboardSet : TypedCodec<global::CuoModSdk.Ty
     }
 }
 
-/// <summary><c>cuo:ui/focused-input</c> (focused-input).</summary>
-internal sealed unsafe class CodecFocusedInput : TypedCodec<global::CuoModSdk.Types.FocusedInput>
+/// <summary><c>cuo:ui/focused-input</c> (input-focus).</summary>
+internal sealed unsafe class CodecFocusedInput : TypedCodec<global::CuoModSdk.Types.InputFocus>
 {
     internal override int Size => 8;
     internal override string Path => "cuo:ui/focused-input";
-    internal override global::CuoModSdk.Types.FocusedInput Lift(byte* p) => TypedGen.LiftFocusedInput(p);
-    protected override void Lower(in global::CuoModSdk.Types.FocusedInput v, byte* p) => TypedGen.LowerFocusedInput(v, p);
-    internal override bool Differs(in global::CuoModSdk.Types.FocusedInput now, byte* original)
+    internal override global::CuoModSdk.Types.InputFocus Lift(byte* p) => TypedGen.LiftInputFocus(p);
+    protected override void Lower(in global::CuoModSdk.Types.InputFocus v, byte* p) => TypedGen.LowerInputFocus(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.InputFocus now, byte* original)
     {
         var mine = stackalloc ulong[1];
         LowerInto(now, (byte*)mine);
-        return !TypedGen.EqFocusedInput((byte*)mine, original);
+        return !TypedGen.EqInputFocus((byte*)mine, original);
     }
     internal override bool GetRecord(int res, byte* rec)
     {

@@ -13,7 +13,6 @@ extern "C" {
 #endif
 
 typedef struct cuo_Amount cuo_Amount;
-typedef struct cuo_Anchorable cuo_Anchorable;
 typedef struct cuo_AutoOpenedCorpse cuo_AutoOpenedCorpse;
 typedef struct cuo_BackgroundColor cuo_BackgroundColor;
 typedef struct cuo_BookWindow cuo_BookWindow;
@@ -47,7 +46,6 @@ typedef struct cuo_EntityName cuo_EntityName;
 typedef struct cuo_EntityProperties cuo_EntityProperties;
 typedef struct cuo_EquipmentSlots cuo_EquipmentSlots;
 typedef struct cuo_Facing cuo_Facing;
-typedef struct cuo_FocusedInput cuo_FocusedInput;
 typedef struct cuo_GameContext cuo_GameContext;
 typedef struct cuo_GameScene cuo_GameScene;
 typedef struct cuo_GameSettings cuo_GameSettings;
@@ -64,6 +62,7 @@ typedef struct cuo_HostHotkey cuo_HostHotkey;
 typedef struct cuo_HostHotkeys cuo_HostHotkeys;
 typedef struct cuo_HouseDesignWindow cuo_HouseDesignWindow;
 typedef struct cuo_Hue cuo_Hue;
+typedef struct cuo_InputFocus cuo_InputFocus;
 typedef struct cuo_Interaction cuo_Interaction;
 typedef struct cuo_IsContainer cuo_IsContainer;
 typedef struct cuo_IsMulti cuo_IsMulti;
@@ -169,6 +168,7 @@ typedef struct cuo_TopBarFull cuo_TopBarFull;
 typedef struct cuo_TownInfo cuo_TownInfo;
 typedef struct cuo_TradeWindow cuo_TradeWindow;
 typedef struct cuo_UOButton cuo_UOButton;
+typedef struct cuo_UiAnchorable cuo_UiAnchorable;
 typedef struct cuo_UiContainsByBounds cuo_UiContainsByBounds;
 typedef struct cuo_UiCustom cuo_UiCustom;
 typedef struct cuo_UiHoverTint cuo_UiHoverTint;
@@ -200,11 +200,6 @@ typedef uint8_t cuo_AlignItems;
 #define CUO_ALIGN_ITEMS_START ((cuo_AlignItems)0)
 #define CUO_ALIGN_ITEMS_CENTER ((cuo_AlignItems)1)
 #define CUO_ALIGN_ITEMS_END ((cuo_AlignItems)2)
-
-/* `ClassicUO.Ecs.AnchorKind` */
-typedef uint8_t cuo_AnchorKind;
-#define CUO_ANCHOR_KIND_SPELL ((cuo_AnchorKind)0)
-#define CUO_ANCHOR_KIND_HEALTHBAR ((cuo_AnchorKind)1)
 
 /* `ClassicUO.Ecs.Modding.ChatKind` */
 typedef uint8_t cuo_ChatKind;
@@ -380,11 +375,6 @@ typedef uint8_t cuo_RaceType;
 #define CUO_RACE_TYPE_ELF ((cuo_RaceType)2)
 #define CUO_RACE_TYPE_GARGOYLE ((cuo_RaceType)3)
 
-/* `ClassicUO.Ecs.ScrollbarStyle` */
-typedef uint8_t cuo_ScrollbarStyle;
-#define CUO_SCROLLBAR_STYLE_UO ((cuo_ScrollbarStyle)0)
-#define CUO_SCROLLBAR_STYLE_FLAT ((cuo_ScrollbarStyle)1)
-
 /* `ClassicUO.Ecs.SpellBookType` */
 typedef uint8_t cuo_SpellBookType;
 #define CUO_SPELL_BOOK_TYPE_MAGERY ((cuo_SpellBookType)0)
@@ -438,6 +428,11 @@ typedef uint8_t cuo_UOCustomKind;
 #define CUO_UO_CUSTOM_KIND_DYN_TEXTURE ((cuo_UOCustomKind)11)
 #define CUO_UO_CUSTOM_KIND_WORLD_MAP ((cuo_UOCustomKind)12)
 
+/* `TinyEcs.Bevy.UI.UiScrollbarStyle` */
+typedef uint8_t cuo_UiScrollbarStyle;
+#define CUO_UI_SCROLLBAR_STYLE_SKINNED ((cuo_UiScrollbarStyle)0)
+#define CUO_UI_SCROLLBAR_STYLE_FLAT ((cuo_UiScrollbarStyle)1)
+
 /* `TinyEcs.Bevy.UI.ValType` */
 typedef uint8_t cuo_ValType;
 #define CUO_VAL_TYPE_AUTO ((cuo_ValType)0)
@@ -475,13 +470,6 @@ struct cuo_Amount {
 };
 #define cuo_Amount_PATH CUO_PATH_ENT_AMOUNT
 uint16_t cuo_Amount_id(void);
-
-/* `cuo:ui/anchorable` */
-struct cuo_Anchorable {
-    uint8_t kind; /* enum AnchorKind (0=Spell, 1=Healthbar) */
-};
-#define cuo_Anchorable_PATH CUO_PATH_UI_ANCHORABLE
-uint16_t cuo_Anchorable_id(void);
 
 /* `cuo:ent/auto-opened-corpse` */
 /* Zero-size tag: crosses as no value (the typed functions take none). */
@@ -780,13 +768,6 @@ struct cuo_Facing {
 #define cuo_Facing_PATH CUO_PATH_ENT_FACING
 uint16_t cuo_Facing_id(void);
 
-/* `cuo:ui/focused-input` */
-struct cuo_FocusedInput {
-    uint64_t entity;
-};
-#define cuo_FocusedInput_PATH CUO_PATH_UI_FOCUSED_INPUT
-uint16_t cuo_FocusedInput_id(void);
-
 /* `cuo:game/context` */
 struct cuo_GameContext {
     uint32_t player_serial;
@@ -946,6 +927,13 @@ struct cuo_Hue {
 };
 #define cuo_Hue_PATH CUO_PATH_ENT_HUE
 uint16_t cuo_Hue_id(void);
+
+/* `cuo:ui/focused-input` */
+struct cuo_InputFocus {
+    uint64_t entity;
+};
+#define cuo_InputFocus_PATH CUO_PATH_UI_FOCUSED_INPUT
+uint16_t cuo_InputFocus_id(void);
 
 /* `cuo:ui/interaction` */
 struct cuo_Interaction {
@@ -1926,7 +1914,7 @@ struct cuo_TextInput {
 #define cuo_TextInput_PATH CUO_PATH_UI_TEXT_INPUT
 uint16_t cuo_TextInput_id(void);
 
-/* Nested payload type (`ClassicUO.Ecs.TextSpan`). */
+/* Nested payload type (`TinyEcs.Bevy.UI.TextSpan`). */
 struct cuo_TextSpan {
     int32_t start;
     int32_t length;
@@ -2025,6 +2013,13 @@ struct cuo_UOButton {
 };
 #define cuo_UOButton_PATH CUO_PATH_UI_BUTTON
 uint16_t cuo_UOButton_id(void);
+
+/* `cuo:ui/anchorable` */
+struct cuo_UiAnchorable {
+    int32_t kind;
+};
+#define cuo_UiAnchorable_PATH CUO_PATH_UI_ANCHORABLE
+uint16_t cuo_UiAnchorable_id(void);
 
 /* `cuo:ui/contains-by-bounds` */
 /* Zero-size tag: crosses as no value (the typed functions take none). */
@@ -2136,7 +2131,7 @@ uint16_t cuo_UiResizable_id(void);
 /* `cuo:ui/scrollbar` */
 struct cuo_UiScrollbar {
     float width;
-    uint8_t style; /* enum ScrollbarStyle (0=Uo, 1=Flat) */
+    uint8_t style; /* enum UiScrollbarStyle (0=Skinned, 1=Flat) */
 };
 #define cuo_UiScrollbar_PATH CUO_PATH_UI_SCROLLBAR
 uint16_t cuo_UiScrollbar_id(void);

@@ -349,10 +349,10 @@ bool cuo_TargetingState_res(const cuo_input *in, cuo_param p, cuo_TargetingState
 bool cuo_TargetingState_obs_res(const cuo_obs *ev, cuo_param p, cuo_TargetingState *out);
 
 /* `cuo:ui/anchorable` */
-cuo_comp cuo_Anchorable_comp(const cuo_Anchorable *v);
-const cuo_Anchorable *cuo_Anchorable_column(cuo_query q, size_t term);
-void cuo_Anchorable_set(cuo_query q, cuo_entity e, size_t term, const cuo_Anchorable *v);
-const cuo_Anchorable *cuo_Anchorable_obs_value(const cuo_obs *ev);
+cuo_comp cuo_UiAnchorable_comp(const cuo_UiAnchorable *v);
+const cuo_UiAnchorable *cuo_UiAnchorable_column(cuo_query q, size_t term);
+void cuo_UiAnchorable_set(cuo_query q, cuo_entity e, size_t term, const cuo_UiAnchorable *v);
+const cuo_UiAnchorable *cuo_UiAnchorable_obs_value(const cuo_obs *ev);
 
 /* `cuo:ui/border-color` */
 cuo_comp cuo_BorderColor_comp(const cuo_BorderColor *v);
@@ -721,11 +721,11 @@ void cuo_ClipboardSet_obs_put(const cuo_obs *ev, cuo_param p, const cuo_Clipboar
 void cuo_ClipboardSet_set_resource(cuo_cmds *c, const cuo_ClipboardSet *v);
 
 /* `cuo:ui/focused-input` */
-bool cuo_FocusedInput_res(const cuo_input *in, cuo_param p, cuo_FocusedInput *out);
-bool cuo_FocusedInput_obs_res(const cuo_obs *ev, cuo_param p, cuo_FocusedInput *out);
-void cuo_FocusedInput_put(const cuo_input *in, cuo_param p, const cuo_FocusedInput *v);
-void cuo_FocusedInput_obs_put(const cuo_obs *ev, cuo_param p, const cuo_FocusedInput *v);
-void cuo_FocusedInput_set_resource(cuo_cmds *c, const cuo_FocusedInput *v);
+bool cuo_InputFocus_res(const cuo_input *in, cuo_param p, cuo_InputFocus *out);
+bool cuo_InputFocus_obs_res(const cuo_obs *ev, cuo_param p, cuo_InputFocus *out);
+void cuo_InputFocus_put(const cuo_input *in, cuo_param p, const cuo_InputFocus *v);
+void cuo_InputFocus_obs_put(const cuo_obs *ev, cuo_param p, const cuo_InputFocus *v);
+void cuo_InputFocus_set_resource(cuo_cmds *c, const cuo_InputFocus *v);
 
 /* `cuo:ui/masked-text` */
 cuo_comp cuo_MaskedText_comp(const cuo_MaskedText *v);
