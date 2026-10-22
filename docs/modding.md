@@ -113,6 +113,10 @@ Things that are not world data are plain functions, in four groups:
 - **`host`** — `log`, `measure_text`, `resolve_serial`, `storage_get` /
   `storage_set` (global or per character; `storage::load::<T>(scope)` /
   `storage::save(scope, &value)` do the JSON for you).
+- **Files** — the mod's own folder (`Data/Mods/<mod>/`) is its filesystem, read-write
+  at `/`: plain `std::fs` / `System.IO` with relative paths (`std::fs::write("cache.bin",
+  ..)`). Nothing outside it is reachable. In the browser the folder is the OPFS directory
+  `mods/<mod>/`. Don't overwrite `mod.json` / your wasm: an update replaces them.
 
 ```rust,ignore
 fn setup(app: &mut App) {
