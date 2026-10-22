@@ -206,12 +206,52 @@ interface assets {
     map-land: func(%map: u8, x: u16, y: u16) -> option<land-cell>;
     map-statics: func(%map: u8, x: u16, y: u16) -> list<static-cell>;
 
+    /// One 8x8 map block's raw file bytes, as the client currently sees them
+    /// (map patches included): `land` = the 192 cell bytes (64 x tile u16 LE + z s8),
+    /// `statics` = 7-byte entries (graphic u16, x u8, y u8, z s8, hue u16) in file
+    /// order. `block` = block-x * map-height-in-blocks + block-y.
+    record block-bytes { land: list<u8>, statics: list<u8> }
+    map-block: func(%map: u8, block: u32) -> option<block-bytes>;
+
     /// The pieces of a multi (house, boat), offsets relative to its centre.
     record multi-part { graphic: u16, x: s16, y: s16, z: s16 }
     multi: func(id: u16) -> list<multi-part>;
 
     record skill { index: u16, name: string, has-action: bool }
     skills: func() -> list<skill>;
+
+    // ── overrides ──
+    // Replace an asset in memory: every reader sees it (world, UI, other mods). Applied
+    // from the next frame (queued until the assets are loaded); lost on exit; reverted
+    // when the mod is disabled or reloaded. Only ids the files have; the last writer wins,
+    // and a reset only undoes your own override.
+
+    /// Cliloc text, `~n_ARG~` slots included. Text already on screen keeps the old one.
+    set-cliloc: func(id: u32, text: string);
+    reset-cliloc: func(id: u32);
+
+    /// Tiledata rows. The world reloads around the player.
+    set-static-tile: func(graphic: u16, info: static-info);
+    reset-static-tile: func(graphic: u16);
+    set-land-tile: func(id: u16, info: land-info);
+    reset-land-tile: func(id: u16);
+
+    /// A map block's land: 192 cell bytes (the `map-block` layout). The world,
+    /// pathfinder and radar redraw from it.
+    set-map-land: func(%map: u8, block: u32, land: list<u8>);
+    reset-map-land: func(%map: u8, block: u32);
+    /// A map block's statics: 7-byte entries (the `map-block` layout), empty = none.
+    set-map-statics: func(%map: u8, block: u32, statics: list<u8>);
+    reset-map-statics: func(%map: u8, block: u32);
+
+    /// A hue's 32 colours, 0xAARRGGBB dark to light (stored 15-bit; alpha ignored).
+    set-hue: func(hue: u16, ramp: list<u32>);
+    reset-hue: func(hue: u16);
+
+    /// An image, in the `image-pixels` layout (rgba, row-major). Land is 44x44, a texmap
+    /// 64x64 or 128x128, art and gumps up to 1024x1024. Lights can't be replaced.
+    set-image: func(kind: image-kind, id: u32, img: image);
+    reset-image: func(kind: image-kind, id: u32);
 }
 
 /// What the player can do. Each call goes through the client's own code path (the
