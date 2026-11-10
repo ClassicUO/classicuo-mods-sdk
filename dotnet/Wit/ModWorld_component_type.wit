@@ -1,4 +1,4 @@
-package cuo:modding@0.1.0;
+package cuo:modding@0.2.0;
 
 interface host {
   use tinyecs:modding/ecs@0.1.0.{entity};
@@ -6,6 +6,29 @@ interface host {
   enum scope {
     global,
     character,
+  }
+
+  record screen-point {
+    x: f32,
+    y: f32,
+  }
+
+  record screen-rect {
+    x: f32,
+    y: f32,
+    width: f32,
+    height: f32,
+  }
+
+  variant page-change {
+    text(string),
+    add-class(string),
+    remove-class(string),
+    style(tuple<string, string>),
+    clear-style(string),
+    attr(tuple<string, string>),
+    remove-attr(string),
+    html(string),
   }
 
   log: func(message: string);
@@ -17,6 +40,36 @@ interface host {
   storage-get: func(scope: scope) -> string;
 
   storage-set: func(scope: scope, value: string);
+
+  game-viewport: func() -> option<screen-rect>;
+
+  world-to-screen: func(x: u16, y: u16, z: s8) -> option<screen-point>;
+
+  entity-screen-position: func(e: entity) -> option<screen-point>;
+
+  page-open: func(name: string, html: string, css: string) -> option<entity>;
+
+  page-spawn: func(name: string, html: string, css: string, x: s32, y: s32) -> option<entity>;
+
+  page-edit: func(page: entity, id: string, change: page-change);
+
+  page-value: func(page: entity, id: string) -> option<string>;
+
+  page-clicks: func(page: entity) -> list<string>;
+
+  page-is-open: func(page: entity) -> bool;
+
+  page-close: func(page: entity);
+
+  page-element: func(page: entity, id: string) -> option<entity>;
+
+  page-clone: func(page: entity, container: string, template: string) -> option<entity>;
+
+  page-clear: func(page: entity, container: string);
+
+  page-part: func(page: entity, element: entity, part: string) -> option<entity>;
+
+  page-edit-element: func(page: entity, element: entity, change: page-change);
 }
 
 interface types {
@@ -122,6 +175,8 @@ interface types {
   enum display {
     flex,
     none,
+    block,
+    grid,
   }
 
   enum position-type {
@@ -138,18 +193,30 @@ interface types {
   enum flex-direction {
     row,
     column,
+    row-reverse,
+    column-reverse,
   }
 
   enum justify-content {
     start,
     center,
     end,
+    space-between,
+    space-around,
+    space-evenly,
+    logical-start,
+    logical-end,
+    stretch,
   }
 
   enum align-items {
     start,
     center,
     end,
+    stretch,
+    baseline,
+    logical-start,
+    logical-end,
   }
 
   enum val-type {
@@ -169,6 +236,58 @@ interface types {
     right: val,
     top: val,
     bottom: val,
+  }
+
+  enum flex-wrap {
+    no-wrap,
+    wrap,
+    wrap-reverse,
+  }
+
+  enum align-self {
+    auto,
+    start,
+    center,
+    end,
+    stretch,
+    baseline,
+    logical-start,
+    logical-end,
+  }
+
+  enum box-sizing {
+    border-box,
+    content-box,
+  }
+
+  enum align-content {
+    start,
+    center,
+    end,
+    stretch,
+    space-between,
+    space-around,
+    space-evenly,
+    logical-start,
+    logical-end,
+  }
+
+  enum float {
+    none,
+    left,
+    right,
+  }
+
+  enum clear {
+    none,
+    left,
+    right,
+    both,
+  }
+
+  enum ui-direction {
+    ltr,
+    rtl,
   }
 
   record node {
@@ -192,6 +311,26 @@ interface types {
     border: ui-rect,
     gap: val,
     aspect-ratio: f32,
+    margin: ui-rect,
+    flex-grow: option<f32>,
+    flex-shrink: option<f32>,
+    flex-basis: val,
+    flex-wrap: flex-wrap,
+    align-self: align-self,
+    box-sizing: box-sizing,
+    row-gap: option<val>,
+    column-gap: option<val>,
+    align-content: option<align-content>,
+    justify-items: option<align-items>,
+    justify-self: align-self,
+    overflow-x: option<overflow>,
+    overflow-y: option<overflow>,
+    scrollbar-width: f32,
+    relative-insets: bool,
+    border-in-layout: bool,
+    float: float,
+    clear: clear,
+    direction: ui-direction,
   }
 
   record text {
@@ -742,7 +881,7 @@ interface types {
   record computed-node {
     size: vector2,
     position: vector2,
-    clay-id: u32,
+    layout-id: u32,
     paint-order: s32,
   }
 
@@ -1215,6 +1354,103 @@ interface types {
     entity: u64,
   }
 
+  record grid-placement {
+    column-start: s16,
+    column-span: u16,
+    row-start: s16,
+    row-span: u16,
+    column-end: s16,
+    row-end: s16,
+  }
+
+  record grid-placement-names {
+    column-start: string,
+    column-end: string,
+    row-start: string,
+    row-end: string,
+  }
+
+  enum grid-track-kind {
+    auto,
+    px,
+    percent,
+    fr,
+    min-content,
+    max-content,
+    min-max,
+    fit-content,
+  }
+
+  enum grid-breadth-kind {
+    auto,
+    px,
+    percent,
+    fr,
+    min-content,
+    max-content,
+  }
+
+  record grid-breadth {
+    kind: grid-breadth-kind,
+    value: f32,
+  }
+
+  record grid-track {
+    kind: grid-track-kind,
+    value: f32,
+    min: grid-breadth,
+    max: grid-breadth,
+    fit-limit: val,
+  }
+
+  enum grid-repeat-kind {
+    count,
+    auto-fill,
+    auto-fit,
+  }
+
+  record grid-line-names {
+    names: list<string>,
+  }
+
+  record grid-repeat {
+    kind: grid-repeat-kind,
+    count: u16,
+    tracks: list<grid-track>,
+    line-names: list<grid-line-names>,
+  }
+
+  record grid-template-track {
+    track: grid-track,
+    repeat: option<grid-repeat>,
+  }
+
+  enum grid-auto-flow {
+    row,
+    column,
+    row-dense,
+    column-dense,
+  }
+
+  record grid-area {
+    name: string,
+    row-start: u16,
+    row-end: u16,
+    column-start: u16,
+    column-end: u16,
+  }
+
+  record grid-template {
+    columns: list<grid-template-track>,
+    rows: list<grid-template-track>,
+    auto-rows: list<grid-track>,
+    auto-columns: list<grid-track>,
+    auto-flow: grid-auto-flow,
+    areas: list<grid-area>,
+    column-names: list<grid-line-names>,
+    row-names: list<grid-line-names>,
+  }
+
   record masked-text {
     value: string,
     mask-char: char,
@@ -1249,6 +1485,10 @@ interface types {
     %map: s32,
     color: color,
     name-hue: u16,
+  }
+
+  record world-map-self-label {
+    name: string,
   }
 }
 
@@ -1316,6 +1556,32 @@ interface assets {
     hue: u16,
   }
 
+  record block-bytes {
+    land: list<u8>,
+    statics: list<u8>,
+  }
+
+  record map-area {
+    x: u16,
+    y: u16,
+    width: u16,
+    height: u16,
+  }
+
+  record land-area {
+    area: map-area,
+    graphics: list<u16>,
+    z: list<s8>,
+  }
+
+  record placed-static {
+    x: u16,
+    y: u16,
+    z: s8,
+    graphic: u16,
+    hue: u16,
+  }
+
   record multi-part {
     graphic: u16,
     x: s16,
@@ -1349,13 +1615,55 @@ interface assets {
 
   map-size: func(%map: u8) -> option<size>;
 
+  map-load: func(%map: u8) -> option<size>;
+
   map-land: func(%map: u8, x: u16, y: u16) -> option<land-cell>;
 
   map-statics: func(%map: u8, x: u16, y: u16) -> list<static-cell>;
 
+  map-block: func(%map: u8, block: u32) -> option<block-bytes>;
+
+  map-land-area: func(%map: u8, area: map-area) -> option<land-area>;
+
+  map-statics-area: func(%map: u8, area: map-area) -> list<placed-static>;
+
+  land-radar-color: func(id: u16) -> option<u32>;
+
+  static-radar-color: func(graphic: u16, hue: u16) -> option<u32>;
+
+  map-revision: func() -> u32;
+
   multi: func(id: u16) -> list<multi-part>;
 
   skills: func() -> list<skill>;
+
+  set-cliloc: func(id: u32, text: string);
+
+  reset-cliloc: func(id: u32);
+
+  set-static-tile: func(graphic: u16, info: static-info);
+
+  reset-static-tile: func(graphic: u16);
+
+  set-land-tile: func(id: u16, info: land-info);
+
+  reset-land-tile: func(id: u16);
+
+  set-map-land: func(%map: u8, block: u32, land: list<u8>);
+
+  reset-map-land: func(%map: u8, block: u32);
+
+  set-map-statics: func(%map: u8, block: u32, statics: list<u8>);
+
+  reset-map-statics: func(%map: u8, block: u32);
+
+  set-hue: func(hue: u16, ramp: list<u32>);
+
+  reset-hue: func(hue: u16);
+
+  set-image: func(kind: image-kind, id: u32, img: image);
+
+  reset-image: func(kind: image-kind, id: u32);
 }
 
 interface actions {
@@ -1597,7 +1905,7 @@ interface legacy-plugins {
 
 interface components {
   use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity};
-  use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, ui-anchorable, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, server-selection-info-event, clipboard-set, input-focus, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial, world-map-marker};
+  use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, ui-anchorable, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, server-selection-info-event, clipboard-set, input-focus, grid-placement, grid-placement-names, grid-template, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial, world-map-marker, world-map-self-label};
 
   resource entity-builder {
     id: func() -> entity;
@@ -1681,6 +1989,9 @@ interface components {
     login: func() -> entity-builder;
     login-error: func() -> entity-builder;
     server-selection: func() -> entity-builder;
+    grid-placement: func(v: grid-placement) -> entity-builder;
+    grid-placement-names: func(v: grid-placement-names) -> entity-builder;
+    grid-template: func(v: grid-template) -> entity-builder;
     masked-text: func(v: masked-text) -> entity-builder;
     read-only-text: func() -> entity-builder;
     tooltip-serial: func(v: ui-tooltip-serial) -> entity-builder;
@@ -1937,6 +2248,18 @@ interface components {
 
   set-trade: func(q: borrow<query>, e: entity, term: u8, v: trade-window);
 
+  column-grid-placement: func(q: borrow<query>, term: u8) -> list<grid-placement>;
+
+  set-grid-placement: func(q: borrow<query>, e: entity, term: u8, v: grid-placement);
+
+  column-grid-placement-names: func(q: borrow<query>, term: u8) -> list<grid-placement-names>;
+
+  set-grid-placement-names: func(q: borrow<query>, e: entity, term: u8, v: grid-placement-names);
+
+  column-grid-template: func(q: borrow<query>, term: u8) -> list<grid-template>;
+
+  set-grid-template: func(q: borrow<query>, e: entity, term: u8, v: grid-template);
+
   column-masked-text: func(q: borrow<query>, term: u8) -> list<masked-text>;
 
   set-masked-text: func(q: borrow<query>, e: entity, term: u8, v: masked-text);
@@ -2044,6 +2367,12 @@ interface components {
   put-text-completion-pick: func(r: borrow<res>, v: text-completion-pick);
 
   set-resource-text-completion-pick: func(c: borrow<commands>, v: text-completion-pick);
+
+  get-self-label: func(r: borrow<res>) -> option<world-map-self-label>;
+
+  put-self-label: func(r: borrow<res>, v: world-map-self-label);
+
+  set-resource-self-label: func(c: borrow<commands>, v: world-map-self-label);
 
   send-message: func(c: borrow<commands>, v: chat-message);
 

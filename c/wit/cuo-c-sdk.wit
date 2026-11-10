@@ -9,5 +9,5 @@ world mod {
 
     export cuo-sdk-hotkeys: func(commands: cuo-sdk-commands);
 
-    include cuo:modding/mod@0.1.0;
+    include cuo:modding/mod@0.2.0;
 }

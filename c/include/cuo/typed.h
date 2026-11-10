@@ -727,6 +727,24 @@ void cuo_InputFocus_put(const cuo_input *in, cuo_param p, const cuo_InputFocus *
 void cuo_InputFocus_obs_put(const cuo_obs *ev, cuo_param p, const cuo_InputFocus *v);
 void cuo_InputFocus_set_resource(cuo_cmds *c, const cuo_InputFocus *v);
 
+/* `cuo:ui/grid-placement` */
+cuo_comp cuo_GridPlacement_comp(const cuo_GridPlacement *v);
+const cuo_GridPlacement *cuo_GridPlacement_column(cuo_query q, size_t term);
+void cuo_GridPlacement_set(cuo_query q, cuo_entity e, size_t term, const cuo_GridPlacement *v);
+const cuo_GridPlacement *cuo_GridPlacement_obs_value(const cuo_obs *ev);
+
+/* `cuo:ui/grid-placement-names` */
+cuo_comp cuo_GridPlacementNames_comp(const cuo_GridPlacementNames *v);
+const cuo_GridPlacementNames *cuo_GridPlacementNames_column(cuo_query q, size_t term);
+void cuo_GridPlacementNames_set(cuo_query q, cuo_entity e, size_t term, const cuo_GridPlacementNames *v);
+const cuo_GridPlacementNames *cuo_GridPlacementNames_obs_value(const cuo_obs *ev);
+
+/* `cuo:ui/grid-template` */
+cuo_comp cuo_GridTemplate_comp(const cuo_GridTemplate *v);
+const cuo_GridTemplate *cuo_GridTemplate_column(cuo_query q, size_t term);
+void cuo_GridTemplate_set(cuo_query q, cuo_entity e, size_t term, const cuo_GridTemplate *v);
+const cuo_GridTemplate *cuo_GridTemplate_obs_value(const cuo_obs *ev);
+
 /* `cuo:ui/masked-text` */
 cuo_comp cuo_MaskedText_comp(const cuo_MaskedText *v);
 const cuo_MaskedText *cuo_MaskedText_column(cuo_query q, size_t term);
@@ -768,6 +786,13 @@ cuo_comp cuo_WorldMapMarker_comp(const cuo_WorldMapMarker *v);
 const cuo_WorldMapMarker *cuo_WorldMapMarker_column(cuo_query q, size_t term);
 void cuo_WorldMapMarker_set(cuo_query q, cuo_entity e, size_t term, const cuo_WorldMapMarker *v);
 const cuo_WorldMapMarker *cuo_WorldMapMarker_obs_value(const cuo_obs *ev);
+
+/* `cuo:worldmap/self-label` */
+bool cuo_WorldMapSelfLabel_res(const cuo_input *in, cuo_param p, cuo_WorldMapSelfLabel *out);
+bool cuo_WorldMapSelfLabel_obs_res(const cuo_obs *ev, cuo_param p, cuo_WorldMapSelfLabel *out);
+void cuo_WorldMapSelfLabel_put(const cuo_input *in, cuo_param p, const cuo_WorldMapSelfLabel *v);
+void cuo_WorldMapSelfLabel_obs_put(const cuo_obs *ev, cuo_param p, const cuo_WorldMapSelfLabel *v);
+void cuo_WorldMapSelfLabel_set_resource(cuo_cmds *c, const cuo_WorldMapSelfLabel *v);
 
 #ifdef __cplusplus
 }

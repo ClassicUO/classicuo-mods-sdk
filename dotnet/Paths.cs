@@ -291,6 +291,12 @@ public static class Paths
         public const string FocusedInput = "cuo:ui/focused-input";
         /// <summary><c>cuo:ui/global-z</c> — component.</summary>
         public const string GlobalZ = "cuo:ui/global-z";
+        /// <summary><c>cuo:ui/grid-placement</c> — component.</summary>
+        public const string GridPlacement = "cuo:ui/grid-placement";
+        /// <summary><c>cuo:ui/grid-placement-names</c> — component.</summary>
+        public const string GridPlacementNames = "cuo:ui/grid-placement-names";
+        /// <summary><c>cuo:ui/grid-template</c> — component.</summary>
+        public const string GridTemplate = "cuo:ui/grid-template";
         /// <summary><c>cuo:ui/hover</c> — event.</summary>
         public const string Hover = "cuo:ui/hover";
         /// <summary><c>cuo:ui/hover-tint</c> — component.</summary>
@@ -381,5 +387,7 @@ public static class Paths
     {
         /// <summary><c>cuo:worldmap/marker</c> — component.</summary>
         public const string Marker = "cuo:worldmap/marker";
+        /// <summary><c>cuo:worldmap/self-label</c> — resource.</summary>
+        public const string SelfLabel = "cuo:worldmap/self-label";
     }
 }

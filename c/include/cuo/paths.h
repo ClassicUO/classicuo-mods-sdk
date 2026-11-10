@@ -118,6 +118,9 @@
 #define CUO_PATH_UI_EDITABLE_TEXT "cuo:ui/editable-text" /* component */
 #define CUO_PATH_UI_FOCUSED_INPUT "cuo:ui/focused-input" /* resource */
 #define CUO_PATH_UI_GLOBAL_Z "cuo:ui/global-z" /* component */
+#define CUO_PATH_UI_GRID_PLACEMENT "cuo:ui/grid-placement" /* component */
+#define CUO_PATH_UI_GRID_PLACEMENT_NAMES "cuo:ui/grid-placement-names" /* component */
+#define CUO_PATH_UI_GRID_TEMPLATE "cuo:ui/grid-template" /* component */
 #define CUO_PATH_UI_HOVER "cuo:ui/hover" /* event */
 #define CUO_PATH_UI_HOVER_TINT "cuo:ui/hover-tint" /* component */
 #define CUO_PATH_UI_INTERACTION "cuo:ui/interaction" /* component */
@@ -161,5 +164,6 @@
 #define CUO_PATH_UI_TOPBAR_FULL "cuo:ui/topbar-full" /* component */
 #define CUO_PATH_UI_TOPBAR_ROOT "cuo:ui/topbar-root" /* component */
 #define CUO_PATH_WORLDMAP_MARKER "cuo:worldmap/marker" /* component */
+#define CUO_PATH_WORLDMAP_SELF_LABEL "cuo:worldmap/self-label" /* resource */
 
 #endif

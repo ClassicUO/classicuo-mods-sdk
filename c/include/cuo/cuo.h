@@ -285,6 +285,12 @@ void cuo_log(const char *msg);
 void cuo_logf(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 uint32_t cuo_measure_text(uint16_t font, const char *text);
 bool cuo_resolve_serial(uint32_t serial, cuo_entity *out); /* false: the client doesn't know it */
+/* World -> screen, in UI coordinates (a node's left / top space). All false off the game
+ * screen; points can lie outside the viewport. The entity form is its feet this frame,
+ * walk offset included, and false when it has no world position. */
+bool cuo_game_viewport(float *x, float *y, float *w, float *h);
+bool cuo_world_to_screen(uint16_t x, uint16_t y, int8_t z, float *sx, float *sy);
+bool cuo_entity_screen_position(cuo_entity e, float *sx, float *sy);
 typedef enum cuo_scope { CUO_SCOPE_GLOBAL = 0, CUO_SCOPE_CHARACTER = 1 } cuo_scope;
 /* The mod's blob in `scope` ("" when nothing stored); write-through on set. The format is
  * the mod's own (the host stores it as-is). */
@@ -337,7 +343,7 @@ extern "C" {
  *   (call-scoped array; a zero-size event: the count).
  * - Observers: the trigger's value is cuo_X_obs_value(ev) (NULL when X is not the
  *   trigger's type). The export declares it `func(entity: entity, value: <record>, ...)`
- *   (`use tinyecs:modding/ecs@0.1.0.{entity}` and `use cuo:modding/types@0.1.0.{<record>}`),
+ *   (`use tinyecs:modding/ecs@0.1.0.{entity}` and `use cuo:modding/types@0.2.0.{<record>}`),
  *   or `func(entity: entity, ...)` for a tag:
  *
  *       export on-chat: func(entity: entity, value: chat-message, commands: commands);

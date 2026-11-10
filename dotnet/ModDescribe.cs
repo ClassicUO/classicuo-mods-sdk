@@ -187,7 +187,7 @@ public static class ModDescribe
         sb.AppendLine("    use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity, packet-direction, verdict};");
         var records = entries.Select(e => e.Trigger?.Typed?.Record).OfType<string>().Distinct().ToList();
         if (records.Count > 0)
-            sb.AppendLine($"    use cuo:modding/types@0.1.0.{{{string.Join(", ", records)}}};");
+            sb.AppendLine($"    use cuo:modding/types@0.2.0.{{{string.Join(", ", records)}}};");
         sb.AppendLine();
         foreach (var e in entries)
         {
@@ -208,7 +208,7 @@ public static class ModDescribe
             sb.AppendLine($"    export {e.Name}: func({string.Join(", ", args)}){(e.IsPacket ? " -> verdict" : "")};");
         }
         sb.AppendLine();
-        sb.AppendLine("    include cuo:modding/mod@0.1.0;");
+        sb.AppendLine("    include cuo:modding/mod@0.2.0;");
         sb.AppendLine("}");
         sb.AppendLine();
         // The SDK's flattened contract (wit-bindgen's component-type WIT: cuo:modding as the

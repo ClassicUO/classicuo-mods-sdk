@@ -4,19 +4,19 @@
 
 using System;
 
-namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
+namespace ModWorld.wit.Imports.cuo.modding.v0_2_0
 {
     internal static class PacketsImportsInterop {
 
         public static class SendToServerWasmInterop
         {
-            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/packets@0.1.0", EntryPoint = "send-to-server"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/packets@0.2.0", EntryPoint = "send-to-server"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
             public static extern void wasmImportSendToServer(nint p0, int p1);
         }
 
         public static class SendToClientWasmInterop
         {
-            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/packets@0.1.0", EntryPoint = "send-to-client"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
+            [global::System.Runtime.InteropServices.DllImportAttribute("cuo:modding/packets@0.2.0", EntryPoint = "send-to-client"), global::System.Runtime.InteropServices.WasmImportLinkageAttribute]
             public static extern void wasmImportSendToClient(nint p0, int p1);
         }
 

@@ -4,7 +4,7 @@
 
 using System;
 
-namespace ModWorld.wit.Imports.cuo.modding.v0_1_0
+namespace ModWorld.wit.Imports.cuo.modding.v0_2_0
 {
     internal static class TypesImportsInterop {
 

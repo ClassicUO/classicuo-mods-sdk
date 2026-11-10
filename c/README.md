@@ -54,7 +54,7 @@ package my:mod;
 
 world my-mod {
     use tinyecs:modding/ecs@0.1.0.{commands, query, res, entity};
-    use cuo:modding/types@0.1.0.{chat-message};
+    use cuo:modding/types@0.2.0.{chat-message};
 
     export low-hp: func(commands: commands, hits: query, time: res);
     export on-chat: func(entity: entity, value: chat-message);
@@ -103,7 +103,7 @@ void cuo_setup(cuo_builder *m)
   - system: `func(<params>)`
   - observer (`cuo_on_event` / `_add` / `_remove`): `func(entity: entity, value: <record>,
     <params>)`, where `<record>` is the `cuo:modding/types` record of the observed path
-    (`use cuo:modding/types@0.1.0.{<record>}`), or `func(entity: entity, <params>)` for a
+    (`use cuo:modding/types@0.2.0.{<record>}`), or `func(entity: entity, <params>)` for a
     path without a value (a tag component, a zero-size event like `cuo:ui/click`)
   - packet observer (`cuo_on_packet`, `cuo_on_packet_in/out`):
     `func(direction: packet-direction, packet: list<u8>, <params>) -> verdict`

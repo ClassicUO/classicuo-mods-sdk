@@ -5,7 +5,7 @@
 /// type paths ("cuo:ent/graphic", "cuo:player/hits", ...), listed in
 /// docs/modding-reference.md. A curated set of them also has typed records and functions
 /// (`types` / `components`, generated at the end of this file); the rest is JSON.
-package cuo:modding@0.1.0;
+package cuo:modding@0.2.0;
 
 interface host {
     use tinyecs:modding/ecs@0.1.0.{entity};
@@ -33,6 +33,100 @@ interface host {
 
     /// Replaces the mod's stored blob. Written to disk immediately.
     storage-set: func(scope: scope, value: string);
+
+    /// A point in UI coordinates: the space a `cuo:ui/node`'s `left` / `top` are in.
+    record screen-point {
+        x: f32,
+        y: f32,
+    }
+
+    /// A rectangle in UI coordinates.
+    record screen-rect {
+        x: f32,
+        y: f32,
+        width: f32,
+        height: f32,
+    }
+
+    /// The game world's viewport in UI coordinates; none off the game screen.
+    game-viewport: func() -> option<screen-rect>;
+
+    /// Where the centre of world tile (x, y) at height z is drawn, in UI coordinates,
+    /// with the camera, zoom and the player's walk offset applied. It can lie outside
+    /// `game-viewport`: clamp or cull against it. None off the game screen.
+    world-to-screen: func(x: u16, y: u16, z: s8) -> option<screen-point>;
+
+    /// Where an entity on the ground stands (the centre of its tile, i.e. its feet), in
+    /// UI coordinates, including its own walk offset so an overlay follows it smoothly
+    /// between tiles. Like `world-to-screen` it can lie outside the viewport. None when
+    /// the entity has no world position (unknown, or inside a container) or off the game
+    /// screen. Call it every frame you draw: it is the position for this frame only.
+    entity-screen-position: func(e: entity) -> option<screen-point>;
+
+    /// What `page-edit` changes on an element of a page.
+    variant page-change {
+        /// The element's text (an input: its value).
+        text(string),
+        add-class(string),
+        remove-class(string),
+        /// An inline style: property, value.
+        style(tuple<string, string>),
+        clear-style(string),
+        /// An attribute: name, value.
+        attr(tuple<string, string>),
+        remove-attr(string),
+        /// Replaces what earlier `html` changes and `page-clone` put under the element. Ids in
+        /// it work with `page-element`; `data-action="mod"` and `data-rclick` work as on the page.
+        html(string),
+    }
+
+    /// Opens a window showing an HTML/CSS page, or returns the one already open under this
+    /// name. `html` and `css` are the mod's built-in page: they are exported once to
+    /// `Data/Mods/<mod>/ui/<name>.html` and `.css` (link the sheet from the html), where the
+    /// player's edited copy wins and reloads on save. None when `name` isn't letters, digits,
+    /// `-` and `_`. The window closes with the mod.
+    page-open: func(name: string, html: string, css: string) -> option<entity>;
+
+    /// Like `page-open`, but always a new window of that page, at (x, y): one page, many
+    /// windows (one per container). The result is the window root, which the mod may size
+    /// and put its own components on.
+    page-spawn: func(name: string, html: string, css: string, x: s32, y: s32) -> option<entity>;
+
+    /// Changes the element with this HTML `id`. Kept and re-applied after every reload of the
+    /// page, so call it any time, also before the page has loaded. Repeating a change costs
+    /// nothing.
+    page-edit: func(page: entity, id: string, change: page-change);
+
+    /// The value of a text input, checkbox ("true" / "false") or slider. None when there is no
+    /// such element.
+    page-value: func(page: entity, id: string) -> option<string>;
+
+    /// The `data-arg` of each `data-action="mod"` element clicked on this page since the last
+    /// call, oldest first, with `{id}` replaced by that element's value. Poll it from a system.
+    page-clicks: func(page: entity) -> list<string>;
+
+    /// False once the player or `page-close` closed the window.
+    page-is-open: func(page: entity) -> bool;
+
+    page-close: func(page: entity);
+
+    /// The entity of the element with this HTML `id`, to put components or children on. None
+    /// until the page has loaded. A reload of the page makes new elements: everything on the
+    /// old one is gone, so a mod that uses this compares the result each frame.
+    page-element: func(page: entity, id: string) -> option<entity>;
+
+    /// Appends a copy of `<template id=template>` to the element with id `container`, and
+    /// returns the copy's first element. None until the page has loaded.
+    page-clone: func(page: entity, container: string, template: string) -> option<entity>;
+
+    /// Removes every copy `page-clone` put in the element with id `container`.
+    page-clear: func(page: entity, container: string);
+    /// The element with `data-part="<part>"` inside `element` (a clone's fields: template ids aren't registered).
+    page-part: func(page: entity, element: entity, part: string) -> option<entity>;
+
+    /// `page-edit` for an element from `page-clone` or `page-element`. Not re-applied after a
+    /// reload: the element is gone by then.
+    page-edit-element: func(page: entity, element: entity, change: page-change);
 }
 
 /// Raw UO packets, both ways. A packet is the full wire bytes, id first. Prefer
@@ -203,6 +297,12 @@ interface assets {
     record static-cell { graphic: u16, z: s8, hue: u16 }
 
     map-size: func(%map: u8) -> option<size>;
+
+    /// Loads a facet the client hasn't needed yet, so the `map-*` calls can read it, and returns
+    /// its size. None when the files have no such facet. A facet stays in memory once loaded (tens
+    /// of MB), and may stall the frame it loads in: call it when the player asks for that facet,
+    /// not to probe them all. `map-size` tells what's loaded without loading.
+    map-load: func(%map: u8) -> option<size>;
     map-land: func(%map: u8, x: u16, y: u16) -> option<land-cell>;
     map-statics: func(%map: u8, x: u16, y: u16) -> list<static-cell>;
 
@@ -212,6 +312,35 @@ interface assets {
     /// order. `block` = block-x * map-height-in-blocks + block-y.
     record block-bytes { land: list<u8>, statics: list<u8> }
     map-block: func(%map: u8, block: u32) -> option<block-bytes>;
+
+    /// A rectangle of tiles on a facet.
+    record map-area { x: u16, y: u16, width: u16, height: u16 }
+
+    /// The land of `area`, row by row: both lists are indexed by
+    /// (y - area.y) * area.width + (x - area.x). A block the files lack reads as graphic 0.
+    record land-area { area: map-area, graphics: list<u16>, z: list<s8> }
+
+    /// `x` and `y` are world tiles.
+    record placed-static { x: u16, y: u16, z: s8, graphic: u16, hue: u16 }
+
+    /// The land in `area`, clipped to the facet and to 512x512 tiles: `area` in the result is
+    /// what was read. None when the facet isn't loaded or nothing is left after clipping.
+    /// Map patches and overrides included.
+    map-land-area: func(%map: u8, area: map-area) -> option<land-area>;
+
+    /// The statics in `area`, clipped like `map-land-area`, in no particular order.
+    map-statics-area: func(%map: u8, area: map-area) -> list<placed-static>;
+
+    /// A land tile's radar colour, 0xAARRGGBB. None past the table.
+    land-radar-color: func(id: u16) -> option<u32>;
+
+    /// A static's radar colour, 0xAARRGGBB, with `hue` applied (0 = none). None when the
+    /// client's map and minimap don't draw that graphic.
+    static-radar-color: func(graphic: u16, hue: u16) -> option<u32>;
+
+    /// Goes up each time map data changes in memory (a server's map patches, an override).
+    /// One counter for all facets, only comparable within a session.
+    map-revision: func() -> u32;
 
     /// The pieces of a multi (house, boat), offsets relative to its centre.
     record multi-part { graphic: u16, x: s16, y: s16, z: s16 }
@@ -503,7 +632,7 @@ interface types {
     }
 
     /// `Display`
-    enum display { flex, none }
+    enum display { flex, none, block, grid }
 
     /// `PositionType`
     enum position-type { relative, absolute }
@@ -512,13 +641,13 @@ interface types {
     enum overflow { visible, clip, scroll }
 
     /// `FlexDirection`
-    enum flex-direction { row, column }
+    enum flex-direction { row, column, row-reverse, column-reverse }
 
     /// `JustifyContent`
-    enum justify-content { start, center, end }
+    enum justify-content { start, center, end, space-between, space-around, space-evenly, logical-start, logical-end, stretch }
 
     /// `AlignItems`
-    enum align-items { start, center, end }
+    enum align-items { start, center, end, stretch, baseline, logical-start, logical-end }
 
     /// `ValType`
     enum val-type { auto, px, percent, grow }
@@ -536,6 +665,27 @@ interface types {
         top: val,
         bottom: val,
     }
+
+    /// `FlexWrap`
+    enum flex-wrap { no-wrap, wrap, wrap-reverse }
+
+    /// `AlignSelf`
+    enum align-self { auto, start, center, end, stretch, baseline, logical-start, logical-end }
+
+    /// `BoxSizing`
+    enum box-sizing { border-box, content-box }
+
+    /// `AlignContent`
+    enum align-content { start, center, end, stretch, space-between, space-around, space-evenly, logical-start, logical-end }
+
+    /// `Float`
+    enum float { none, left, right }
+
+    /// `Clear`
+    enum clear { none, left, right, both }
+
+    /// `UiDirection`
+    enum ui-direction { ltr, rtl }
 
     /// `cuo:ui/node`
     record node {
@@ -559,6 +709,26 @@ interface types {
         border: ui-rect,
         gap: val,
         aspect-ratio: f32,
+        margin: ui-rect,
+        flex-grow: option<f32>,
+        flex-shrink: option<f32>,
+        flex-basis: val,
+        flex-wrap: flex-wrap,
+        align-self: align-self,
+        box-sizing: box-sizing,
+        row-gap: option<val>,
+        column-gap: option<val>,
+        align-content: option<align-content>,
+        justify-items: option<align-items>,
+        justify-self: align-self,
+        overflow-x: option<overflow>,
+        overflow-y: option<overflow>,
+        scrollbar-width: f32,
+        relative-insets: bool,
+        border-in-layout: bool,
+        float: float,
+        clear: clear,
+        direction: ui-direction,
     }
 
     /// `cuo:ui/text`
@@ -1117,7 +1287,7 @@ interface types {
     record computed-node {
         size: vector2,
         position: vector2,
-        clay-id: u32,
+        layout-id: u32,
         paint-order: s32,
     }
 
@@ -1635,6 +1805,91 @@ interface types {
         entity: u64,
     }
 
+    /// `cuo:ui/grid-placement`
+    record grid-placement {
+        column-start: s16,
+        column-span: u16,
+        row-start: s16,
+        row-span: u16,
+        column-end: s16,
+        row-end: s16,
+    }
+
+    /// `cuo:ui/grid-placement-names`
+    record grid-placement-names {
+        column-start: string,
+        column-end: string,
+        row-start: string,
+        row-end: string,
+    }
+
+    /// `GridTrackKind`
+    enum grid-track-kind { auto, px, percent, fr, min-content, max-content, min-max, fit-content }
+
+    /// `GridBreadthKind`
+    enum grid-breadth-kind { auto, px, percent, fr, min-content, max-content }
+
+    /// `GridBreadth`
+    record grid-breadth {
+        kind: grid-breadth-kind,
+        value: f32,
+    }
+
+    /// `GridTrack`
+    record grid-track {
+        kind: grid-track-kind,
+        value: f32,
+        min: grid-breadth,
+        max: grid-breadth,
+        fit-limit: val,
+    }
+
+    /// `GridRepeatKind`
+    enum grid-repeat-kind { count, auto-fill, auto-fit }
+
+    /// `GridLineNames`
+    record grid-line-names {
+        names: list<string>,
+    }
+
+    /// `GridRepeat`
+    record grid-repeat {
+        kind: grid-repeat-kind,
+        count: u16,
+        tracks: list<grid-track>,
+        line-names: list<grid-line-names>,
+    }
+
+    /// `GridTemplateTrack`
+    record grid-template-track {
+        track: grid-track,
+        repeat: option<grid-repeat>,
+    }
+
+    /// `GridAutoFlow`
+    enum grid-auto-flow { row, column, row-dense, column-dense }
+
+    /// `GridArea`
+    record grid-area {
+        name: string,
+        row-start: u16,
+        row-end: u16,
+        column-start: u16,
+        column-end: u16,
+    }
+
+    /// `cuo:ui/grid-template`
+    record grid-template {
+        columns: list<grid-template-track>,
+        rows: list<grid-template-track>,
+        auto-rows: list<grid-track>,
+        auto-columns: list<grid-track>,
+        auto-flow: grid-auto-flow,
+        areas: list<grid-area>,
+        column-names: list<grid-line-names>,
+        row-names: list<grid-line-names>,
+    }
+
     /// `cuo:ui/masked-text`
     record masked-text {
         value: string,
@@ -1676,6 +1931,11 @@ interface types {
         color: color,
         name-hue: u16,
     }
+
+    /// `cuo:worldmap/self-label`
+    record world-map-self-label {
+        name: string,
+    }
 }
 
 /// Reads and writes of the `types` records. Everything here except `put-*` is deferred
@@ -1687,7 +1947,7 @@ interface types {
 /// signature when it binds it.
 interface components {
     use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity};
-    use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, ui-anchorable, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, server-selection-info-event, clipboard-set, input-focus, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial, world-map-marker};
+    use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, ui-anchorable, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, server-selection-info-event, clipboard-set, input-focus, grid-placement, grid-placement-names, grid-template, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial, world-map-marker, world-map-self-label};
 
     /// Inserts components on one entity, chained: each method queues one insert and
     /// returns a new builder for the same entity.
@@ -1854,6 +2114,12 @@ interface components {
         login-error: func() -> entity-builder;
         /// Inserts `cuo:scene/server-selection`.
         server-selection: func() -> entity-builder;
+        /// Inserts `cuo:ui/grid-placement`.
+        grid-placement: func(v: grid-placement) -> entity-builder;
+        /// Inserts `cuo:ui/grid-placement-names`.
+        grid-placement-names: func(v: grid-placement-names) -> entity-builder;
+        /// Inserts `cuo:ui/grid-template`.
+        grid-template: func(v: grid-template) -> entity-builder;
         /// Inserts `cuo:ui/masked-text`.
         masked-text: func(v: masked-text) -> entity-builder;
         /// Inserts `cuo:ui/read-only-text`.
@@ -2251,6 +2517,24 @@ interface components {
     /// Writes `cuo:gump/trade` back through the `mut` reading term `term`.
     set-trade: func(q: borrow<query>, e: entity, term: u8, v: trade-window);
 
+    /// `cuo:ui/grid-placement` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:ui/grid-placement`.
+    column-grid-placement: func(q: borrow<query>, term: u8) -> list<grid-placement>;
+    /// Writes `cuo:ui/grid-placement` back through the `mut` reading term `term`.
+    set-grid-placement: func(q: borrow<query>, e: entity, term: u8, v: grid-placement);
+
+    /// `cuo:ui/grid-placement-names` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:ui/grid-placement-names`.
+    column-grid-placement-names: func(q: borrow<query>, term: u8) -> list<grid-placement-names>;
+    /// Writes `cuo:ui/grid-placement-names` back through the `mut` reading term `term`.
+    set-grid-placement-names: func(q: borrow<query>, e: entity, term: u8, v: grid-placement-names);
+
+    /// `cuo:ui/grid-template` of every matched entity, aligned with `query.entities`. Traps unless
+    /// reading term `term` is `cuo:ui/grid-template`.
+    column-grid-template: func(q: borrow<query>, term: u8) -> list<grid-template>;
+    /// Writes `cuo:ui/grid-template` back through the `mut` reading term `term`.
+    set-grid-template: func(q: borrow<query>, e: entity, term: u8, v: grid-template);
+
     /// `cuo:ui/masked-text` of every matched entity, aligned with `query.entities`. Traps unless
     /// reading term `term` is `cuo:ui/masked-text`.
     column-masked-text: func(q: borrow<query>, term: u8) -> list<masked-text>;
@@ -2402,6 +2686,14 @@ interface components {
     put-text-completion-pick: func(r: borrow<res>, v: text-completion-pick);
     /// Sets the `cuo:ui/text-completion-pick` resource (deferred, in order with the call's commands).
     set-resource-text-completion-pick: func(c: borrow<commands>, v: text-completion-pick);
+
+    /// The `cuo:worldmap/self-label` resource parameter's value; none when the host has none.
+    get-self-label: func(r: borrow<res>) -> option<world-map-self-label>;
+    /// Writes the `cuo:worldmap/self-label` resource through an `add-res-mut` parameter (now: a
+    /// `get-self-label` after it reads the new value).
+    put-self-label: func(r: borrow<res>, v: world-map-self-label);
+    /// Sets the `cuo:worldmap/self-label` resource (deferred, in order with the call's commands).
+    set-resource-self-label: func(c: borrow<commands>, v: world-map-self-label);
 
     /// Sends `cuo:chat/message` (observers fire, event readers see it next).
     send-message: func(c: borrow<commands>, v: chat-message);

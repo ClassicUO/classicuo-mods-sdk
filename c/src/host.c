@@ -51,6 +51,39 @@ bool cuo_resolve_serial(uint32_t serial, cuo_entity *out)
     return true;
 }
 
+bool cuo_game_viewport(float *x, float *y, float *w, float *h)
+{
+    cuo_modding_host_screen_rect_t r;
+    if (!cuo_modding_host_game_viewport(&r))
+        return false;
+    if (x) *x = r.x;
+    if (y) *y = r.y;
+    if (w) *w = r.width;
+    if (h) *h = r.height;
+    return true;
+}
+
+static bool point_out(bool ok, const cuo_modding_host_screen_point_t *p, float *sx, float *sy)
+{
+    if (!ok)
+        return false;
+    if (sx) *sx = p->x;
+    if (sy) *sy = p->y;
+    return true;
+}
+
+bool cuo_world_to_screen(uint16_t x, uint16_t y, int8_t z, float *sx, float *sy)
+{
+    cuo_modding_host_screen_point_t p;
+    return point_out(cuo_modding_host_world_to_screen(x, y, z, &p), &p, sx, sy);
+}
+
+bool cuo_entity_screen_position(cuo_entity e, float *sx, float *sy)
+{
+    cuo_modding_host_screen_point_t p;
+    return point_out(cuo_modding_host_entity_screen_position(e, &p), &p, sx, sy);
+}
+
 const char *cuo_storage_get(cuo_scope scope)
 {
     cuo_wit_string_t s;

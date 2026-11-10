@@ -228,16 +228,16 @@ internal static unsafe class TypedArena
 /// <summary>The calls around the per-type ones: builders, entities, list frees.</summary>
 internal static unsafe class TypedAbi
 {
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[resource-drop]entity-builder"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[resource-drop]entity-builder"), WasmImportLinkage]
     static extern void DropBuilder(int handle);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "spawn"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "spawn"), WasmImportLinkage]
     static extern int SpawnImport(int commands);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "entity-of"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "entity-of"), WasmImportLinkage]
     static extern int EntityOfImport(int commands, long entity);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.id"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.id"), WasmImportLinkage]
     static extern long IdImport(int builder);
 
     internal static void Drop(int builder) => DropBuilder(builder);

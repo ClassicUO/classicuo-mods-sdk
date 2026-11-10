@@ -272,6 +272,12 @@ pub mod ui {
     pub const FOCUSED_INPUT: &str = "cuo:ui/focused-input";
     /// `cuo:ui/global-z` — component.
     pub const GLOBAL_Z: &str = "cuo:ui/global-z";
+    /// `cuo:ui/grid-placement` — component.
+    pub const GRID_PLACEMENT: &str = "cuo:ui/grid-placement";
+    /// `cuo:ui/grid-placement-names` — component.
+    pub const GRID_PLACEMENT_NAMES: &str = "cuo:ui/grid-placement-names";
+    /// `cuo:ui/grid-template` — component.
+    pub const GRID_TEMPLATE: &str = "cuo:ui/grid-template";
     /// `cuo:ui/hover` — event.
     pub const HOVER: &str = "cuo:ui/hover";
     /// `cuo:ui/hover-tint` — component.
@@ -361,5 +367,7 @@ pub mod ui {
 pub mod worldmap {
     /// `cuo:worldmap/marker` — component.
     pub const MARKER: &str = "cuo:worldmap/marker";
+    /// `cuo:worldmap/self-label` — resource.
+    pub const SELF_LABEL: &str = "cuo:worldmap/self-label";
 }
 

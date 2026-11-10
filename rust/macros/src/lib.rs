@@ -271,7 +271,7 @@ fn expand(func: &ItemFn) -> syn::Result<proc_macro2::TokenStream> {
     };
     let ret = if matches!(kind, Kind::Packet) { " -> verdict" } else { "" };
     let uses_types = match typed {
-        Some((tt, _)) if !tt.wit.is_empty() => format!("use cuo:modding/types@0.1.0.{{{}}};\n", tt.wit),
+        Some((tt, _)) if !tt.wit.is_empty() => format!("use cuo:modding/types@0.2.0.{{{}}};\n", tt.wit),
         _ => String::new(),
     };
     let args: Vec<String> = std::iter::once(lead).filter(|s| !s.is_empty()).chain(wit_params).collect();
@@ -291,7 +291,7 @@ fn expand(func: &ItemFn) -> syn::Result<proc_macro2::TokenStream> {
     } else {
         quote!(
             "tinyecs:modding/ecs@0.1.0": ::cuo_mod_sdk::__private::ecs,
-            "cuo:modding/types@0.1.0": ::cuo_mod_sdk::__private::wtypes,
+            "cuo:modding/types@0.2.0": ::cuo_mod_sdk::__private::wtypes,
         )
     };
     let world = format!("cuo-mod-system:{name}/{name}");

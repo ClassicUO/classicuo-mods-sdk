@@ -95,6 +95,7 @@ Read-only data is marked *(ro)*; writing it is ignored, and a `&mut` / `Mut<T>` 
 | Path | Kind | Change |
 |---|---|---|
 | `cuo:ui/node` · `text` · `text-font` · `text-color` · `text-hue` · `text-spans` · `text-wrap` | C | keep |
+| `cuo:ui/grid-template` · `grid-placement` · `grid-placement-names` | C | *new* — the tracks and placement of a `display: grid` node |
 | `cuo:ui/bg-color` · `border-color` · `border-radius` · `hover-tint` · `custom` · `global-z` | C | keep |
 | `cuo:ui/interaction` · `name` · `tooltip` · `tooltip-serial` · `button` · `stat-lock-button` | C | keep |
 | `cuo:ui/scroll` · `scrollbar` · `computed` *(ro)* | C | keep |

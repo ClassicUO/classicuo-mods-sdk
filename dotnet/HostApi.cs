@@ -7,7 +7,7 @@
 #nullable enable
 #pragma warning disable CS1591
 using System.Runtime.InteropServices;
-using G = ModWorld.wit.Imports.cuo.modding.v0_1_0;
+using G = ModWorld.wit.Imports.cuo.modding.v0_2_0;
 
 namespace CuoModSdk;
 
@@ -68,6 +68,45 @@ public static partial class Host
     public static void StorageSet(Scope scope, string value)
     {
         G.IHostImports.StorageSet((G.IHostImports.Scope)scope, value);
+    }
+
+    /// <summary>
+    /// The game world's viewport in UI coordinates; none off the game screen.
+    /// </summary>
+    public static ScreenRect? GameViewport()
+    {
+        return G.IHostImports.GameViewport() is { } r ? new ScreenRect { X = r.x, Y = r.y, Width = r.width, Height = r.height } : null;
+    }
+
+    /// <summary>
+    /// Where the centre of world tile (x, y) at height z is drawn, in UI coordinates
+    /// (camera, zoom and walk offset applied). Can lie outside <see cref="GameViewport"/>.
+    /// None off the game screen.
+    /// </summary>
+    public static ScreenPoint? WorldToScreen(ushort x, ushort y, sbyte z)
+    {
+        return G.IHostImports.WorldToScreen(x, y, z) is { } p ? new ScreenPoint { X = p.x, Y = p.y } : null;
+    }
+
+    /// <summary>
+    /// Where an entity on the ground stands (its feet), in UI coordinates, including its
+    /// own walk offset. None when it has no world position or off the game screen.
+    /// </summary>
+    public static ScreenPoint? EntityScreenPosition(ulong entity)
+    {
+        return G.IHostImports.EntityScreenPosition(entity) is { } p ? new ScreenPoint { X = p.x, Y = p.y } : null;
+    }
+
+    /// <summary>A point in UI coordinates (a node's left / top space).</summary>
+    public struct ScreenPoint
+    {
+        public float X, Y;
+    }
+
+    /// <summary>A rectangle in UI coordinates.</summary>
+    public struct ScreenRect
+    {
+        public float X, Y, Width, Height;
     }
 }
 

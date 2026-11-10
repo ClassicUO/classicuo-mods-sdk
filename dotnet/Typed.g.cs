@@ -124,12 +124,16 @@ internal static unsafe partial class TypedCodecs
             typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new CodecServerList() :
             typeof(T) == typeof(global::CuoModSdk.Types.ClipboardSet) ? new CodecClipboardSet() :
             typeof(T) == typeof(global::CuoModSdk.Types.InputFocus) ? new CodecFocusedInput() :
+            typeof(T) == typeof(global::CuoModSdk.Types.GridPlacement) ? new CodecGridPlacement() :
+            typeof(T) == typeof(global::CuoModSdk.Types.GridPlacementNames) ? new CodecGridPlacementNames() :
+            typeof(T) == typeof(global::CuoModSdk.Types.GridTemplate) ? new CodecGridTemplate() :
             typeof(T) == typeof(global::CuoModSdk.Types.MaskedText) ? new CodecMaskedText() :
             typeof(T) == typeof(global::CuoModSdk.Types.TextClipboardAction) ? new CodecTextClipboardAction() :
             typeof(T) == typeof(global::CuoModSdk.Types.TextCompletion) ? new CodecTextCompletion() :
             typeof(T) == typeof(global::CuoModSdk.Types.TextCompletionPick) ? new CodecTextCompletionPick() :
             typeof(T) == typeof(global::CuoModSdk.Types.UiTooltipSerial) ? new CodecTooltipSerial() :
             typeof(T) == typeof(global::CuoModSdk.Types.WorldMapMarker) ? new CodecMarker() :
+            typeof(T) == typeof(global::CuoModSdk.Types.WorldMapSelfLabel) ? new CodecSelfLabel() :
             null;
         return (TypedCodec<T>?)c;
     }
@@ -244,7 +248,7 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.Notoriety) ? new TypedTrigger("notoriety", 1, 1, [new TypedFlat("int", 0, "byte")], new CodecNotoriety()) :
         typeof(T) == typeof(global::CuoModSdk.Types.EntityName) ? new TypedTrigger("entity-name", 8, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int")], new CodecName()) :
         typeof(T) == typeof(global::CuoModSdk.Types.Amount) ? new TypedTrigger("amount", 4, 4, [new TypedFlat("int", 0, "int")], new CodecAmount()) :
-        typeof(T) == typeof(global::CuoModSdk.Types.Node) ? new TypedTrigger("node", 164, 4, [new TypedFlat("int", 0, "byte"), new TypedFlat("int", 1, "byte"), new TypedFlat("int", 2, "byte"), new TypedFlat("int", 3, "byte"), new TypedFlat("int", 4, "byte"), new TypedFlat("int", 5, "byte"), new TypedFlat("int", 8, "byte"), new TypedFlat("float", 12, "float"), new TypedFlat("int", 16, "byte"), new TypedFlat("float", 20, "float"), new TypedFlat("int", 24, "byte"), new TypedFlat("float", 28, "float"), new TypedFlat("int", 32, "byte"), new TypedFlat("float", 36, "float"), new TypedFlat("int", 40, "byte"), new TypedFlat("float", 44, "float"), new TypedFlat("int", 48, "byte"), new TypedFlat("float", 52, "float"), new TypedFlat("int", 56, "byte"), new TypedFlat("float", 60, "float"), new TypedFlat("int", 64, "byte"), new TypedFlat("float", 68, "float"), new TypedFlat("int", 72, "byte"), new TypedFlat("float", 76, "float"), new TypedFlat("int", 80, "byte"), new TypedFlat("float", 84, "float"), new TypedFlat("int", 88, "byte"), new TypedFlat("float", 92, "float"), new TypedFlat("int", 96, "byte"), new TypedFlat("float", 100, "float"), new TypedFlat("int", 104, "byte"), new TypedFlat("float", 108, "float"), new TypedFlat("int", 112, "byte"), new TypedFlat("float", 116, "float"), new TypedFlat("int", 120, "byte"), new TypedFlat("float", 124, "float"), new TypedFlat("int", 128, "byte"), new TypedFlat("float", 132, "float"), new TypedFlat("int", 136, "byte"), new TypedFlat("float", 140, "float"), new TypedFlat("int", 144, "byte"), new TypedFlat("float", 148, "float"), new TypedFlat("int", 152, "byte"), new TypedFlat("float", 156, "float"), new TypedFlat("float", 160, "float")], new CodecNode()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.Node) ? new TypedTrigger("node", 272, 4, [new TypedFlat("int", 0, "byte"), new TypedFlat("int", 1, "byte"), new TypedFlat("int", 2, "byte"), new TypedFlat("int", 3, "byte"), new TypedFlat("int", 4, "byte"), new TypedFlat("int", 5, "byte"), new TypedFlat("int", 8, "byte"), new TypedFlat("float", 12, "float"), new TypedFlat("int", 16, "byte"), new TypedFlat("float", 20, "float"), new TypedFlat("int", 24, "byte"), new TypedFlat("float", 28, "float"), new TypedFlat("int", 32, "byte"), new TypedFlat("float", 36, "float"), new TypedFlat("int", 40, "byte"), new TypedFlat("float", 44, "float"), new TypedFlat("int", 48, "byte"), new TypedFlat("float", 52, "float"), new TypedFlat("int", 56, "byte"), new TypedFlat("float", 60, "float"), new TypedFlat("int", 64, "byte"), new TypedFlat("float", 68, "float"), new TypedFlat("int", 72, "byte"), new TypedFlat("float", 76, "float"), new TypedFlat("int", 80, "byte"), new TypedFlat("float", 84, "float"), new TypedFlat("int", 88, "byte"), new TypedFlat("float", 92, "float"), new TypedFlat("int", 96, "byte"), new TypedFlat("float", 100, "float"), new TypedFlat("int", 104, "byte"), new TypedFlat("float", 108, "float"), new TypedFlat("int", 112, "byte"), new TypedFlat("float", 116, "float"), new TypedFlat("int", 120, "byte"), new TypedFlat("float", 124, "float"), new TypedFlat("int", 128, "byte"), new TypedFlat("float", 132, "float"), new TypedFlat("int", 136, "byte"), new TypedFlat("float", 140, "float"), new TypedFlat("int", 144, "byte"), new TypedFlat("float", 148, "float"), new TypedFlat("int", 152, "byte"), new TypedFlat("float", 156, "float"), new TypedFlat("float", 160, "float"), new TypedFlat("int", 164, "byte"), new TypedFlat("float", 168, "float"), new TypedFlat("int", 172, "byte"), new TypedFlat("float", 176, "float"), new TypedFlat("int", 180, "byte"), new TypedFlat("float", 184, "float"), new TypedFlat("int", 188, "byte"), new TypedFlat("float", 192, "float"), new TypedFlat("int", 196, "byte"), new TypedFlat("float", 200, "float"), new TypedFlat("int", 204, "byte"), new TypedFlat("float", 208, "float"), new TypedFlat("int", 212, "byte"), new TypedFlat("float", 216, "float"), new TypedFlat("int", 220, "byte"), new TypedFlat("int", 221, "byte"), new TypedFlat("int", 222, "byte"), new TypedFlat("int", 224, "byte"), new TypedFlat("int", 228, "byte"), new TypedFlat("float", 232, "float"), new TypedFlat("int", 236, "byte"), new TypedFlat("int", 240, "byte"), new TypedFlat("float", 244, "float"), new TypedFlat("int", 248, "byte"), new TypedFlat("int", 249, "byte"), new TypedFlat("int", 250, "byte"), new TypedFlat("int", 251, "byte"), new TypedFlat("int", 252, "byte"), new TypedFlat("int", 253, "byte"), new TypedFlat("int", 254, "byte"), new TypedFlat("int", 255, "byte"), new TypedFlat("int", 256, "byte"), new TypedFlat("float", 260, "float"), new TypedFlat("int", 264, "byte"), new TypedFlat("int", 265, "byte"), new TypedFlat("int", 266, "byte"), new TypedFlat("int", 267, "byte"), new TypedFlat("int", 268, "byte")], new CodecNode()) :
         typeof(T) == typeof(global::CuoModSdk.Types.Text) ? new TypedTrigger("text", 8, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int")], new CodecText()) :
         typeof(T) == typeof(global::CuoModSdk.Types.TextFont) ? new TypedTrigger("text-font", 4, 2, [new TypedFlat("int", 0, "ushort"), new TypedFlat("int", 2, "ushort")], new CodecTextFont()) :
         typeof(T) == typeof(global::CuoModSdk.Types.TextColor) ? new TypedTrigger("text-color", 16, 4, [new TypedFlat("float", 0, "float"), new TypedFlat("float", 4, "float"), new TypedFlat("float", 8, "float"), new TypedFlat("float", 12, "float")], new CodecTextColor()) :
@@ -357,6 +361,9 @@ internal static unsafe partial class TypedCodecs
         typeof(T) == typeof(global::CuoModSdk.Types.LoginErrorsInfoEvent) ? new TypedTrigger("login-errors-info-event", 8, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int")], new CodecLoginErrorInfo()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionInfoEvent) ? new TypedTrigger("server-selection-info-event", 8, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int")], new CodecServerList()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ServerSelectionScene) ? new TypedTrigger(null, 0, 1, [], null) :
+        typeof(T) == typeof(global::CuoModSdk.Types.GridPlacement) ? new TypedTrigger("grid-placement", 12, 2, [new TypedFlat("int", 0, "short"), new TypedFlat("int", 2, "ushort"), new TypedFlat("int", 4, "short"), new TypedFlat("int", 6, "ushort"), new TypedFlat("int", 8, "short"), new TypedFlat("int", 10, "short")], new CodecGridPlacement()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.GridPlacementNames) ? new TypedTrigger("grid-placement-names", 32, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int"), new TypedFlat("int", 24, "int"), new TypedFlat("int", 28, "int")], new CodecGridPlacementNames()) :
+        typeof(T) == typeof(global::CuoModSdk.Types.GridTemplate) ? new TypedTrigger("grid-template", 60, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "int"), new TypedFlat("int", 12, "int"), new TypedFlat("int", 16, "int"), new TypedFlat("int", 20, "int"), new TypedFlat("int", 24, "int"), new TypedFlat("int", 28, "int"), new TypedFlat("int", 32, "byte"), new TypedFlat("int", 36, "int"), new TypedFlat("int", 40, "int"), new TypedFlat("int", 44, "int"), new TypedFlat("int", 48, "int"), new TypedFlat("int", 52, "int"), new TypedFlat("int", 56, "int")], new CodecGridTemplate()) :
         typeof(T) == typeof(global::CuoModSdk.Types.MaskedText) ? new TypedTrigger("masked-text", 12, 4, [new TypedFlat("int", 0, "int"), new TypedFlat("int", 4, "int"), new TypedFlat("int", 8, "uint")], new CodecMaskedText()) :
         typeof(T) == typeof(global::CuoModSdk.Types.ReadOnlyText) ? new TypedTrigger(null, 0, 1, [], null) :
         typeof(T) == typeof(global::CuoModSdk.Types.UiTooltipSerial) ? new TypedTrigger("ui-tooltip-serial", 4, 4, [new TypedFlat("int", 0, "uint")], new CodecTooltipSerial()) :
@@ -744,7 +751,7 @@ internal static unsafe class TypedGen
         && EqVal(a + 16, b + 16)
         && EqVal(a + 24, b + 24);
 
-    // node: 164 bytes, align 4
+    // node: 272 bytes, align 4
     internal static global::CuoModSdk.Types.Node LiftNode(byte* p)
     {
         var v = new global::CuoModSdk.Types.Node
@@ -769,6 +776,26 @@ internal static unsafe class TypedGen
             Border = LiftUiRect(p + 120),
             Gap = LiftVal(p + 152),
             AspectRatio = *(float*)(p + 160),
+            Margin = LiftUiRect(p + 164),
+            FlexGrow = LiftOption0(p + 196),
+            FlexShrink = LiftOption1(p + 204),
+            FlexBasis = LiftVal(p + 212),
+            FlexWrap = (global::CuoModSdk.Types.FlexWrap)(*(byte*)(p + 220)),
+            AlignSelf = (global::CuoModSdk.Types.AlignSelf)(*(byte*)(p + 221)),
+            BoxSizing = (global::CuoModSdk.Types.BoxSizing)(*(byte*)(p + 222)),
+            RowGap = LiftOption2(p + 224),
+            ColumnGap = LiftOption3(p + 236),
+            AlignContent = LiftOption4(p + 248),
+            JustifyItems = LiftOption5(p + 250),
+            JustifySelf = (global::CuoModSdk.Types.AlignSelf)(*(byte*)(p + 252)),
+            OverflowX = LiftOption6(p + 253),
+            OverflowY = LiftOption7(p + 255),
+            ScrollbarWidth = *(float*)(p + 260),
+            RelativeInsets = *(p + 264) != 0,
+            BorderInLayout = *(p + 265) != 0,
+            Float = (global::CuoModSdk.Types.Float)(*(byte*)(p + 266)),
+            Clear = (global::CuoModSdk.Types.Clear)(*(byte*)(p + 267)),
+            Direction = (global::CuoModSdk.Types.UiDirection)(*(byte*)(p + 268)),
         };
         return v;
     }
@@ -795,6 +822,26 @@ internal static unsafe class TypedGen
         LowerUiRect(v.Border, p + 120);
         LowerVal(v.Gap, p + 152);
         *(float*)(p + 160) = v.AspectRatio;
+        LowerUiRect(v.Margin, p + 164);
+        LowerOption0(v.FlexGrow, p + 196);
+        LowerOption1(v.FlexShrink, p + 204);
+        LowerVal(v.FlexBasis, p + 212);
+        *(byte*)(p + 220) = (byte)v.FlexWrap;
+        *(byte*)(p + 221) = (byte)v.AlignSelf;
+        *(byte*)(p + 222) = (byte)v.BoxSizing;
+        LowerOption2(v.RowGap, p + 224);
+        LowerOption3(v.ColumnGap, p + 236);
+        LowerOption4(v.AlignContent, p + 248);
+        LowerOption5(v.JustifyItems, p + 250);
+        *(byte*)(p + 252) = (byte)v.JustifySelf;
+        LowerOption6(v.OverflowX, p + 253);
+        LowerOption7(v.OverflowY, p + 255);
+        *(float*)(p + 260) = v.ScrollbarWidth;
+        *(p + 264) = (byte)(v.RelativeInsets ? 1 : 0);
+        *(p + 265) = (byte)(v.BorderInLayout ? 1 : 0);
+        *(byte*)(p + 266) = (byte)v.Float;
+        *(byte*)(p + 267) = (byte)v.Clear;
+        *(byte*)(p + 268) = (byte)v.Direction;
     }
 
     internal static bool EqNode(byte* a, byte* b) =>
@@ -817,7 +864,27 @@ internal static unsafe class TypedGen
         && EqUiRect(a + 88, b + 88)
         && EqUiRect(a + 120, b + 120)
         && EqVal(a + 152, b + 152)
-        && *(uint*)(a + 160) == *(uint*)(b + 160);
+        && *(uint*)(a + 160) == *(uint*)(b + 160)
+        && EqUiRect(a + 164, b + 164)
+        && EqOption0(a + 196, b + 196)
+        && EqOption1(a + 204, b + 204)
+        && EqVal(a + 212, b + 212)
+        && *(a + 220) == *(b + 220)
+        && *(a + 221) == *(b + 221)
+        && *(a + 222) == *(b + 222)
+        && EqOption2(a + 224, b + 224)
+        && EqOption3(a + 236, b + 236)
+        && EqOption4(a + 248, b + 248)
+        && EqOption5(a + 250, b + 250)
+        && *(a + 252) == *(b + 252)
+        && EqOption6(a + 253, b + 253)
+        && EqOption7(a + 255, b + 255)
+        && *(uint*)(a + 260) == *(uint*)(b + 260)
+        && (*(a + 264) != 0) == (*(b + 264) != 0)
+        && (*(a + 265) != 0) == (*(b + 265) != 0)
+        && *(a + 266) == *(b + 266)
+        && *(a + 267) == *(b + 267)
+        && *(a + 268) == *(b + 268);
 
     // text: 8 bytes, align 4
     internal static global::CuoModSdk.Types.Text LiftText(byte* p)
@@ -2710,7 +2777,7 @@ internal static unsafe class TypedGen
         {
             Size = LiftVector2(p + 0),
             Position = LiftVector2(p + 8),
-            ClayId = *(uint*)(p + 16),
+            LayoutId = *(uint*)(p + 16),
             PaintOrder = *(int*)(p + 20),
         };
         return v;
@@ -2720,7 +2787,7 @@ internal static unsafe class TypedGen
     {
         LowerVector2(v.Size, p + 0);
         LowerVector2(v.Position, p + 8);
-        *(uint*)(p + 16) = v.ClayId;
+        *(uint*)(p + 16) = v.LayoutId;
         *(int*)(p + 20) = v.PaintOrder;
     }
 
@@ -4489,6 +4556,292 @@ internal static unsafe class TypedGen
     internal static bool EqInputFocus(byte* a, byte* b) =>
         *(ulong*)(a + 0) == *(ulong*)(b + 0);
 
+    // grid-placement: 12 bytes, align 2
+    internal static global::CuoModSdk.Types.GridPlacement LiftGridPlacement(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.GridPlacement
+        {
+            ColumnStart = *(short*)(p + 0),
+            ColumnSpan = *(ushort*)(p + 2),
+            RowStart = *(short*)(p + 4),
+            RowSpan = *(ushort*)(p + 6),
+            ColumnEnd = *(short*)(p + 8),
+            RowEnd = *(short*)(p + 10),
+        };
+        return v;
+    }
+
+    internal static void LowerGridPlacement(in global::CuoModSdk.Types.GridPlacement v, byte* p)
+    {
+        *(short*)(p + 0) = v.ColumnStart;
+        *(ushort*)(p + 2) = v.ColumnSpan;
+        *(short*)(p + 4) = v.RowStart;
+        *(ushort*)(p + 6) = v.RowSpan;
+        *(short*)(p + 8) = v.ColumnEnd;
+        *(short*)(p + 10) = v.RowEnd;
+    }
+
+    internal static bool EqGridPlacement(byte* a, byte* b) =>
+        *(ushort*)(a + 0) == *(ushort*)(b + 0)
+        && *(ushort*)(a + 2) == *(ushort*)(b + 2)
+        && *(ushort*)(a + 4) == *(ushort*)(b + 4)
+        && *(ushort*)(a + 6) == *(ushort*)(b + 6)
+        && *(ushort*)(a + 8) == *(ushort*)(b + 8)
+        && *(ushort*)(a + 10) == *(ushort*)(b + 10);
+
+    // grid-placement-names: 32 bytes, align 4
+    internal static global::CuoModSdk.Types.GridPlacementNames LiftGridPlacementNames(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.GridPlacementNames
+        {
+            ColumnStart = TypedCodecs.ReadString(p + 0),
+            ColumnEnd = TypedCodecs.ReadString(p + 8),
+            RowStart = TypedCodecs.ReadString(p + 16),
+            RowEnd = TypedCodecs.ReadString(p + 24),
+        };
+        return v;
+    }
+
+    internal static void LowerGridPlacementNames(in global::CuoModSdk.Types.GridPlacementNames v, byte* p)
+    {
+        TypedCodecs.WriteString(v.ColumnStart, p + 0);
+        TypedCodecs.WriteString(v.ColumnEnd, p + 8);
+        TypedCodecs.WriteString(v.RowStart, p + 16);
+        TypedCodecs.WriteString(v.RowEnd, p + 24);
+    }
+
+    internal static void FreeGridPlacementNames(byte* p)
+    {
+        TypedCodecs.FreeString(p + 0);
+        TypedCodecs.FreeString(p + 8);
+        TypedCodecs.FreeString(p + 16);
+        TypedCodecs.FreeString(p + 24);
+    }
+
+    internal static bool EqGridPlacementNames(byte* a, byte* b) =>
+        TypedStrings.SameRecord(a + 0, b + 0)
+        && TypedStrings.SameRecord(a + 8, b + 8)
+        && TypedStrings.SameRecord(a + 16, b + 16)
+        && TypedStrings.SameRecord(a + 24, b + 24);
+
+    // grid-breadth: 8 bytes, align 4
+    internal static global::CuoModSdk.Types.GridBreadth LiftGridBreadth(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.GridBreadth
+        {
+            Kind = (global::CuoModSdk.Types.GridBreadthKind)(*(byte*)(p + 0)),
+            Value = *(float*)(p + 4),
+        };
+        return v;
+    }
+
+    internal static void LowerGridBreadth(in global::CuoModSdk.Types.GridBreadth v, byte* p)
+    {
+        *(byte*)(p + 0) = (byte)v.Kind;
+        *(float*)(p + 4) = v.Value;
+    }
+
+    internal static bool EqGridBreadth(byte* a, byte* b) =>
+        *(a + 0) == *(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4);
+
+    // grid-track: 32 bytes, align 4
+    internal static global::CuoModSdk.Types.GridTrack LiftGridTrack(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.GridTrack
+        {
+            Kind = (global::CuoModSdk.Types.GridTrackKind)(*(byte*)(p + 0)),
+            Value = *(float*)(p + 4),
+            Min = LiftGridBreadth(p + 8),
+            Max = LiftGridBreadth(p + 16),
+            FitLimit = LiftVal(p + 24),
+        };
+        return v;
+    }
+
+    internal static void LowerGridTrack(in global::CuoModSdk.Types.GridTrack v, byte* p)
+    {
+        *(byte*)(p + 0) = (byte)v.Kind;
+        *(float*)(p + 4) = v.Value;
+        LowerGridBreadth(v.Min, p + 8);
+        LowerGridBreadth(v.Max, p + 16);
+        LowerVal(v.FitLimit, p + 24);
+    }
+
+    internal static bool EqGridTrack(byte* a, byte* b) =>
+        *(a + 0) == *(b + 0)
+        && *(uint*)(a + 4) == *(uint*)(b + 4)
+        && EqGridBreadth(a + 8, b + 8)
+        && EqGridBreadth(a + 16, b + 16)
+        && EqVal(a + 24, b + 24);
+
+    // grid-line-names: 8 bytes, align 4
+    internal static global::CuoModSdk.Types.GridLineNames LiftGridLineNames(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.GridLineNames
+        {
+            Names = LiftList28(p + 0),
+        };
+        return v;
+    }
+
+    internal static void LowerGridLineNames(in global::CuoModSdk.Types.GridLineNames v, byte* p)
+    {
+        LowerList28(v.Names, p + 0);
+    }
+
+    internal static void FreeGridLineNames(byte* p)
+    {
+        FreeList28(p + 0);
+    }
+
+    internal static bool EqGridLineNames(byte* a, byte* b) =>
+        EqList28(a + 0, b + 0);
+
+    // grid-repeat: 20 bytes, align 4
+    internal static global::CuoModSdk.Types.GridRepeat LiftGridRepeat(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.GridRepeat
+        {
+            Kind = (global::CuoModSdk.Types.GridRepeatKind)(*(byte*)(p + 0)),
+            Count = *(ushort*)(p + 2),
+            Tracks = LiftList27(p + 4),
+            LineNames = LiftList29(p + 12),
+        };
+        return v;
+    }
+
+    internal static void LowerGridRepeat(in global::CuoModSdk.Types.GridRepeat v, byte* p)
+    {
+        *(byte*)(p + 0) = (byte)v.Kind;
+        *(ushort*)(p + 2) = v.Count;
+        LowerList27(v.Tracks, p + 4);
+        LowerList29(v.LineNames, p + 12);
+    }
+
+    internal static void FreeGridRepeat(byte* p)
+    {
+        FreeList27(p + 4);
+        FreeList29(p + 12);
+    }
+
+    internal static bool EqGridRepeat(byte* a, byte* b) =>
+        *(a + 0) == *(b + 0)
+        && *(ushort*)(a + 2) == *(ushort*)(b + 2)
+        && EqList27(a + 4, b + 4)
+        && EqList29(a + 12, b + 12);
+
+    // grid-template-track: 56 bytes, align 4
+    internal static global::CuoModSdk.Types.GridTemplateTrack LiftGridTemplateTrack(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.GridTemplateTrack
+        {
+            Track = LiftGridTrack(p + 0),
+            Repeat = LiftOption8(p + 32),
+        };
+        return v;
+    }
+
+    internal static void LowerGridTemplateTrack(in global::CuoModSdk.Types.GridTemplateTrack v, byte* p)
+    {
+        LowerGridTrack(v.Track, p + 0);
+        LowerOption8(v.Repeat, p + 32);
+    }
+
+    internal static void FreeGridTemplateTrack(byte* p)
+    {
+        FreeOption8(p + 32);
+    }
+
+    internal static bool EqGridTemplateTrack(byte* a, byte* b) =>
+        EqGridTrack(a + 0, b + 0)
+        && EqOption8(a + 32, b + 32);
+
+    // grid-area: 16 bytes, align 4
+    internal static global::CuoModSdk.Types.GridArea LiftGridArea(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.GridArea
+        {
+            Name = TypedCodecs.ReadString(p + 0),
+            RowStart = *(ushort*)(p + 8),
+            RowEnd = *(ushort*)(p + 10),
+            ColumnStart = *(ushort*)(p + 12),
+            ColumnEnd = *(ushort*)(p + 14),
+        };
+        return v;
+    }
+
+    internal static void LowerGridArea(in global::CuoModSdk.Types.GridArea v, byte* p)
+    {
+        TypedCodecs.WriteString(v.Name, p + 0);
+        *(ushort*)(p + 8) = v.RowStart;
+        *(ushort*)(p + 10) = v.RowEnd;
+        *(ushort*)(p + 12) = v.ColumnStart;
+        *(ushort*)(p + 14) = v.ColumnEnd;
+    }
+
+    internal static void FreeGridArea(byte* p)
+    {
+        TypedCodecs.FreeString(p + 0);
+    }
+
+    internal static bool EqGridArea(byte* a, byte* b) =>
+        TypedStrings.SameRecord(a + 0, b + 0)
+        && *(ushort*)(a + 8) == *(ushort*)(b + 8)
+        && *(ushort*)(a + 10) == *(ushort*)(b + 10)
+        && *(ushort*)(a + 12) == *(ushort*)(b + 12)
+        && *(ushort*)(a + 14) == *(ushort*)(b + 14);
+
+    // grid-template: 60 bytes, align 4
+    internal static global::CuoModSdk.Types.GridTemplate LiftGridTemplate(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.GridTemplate
+        {
+            Columns = LiftList30(p + 0),
+            Rows = LiftList31(p + 8),
+            AutoRows = LiftList32(p + 16),
+            AutoColumns = LiftList33(p + 24),
+            AutoFlow = (global::CuoModSdk.Types.GridAutoFlow)(*(byte*)(p + 32)),
+            Areas = LiftList34(p + 36),
+            ColumnNames = LiftList35(p + 44),
+            RowNames = LiftList36(p + 52),
+        };
+        return v;
+    }
+
+    internal static void LowerGridTemplate(in global::CuoModSdk.Types.GridTemplate v, byte* p)
+    {
+        LowerList30(v.Columns, p + 0);
+        LowerList31(v.Rows, p + 8);
+        LowerList32(v.AutoRows, p + 16);
+        LowerList33(v.AutoColumns, p + 24);
+        *(byte*)(p + 32) = (byte)v.AutoFlow;
+        LowerList34(v.Areas, p + 36);
+        LowerList35(v.ColumnNames, p + 44);
+        LowerList36(v.RowNames, p + 52);
+    }
+
+    internal static void FreeGridTemplate(byte* p)
+    {
+        FreeList30(p + 0);
+        FreeList31(p + 8);
+        FreeList32(p + 16);
+        FreeList33(p + 24);
+        FreeList34(p + 36);
+        FreeList35(p + 44);
+        FreeList36(p + 52);
+    }
+
+    internal static bool EqGridTemplate(byte* a, byte* b) =>
+        EqList30(a + 0, b + 0)
+        && EqList31(a + 8, b + 8)
+        && EqList32(a + 16, b + 16)
+        && EqList33(a + 24, b + 24)
+        && *(a + 32) == *(b + 32)
+        && EqList34(a + 36, b + 36)
+        && EqList35(a + 44, b + 44)
+        && EqList36(a + 52, b + 52);
+
     // masked-text: 12 bytes, align 4
     internal static global::CuoModSdk.Types.MaskedText LiftMaskedText(byte* p)
     {
@@ -4546,7 +4899,7 @@ internal static unsafe class TypedGen
         {
             Entity = *(ulong*)(p + 0),
             Prefix = TypedCodecs.ReadString(p + 8),
-            Items = LiftList27(p + 16),
+            Items = LiftList37(p + 16),
         };
         return v;
     }
@@ -4555,19 +4908,19 @@ internal static unsafe class TypedGen
     {
         *(ulong*)(p + 0) = v.Entity;
         TypedCodecs.WriteString(v.Prefix, p + 8);
-        LowerList27(v.Items, p + 16);
+        LowerList37(v.Items, p + 16);
     }
 
     internal static void FreeTextCompletion(byte* p)
     {
         TypedCodecs.FreeString(p + 8);
-        FreeList27(p + 16);
+        FreeList37(p + 16);
     }
 
     internal static bool EqTextCompletion(byte* a, byte* b) =>
         *(ulong*)(a + 0) == *(ulong*)(b + 0)
         && TypedStrings.SameRecord(a + 8, b + 8)
-        && EqList27(a + 16, b + 16);
+        && EqList37(a + 16, b + 16);
 
     // text-completion-pick: 16 bytes, align 8
     internal static global::CuoModSdk.Types.TextCompletionPick LiftTextCompletionPick(byte* p)
@@ -4648,6 +5001,29 @@ internal static unsafe class TypedGen
         && *(uint*)(a + 16) == *(uint*)(b + 16)
         && EqColor(a + 20, b + 20)
         && *(ushort*)(a + 36) == *(ushort*)(b + 36);
+
+    // world-map-self-label: 8 bytes, align 4
+    internal static global::CuoModSdk.Types.WorldMapSelfLabel LiftWorldMapSelfLabel(byte* p)
+    {
+        var v = new global::CuoModSdk.Types.WorldMapSelfLabel
+        {
+            Name = TypedCodecs.ReadString(p + 0),
+        };
+        return v;
+    }
+
+    internal static void LowerWorldMapSelfLabel(in global::CuoModSdk.Types.WorldMapSelfLabel v, byte* p)
+    {
+        TypedCodecs.WriteString(v.Name, p + 0);
+    }
+
+    internal static void FreeWorldMapSelfLabel(byte* p)
+    {
+        TypedCodecs.FreeString(p + 0);
+    }
+
+    internal static bool EqWorldMapSelfLabel(byte* a, byte* b) =>
+        TypedStrings.SameRecord(a + 0, b + 0);
 
     internal static int[] LiftList0(byte* p)
     {
@@ -5869,7 +6245,51 @@ internal static unsafe class TypedGen
         return true;
     }
 
-    internal static string[] LiftList27(byte* p)
+    internal static global::CuoModSdk.Types.GridTrack[] LiftList27(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.GridTrack[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftGridTrack(items + i * 32);
+        return v;
+    }
+
+    internal static void LowerList27(global::CuoModSdk.Types.GridTrack[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 32, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerGridTrack(e, items + i * 32);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList27(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList27(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqGridTrack(x + i * 32, y + i * 32)))
+                return false;
+        return true;
+    }
+
+    internal static string[] LiftList28(byte* p)
     {
         var len = *(int*)(p + 4);
         var items = (byte*)(nint)(*(int*)p);
@@ -5879,7 +6299,7 @@ internal static unsafe class TypedGen
         return v;
     }
 
-    internal static void LowerList27(string[]? v, byte* p)
+    internal static void LowerList28(string[]? v, byte* p)
     {
         var len = v?.Length ?? 0;
         var items = TypedArena.Alloc(len * 8, 4);
@@ -5892,7 +6312,7 @@ internal static unsafe class TypedGen
         *(int*)(p + 4) = len;
     }
 
-    internal static void FreeList27(byte* p)
+    internal static void FreeList28(byte* p)
     {
         var len = *(int*)(p + 4);
         if (len <= 0)
@@ -5903,7 +6323,7 @@ internal static unsafe class TypedGen
         NativeMemory.Free(items);
     }
 
-    internal static bool EqList27(byte* a, byte* b)
+    internal static bool EqList28(byte* a, byte* b)
     {
         var len = *(int*)(a + 4);
         if (len != *(int*)(b + 4))
@@ -5915,964 +6335,1524 @@ internal static unsafe class TypedGen
         return true;
     }
 
+    internal static global::CuoModSdk.Types.GridLineNames[] LiftList29(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.GridLineNames[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftGridLineNames(items + i * 8);
+        return v;
+    }
+
+    internal static void LowerList29(global::CuoModSdk.Types.GridLineNames[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 8, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerGridLineNames(e, items + i * 8);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList29(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreeGridLineNames(items + i * 8);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList29(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqGridLineNames(x + i * 8, y + i * 8)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.GridTemplateTrack[] LiftList30(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.GridTemplateTrack[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftGridTemplateTrack(items + i * 56);
+        return v;
+    }
+
+    internal static void LowerList30(global::CuoModSdk.Types.GridTemplateTrack[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 56, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerGridTemplateTrack(e, items + i * 56);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList30(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreeGridTemplateTrack(items + i * 56);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList30(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqGridTemplateTrack(x + i * 56, y + i * 56)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.GridTemplateTrack[] LiftList31(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.GridTemplateTrack[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftGridTemplateTrack(items + i * 56);
+        return v;
+    }
+
+    internal static void LowerList31(global::CuoModSdk.Types.GridTemplateTrack[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 56, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerGridTemplateTrack(e, items + i * 56);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList31(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreeGridTemplateTrack(items + i * 56);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList31(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqGridTemplateTrack(x + i * 56, y + i * 56)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.GridTrack[] LiftList32(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.GridTrack[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftGridTrack(items + i * 32);
+        return v;
+    }
+
+    internal static void LowerList32(global::CuoModSdk.Types.GridTrack[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 32, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerGridTrack(e, items + i * 32);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList32(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList32(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqGridTrack(x + i * 32, y + i * 32)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.GridTrack[] LiftList33(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.GridTrack[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftGridTrack(items + i * 32);
+        return v;
+    }
+
+    internal static void LowerList33(global::CuoModSdk.Types.GridTrack[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 32, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerGridTrack(e, items + i * 32);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList33(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList33(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqGridTrack(x + i * 32, y + i * 32)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.GridArea[] LiftList34(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.GridArea[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftGridArea(items + i * 16);
+        return v;
+    }
+
+    internal static void LowerList34(global::CuoModSdk.Types.GridArea[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 16, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerGridArea(e, items + i * 16);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList34(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreeGridArea(items + i * 16);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList34(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqGridArea(x + i * 16, y + i * 16)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.GridLineNames[] LiftList35(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.GridLineNames[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftGridLineNames(items + i * 8);
+        return v;
+    }
+
+    internal static void LowerList35(global::CuoModSdk.Types.GridLineNames[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 8, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerGridLineNames(e, items + i * 8);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList35(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreeGridLineNames(items + i * 8);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList35(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqGridLineNames(x + i * 8, y + i * 8)))
+                return false;
+        return true;
+    }
+
+    internal static global::CuoModSdk.Types.GridLineNames[] LiftList36(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new global::CuoModSdk.Types.GridLineNames[len];
+        for (var i = 0; i < len; i++)
+            v[i] = LiftGridLineNames(items + i * 8);
+        return v;
+    }
+
+    internal static void LowerList36(global::CuoModSdk.Types.GridLineNames[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 8, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            LowerGridLineNames(e, items + i * 8);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList36(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            FreeGridLineNames(items + i * 8);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList36(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(EqGridLineNames(x + i * 8, y + i * 8)))
+                return false;
+        return true;
+    }
+
+    internal static string[] LiftList37(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        var items = (byte*)(nint)(*(int*)p);
+        var v = new string[len];
+        for (var i = 0; i < len; i++)
+            v[i] = TypedCodecs.ReadString(items + i * 8);
+        return v;
+    }
+
+    internal static void LowerList37(string[]? v, byte* p)
+    {
+        var len = v?.Length ?? 0;
+        var items = TypedArena.Alloc(len * 8, 4);
+        for (var i = 0; i < len; i++)
+        {
+            var e = v![i];
+            TypedCodecs.WriteString(e, items + i * 8);
+        }
+        *(int*)p = (int)(nint)items;
+        *(int*)(p + 4) = len;
+    }
+
+    internal static void FreeList37(byte* p)
+    {
+        var len = *(int*)(p + 4);
+        if (len <= 0)
+            return;
+        var items = (byte*)(nint)(*(int*)p);
+        for (var i = 0; i < len; i++)
+            TypedCodecs.FreeString(items + i * 8);
+        NativeMemory.Free(items);
+    }
+
+    internal static bool EqList37(byte* a, byte* b)
+    {
+        var len = *(int*)(a + 4);
+        if (len != *(int*)(b + 4))
+            return false;
+        byte* x = (byte*)(nint)(*(int*)a), y = (byte*)(nint)(*(int*)b);
+        for (var i = 0; i < len; i++)
+            if (!(TypedStrings.SameRecord(x + i * 8, y + i * 8)))
+                return false;
+        return true;
+    }
+
+    internal static float? LiftOption0(byte* p) => p[0] != 0 ? (float?)*(float*)(p + 4) : null;
+
+    internal static void LowerOption0(float? v, byte* p)
+    {
+        if (v is not { } x)
+            return;
+        p[0] = 1;
+        *(float*)(p + 4) = x;
+    }
+
+    internal static bool EqOption0(byte* a, byte* b) => (a[0] != 0) == (b[0] != 0) && (a[0] == 0 || (*(uint*)(a + 4) == *(uint*)(b + 4)));
+
+    internal static float? LiftOption1(byte* p) => p[0] != 0 ? (float?)*(float*)(p + 4) : null;
+
+    internal static void LowerOption1(float? v, byte* p)
+    {
+        if (v is not { } x)
+            return;
+        p[0] = 1;
+        *(float*)(p + 4) = x;
+    }
+
+    internal static bool EqOption1(byte* a, byte* b) => (a[0] != 0) == (b[0] != 0) && (a[0] == 0 || (*(uint*)(a + 4) == *(uint*)(b + 4)));
+
+    internal static global::CuoModSdk.Types.Val? LiftOption2(byte* p) => p[0] != 0 ? (global::CuoModSdk.Types.Val?)LiftVal(p + 4) : null;
+
+    internal static void LowerOption2(global::CuoModSdk.Types.Val? v, byte* p)
+    {
+        if (v is not { } x)
+            return;
+        p[0] = 1;
+        LowerVal(x, p + 4);
+    }
+
+    internal static bool EqOption2(byte* a, byte* b) => (a[0] != 0) == (b[0] != 0) && (a[0] == 0 || (EqVal(a + 4, b + 4)));
+
+    internal static global::CuoModSdk.Types.Val? LiftOption3(byte* p) => p[0] != 0 ? (global::CuoModSdk.Types.Val?)LiftVal(p + 4) : null;
+
+    internal static void LowerOption3(global::CuoModSdk.Types.Val? v, byte* p)
+    {
+        if (v is not { } x)
+            return;
+        p[0] = 1;
+        LowerVal(x, p + 4);
+    }
+
+    internal static bool EqOption3(byte* a, byte* b) => (a[0] != 0) == (b[0] != 0) && (a[0] == 0 || (EqVal(a + 4, b + 4)));
+
+    internal static global::CuoModSdk.Types.AlignContent? LiftOption4(byte* p) => p[0] != 0 ? (global::CuoModSdk.Types.AlignContent?)(global::CuoModSdk.Types.AlignContent)(*(byte*)(p + 1)) : null;
+
+    internal static void LowerOption4(global::CuoModSdk.Types.AlignContent? v, byte* p)
+    {
+        if (v is not { } x)
+            return;
+        p[0] = 1;
+        *(byte*)(p + 1) = (byte)x;
+    }
+
+    internal static bool EqOption4(byte* a, byte* b) => (a[0] != 0) == (b[0] != 0) && (a[0] == 0 || (*(a + 1) == *(b + 1)));
+
+    internal static global::CuoModSdk.Types.AlignItems? LiftOption5(byte* p) => p[0] != 0 ? (global::CuoModSdk.Types.AlignItems?)(global::CuoModSdk.Types.AlignItems)(*(byte*)(p + 1)) : null;
+
+    internal static void LowerOption5(global::CuoModSdk.Types.AlignItems? v, byte* p)
+    {
+        if (v is not { } x)
+            return;
+        p[0] = 1;
+        *(byte*)(p + 1) = (byte)x;
+    }
+
+    internal static bool EqOption5(byte* a, byte* b) => (a[0] != 0) == (b[0] != 0) && (a[0] == 0 || (*(a + 1) == *(b + 1)));
+
+    internal static global::CuoModSdk.Types.Overflow? LiftOption6(byte* p) => p[0] != 0 ? (global::CuoModSdk.Types.Overflow?)(global::CuoModSdk.Types.Overflow)(*(byte*)(p + 1)) : null;
+
+    internal static void LowerOption6(global::CuoModSdk.Types.Overflow? v, byte* p)
+    {
+        if (v is not { } x)
+            return;
+        p[0] = 1;
+        *(byte*)(p + 1) = (byte)x;
+    }
+
+    internal static bool EqOption6(byte* a, byte* b) => (a[0] != 0) == (b[0] != 0) && (a[0] == 0 || (*(a + 1) == *(b + 1)));
+
+    internal static global::CuoModSdk.Types.Overflow? LiftOption7(byte* p) => p[0] != 0 ? (global::CuoModSdk.Types.Overflow?)(global::CuoModSdk.Types.Overflow)(*(byte*)(p + 1)) : null;
+
+    internal static void LowerOption7(global::CuoModSdk.Types.Overflow? v, byte* p)
+    {
+        if (v is not { } x)
+            return;
+        p[0] = 1;
+        *(byte*)(p + 1) = (byte)x;
+    }
+
+    internal static bool EqOption7(byte* a, byte* b) => (a[0] != 0) == (b[0] != 0) && (a[0] == 0 || (*(a + 1) == *(b + 1)));
+
+    internal static global::CuoModSdk.Types.GridRepeat? LiftOption8(byte* p) => p[0] != 0 ? (global::CuoModSdk.Types.GridRepeat?)LiftGridRepeat(p + 4) : null;
+
+    internal static void LowerOption8(global::CuoModSdk.Types.GridRepeat? v, byte* p)
+    {
+        if (v is not { } x)
+            return;
+        p[0] = 1;
+        LowerGridRepeat(x, p + 4);
+    }
+
+    internal static void FreeOption8(byte* p)
+    {
+        if (p[0] != 0)
+            FreeGridRepeat(p + 4);
+    }
+
+    internal static bool EqOption8(byte* a, byte* b) => (a[0] != 0) == (b[0] != 0) && (a[0] == 0 || (EqGridRepeat(a + 4, b + 4)));
+
 }
 
 internal static unsafe class TypedImports
 {
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-hits"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-hits"), WasmImportLinkage]
     internal static extern void Col_Hits(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-mana"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-mana"), WasmImportLinkage]
     internal static extern void Col_Mana(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-stamina"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-stamina"), WasmImportLinkage]
     internal static extern void Col_Stamina(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-data"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-data"), WasmImportLinkage]
     internal static extern void Col_Data(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-serial"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-serial"), WasmImportLinkage]
     internal static extern void Col_Serial(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.graphic"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.graphic"), WasmImportLinkage]
     internal static extern int B_Graphic(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-graphic"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-graphic"), WasmImportLinkage]
     internal static extern void Col_Graphic(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-graphic"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-graphic"), WasmImportLinkage]
     internal static extern void Set_Graphic(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.hue"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.hue"), WasmImportLinkage]
     internal static extern int B_Hue(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-hue"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-hue"), WasmImportLinkage]
     internal static extern void Col_Hue(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-hue"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-hue"), WasmImportLinkage]
     internal static extern void Set_Hue(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.world-position"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.world-position"), WasmImportLinkage]
     internal static extern int B_WorldPosition(int a0, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-world-position"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-world-position"), WasmImportLinkage]
     internal static extern void Col_WorldPosition(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-world-position"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-world-position"), WasmImportLinkage]
     internal static extern void Set_WorldPosition(int a0, long a1, int a2, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.notoriety"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.notoriety"), WasmImportLinkage]
     internal static extern int B_Notoriety(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-notoriety"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-notoriety"), WasmImportLinkage]
     internal static extern void Col_Notoriety(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-notoriety"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-notoriety"), WasmImportLinkage]
     internal static extern void Set_Notoriety(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.name"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.name"), WasmImportLinkage]
     internal static extern int B_Name(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-name"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-name"), WasmImportLinkage]
     internal static extern void Col_Name(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-name"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-name"), WasmImportLinkage]
     internal static extern void Set_Name(int a0, long a1, int a2, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.amount"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.amount"), WasmImportLinkage]
     internal static extern int B_Amount(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-amount"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-amount"), WasmImportLinkage]
     internal static extern void Col_Amount(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-amount"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-amount"), WasmImportLinkage]
     internal static extern void Set_Amount(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.node"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.node"), WasmImportLinkage]
     internal static extern int B_Node(nint args);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-node"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-node"), WasmImportLinkage]
     internal static extern void Col_Node(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-node"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-node"), WasmImportLinkage]
     internal static extern void Set_Node(nint args);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.text"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.text"), WasmImportLinkage]
     internal static extern int B_Text(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-text"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-text"), WasmImportLinkage]
     internal static extern void Col_Text(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-text"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-text"), WasmImportLinkage]
     internal static extern void Set_Text(int a0, long a1, int a2, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.text-font"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.text-font"), WasmImportLinkage]
     internal static extern int B_TextFont(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-text-font"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-text-font"), WasmImportLinkage]
     internal static extern void Col_TextFont(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-text-font"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-text-font"), WasmImportLinkage]
     internal static extern void Set_TextFont(int a0, long a1, int a2, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.text-color"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.text-color"), WasmImportLinkage]
     internal static extern int B_TextColor(int a0, float f0, float f1, float f2, float f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-text-color"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-text-color"), WasmImportLinkage]
     internal static extern void Col_TextColor(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-text-color"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-text-color"), WasmImportLinkage]
     internal static extern void Set_TextColor(int a0, long a1, int a2, float f0, float f1, float f2, float f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.bg-color"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.bg-color"), WasmImportLinkage]
     internal static extern int B_BgColor(int a0, float f0, float f1, float f2, float f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-bg-color"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-bg-color"), WasmImportLinkage]
     internal static extern void Col_BgColor(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-bg-color"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-bg-color"), WasmImportLinkage]
     internal static extern void Set_BgColor(int a0, long a1, int a2, float f0, float f1, float f2, float f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.border-radius"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.border-radius"), WasmImportLinkage]
     internal static extern int B_BorderRadius(int a0, float f0, float f1, float f2, float f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-border-radius"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-border-radius"), WasmImportLinkage]
     internal static extern void Col_BorderRadius(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-border-radius"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-border-radius"), WasmImportLinkage]
     internal static extern void Set_BorderRadius(int a0, long a1, int a2, float f0, float f1, float f2, float f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.child-of"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.child-of"), WasmImportLinkage]
     internal static extern int B_ChildOf(int a0, long f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-child-of"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-child-of"), WasmImportLinkage]
     internal static extern void Col_ChildOf(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-child-of"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-child-of"), WasmImportLinkage]
     internal static extern void Set_ChildOf(int a0, long a1, int a2, long f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.movable"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.movable"), WasmImportLinkage]
     internal static extern int B_Movable(int self);
 
     internal static int Tag_Movable(int b) => B_Movable(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.no-window-drag"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.no-window-drag"), WasmImportLinkage]
     internal static extern int B_NoWindowDrag(int self);
 
     internal static int Tag_NoWindowDrag(int b) => B_NoWindowDrag(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.global-z"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.global-z"), WasmImportLinkage]
     internal static extern int B_GlobalZ(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-global-z"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-global-z"), WasmImportLinkage]
     internal static extern void Col_GlobalZ(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-global-z"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-global-z"), WasmImportLinkage]
     internal static extern void Set_GlobalZ(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.interaction"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.interaction"), WasmImportLinkage]
     internal static extern int B_Interaction(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-interaction"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-interaction"), WasmImportLinkage]
     internal static extern void Col_Interaction(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-interaction"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-interaction"), WasmImportLinkage]
     internal static extern void Set_Interaction(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-mouse"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-mouse"), WasmImportLinkage]
     internal static extern void Get_Mouse(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-keyboard"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-keyboard"), WasmImportLinkage]
     internal static extern void Get_Keyboard(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-message"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-message"), WasmImportLinkage]
     internal static extern void Send_Message(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6, int f7, int f8, float f9, int f10);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-message"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-message"), WasmImportLinkage]
     internal static extern void Read_Message(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-prompt"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-prompt"), WasmImportLinkage]
     internal static extern void Send_Prompt(int a0, int f0, int f1, int f2, int f3, int f4);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-prompt"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-prompt"), WasmImportLinkage]
     internal static extern void Read_Prompt(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-time"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-time"), WasmImportLinkage]
     internal static extern void Get_Time(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-equipment"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-equipment"), WasmImportLinkage]
     internal static extern void Col_Equipment(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.facing"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.facing"), WasmImportLinkage]
     internal static extern int B_Facing(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-facing"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-facing"), WasmImportLinkage]
     internal static extern void Col_Facing(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-facing"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-facing"), WasmImportLinkage]
     internal static extern void Set_Facing(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-properties"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-properties"), WasmImportLinkage]
     internal static extern void Col_Properties(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-server-flags"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-server-flags"), WasmImportLinkage]
     internal static extern void Col_ServerFlags(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.slot-position"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.slot-position"), WasmImportLinkage]
     internal static extern int B_SlotPosition(int a0, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-slot-position"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-slot-position"), WasmImportLinkage]
     internal static extern void Col_SlotPosition(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-slot-position"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-slot-position"), WasmImportLinkage]
     internal static extern void Set_SlotPosition(int a0, long a1, int a2, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-context"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-context"), WasmImportLinkage]
     internal static extern void Get_Context(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "put-context"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "put-context"), WasmImportLinkage]
     internal static extern void Put_Context(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-context"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resource-context"), WasmImportLinkage]
     internal static extern void SetRes_Context(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-settings"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-settings"), WasmImportLinkage]
     internal static extern void Get_Settings(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-state"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-state"), WasmImportLinkage]
     internal static extern void Get_State(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "put-state"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "put-state"), WasmImportLinkage]
     internal static extern void Put_State(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-state"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resource-state"), WasmImportLinkage]
     internal static extern void SetRes_State(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.container"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.container"), WasmImportLinkage]
     internal static extern int B_Container(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-container"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-container"), WasmImportLinkage]
     internal static extern void Col_Container(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-container"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-container"), WasmImportLinkage]
     internal static extern void Set_Container(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-container-closed"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-container-closed"), WasmImportLinkage]
     internal static extern void Send_ContainerClosed(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-container-closed"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-container-closed"), WasmImportLinkage]
     internal static extern void Read_ContainerClosed(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-container-opened"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-container-opened"), WasmImportLinkage]
     internal static extern void Send_ContainerOpened(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-container-opened"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-container-opened"), WasmImportLinkage]
     internal static extern void Read_ContainerOpened(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-container-positions"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-container-positions"), WasmImportLinkage]
     internal static extern void Get_ContainerPositions(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "put-container-positions"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "put-container-positions"), WasmImportLinkage]
     internal static extern void Put_ContainerPositions(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-container-positions"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resource-container-positions"), WasmImportLinkage]
     internal static extern void SetRes_ContainerPositions(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-container-slot"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-container-slot"), WasmImportLinkage]
     internal static extern void Send_ContainerSlot(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6, int f7);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-container-slot"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-container-slot"), WasmImportLinkage]
     internal static extern void Read_ContainerSlot(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.container-tag"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.container-tag"), WasmImportLinkage]
     internal static extern int B_ContainerTag(int a0, int f0, int f1, float f2, int f3, int f4, int f5, int f6);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-container-tag"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-container-tag"), WasmImportLinkage]
     internal static extern void Col_ContainerTag(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-container-tag"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-container-tag"), WasmImportLinkage]
     internal static extern void Set_ContainerTag(int a0, long a1, int a2, int f0, int f1, float f2, int f3, int f4, int f5, int f6);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-context-menu"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-context-menu"), WasmImportLinkage]
     internal static extern void Send_ContextMenu(int a0, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-context-menu"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-context-menu"), WasmImportLinkage]
     internal static extern void Read_ContextMenu(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.grid-container"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.grid-container"), WasmImportLinkage]
     internal static extern int B_GridContainer(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-grid-container"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-grid-container"), WasmImportLinkage]
     internal static extern void Col_GridContainer(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-grid-container"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-grid-container"), WasmImportLinkage]
     internal static extern void Set_GridContainer(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.grid-loot"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.grid-loot"), WasmImportLinkage]
     internal static extern int B_GridLoot(int a0, int f0, long f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-grid-loot"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-grid-loot"), WasmImportLinkage]
     internal static extern void Col_GridLoot(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-grid-loot"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-grid-loot"), WasmImportLinkage]
     internal static extern void Set_GridLoot(int a0, long a1, int a2, int f0, long f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.health-bar"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.health-bar"), WasmImportLinkage]
     internal static extern int B_HealthBar(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-health-bar"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-health-bar"), WasmImportLinkage]
     internal static extern void Col_HealthBar(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-health-bar"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-health-bar"), WasmImportLinkage]
     internal static extern void Set_HealthBar(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, int f5, int f6);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-server"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-server"), WasmImportLinkage]
     internal static extern void Col_Server(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-consume"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-consume"), WasmImportLinkage]
     internal static extern void Send_Consume(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-consume"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-consume"), WasmImportLinkage]
     internal static extern void Read_Consume(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-host-hotkeys"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-host-hotkeys"), WasmImportLinkage]
     internal static extern void Get_HostHotkeys(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-hotkey"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-hotkey"), WasmImportLinkage]
     internal static extern void Send_Hotkey(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6, int f7);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-hotkey"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-hotkey"), WasmImportLinkage]
     internal static extern void Read_Hotkey(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-mod-hotkeys"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-mod-hotkeys"), WasmImportLinkage]
     internal static extern void Get_ModHotkeys(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "put-mod-hotkeys"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "put-mod-hotkeys"), WasmImportLinkage]
     internal static extern void Put_ModHotkeys(int a0, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-mod-hotkeys"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resource-mod-hotkeys"), WasmImportLinkage]
     internal static extern void SetRes_ModHotkeys(int a0, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-world-single-click"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-world-single-click"), WasmImportLinkage]
     internal static extern void Get_WorldSingleClick(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-drop-sent"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-drop-sent"), WasmImportLinkage]
     internal static extern void Send_DropSent(int a0, int f0, int f1, int f2, int f3, int f4);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-drop-sent"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-drop-sent"), WasmImportLinkage]
     internal static extern void Read_DropSent(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-move-result"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-move-result"), WasmImportLinkage]
     internal static extern void Send_MoveResult(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-move-result"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-move-result"), WasmImportLinkage]
     internal static extern void Read_MoveResult(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-schema"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-schema"), WasmImportLinkage]
     internal static extern void Get_Schema(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "put-schema"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "put-schema"), WasmImportLinkage]
     internal static extern void Put_Schema(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-schema"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resource-schema"), WasmImportLinkage]
     internal static extern void SetRes_Schema(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-values"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-values"), WasmImportLinkage]
     internal static extern void Get_Values(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-buffs"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-buffs"), WasmImportLinkage]
     internal static extern void Get_Buffs(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-grabbed-item"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-grabbed-item"), WasmImportLinkage]
     internal static extern void Get_GrabbedItem(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.player"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.player"), WasmImportLinkage]
     internal static extern int B_Player(int self);
 
     internal static int Tag_Player(int b) => B_Player(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-skills"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-skills"), WasmImportLinkage]
     internal static extern void Get_Skills(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-stat-locks"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-stat-locks"), WasmImportLinkage]
     internal static extern void Col_StatLocks(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-local-result"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-local-result"), WasmImportLinkage]
     internal static extern void Send_LocalResult(int a0, long f0, int f1, int f2, int f3, int f4, int f5, int f6);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-local-result"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-local-result"), WasmImportLinkage]
     internal static extern void Read_LocalResult(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-target-state"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-target-state"), WasmImportLinkage]
     internal static extern void Get_TargetState(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.anchorable"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.anchorable"), WasmImportLinkage]
     internal static extern int B_Anchorable(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-anchorable"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-anchorable"), WasmImportLinkage]
     internal static extern void Col_Anchorable(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-anchorable"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-anchorable"), WasmImportLinkage]
     internal static extern void Set_Anchorable(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.border-color"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.border-color"), WasmImportLinkage]
     internal static extern int B_BorderColor(int a0, float f0, float f1, float f2, float f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-border-color"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-border-color"), WasmImportLinkage]
     internal static extern void Col_BorderColor(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-border-color"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-border-color"), WasmImportLinkage]
     internal static extern void Set_BorderColor(int a0, long a1, int a2, float f0, float f1, float f2, float f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.button"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.button"), WasmImportLinkage]
     internal static extern int B_Button(int a0, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-button"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-button"), WasmImportLinkage]
     internal static extern void Col_Button(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-button"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-button"), WasmImportLinkage]
     internal static extern void Set_Button(int a0, long a1, int a2, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-click"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-click"), WasmImportLinkage]
     internal static extern void Send_Click(int c);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-click"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-click"), WasmImportLinkage]
     internal static extern int Read_Click(int e);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-computed"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-computed"), WasmImportLinkage]
     internal static extern void Col_Computed(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.container-item"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.container-item"), WasmImportLinkage]
     internal static extern int B_ContainerItem(int a0, long f0, int f1, float f2, float f3, float f4, float f5, float f6, float f7);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-container-item"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-container-item"), WasmImportLinkage]
     internal static extern void Col_ContainerItem(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-container-item"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-container-item"), WasmImportLinkage]
     internal static extern void Set_ContainerItem(int a0, long a1, int a2, long f0, int f1, float f2, float f3, float f4, float f5, float f6, float f7);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.contains-by-bounds"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.contains-by-bounds"), WasmImportLinkage]
     internal static extern int B_ContainsByBounds(int self);
 
     internal static int Tag_ContainsByBounds(int b) => B_ContainsByBounds(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.custom"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.custom"), WasmImportLinkage]
     internal static extern int B_Custom(int a0, int f0, int f1, float f2, float f3, float f4, int f5);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-custom"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-custom"), WasmImportLinkage]
     internal static extern void Col_Custom(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-custom"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-custom"), WasmImportLinkage]
     internal static extern void Set_Custom(int a0, long a1, int a2, int f0, int f1, float f2, float f3, float f4, int f5);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.editable-text"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.editable-text"), WasmImportLinkage]
     internal static extern int B_EditableText(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-editable-text"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-editable-text"), WasmImportLinkage]
     internal static extern void Col_EditableText(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-editable-text"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-editable-text"), WasmImportLinkage]
     internal static extern void Set_EditableText(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-hover"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-hover"), WasmImportLinkage]
     internal static extern void Send_Hover(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-hover"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-hover"), WasmImportLinkage]
     internal static extern void Read_Hover(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.hover-tint"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.hover-tint"), WasmImportLinkage]
     internal static extern int B_HoverTint(int a0, float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-hover-tint"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-hover-tint"), WasmImportLinkage]
     internal static extern void Col_HoverTint(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-hover-tint"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-hover-tint"), WasmImportLinkage]
     internal static extern void Set_HoverTint(int a0, long a1, int a2, float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.movable-no-drag"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.movable-no-drag"), WasmImportLinkage]
     internal static extern int B_MovableNoDrag(int self);
 
     internal static int Tag_MovableNoDrag(int b) => B_MovableNoDrag(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.ui-name"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.ui-name"), WasmImportLinkage]
     internal static extern int B_UiName(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-ui-name"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-ui-name"), WasmImportLinkage]
     internal static extern void Col_UiName(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-ui-name"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-ui-name"), WasmImportLinkage]
     internal static extern void Set_UiName(int a0, long a1, int a2, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.no-blur"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.no-blur"), WasmImportLinkage]
     internal static extern int B_NoBlur(int self);
 
     internal static int Tag_NoBlur(int b) => B_NoBlur(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.no-pickup"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.no-pickup"), WasmImportLinkage]
     internal static extern int B_NoPickup(int self);
 
     internal static int Tag_NoPickup(int b) => B_NoPickup(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.no-right-click-close"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.no-right-click-close"), WasmImportLinkage]
     internal static extern int B_NoRightClickClose(int self);
 
     internal static int Tag_NoRightClickClose(int b) => B_NoRightClickClose(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.options-window"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.options-window"), WasmImportLinkage]
     internal static extern int B_OptionsWindow(int self);
 
     internal static int Tag_OptionsWindow(int b) => B_OptionsWindow(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-pick"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-pick"), WasmImportLinkage]
     internal static extern void Get_Pick(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.popup"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.popup"), WasmImportLinkage]
     internal static extern int B_Popup(int self);
 
     internal static int Tag_Popup(int b) => B_Popup(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.resizable"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.resizable"), WasmImportLinkage]
     internal static extern int B_Resizable(int a0, float f0, float f1, float f2, float f3, float f4, float f5, int f6);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-resizable"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-resizable"), WasmImportLinkage]
     internal static extern void Col_Resizable(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resizable"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resizable"), WasmImportLinkage]
     internal static extern void Set_Resizable(int a0, long a1, int a2, float f0, float f1, float f2, float f3, float f4, float f5, int f6);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-right-click"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-right-click"), WasmImportLinkage]
     internal static extern void Send_RightClick(int a0, float f0, float f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-right-click"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-right-click"), WasmImportLinkage]
     internal static extern void Read_RightClick(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.scroll"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.scroll"), WasmImportLinkage]
     internal static extern int B_Scroll(int a0, float f0, float f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-scroll"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-scroll"), WasmImportLinkage]
     internal static extern void Col_Scroll(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-scroll"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-scroll"), WasmImportLinkage]
     internal static extern void Set_Scroll(int a0, long a1, int a2, float f0, float f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.scrollbar"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.scrollbar"), WasmImportLinkage]
     internal static extern int B_Scrollbar(int a0, float f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-scrollbar"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-scrollbar"), WasmImportLinkage]
     internal static extern void Col_Scrollbar(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-scrollbar"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-scrollbar"), WasmImportLinkage]
     internal static extern void Set_Scrollbar(int a0, long a1, int a2, float f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.stat-lock-button"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.stat-lock-button"), WasmImportLinkage]
     internal static extern int B_StatLockButton(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-stat-lock-button"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-stat-lock-button"), WasmImportLinkage]
     internal static extern void Col_StatLockButton(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-stat-lock-button"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-stat-lock-button"), WasmImportLinkage]
     internal static extern void Set_StatLockButton(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.statusbar-window"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.statusbar-window"), WasmImportLinkage]
     internal static extern int B_StatusbarWindow(int a0, float f0, float f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-statusbar-window"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-statusbar-window"), WasmImportLinkage]
     internal static extern void Col_StatusbarWindow(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-statusbar-window"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-statusbar-window"), WasmImportLinkage]
     internal static extern void Set_StatusbarWindow(int a0, long a1, int a2, float f0, float f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.supersedes"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.supersedes"), WasmImportLinkage]
     internal static extern int B_Supersedes(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-supersedes"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-supersedes"), WasmImportLinkage]
     internal static extern void Col_Supersedes(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-supersedes"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-supersedes"), WasmImportLinkage]
     internal static extern void Set_Supersedes(int a0, long a1, int a2, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-surface"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-surface"), WasmImportLinkage]
     internal static extern void Get_Surface(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-text-caret"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-text-caret"), WasmImportLinkage]
     internal static extern void Get_TextCaret(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-text-completion-state"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-text-completion-state"), WasmImportLinkage]
     internal static extern void Get_TextCompletionState(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.text-hue"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.text-hue"), WasmImportLinkage]
     internal static extern int B_TextHue(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-text-hue"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-text-hue"), WasmImportLinkage]
     internal static extern void Col_TextHue(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-text-hue"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-text-hue"), WasmImportLinkage]
     internal static extern void Set_TextHue(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.text-input"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.text-input"), WasmImportLinkage]
     internal static extern int B_TextInput(int self);
 
     internal static int Tag_TextInput(int b) => B_TextInput(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.text-spans"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.text-spans"), WasmImportLinkage]
     internal static extern int B_TextSpans(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-text-spans"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-text-spans"), WasmImportLinkage]
     internal static extern void Col_TextSpans(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-text-spans"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-text-spans"), WasmImportLinkage]
     internal static extern void Set_TextSpans(int a0, long a1, int a2, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.text-wrap"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.text-wrap"), WasmImportLinkage]
     internal static extern int B_TextWrap(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-text-wrap"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-text-wrap"), WasmImportLinkage]
     internal static extern void Col_TextWrap(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-text-wrap"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-text-wrap"), WasmImportLinkage]
     internal static extern void Set_TextWrap(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.tooltip"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.tooltip"), WasmImportLinkage]
     internal static extern int B_Tooltip(int a0, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-tooltip"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-tooltip"), WasmImportLinkage]
     internal static extern void Col_Tooltip(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-tooltip"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-tooltip"), WasmImportLinkage]
     internal static extern void Set_Tooltip(int a0, long a1, int a2, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.topbar-bg"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.topbar-bg"), WasmImportLinkage]
     internal static extern int B_TopbarBg(int self);
 
     internal static int Tag_TopbarBg(int b) => B_TopbarBg(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.topbar-button"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.topbar-button"), WasmImportLinkage]
     internal static extern int B_TopbarButton(int self);
 
     internal static int Tag_TopbarButton(int b) => B_TopbarButton(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.topbar-full"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.topbar-full"), WasmImportLinkage]
     internal static extern int B_TopbarFull(int self);
 
     internal static int Tag_TopbarFull(int b) => B_TopbarFull(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.topbar-root"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.topbar-root"), WasmImportLinkage]
     internal static extern int B_TopbarRoot(int self);
 
     internal static int Tag_TopbarRoot(int b) => B_TopbarRoot(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-animation"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-animation"), WasmImportLinkage]
     internal static extern void Col_Animation(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-mob-steps"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-mob-steps"), WasmImportLinkage]
     internal static extern void Col_MobSteps(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.buff"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.buff"), WasmImportLinkage]
     internal static extern int B_Buff(int self);
 
     internal static int Tag_Buff(int b) => B_Buff(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.combat-book"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.combat-book"), WasmImportLinkage]
     internal static extern int B_CombatBook(int a0, int f0, int f1, int f2, int f3, int f4, int f5, long f6, long f7, long f8);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-combat-book"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-combat-book"), WasmImportLinkage]
     internal static extern void Col_CombatBook(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-combat-book"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-combat-book"), WasmImportLinkage]
     internal static extern void Set_CombatBook(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, int f5, long f6, long f7, long f8);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.house-design"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.house-design"), WasmImportLinkage]
     internal static extern int B_HouseDesign(int a0, long f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-house-design"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-house-design"), WasmImportLinkage]
     internal static extern void Col_HouseDesign(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-house-design"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-house-design"), WasmImportLinkage]
     internal static extern void Set_HouseDesign(int a0, long a1, int a2, long f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.journal"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.journal"), WasmImportLinkage]
     internal static extern int B_Journal(nint args);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-journal"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-journal"), WasmImportLinkage]
     internal static extern void Col_Journal(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-journal"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-journal"), WasmImportLinkage]
     internal static extern void Set_Journal(nint args);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.logout"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.logout"), WasmImportLinkage]
     internal static extern int B_Logout(int self);
 
     internal static int Tag_Logout(int b) => B_Logout(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.menu"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.menu"), WasmImportLinkage]
     internal static extern int B_Menu(int a0, int f0, int f1, int f2, int f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-menu"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-menu"), WasmImportLinkage]
     internal static extern void Col_Menu(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-menu"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-menu"), WasmImportLinkage]
     internal static extern void Set_Menu(int a0, long a1, int a2, int f0, int f1, int f2, int f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.message-box"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.message-box"), WasmImportLinkage]
     internal static extern int B_MessageBox(int self);
 
     internal static int Tag_MessageBox(int b) => B_MessageBox(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.minimap"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.minimap"), WasmImportLinkage]
     internal static extern int B_Minimap(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-minimap"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-minimap"), WasmImportLinkage]
     internal static extern void Col_Minimap(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-minimap"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-minimap"), WasmImportLinkage]
     internal static extern void Set_Minimap(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.paperdoll"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.paperdoll"), WasmImportLinkage]
     internal static extern int B_Paperdoll(int a0, int f0, int f1, int f2, int f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-paperdoll"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-paperdoll"), WasmImportLinkage]
     internal static extern void Col_Paperdoll(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-paperdoll"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-paperdoll"), WasmImportLinkage]
     internal static extern void Set_Paperdoll(int a0, long a1, int a2, int f0, int f1, int f2, int f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.party-invite"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.party-invite"), WasmImportLinkage]
     internal static extern int B_PartyInvite(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-party-invite"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-party-invite"), WasmImportLinkage]
     internal static extern void Col_PartyInvite(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-party-invite"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-party-invite"), WasmImportLinkage]
     internal static extern void Set_PartyInvite(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.party-manifest"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.party-manifest"), WasmImportLinkage]
     internal static extern int B_PartyManifest(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-party-manifest"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-party-manifest"), WasmImportLinkage]
     internal static extern void Col_PartyManifest(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-party-manifest"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-party-manifest"), WasmImportLinkage]
     internal static extern void Set_PartyManifest(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.profile"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.profile"), WasmImportLinkage]
     internal static extern int B_Profile(int a0, int f0, int f1, float f2, long f3, long f4, long f5, long f6, int f7, int f8, long f9);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-profile"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-profile"), WasmImportLinkage]
     internal static extern void Col_Profile(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-profile"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-profile"), WasmImportLinkage]
     internal static extern void Set_Profile(int a0, long a1, int a2, int f0, int f1, float f2, long f3, long f4, long f5, long f6, int f7, int f8, long f9);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.racial-book"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.racial-book"), WasmImportLinkage]
     internal static extern int B_RacialBook(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6, long f7, long f8, long f9);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-racial-book"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-racial-book"), WasmImportLinkage]
     internal static extern void Col_RacialBook(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-racial-book"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-racial-book"), WasmImportLinkage]
     internal static extern void Set_RacialBook(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, int f5, int f6, long f7, long f8, long f9);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-server-closed"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-server-closed"), WasmImportLinkage]
     internal static extern void Send_ServerClosed(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-server-closed"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-server-closed"), WasmImportLinkage]
     internal static extern void Read_ServerClosed(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-server-opened"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-server-opened"), WasmImportLinkage]
     internal static extern void Send_ServerOpened(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-server-opened"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-server-opened"), WasmImportLinkage]
     internal static extern void Read_ServerOpened(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.gump-skills"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.gump-skills"), WasmImportLinkage]
     internal static extern int B_GumpSkills(nint args);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-gump-skills"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-gump-skills"), WasmImportLinkage]
     internal static extern void Col_GumpSkills(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-gump-skills"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-gump-skills"), WasmImportLinkage]
     internal static extern void Set_GumpSkills(nint args);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.spellbook"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.spellbook"), WasmImportLinkage]
     internal static extern int B_Spellbook(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6, long f7, long f8, long f9, int f10);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-spellbook"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-spellbook"), WasmImportLinkage]
     internal static extern void Col_Spellbook(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-spellbook"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-spellbook"), WasmImportLinkage]
     internal static extern void Set_Spellbook(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, int f5, int f6, long f7, long f8, long f9, int f10);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.split-menu"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.split-menu"), WasmImportLinkage]
     internal static extern int B_SplitMenu(nint args);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-split-menu"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-split-menu"), WasmImportLinkage]
     internal static extern void Col_SplitMenu(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-split-menu"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-split-menu"), WasmImportLinkage]
     internal static extern void Set_SplitMenu(nint args);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.tip-notice"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.tip-notice"), WasmImportLinkage]
     internal static extern int B_TipNotice(int a0, int f0, int f1, float f2, long f3, long f4, long f5, long f6, long f7);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-tip-notice"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-tip-notice"), WasmImportLinkage]
     internal static extern void Col_TipNotice(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-tip-notice"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-tip-notice"), WasmImportLinkage]
     internal static extern void Set_TipNotice(int a0, long a1, int a2, int f0, int f1, float f2, long f3, long f4, long f5, long f6, long f7);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.trade"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.trade"), WasmImportLinkage]
     internal static extern int B_Trade(int a0, int f0, int f1, int f2, int f3, int f4, int f5);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-trade"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-trade"), WasmImportLinkage]
     internal static extern void Col_Trade(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-trade"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-trade"), WasmImportLinkage]
     internal static extern void Set_Trade(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, int f5);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.worldmap"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.worldmap"), WasmImportLinkage]
     internal static extern int B_Worldmap(int self);
 
     internal static int Tag_Worldmap(int b) => B_Worldmap(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-move-request"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-move-request"), WasmImportLinkage]
     internal static extern void Send_MoveRequest(int a0, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-move-request"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-move-request"), WasmImportLinkage]
     internal static extern void Read_MoveRequest(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-party"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-party"), WasmImportLinkage]
     internal static extern void Get_Party(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-player-spellbook"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-player-spellbook"), WasmImportLinkage]
     internal static extern void Get_PlayerSpellbook(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-steps"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-steps"), WasmImportLinkage]
     internal static extern void Get_Steps(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.character-creation"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.character-creation"), WasmImportLinkage]
     internal static extern int B_CharacterCreation(int self);
 
     internal static int Tag_CharacterCreation(int b) => B_CharacterCreation(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-character-list"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-character-list"), WasmImportLinkage]
     internal static extern void Send_CharacterList(int a0, int f0, int f1, int f2, int f3);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-character-list"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-character-list"), WasmImportLinkage]
     internal static extern void Read_CharacterList(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.character-selection"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.character-selection"), WasmImportLinkage]
     internal static extern int B_CharacterSelection(int self);
 
     internal static int Tag_CharacterSelection(int b) => B_CharacterSelection(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.game"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.game"), WasmImportLinkage]
     internal static extern int B_Game(int self);
 
     internal static int Tag_Game(int b) => B_Game(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.login"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.login"), WasmImportLinkage]
     internal static extern int B_Login(int self);
 
     internal static int Tag_Login(int b) => B_Login(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.login-error"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.login-error"), WasmImportLinkage]
     internal static extern int B_LoginError(int self);
 
     internal static int Tag_LoginError(int b) => B_LoginError(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-login-error-info"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-login-error-info"), WasmImportLinkage]
     internal static extern void Send_LoginErrorInfo(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-login-error-info"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-login-error-info"), WasmImportLinkage]
     internal static extern void Read_LoginErrorInfo(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "send-server-list"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "send-server-list"), WasmImportLinkage]
     internal static extern void Send_ServerList(int a0, int f0, int f1);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "read-server-list"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "read-server-list"), WasmImportLinkage]
     internal static extern void Read_ServerList(int e, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.server-selection"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.server-selection"), WasmImportLinkage]
     internal static extern int B_ServerSelection(int self);
 
     internal static int Tag_ServerSelection(int b) => B_ServerSelection(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-clipboard-set"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-clipboard-set"), WasmImportLinkage]
     internal static extern void Get_ClipboardSet(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "put-clipboard-set"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "put-clipboard-set"), WasmImportLinkage]
     internal static extern void Put_ClipboardSet(int a0, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-clipboard-set"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resource-clipboard-set"), WasmImportLinkage]
     internal static extern void SetRes_ClipboardSet(int a0, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-focused-input"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-focused-input"), WasmImportLinkage]
     internal static extern void Get_FocusedInput(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "put-focused-input"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "put-focused-input"), WasmImportLinkage]
     internal static extern void Put_FocusedInput(int a0, long f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-focused-input"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resource-focused-input"), WasmImportLinkage]
     internal static extern void SetRes_FocusedInput(int a0, long f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.masked-text"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.grid-placement"), WasmImportLinkage]
+    internal static extern int B_GridPlacement(int a0, int f0, int f1, int f2, int f3, int f4, int f5);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-grid-placement"), WasmImportLinkage]
+    internal static extern void Col_GridPlacement(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-grid-placement"), WasmImportLinkage]
+    internal static extern void Set_GridPlacement(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, int f5);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.grid-placement-names"), WasmImportLinkage]
+    internal static extern int B_GridPlacementNames(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6, int f7);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-grid-placement-names"), WasmImportLinkage]
+    internal static extern void Col_GridPlacementNames(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-grid-placement-names"), WasmImportLinkage]
+    internal static extern void Set_GridPlacementNames(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, int f5, int f6, int f7);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.grid-template"), WasmImportLinkage]
+    internal static extern int B_GridTemplate(int a0, int f0, int f1, int f2, int f3, int f4, int f5, int f6, int f7, int f8, int f9, int f10, int f11, int f12, int f13, int f14);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-grid-template"), WasmImportLinkage]
+    internal static extern void Col_GridTemplate(int q, int term, nint ret);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-grid-template"), WasmImportLinkage]
+    internal static extern void Set_GridTemplate(nint args);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.masked-text"), WasmImportLinkage]
     internal static extern int B_MaskedText(int a0, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-masked-text"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-masked-text"), WasmImportLinkage]
     internal static extern void Col_MaskedText(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-masked-text"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-masked-text"), WasmImportLinkage]
     internal static extern void Set_MaskedText(int a0, long a1, int a2, int f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.read-only-text"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.read-only-text"), WasmImportLinkage]
     internal static extern int B_ReadOnlyText(int self);
 
     internal static int Tag_ReadOnlyText(int b) => B_ReadOnlyText(b);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-text-clipboard-action"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-text-clipboard-action"), WasmImportLinkage]
     internal static extern void Get_TextClipboardAction(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "put-text-clipboard-action"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "put-text-clipboard-action"), WasmImportLinkage]
     internal static extern void Put_TextClipboardAction(int a0, long f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-text-clipboard-action"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resource-text-clipboard-action"), WasmImportLinkage]
     internal static extern void SetRes_TextClipboardAction(int a0, long f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-text-completion"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-text-completion"), WasmImportLinkage]
     internal static extern void Get_TextCompletion(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "put-text-completion"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "put-text-completion"), WasmImportLinkage]
     internal static extern void Put_TextCompletion(int a0, long f0, int f1, int f2, int f3, int f4);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-text-completion"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resource-text-completion"), WasmImportLinkage]
     internal static extern void SetRes_TextCompletion(int a0, long f0, int f1, int f2, int f3, int f4);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "get-text-completion-pick"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-text-completion-pick"), WasmImportLinkage]
     internal static extern void Get_TextCompletionPick(int r, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "put-text-completion-pick"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "put-text-completion-pick"), WasmImportLinkage]
     internal static extern void Put_TextCompletionPick(int a0, long f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-resource-text-completion-pick"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resource-text-completion-pick"), WasmImportLinkage]
     internal static extern void SetRes_TextCompletionPick(int a0, long f0, int f1, int f2);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.tooltip-serial"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.tooltip-serial"), WasmImportLinkage]
     internal static extern int B_TooltipSerial(int a0, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-tooltip-serial"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-tooltip-serial"), WasmImportLinkage]
     internal static extern void Col_TooltipSerial(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-tooltip-serial"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-tooltip-serial"), WasmImportLinkage]
     internal static extern void Set_TooltipSerial(int a0, long a1, int a2, int f0);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "[method]entity-builder.marker"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "[method]entity-builder.marker"), WasmImportLinkage]
     internal static extern int B_Marker(int a0, int f0, int f1, int f2, int f3, int f4, float f5, float f6, float f7, float f8, int f9);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "column-marker"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "column-marker"), WasmImportLinkage]
     internal static extern void Col_Marker(int q, int term, nint ret);
 
-    [DllImport("cuo:modding/components@0.1.0", EntryPoint = "set-marker"), WasmImportLinkage]
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-marker"), WasmImportLinkage]
     internal static extern void Set_Marker(int a0, long a1, int a2, int f0, int f1, int f2, int f3, int f4, float f5, float f6, float f7, float f8, int f9);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "get-self-label"), WasmImportLinkage]
+    internal static extern void Get_SelfLabel(int r, nint ret);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "put-self-label"), WasmImportLinkage]
+    internal static extern void Put_SelfLabel(int a0, int f0, int f1);
+
+    [DllImport("cuo:modding/components@0.2.0", EntryPoint = "set-resource-self-label"), WasmImportLinkage]
+    internal static extern void SetRes_SelfLabel(int a0, int f0, int f1);
 
 }
 
@@ -7104,33 +8084,33 @@ internal sealed unsafe class CodecAmount : TypedCodec<global::CuoModSdk.Types.Am
 /// <summary><c>cuo:ui/node</c> (node).</summary>
 internal sealed unsafe class CodecNode : TypedCodec<global::CuoModSdk.Types.Node>
 {
-    internal override int Size => 164;
+    internal override int Size => 272;
     internal override string Path => "cuo:ui/node";
     internal override global::CuoModSdk.Types.Node Lift(byte* p) => TypedGen.LiftNode(p);
     protected override void Lower(in global::CuoModSdk.Types.Node v, byte* p) => TypedGen.LowerNode(v, p);
     internal override bool Differs(in global::CuoModSdk.Types.Node now, byte* original)
     {
-        var mine = stackalloc ulong[21];
+        var mine = stackalloc ulong[34];
         LowerInto(now, (byte*)mine);
         return !TypedGen.EqNode((byte*)mine, original);
     }
     internal override int Build(int b, byte* rec)
     {
-        var area = stackalloc ulong[21];
+        var area = stackalloc ulong[35];
         var a = (byte*)area;
         *(int*)(a + 0) = b;
-        new ReadOnlySpan<byte>(rec, 164).CopyTo(new Span<byte>(a + 4, 164));
+        new ReadOnlySpan<byte>(rec, 272).CopyTo(new Span<byte>(a + 4, 272));
         return TypedImports.B_Node((nint)a);
     }
     internal override void Column(int q, byte t, nint ret) => TypedImports.Col_Node(q, t, ret);
     internal override void Set(int q, ulong e, byte t, byte* rec)
     {
-        var area = stackalloc ulong[23];
+        var area = stackalloc ulong[37];
         var a = (byte*)area;
         *(int*)(a + 0) = q;
         *(long*)(a + 8) = (long)e;
         a[16] = t;
-        new ReadOnlySpan<byte>(rec, 164).CopyTo(new Span<byte>(a + 20, 164));
+        new ReadOnlySpan<byte>(rec, 272).CopyTo(new Span<byte>(a + 20, 272));
         TypedImports.Set_Node((nint)a);
     }
 }
@@ -9991,6 +10971,86 @@ internal sealed unsafe class CodecFocusedInput : TypedCodec<global::CuoModSdk.Ty
     }
 }
 
+/// <summary><c>cuo:ui/grid-placement</c> (grid-placement).</summary>
+internal sealed unsafe class CodecGridPlacement : TypedCodec<global::CuoModSdk.Types.GridPlacement>
+{
+    internal override int Size => 12;
+    internal override string Path => "cuo:ui/grid-placement";
+    internal override global::CuoModSdk.Types.GridPlacement Lift(byte* p) => TypedGen.LiftGridPlacement(p);
+    protected override void Lower(in global::CuoModSdk.Types.GridPlacement v, byte* p) => TypedGen.LowerGridPlacement(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.GridPlacement now, byte* original)
+    {
+        var mine = stackalloc ulong[2];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqGridPlacement((byte*)mine, original);
+    }
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_GridPlacement(b, *(short*)(rec + 0), *(ushort*)(rec + 2), *(short*)(rec + 4), *(ushort*)(rec + 6), *(short*)(rec + 8), *(short*)(rec + 10));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_GridPlacement(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_GridPlacement(q, (long)e, t, *(short*)(rec + 0), *(ushort*)(rec + 2), *(short*)(rec + 4), *(ushort*)(rec + 6), *(short*)(rec + 8), *(short*)(rec + 10));
+    }
+}
+
+/// <summary><c>cuo:ui/grid-placement-names</c> (grid-placement-names).</summary>
+internal sealed unsafe class CodecGridPlacementNames : TypedCodec<global::CuoModSdk.Types.GridPlacementNames>
+{
+    internal override int Size => 32;
+    internal override string Path => "cuo:ui/grid-placement-names";
+    internal override global::CuoModSdk.Types.GridPlacementNames Lift(byte* p) => TypedGen.LiftGridPlacementNames(p);
+    protected override void Lower(in global::CuoModSdk.Types.GridPlacementNames v, byte* p) => TypedGen.LowerGridPlacementNames(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.GridPlacementNames now, byte* original)
+    {
+        var mine = stackalloc ulong[4];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqGridPlacementNames((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeGridPlacementNames(p);
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_GridPlacementNames(b, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20), *(int*)(rec + 24), *(int*)(rec + 28));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_GridPlacementNames(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        TypedImports.Set_GridPlacementNames(q, (long)e, t, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20), *(int*)(rec + 24), *(int*)(rec + 28));
+    }
+}
+
+/// <summary><c>cuo:ui/grid-template</c> (grid-template).</summary>
+internal sealed unsafe class CodecGridTemplate : TypedCodec<global::CuoModSdk.Types.GridTemplate>
+{
+    internal override int Size => 60;
+    internal override string Path => "cuo:ui/grid-template";
+    internal override global::CuoModSdk.Types.GridTemplate Lift(byte* p) => TypedGen.LiftGridTemplate(p);
+    protected override void Lower(in global::CuoModSdk.Types.GridTemplate v, byte* p) => TypedGen.LowerGridTemplate(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.GridTemplate now, byte* original)
+    {
+        var mine = stackalloc ulong[8];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqGridTemplate((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeGridTemplate(p);
+    internal override int Build(int b, byte* rec)
+    {
+        return TypedImports.B_GridTemplate(b, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(int*)(rec + 20), *(int*)(rec + 24), *(int*)(rec + 28), *(rec + 32), *(int*)(rec + 36), *(int*)(rec + 40), *(int*)(rec + 44), *(int*)(rec + 48), *(int*)(rec + 52), *(int*)(rec + 56));
+    }
+    internal override void Column(int q, byte t, nint ret) => TypedImports.Col_GridTemplate(q, t, ret);
+    internal override void Set(int q, ulong e, byte t, byte* rec)
+    {
+        var area = stackalloc ulong[10];
+        var a = (byte*)area;
+        *(int*)(a + 0) = q;
+        *(long*)(a + 8) = (long)e;
+        a[16] = t;
+        new ReadOnlySpan<byte>(rec, 60).CopyTo(new Span<byte>(a + 20, 60));
+        TypedImports.Set_GridTemplate((nint)a);
+    }
+}
+
 /// <summary><c>cuo:ui/masked-text</c> (masked-text).</summary>
 internal sealed unsafe class CodecMaskedText : TypedCodec<global::CuoModSdk.Types.MaskedText>
 {
@@ -10162,5 +11222,39 @@ internal sealed unsafe class CodecMarker : TypedCodec<global::CuoModSdk.Types.Wo
     internal override void Set(int q, ulong e, byte t, byte* rec)
     {
         TypedImports.Set_Marker(q, (long)e, t, *(int*)(rec + 0), *(int*)(rec + 4), *(int*)(rec + 8), *(int*)(rec + 12), *(int*)(rec + 16), *(float*)(rec + 20), *(float*)(rec + 24), *(float*)(rec + 28), *(float*)(rec + 32), *(ushort*)(rec + 36));
+    }
+}
+
+/// <summary><c>cuo:worldmap/self-label</c> (world-map-self-label).</summary>
+internal sealed unsafe class CodecSelfLabel : TypedCodec<global::CuoModSdk.Types.WorldMapSelfLabel>
+{
+    internal override int Size => 8;
+    internal override string Path => "cuo:worldmap/self-label";
+    internal override global::CuoModSdk.Types.WorldMapSelfLabel Lift(byte* p) => TypedGen.LiftWorldMapSelfLabel(p);
+    protected override void Lower(in global::CuoModSdk.Types.WorldMapSelfLabel v, byte* p) => TypedGen.LowerWorldMapSelfLabel(v, p);
+    internal override bool Differs(in global::CuoModSdk.Types.WorldMapSelfLabel now, byte* original)
+    {
+        var mine = stackalloc ulong[1];
+        LowerInto(now, (byte*)mine);
+        return !TypedGen.EqWorldMapSelfLabel((byte*)mine, original);
+    }
+    internal override void FreeElement(byte* p) => TypedGen.FreeWorldMapSelfLabel(p);
+    internal override bool GetRecord(int res, byte* rec)
+    {
+        var ret = stackalloc ulong[2];
+        var p = (byte*)ret;
+        TypedImports.Get_SelfLabel(res, (nint)p);
+        if (p[0] == 0)
+            return false;
+        new ReadOnlySpan<byte>(p + 4, 8).CopyTo(new Span<byte>(rec, 8));
+        return true;
+    }
+    internal override void Put(int r, byte* rec)
+    {
+        TypedImports.Put_SelfLabel(r, *(int*)(rec + 0), *(int*)(rec + 4));
+    }
+    internal override void SetResource(int c, byte* rec)
+    {
+        TypedImports.SetRes_SelfLabel(c, *(int*)(rec + 0), *(int*)(rec + 4));
     }
 }

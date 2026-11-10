@@ -26,7 +26,7 @@ impl Conv<w::NotorietyFlag> for u8 {
 
 impl Conv<w::Display> for u8 {
     fn to_wit(&self) -> w::Display {
-        const CASES: &[w::Display] = &[w::Display::Flex, w::Display::None];
+        const CASES: &[w::Display] = &[w::Display::Flex, w::Display::None, w::Display::Block, w::Display::Grid];
         usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
     }
     fn from_wit(v: w::Display) -> u8 {
@@ -56,7 +56,7 @@ impl Conv<w::Overflow> for u8 {
 
 impl Conv<w::FlexDirection> for u8 {
     fn to_wit(&self) -> w::FlexDirection {
-        const CASES: &[w::FlexDirection] = &[w::FlexDirection::Row, w::FlexDirection::Column];
+        const CASES: &[w::FlexDirection] = &[w::FlexDirection::Row, w::FlexDirection::Column, w::FlexDirection::RowReverse, w::FlexDirection::ColumnReverse];
         usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
     }
     fn from_wit(v: w::FlexDirection) -> u8 {
@@ -66,7 +66,7 @@ impl Conv<w::FlexDirection> for u8 {
 
 impl Conv<w::JustifyContent> for u8 {
     fn to_wit(&self) -> w::JustifyContent {
-        const CASES: &[w::JustifyContent] = &[w::JustifyContent::Start, w::JustifyContent::Center, w::JustifyContent::End];
+        const CASES: &[w::JustifyContent] = &[w::JustifyContent::Start, w::JustifyContent::Center, w::JustifyContent::End, w::JustifyContent::SpaceBetween, w::JustifyContent::SpaceAround, w::JustifyContent::SpaceEvenly, w::JustifyContent::LogicalStart, w::JustifyContent::LogicalEnd, w::JustifyContent::Stretch];
         usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
     }
     fn from_wit(v: w::JustifyContent) -> u8 {
@@ -76,7 +76,7 @@ impl Conv<w::JustifyContent> for u8 {
 
 impl Conv<w::AlignItems> for u8 {
     fn to_wit(&self) -> w::AlignItems {
-        const CASES: &[w::AlignItems] = &[w::AlignItems::Start, w::AlignItems::Center, w::AlignItems::End];
+        const CASES: &[w::AlignItems] = &[w::AlignItems::Start, w::AlignItems::Center, w::AlignItems::End, w::AlignItems::Stretch, w::AlignItems::Baseline, w::AlignItems::LogicalStart, w::AlignItems::LogicalEnd];
         usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
     }
     fn from_wit(v: w::AlignItems) -> u8 {
@@ -90,6 +90,76 @@ impl Conv<w::ValType> for u8 {
         usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
     }
     fn from_wit(v: w::ValType) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::FlexWrap> for u8 {
+    fn to_wit(&self) -> w::FlexWrap {
+        const CASES: &[w::FlexWrap] = &[w::FlexWrap::NoWrap, w::FlexWrap::Wrap, w::FlexWrap::WrapReverse];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::FlexWrap) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::AlignSelf> for u8 {
+    fn to_wit(&self) -> w::AlignSelf {
+        const CASES: &[w::AlignSelf] = &[w::AlignSelf::Auto, w::AlignSelf::Start, w::AlignSelf::Center, w::AlignSelf::End, w::AlignSelf::Stretch, w::AlignSelf::Baseline, w::AlignSelf::LogicalStart, w::AlignSelf::LogicalEnd];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::AlignSelf) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::BoxSizing> for u8 {
+    fn to_wit(&self) -> w::BoxSizing {
+        const CASES: &[w::BoxSizing] = &[w::BoxSizing::BorderBox, w::BoxSizing::ContentBox];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::BoxSizing) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::AlignContent> for u8 {
+    fn to_wit(&self) -> w::AlignContent {
+        const CASES: &[w::AlignContent] = &[w::AlignContent::Start, w::AlignContent::Center, w::AlignContent::End, w::AlignContent::Stretch, w::AlignContent::SpaceBetween, w::AlignContent::SpaceAround, w::AlignContent::SpaceEvenly, w::AlignContent::LogicalStart, w::AlignContent::LogicalEnd];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::AlignContent) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::Float> for u8 {
+    fn to_wit(&self) -> w::Float {
+        const CASES: &[w::Float] = &[w::Float::None, w::Float::Left, w::Float::Right];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::Float) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::Clear> for u8 {
+    fn to_wit(&self) -> w::Clear {
+        const CASES: &[w::Clear] = &[w::Clear::None, w::Clear::Left, w::Clear::Right, w::Clear::Both];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::Clear) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::UiDirection> for u8 {
+    fn to_wit(&self) -> w::UiDirection {
+        const CASES: &[w::UiDirection] = &[w::UiDirection::Ltr, w::UiDirection::Rtl];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::UiDirection) -> u8 {
         v as u8
     }
 }
@@ -230,6 +300,46 @@ impl Conv<w::TextWrapKind> for u8 {
         usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
     }
     fn from_wit(v: w::TextWrapKind) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::GridTrackKind> for u8 {
+    fn to_wit(&self) -> w::GridTrackKind {
+        const CASES: &[w::GridTrackKind] = &[w::GridTrackKind::Auto, w::GridTrackKind::Px, w::GridTrackKind::Percent, w::GridTrackKind::Fr, w::GridTrackKind::MinContent, w::GridTrackKind::MaxContent, w::GridTrackKind::MinMax, w::GridTrackKind::FitContent];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::GridTrackKind) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::GridBreadthKind> for u8 {
+    fn to_wit(&self) -> w::GridBreadthKind {
+        const CASES: &[w::GridBreadthKind] = &[w::GridBreadthKind::Auto, w::GridBreadthKind::Px, w::GridBreadthKind::Percent, w::GridBreadthKind::Fr, w::GridBreadthKind::MinContent, w::GridBreadthKind::MaxContent];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::GridBreadthKind) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::GridRepeatKind> for u8 {
+    fn to_wit(&self) -> w::GridRepeatKind {
+        const CASES: &[w::GridRepeatKind] = &[w::GridRepeatKind::Count, w::GridRepeatKind::AutoFill, w::GridRepeatKind::AutoFit];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::GridRepeatKind) -> u8 {
+        v as u8
+    }
+}
+
+impl Conv<w::GridAutoFlow> for u8 {
+    fn to_wit(&self) -> w::GridAutoFlow {
+        const CASES: &[w::GridAutoFlow] = &[w::GridAutoFlow::Row, w::GridAutoFlow::Column, w::GridAutoFlow::RowDense, w::GridAutoFlow::ColumnDense];
+        usize::try_from(*self).ok().and_then(|i| CASES.get(i)).copied().unwrap_or(CASES[0])
+    }
+    fn from_wit(v: w::GridAutoFlow) -> u8 {
         v as u8
     }
 }
@@ -523,6 +633,26 @@ impl Conv<w::Node> for s::Node {
             border: Conv::to_wit(&self.border),
             gap: Conv::to_wit(&self.gap),
             aspect_ratio: Conv::to_wit(&self.aspect_ratio),
+            margin: Conv::to_wit(&self.margin),
+            flex_grow: Conv::to_wit(&self.flex_grow),
+            flex_shrink: Conv::to_wit(&self.flex_shrink),
+            flex_basis: Conv::to_wit(&self.flex_basis),
+            flex_wrap: Conv::to_wit(&self.flex_wrap),
+            align_self: Conv::to_wit(&self.align_self),
+            box_sizing: Conv::to_wit(&self.box_sizing),
+            row_gap: Conv::to_wit(&self.row_gap),
+            column_gap: Conv::to_wit(&self.column_gap),
+            align_content: Conv::to_wit(&self.align_content),
+            justify_items: Conv::to_wit(&self.justify_items),
+            justify_self: Conv::to_wit(&self.justify_self),
+            overflow_x: Conv::to_wit(&self.overflow_x),
+            overflow_y: Conv::to_wit(&self.overflow_y),
+            scrollbar_width: Conv::to_wit(&self.scrollbar_width),
+            relative_insets: Conv::to_wit(&self.relative_insets),
+            border_in_layout: Conv::to_wit(&self.border_in_layout),
+            float: Conv::to_wit(&self.float),
+            clear: Conv::to_wit(&self.clear),
+            direction: Conv::to_wit(&self.direction),
         }
     }
     fn from_wit(v: w::Node) -> s::Node {
@@ -547,6 +677,26 @@ impl Conv<w::Node> for s::Node {
             border: Conv::from_wit(v.border),
             gap: Conv::from_wit(v.gap),
             aspect_ratio: Conv::from_wit(v.aspect_ratio),
+            margin: Conv::from_wit(v.margin),
+            flex_grow: Conv::from_wit(v.flex_grow),
+            flex_shrink: Conv::from_wit(v.flex_shrink),
+            flex_basis: Conv::from_wit(v.flex_basis),
+            flex_wrap: Conv::from_wit(v.flex_wrap),
+            align_self: Conv::from_wit(v.align_self),
+            box_sizing: Conv::from_wit(v.box_sizing),
+            row_gap: Conv::from_wit(v.row_gap),
+            column_gap: Conv::from_wit(v.column_gap),
+            align_content: Conv::from_wit(v.align_content),
+            justify_items: Conv::from_wit(v.justify_items),
+            justify_self: Conv::from_wit(v.justify_self),
+            overflow_x: Conv::from_wit(v.overflow_x),
+            overflow_y: Conv::from_wit(v.overflow_y),
+            scrollbar_width: Conv::from_wit(v.scrollbar_width),
+            relative_insets: Conv::from_wit(v.relative_insets),
+            border_in_layout: Conv::from_wit(v.border_in_layout),
+            float: Conv::from_wit(v.float),
+            clear: Conv::from_wit(v.clear),
+            direction: Conv::from_wit(v.direction),
         }
     }
 }
@@ -1787,7 +1937,7 @@ impl Conv<w::ComputedNode> for s::ComputedNode {
         w::ComputedNode {
             size: Conv::to_wit(&self.size),
             position: Conv::to_wit(&self.position),
-            clay_id: Conv::to_wit(&self.clay_id),
+            layout_id: Conv::to_wit(&self.layout_id),
             paint_order: Conv::to_wit(&self.paint_order),
         }
     }
@@ -1795,7 +1945,7 @@ impl Conv<w::ComputedNode> for s::ComputedNode {
         s::ComputedNode {
             size: Conv::from_wit(v.size),
             position: Conv::from_wit(v.position),
-            clay_id: Conv::from_wit(v.clay_id),
+            layout_id: Conv::from_wit(v.layout_id),
             paint_order: Conv::from_wit(v.paint_order),
         }
     }
@@ -2968,6 +3118,179 @@ impl Conv<w::InputFocus> for s::InputFocus {
     }
 }
 
+impl Conv<w::GridPlacement> for s::GridPlacement {
+    fn to_wit(&self) -> w::GridPlacement {
+        w::GridPlacement {
+            column_start: Conv::to_wit(&self.column_start),
+            column_span: Conv::to_wit(&self.column_span),
+            row_start: Conv::to_wit(&self.row_start),
+            row_span: Conv::to_wit(&self.row_span),
+            column_end: Conv::to_wit(&self.column_end),
+            row_end: Conv::to_wit(&self.row_end),
+        }
+    }
+    fn from_wit(v: w::GridPlacement) -> s::GridPlacement {
+        s::GridPlacement {
+            column_start: Conv::from_wit(v.column_start),
+            column_span: Conv::from_wit(v.column_span),
+            row_start: Conv::from_wit(v.row_start),
+            row_span: Conv::from_wit(v.row_span),
+            column_end: Conv::from_wit(v.column_end),
+            row_end: Conv::from_wit(v.row_end),
+        }
+    }
+}
+
+impl Conv<w::GridPlacementNames> for s::GridPlacementNames {
+    fn to_wit(&self) -> w::GridPlacementNames {
+        w::GridPlacementNames {
+            column_start: Conv::to_wit(&self.column_start),
+            column_end: Conv::to_wit(&self.column_end),
+            row_start: Conv::to_wit(&self.row_start),
+            row_end: Conv::to_wit(&self.row_end),
+        }
+    }
+    fn from_wit(v: w::GridPlacementNames) -> s::GridPlacementNames {
+        s::GridPlacementNames {
+            column_start: Conv::from_wit(v.column_start),
+            column_end: Conv::from_wit(v.column_end),
+            row_start: Conv::from_wit(v.row_start),
+            row_end: Conv::from_wit(v.row_end),
+        }
+    }
+}
+
+impl Conv<w::GridBreadth> for s::GridBreadth {
+    fn to_wit(&self) -> w::GridBreadth {
+        w::GridBreadth {
+            kind: Conv::to_wit(&self.kind),
+            value: Conv::to_wit(&self.value),
+        }
+    }
+    fn from_wit(v: w::GridBreadth) -> s::GridBreadth {
+        s::GridBreadth {
+            kind: Conv::from_wit(v.kind),
+            value: Conv::from_wit(v.value),
+        }
+    }
+}
+
+impl Conv<w::GridTrack> for s::GridTrack {
+    fn to_wit(&self) -> w::GridTrack {
+        w::GridTrack {
+            kind: Conv::to_wit(&self.kind),
+            value: Conv::to_wit(&self.value),
+            min: Conv::to_wit(&self.min),
+            max: Conv::to_wit(&self.max),
+            fit_limit: Conv::to_wit(&self.fit_limit),
+        }
+    }
+    fn from_wit(v: w::GridTrack) -> s::GridTrack {
+        s::GridTrack {
+            kind: Conv::from_wit(v.kind),
+            value: Conv::from_wit(v.value),
+            min: Conv::from_wit(v.min),
+            max: Conv::from_wit(v.max),
+            fit_limit: Conv::from_wit(v.fit_limit),
+        }
+    }
+}
+
+impl Conv<w::GridLineNames> for s::GridLineNames {
+    fn to_wit(&self) -> w::GridLineNames {
+        w::GridLineNames {
+            names: Conv::to_wit(&self.names),
+        }
+    }
+    fn from_wit(v: w::GridLineNames) -> s::GridLineNames {
+        s::GridLineNames {
+            names: Conv::from_wit(v.names),
+        }
+    }
+}
+
+impl Conv<w::GridRepeat> for s::GridRepeat {
+    fn to_wit(&self) -> w::GridRepeat {
+        w::GridRepeat {
+            kind: Conv::to_wit(&self.kind),
+            count: Conv::to_wit(&self.count),
+            tracks: Conv::to_wit(&self.tracks),
+            line_names: Conv::to_wit(&self.line_names),
+        }
+    }
+    fn from_wit(v: w::GridRepeat) -> s::GridRepeat {
+        s::GridRepeat {
+            kind: Conv::from_wit(v.kind),
+            count: Conv::from_wit(v.count),
+            tracks: Conv::from_wit(v.tracks),
+            line_names: Conv::from_wit(v.line_names),
+        }
+    }
+}
+
+impl Conv<w::GridTemplateTrack> for s::GridTemplateTrack {
+    fn to_wit(&self) -> w::GridTemplateTrack {
+        w::GridTemplateTrack {
+            track: Conv::to_wit(&self.track),
+            repeat: Conv::to_wit(&self.repeat),
+        }
+    }
+    fn from_wit(v: w::GridTemplateTrack) -> s::GridTemplateTrack {
+        s::GridTemplateTrack {
+            track: Conv::from_wit(v.track),
+            repeat: Conv::from_wit(v.repeat),
+        }
+    }
+}
+
+impl Conv<w::GridArea> for s::GridArea {
+    fn to_wit(&self) -> w::GridArea {
+        w::GridArea {
+            name: Conv::to_wit(&self.name),
+            row_start: Conv::to_wit(&self.row_start),
+            row_end: Conv::to_wit(&self.row_end),
+            column_start: Conv::to_wit(&self.column_start),
+            column_end: Conv::to_wit(&self.column_end),
+        }
+    }
+    fn from_wit(v: w::GridArea) -> s::GridArea {
+        s::GridArea {
+            name: Conv::from_wit(v.name),
+            row_start: Conv::from_wit(v.row_start),
+            row_end: Conv::from_wit(v.row_end),
+            column_start: Conv::from_wit(v.column_start),
+            column_end: Conv::from_wit(v.column_end),
+        }
+    }
+}
+
+impl Conv<w::GridTemplate> for s::GridTemplate {
+    fn to_wit(&self) -> w::GridTemplate {
+        w::GridTemplate {
+            columns: Conv::to_wit(&self.columns),
+            rows: Conv::to_wit(&self.rows),
+            auto_rows: Conv::to_wit(&self.auto_rows),
+            auto_columns: Conv::to_wit(&self.auto_columns),
+            auto_flow: Conv::to_wit(&self.auto_flow),
+            areas: Conv::to_wit(&self.areas),
+            column_names: Conv::to_wit(&self.column_names),
+            row_names: Conv::to_wit(&self.row_names),
+        }
+    }
+    fn from_wit(v: w::GridTemplate) -> s::GridTemplate {
+        s::GridTemplate {
+            columns: Conv::from_wit(v.columns),
+            rows: Conv::from_wit(v.rows),
+            auto_rows: Conv::from_wit(v.auto_rows),
+            auto_columns: Conv::from_wit(v.auto_columns),
+            auto_flow: Conv::from_wit(v.auto_flow),
+            areas: Conv::from_wit(v.areas),
+            column_names: Conv::from_wit(v.column_names),
+            row_names: Conv::from_wit(v.row_names),
+        }
+    }
+}
+
 impl Conv<w::MaskedText> for s::MaskedText {
     fn to_wit(&self) -> w::MaskedText {
         w::MaskedText {
@@ -3066,6 +3389,19 @@ impl Conv<w::WorldMapMarker> for s::WorldMapMarker {
             map: Conv::from_wit(v.map),
             color: Conv::from_wit(v.color),
             name_hue: Conv::from_wit(v.name_hue),
+        }
+    }
+}
+
+impl Conv<w::WorldMapSelfLabel> for s::WorldMapSelfLabel {
+    fn to_wit(&self) -> w::WorldMapSelfLabel {
+        w::WorldMapSelfLabel {
+            name: Conv::to_wit(&self.name),
+        }
+    }
+    fn from_wit(v: w::WorldMapSelfLabel) -> s::WorldMapSelfLabel {
+        s::WorldMapSelfLabel {
+            name: Conv::from_wit(v.name),
         }
     }
 }
@@ -5248,6 +5584,66 @@ impl WritableResource for s::InputFocus {
     }
 }
 
+// `cuo:ui/grid-placement`
+impl Component for s::GridPlacement {
+    fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
+        c::column_grid_placement(q, term).into_iter().map(Conv::from_wit).collect()
+    }
+}
+impl WritableComponent for s::GridPlacement {
+    fn __same(&self, other: &Self) -> bool {
+        Conv::<w::GridPlacement>::to_wit(self) == Conv::<w::GridPlacement>::to_wit(other)
+    }
+    fn __set(&self, q: &wit::Query, entity: u64, term: u8) {
+        let v: w::GridPlacement = self.to_wit();
+        c::set_grid_placement(q, entity, term, v);
+    }
+    fn __insert(&self, b: &c::EntityBuilder) -> c::EntityBuilder {
+        let v: w::GridPlacement = self.to_wit();
+        b.grid_placement(v)
+    }
+}
+
+// `cuo:ui/grid-placement-names`
+impl Component for s::GridPlacementNames {
+    fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
+        c::column_grid_placement_names(q, term).into_iter().map(Conv::from_wit).collect()
+    }
+}
+impl WritableComponent for s::GridPlacementNames {
+    fn __same(&self, other: &Self) -> bool {
+        Conv::<w::GridPlacementNames>::to_wit(self) == Conv::<w::GridPlacementNames>::to_wit(other)
+    }
+    fn __set(&self, q: &wit::Query, entity: u64, term: u8) {
+        let v: w::GridPlacementNames = self.to_wit();
+        c::set_grid_placement_names(q, entity, term, &v);
+    }
+    fn __insert(&self, b: &c::EntityBuilder) -> c::EntityBuilder {
+        let v: w::GridPlacementNames = self.to_wit();
+        b.grid_placement_names(&v)
+    }
+}
+
+// `cuo:ui/grid-template`
+impl Component for s::GridTemplate {
+    fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
+        c::column_grid_template(q, term).into_iter().map(Conv::from_wit).collect()
+    }
+}
+impl WritableComponent for s::GridTemplate {
+    fn __same(&self, other: &Self) -> bool {
+        Conv::<w::GridTemplate>::to_wit(self) == Conv::<w::GridTemplate>::to_wit(other)
+    }
+    fn __set(&self, q: &wit::Query, entity: u64, term: u8) {
+        let v: w::GridTemplate = self.to_wit();
+        c::set_grid_template(q, entity, term, &v);
+    }
+    fn __insert(&self, b: &c::EntityBuilder) -> c::EntityBuilder {
+        let v: w::GridTemplate = self.to_wit();
+        b.grid_template(&v)
+    }
+}
+
 // `cuo:ui/masked-text`
 impl Component for s::MaskedText {
     fn __column(q: &wit::Query, term: u8, n: usize) -> Vec<Self> {
@@ -5382,6 +5778,26 @@ impl WritableComponent for s::WorldMapMarker {
     fn __insert(&self, b: &c::EntityBuilder) -> c::EntityBuilder {
         let v: w::WorldMapMarker = self.to_wit();
         b.marker(&v)
+    }
+}
+
+// `cuo:worldmap/self-label`
+impl Resource for s::WorldMapSelfLabel {
+    fn __get(r: &wit::Res) -> Option<Self> {
+        c::get_self_label(r).map(Conv::from_wit)
+    }
+}
+impl WritableResource for s::WorldMapSelfLabel {
+    fn __same(&self, other: &Self) -> bool {
+        Conv::<w::WorldMapSelfLabel>::to_wit(self) == Conv::<w::WorldMapSelfLabel>::to_wit(other)
+    }
+    fn __put(&self, r: &wit::Res) {
+        let v: w::WorldMapSelfLabel = self.to_wit();
+        c::put_self_label(r, &v);
+    }
+    fn __set_resource(&self, cmds: &wit::Commands) {
+        let v: w::WorldMapSelfLabel = self.to_wit();
+        c::set_resource_self_label(cmds, &v);
     }
 }
 
@@ -6215,6 +6631,27 @@ impl TypedTrigger for s::ServerSelectionInfoEvent {
 impl TagTrigger for s::ServerSelectionScene {
     fn tag() -> s::ServerSelectionScene {
         s::ServerSelectionScene {}
+    }
+}
+
+impl TypedTrigger for s::GridPlacement {
+    type Wit = w::GridPlacement;
+    fn lift(v: w::GridPlacement) -> s::GridPlacement {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::GridPlacementNames {
+    type Wit = w::GridPlacementNames;
+    fn lift(v: w::GridPlacementNames) -> s::GridPlacementNames {
+        Conv::from_wit(v)
+    }
+}
+
+impl TypedTrigger for s::GridTemplate {
+    type Wit = w::GridTemplate;
+    fn lift(v: w::GridTemplate) -> s::GridTemplate {
+        Conv::from_wit(v)
     }
 }
 

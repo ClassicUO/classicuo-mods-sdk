@@ -44,6 +44,9 @@ uint16_t cuo_Graphic_id(void) { TYPE_ID(cuo_Graphic_PATH); }
 uint16_t cuo_GridContainerWindow_id(void) { TYPE_ID(cuo_GridContainerWindow_PATH); }
 uint16_t cuo_GridLootWindow_id(void) { TYPE_ID(cuo_GridLootWindow_PATH); }
 uint16_t cuo_GridPinnedCell_id(void) { TYPE_ID(cuo_GridPinnedCell_PATH); }
+uint16_t cuo_GridPlacement_id(void) { TYPE_ID(cuo_GridPlacement_PATH); }
+uint16_t cuo_GridPlacementNames_id(void) { TYPE_ID(cuo_GridPlacementNames_PATH); }
+uint16_t cuo_GridTemplate_id(void) { TYPE_ID(cuo_GridTemplate_PATH); }
 uint16_t cuo_HealthBarWindow_id(void) { TYPE_ID(cuo_HealthBarWindow_PATH); }
 uint16_t cuo_Hits_id(void) { TYPE_ID(cuo_Hits_PATH); }
 uint16_t cuo_HostHotkeys_id(void) { TYPE_ID(cuo_HostHotkeys_PATH); }
@@ -157,6 +160,7 @@ uint16_t cuo_UiTooltip_id(void) { TYPE_ID(cuo_UiTooltip_PATH); }
 uint16_t cuo_UiTooltipSerial_id(void) { TYPE_ID(cuo_UiTooltipSerial_PATH); }
 uint16_t cuo_VendorWindow_id(void) { TYPE_ID(cuo_VendorWindow_PATH); }
 uint16_t cuo_WorldMapMarker_id(void) { TYPE_ID(cuo_WorldMapMarker_PATH); }
+uint16_t cuo_WorldMapSelfLabel_id(void) { TYPE_ID(cuo_WorldMapSelfLabel_PATH); }
 uint16_t cuo_WorldMapWindow_id(void) { TYPE_ID(cuo_WorldMapWindow_PATH); }
 uint16_t cuo_WorldPosition_id(void) { TYPE_ID(cuo_WorldPosition_PATH); }
 uint16_t cuo_WorldSingleClick_id(void) { TYPE_ID(cuo_WorldSingleClick_PATH); }

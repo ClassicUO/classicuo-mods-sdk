@@ -95,12 +95,35 @@ root and it drags and right-click-closes like every client window. Clicks arrive
 `cuo:ui/click` event: `app.add_observer(on_click)` with
 `fn on_click(click: On<Event, UiClick>, ...)`; `click.entity()` is what was clicked.
 
+`cuo:ui/node` is the whole layout of an element. Next to the box (`width` ... `border`, `gap`,
+`aspect-ratio`) and the flex basics it has `margin`, `flex-grow` / `flex-shrink` / `flex-basis` /
+`flex-wrap`, `align-self`, `box-sizing`, `row-gap` / `column-gap` (none: `gap`), `align-content`,
+`justify-items` / `justify-self`, `overflow-x` / `overflow-y` (none: from `overflow`),
+`scrollbar-width`, `relative-insets`, `border-in-layout`, `float`, `clear` and `direction`.
+`display` adds `block` and `grid`, `flex-direction` the reverses, `justify-content` and
+`align-items` the space-*, stretch, baseline and logical cases. Unset fields keep the
+defaults, and a read-modify-write of a node keeps every field. For a `display: grid` node:
+
+- `cuo:ui/grid-template`: `columns` and `rows` (each a `grid-template-track`: one `track`, or a
+  `repeat` with a count, auto-fill or auto-fit, its tracks and line names), `auto-rows`,
+  `auto-columns`, `auto-flow`, `areas`, `column-names` and `row-names`. A `grid-track` is a `kind`
+  (auto, px, percent, fr, min-content, max-content, min-max, fit-content) and the fields that kind
+  uses: `value`, `min` + `max`, or `fit-limit`.
+- `cuo:ui/grid-placement` on an item: 1-based start lines (0: auto-placed, negative: from the end),
+  spans (0: 1) and end lines (0: use the span).
+- `cuo:ui/grid-placement-names`: the same by name: a named line or an area, where an empty string
+  means none and a name wins over the number of that side.
+
+The contract is `cuo:modding@0.2.0`. A mod built against an older one fails to load with an
+error naming its import: rebuild it against this SDK.
+
 ### Functions: assets, actions, host
 
 Things that are not world data are plain functions, in four groups:
 
 - **`assets`** — the UO data files: image size + pixels (land, art, gumps, texmaps,
-  lights), animation frames, tiledata, hue ramps, clilocs, map cells, multis, skills.
+  lights), animation frames, tiledata, hue ramps, clilocs, map cells and areas (see
+  [Reading the map](#reading-the-map)), multis, skills.
 - **`actions`** — what the player can do: `double_click`, `move_item`, `walk`,
   `cast_spell`, `target_object`, `say`, `invoke_virtue`, `gump_reply`, `vendor_buy`,
   ... They go through the client's own code, so last target / held item / war mode
@@ -113,6 +136,10 @@ Things that are not world data are plain functions, in four groups:
 - **`host`** — `log`, `measure_text`, `resolve_serial`, `storage_get` /
   `storage_set` (global or per character; `storage::load::<T>(scope)` /
   `storage::save(scope, &value)` do the JSON for you).
+  `game_viewport`, `world_to_screen(x, y, z)` and `entity_screen_position(e)` turn
+  world positions into UI coordinates (the space a node's `left` / `top` are in) for
+  overlays that follow the world: nameplates, HP labels, markers. Re-query them every
+  frame you draw; they are none off the game screen.
 - **Files** — the mod's own folder (`Data/Mods/<mod>/`) is its filesystem, read-write
   at `/`: plain `std::fs` / `System.IO` with relative paths (`std::fs::write("cache.bin",
   ..)`). Nothing outside it is reachable. In the browser the folder is the OPFS directory
@@ -129,6 +156,40 @@ fn block_spam(p: Packet) -> Verdict {
 }
 
 export_mod!(setup);
+```
+
+### Reading the map
+
+`assets` reads the map files by facet index (`map`). It is file data only: no items, no
+house customisation. Map patches and overrides are included.
+
+- **Is the facet there?** `map_size(map)` gives its size in tiles, or none when it isn't
+  loaded. `map_load(map)` loads a facet nobody needed yet and returns its size; none when
+  the files have no such facet. A loaded facet stays in memory (tens of MB) and the load can
+  stall its frame, so call it when the player asks for that facet, not to probe them all.
+- **One tile:** `map_land(map, x, y)` is the land cell (graphic, z); `map_statics(map, x, y)`
+  the statics on it (graphic, z, hue).
+- **A rectangle:** `map_land_area(map, area)` and `map_statics_area(map, area)` read a
+  `MapArea { x, y, width, height }` in one call. The area is clipped to the facet and to
+  512x512 tiles, and the result's `area` is what was read. Land comes back row by row:
+  `graphics` and `z` are indexed by `(y - area.y) * area.width + (x - area.x)`, and a
+  block the files lack reads as graphic 0. Statics come back in no particular order, with
+  world `x` / `y`. Use these for anything bigger than a few tiles: one call per tile is slow.
+- **Colours:** `land_radar_color(id)` and `static_radar_color(graphic, hue)` give the radar
+  colour as `0xAARRGGBB` (`hue` 0 = none). None means the tile has no colour: skip it.
+- **Changes:** `map_revision()` goes up each time map data changes in memory (a server's map
+  patch, an override). It is one counter for all facets and only comparable within a session:
+  keep the last value and redraw what you cached when it differs.
+- **Raw blocks:** `map_block(map, block)` is one 8x8 block's file bytes, for tools that
+  want the file layout.
+
+```rust,ignore
+// A radar image of one rectangle, land only.
+fn radar(map: u8, area: MapArea) -> Option<(MapArea, Vec<u32>)> {
+    let land = assets::map_land_area(map, area)?;
+    let pixels = land.graphics.iter().map(|&id| assets::land_radar_color(id).unwrap_or(0)).collect();
+    Some((land.area, pixels)) // land.area: what was actually read
+}
 ```
 
 ### Idle cost
@@ -208,14 +269,14 @@ package example:hello;
 
 world hello {
     use tinyecs:modding/ecs@0.1.0.{commands, query, entity, packet-direction, verdict};
-    use cuo:modding/types@0.1.0.{chat-message};
+    use cuo:modding/types@0.2.0.{chat-message};
 
     export show-hits: func(hits: query, commands: commands);       // a scheduled system
     export on-click: func(entity: entity);                         // an observer (a tag event)
     export on-chat: func(entity: entity, value: chat-message);     // an observer with a value
     export filter: func(direction: packet-direction, packet: list<u8>) -> verdict; // on-packet
 
-    include cuo:modding/mod@0.1.0;
+    include cuo:modding/mod@0.2.0;
 }
 ```
 
@@ -226,3 +287,58 @@ trigger's value record (none for a tag); on-packet observers the direction and t
 packet. A declared system without a matching
 export fails the mod's load. A complete example: `src/Mods/ecs-hello-raw` in the client
 repo.
+
+## HTML/CSS windows
+
+A mod can draw a window from an HTML/CSS page instead of spawning nodes (Rust SDK; the `host` interface in the WIT):
+
+```rust,ignore
+const HTML: &str = include_str!("panel.html"); // links panel.css
+const CSS: &str = include_str!("panel.css");
+
+// Opens the window, or returns the one already open under this name.
+let Some(page) = host::page_open("panel", HTML, CSS) else { return };
+
+// Elements are named by their HTML id. Safe every frame, and also before the page has loaded.
+host::page_edit(page, "hp", &host::PageChange::Text(format!("{hp} / {max}")));
+host::page_edit(page, "bar", &host::PageChange::Style(("width".into(), format!("{pct}%"))));
+
+// Poll from a system: the data-arg of each clicked button, {id} filled in.
+for click in host::page_clicks(page) {
+    if let Some(amount) = click.strip_prefix("heal:") { /* ... */ }
+}
+```
+
+```html
+<input id="amount" value="5">
+<button data-action="mod" data-arg="heal:{amount}">Heal</button>
+<button data-action="close">Close</button>
+```
+
+Also `page-value`, `page-is-open` (false once the player closed it) and `page-close`.
+
+The files are exported once to `Data/Mods/<mod>/ui/<name>.html` and `.css`, then the player's copy
+wins and reloads on save. Changes from `page-edit` are re-applied after each reload. Every other
+page feature works here too: other `data-action` verbs, UO art, fonts, images, hover styles. An
+exported page does not update when the mod does, and removing the mod leaves `ui/` behind, like its
+`storage.json`.
+
+A page with a window per thing, and rows the mod fills:
+
+```rust,ignore
+let Some(page) = host::page_spawn("container", HTML, CSS, x, y) else { return }; // always a new window
+let root = Entity::from_bits(page); // the window root: size it, put components on it
+
+let Some(row) = host::page_clone(page, "list", "row") else { return }; // <template id="row">, into #list
+let name = host::page_part(page, row, "name"); // <span data-part="name"> inside the clone
+host::page_edit_element(page, row, &host::PageChange::AddClass("pinned".into()));
+host::page_clear(page, "list");
+```
+
+For a window whose whole content is generated, `PageChange::Html` replaces an element's contents
+with markup in one call, and the ids in it work with `page-element`. `data-rclick="arg"` on an
+element reports a right-click through `page-clicks` as `rclick:<x>:<y>:arg`.
+
+`page-element` gives an element's entity. A reload of the page makes new elements, and clones and
+anything on the old ones are gone, so compare it each frame and rebuild when it changes.
+`grid-containers-mod` is the worked example.

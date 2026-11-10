@@ -53,9 +53,18 @@ typedef struct cuo_GameState cuo_GameState;
 typedef struct cuo_GlobalZIndex cuo_GlobalZIndex;
 typedef struct cuo_GrabbedItem cuo_GrabbedItem;
 typedef struct cuo_Graphic cuo_Graphic;
+typedef struct cuo_GridArea cuo_GridArea;
+typedef struct cuo_GridBreadth cuo_GridBreadth;
 typedef struct cuo_GridContainerWindow cuo_GridContainerWindow;
+typedef struct cuo_GridLineNames cuo_GridLineNames;
 typedef struct cuo_GridLootWindow cuo_GridLootWindow;
 typedef struct cuo_GridPinnedCell cuo_GridPinnedCell;
+typedef struct cuo_GridPlacement cuo_GridPlacement;
+typedef struct cuo_GridPlacementNames cuo_GridPlacementNames;
+typedef struct cuo_GridRepeat cuo_GridRepeat;
+typedef struct cuo_GridTemplate cuo_GridTemplate;
+typedef struct cuo_GridTemplateTrack cuo_GridTemplateTrack;
+typedef struct cuo_GridTrack cuo_GridTrack;
 typedef struct cuo_HealthBarWindow cuo_HealthBarWindow;
 typedef struct cuo_Hits cuo_Hits;
 typedef struct cuo_HostHotkey cuo_HostHotkey;
@@ -191,20 +200,60 @@ typedef struct cuo_Vector2 cuo_Vector2;
 typedef struct cuo_Vector3 cuo_Vector3;
 typedef struct cuo_VendorWindow cuo_VendorWindow;
 typedef struct cuo_WorldMapMarker cuo_WorldMapMarker;
+typedef struct cuo_WorldMapSelfLabel cuo_WorldMapSelfLabel;
 typedef struct cuo_WorldMapWindow cuo_WorldMapWindow;
 typedef struct cuo_WorldPosition cuo_WorldPosition;
 typedef struct cuo_WorldSingleClick cuo_WorldSingleClick;
+
+/* `TinyEcs.Bevy.UI.AlignContent` */
+typedef uint8_t cuo_AlignContent;
+#define CUO_ALIGN_CONTENT_START ((cuo_AlignContent)0)
+#define CUO_ALIGN_CONTENT_CENTER ((cuo_AlignContent)1)
+#define CUO_ALIGN_CONTENT_END ((cuo_AlignContent)2)
+#define CUO_ALIGN_CONTENT_STRETCH ((cuo_AlignContent)3)
+#define CUO_ALIGN_CONTENT_SPACE_BETWEEN ((cuo_AlignContent)4)
+#define CUO_ALIGN_CONTENT_SPACE_AROUND ((cuo_AlignContent)5)
+#define CUO_ALIGN_CONTENT_SPACE_EVENLY ((cuo_AlignContent)6)
+#define CUO_ALIGN_CONTENT_LOGICAL_START ((cuo_AlignContent)7)
+#define CUO_ALIGN_CONTENT_LOGICAL_END ((cuo_AlignContent)8)
 
 /* `TinyEcs.Bevy.UI.AlignItems` */
 typedef uint8_t cuo_AlignItems;
 #define CUO_ALIGN_ITEMS_START ((cuo_AlignItems)0)
 #define CUO_ALIGN_ITEMS_CENTER ((cuo_AlignItems)1)
 #define CUO_ALIGN_ITEMS_END ((cuo_AlignItems)2)
+#define CUO_ALIGN_ITEMS_STRETCH ((cuo_AlignItems)3)
+#define CUO_ALIGN_ITEMS_BASELINE ((cuo_AlignItems)4)
+#define CUO_ALIGN_ITEMS_LOGICAL_START ((cuo_AlignItems)5)
+#define CUO_ALIGN_ITEMS_LOGICAL_END ((cuo_AlignItems)6)
+
+/* `TinyEcs.Bevy.UI.AlignSelf` */
+typedef uint8_t cuo_AlignSelf;
+#define CUO_ALIGN_SELF_AUTO ((cuo_AlignSelf)0)
+#define CUO_ALIGN_SELF_START ((cuo_AlignSelf)1)
+#define CUO_ALIGN_SELF_CENTER ((cuo_AlignSelf)2)
+#define CUO_ALIGN_SELF_END ((cuo_AlignSelf)3)
+#define CUO_ALIGN_SELF_STRETCH ((cuo_AlignSelf)4)
+#define CUO_ALIGN_SELF_BASELINE ((cuo_AlignSelf)5)
+#define CUO_ALIGN_SELF_LOGICAL_START ((cuo_AlignSelf)6)
+#define CUO_ALIGN_SELF_LOGICAL_END ((cuo_AlignSelf)7)
+
+/* `TinyEcs.Bevy.UI.BoxSizing` */
+typedef uint8_t cuo_BoxSizing;
+#define CUO_BOX_SIZING_BORDER_BOX ((cuo_BoxSizing)0)
+#define CUO_BOX_SIZING_CONTENT_BOX ((cuo_BoxSizing)1)
 
 /* `ClassicUO.Ecs.Modding.ChatKind` */
 typedef uint8_t cuo_ChatKind;
 #define CUO_CHAT_KIND_OVERHEAD ((cuo_ChatKind)0)
 #define CUO_CHAT_KIND_SYSTEM ((cuo_ChatKind)1)
+
+/* `TinyEcs.Bevy.UI.Clear` */
+typedef uint8_t cuo_Clear;
+#define CUO_CLEAR_NONE ((cuo_Clear)0)
+#define CUO_CLEAR_LEFT ((cuo_Clear)1)
+#define CUO_CLEAR_RIGHT ((cuo_Clear)2)
+#define CUO_CLEAR_BOTH ((cuo_Clear)3)
 
 /* `ClassicUO.Ecs.ContainerSlotAction` */
 typedef uint8_t cuo_ContainerSlotAction;
@@ -236,6 +285,8 @@ typedef uint8_t cuo_Direction;
 typedef uint8_t cuo_Display;
 #define CUO_DISPLAY_FLEX ((cuo_Display)0)
 #define CUO_DISPLAY_NONE ((cuo_Display)1)
+#define CUO_DISPLAY_BLOCK ((cuo_Display)2)
+#define CUO_DISPLAY_GRID ((cuo_Display)3)
 
 /* `ClassicUO.Game.Data.Flags` */
 typedef uint8_t cuo_Flags;
@@ -254,6 +305,20 @@ typedef uint8_t cuo_Flags;
 typedef uint8_t cuo_FlexDirection;
 #define CUO_FLEX_DIRECTION_ROW ((cuo_FlexDirection)0)
 #define CUO_FLEX_DIRECTION_COLUMN ((cuo_FlexDirection)1)
+#define CUO_FLEX_DIRECTION_ROW_REVERSE ((cuo_FlexDirection)2)
+#define CUO_FLEX_DIRECTION_COLUMN_REVERSE ((cuo_FlexDirection)3)
+
+/* `TinyEcs.Bevy.UI.FlexWrap` */
+typedef uint8_t cuo_FlexWrap;
+#define CUO_FLEX_WRAP_NO_WRAP ((cuo_FlexWrap)0)
+#define CUO_FLEX_WRAP_WRAP ((cuo_FlexWrap)1)
+#define CUO_FLEX_WRAP_WRAP_REVERSE ((cuo_FlexWrap)2)
+
+/* `TinyEcs.Bevy.UI.Float` */
+typedef uint8_t cuo_Float;
+#define CUO_FLOAT_NONE ((cuo_Float)0)
+#define CUO_FLOAT_LEFT ((cuo_Float)1)
+#define CUO_FLOAT_RIGHT ((cuo_Float)2)
 
 /* `ClassicUO.Ecs.Modding.GameStateKind` */
 typedef uint8_t cuo_GameStateKind;
@@ -264,6 +329,39 @@ typedef uint8_t cuo_GameStateKind;
 #define CUO_GAME_STATE_KIND_CHARACTER_CREATION ((cuo_GameStateKind)4)
 #define CUO_GAME_STATE_KIND_LOGIN_ERROR ((cuo_GameStateKind)5)
 #define CUO_GAME_STATE_KIND_GAME_SCREEN ((cuo_GameStateKind)6)
+
+/* `TinyEcs.Bevy.UI.GridAutoFlow` */
+typedef uint8_t cuo_GridAutoFlow;
+#define CUO_GRID_AUTO_FLOW_ROW ((cuo_GridAutoFlow)0)
+#define CUO_GRID_AUTO_FLOW_COLUMN ((cuo_GridAutoFlow)1)
+#define CUO_GRID_AUTO_FLOW_ROW_DENSE ((cuo_GridAutoFlow)2)
+#define CUO_GRID_AUTO_FLOW_COLUMN_DENSE ((cuo_GridAutoFlow)3)
+
+/* `TinyEcs.Bevy.UI.GridBreadthKind` */
+typedef uint8_t cuo_GridBreadthKind;
+#define CUO_GRID_BREADTH_KIND_AUTO ((cuo_GridBreadthKind)0)
+#define CUO_GRID_BREADTH_KIND_PX ((cuo_GridBreadthKind)1)
+#define CUO_GRID_BREADTH_KIND_PERCENT ((cuo_GridBreadthKind)2)
+#define CUO_GRID_BREADTH_KIND_FR ((cuo_GridBreadthKind)3)
+#define CUO_GRID_BREADTH_KIND_MIN_CONTENT ((cuo_GridBreadthKind)4)
+#define CUO_GRID_BREADTH_KIND_MAX_CONTENT ((cuo_GridBreadthKind)5)
+
+/* `TinyEcs.Bevy.UI.GridRepeatKind` */
+typedef uint8_t cuo_GridRepeatKind;
+#define CUO_GRID_REPEAT_KIND_COUNT ((cuo_GridRepeatKind)0)
+#define CUO_GRID_REPEAT_KIND_AUTO_FILL ((cuo_GridRepeatKind)1)
+#define CUO_GRID_REPEAT_KIND_AUTO_FIT ((cuo_GridRepeatKind)2)
+
+/* `TinyEcs.Bevy.UI.GridTrackKind` */
+typedef uint8_t cuo_GridTrackKind;
+#define CUO_GRID_TRACK_KIND_AUTO ((cuo_GridTrackKind)0)
+#define CUO_GRID_TRACK_KIND_PX ((cuo_GridTrackKind)1)
+#define CUO_GRID_TRACK_KIND_PERCENT ((cuo_GridTrackKind)2)
+#define CUO_GRID_TRACK_KIND_FR ((cuo_GridTrackKind)3)
+#define CUO_GRID_TRACK_KIND_MIN_CONTENT ((cuo_GridTrackKind)4)
+#define CUO_GRID_TRACK_KIND_MAX_CONTENT ((cuo_GridTrackKind)5)
+#define CUO_GRID_TRACK_KIND_MIN_MAX ((cuo_GridTrackKind)6)
+#define CUO_GRID_TRACK_KIND_FIT_CONTENT ((cuo_GridTrackKind)7)
 
 /* `ClassicUO.Ecs.Modding.InteractionState` */
 typedef uint8_t cuo_InteractionState;
@@ -282,6 +380,12 @@ typedef uint8_t cuo_JustifyContent;
 #define CUO_JUSTIFY_CONTENT_START ((cuo_JustifyContent)0)
 #define CUO_JUSTIFY_CONTENT_CENTER ((cuo_JustifyContent)1)
 #define CUO_JUSTIFY_CONTENT_END ((cuo_JustifyContent)2)
+#define CUO_JUSTIFY_CONTENT_SPACE_BETWEEN ((cuo_JustifyContent)3)
+#define CUO_JUSTIFY_CONTENT_SPACE_AROUND ((cuo_JustifyContent)4)
+#define CUO_JUSTIFY_CONTENT_SPACE_EVENLY ((cuo_JustifyContent)5)
+#define CUO_JUSTIFY_CONTENT_LOGICAL_START ((cuo_JustifyContent)6)
+#define CUO_JUSTIFY_CONTENT_LOGICAL_END ((cuo_JustifyContent)7)
+#define CUO_JUSTIFY_CONTENT_STRETCH ((cuo_JustifyContent)8)
 
 /* `ClassicUO.Game.Data.Layer` */
 typedef uint8_t cuo_Layer;
@@ -428,6 +532,11 @@ typedef uint8_t cuo_UOCustomKind;
 #define CUO_UO_CUSTOM_KIND_DYN_TEXTURE ((cuo_UOCustomKind)11)
 #define CUO_UO_CUSTOM_KIND_WORLD_MAP ((cuo_UOCustomKind)12)
 
+/* `TinyEcs.Bevy.UI.UiDirection` */
+typedef uint8_t cuo_UiDirection;
+#define CUO_UI_DIRECTION_LTR ((cuo_UiDirection)0)
+#define CUO_UI_DIRECTION_RTL ((cuo_UiDirection)1)
+
 /* `TinyEcs.Bevy.UI.UiScrollbarStyle` */
 typedef uint8_t cuo_UiScrollbarStyle;
 #define CUO_UI_SCROLLBAR_STYLE_SKINNED ((cuo_UiScrollbarStyle)0)
@@ -443,6 +552,10 @@ typedef uint8_t cuo_ValType;
 typedef struct cuo_vec_CharInfo { cuo_CharInfo *items; size_t len; } cuo_vec_CharInfo;
 typedef struct cuo_vec_ContainerPosition { cuo_ContainerPosition *items; size_t len; } cuo_vec_ContainerPosition;
 typedef struct cuo_vec_ContextMenuEntry { cuo_ContextMenuEntry *items; size_t len; } cuo_vec_ContextMenuEntry;
+typedef struct cuo_vec_GridArea { cuo_GridArea *items; size_t len; } cuo_vec_GridArea;
+typedef struct cuo_vec_GridLineNames { cuo_GridLineNames *items; size_t len; } cuo_vec_GridLineNames;
+typedef struct cuo_vec_GridTemplateTrack { cuo_GridTemplateTrack *items; size_t len; } cuo_vec_GridTemplateTrack;
+typedef struct cuo_vec_GridTrack { cuo_GridTrack *items; size_t len; } cuo_vec_GridTrack;
 typedef struct cuo_vec_HostHotkey { cuo_HostHotkey *items; size_t len; } cuo_vec_HostHotkey;
 typedef struct cuo_vec_MobStep { cuo_MobStep *items; size_t len; } cuo_vec_MobStep;
 typedef struct cuo_vec_ModHotkeyBinding { cuo_ModHotkeyBinding *items; size_t len; } cuo_vec_ModHotkeyBinding;
@@ -609,7 +722,7 @@ struct cuo_Vector2 {
 struct cuo_ComputedNode {
     cuo_Vector2 size;
     cuo_Vector2 position;
-    uint32_t clay_id;
+    uint32_t layout_id;
     int32_t paint_order;
 };
 #define cuo_ComputedNode_PATH CUO_PATH_UI_COMPUTED
@@ -852,12 +965,32 @@ struct cuo_Graphic {
 #define cuo_Graphic_PATH CUO_PATH_ENT_GRAPHIC
 uint16_t cuo_Graphic_id(void);
 
+/* Nested payload type (`TinyEcs.Bevy.UI.GridArea`). */
+struct cuo_GridArea {
+    const char *name;
+    uint16_t row_start;
+    uint16_t row_end;
+    uint16_t column_start;
+    uint16_t column_end;
+};
+
+/* Nested payload type (`TinyEcs.Bevy.UI.GridBreadth`). */
+struct cuo_GridBreadth {
+    uint8_t kind; /* enum GridBreadthKind (0=Auto, 1=Px, 2=Percent, 3=Fr, 4=MinContent, 5=MaxContent) */
+    float value;
+};
+
 /* `cuo:gump/grid-container` */
 struct cuo_GridContainerWindow {
     uint32_t serial;
 };
 #define cuo_GridContainerWindow_PATH CUO_PATH_GUMP_GRID_CONTAINER
 uint16_t cuo_GridContainerWindow_id(void);
+
+/* Nested payload type (`TinyEcs.Bevy.UI.GridLineNames`). */
+struct cuo_GridLineNames {
+    cuo_vec_str names;
+};
 
 /* `cuo:gump/grid-loot` */
 struct cuo_GridLootWindow {
@@ -875,6 +1008,72 @@ struct cuo_GridPinnedCell {
 };
 #define cuo_GridPinnedCell_PATH CUO_PATH_UI_NO_PICKUP
 uint16_t cuo_GridPinnedCell_id(void);
+
+/* `cuo:ui/grid-placement` */
+struct cuo_GridPlacement {
+    int16_t column_start;
+    uint16_t column_span;
+    int16_t row_start;
+    uint16_t row_span;
+    int16_t column_end;
+    int16_t row_end;
+};
+#define cuo_GridPlacement_PATH CUO_PATH_UI_GRID_PLACEMENT
+uint16_t cuo_GridPlacement_id(void);
+
+/* `cuo:ui/grid-placement-names` */
+struct cuo_GridPlacementNames {
+    const char *column_start;
+    const char *column_end;
+    const char *row_start;
+    const char *row_end;
+};
+#define cuo_GridPlacementNames_PATH CUO_PATH_UI_GRID_PLACEMENT_NAMES
+uint16_t cuo_GridPlacementNames_id(void);
+
+/* Nested payload type (`TinyEcs.Bevy.UI.GridRepeat`). */
+struct cuo_GridRepeat {
+    uint8_t kind; /* enum GridRepeatKind (0=Count, 1=AutoFill, 2=AutoFit) */
+    uint16_t count;
+    cuo_vec_GridTrack tracks;
+    cuo_vec_GridLineNames line_names;
+};
+
+/* `cuo:ui/grid-template` */
+struct cuo_GridTemplate {
+    cuo_vec_GridTemplateTrack columns;
+    cuo_vec_GridTemplateTrack rows;
+    cuo_vec_GridTrack auto_rows;
+    cuo_vec_GridTrack auto_columns;
+    uint8_t auto_flow; /* enum GridAutoFlow (0=Row, 1=Column, 2=RowDense, 3=ColumnDense) */
+    cuo_vec_GridArea areas;
+    cuo_vec_GridLineNames column_names;
+    cuo_vec_GridLineNames row_names;
+};
+#define cuo_GridTemplate_PATH CUO_PATH_UI_GRID_TEMPLATE
+uint16_t cuo_GridTemplate_id(void);
+
+/* Nested payload type (`TinyEcs.Bevy.UI.Val`). */
+struct cuo_Val {
+    uint8_t type; /* enum ValType (0=Auto, 1=Px, 2=Percent, 3=Grow) */
+    float value;
+    bool is_auto; /* host-computed, ignored on write */
+};
+
+/* Nested payload type (`TinyEcs.Bevy.UI.GridTrack`). */
+struct cuo_GridTrack {
+    uint8_t kind; /* enum GridTrackKind (0=Auto, 1=Px, 2=Percent, 3=Fr, 4=MinContent, 5=MaxContent, 6=MinMax, 7=FitContent) */
+    float value;
+    cuo_GridBreadth min;
+    cuo_GridBreadth max;
+    cuo_Val fit_limit;
+};
+
+/* Nested payload type (`TinyEcs.Bevy.UI.GridTemplateTrack`). */
+struct cuo_GridTemplateTrack {
+    cuo_GridTrack track;
+    const cuo_GridRepeat *repeat;
+};
 
 /* `cuo:gump/health-bar` */
 struct cuo_HealthBarWindow {
@@ -1338,13 +1537,6 @@ struct cuo_NetworkSerial {
 #define cuo_NetworkSerial_PATH CUO_PATH_ENT_SERIAL
 uint16_t cuo_NetworkSerial_id(void);
 
-/* Nested payload type (`TinyEcs.Bevy.UI.Val`). */
-struct cuo_Val {
-    uint8_t type; /* enum ValType (0=Auto, 1=Px, 2=Percent, 3=Grow) */
-    float value;
-    bool is_auto; /* host-computed, ignored on write */
-};
-
 /* Nested payload type (`TinyEcs.Bevy.UI.UiRect`). */
 struct cuo_UiRect {
     cuo_Val left;
@@ -1355,12 +1547,12 @@ struct cuo_UiRect {
 
 /* `cuo:ui/node` */
 struct cuo_Node {
-    uint8_t display; /* enum Display (0=Flex, 1=None) */
+    uint8_t display; /* enum Display (0=Flex, 1=None, 2=Block, 3=Grid) */
     uint8_t position_type; /* enum PositionType (0=Relative, 1=Absolute) */
     uint8_t overflow; /* enum Overflow (0=Visible, 1=Clip, 2=Scroll) */
-    uint8_t flex_direction; /* enum FlexDirection (0=Row, 1=Column) */
-    uint8_t justify_content; /* enum JustifyContent (0=Start, 1=Center, 2=End) */
-    uint8_t align_items; /* enum AlignItems (0=Start, 1=Center, 2=End) */
+    uint8_t flex_direction; /* enum FlexDirection (0=Row, 1=Column, 2=RowReverse, 3=ColumnReverse) */
+    uint8_t justify_content; /* enum JustifyContent (0=Start, 1=Center, 2=End, 3=SpaceBetween, 4=SpaceAround, 5=SpaceEvenly, 6=LogicalStart, 7=LogicalEnd, 8=Stretch) */
+    uint8_t align_items; /* enum AlignItems (0=Start, 1=Center, 2=End, 3=Stretch, 4=Baseline, 5=LogicalStart, 6=LogicalEnd) */
     cuo_Val width;
     cuo_Val height;
     cuo_Val min_width;
@@ -1375,6 +1567,26 @@ struct cuo_Node {
     cuo_UiRect border;
     cuo_Val gap;
     float aspect_ratio;
+    cuo_UiRect margin;
+    const float *flex_grow;
+    const float *flex_shrink;
+    cuo_Val flex_basis;
+    uint8_t flex_wrap; /* enum FlexWrap (0=NoWrap, 1=Wrap, 2=WrapReverse) */
+    uint8_t align_self; /* enum AlignSelf (0=Auto, 1=Start, 2=Center, 3=End, 4=Stretch, 5=Baseline, 6=LogicalStart, 7=LogicalEnd) */
+    uint8_t box_sizing; /* enum BoxSizing (0=BorderBox, 1=ContentBox) */
+    const cuo_Val *row_gap;
+    const cuo_Val *column_gap;
+    const uint8_t *align_content; /* enum AlignContent (0=Start, 1=Center, 2=End, 3=Stretch, 4=SpaceBetween, 5=SpaceAround, 6=SpaceEvenly, 7=LogicalStart, 8=LogicalEnd) */
+    const uint8_t *justify_items; /* enum AlignItems (0=Start, 1=Center, 2=End, 3=Stretch, 4=Baseline, 5=LogicalStart, 6=LogicalEnd) */
+    uint8_t justify_self; /* enum AlignSelf (0=Auto, 1=Start, 2=Center, 3=End, 4=Stretch, 5=Baseline, 6=LogicalStart, 7=LogicalEnd) */
+    const uint8_t *overflow_x; /* enum Overflow (0=Visible, 1=Clip, 2=Scroll) */
+    const uint8_t *overflow_y; /* enum Overflow (0=Visible, 1=Clip, 2=Scroll) */
+    float scrollbar_width;
+    bool relative_insets;
+    bool border_in_layout;
+    uint8_t float_; /* enum Float (0=None, 1=Left, 2=Right) */
+    uint8_t clear; /* enum Clear (0=None, 1=Left, 2=Right, 3=Both) */
+    uint8_t direction; /* enum UiDirection (0=Ltr, 1=Rtl) */
 };
 #define cuo_Node_PATH CUO_PATH_UI_NODE
 uint16_t cuo_Node_id(void);
@@ -2178,6 +2390,13 @@ struct cuo_WorldMapMarker {
 };
 #define cuo_WorldMapMarker_PATH CUO_PATH_WORLDMAP_MARKER
 uint16_t cuo_WorldMapMarker_id(void);
+
+/* `cuo:worldmap/self-label` */
+struct cuo_WorldMapSelfLabel {
+    const char *name;
+};
+#define cuo_WorldMapSelfLabel_PATH CUO_PATH_WORLDMAP_SELF_LABEL
+uint16_t cuo_WorldMapSelfLabel_id(void);
 
 /* `cuo:gump/worldmap` */
 /* Zero-size tag: crosses as no value (the typed functions take none). */

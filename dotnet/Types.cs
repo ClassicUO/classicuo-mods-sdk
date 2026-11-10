@@ -9,12 +9,43 @@ namespace CuoModSdk.Types;
 // type; they cross as the cuo:modding/types records (Typed.g.cs). Host value types
 // stay structs here so a default instance is the host's default, not nulls.
 
+/// <remarks><c>TinyEcs.Bevy.UI.AlignContent</c> — crosses the boundary as a number.</remarks>
+public enum AlignContent : byte
+{
+    Start = 0,
+    Center = 1,
+    End = 2,
+    Stretch = 3,
+    SpaceBetween = 4,
+    SpaceAround = 5,
+    SpaceEvenly = 6,
+    LogicalStart = 7,
+    LogicalEnd = 8,
+}
+
 /// <remarks><c>TinyEcs.Bevy.UI.AlignItems</c> — crosses the boundary as a number.</remarks>
 public enum AlignItems : byte
 {
     Start = 0,
     Center = 1,
     End = 2,
+    Stretch = 3,
+    Baseline = 4,
+    LogicalStart = 5,
+    LogicalEnd = 6,
+}
+
+/// <remarks><c>TinyEcs.Bevy.UI.AlignSelf</c> — crosses the boundary as a number.</remarks>
+public enum AlignSelf : byte
+{
+    Auto = 0,
+    Start = 1,
+    Center = 2,
+    End = 3,
+    Stretch = 4,
+    Baseline = 5,
+    LogicalStart = 6,
+    LogicalEnd = 7,
 }
 
 /// <summary><c>cuo:ent/amount</c></summary>
@@ -75,6 +106,13 @@ public partial struct BorderRadius
     public float TopRight;
     public float BottomLeft;
     public float BottomRight;
+}
+
+/// <remarks><c>TinyEcs.Bevy.UI.BoxSizing</c> — crosses the boundary as a number.</remarks>
+public enum BoxSizing : byte
+{
+    BorderBox = 0,
+    ContentBox = 1,
 }
 
 /// <summary><c>cuo:gump/buff</c>
@@ -146,6 +184,15 @@ public partial struct ChildOf
     public ulong Parent;
 }
 
+/// <remarks><c>TinyEcs.Bevy.UI.Clear</c> — crosses the boundary as a number.</remarks>
+public enum Clear : byte
+{
+    None = 0,
+    Left = 1,
+    Right = 2,
+    Both = 3,
+}
+
 /// <summary><c>cuo:ui/clipboard-set</c></summary>
 public sealed partial class ClipboardSet
 {
@@ -192,7 +239,7 @@ public partial struct ComputedNode
 
     public Vector2 Size;
     public Vector2 Position;
-    public uint ClayId;
+    public uint LayoutId;
     public int PaintOrder;
 }
 
@@ -364,6 +411,8 @@ public enum Display : byte
 {
     Flex = 0,
     None = 1,
+    Block = 2,
+    Grid = 3,
 }
 
 /// <summary><c>cuo:ui/editable-text</c></summary>
@@ -435,6 +484,24 @@ public enum FlexDirection : byte
 {
     Row = 0,
     Column = 1,
+    RowReverse = 2,
+    ColumnReverse = 3,
+}
+
+/// <remarks><c>TinyEcs.Bevy.UI.FlexWrap</c> — crosses the boundary as a number.</remarks>
+public enum FlexWrap : byte
+{
+    NoWrap = 0,
+    Wrap = 1,
+    WrapReverse = 2,
+}
+
+/// <remarks><c>TinyEcs.Bevy.UI.Float</c> — crosses the boundary as a number.</remarks>
+public enum Float : byte
+{
+    None = 0,
+    Left = 1,
+    Right = 2,
 }
 
 /// <summary><c>cuo:game/context</c></summary>
@@ -548,6 +615,44 @@ public partial struct Graphic
     public ushort Value;
 }
 
+/// <summary>Nested payload type (<c>TinyEcs.Bevy.UI.GridArea</c>).</summary>
+public partial struct GridArea
+{
+    public string Name;
+    public ushort RowStart;
+    public ushort RowEnd;
+    public ushort ColumnStart;
+    public ushort ColumnEnd;
+}
+
+/// <remarks><c>TinyEcs.Bevy.UI.GridAutoFlow</c> — crosses the boundary as a number.</remarks>
+public enum GridAutoFlow : byte
+{
+    Row = 0,
+    Column = 1,
+    RowDense = 2,
+    ColumnDense = 3,
+}
+
+/// <summary>Nested payload type (<c>TinyEcs.Bevy.UI.GridBreadth</c>).</summary>
+public partial struct GridBreadth
+{
+    /// <summary>enum GridBreadthKind (0=Auto, 1=Px, 2=Percent, 3=Fr, 4=MinContent, 5=MaxContent)</summary>
+    public GridBreadthKind Kind;
+    public float Value;
+}
+
+/// <remarks><c>TinyEcs.Bevy.UI.GridBreadthKind</c> — crosses the boundary as a number.</remarks>
+public enum GridBreadthKind : byte
+{
+    Auto = 0,
+    Px = 1,
+    Percent = 2,
+    Fr = 3,
+    MinContent = 4,
+    MaxContent = 5,
+}
+
 /// <summary><c>cuo:gump/grid-container</c></summary>
 public partial struct GridContainerWindow
 {
@@ -555,6 +660,12 @@ public partial struct GridContainerWindow
     public const string Path = "cuo:gump/grid-container";
 
     public uint Serial;
+}
+
+/// <summary>Nested payload type (<c>TinyEcs.Bevy.UI.GridLineNames</c>).</summary>
+public partial struct GridLineNames
+{
+    public string[] Names;
 }
 
 /// <summary><c>cuo:gump/grid-loot</c></summary>
@@ -575,6 +686,98 @@ public partial struct GridPinnedCell
 {
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/no-pickup";
+}
+
+/// <summary><c>cuo:ui/grid-placement</c></summary>
+public partial struct GridPlacement
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/grid-placement";
+
+    public short ColumnStart;
+    public ushort ColumnSpan;
+    public short RowStart;
+    public ushort RowSpan;
+    public short ColumnEnd;
+    public short RowEnd;
+}
+
+/// <summary><c>cuo:ui/grid-placement-names</c></summary>
+public partial struct GridPlacementNames
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/grid-placement-names";
+
+    public string ColumnStart;
+    public string ColumnEnd;
+    public string RowStart;
+    public string RowEnd;
+}
+
+/// <summary>Nested payload type (<c>TinyEcs.Bevy.UI.GridRepeat</c>).</summary>
+public partial struct GridRepeat
+{
+    /// <summary>enum GridRepeatKind (0=Count, 1=AutoFill, 2=AutoFit)</summary>
+    public GridRepeatKind Kind;
+    public ushort Count;
+    public GridTrack[] Tracks;
+    public GridLineNames[] LineNames;
+}
+
+/// <remarks><c>TinyEcs.Bevy.UI.GridRepeatKind</c> — crosses the boundary as a number.</remarks>
+public enum GridRepeatKind : byte
+{
+    Count = 0,
+    AutoFill = 1,
+    AutoFit = 2,
+}
+
+/// <summary><c>cuo:ui/grid-template</c></summary>
+public partial struct GridTemplate
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:ui/grid-template";
+
+    public GridTemplateTrack[] Columns;
+    public GridTemplateTrack[] Rows;
+    public GridTrack[] AutoRows;
+    public GridTrack[] AutoColumns;
+    /// <summary>enum GridAutoFlow (0=Row, 1=Column, 2=RowDense, 3=ColumnDense)</summary>
+    public GridAutoFlow AutoFlow;
+    public GridArea[] Areas;
+    public GridLineNames[] ColumnNames;
+    public GridLineNames[] RowNames;
+}
+
+/// <summary>Nested payload type (<c>TinyEcs.Bevy.UI.GridTemplateTrack</c>).</summary>
+public partial struct GridTemplateTrack
+{
+    public GridTrack Track;
+    public GridRepeat? Repeat;
+}
+
+/// <summary>Nested payload type (<c>TinyEcs.Bevy.UI.GridTrack</c>).</summary>
+public partial struct GridTrack
+{
+    /// <summary>enum GridTrackKind (0=Auto, 1=Px, 2=Percent, 3=Fr, 4=MinContent, 5=MaxContent, 6=MinMax, 7=FitContent)</summary>
+    public GridTrackKind Kind;
+    public float Value;
+    public GridBreadth Min;
+    public GridBreadth Max;
+    public Val FitLimit;
+}
+
+/// <remarks><c>TinyEcs.Bevy.UI.GridTrackKind</c> — crosses the boundary as a number.</remarks>
+public enum GridTrackKind : byte
+{
+    Auto = 0,
+    Px = 1,
+    Percent = 2,
+    Fr = 3,
+    MinContent = 4,
+    MaxContent = 5,
+    MinMax = 6,
+    FitContent = 7,
 }
 
 /// <summary><c>cuo:gump/health-bar</c></summary>
@@ -771,6 +974,12 @@ public enum JustifyContent : byte
     Start = 0,
     Center = 1,
     End = 2,
+    SpaceBetween = 3,
+    SpaceAround = 4,
+    SpaceEvenly = 5,
+    LogicalStart = 6,
+    LogicalEnd = 7,
+    Stretch = 8,
 }
 
 /// <summary><c>cuo:input/keyboard</c></summary>
@@ -1229,17 +1438,17 @@ public partial struct Node
     /// <summary>The registry type-path this payload belongs to.</summary>
     public const string Path = "cuo:ui/node";
 
-    /// <summary>enum Display (0=Flex, 1=None)</summary>
+    /// <summary>enum Display (0=Flex, 1=None, 2=Block, 3=Grid)</summary>
     public Display Display;
     /// <summary>enum PositionType (0=Relative, 1=Absolute)</summary>
     public PositionType PositionType;
     /// <summary>enum Overflow (0=Visible, 1=Clip, 2=Scroll)</summary>
     public Overflow Overflow;
-    /// <summary>enum FlexDirection (0=Row, 1=Column)</summary>
+    /// <summary>enum FlexDirection (0=Row, 1=Column, 2=RowReverse, 3=ColumnReverse)</summary>
     public FlexDirection FlexDirection;
-    /// <summary>enum JustifyContent (0=Start, 1=Center, 2=End)</summary>
+    /// <summary>enum JustifyContent (0=Start, 1=Center, 2=End, 3=SpaceBetween, 4=SpaceAround, 5=SpaceEvenly, 6=LogicalStart, 7=LogicalEnd, 8=Stretch)</summary>
     public JustifyContent JustifyContent;
-    /// <summary>enum AlignItems (0=Start, 1=Center, 2=End)</summary>
+    /// <summary>enum AlignItems (0=Start, 1=Center, 2=End, 3=Stretch, 4=Baseline, 5=LogicalStart, 6=LogicalEnd)</summary>
     public AlignItems AlignItems;
     public Val Width;
     public Val Height;
@@ -1255,6 +1464,37 @@ public partial struct Node
     public UiRect Border;
     public Val Gap;
     public float AspectRatio;
+    public UiRect Margin;
+    public float? FlexGrow;
+    public float? FlexShrink;
+    public Val FlexBasis;
+    /// <summary>enum FlexWrap (0=NoWrap, 1=Wrap, 2=WrapReverse)</summary>
+    public FlexWrap FlexWrap;
+    /// <summary>enum AlignSelf (0=Auto, 1=Start, 2=Center, 3=End, 4=Stretch, 5=Baseline, 6=LogicalStart, 7=LogicalEnd)</summary>
+    public AlignSelf AlignSelf;
+    /// <summary>enum BoxSizing (0=BorderBox, 1=ContentBox)</summary>
+    public BoxSizing BoxSizing;
+    public Val? RowGap;
+    public Val? ColumnGap;
+    /// <summary>enum AlignContent (0=Start, 1=Center, 2=End, 3=Stretch, 4=SpaceBetween, 5=SpaceAround, 6=SpaceEvenly, 7=LogicalStart, 8=LogicalEnd)</summary>
+    public AlignContent? AlignContent;
+    /// <summary>enum AlignItems (0=Start, 1=Center, 2=End, 3=Stretch, 4=Baseline, 5=LogicalStart, 6=LogicalEnd)</summary>
+    public AlignItems? JustifyItems;
+    /// <summary>enum AlignSelf (0=Auto, 1=Start, 2=Center, 3=End, 4=Stretch, 5=Baseline, 6=LogicalStart, 7=LogicalEnd)</summary>
+    public AlignSelf JustifySelf;
+    /// <summary>enum Overflow (0=Visible, 1=Clip, 2=Scroll)</summary>
+    public Overflow? OverflowX;
+    /// <summary>enum Overflow (0=Visible, 1=Clip, 2=Scroll)</summary>
+    public Overflow? OverflowY;
+    public float ScrollbarWidth;
+    public bool RelativeInsets;
+    public bool BorderInLayout;
+    /// <summary>enum Float (0=None, 1=Left, 2=Right)</summary>
+    public Float Float;
+    /// <summary>enum Clear (0=None, 1=Left, 2=Right, 3=Both)</summary>
+    public Clear Clear;
+    /// <summary>enum UiDirection (0=Ltr, 1=Rtl)</summary>
+    public UiDirection Direction;
 }
 
 /// <summary><c>cuo:ent/notoriety</c></summary>
@@ -2145,6 +2385,13 @@ public partial struct UiCustom
     public bool Stacked;
 }
 
+/// <remarks><c>TinyEcs.Bevy.UI.UiDirection</c> — crosses the boundary as a number.</remarks>
+public enum UiDirection : byte
+{
+    Ltr = 0,
+    Rtl = 1,
+}
+
 /// <summary><c>cuo:ui/hover-tint</c></summary>
 public partial struct UiHoverTint
 {
@@ -2359,6 +2606,15 @@ public partial struct WorldMapMarker
     public ushort NameHue;
 }
 
+/// <summary><c>cuo:worldmap/self-label</c></summary>
+public partial struct WorldMapSelfLabel
+{
+    /// <summary>The registry type-path this payload belongs to.</summary>
+    public const string Path = "cuo:worldmap/self-label";
+
+    public string Name;
+}
+
 /// <summary><c>cuo:gump/worldmap</c>
 /// <para>Zero-size tag: no value crosses, only its presence.</para>
 /// </summary>
@@ -2435,6 +2691,9 @@ public static class TypePaths
         [typeof(GridContainerWindow)] = "cuo:gump/grid-container",
         [typeof(GridLootWindow)] = "cuo:gump/grid-loot",
         [typeof(GridPinnedCell)] = "cuo:ui/no-pickup",
+        [typeof(GridPlacement)] = "cuo:ui/grid-placement",
+        [typeof(GridPlacementNames)] = "cuo:ui/grid-placement-names",
+        [typeof(GridTemplate)] = "cuo:ui/grid-template",
         [typeof(HealthBarWindow)] = "cuo:gump/health-bar",
         [typeof(Hits)] = "cuo:player/hits",
         [typeof(HostHotkeys)] = "cuo:input/host-hotkeys",
@@ -2548,6 +2807,7 @@ public static class TypePaths
         [typeof(UiTooltipSerial)] = "cuo:ui/tooltip-serial",
         [typeof(VendorWindow)] = "cuo:gump/vendor",
         [typeof(WorldMapMarker)] = "cuo:worldmap/marker",
+        [typeof(WorldMapSelfLabel)] = "cuo:worldmap/self-label",
         [typeof(WorldMapWindow)] = "cuo:gump/worldmap",
         [typeof(WorldPosition)] = "cuo:ent/world-position",
         [typeof(WorldSingleClick)] = "cuo:input/world-single-click",

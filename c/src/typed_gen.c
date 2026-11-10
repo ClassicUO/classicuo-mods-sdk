@@ -284,6 +284,24 @@ static void to_ClipboardSet(cuo_modding_types_clipboard_set_t *w, const cuo_Clip
 static void from_ClipboardSet(cuo_ClipboardSet *o, const cuo_modding_types_clipboard_set_t *w);
 static void to_InputFocus(cuo_modding_types_input_focus_t *w, const cuo_InputFocus *v);
 static void from_InputFocus(cuo_InputFocus *o, const cuo_modding_types_input_focus_t *w);
+static void to_GridPlacement(cuo_modding_types_grid_placement_t *w, const cuo_GridPlacement *v);
+static void from_GridPlacement(cuo_GridPlacement *o, const cuo_modding_types_grid_placement_t *w);
+static void to_GridPlacementNames(cuo_modding_types_grid_placement_names_t *w, const cuo_GridPlacementNames *v);
+static void from_GridPlacementNames(cuo_GridPlacementNames *o, const cuo_modding_types_grid_placement_names_t *w);
+static void to_GridBreadth(cuo_modding_types_grid_breadth_t *w, const cuo_GridBreadth *v);
+static void from_GridBreadth(cuo_GridBreadth *o, const cuo_modding_types_grid_breadth_t *w);
+static void to_GridTrack(cuo_modding_types_grid_track_t *w, const cuo_GridTrack *v);
+static void from_GridTrack(cuo_GridTrack *o, const cuo_modding_types_grid_track_t *w);
+static void to_GridLineNames(cuo_modding_types_grid_line_names_t *w, const cuo_GridLineNames *v);
+static void from_GridLineNames(cuo_GridLineNames *o, const cuo_modding_types_grid_line_names_t *w);
+static void to_GridRepeat(cuo_modding_types_grid_repeat_t *w, const cuo_GridRepeat *v);
+static void from_GridRepeat(cuo_GridRepeat *o, const cuo_modding_types_grid_repeat_t *w);
+static void to_GridTemplateTrack(cuo_modding_types_grid_template_track_t *w, const cuo_GridTemplateTrack *v);
+static void from_GridTemplateTrack(cuo_GridTemplateTrack *o, const cuo_modding_types_grid_template_track_t *w);
+static void to_GridArea(cuo_modding_types_grid_area_t *w, const cuo_GridArea *v);
+static void from_GridArea(cuo_GridArea *o, const cuo_modding_types_grid_area_t *w);
+static void to_GridTemplate(cuo_modding_types_grid_template_t *w, const cuo_GridTemplate *v);
+static void from_GridTemplate(cuo_GridTemplate *o, const cuo_modding_types_grid_template_t *w);
 static void to_MaskedText(cuo_modding_types_masked_text_t *w, const cuo_MaskedText *v);
 static void from_MaskedText(cuo_MaskedText *o, const cuo_modding_types_masked_text_t *w);
 static void to_TextClipboardAction(cuo_modding_types_text_clipboard_action_t *w, const cuo_TextClipboardAction *v);
@@ -296,6 +314,8 @@ static void to_UiTooltipSerial(cuo_modding_types_ui_tooltip_serial_t *w, const c
 static void from_UiTooltipSerial(cuo_UiTooltipSerial *o, const cuo_modding_types_ui_tooltip_serial_t *w);
 static void to_WorldMapMarker(cuo_modding_types_world_map_marker_t *w, const cuo_WorldMapMarker *v);
 static void from_WorldMapMarker(cuo_WorldMapMarker *o, const cuo_modding_types_world_map_marker_t *w);
+static void to_WorldMapSelfLabel(cuo_modding_types_world_map_self_label_t *w, const cuo_WorldMapSelfLabel *v);
+static void from_WorldMapSelfLabel(cuo_WorldMapSelfLabel *o, const cuo_modding_types_world_map_self_label_t *w);
 
 static void to_Hits(cuo_modding_types_hits_t *w, const cuo_Hits *v)
 {
@@ -522,12 +542,12 @@ static void from_UiRect(cuo_UiRect *o, const cuo_modding_types_ui_rect_t *w)
 
 static void to_Node(cuo_modding_types_node_t *w, const cuo_Node *v)
 {
-    w->display = (uint32_t)(v->display) < 2u ? (v->display) : 0;
+    w->display = (uint32_t)(v->display) < 4u ? (v->display) : 0;
     w->position_type = (uint32_t)(v->position_type) < 2u ? (v->position_type) : 0;
     w->overflow = (uint32_t)(v->overflow) < 3u ? (v->overflow) : 0;
-    w->flex_direction = (uint32_t)(v->flex_direction) < 2u ? (v->flex_direction) : 0;
-    w->justify_content = (uint32_t)(v->justify_content) < 3u ? (v->justify_content) : 0;
-    w->align_items = (uint32_t)(v->align_items) < 3u ? (v->align_items) : 0;
+    w->flex_direction = (uint32_t)(v->flex_direction) < 4u ? (v->flex_direction) : 0;
+    w->justify_content = (uint32_t)(v->justify_content) < 9u ? (v->justify_content) : 0;
+    w->align_items = (uint32_t)(v->align_items) < 7u ? (v->align_items) : 0;
     to_Val(&w->width, &v->width);
     to_Val(&w->height, &v->height);
     to_Val(&w->min_width, &v->min_width);
@@ -542,6 +562,50 @@ static void to_Node(cuo_modding_types_node_t *w, const cuo_Node *v)
     to_UiRect(&w->border, &v->border);
     to_Val(&w->gap, &v->gap);
     w->aspect_ratio = v->aspect_ratio;
+    to_UiRect(&w->margin, &v->margin);
+    w->flex_grow.is_some = v->flex_grow != NULL;
+    if (v->flex_grow) {
+        w->flex_grow.val = (*v->flex_grow);
+    }
+    w->flex_shrink.is_some = v->flex_shrink != NULL;
+    if (v->flex_shrink) {
+        w->flex_shrink.val = (*v->flex_shrink);
+    }
+    to_Val(&w->flex_basis, &v->flex_basis);
+    w->flex_wrap = (uint32_t)(v->flex_wrap) < 3u ? (v->flex_wrap) : 0;
+    w->align_self = (uint32_t)(v->align_self) < 8u ? (v->align_self) : 0;
+    w->box_sizing = (uint32_t)(v->box_sizing) < 2u ? (v->box_sizing) : 0;
+    w->row_gap.is_some = v->row_gap != NULL;
+    if (v->row_gap) {
+        to_Val(&w->row_gap.val, &(*v->row_gap));
+    }
+    w->column_gap.is_some = v->column_gap != NULL;
+    if (v->column_gap) {
+        to_Val(&w->column_gap.val, &(*v->column_gap));
+    }
+    w->align_content.is_some = v->align_content != NULL;
+    if (v->align_content) {
+        w->align_content.val = (uint32_t)((*v->align_content)) < 9u ? ((*v->align_content)) : 0;
+    }
+    w->justify_items.is_some = v->justify_items != NULL;
+    if (v->justify_items) {
+        w->justify_items.val = (uint32_t)((*v->justify_items)) < 7u ? ((*v->justify_items)) : 0;
+    }
+    w->justify_self = (uint32_t)(v->justify_self) < 8u ? (v->justify_self) : 0;
+    w->overflow_x.is_some = v->overflow_x != NULL;
+    if (v->overflow_x) {
+        w->overflow_x.val = (uint32_t)((*v->overflow_x)) < 3u ? ((*v->overflow_x)) : 0;
+    }
+    w->overflow_y.is_some = v->overflow_y != NULL;
+    if (v->overflow_y) {
+        w->overflow_y.val = (uint32_t)((*v->overflow_y)) < 3u ? ((*v->overflow_y)) : 0;
+    }
+    w->scrollbar_width = v->scrollbar_width;
+    w->relative_insets = v->relative_insets;
+    w->border_in_layout = v->border_in_layout;
+    w->float_ = (uint32_t)(v->float_) < 3u ? (v->float_) : 0;
+    w->clear = (uint32_t)(v->clear) < 4u ? (v->clear) : 0;
+    w->direction = (uint32_t)(v->direction) < 2u ? (v->direction) : 0;
 }
 
 static void from_Node(cuo_Node *o, const cuo_modding_types_node_t *w)
@@ -566,6 +630,66 @@ static void from_Node(cuo_Node *o, const cuo_modding_types_node_t *w)
     from_UiRect(&o->border, &w->border);
     from_Val(&o->gap, &w->gap);
     o->aspect_ratio = w->aspect_ratio;
+    from_UiRect(&o->margin, &w->margin);
+    o->flex_grow = NULL;
+    if (w->flex_grow.is_some) {
+        float *p0 = cuo_alloc(sizeof *p0);
+        (*p0) = w->flex_grow.val;
+        o->flex_grow = p0;
+    }
+    o->flex_shrink = NULL;
+    if (w->flex_shrink.is_some) {
+        float *p1 = cuo_alloc(sizeof *p1);
+        (*p1) = w->flex_shrink.val;
+        o->flex_shrink = p1;
+    }
+    from_Val(&o->flex_basis, &w->flex_basis);
+    o->flex_wrap = w->flex_wrap;
+    o->align_self = w->align_self;
+    o->box_sizing = w->box_sizing;
+    o->row_gap = NULL;
+    if (w->row_gap.is_some) {
+        cuo_Val *p2 = cuo_alloc(sizeof *p2);
+        from_Val(&(*p2), &w->row_gap.val);
+        o->row_gap = p2;
+    }
+    o->column_gap = NULL;
+    if (w->column_gap.is_some) {
+        cuo_Val *p3 = cuo_alloc(sizeof *p3);
+        from_Val(&(*p3), &w->column_gap.val);
+        o->column_gap = p3;
+    }
+    o->align_content = NULL;
+    if (w->align_content.is_some) {
+        cuo_AlignContent *p4 = cuo_alloc(sizeof *p4);
+        (*p4) = w->align_content.val;
+        o->align_content = p4;
+    }
+    o->justify_items = NULL;
+    if (w->justify_items.is_some) {
+        cuo_AlignItems *p5 = cuo_alloc(sizeof *p5);
+        (*p5) = w->justify_items.val;
+        o->justify_items = p5;
+    }
+    o->justify_self = w->justify_self;
+    o->overflow_x = NULL;
+    if (w->overflow_x.is_some) {
+        cuo_Overflow *p6 = cuo_alloc(sizeof *p6);
+        (*p6) = w->overflow_x.val;
+        o->overflow_x = p6;
+    }
+    o->overflow_y = NULL;
+    if (w->overflow_y.is_some) {
+        cuo_Overflow *p7 = cuo_alloc(sizeof *p7);
+        (*p7) = w->overflow_y.val;
+        o->overflow_y = p7;
+    }
+    o->scrollbar_width = w->scrollbar_width;
+    o->relative_insets = w->relative_insets;
+    o->border_in_layout = w->border_in_layout;
+    o->float_ = w->float_;
+    o->clear = w->clear;
+    o->direction = w->direction;
 }
 
 static void to_Text(cuo_modding_types_text_t *w, const cuo_Text *v)
@@ -1753,7 +1877,7 @@ static void to_ComputedNode(cuo_modding_types_computed_node_t *w, const cuo_Comp
 {
     to_Vector2(&w->size, &v->size);
     to_Vector2(&w->position, &v->position);
-    w->clay_id = v->clay_id;
+    w->layout_id = v->layout_id;
     w->paint_order = v->paint_order;
 }
 
@@ -1761,7 +1885,7 @@ static void from_ComputedNode(cuo_ComputedNode *o, const cuo_modding_types_compu
 {
     from_Vector2(&o->size, &w->size);
     from_Vector2(&o->position, &w->position);
-    o->clay_id = w->clay_id;
+    o->layout_id = w->layout_id;
     o->paint_order = w->paint_order;
 }
 
@@ -2827,6 +2951,240 @@ static void from_InputFocus(cuo_InputFocus *o, const cuo_modding_types_input_foc
     o->entity = w->entity;
 }
 
+static void to_GridPlacement(cuo_modding_types_grid_placement_t *w, const cuo_GridPlacement *v)
+{
+    w->column_start = v->column_start;
+    w->column_span = v->column_span;
+    w->row_start = v->row_start;
+    w->row_span = v->row_span;
+    w->column_end = v->column_end;
+    w->row_end = v->row_end;
+}
+
+static void from_GridPlacement(cuo_GridPlacement *o, const cuo_modding_types_grid_placement_t *w)
+{
+    o->column_start = w->column_start;
+    o->column_span = w->column_span;
+    o->row_start = w->row_start;
+    o->row_span = w->row_span;
+    o->column_end = w->column_end;
+    o->row_end = w->row_end;
+}
+
+static void to_GridPlacementNames(cuo_modding_types_grid_placement_names_t *w, const cuo_GridPlacementNames *v)
+{
+    w->column_start = cuo__wstr_copy(v->column_start);
+    w->column_end = cuo__wstr_copy(v->column_end);
+    w->row_start = cuo__wstr_copy(v->row_start);
+    w->row_end = cuo__wstr_copy(v->row_end);
+}
+
+static void from_GridPlacementNames(cuo_GridPlacementNames *o, const cuo_modding_types_grid_placement_names_t *w)
+{
+    o->column_start = cuo_strndup((const char *)w->column_start.ptr, w->column_start.len);
+    o->column_end = cuo_strndup((const char *)w->column_end.ptr, w->column_end.len);
+    o->row_start = cuo_strndup((const char *)w->row_start.ptr, w->row_start.len);
+    o->row_end = cuo_strndup((const char *)w->row_end.ptr, w->row_end.len);
+}
+
+static void to_GridBreadth(cuo_modding_types_grid_breadth_t *w, const cuo_GridBreadth *v)
+{
+    w->kind = (uint32_t)(v->kind) < 6u ? (v->kind) : 0;
+    w->value = v->value;
+}
+
+static void from_GridBreadth(cuo_GridBreadth *o, const cuo_modding_types_grid_breadth_t *w)
+{
+    o->kind = w->kind;
+    o->value = w->value;
+}
+
+static void to_GridTrack(cuo_modding_types_grid_track_t *w, const cuo_GridTrack *v)
+{
+    w->kind = (uint32_t)(v->kind) < 8u ? (v->kind) : 0;
+    w->value = v->value;
+    to_GridBreadth(&w->min, &v->min);
+    to_GridBreadth(&w->max, &v->max);
+    to_Val(&w->fit_limit, &v->fit_limit);
+}
+
+static void from_GridTrack(cuo_GridTrack *o, const cuo_modding_types_grid_track_t *w)
+{
+    o->kind = w->kind;
+    o->value = w->value;
+    from_GridBreadth(&o->min, &w->min);
+    from_GridBreadth(&o->max, &w->max);
+    from_Val(&o->fit_limit, &w->fit_limit);
+}
+
+static void to_GridLineNames(cuo_modding_types_grid_line_names_t *w, const cuo_GridLineNames *v)
+{
+    w->names.len = v->names.len;
+    w->names.ptr = cuo_alloc((v->names.len ? v->names.len : 1) * sizeof *w->names.ptr);
+    for (size_t i0 = 0; i0 < v->names.len; i0++) {
+        w->names.ptr[i0] = cuo__wstr_copy(v->names.items[i0]);
+    }
+}
+
+static void from_GridLineNames(cuo_GridLineNames *o, const cuo_modding_types_grid_line_names_t *w)
+{
+    o->names.len = w->names.len;
+    o->names.items = cuo_alloc((w->names.len ? w->names.len : 1) * sizeof *o->names.items);
+    for (size_t i0 = 0; i0 < w->names.len; i0++) {
+        o->names.items[i0] = cuo_strndup((const char *)w->names.ptr[i0].ptr, w->names.ptr[i0].len);
+    }
+}
+
+static void to_GridRepeat(cuo_modding_types_grid_repeat_t *w, const cuo_GridRepeat *v)
+{
+    w->kind = (uint32_t)(v->kind) < 3u ? (v->kind) : 0;
+    w->count = v->count;
+    w->tracks.len = v->tracks.len;
+    w->tracks.ptr = cuo_alloc((v->tracks.len ? v->tracks.len : 1) * sizeof *w->tracks.ptr);
+    for (size_t i0 = 0; i0 < v->tracks.len; i0++) {
+        to_GridTrack(&w->tracks.ptr[i0], &v->tracks.items[i0]);
+    }
+    w->line_names.len = v->line_names.len;
+    w->line_names.ptr = cuo_alloc((v->line_names.len ? v->line_names.len : 1) * sizeof *w->line_names.ptr);
+    for (size_t i1 = 0; i1 < v->line_names.len; i1++) {
+        to_GridLineNames(&w->line_names.ptr[i1], &v->line_names.items[i1]);
+    }
+}
+
+static void from_GridRepeat(cuo_GridRepeat *o, const cuo_modding_types_grid_repeat_t *w)
+{
+    o->kind = w->kind;
+    o->count = w->count;
+    o->tracks.len = w->tracks.len;
+    o->tracks.items = cuo_alloc((w->tracks.len ? w->tracks.len : 1) * sizeof *o->tracks.items);
+    for (size_t i0 = 0; i0 < w->tracks.len; i0++) {
+        from_GridTrack(&o->tracks.items[i0], &w->tracks.ptr[i0]);
+    }
+    o->line_names.len = w->line_names.len;
+    o->line_names.items = cuo_alloc((w->line_names.len ? w->line_names.len : 1) * sizeof *o->line_names.items);
+    for (size_t i1 = 0; i1 < w->line_names.len; i1++) {
+        from_GridLineNames(&o->line_names.items[i1], &w->line_names.ptr[i1]);
+    }
+}
+
+static void to_GridTemplateTrack(cuo_modding_types_grid_template_track_t *w, const cuo_GridTemplateTrack *v)
+{
+    to_GridTrack(&w->track, &v->track);
+    w->repeat.is_some = v->repeat != NULL;
+    if (v->repeat) {
+        to_GridRepeat(&w->repeat.val, &(*v->repeat));
+    }
+}
+
+static void from_GridTemplateTrack(cuo_GridTemplateTrack *o, const cuo_modding_types_grid_template_track_t *w)
+{
+    from_GridTrack(&o->track, &w->track);
+    o->repeat = NULL;
+    if (w->repeat.is_some) {
+        cuo_GridRepeat *p0 = cuo_alloc(sizeof *p0);
+        from_GridRepeat(&(*p0), &w->repeat.val);
+        o->repeat = p0;
+    }
+}
+
+static void to_GridArea(cuo_modding_types_grid_area_t *w, const cuo_GridArea *v)
+{
+    w->name = cuo__wstr_copy(v->name);
+    w->row_start = v->row_start;
+    w->row_end = v->row_end;
+    w->column_start = v->column_start;
+    w->column_end = v->column_end;
+}
+
+static void from_GridArea(cuo_GridArea *o, const cuo_modding_types_grid_area_t *w)
+{
+    o->name = cuo_strndup((const char *)w->name.ptr, w->name.len);
+    o->row_start = w->row_start;
+    o->row_end = w->row_end;
+    o->column_start = w->column_start;
+    o->column_end = w->column_end;
+}
+
+static void to_GridTemplate(cuo_modding_types_grid_template_t *w, const cuo_GridTemplate *v)
+{
+    w->columns.len = v->columns.len;
+    w->columns.ptr = cuo_alloc((v->columns.len ? v->columns.len : 1) * sizeof *w->columns.ptr);
+    for (size_t i0 = 0; i0 < v->columns.len; i0++) {
+        to_GridTemplateTrack(&w->columns.ptr[i0], &v->columns.items[i0]);
+    }
+    w->rows.len = v->rows.len;
+    w->rows.ptr = cuo_alloc((v->rows.len ? v->rows.len : 1) * sizeof *w->rows.ptr);
+    for (size_t i1 = 0; i1 < v->rows.len; i1++) {
+        to_GridTemplateTrack(&w->rows.ptr[i1], &v->rows.items[i1]);
+    }
+    w->auto_rows.len = v->auto_rows.len;
+    w->auto_rows.ptr = cuo_alloc((v->auto_rows.len ? v->auto_rows.len : 1) * sizeof *w->auto_rows.ptr);
+    for (size_t i2 = 0; i2 < v->auto_rows.len; i2++) {
+        to_GridTrack(&w->auto_rows.ptr[i2], &v->auto_rows.items[i2]);
+    }
+    w->auto_columns.len = v->auto_columns.len;
+    w->auto_columns.ptr = cuo_alloc((v->auto_columns.len ? v->auto_columns.len : 1) * sizeof *w->auto_columns.ptr);
+    for (size_t i3 = 0; i3 < v->auto_columns.len; i3++) {
+        to_GridTrack(&w->auto_columns.ptr[i3], &v->auto_columns.items[i3]);
+    }
+    w->auto_flow = (uint32_t)(v->auto_flow) < 4u ? (v->auto_flow) : 0;
+    w->areas.len = v->areas.len;
+    w->areas.ptr = cuo_alloc((v->areas.len ? v->areas.len : 1) * sizeof *w->areas.ptr);
+    for (size_t i4 = 0; i4 < v->areas.len; i4++) {
+        to_GridArea(&w->areas.ptr[i4], &v->areas.items[i4]);
+    }
+    w->column_names.len = v->column_names.len;
+    w->column_names.ptr = cuo_alloc((v->column_names.len ? v->column_names.len : 1) * sizeof *w->column_names.ptr);
+    for (size_t i5 = 0; i5 < v->column_names.len; i5++) {
+        to_GridLineNames(&w->column_names.ptr[i5], &v->column_names.items[i5]);
+    }
+    w->row_names.len = v->row_names.len;
+    w->row_names.ptr = cuo_alloc((v->row_names.len ? v->row_names.len : 1) * sizeof *w->row_names.ptr);
+    for (size_t i6 = 0; i6 < v->row_names.len; i6++) {
+        to_GridLineNames(&w->row_names.ptr[i6], &v->row_names.items[i6]);
+    }
+}
+
+static void from_GridTemplate(cuo_GridTemplate *o, const cuo_modding_types_grid_template_t *w)
+{
+    o->columns.len = w->columns.len;
+    o->columns.items = cuo_alloc((w->columns.len ? w->columns.len : 1) * sizeof *o->columns.items);
+    for (size_t i0 = 0; i0 < w->columns.len; i0++) {
+        from_GridTemplateTrack(&o->columns.items[i0], &w->columns.ptr[i0]);
+    }
+    o->rows.len = w->rows.len;
+    o->rows.items = cuo_alloc((w->rows.len ? w->rows.len : 1) * sizeof *o->rows.items);
+    for (size_t i1 = 0; i1 < w->rows.len; i1++) {
+        from_GridTemplateTrack(&o->rows.items[i1], &w->rows.ptr[i1]);
+    }
+    o->auto_rows.len = w->auto_rows.len;
+    o->auto_rows.items = cuo_alloc((w->auto_rows.len ? w->auto_rows.len : 1) * sizeof *o->auto_rows.items);
+    for (size_t i2 = 0; i2 < w->auto_rows.len; i2++) {
+        from_GridTrack(&o->auto_rows.items[i2], &w->auto_rows.ptr[i2]);
+    }
+    o->auto_columns.len = w->auto_columns.len;
+    o->auto_columns.items = cuo_alloc((w->auto_columns.len ? w->auto_columns.len : 1) * sizeof *o->auto_columns.items);
+    for (size_t i3 = 0; i3 < w->auto_columns.len; i3++) {
+        from_GridTrack(&o->auto_columns.items[i3], &w->auto_columns.ptr[i3]);
+    }
+    o->auto_flow = w->auto_flow;
+    o->areas.len = w->areas.len;
+    o->areas.items = cuo_alloc((w->areas.len ? w->areas.len : 1) * sizeof *o->areas.items);
+    for (size_t i4 = 0; i4 < w->areas.len; i4++) {
+        from_GridArea(&o->areas.items[i4], &w->areas.ptr[i4]);
+    }
+    o->column_names.len = w->column_names.len;
+    o->column_names.items = cuo_alloc((w->column_names.len ? w->column_names.len : 1) * sizeof *o->column_names.items);
+    for (size_t i5 = 0; i5 < w->column_names.len; i5++) {
+        from_GridLineNames(&o->column_names.items[i5], &w->column_names.ptr[i5]);
+    }
+    o->row_names.len = w->row_names.len;
+    o->row_names.items = cuo_alloc((w->row_names.len ? w->row_names.len : 1) * sizeof *o->row_names.items);
+    for (size_t i6 = 0; i6 < w->row_names.len; i6++) {
+        from_GridLineNames(&o->row_names.items[i6], &w->row_names.ptr[i6]);
+    }
+}
+
 static void to_MaskedText(cuo_modding_types_masked_text_t *w, const cuo_MaskedText *v)
 {
     w->value = cuo__wstr_copy(v->value);
@@ -2917,6 +3275,16 @@ static void from_WorldMapMarker(cuo_WorldMapMarker *o, const cuo_modding_types_w
     o->map = w->map;
     from_Color(&o->color, &w->color);
     o->name_hue = w->name_hue;
+}
+
+static void to_WorldMapSelfLabel(cuo_modding_types_world_map_self_label_t *w, const cuo_WorldMapSelfLabel *v)
+{
+    w->name = cuo__wstr_copy(v->name);
+}
+
+static void from_WorldMapSelfLabel(cuo_WorldMapSelfLabel *o, const cuo_modding_types_world_map_self_label_t *w)
+{
+    o->name = cuo_strndup((const char *)w->name.ptr, w->name.len);
 }
 
 /* ── inserts ── */
@@ -3276,24 +3644,42 @@ cuo_comp cuo_GameScene_comp(void) { return cuo__comp(cuo_GameScene_id(), 77, NUL
 cuo_comp cuo_LoginScene_comp(void) { return cuo__comp(cuo_LoginScene_id(), 78, NULL); }
 cuo_comp cuo_LoginErrorScene_comp(void) { return cuo__comp(cuo_LoginErrorScene_id(), 79, NULL); }
 cuo_comp cuo_ServerSelectionScene_comp(void) { return cuo__comp(cuo_ServerSelectionScene_id(), 80, NULL); }
+cuo_comp cuo_GridPlacement_comp(const cuo_GridPlacement *v)
+{
+    cuo_modding_types_grid_placement_t *w = cuo_alloc(sizeof *w);
+    to_GridPlacement(w, v);
+    return cuo__comp(cuo_GridPlacement_id(), 81, w);
+}
+cuo_comp cuo_GridPlacementNames_comp(const cuo_GridPlacementNames *v)
+{
+    cuo_modding_types_grid_placement_names_t *w = cuo_alloc(sizeof *w);
+    to_GridPlacementNames(w, v);
+    return cuo__comp(cuo_GridPlacementNames_id(), 82, w);
+}
+cuo_comp cuo_GridTemplate_comp(const cuo_GridTemplate *v)
+{
+    cuo_modding_types_grid_template_t *w = cuo_alloc(sizeof *w);
+    to_GridTemplate(w, v);
+    return cuo__comp(cuo_GridTemplate_id(), 83, w);
+}
 cuo_comp cuo_MaskedText_comp(const cuo_MaskedText *v)
 {
     cuo_modding_types_masked_text_t *w = cuo_alloc(sizeof *w);
     to_MaskedText(w, v);
-    return cuo__comp(cuo_MaskedText_id(), 81, w);
+    return cuo__comp(cuo_MaskedText_id(), 84, w);
 }
-cuo_comp cuo_ReadOnlyText_comp(void) { return cuo__comp(cuo_ReadOnlyText_id(), 82, NULL); }
+cuo_comp cuo_ReadOnlyText_comp(void) { return cuo__comp(cuo_ReadOnlyText_id(), 85, NULL); }
 cuo_comp cuo_UiTooltipSerial_comp(const cuo_UiTooltipSerial *v)
 {
     cuo_modding_types_ui_tooltip_serial_t *w = cuo_alloc(sizeof *w);
     to_UiTooltipSerial(w, v);
-    return cuo__comp(cuo_UiTooltipSerial_id(), 83, w);
+    return cuo__comp(cuo_UiTooltipSerial_id(), 86, w);
 }
 cuo_comp cuo_WorldMapMarker_comp(const cuo_WorldMapMarker *v)
 {
     cuo_modding_types_world_map_marker_t *w = cuo_alloc(sizeof *w);
     to_WorldMapMarker(w, v);
-    return cuo__comp(cuo_WorldMapMarker_id(), 84, w);
+    return cuo__comp(cuo_WorldMapMarker_id(), 87, w);
 }
 
 cuo__own_eb cuo__typed_push(cuo__borrow_eb b, const cuo_comp *comp)
@@ -3380,10 +3766,13 @@ cuo__own_eb cuo__typed_push(cuo__borrow_eb b, const cuo_comp *comp)
     case 78: return cuo_modding_components_method_entity_builder_login(b);
     case 79: return cuo_modding_components_method_entity_builder_login_error(b);
     case 80: return cuo_modding_components_method_entity_builder_server_selection(b);
-    case 81: return cuo_modding_components_method_entity_builder_masked_text(b, w);
-    case 82: return cuo_modding_components_method_entity_builder_read_only_text(b);
-    case 83: return cuo_modding_components_method_entity_builder_tooltip_serial(b, w);
-    case 84: return cuo_modding_components_method_entity_builder_marker(b, w);
+    case 81: return cuo_modding_components_method_entity_builder_grid_placement(b, w);
+    case 82: return cuo_modding_components_method_entity_builder_grid_placement_names(b, w);
+    case 83: return cuo_modding_components_method_entity_builder_grid_template(b, w);
+    case 84: return cuo_modding_components_method_entity_builder_masked_text(b, w);
+    case 85: return cuo_modding_components_method_entity_builder_read_only_text(b);
+    case 86: return cuo_modding_components_method_entity_builder_tooltip_serial(b, w);
+    case 87: return cuo_modding_components_method_entity_builder_marker(b, w);
     default: cuo__trap("cuo: unknown typed component");
     }
 }
@@ -4659,6 +5048,66 @@ void cuo_TradeWindow_set(cuo_query q, cuo_entity e, size_t term, const cuo_Trade
     cuo_modding_components_set_trade(cuo__typed_query(q), e, (uint8_t)term, &w);
 }
 
+const cuo_GridPlacement *cuo_GridPlacement_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_grid_placement_t l;
+    cuo_modding_components_column_grid_placement(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_GridPlacement *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_GridPlacement(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_grid_placement_free(&l);
+    return out;
+}
+
+void cuo_GridPlacement_set(cuo_query q, cuo_entity e, size_t term, const cuo_GridPlacement *v)
+{
+    cuo_modding_types_grid_placement_t w;
+    to_GridPlacement(&w, v);
+    cuo_modding_components_set_grid_placement(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_GridPlacementNames *cuo_GridPlacementNames_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_grid_placement_names_t l;
+    cuo_modding_components_column_grid_placement_names(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_GridPlacementNames *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_GridPlacementNames(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_grid_placement_names_free(&l);
+    return out;
+}
+
+void cuo_GridPlacementNames_set(cuo_query q, cuo_entity e, size_t term, const cuo_GridPlacementNames *v)
+{
+    cuo_modding_types_grid_placement_names_t w;
+    to_GridPlacementNames(&w, v);
+    cuo_modding_components_set_grid_placement_names(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
+const cuo_GridTemplate *cuo_GridTemplate_column(cuo_query q, size_t term)
+{
+    if (!q.len)
+        return NULL;
+    cuo_modding_components_list_grid_template_t l;
+    cuo_modding_components_column_grid_template(cuo__typed_query(q), (uint8_t)term, &l);
+    cuo_GridTemplate *out = cuo_alloc((l.len ? l.len : 1) * sizeof *out);
+    for (size_t i = 0; i < l.len; i++)
+        from_GridTemplate(&out[i], &l.ptr[i]);
+    cuo_modding_components_list_grid_template_free(&l);
+    return out;
+}
+
+void cuo_GridTemplate_set(cuo_query q, cuo_entity e, size_t term, const cuo_GridTemplate *v)
+{
+    cuo_modding_types_grid_template_t w;
+    to_GridTemplate(&w, v);
+    cuo_modding_components_set_grid_template(cuo__typed_query(q), e, (uint8_t)term, &w);
+}
+
 const cuo_MaskedText *cuo_MaskedText_column(cuo_query q, size_t term)
 {
     if (!q.len)
@@ -4752,6 +5201,7 @@ size_t cuo__typed_res_size(uint16_t kind)
     case 26: return sizeof(cuo_modding_types_text_clipboard_action_t);
     case 27: return sizeof(cuo_modding_types_text_completion_t);
     case 28: return sizeof(cuo_modding_types_text_completion_pick_t);
+    case 29: return sizeof(cuo_modding_types_world_map_self_label_t);
     default: cuo__trap("cuo: unknown typed resource");
     }
 }
@@ -4788,6 +5238,7 @@ bool cuo__typed_res_get(uint16_t kind, int32_t handle, void *out)
     case 26: return cuo_modding_components_get_text_clipboard_action(h, out);
     case 27: return cuo_modding_components_get_text_completion(h, out);
     case 28: return cuo_modding_components_get_text_completion_pick(h, out);
+    case 29: return cuo_modding_components_get_self_label(h, out);
     default: cuo__trap("cuo: unknown typed resource");
     }
 }
@@ -4809,6 +5260,7 @@ void cuo__typed_res_free(uint16_t kind, void *rec)
     case 23: cuo_modding_types_player_steps_free(rec); break;
     case 24: cuo_modding_types_clipboard_set_free(rec); break;
     case 27: cuo_modding_types_text_completion_free(rec); break;
+    case 29: cuo_modding_types_world_map_self_label_free(rec); break;
     default: break;
     }
 }
@@ -5231,6 +5683,30 @@ void cuo_TextCompletionPick_set_resource(cuo_cmds *c, const cuo_TextCompletionPi
     cuo_modding_types_text_completion_pick_t w;
     to_TextCompletionPick(&w, v);
     cuo_modding_components_set_resource_text_completion_pick(cuo__typed_cmds(c), &w);
+}
+
+static bool res_WorldMapSelfLabel(const cuo__params *ps, cuo_param p, cuo_WorldMapSelfLabel *out)
+{
+    const cuo_modding_types_world_map_self_label_t *w = cuo__res_typed(ps, p, 29);
+    if (w)
+        from_WorldMapSelfLabel(out, w);
+    return w != NULL;
+}
+bool cuo_WorldMapSelfLabel_res(const cuo_input *in, cuo_param p, cuo_WorldMapSelfLabel *out) { return res_WorldMapSelfLabel(in->params, p, out); }
+bool cuo_WorldMapSelfLabel_obs_res(const cuo_obs *ev, cuo_param p, cuo_WorldMapSelfLabel *out) { return res_WorldMapSelfLabel(ev->params, p, out); }
+static void put_WorldMapSelfLabel(const cuo__params *ps, cuo_param p, const cuo_WorldMapSelfLabel *v)
+{
+    cuo_modding_types_world_map_self_label_t w;
+    to_WorldMapSelfLabel(&w, v);
+    cuo_modding_components_put_self_label(cuo__res_put(ps, p), &w);
+}
+void cuo_WorldMapSelfLabel_put(const cuo_input *in, cuo_param p, const cuo_WorldMapSelfLabel *v) { put_WorldMapSelfLabel(in->params, p, v); }
+void cuo_WorldMapSelfLabel_obs_put(const cuo_obs *ev, cuo_param p, const cuo_WorldMapSelfLabel *v) { put_WorldMapSelfLabel(ev->params, p, v); }
+void cuo_WorldMapSelfLabel_set_resource(cuo_cmds *c, const cuo_WorldMapSelfLabel *v)
+{
+    cuo_modding_types_world_map_self_label_t w;
+    to_WorldMapSelfLabel(&w, v);
+    cuo_modding_components_set_resource_self_label(cuo__typed_cmds(c), &w);
 }
 
 /* ── events ── */
@@ -5829,10 +6305,13 @@ int cuo__trigger_kind(const char *path, const char **record)
     if (strcmp(path, "cuo:scene/login-error-info") == 0) return *record = "login-errors-info-event", 101;
     if (strcmp(path, "cuo:scene/server-list") == 0) return *record = "server-selection-info-event", 102;
     if (strcmp(path, "cuo:scene/server-selection") == 0) return 0;
-    if (strcmp(path, "cuo:ui/masked-text") == 0) return *record = "masked-text", 103;
+    if (strcmp(path, "cuo:ui/grid-placement") == 0) return *record = "grid-placement", 103;
+    if (strcmp(path, "cuo:ui/grid-placement-names") == 0) return *record = "grid-placement-names", 104;
+    if (strcmp(path, "cuo:ui/grid-template") == 0) return *record = "grid-template", 105;
+    if (strcmp(path, "cuo:ui/masked-text") == 0) return *record = "masked-text", 106;
     if (strcmp(path, "cuo:ui/read-only-text") == 0) return 0;
-    if (strcmp(path, "cuo:ui/tooltip-serial") == 0) return *record = "ui-tooltip-serial", 104;
-    if (strcmp(path, "cuo:worldmap/marker") == 0) return *record = "world-map-marker", 105;
+    if (strcmp(path, "cuo:ui/tooltip-serial") == 0) return *record = "ui-tooltip-serial", 107;
+    if (strcmp(path, "cuo:worldmap/marker") == 0) return *record = "world-map-marker", 108;
     return -1;
 }
 
@@ -6293,17 +6772,34 @@ const void *cuo__trigger_value(uint8_t kind, void *rec)
         return o;
     }
     case 103: {
+        cuo_GridPlacement *o = cuo_alloc(sizeof *o);
+        from_GridPlacement(o, rec);
+        return o;
+    }
+    case 104: {
+        cuo_GridPlacementNames *o = cuo_alloc(sizeof *o);
+        from_GridPlacementNames(o, rec);
+        cuo_modding_types_grid_placement_names_free(rec);
+        return o;
+    }
+    case 105: {
+        cuo_GridTemplate *o = cuo_alloc(sizeof *o);
+        from_GridTemplate(o, rec);
+        cuo_modding_types_grid_template_free(rec);
+        return o;
+    }
+    case 106: {
         cuo_MaskedText *o = cuo_alloc(sizeof *o);
         from_MaskedText(o, rec);
         cuo_modding_types_masked_text_free(rec);
         return o;
     }
-    case 104: {
+    case 107: {
         cuo_UiTooltipSerial *o = cuo_alloc(sizeof *o);
         from_UiTooltipSerial(o, rec);
         return o;
     }
-    case 105: {
+    case 108: {
         cuo_WorldMapMarker *o = cuo_alloc(sizeof *o);
         from_WorldMapMarker(o, rec);
         cuo_modding_types_world_map_marker_free(rec);
@@ -6400,6 +6896,9 @@ const cuo_ModMoveRequest *cuo_ModMoveRequest_obs_value(const cuo_obs *ev) { retu
 const cuo_CharacterSelection *cuo_CharacterSelection_obs_value(const cuo_obs *ev) { return ev->value_kind == 100 ? ev->value : NULL; }
 const cuo_LoginErrorsInfoEvent *cuo_LoginErrorsInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 101 ? ev->value : NULL; }
 const cuo_ServerSelectionInfoEvent *cuo_ServerSelectionInfoEvent_obs_value(const cuo_obs *ev) { return ev->value_kind == 102 ? ev->value : NULL; }
-const cuo_MaskedText *cuo_MaskedText_obs_value(const cuo_obs *ev) { return ev->value_kind == 103 ? ev->value : NULL; }
-const cuo_UiTooltipSerial *cuo_UiTooltipSerial_obs_value(const cuo_obs *ev) { return ev->value_kind == 104 ? ev->value : NULL; }
-const cuo_WorldMapMarker *cuo_WorldMapMarker_obs_value(const cuo_obs *ev) { return ev->value_kind == 105 ? ev->value : NULL; }
+const cuo_GridPlacement *cuo_GridPlacement_obs_value(const cuo_obs *ev) { return ev->value_kind == 103 ? ev->value : NULL; }
+const cuo_GridPlacementNames *cuo_GridPlacementNames_obs_value(const cuo_obs *ev) { return ev->value_kind == 104 ? ev->value : NULL; }
+const cuo_GridTemplate *cuo_GridTemplate_obs_value(const cuo_obs *ev) { return ev->value_kind == 105 ? ev->value : NULL; }
+const cuo_MaskedText *cuo_MaskedText_obs_value(const cuo_obs *ev) { return ev->value_kind == 106 ? ev->value : NULL; }
+const cuo_UiTooltipSerial *cuo_UiTooltipSerial_obs_value(const cuo_obs *ev) { return ev->value_kind == 107 ? ev->value : NULL; }
+const cuo_WorldMapMarker *cuo_WorldMapMarker_obs_value(const cuo_obs *ev) { return ev->value_kind == 108 ? ev->value : NULL; }

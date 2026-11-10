@@ -25,12 +25,43 @@ pub trait HasPath {
     const PATH: &'static str;
 }
 
+/// `TinyEcs.Bevy.UI.AlignContent` — crosses as `u8`.
+pub type AlignContent = u8;
+pub mod align_content {
+    pub const START: super::AlignContent = 0;
+    pub const CENTER: super::AlignContent = 1;
+    pub const END: super::AlignContent = 2;
+    pub const STRETCH: super::AlignContent = 3;
+    pub const SPACE_BETWEEN: super::AlignContent = 4;
+    pub const SPACE_AROUND: super::AlignContent = 5;
+    pub const SPACE_EVENLY: super::AlignContent = 6;
+    pub const LOGICAL_START: super::AlignContent = 7;
+    pub const LOGICAL_END: super::AlignContent = 8;
+}
+
 /// `TinyEcs.Bevy.UI.AlignItems` — crosses as `u8`.
 pub type AlignItems = u8;
 pub mod align_items {
     pub const START: super::AlignItems = 0;
     pub const CENTER: super::AlignItems = 1;
     pub const END: super::AlignItems = 2;
+    pub const STRETCH: super::AlignItems = 3;
+    pub const BASELINE: super::AlignItems = 4;
+    pub const LOGICAL_START: super::AlignItems = 5;
+    pub const LOGICAL_END: super::AlignItems = 6;
+}
+
+/// `TinyEcs.Bevy.UI.AlignSelf` — crosses as `u8`.
+pub type AlignSelf = u8;
+pub mod align_self {
+    pub const AUTO: super::AlignSelf = 0;
+    pub const START: super::AlignSelf = 1;
+    pub const CENTER: super::AlignSelf = 2;
+    pub const END: super::AlignSelf = 3;
+    pub const STRETCH: super::AlignSelf = 4;
+    pub const BASELINE: super::AlignSelf = 5;
+    pub const LOGICAL_START: super::AlignSelf = 6;
+    pub const LOGICAL_END: super::AlignSelf = 7;
 }
 
 /// `cuo:ent/amount`
@@ -95,6 +126,13 @@ pub struct BorderRadius {
 }
 impl HasPath for BorderRadius {
     const PATH: &'static str = paths::ui::BORDER_RADIUS;
+}
+
+/// `TinyEcs.Bevy.UI.BoxSizing` — crosses as `u8`.
+pub type BoxSizing = u8;
+pub mod box_sizing {
+    pub const BORDER_BOX: super::BoxSizing = 0;
+    pub const CONTENT_BOX: super::BoxSizing = 1;
 }
 
 /// `cuo:gump/buff`
@@ -169,6 +207,15 @@ impl HasPath for ChildOf {
     const PATH: &'static str = paths::ecs::CHILD_OF;
 }
 
+/// `TinyEcs.Bevy.UI.Clear` — crosses as `u8`.
+pub type Clear = u8;
+pub mod clear {
+    pub const NONE: super::Clear = 0;
+    pub const LEFT: super::Clear = 1;
+    pub const RIGHT: super::Clear = 2;
+    pub const BOTH: super::Clear = 3;
+}
+
 /// `cuo:ui/clipboard-set`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -216,7 +263,7 @@ impl HasPath for CombatBookWindow {
 pub struct ComputedNode {
     pub size: Vector2,
     pub position: Vector2,
-    pub clay_id: u32,
+    pub layout_id: u32,
     pub paint_order: i32,
 }
 impl HasPath for ComputedNode {
@@ -402,6 +449,8 @@ pub type Display = u8;
 pub mod display {
     pub const FLEX: super::Display = 0;
     pub const NONE: super::Display = 1;
+    pub const BLOCK: super::Display = 2;
+    pub const GRID: super::Display = 3;
 }
 
 /// `cuo:ui/editable-text`
@@ -478,6 +527,24 @@ pub type FlexDirection = u8;
 pub mod flex_direction {
     pub const ROW: super::FlexDirection = 0;
     pub const COLUMN: super::FlexDirection = 1;
+    pub const ROW_REVERSE: super::FlexDirection = 2;
+    pub const COLUMN_REVERSE: super::FlexDirection = 3;
+}
+
+/// `TinyEcs.Bevy.UI.FlexWrap` — crosses as `u8`.
+pub type FlexWrap = u8;
+pub mod flex_wrap {
+    pub const NO_WRAP: super::FlexWrap = 0;
+    pub const WRAP: super::FlexWrap = 1;
+    pub const WRAP_REVERSE: super::FlexWrap = 2;
+}
+
+/// `TinyEcs.Bevy.UI.Float` — crosses as `u8`.
+pub type Float = u8;
+pub mod float {
+    pub const NONE: super::Float = 0;
+    pub const LEFT: super::Float = 1;
+    pub const RIGHT: super::Float = 2;
 }
 
 /// `cuo:game/context`
@@ -597,6 +664,46 @@ impl HasPath for Graphic {
     const PATH: &'static str = paths::ent::GRAPHIC;
 }
 
+/// Nested payload type (`TinyEcs.Bevy.UI.GridArea`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct GridArea {
+    pub name: String,
+    pub row_start: u16,
+    pub row_end: u16,
+    pub column_start: u16,
+    pub column_end: u16,
+}
+
+/// `TinyEcs.Bevy.UI.GridAutoFlow` — crosses as `u8`.
+pub type GridAutoFlow = u8;
+pub mod grid_auto_flow {
+    pub const ROW: super::GridAutoFlow = 0;
+    pub const COLUMN: super::GridAutoFlow = 1;
+    pub const ROW_DENSE: super::GridAutoFlow = 2;
+    pub const COLUMN_DENSE: super::GridAutoFlow = 3;
+}
+
+/// Nested payload type (`TinyEcs.Bevy.UI.GridBreadth`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct GridBreadth {
+    /// enum GridBreadthKind (0=Auto, 1=Px, 2=Percent, 3=Fr, 4=MinContent, 5=MaxContent)
+    pub kind: GridBreadthKind,
+    pub value: f32,
+}
+
+/// `TinyEcs.Bevy.UI.GridBreadthKind` — crosses as `u8`.
+pub type GridBreadthKind = u8;
+pub mod grid_breadth_kind {
+    pub const AUTO: super::GridBreadthKind = 0;
+    pub const PX: super::GridBreadthKind = 1;
+    pub const PERCENT: super::GridBreadthKind = 2;
+    pub const FR: super::GridBreadthKind = 3;
+    pub const MIN_CONTENT: super::GridBreadthKind = 4;
+    pub const MAX_CONTENT: super::GridBreadthKind = 5;
+}
+
 /// `cuo:gump/grid-container`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -605,6 +712,13 @@ pub struct GridContainerWindow {
 }
 impl HasPath for GridContainerWindow {
     const PATH: &'static str = paths::gump::GRID_CONTAINER;
+}
+
+/// Nested payload type (`TinyEcs.Bevy.UI.GridLineNames`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct GridLineNames {
+    pub names: Vec<String>,
 }
 
 /// `cuo:gump/grid-loot`
@@ -626,6 +740,104 @@ impl HasPath for GridLootWindow {
 pub struct NoPickup {}
 impl HasPath for NoPickup {
     const PATH: &'static str = paths::ui::NO_PICKUP;
+}
+
+/// `cuo:ui/grid-placement`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct GridPlacement {
+    pub column_start: i16,
+    pub column_span: u16,
+    pub row_start: i16,
+    pub row_span: u16,
+    pub column_end: i16,
+    pub row_end: i16,
+}
+impl HasPath for GridPlacement {
+    const PATH: &'static str = paths::ui::GRID_PLACEMENT;
+}
+
+/// `cuo:ui/grid-placement-names`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct GridPlacementNames {
+    pub column_start: String,
+    pub column_end: String,
+    pub row_start: String,
+    pub row_end: String,
+}
+impl HasPath for GridPlacementNames {
+    const PATH: &'static str = paths::ui::GRID_PLACEMENT_NAMES;
+}
+
+/// Nested payload type (`TinyEcs.Bevy.UI.GridRepeat`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct GridRepeat {
+    /// enum GridRepeatKind (0=Count, 1=AutoFill, 2=AutoFit)
+    pub kind: GridRepeatKind,
+    pub count: u16,
+    pub tracks: Vec<GridTrack>,
+    pub line_names: Vec<GridLineNames>,
+}
+
+/// `TinyEcs.Bevy.UI.GridRepeatKind` — crosses as `u8`.
+pub type GridRepeatKind = u8;
+pub mod grid_repeat_kind {
+    pub const COUNT: super::GridRepeatKind = 0;
+    pub const AUTO_FILL: super::GridRepeatKind = 1;
+    pub const AUTO_FIT: super::GridRepeatKind = 2;
+}
+
+/// `cuo:ui/grid-template`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct GridTemplate {
+    pub columns: Vec<GridTemplateTrack>,
+    pub rows: Vec<GridTemplateTrack>,
+    pub auto_rows: Vec<GridTrack>,
+    pub auto_columns: Vec<GridTrack>,
+    /// enum GridAutoFlow (0=Row, 1=Column, 2=RowDense, 3=ColumnDense)
+    pub auto_flow: GridAutoFlow,
+    pub areas: Vec<GridArea>,
+    pub column_names: Vec<GridLineNames>,
+    pub row_names: Vec<GridLineNames>,
+}
+impl HasPath for GridTemplate {
+    const PATH: &'static str = paths::ui::GRID_TEMPLATE;
+}
+
+/// Nested payload type (`TinyEcs.Bevy.UI.GridTemplateTrack`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct GridTemplateTrack {
+    pub track: GridTrack,
+    pub repeat: Option<GridRepeat>,
+}
+
+/// Nested payload type (`TinyEcs.Bevy.UI.GridTrack`).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct GridTrack {
+    /// enum GridTrackKind (0=Auto, 1=Px, 2=Percent, 3=Fr, 4=MinContent, 5=MaxContent, 6=MinMax, 7=FitContent)
+    pub kind: GridTrackKind,
+    pub value: f32,
+    pub min: GridBreadth,
+    pub max: GridBreadth,
+    pub fit_limit: Val,
+}
+
+/// `TinyEcs.Bevy.UI.GridTrackKind` — crosses as `u8`.
+pub type GridTrackKind = u8;
+pub mod grid_track_kind {
+    pub const AUTO: super::GridTrackKind = 0;
+    pub const PX: super::GridTrackKind = 1;
+    pub const PERCENT: super::GridTrackKind = 2;
+    pub const FR: super::GridTrackKind = 3;
+    pub const MIN_CONTENT: super::GridTrackKind = 4;
+    pub const MAX_CONTENT: super::GridTrackKind = 5;
+    pub const MIN_MAX: super::GridTrackKind = 6;
+    pub const FIT_CONTENT: super::GridTrackKind = 7;
 }
 
 /// `cuo:gump/health-bar`
@@ -833,6 +1045,12 @@ pub mod justify_content {
     pub const START: super::JustifyContent = 0;
     pub const CENTER: super::JustifyContent = 1;
     pub const END: super::JustifyContent = 2;
+    pub const SPACE_BETWEEN: super::JustifyContent = 3;
+    pub const SPACE_AROUND: super::JustifyContent = 4;
+    pub const SPACE_EVENLY: super::JustifyContent = 5;
+    pub const LOGICAL_START: super::JustifyContent = 6;
+    pub const LOGICAL_END: super::JustifyContent = 7;
+    pub const STRETCH: super::JustifyContent = 8;
 }
 
 /// `cuo:input/keyboard`
@@ -1315,17 +1533,17 @@ impl HasPath for Serial {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
 pub struct Node {
-    /// enum Display (0=Flex, 1=None)
+    /// enum Display (0=Flex, 1=None, 2=Block, 3=Grid)
     pub display: Display,
     /// enum PositionType (0=Relative, 1=Absolute)
     pub position_type: PositionType,
     /// enum Overflow (0=Visible, 1=Clip, 2=Scroll)
     pub overflow: Overflow,
-    /// enum FlexDirection (0=Row, 1=Column)
+    /// enum FlexDirection (0=Row, 1=Column, 2=RowReverse, 3=ColumnReverse)
     pub flex_direction: FlexDirection,
-    /// enum JustifyContent (0=Start, 1=Center, 2=End)
+    /// enum JustifyContent (0=Start, 1=Center, 2=End, 3=SpaceBetween, 4=SpaceAround, 5=SpaceEvenly, 6=LogicalStart, 7=LogicalEnd, 8=Stretch)
     pub justify_content: JustifyContent,
-    /// enum AlignItems (0=Start, 1=Center, 2=End)
+    /// enum AlignItems (0=Start, 1=Center, 2=End, 3=Stretch, 4=Baseline, 5=LogicalStart, 6=LogicalEnd)
     pub align_items: AlignItems,
     pub width: Val,
     pub height: Val,
@@ -1341,6 +1559,37 @@ pub struct Node {
     pub border: UiRect,
     pub gap: Val,
     pub aspect_ratio: f32,
+    pub margin: UiRect,
+    pub flex_grow: Option<f32>,
+    pub flex_shrink: Option<f32>,
+    pub flex_basis: Val,
+    /// enum FlexWrap (0=NoWrap, 1=Wrap, 2=WrapReverse)
+    pub flex_wrap: FlexWrap,
+    /// enum AlignSelf (0=Auto, 1=Start, 2=Center, 3=End, 4=Stretch, 5=Baseline, 6=LogicalStart, 7=LogicalEnd)
+    pub align_self: AlignSelf,
+    /// enum BoxSizing (0=BorderBox, 1=ContentBox)
+    pub box_sizing: BoxSizing,
+    pub row_gap: Option<Val>,
+    pub column_gap: Option<Val>,
+    /// enum AlignContent (0=Start, 1=Center, 2=End, 3=Stretch, 4=SpaceBetween, 5=SpaceAround, 6=SpaceEvenly, 7=LogicalStart, 8=LogicalEnd)
+    pub align_content: Option<u8>,
+    /// enum AlignItems (0=Start, 1=Center, 2=End, 3=Stretch, 4=Baseline, 5=LogicalStart, 6=LogicalEnd)
+    pub justify_items: Option<u8>,
+    /// enum AlignSelf (0=Auto, 1=Start, 2=Center, 3=End, 4=Stretch, 5=Baseline, 6=LogicalStart, 7=LogicalEnd)
+    pub justify_self: AlignSelf,
+    /// enum Overflow (0=Visible, 1=Clip, 2=Scroll)
+    pub overflow_x: Option<u8>,
+    /// enum Overflow (0=Visible, 1=Clip, 2=Scroll)
+    pub overflow_y: Option<u8>,
+    pub scrollbar_width: f32,
+    pub relative_insets: bool,
+    pub border_in_layout: bool,
+    /// enum Float (0=None, 1=Left, 2=Right)
+    pub float: Float,
+    /// enum Clear (0=None, 1=Left, 2=Right, 3=Both)
+    pub clear: Clear,
+    /// enum UiDirection (0=Ltr, 1=Rtl)
+    pub direction: UiDirection,
 }
 impl HasPath for Node {
     const PATH: &'static str = paths::ui::NODE;
@@ -2290,6 +2539,13 @@ impl HasPath for UiCustom {
     const PATH: &'static str = paths::ui::CUSTOM;
 }
 
+/// `TinyEcs.Bevy.UI.UiDirection` — crosses as `u8`.
+pub type UiDirection = u8;
+pub mod ui_direction {
+    pub const LTR: super::UiDirection = 0;
+    pub const RTL: super::UiDirection = 1;
+}
+
 /// `cuo:ui/hover-tint`
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "PascalCase")]
@@ -2515,6 +2771,16 @@ pub struct WorldMapMarker {
 }
 impl HasPath for WorldMapMarker {
     const PATH: &'static str = paths::worldmap::MARKER;
+}
+
+/// `cuo:worldmap/self-label`
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default, rename_all = "PascalCase")]
+pub struct WorldMapSelfLabel {
+    pub name: String,
+}
+impl HasPath for WorldMapSelfLabel {
+    const PATH: &'static str = paths::worldmap::SELF_LABEL;
 }
 
 /// `cuo:gump/worldmap`

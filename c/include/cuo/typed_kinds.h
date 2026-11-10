@@ -94,8 +94,11 @@
         cuo_modding_types_character_selection_t *: 100, \
         cuo_modding_types_login_errors_info_event_t *: 101, \
         cuo_modding_types_server_selection_info_event_t *: 102, \
-        cuo_modding_types_masked_text_t *: 103, \
-        cuo_modding_types_ui_tooltip_serial_t *: 104, \
-        cuo_modding_types_world_map_marker_t *: 105,
+        cuo_modding_types_grid_placement_t *: 103, \
+        cuo_modding_types_grid_placement_names_t *: 104, \
+        cuo_modding_types_grid_template_t *: 105, \
+        cuo_modding_types_masked_text_t *: 106, \
+        cuo_modding_types_ui_tooltip_serial_t *: 107, \
+        cuo_modding_types_world_map_marker_t *: 108,
 
 #endif
