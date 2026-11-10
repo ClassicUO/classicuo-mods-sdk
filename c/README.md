@@ -127,7 +127,9 @@ void cuo_setup(cuo_builder *m)
   in later runs. Parent with `cuo_child_of(parent)` (or `cuo_spawn_child`).
 - **Host functions**: typed wrappers for the common ones (`cuo_log`,
   `cuo_storage_get/set`, `cuo_measure_text`, `cuo_resolve_serial`, `cuo_gump_size`,
-  `cuo_hue_argb`, `cuo_cliloc`, `cuo_send_to_server/client`); anything else is the
+  `cuo_hue_argb`, `cuo_cliloc`, `cuo_send_to_server/client`, the HTML/CSS pages `cuo_page_*`,
+  the map reads `cuo_map_load`, `cuo_map_land_area`, `cuo_map_statics_area`,
+  `cuo_land_radar_color`, `cuo_static_radar_color`, `cuo_map_revision`); anything else is the
   generated import, e.g. `cuo_modding_actions_cast_spell(29)`,
   `cuo_modding_actions_double_click(serial)` (results a generated import returns are
   malloc'd: free them with the matching `*_free`). The storage blob's format is the

@@ -97,6 +97,118 @@ void cuo_storage_set(cuo_scope scope, const char *blob)
     cuo_modding_host_storage_set((cuo_modding_host_scope_t)scope, &s);
 }
 
+/* ── host: pages ─────────────────────────────────────────────────────────── */
+
+_Static_assert(CUO_PAGE_TEXT == CUO_MODDING_HOST_PAGE_CHANGE_TEXT && CUO_PAGE_HTML == CUO_MODDING_HOST_PAGE_CHANGE_HTML
+                   && CUO_PAGE_STYLE == CUO_MODDING_HOST_PAGE_CHANGE_STYLE && CUO_PAGE_ATTR == CUO_MODDING_HOST_PAGE_CHANGE_ATTR,
+               "cuo_page_change_kind follows the WIT's page-change cases");
+
+static bool entity_out(bool ok, cuo_modding_host_entity_t e, cuo_entity *out)
+{
+    if (ok && out)
+        *out = e;
+    return ok;
+}
+
+/* The import only reads the change: its strings stay the caller's. */
+static cuo_modding_host_page_change_t lower_change(cuo_page_change c)
+{
+    cuo_modding_host_page_change_t w;
+    w.tag = (uint8_t)c.kind;
+    if (c.kind == CUO_PAGE_STYLE || c.kind == CUO_PAGE_ATTR) {
+        w.val.style.f0 = cuo__wstr(c.a);
+        w.val.style.f1 = cuo__wstr(c.b);
+    } else {
+        w.val.text = cuo__wstr(c.a);
+    }
+    return w;
+}
+
+bool cuo_page_open(const char *name, const char *html, const char *css, cuo_entity *page)
+{
+    cuo_wit_string_t n = cuo__wstr(name), h = cuo__wstr(html), c = cuo__wstr(css);
+    cuo_modding_host_entity_t e = 0;
+    return entity_out(cuo_modding_host_page_open(&n, &h, &c, &e), e, page);
+}
+
+bool cuo_page_spawn(const char *name, const char *html, const char *css, int32_t x, int32_t y, cuo_entity *page)
+{
+    cuo_wit_string_t n = cuo__wstr(name), h = cuo__wstr(html), c = cuo__wstr(css);
+    cuo_modding_host_entity_t e = 0;
+    return entity_out(cuo_modding_host_page_spawn(&n, &h, &c, x, y, &e), e, page);
+}
+
+void cuo_page_edit(cuo_entity page, const char *id, cuo_page_change change)
+{
+    cuo_wit_string_t i = cuo__wstr(id);
+    cuo_modding_host_page_change_t w = lower_change(change);
+    cuo_modding_host_page_edit(page, &i, &w);
+}
+
+const char *cuo_page_value(cuo_entity page, const char *id)
+{
+    cuo_wit_string_t i = cuo__wstr(id), s;
+    return cuo_modding_host_page_value(page, &i, &s) ? take_string(&s) : NULL;
+}
+
+size_t cuo_page_clicks(cuo_entity page, const char *const **args)
+{
+    cuo_wit_list_string_t l;
+    cuo_modding_host_page_clicks(page, &l);
+    size_t n = l.len;
+    if (args) {
+        const char **out = cuo_alloc(n * sizeof *out);
+        for (size_t k = 0; k < n; k++)
+            out[k] = cuo_strndup((const char *)l.ptr[k].ptr, l.ptr[k].len);
+        *args = out;
+    }
+    cuo_wit_list_string_free(&l);
+    return n;
+}
+
+bool cuo_page_is_open(cuo_entity page)
+{
+    return cuo_modding_host_page_is_open(page);
+}
+
+void cuo_page_close(cuo_entity page)
+{
+    cuo_modding_host_page_close(page);
+}
+
+bool cuo_page_element(cuo_entity page, const char *id, cuo_entity *out)
+{
+    cuo_wit_string_t i = cuo__wstr(id);
+    cuo_modding_host_entity_t e = 0;
+    return entity_out(cuo_modding_host_page_element(page, &i, &e), e, out);
+}
+
+bool cuo_page_clone(cuo_entity page, const char *container, const char *template_id, cuo_entity *out)
+{
+    cuo_wit_string_t c = cuo__wstr(container), t = cuo__wstr(template_id);
+    cuo_modding_host_entity_t e = 0;
+    return entity_out(cuo_modding_host_page_clone(page, &c, &t, &e), e, out);
+}
+
+void cuo_page_clear(cuo_entity page, const char *container)
+{
+    cuo_wit_string_t c = cuo__wstr(container);
+    cuo_modding_host_page_clear(page, &c);
+}
+
+bool cuo_page_part(cuo_entity page, cuo_entity element, const char *part, cuo_entity *out)
+{
+    cuo_wit_string_t p = cuo__wstr(part);
+    cuo_modding_host_entity_t e = 0;
+    return entity_out(cuo_modding_host_page_part(page, element, &p, &e), e, out);
+}
+
+void cuo_page_edit_element(cuo_entity page, cuo_entity element, cuo_page_change change)
+{
+    cuo_modding_host_page_change_t w = lower_change(change);
+    cuo_modding_host_page_edit_element(page, element, &w);
+}
+
 /* ── packets ─────────────────────────────────────────────────────────────── */
 
 void cuo_send_to_server(const uint8_t *data, size_t len)
@@ -144,4 +256,78 @@ const char *cuo_cliloc(uint32_t id)
     cuo_wit_string_t s;
     cuo_modding_assets_cliloc(id, &args, &s);
     return take_string(&s);
+}
+
+/* ── assets: the map ─────────────────────────────────────────────────────── */
+
+static void *scratch_copy(const void *src, size_t bytes)
+{
+    void *d = cuo_alloc(bytes);
+    if (bytes)
+        memcpy(d, src, bytes);
+    return d;
+}
+
+bool cuo_map_load(uint8_t map, uint32_t *w, uint32_t *h)
+{
+    cuo_modding_assets_size_t s;
+    if (!cuo_modding_assets_map_load(map, &s))
+        return false;
+    if (w) *w = s.width;
+    if (h) *h = s.height;
+    return true;
+}
+
+bool cuo_map_land_area(uint8_t map, cuo_map_area area, cuo_land_area *out)
+{
+    cuo_modding_assets_map_area_t a = { area.x, area.y, area.width, area.height };
+    cuo_modding_assets_land_area_t r;
+    if (!cuo_modding_assets_map_land_area(map, &a, &r))
+        return false;
+    if (out) {
+        out->area = (cuo_map_area){ r.area.x, r.area.y, r.area.width, r.area.height };
+        out->graphics = scratch_copy(r.graphics.ptr, r.graphics.len * sizeof(uint16_t));
+        out->z = scratch_copy(r.z.ptr, r.z.len);
+    }
+    cuo_modding_assets_land_area_free(&r);
+    return true;
+}
+
+size_t cuo_map_statics_area(uint8_t map, cuo_map_area area, const cuo_placed_static **out)
+{
+    cuo_modding_assets_map_area_t a = { area.x, area.y, area.width, area.height };
+    cuo_modding_assets_list_placed_static_t l;
+    cuo_modding_assets_map_statics_area(map, &a, &l);
+    size_t n = l.len;
+    if (out) {
+        cuo_placed_static *d = cuo_alloc(n * sizeof *d);
+        for (size_t k = 0; k < n; k++)
+            d[k] = (cuo_placed_static){ l.ptr[k].x, l.ptr[k].y, l.ptr[k].z, l.ptr[k].graphic, l.ptr[k].hue };
+        *out = d;
+    }
+    cuo_modding_assets_list_placed_static_free(&l);
+    return n;
+}
+
+bool cuo_land_radar_color(uint16_t id, uint32_t *argb)
+{
+    uint32_t c;
+    if (!cuo_modding_assets_land_radar_color(id, &c))
+        return false;
+    if (argb) *argb = c;
+    return true;
+}
+
+bool cuo_static_radar_color(uint16_t graphic, uint16_t hue, uint32_t *argb)
+{
+    uint32_t c;
+    if (!cuo_modding_assets_static_radar_color(graphic, hue, &c))
+        return false;
+    if (argb) *argb = c;
+    return true;
+}
+
+uint32_t cuo_map_revision(void)
+{
+    return cuo_modding_assets_map_revision();
 }

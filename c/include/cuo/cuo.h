@@ -297,10 +297,80 @@ typedef enum cuo_scope { CUO_SCOPE_GLOBAL = 0, CUO_SCOPE_CHARACTER = 1 } cuo_sco
 const char *cuo_storage_get(cuo_scope scope);
 void cuo_storage_set(cuo_scope scope, const char *blob);
 
+/* HTML/CSS pages: a window drawn from a page the mod ships (docs/modding.md). `page` is what
+ * cuo_page_open / cuo_page_spawn gave. The bools are false where the WIT returns none. */
+typedef enum cuo_page_change_kind {
+    CUO_PAGE_TEXT = 0,     /* a: the element's text (an input: its value) */
+    CUO_PAGE_ADD_CLASS,    /* a: the class */
+    CUO_PAGE_REMOVE_CLASS, /* a: the class */
+    CUO_PAGE_STYLE,        /* a: the property, b: its value (an inline style) */
+    CUO_PAGE_CLEAR_STYLE,  /* a: the property */
+    CUO_PAGE_ATTR,         /* a: the attribute, b: its value */
+    CUO_PAGE_REMOVE_ATTR,  /* a: the attribute */
+    CUO_PAGE_HTML,         /* a: markup replacing what earlier html changes and clones put there */
+} cuo_page_change_kind;
+typedef struct cuo_page_change {
+    cuo_page_change_kind kind;
+    const char *a, *b; /* b: STYLE and ATTR only */
+} cuo_page_change;
+/* The window of page `name` (letters, digits, - and _), opened or already open. */
+bool cuo_page_open(const char *name, const char *html, const char *css, cuo_entity *page);
+/* Always a new window of that page, at (x, y): `page` is its root. */
+bool cuo_page_spawn(const char *name, const char *html, const char *css, int32_t x, int32_t y, cuo_entity *page);
+/* Changes the element with this HTML id; kept and re-applied after a reload of the page. */
+void cuo_page_edit(cuo_entity page, const char *id, cuo_page_change change);
+/* A text input's, checkbox's ("true" / "false") or slider's value; NULL: no such element. */
+const char *cuo_page_value(cuo_entity page, const char *id);
+/* The data-arg of each data-action="mod" element clicked since the last call, oldest first:
+ * the count, the strings in *args (call-scoped). */
+size_t cuo_page_clicks(cuo_entity page, const char *const **args);
+bool cuo_page_is_open(cuo_entity page);
+void cuo_page_close(cuo_entity page);
+/* The element with this HTML id; false until the page has loaded. A reload makes new elements. */
+bool cuo_page_element(cuo_entity page, const char *id, cuo_entity *out);
+/* Appends a copy of <template id=template_id> to the element with id `container`: its first element. */
+bool cuo_page_clone(cuo_entity page, const char *container, const char *template_id, cuo_entity *out);
+/* Removes every copy cuo_page_clone put in `container`. */
+void cuo_page_clear(cuo_entity page, const char *container);
+/* The element with data-part="<part>" inside `element` (a clone's fields). */
+bool cuo_page_part(cuo_entity page, cuo_entity element, const char *part, cuo_entity *out);
+/* cuo_page_edit for an element from cuo_page_clone / cuo_page_element; not re-applied after a reload. */
+void cuo_page_edit_element(cuo_entity page, cuo_entity element, cuo_page_change change);
+
 /* assets */
 bool cuo_gump_size(uint32_t gump_id, int *w, int *h);
 uint32_t cuo_hue_argb(uint16_t hue); /* the tint a white glyph gets: 0xAARRGGBB; 0 = white */
 const char *cuo_cliloc(uint32_t id); /* "" when unknown */
+
+/* The map files by facet index: no items, no house customisation; patches and overrides included. */
+typedef struct cuo_map_area {
+    uint16_t x, y, width, height; /* a rectangle of tiles */
+} cuo_map_area;
+typedef struct cuo_land_area {
+    cuo_map_area area; /* what was read (clipped) */
+    /* area.width * area.height each, indexed (y - area.y) * area.width + (x - area.x); call-scoped */
+    const uint16_t *graphics;
+    const int8_t *z;
+} cuo_land_area;
+typedef struct cuo_placed_static {
+    uint16_t x, y; /* world tiles */
+    int8_t z;
+    uint16_t graphic, hue;
+} cuo_placed_static;
+/* Loads a facet nobody needed yet and gives its size in tiles; false when the files have none.
+ * A loaded facet stays in memory and the load can stall its frame. */
+bool cuo_map_load(uint8_t map, uint32_t *w, uint32_t *h);
+/* The land in `area`, clipped to the facet and to 512x512 tiles; false when the facet isn't
+ * loaded or nothing is left. */
+bool cuo_map_land_area(uint8_t map, cuo_map_area area, cuo_land_area *out);
+/* The statics in `area` (clipped the same way), in no particular order: the count, the items
+ * in *out (call-scoped). */
+size_t cuo_map_statics_area(uint8_t map, cuo_map_area area, const cuo_placed_static **out);
+/* Radar colours, 0xAARRGGBB (hue 0 = none); false when the tile has none. */
+bool cuo_land_radar_color(uint16_t id, uint32_t *argb);
+bool cuo_static_radar_color(uint16_t graphic, uint16_t hue, uint32_t *argb);
+/* Goes up each time map data changes in memory; one counter for all facets, per session. */
+uint32_t cuo_map_revision(void);
 
 /* ── call-scoped scratch ─────────────────────────────────────────────────────── */
 

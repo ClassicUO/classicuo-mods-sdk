@@ -97,6 +97,127 @@ public static partial class Host
         return G.IHostImports.EntityScreenPosition(entity) is { } p ? new ScreenPoint { X = p.x, Y = p.y } : null;
     }
 
+    /// <summary>
+    /// What <see cref="PageEdit"/> changes on an element of a page.
+    /// </summary>
+    public readonly struct PageChange
+    {
+        internal readonly G.IHostImports.PageChange Raw;
+        PageChange(G.IHostImports.PageChange raw) => Raw = raw;
+
+        /// <summary>The element's text (an input: its value).</summary>
+        public static PageChange Text(string text) => new(G.IHostImports.PageChange.Text(text));
+        public static PageChange AddClass(string name) => new(G.IHostImports.PageChange.AddClass(name));
+        public static PageChange RemoveClass(string name) => new(G.IHostImports.PageChange.RemoveClass(name));
+        /// <summary>An inline style.</summary>
+        public static PageChange Style(string property, string value) => new(G.IHostImports.PageChange.Style((property, value)));
+        public static PageChange ClearStyle(string property) => new(G.IHostImports.PageChange.ClearStyle(property));
+        public static PageChange Attr(string name, string value) => new(G.IHostImports.PageChange.Attr((name, value)));
+        public static PageChange RemoveAttr(string name) => new(G.IHostImports.PageChange.RemoveAttr(name));
+        /// <summary>
+        /// Replaces what earlier `html` changes and <see cref="PageClone"/> put under the element.
+        /// Ids in it work with <see cref="PageElement"/>.
+        /// </summary>
+        public static PageChange Html(string html) => new(G.IHostImports.PageChange.Html(html));
+    }
+
+    /// <summary>
+    /// Opens a window showing an HTML/CSS page, or returns the one already open under this
+    /// name. `html` and `css` are the mod's built-in page (link the sheet from the html); the
+    /// player's edited copy in the mod's `ui` folder wins and reloads on save. None when `name`
+    /// isn't letters, digits, `-` and `_`. The window closes with the mod.
+    /// </summary>
+    public static ulong? PageOpen(string name, string html, string css)
+    {
+        return G.IHostImports.PageOpen(name, html, css);
+    }
+
+    /// <summary>
+    /// Like <see cref="PageOpen"/>, but always a new window of that page, at (x, y). The result
+    /// is the window root, which the mod may size and put its own components on.
+    /// </summary>
+    public static ulong? PageSpawn(string name, string html, string css, int x, int y)
+    {
+        return G.IHostImports.PageSpawn(name, html, css, x, y);
+    }
+
+    /// <summary>
+    /// Changes the element with this HTML `id`. Kept and re-applied after every reload of the
+    /// page, so call it any time, also before the page has loaded.
+    /// </summary>
+    public static void PageEdit(ulong page, string id, PageChange change)
+    {
+        G.IHostImports.PageEdit(page, id, change.Raw);
+    }
+
+    /// <summary>
+    /// The value of a text input, checkbox ("true" / "false") or slider. None when there is no
+    /// such element.
+    /// </summary>
+    public static string? PageValue(ulong page, string id)
+    {
+        return G.IHostImports.PageValue(page, id);
+    }
+
+    /// <summary>
+    /// The `data-arg` of each `data-action="mod"` element clicked on this page since the last
+    /// call, oldest first. Poll it from a system.
+    /// </summary>
+    public static string[] PageClicks(ulong page)
+    {
+        return G.IHostImports.PageClicks(page).ToArray();
+    }
+
+    /// <summary>False once the player or <see cref="PageClose"/> closed the window.</summary>
+    public static bool PageIsOpen(ulong page)
+    {
+        return G.IHostImports.PageIsOpen(page);
+    }
+
+    public static void PageClose(ulong page)
+    {
+        G.IHostImports.PageClose(page);
+    }
+
+    /// <summary>
+    /// The entity of the element with this HTML `id`. None until the page has loaded. A reload
+    /// of the page makes new elements, so compare the result each frame.
+    /// </summary>
+    public static ulong? PageElement(ulong page, string id)
+    {
+        return G.IHostImports.PageElement(page, id);
+    }
+
+    /// <summary>
+    /// Appends a copy of `&lt;template id=template&gt;` to the element with id `container`, and
+    /// returns the copy's first element. None until the page has loaded.
+    /// </summary>
+    public static ulong? PageClone(ulong page, string container, string template)
+    {
+        return G.IHostImports.PageClone(page, container, template);
+    }
+
+    /// <summary>Removes every copy <see cref="PageClone"/> put in the element with id `container`.</summary>
+    public static void PageClear(ulong page, string container)
+    {
+        G.IHostImports.PageClear(page, container);
+    }
+
+    /// <summary>The element with `data-part="part"` inside `element` (a clone's fields).</summary>
+    public static ulong? PagePart(ulong page, ulong element, string part)
+    {
+        return G.IHostImports.PagePart(page, element, part);
+    }
+
+    /// <summary>
+    /// <see cref="PageEdit"/> for an element from <see cref="PageClone"/> or
+    /// <see cref="PageElement"/>. Not re-applied after a reload.
+    /// </summary>
+    public static void PageEditElement(ulong page, ulong element, PageChange change)
+    {
+        G.IHostImports.PageEditElement(page, element, change.Raw);
+    }
+
     /// <summary>A point in UI coordinates (a node's left / top space).</summary>
     public struct ScreenPoint
     {
@@ -161,6 +282,10 @@ public static partial class Assets
     static LandCell Lift(G.IAssetsImports.LandCell v) => new() { Graphic = v.graphic, Z = v.z };
     static StaticCell Lift(G.IAssetsImports.StaticCell v) => new() { Graphic = v.graphic, Z = v.z, Hue = v.hue };
     static MultiPart Lift(G.IAssetsImports.MultiPart v) => new() { Graphic = v.graphic, X = v.x, Y = v.y, Z = v.z };
+    static G.IAssetsImports.MapArea Lower(MapArea a) => new(a.X, a.Y, a.Width, a.Height);
+    static MapArea Lift(G.IAssetsImports.MapArea v) => new() { X = v.x, Y = v.y, Width = v.width, Height = v.height };
+    static LandArea Lift(G.IAssetsImports.LandArea v) => new() { Area = Lift(v.area), Graphics = v.graphics, Z = v.z };
+    static PlacedStatic Lift(G.IAssetsImports.PlacedStatic v) => new() { X = v.x, Y = v.y, Z = v.z, Graphic = v.graphic, Hue = v.hue };
     static Skill Lift(G.IAssetsImports.Skill v) => new() { Index = v.index, Name = v.name, HasAction = v.hasAction };
 
     public enum ImageKind
@@ -256,6 +381,36 @@ public static partial class Assets
     {
         public ushort Graphic;
         public sbyte Z;
+        public ushort Hue;
+    }
+
+    /// <summary>A rectangle of tiles on a facet.</summary>
+    public struct MapArea
+    {
+        public ushort X;
+        public ushort Y;
+        public ushort Width;
+        public ushort Height;
+    }
+
+    /// <summary>
+    /// The land of `Area`, row by row: both arrays are indexed by
+    /// (y - Area.Y) * Area.Width + (x - Area.X). A block the files lack reads as graphic 0.
+    /// </summary>
+    public struct LandArea
+    {
+        public MapArea Area;
+        public ushort[] Graphics;
+        public sbyte[] Z;
+    }
+
+    /// <summary>A static with its world tile.</summary>
+    public struct PlacedStatic
+    {
+        public ushort X;
+        public ushort Y;
+        public sbyte Z;
+        public ushort Graphic;
         public ushort Hue;
     }
 
@@ -363,6 +518,55 @@ public static partial class Assets
     public static StaticCell[] MapStatics(byte map, ushort x, ushort y)
     {
         return G.IAssetsImports.MapStatics(map, x, y).ConvertAll(Lift).ToArray();
+    }
+
+    /// <summary>
+    /// Loads a facet the client hasn't needed yet and returns its size; none when the files have
+    /// no such facet. A loaded facet stays in memory and the load can stall its frame: call it
+    /// when the player asks for that facet. <see cref="MapSize"/> tells what's loaded.
+    /// </summary>
+    public static Size? MapLoad(byte map)
+    {
+        return G.IAssetsImports.MapLoad(map) is { } r ? Lift(r) : null;
+    }
+
+    /// <summary>
+    /// The land in `area`, clipped to the facet and to 512x512 tiles: `Area` in the result is
+    /// what was read. None when the facet isn't loaded or nothing is left after clipping.
+    /// </summary>
+    public static LandArea? MapLandArea(byte map, MapArea area)
+    {
+        return G.IAssetsImports.MapLandArea(map, Lower(area)) is { } r ? Lift(r) : null;
+    }
+
+    /// <summary>The statics in `area`, clipped like <see cref="MapLandArea"/>, in no particular order.</summary>
+    public static PlacedStatic[] MapStaticsArea(byte map, MapArea area)
+    {
+        return G.IAssetsImports.MapStaticsArea(map, Lower(area)).ConvertAll(Lift).ToArray();
+    }
+
+    /// <summary>A land tile's radar colour, 0xAARRGGBB. None past the table.</summary>
+    public static uint? LandRadarColor(ushort id)
+    {
+        return G.IAssetsImports.LandRadarColor(id);
+    }
+
+    /// <summary>
+    /// A static's radar colour, 0xAARRGGBB, with `hue` applied (0 = none). None when the map
+    /// doesn't draw that graphic.
+    /// </summary>
+    public static uint? StaticRadarColor(ushort graphic, ushort hue)
+    {
+        return G.IAssetsImports.StaticRadarColor(graphic, hue);
+    }
+
+    /// <summary>
+    /// Goes up each time map data changes in memory. One counter for all facets, only
+    /// comparable within a session.
+    /// </summary>
+    public static uint MapRevision()
+    {
+        return G.IAssetsImports.MapRevision();
     }
 
     public static MultiPart[] Multi(ushort id)
