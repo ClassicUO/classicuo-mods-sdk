@@ -74,8 +74,12 @@ pub mod ent {
 pub mod game {
     /// `cuo:game/context` — resource.
     pub const CONTEXT: &str = "cuo:game/context";
+    /// `cuo:game/options` — resource.
+    pub const OPTIONS: &str = "cuo:game/options";
     /// `cuo:game/settings` — resource.
     pub const SETTINGS: &str = "cuo:game/settings";
+    /// `cuo:game/shard` — resource.
+    pub const SHARD: &str = "cuo:game/shard";
     /// `cuo:game/state` — resource.
     pub const STATE: &str = "cuo:game/state";
 }

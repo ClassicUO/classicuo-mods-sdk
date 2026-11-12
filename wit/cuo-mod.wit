@@ -908,6 +908,185 @@ interface types {
         highlight-game-objects: bool,
     }
 
+    /// `cuo:game/shard`: the classicuo.org shard this session plays (set by the client's launcher;
+    /// read-only). `id` 0 = none (a desktop session, or a client built without the launcher).
+    record game-shard {
+        /// The classicuo.org shard id (the web client's `shard.id`, `${shardId}|${serial}` keys).
+        id: s32,
+        name: string,
+        /// The shard's rules as the shard list sends them (the web's `ShardRules` JSON); "" when none.
+        rules: string,
+    }
+
+    /// One `game-options` field the shard's rules lock: a write that changes it is refused.
+    record game-option-lock {
+        /// The locked field's name as the Rust SDK spells it (`auto_open_corpses`).
+        key: string,
+        /// Why the shard locks it (show it next to the greyed control).
+        reason: string,
+    }
+
+    /// `cuo:game/options`: the client's game options a mod may read and write (a superset of
+    /// `game-settings`). A write applies to the live profile like the Options window; it is
+    /// refused whole (nothing applies, the host logs it once) when it changes a field in `locked`.
+    record game-options {
+        always-run: bool,
+        always-run-unless-hidden: bool,
+        skip-empty-corpse: bool,
+        auto-open-corpses: bool,
+        auto-open-corpse-range: s32,
+        corpse-open-options: s32,
+        auto-open-doors: bool,
+        enable-pathfind: bool,
+        smooth-doors: bool,
+        use-shift-to-pathfind: bool,
+        use-smooth-boat-movement: bool,
+        fast-rotation: bool,
+        highlight-game-objects: bool,
+        no-color-objects-out-of-range: bool,
+        sallos-easy-grab: bool,
+        show-house-content: bool,
+        cb-black-bg-toggled: bool,
+        close-all-anchored-gumps-in-group-with-right-click: bool,
+        grid-loot-type: s32,
+        hold-alt-to-move-gumps: bool,
+        hold-down-key-alt-to-close-anchored: bool,
+        hold-shift-for-context: bool,
+        hold-shift-to-split-stack: bool,
+        party-invite-gump: bool,
+        topbar-gump-is-disabled: bool,
+        use-old-status-gump: bool,
+        close-health-bar-type: s32,
+        custom-bars-toggled: bool,
+        save-healthbars: bool,
+        status-gump-bar-mutually-exclusive: bool,
+        enable-drag-select: bool,
+        drag-select-as-anchor: bool,
+        drag-select-humanoids-only: bool,
+        drag-select-hostile-only: bool,
+        drag-select-modifier-key: s32,
+        use-circle-of-transparency: bool,
+        circle-of-transparency-radius: s32,
+        circle-of-transparency-type: s32,
+        hide-screenshot-stored-in-message: bool,
+        text-fading: bool,
+        use-objects-fading: bool,
+        show-skills-changed-delta-value: s32,
+        show-stats-changed-message: bool,
+        highlight-mobiles-by-poisoned: bool,
+        poison-hue: u16,
+        highlight-mobiles-by-invul: bool,
+        invulnerable-hue: u16,
+        highlight-mobiles-by-paralize: bool,
+        paralyzed-hue: u16,
+        party-aura: bool,
+        party-aura-hue: u16,
+        show-new-corpse-name-incoming: bool,
+        show-new-mobile-name-incoming: bool,
+        show-dps-with-damage-numbers: bool,
+        show-mobiles-hp: bool,
+        mobile-hp-show-when: s32,
+        mobile-hp-type: s32,
+        aura-under-feet-type: s32,
+        name-overhead-toggled: bool,
+        name-overhead-show-hp-bar: bool,
+        draw-roofs: bool,
+        enable-cave-border: bool,
+        hide-vegetation: bool,
+        tree-to-stumps: bool,
+        fields-type: s32,
+        game-window-full-size: bool,
+        reduce-fps-when-inactive: bool,
+        enable-mousewheel-scale-zoom: bool,
+        restore-scale-after-unpress-ctrl: bool,
+        default-scale: f32,
+        use-alternative-lights: bool,
+        use-colored-lights: bool,
+        use-custom-light-level: bool,
+        light-level: u8,
+        use-dark-nights: bool,
+        aura-on-mouse: bool,
+        enable-black-white-effect: bool,
+        enable-death-screen: bool,
+        animated-water-effect: bool,
+        shadows-enabled: bool,
+        shadows-statics: bool,
+        terrain-shadows-level: s32,
+        enable-music: bool,
+        music-volume: s32,
+        enable-sound: bool,
+        sound-volume: s32,
+        enable-combat-music: bool,
+        enable-footsteps-sound: bool,
+        reproduce-sounds-in-background: bool,
+        benefic-hue: u16,
+        neutral-hue: u16,
+        can-attack-hue: u16,
+        criminal-hue: u16,
+        enemy-hue: u16,
+        friend-hue: u16,
+        harmful-hue: u16,
+        innocent-hue: u16,
+        murderer-hue: u16,
+        use-new-target-system: bool,
+        queue-auto-target: bool,
+        show-target-range-indicator: bool,
+        hold-down-key-tab: bool,
+        enabled-beneficial-criminal-action-query: bool,
+        enabled-criminal-action-query: bool,
+        buff-bar-time: bool,
+        enabled-spell-hue: bool,
+        cast-spells-by-one-click: bool,
+        fast-spells-assign: bool,
+        enabled-spell-format: bool,
+        spell-display-format: string,
+        speech-hue: u16,
+        whisper-hue: u16,
+        yell-hue: u16,
+        ally-message-hue: u16,
+        chat-message-hue: u16,
+        emote-hue: u16,
+        guild-message-hue: u16,
+        party-message-hue: u16,
+        activate-chat-additional-buttons: bool,
+        activate-chat-after-enter: bool,
+        activate-chat-shift-enter-support: bool,
+        hide-chat-gradient: bool,
+        ignore-alliance-messages: bool,
+        ignore-guild-messages: bool,
+        save-journal-to-file: bool,
+        scale-speech-delay: bool,
+        speech-delay: s32,
+        counter-bar-enabled: bool,
+        counter-bar-cell-size: s32,
+        counter-bar-abbreviated-amount: s32,
+        counter-bar-highlight-amount: s32,
+        containers-scale: u8,
+        scale-items-inside-containers: bool,
+        use-large-container-gumps: bool,
+        override-container-location: bool,
+        override-container-location-setting: s32,
+        backpack-style: s32,
+        hue-container-gumps: bool,
+        double-click-to-loot-inside-containers: bool,
+        highlight-container-when-selected: bool,
+        relative-drag-and-drop-items: bool,
+        use-tooltip: bool,
+        tooltip-text-hue: u16,
+        tooltip-background-opacity: s32,
+        tooltip-delay-before-display: s32,
+        tooltip-display-zoom: s32,
+        override-all-fonts: bool,
+        override-all-fonts-is-unicode: bool,
+        force-unicode-journal: bool,
+        chat-font: u8,
+        disable-auto-move: bool,
+        counter-bar-display-abbreviated-amount: bool,
+        counter-bar-highlight-on-amount: bool,
+        /// The fields the shard locks, with the reason; ignored on a write.
+        locked: list<game-option-lock>,
+    }
+
     /// `GameStateKind`
     enum game-state-kind { loading, login-screen, server-selection, character-selection, character-creation, login-error, game-screen }
 
@@ -1947,7 +2126,7 @@ interface types {
 /// signature when it binds it.
 interface components {
     use tinyecs:modding/ecs@0.1.0.{commands, query, res, events, entity};
-    use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, ui-anchorable, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, server-selection-info-event, clipboard-set, input-focus, grid-placement, grid-placement-names, grid-template, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial, world-map-marker, world-map-self-label};
+    use types.{hits, mana, stamina, player-data, serial, graphic, hue, world-position, notoriety, entity-name, amount, node, text, text-font, text-color, background-color, border-radius, child-of, global-z-index, interaction, mouse-input, keyboard-input, chat-message, prompt-opened-event, time, equipment-slots, facing, entity-properties, server-flags, container-slot-position, game-context, game-settings, game-shard, game-option-lock, game-options, game-state, container-window, container-closed-event, container-opened-event, container-positions, container-slot-event, container-gump-tag, context-menu-event, grid-container-window, grid-loot-window, health-bar-window, server-gump, input-consume, host-hotkeys, mod-hotkey-fired, mod-hotkey-bindings, world-single-click, item-drop-sent, item-move-result, mod-options-schema, mod-options-values, player-buffs, grabbed-item, player-skills, stat-locks, local-target-result-event, targeting-state, ui-anchorable, border-color, uo-button, computed-node, container-item-ui, ui-custom, editable-text, ui-hover, ui-hover-tint, ui-name, ui-pick, ui-resizable, ui-right-click, scroll-position, ui-scrollbar, stat-lock-button, status-bar-window, mod-supersedes, ui-surface, text-caret, text-completion-state, text-hue, text-spans, text-wrap, ui-tooltip, mob-animation, mobile-steps, combat-book-window, house-design-window, journal-window, menu-gump-window, mini-map-window, paperdoll-window, party-invite-window, party-manifest-window, profile-window, racial-book-window, server-gump-closed-event, server-gump-opened-event, skills-window, spellbook-window, split-menu-window, tip-notice-window, trade-window, mod-move-request, party, spellbooks, player-steps, character-selection, login-errors-info-event, server-selection-info-event, clipboard-set, input-focus, grid-placement, grid-placement-names, grid-template, masked-text, text-clipboard-action, text-completion, text-completion-pick, ui-tooltip-serial, world-map-marker, world-map-self-label};
 
     /// Inserts components on one entity, chained: each method queues one insert and
     /// returns a new builder for the same entity.
@@ -2572,6 +2751,17 @@ interface components {
 
     /// The `cuo:game/settings` resource parameter's value; none when the host has none.
     get-settings: func(r: borrow<res>) -> option<game-settings>;
+
+    /// The `cuo:game/shard` resource parameter's value; none when the host has none.
+    get-shard: func(r: borrow<res>) -> option<game-shard>;
+
+    /// The `cuo:game/options` resource parameter's value; none when the host has none.
+    get-options: func(r: borrow<res>) -> option<game-options>;
+    /// Writes the `cuo:game/options` resource through an `add-res-mut` parameter (now: a
+    /// `get-options` after it reads the new value).
+    put-options: func(r: borrow<res>, v: game-options);
+    /// Sets the `cuo:game/options` resource (deferred, in order with the call's commands).
+    set-resource-options: func(c: borrow<commands>, v: game-options);
 
     /// The `cuo:game/state` resource parameter's value; none when the host has none.
     get-state: func(r: borrow<res>) -> option<game-state>;

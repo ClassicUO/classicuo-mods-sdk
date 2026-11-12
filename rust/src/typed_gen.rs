@@ -1073,6 +1073,340 @@ impl Conv<w::GameContext> for s::GameContext {
     }
 }
 
+impl Conv<w::GameOptionLock> for s::GameOptionLock {
+    fn to_wit(&self) -> w::GameOptionLock {
+        w::GameOptionLock {
+            key: Conv::to_wit(&self.key),
+            reason: Conv::to_wit(&self.reason),
+        }
+    }
+    fn from_wit(v: w::GameOptionLock) -> s::GameOptionLock {
+        s::GameOptionLock {
+            key: Conv::from_wit(v.key),
+            reason: Conv::from_wit(v.reason),
+        }
+    }
+}
+
+impl Conv<w::GameOptions> for s::GameOptions {
+    fn to_wit(&self) -> w::GameOptions {
+        w::GameOptions {
+            always_run: Conv::to_wit(&self.always_run),
+            always_run_unless_hidden: Conv::to_wit(&self.always_run_unless_hidden),
+            skip_empty_corpse: Conv::to_wit(&self.skip_empty_corpse),
+            auto_open_corpses: Conv::to_wit(&self.auto_open_corpses),
+            auto_open_corpse_range: Conv::to_wit(&self.auto_open_corpse_range),
+            corpse_open_options: Conv::to_wit(&self.corpse_open_options),
+            auto_open_doors: Conv::to_wit(&self.auto_open_doors),
+            enable_pathfind: Conv::to_wit(&self.enable_pathfind),
+            smooth_doors: Conv::to_wit(&self.smooth_doors),
+            use_shift_to_pathfind: Conv::to_wit(&self.use_shift_to_pathfind),
+            use_smooth_boat_movement: Conv::to_wit(&self.use_smooth_boat_movement),
+            fast_rotation: Conv::to_wit(&self.fast_rotation),
+            highlight_game_objects: Conv::to_wit(&self.highlight_game_objects),
+            no_color_objects_out_of_range: Conv::to_wit(&self.no_color_objects_out_of_range),
+            sallos_easy_grab: Conv::to_wit(&self.sallos_easy_grab),
+            show_house_content: Conv::to_wit(&self.show_house_content),
+            cb_black_bg_toggled: Conv::to_wit(&self.cb_black_bg_toggled),
+            close_all_anchored_gumps_in_group_with_right_click: Conv::to_wit(&self.close_all_anchored_gumps_in_group_with_right_click),
+            grid_loot_type: Conv::to_wit(&self.grid_loot_type),
+            hold_alt_to_move_gumps: Conv::to_wit(&self.hold_alt_to_move_gumps),
+            hold_down_key_alt_to_close_anchored: Conv::to_wit(&self.hold_down_key_alt_to_close_anchored),
+            hold_shift_for_context: Conv::to_wit(&self.hold_shift_for_context),
+            hold_shift_to_split_stack: Conv::to_wit(&self.hold_shift_to_split_stack),
+            party_invite_gump: Conv::to_wit(&self.party_invite_gump),
+            topbar_gump_is_disabled: Conv::to_wit(&self.topbar_gump_is_disabled),
+            use_old_status_gump: Conv::to_wit(&self.use_old_status_gump),
+            close_health_bar_type: Conv::to_wit(&self.close_health_bar_type),
+            custom_bars_toggled: Conv::to_wit(&self.custom_bars_toggled),
+            save_healthbars: Conv::to_wit(&self.save_healthbars),
+            status_gump_bar_mutually_exclusive: Conv::to_wit(&self.status_gump_bar_mutually_exclusive),
+            enable_drag_select: Conv::to_wit(&self.enable_drag_select),
+            drag_select_as_anchor: Conv::to_wit(&self.drag_select_as_anchor),
+            drag_select_humanoids_only: Conv::to_wit(&self.drag_select_humanoids_only),
+            drag_select_hostile_only: Conv::to_wit(&self.drag_select_hostile_only),
+            drag_select_modifier_key: Conv::to_wit(&self.drag_select_modifier_key),
+            use_circle_of_transparency: Conv::to_wit(&self.use_circle_of_transparency),
+            circle_of_transparency_radius: Conv::to_wit(&self.circle_of_transparency_radius),
+            circle_of_transparency_type: Conv::to_wit(&self.circle_of_transparency_type),
+            hide_screenshot_stored_in_message: Conv::to_wit(&self.hide_screenshot_stored_in_message),
+            text_fading: Conv::to_wit(&self.text_fading),
+            use_objects_fading: Conv::to_wit(&self.use_objects_fading),
+            show_skills_changed_delta_value: Conv::to_wit(&self.show_skills_changed_delta_value),
+            show_stats_changed_message: Conv::to_wit(&self.show_stats_changed_message),
+            highlight_mobiles_by_poisoned: Conv::to_wit(&self.highlight_mobiles_by_poisoned),
+            poison_hue: Conv::to_wit(&self.poison_hue),
+            highlight_mobiles_by_invul: Conv::to_wit(&self.highlight_mobiles_by_invul),
+            invulnerable_hue: Conv::to_wit(&self.invulnerable_hue),
+            highlight_mobiles_by_paralize: Conv::to_wit(&self.highlight_mobiles_by_paralize),
+            paralyzed_hue: Conv::to_wit(&self.paralyzed_hue),
+            party_aura: Conv::to_wit(&self.party_aura),
+            party_aura_hue: Conv::to_wit(&self.party_aura_hue),
+            show_new_corpse_name_incoming: Conv::to_wit(&self.show_new_corpse_name_incoming),
+            show_new_mobile_name_incoming: Conv::to_wit(&self.show_new_mobile_name_incoming),
+            show_dps_with_damage_numbers: Conv::to_wit(&self.show_dps_with_damage_numbers),
+            show_mobiles_hp: Conv::to_wit(&self.show_mobiles_hp),
+            mobile_hp_show_when: Conv::to_wit(&self.mobile_hp_show_when),
+            mobile_hp_type: Conv::to_wit(&self.mobile_hp_type),
+            aura_under_feet_type: Conv::to_wit(&self.aura_under_feet_type),
+            name_overhead_toggled: Conv::to_wit(&self.name_overhead_toggled),
+            name_overhead_show_hp_bar: Conv::to_wit(&self.name_overhead_show_hp_bar),
+            draw_roofs: Conv::to_wit(&self.draw_roofs),
+            enable_cave_border: Conv::to_wit(&self.enable_cave_border),
+            hide_vegetation: Conv::to_wit(&self.hide_vegetation),
+            tree_to_stumps: Conv::to_wit(&self.tree_to_stumps),
+            fields_type: Conv::to_wit(&self.fields_type),
+            game_window_full_size: Conv::to_wit(&self.game_window_full_size),
+            reduce_fps_when_inactive: Conv::to_wit(&self.reduce_fps_when_inactive),
+            enable_mousewheel_scale_zoom: Conv::to_wit(&self.enable_mousewheel_scale_zoom),
+            restore_scale_after_unpress_ctrl: Conv::to_wit(&self.restore_scale_after_unpress_ctrl),
+            default_scale: Conv::to_wit(&self.default_scale),
+            use_alternative_lights: Conv::to_wit(&self.use_alternative_lights),
+            use_colored_lights: Conv::to_wit(&self.use_colored_lights),
+            use_custom_light_level: Conv::to_wit(&self.use_custom_light_level),
+            light_level: Conv::to_wit(&self.light_level),
+            use_dark_nights: Conv::to_wit(&self.use_dark_nights),
+            aura_on_mouse: Conv::to_wit(&self.aura_on_mouse),
+            enable_black_white_effect: Conv::to_wit(&self.enable_black_white_effect),
+            enable_death_screen: Conv::to_wit(&self.enable_death_screen),
+            animated_water_effect: Conv::to_wit(&self.animated_water_effect),
+            shadows_enabled: Conv::to_wit(&self.shadows_enabled),
+            shadows_statics: Conv::to_wit(&self.shadows_statics),
+            terrain_shadows_level: Conv::to_wit(&self.terrain_shadows_level),
+            enable_music: Conv::to_wit(&self.enable_music),
+            music_volume: Conv::to_wit(&self.music_volume),
+            enable_sound: Conv::to_wit(&self.enable_sound),
+            sound_volume: Conv::to_wit(&self.sound_volume),
+            enable_combat_music: Conv::to_wit(&self.enable_combat_music),
+            enable_footsteps_sound: Conv::to_wit(&self.enable_footsteps_sound),
+            reproduce_sounds_in_background: Conv::to_wit(&self.reproduce_sounds_in_background),
+            benefic_hue: Conv::to_wit(&self.benefic_hue),
+            neutral_hue: Conv::to_wit(&self.neutral_hue),
+            can_attack_hue: Conv::to_wit(&self.can_attack_hue),
+            criminal_hue: Conv::to_wit(&self.criminal_hue),
+            enemy_hue: Conv::to_wit(&self.enemy_hue),
+            friend_hue: Conv::to_wit(&self.friend_hue),
+            harmful_hue: Conv::to_wit(&self.harmful_hue),
+            innocent_hue: Conv::to_wit(&self.innocent_hue),
+            murderer_hue: Conv::to_wit(&self.murderer_hue),
+            use_new_target_system: Conv::to_wit(&self.use_new_target_system),
+            queue_auto_target: Conv::to_wit(&self.queue_auto_target),
+            show_target_range_indicator: Conv::to_wit(&self.show_target_range_indicator),
+            hold_down_key_tab: Conv::to_wit(&self.hold_down_key_tab),
+            enabled_beneficial_criminal_action_query: Conv::to_wit(&self.enabled_beneficial_criminal_action_query),
+            enabled_criminal_action_query: Conv::to_wit(&self.enabled_criminal_action_query),
+            buff_bar_time: Conv::to_wit(&self.buff_bar_time),
+            enabled_spell_hue: Conv::to_wit(&self.enabled_spell_hue),
+            cast_spells_by_one_click: Conv::to_wit(&self.cast_spells_by_one_click),
+            fast_spells_assign: Conv::to_wit(&self.fast_spells_assign),
+            enabled_spell_format: Conv::to_wit(&self.enabled_spell_format),
+            spell_display_format: Conv::to_wit(&self.spell_display_format),
+            speech_hue: Conv::to_wit(&self.speech_hue),
+            whisper_hue: Conv::to_wit(&self.whisper_hue),
+            yell_hue: Conv::to_wit(&self.yell_hue),
+            ally_message_hue: Conv::to_wit(&self.ally_message_hue),
+            chat_message_hue: Conv::to_wit(&self.chat_message_hue),
+            emote_hue: Conv::to_wit(&self.emote_hue),
+            guild_message_hue: Conv::to_wit(&self.guild_message_hue),
+            party_message_hue: Conv::to_wit(&self.party_message_hue),
+            activate_chat_additional_buttons: Conv::to_wit(&self.activate_chat_additional_buttons),
+            activate_chat_after_enter: Conv::to_wit(&self.activate_chat_after_enter),
+            activate_chat_shift_enter_support: Conv::to_wit(&self.activate_chat_shift_enter_support),
+            hide_chat_gradient: Conv::to_wit(&self.hide_chat_gradient),
+            ignore_alliance_messages: Conv::to_wit(&self.ignore_alliance_messages),
+            ignore_guild_messages: Conv::to_wit(&self.ignore_guild_messages),
+            save_journal_to_file: Conv::to_wit(&self.save_journal_to_file),
+            scale_speech_delay: Conv::to_wit(&self.scale_speech_delay),
+            speech_delay: Conv::to_wit(&self.speech_delay),
+            counter_bar_enabled: Conv::to_wit(&self.counter_bar_enabled),
+            counter_bar_cell_size: Conv::to_wit(&self.counter_bar_cell_size),
+            counter_bar_abbreviated_amount: Conv::to_wit(&self.counter_bar_abbreviated_amount),
+            counter_bar_highlight_amount: Conv::to_wit(&self.counter_bar_highlight_amount),
+            containers_scale: Conv::to_wit(&self.containers_scale),
+            scale_items_inside_containers: Conv::to_wit(&self.scale_items_inside_containers),
+            use_large_container_gumps: Conv::to_wit(&self.use_large_container_gumps),
+            override_container_location: Conv::to_wit(&self.override_container_location),
+            override_container_location_setting: Conv::to_wit(&self.override_container_location_setting),
+            backpack_style: Conv::to_wit(&self.backpack_style),
+            hue_container_gumps: Conv::to_wit(&self.hue_container_gumps),
+            double_click_to_loot_inside_containers: Conv::to_wit(&self.double_click_to_loot_inside_containers),
+            highlight_container_when_selected: Conv::to_wit(&self.highlight_container_when_selected),
+            relative_drag_and_drop_items: Conv::to_wit(&self.relative_drag_and_drop_items),
+            use_tooltip: Conv::to_wit(&self.use_tooltip),
+            tooltip_text_hue: Conv::to_wit(&self.tooltip_text_hue),
+            tooltip_background_opacity: Conv::to_wit(&self.tooltip_background_opacity),
+            tooltip_delay_before_display: Conv::to_wit(&self.tooltip_delay_before_display),
+            tooltip_display_zoom: Conv::to_wit(&self.tooltip_display_zoom),
+            override_all_fonts: Conv::to_wit(&self.override_all_fonts),
+            override_all_fonts_is_unicode: Conv::to_wit(&self.override_all_fonts_is_unicode),
+            force_unicode_journal: Conv::to_wit(&self.force_unicode_journal),
+            chat_font: Conv::to_wit(&self.chat_font),
+            disable_auto_move: Conv::to_wit(&self.disable_auto_move),
+            counter_bar_display_abbreviated_amount: Conv::to_wit(&self.counter_bar_display_abbreviated_amount),
+            counter_bar_highlight_on_amount: Conv::to_wit(&self.counter_bar_highlight_on_amount),
+            locked: Conv::to_wit(&self.locked),
+        }
+    }
+    fn from_wit(v: w::GameOptions) -> s::GameOptions {
+        s::GameOptions {
+            always_run: Conv::from_wit(v.always_run),
+            always_run_unless_hidden: Conv::from_wit(v.always_run_unless_hidden),
+            skip_empty_corpse: Conv::from_wit(v.skip_empty_corpse),
+            auto_open_corpses: Conv::from_wit(v.auto_open_corpses),
+            auto_open_corpse_range: Conv::from_wit(v.auto_open_corpse_range),
+            corpse_open_options: Conv::from_wit(v.corpse_open_options),
+            auto_open_doors: Conv::from_wit(v.auto_open_doors),
+            enable_pathfind: Conv::from_wit(v.enable_pathfind),
+            smooth_doors: Conv::from_wit(v.smooth_doors),
+            use_shift_to_pathfind: Conv::from_wit(v.use_shift_to_pathfind),
+            use_smooth_boat_movement: Conv::from_wit(v.use_smooth_boat_movement),
+            fast_rotation: Conv::from_wit(v.fast_rotation),
+            highlight_game_objects: Conv::from_wit(v.highlight_game_objects),
+            no_color_objects_out_of_range: Conv::from_wit(v.no_color_objects_out_of_range),
+            sallos_easy_grab: Conv::from_wit(v.sallos_easy_grab),
+            show_house_content: Conv::from_wit(v.show_house_content),
+            cb_black_bg_toggled: Conv::from_wit(v.cb_black_bg_toggled),
+            close_all_anchored_gumps_in_group_with_right_click: Conv::from_wit(v.close_all_anchored_gumps_in_group_with_right_click),
+            grid_loot_type: Conv::from_wit(v.grid_loot_type),
+            hold_alt_to_move_gumps: Conv::from_wit(v.hold_alt_to_move_gumps),
+            hold_down_key_alt_to_close_anchored: Conv::from_wit(v.hold_down_key_alt_to_close_anchored),
+            hold_shift_for_context: Conv::from_wit(v.hold_shift_for_context),
+            hold_shift_to_split_stack: Conv::from_wit(v.hold_shift_to_split_stack),
+            party_invite_gump: Conv::from_wit(v.party_invite_gump),
+            topbar_gump_is_disabled: Conv::from_wit(v.topbar_gump_is_disabled),
+            use_old_status_gump: Conv::from_wit(v.use_old_status_gump),
+            close_health_bar_type: Conv::from_wit(v.close_health_bar_type),
+            custom_bars_toggled: Conv::from_wit(v.custom_bars_toggled),
+            save_healthbars: Conv::from_wit(v.save_healthbars),
+            status_gump_bar_mutually_exclusive: Conv::from_wit(v.status_gump_bar_mutually_exclusive),
+            enable_drag_select: Conv::from_wit(v.enable_drag_select),
+            drag_select_as_anchor: Conv::from_wit(v.drag_select_as_anchor),
+            drag_select_humanoids_only: Conv::from_wit(v.drag_select_humanoids_only),
+            drag_select_hostile_only: Conv::from_wit(v.drag_select_hostile_only),
+            drag_select_modifier_key: Conv::from_wit(v.drag_select_modifier_key),
+            use_circle_of_transparency: Conv::from_wit(v.use_circle_of_transparency),
+            circle_of_transparency_radius: Conv::from_wit(v.circle_of_transparency_radius),
+            circle_of_transparency_type: Conv::from_wit(v.circle_of_transparency_type),
+            hide_screenshot_stored_in_message: Conv::from_wit(v.hide_screenshot_stored_in_message),
+            text_fading: Conv::from_wit(v.text_fading),
+            use_objects_fading: Conv::from_wit(v.use_objects_fading),
+            show_skills_changed_delta_value: Conv::from_wit(v.show_skills_changed_delta_value),
+            show_stats_changed_message: Conv::from_wit(v.show_stats_changed_message),
+            highlight_mobiles_by_poisoned: Conv::from_wit(v.highlight_mobiles_by_poisoned),
+            poison_hue: Conv::from_wit(v.poison_hue),
+            highlight_mobiles_by_invul: Conv::from_wit(v.highlight_mobiles_by_invul),
+            invulnerable_hue: Conv::from_wit(v.invulnerable_hue),
+            highlight_mobiles_by_paralize: Conv::from_wit(v.highlight_mobiles_by_paralize),
+            paralyzed_hue: Conv::from_wit(v.paralyzed_hue),
+            party_aura: Conv::from_wit(v.party_aura),
+            party_aura_hue: Conv::from_wit(v.party_aura_hue),
+            show_new_corpse_name_incoming: Conv::from_wit(v.show_new_corpse_name_incoming),
+            show_new_mobile_name_incoming: Conv::from_wit(v.show_new_mobile_name_incoming),
+            show_dps_with_damage_numbers: Conv::from_wit(v.show_dps_with_damage_numbers),
+            show_mobiles_hp: Conv::from_wit(v.show_mobiles_hp),
+            mobile_hp_show_when: Conv::from_wit(v.mobile_hp_show_when),
+            mobile_hp_type: Conv::from_wit(v.mobile_hp_type),
+            aura_under_feet_type: Conv::from_wit(v.aura_under_feet_type),
+            name_overhead_toggled: Conv::from_wit(v.name_overhead_toggled),
+            name_overhead_show_hp_bar: Conv::from_wit(v.name_overhead_show_hp_bar),
+            draw_roofs: Conv::from_wit(v.draw_roofs),
+            enable_cave_border: Conv::from_wit(v.enable_cave_border),
+            hide_vegetation: Conv::from_wit(v.hide_vegetation),
+            tree_to_stumps: Conv::from_wit(v.tree_to_stumps),
+            fields_type: Conv::from_wit(v.fields_type),
+            game_window_full_size: Conv::from_wit(v.game_window_full_size),
+            reduce_fps_when_inactive: Conv::from_wit(v.reduce_fps_when_inactive),
+            enable_mousewheel_scale_zoom: Conv::from_wit(v.enable_mousewheel_scale_zoom),
+            restore_scale_after_unpress_ctrl: Conv::from_wit(v.restore_scale_after_unpress_ctrl),
+            default_scale: Conv::from_wit(v.default_scale),
+            use_alternative_lights: Conv::from_wit(v.use_alternative_lights),
+            use_colored_lights: Conv::from_wit(v.use_colored_lights),
+            use_custom_light_level: Conv::from_wit(v.use_custom_light_level),
+            light_level: Conv::from_wit(v.light_level),
+            use_dark_nights: Conv::from_wit(v.use_dark_nights),
+            aura_on_mouse: Conv::from_wit(v.aura_on_mouse),
+            enable_black_white_effect: Conv::from_wit(v.enable_black_white_effect),
+            enable_death_screen: Conv::from_wit(v.enable_death_screen),
+            animated_water_effect: Conv::from_wit(v.animated_water_effect),
+            shadows_enabled: Conv::from_wit(v.shadows_enabled),
+            shadows_statics: Conv::from_wit(v.shadows_statics),
+            terrain_shadows_level: Conv::from_wit(v.terrain_shadows_level),
+            enable_music: Conv::from_wit(v.enable_music),
+            music_volume: Conv::from_wit(v.music_volume),
+            enable_sound: Conv::from_wit(v.enable_sound),
+            sound_volume: Conv::from_wit(v.sound_volume),
+            enable_combat_music: Conv::from_wit(v.enable_combat_music),
+            enable_footsteps_sound: Conv::from_wit(v.enable_footsteps_sound),
+            reproduce_sounds_in_background: Conv::from_wit(v.reproduce_sounds_in_background),
+            benefic_hue: Conv::from_wit(v.benefic_hue),
+            neutral_hue: Conv::from_wit(v.neutral_hue),
+            can_attack_hue: Conv::from_wit(v.can_attack_hue),
+            criminal_hue: Conv::from_wit(v.criminal_hue),
+            enemy_hue: Conv::from_wit(v.enemy_hue),
+            friend_hue: Conv::from_wit(v.friend_hue),
+            harmful_hue: Conv::from_wit(v.harmful_hue),
+            innocent_hue: Conv::from_wit(v.innocent_hue),
+            murderer_hue: Conv::from_wit(v.murderer_hue),
+            use_new_target_system: Conv::from_wit(v.use_new_target_system),
+            queue_auto_target: Conv::from_wit(v.queue_auto_target),
+            show_target_range_indicator: Conv::from_wit(v.show_target_range_indicator),
+            hold_down_key_tab: Conv::from_wit(v.hold_down_key_tab),
+            enabled_beneficial_criminal_action_query: Conv::from_wit(v.enabled_beneficial_criminal_action_query),
+            enabled_criminal_action_query: Conv::from_wit(v.enabled_criminal_action_query),
+            buff_bar_time: Conv::from_wit(v.buff_bar_time),
+            enabled_spell_hue: Conv::from_wit(v.enabled_spell_hue),
+            cast_spells_by_one_click: Conv::from_wit(v.cast_spells_by_one_click),
+            fast_spells_assign: Conv::from_wit(v.fast_spells_assign),
+            enabled_spell_format: Conv::from_wit(v.enabled_spell_format),
+            spell_display_format: Conv::from_wit(v.spell_display_format),
+            speech_hue: Conv::from_wit(v.speech_hue),
+            whisper_hue: Conv::from_wit(v.whisper_hue),
+            yell_hue: Conv::from_wit(v.yell_hue),
+            ally_message_hue: Conv::from_wit(v.ally_message_hue),
+            chat_message_hue: Conv::from_wit(v.chat_message_hue),
+            emote_hue: Conv::from_wit(v.emote_hue),
+            guild_message_hue: Conv::from_wit(v.guild_message_hue),
+            party_message_hue: Conv::from_wit(v.party_message_hue),
+            activate_chat_additional_buttons: Conv::from_wit(v.activate_chat_additional_buttons),
+            activate_chat_after_enter: Conv::from_wit(v.activate_chat_after_enter),
+            activate_chat_shift_enter_support: Conv::from_wit(v.activate_chat_shift_enter_support),
+            hide_chat_gradient: Conv::from_wit(v.hide_chat_gradient),
+            ignore_alliance_messages: Conv::from_wit(v.ignore_alliance_messages),
+            ignore_guild_messages: Conv::from_wit(v.ignore_guild_messages),
+            save_journal_to_file: Conv::from_wit(v.save_journal_to_file),
+            scale_speech_delay: Conv::from_wit(v.scale_speech_delay),
+            speech_delay: Conv::from_wit(v.speech_delay),
+            counter_bar_enabled: Conv::from_wit(v.counter_bar_enabled),
+            counter_bar_cell_size: Conv::from_wit(v.counter_bar_cell_size),
+            counter_bar_abbreviated_amount: Conv::from_wit(v.counter_bar_abbreviated_amount),
+            counter_bar_highlight_amount: Conv::from_wit(v.counter_bar_highlight_amount),
+            containers_scale: Conv::from_wit(v.containers_scale),
+            scale_items_inside_containers: Conv::from_wit(v.scale_items_inside_containers),
+            use_large_container_gumps: Conv::from_wit(v.use_large_container_gumps),
+            override_container_location: Conv::from_wit(v.override_container_location),
+            override_container_location_setting: Conv::from_wit(v.override_container_location_setting),
+            backpack_style: Conv::from_wit(v.backpack_style),
+            hue_container_gumps: Conv::from_wit(v.hue_container_gumps),
+            double_click_to_loot_inside_containers: Conv::from_wit(v.double_click_to_loot_inside_containers),
+            highlight_container_when_selected: Conv::from_wit(v.highlight_container_when_selected),
+            relative_drag_and_drop_items: Conv::from_wit(v.relative_drag_and_drop_items),
+            use_tooltip: Conv::from_wit(v.use_tooltip),
+            tooltip_text_hue: Conv::from_wit(v.tooltip_text_hue),
+            tooltip_background_opacity: Conv::from_wit(v.tooltip_background_opacity),
+            tooltip_delay_before_display: Conv::from_wit(v.tooltip_delay_before_display),
+            tooltip_display_zoom: Conv::from_wit(v.tooltip_display_zoom),
+            override_all_fonts: Conv::from_wit(v.override_all_fonts),
+            override_all_fonts_is_unicode: Conv::from_wit(v.override_all_fonts_is_unicode),
+            force_unicode_journal: Conv::from_wit(v.force_unicode_journal),
+            chat_font: Conv::from_wit(v.chat_font),
+            disable_auto_move: Conv::from_wit(v.disable_auto_move),
+            counter_bar_display_abbreviated_amount: Conv::from_wit(v.counter_bar_display_abbreviated_amount),
+            counter_bar_highlight_on_amount: Conv::from_wit(v.counter_bar_highlight_on_amount),
+            locked: Conv::from_wit(v.locked),
+        }
+    }
+}
+
 impl Conv<w::GameSettings> for s::GameSettings {
     fn to_wit(&self) -> w::GameSettings {
         w::GameSettings {
@@ -1102,6 +1436,23 @@ impl Conv<w::GameSettings> for s::GameSettings {
             speech_hue: Conv::from_wit(v.speech_hue),
             always_run: Conv::from_wit(v.always_run),
             highlight_game_objects: Conv::from_wit(v.highlight_game_objects),
+        }
+    }
+}
+
+impl Conv<w::GameShard> for s::GameShard {
+    fn to_wit(&self) -> w::GameShard {
+        w::GameShard {
+            id: Conv::to_wit(&self.id),
+            name: Conv::to_wit(&self.name),
+            rules: Conv::to_wit(&self.rules),
+        }
+    }
+    fn from_wit(v: w::GameShard) -> s::GameShard {
+        s::GameShard {
+            id: Conv::from_wit(v.id),
+            name: Conv::from_wit(v.name),
+            rules: Conv::from_wit(v.rules),
         }
     }
 }
@@ -3941,10 +4292,37 @@ impl WritableResource for s::GameContext {
     }
 }
 
+// `cuo:game/options`
+impl Resource for s::GameOptions {
+    fn __get(r: &wit::Res) -> Option<Self> {
+        c::get_options(r).map(Conv::from_wit)
+    }
+}
+impl WritableResource for s::GameOptions {
+    fn __same(&self, other: &Self) -> bool {
+        Conv::<w::GameOptions>::to_wit(self) == Conv::<w::GameOptions>::to_wit(other)
+    }
+    fn __put(&self, r: &wit::Res) {
+        let v: w::GameOptions = self.to_wit();
+        c::put_options(r, &v);
+    }
+    fn __set_resource(&self, cmds: &wit::Commands) {
+        let v: w::GameOptions = self.to_wit();
+        c::set_resource_options(cmds, &v);
+    }
+}
+
 // `cuo:game/settings`
 impl Resource for s::GameSettings {
     fn __get(r: &wit::Res) -> Option<Self> {
         c::get_settings(r).map(Conv::from_wit)
+    }
+}
+
+// `cuo:game/shard`
+impl Resource for s::GameShard {
+    fn __get(r: &wit::Res) -> Option<Self> {
+        c::get_shard(r).map(Conv::from_wit)
     }
 }
 

@@ -50,6 +50,8 @@ Read-only data is marked *(ro)*; writing it is ignored, and a `&mut` / `Mut<T>` 
 | `cuo:game/context` | R | keep |
 | `cuo:game/state` | R | keep |
 | **`cuo:game/settings`** | R (ro) | *new* — the client options a mod may need (grid loot, skip empty corpse, …), named fields only |
+| **`cuo:game/shard`** | R (ro) | *new* — the classicuo.org shard this session plays: `id` (0 = none), `name`, `rules` (the shard's rules JSON as the shard list sends it, "" when none). Set by the client's launcher before the game starts; a mod reads it to obey the rules the way the web client's assistant does |
+| **`cuo:game/options`** | R | *new* — the client's game options (the web Game Options page's fields this client has), writable: a write applies to the live profile like the Options window, and is refused whole when it changes a field the shard locks; `locked` lists those fields with the reason |
 | `cuo:options/schema` · `cuo:options/values` | R | keep — your mod's Options section |
 | `cuo:target/state` | R (ro) | keep |
 | `cuo:target/local-result` | E | keep |
